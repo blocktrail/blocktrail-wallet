@@ -1,0 +1,23 @@
+{
+  "name": "browserify-cryptojs",
+  "version": "0.3.1",
+  "keywords": [
+    "browserify",
+    "cryptojs",
+    "crypto",
+    "cipher",
+    "encrypt",
+    "decrypt"
+  ],
+  "dependencies": {},
+  "homepage": "https://github.com/fahad19/crypto-js",
+  "_release": "0.3.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.3.1",
+    "commit": "2ee7ac19d48b5ccff96596d9c04eea0ef60a2707"
+  },
+  "_source": "git://github.com/fahad19/crypto-js.git",
+  "_target": "~0.3.1",
+  "_originalSource": "browserify-cryptojs"
+}

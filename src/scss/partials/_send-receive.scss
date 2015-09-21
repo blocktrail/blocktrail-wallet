@@ -1,0 +1,873 @@
+
+
+//--- sending & Receiving ---
+.state-send, .state-receive {
+    .scroll-content {
+        z-index: 50;
+
+        .placeholder-label {
+            font-size: 18px;
+            color: #ABAEB2;
+        }
+        .user-balance-display {
+            .balance-label {
+                opacity: 1;
+            }
+            .btc-display .canvas-display {
+                //width: 100% !important;
+                float: right;
+            }
+            .fiat-display .canvas-display {
+                position: relative;
+                //left: 5px;
+                float: right;
+                //max-width: 100% !important;
+            }
+
+            /*---transitions---*/
+            &.minimise {
+                height: 21vw;
+                padding: $bar-padding-portrait/2 $bar-padding-portrait;
+                //@include transition(all 0.5s ease-in-out);
+            }
+        }
+        .amount-input-section {
+            $input-height: 35px;
+            $input-padding: 10px;
+            $input-padding-2: 2px;
+
+            position: relative;
+            color: #666;
+            width: 100%;
+            height: $input-height*2 + $input-padding*2 + $input-padding-2*2;
+            background: #fff;
+            transition: background-color 0.5s ease-in-out;
+            -webkit-transition: background-color 0.5s ease-in-out;
+
+            .input-group {
+                position: absolute;
+                padding: $input-padding $bar-padding-portrait;
+                width: 100%;
+
+                input {
+                    position: relative;
+                    width: 100%;
+                    height: $input-height;
+                    line-height: $input-height;
+                    padding: 0;
+                    margin: 0;
+                    outline: 0;
+                    color: #666;
+                    background: transparent;
+                    z-index: 10;
+
+                    //provides the offset for the currency label
+                    &[name='btcValue'] {
+                        padding: 0 2.25em 0 0;
+                    }
+                    &[name='fiatValue'] {
+                        padding: 0 0 0 0.775em;
+                    }
+                }
+
+                &.position-first {
+                    top: 0;
+                    height: 65px;
+
+                    &,
+                    input{
+                        text-align: right;
+                        font-size: 22px;
+                        font-weight: 200;
+                    }
+                }
+                &.position-last {
+                    top: $input-height + $input-padding*2;
+                    background: #f2f2f2;
+
+                    &,
+                    input{
+                        color: #999;
+                        text-align: right;
+                        font-size: 18px;
+                        font-weight: 200;
+                    }
+                    .placeholder-label {
+                        display: none !important;
+                    }
+                    &,
+                    .label-group {
+                        padding-top: $input-padding-2;
+                        padding-bottom: $input-padding-2;
+                    }
+                }
+
+                .label-group {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    padding: $input-padding $bar-padding-portrait;
+                    height: 100%;
+                    z-index: 5;
+
+                    .placeholder-label {
+                        display: inline-block;
+                        height: $input-height;
+                        line-height: $input-height;
+                        float: left;
+                    }
+                    .spacer {
+                        display: inline-block;
+                        height: $input-height;
+                        line-height: $input-height;
+                        vertical-align: middle;
+                        opacity: 0;
+                    }
+                    .label {
+                        display: inline-block;
+                        height: $input-height;
+                        line-height: $input-height;
+                        vertical-align: middle;
+                    }
+                }
+                &.btc-input .label {
+                    position: relative;
+                    top: 0.02em;
+                    left: -0.075em;
+                }
+                &.fiat-input .label {
+                    position: relative;
+                    top: 0.02em;
+                    left: 0.2em;
+                }
+            }
+
+            //click area to swap input currency
+            .input-swapping-overlay {
+                display: block;
+                position: absolute;
+                top: 50px;
+                height: 50px;
+                z-index: 100;
+                width: 100%;
+
+                //background: rgba(255,150,150,0.25);  //@todo remove,  this is for debugging
+
+                .swap-icon {
+                    font-size: 1.25rem;
+                    padding: 0 $bar-padding-portrait;
+                    line-height: 50px;
+                    opacity: 0.45;
+
+                    -moz-transform: rotate(90deg);
+                    -webkit-transform: rotate(90deg);
+                    -o-transform: rotate(90deg);
+                    -ms-transform: rotate(90deg);
+                    transform: rotate(90deg);
+                }
+            }
+        }
+        .recipient-input-section {
+            margin-top: 1rem;
+            .options {
+                padding: $bar-padding-portrait;
+                text-align: center;
+            }
+            .option {
+                width: auto;
+                font-size: 16px;
+            }
+            .select-group {
+                line-height: 50px;
+                height: 50px + $bar-padding-portrait*2;
+                padding: $bar-padding-portrait;
+            }
+            .recipient-display {
+                position: relative;
+            }
+            .contact-token {
+
+            }
+            .recipient-display-name {
+                min-height: 45px;
+                padding-right: 15px + $bar-padding-portrait;
+                font-size: 1rem;
+                line-height: 45px;
+                color: #555;
+
+                max-width: 100%;
+                display: inline-block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+            .clear-input {
+                position: absolute;
+                top: 0;
+                line-height: 70px;
+                right: 0;
+                font-size: 22px;
+                color: $bad-red;
+                min-width: 20px + $bar-padding-portrait*2;
+                text-align: center;
+            }
+
+        }
+    }
+    .option{
+        display: inline-block;
+        margin: 0 0 -0.5rem 0;
+        width: 33%;
+        max-width: 5rem;
+        vertical-align: top;
+        text-align: center;
+
+        a {
+            display: block;
+            margin: 0 auto 0.5rem auto;
+            line-height: 2em;
+            font-size: 2.0rem;
+            color: #fff;
+            box-shadow: none !important;
+
+            &.qrcode {
+                @include circleButton(2em, #fff, lighten($lavender-dark, 10%), 2px solid $lavender-dark);
+                //background: #fff;
+                //color: $lavender-dark;
+            }
+            &.copy {
+                @include circleButton(2em, #fff, lighten($bluejeans-dark, 10%), 2px solid $bluejeans-dark);
+                //background: #fff;
+                //color: $lavender-dark;
+            }
+            &.contacts {
+                @include circleButton(2em, #fff, lighten($bittersweet-dark, 10%), 2px solid $bittersweet-dark);
+                //background: #fff;
+                //color: $bittersweet-dark;
+            }
+            &.email {
+                @include circleButton(2em, #fff, lighten($aqua-dark, 10%), 2px solid $aqua-dark);
+                //background: #fff;
+                //color: $aqua-dark;
+            }
+            &.sms {
+                @include circleButton(2em, #fff, lighten($mint-light, 10%), 2px solid $mint-light);
+                //background: #fff;
+                //color: $mint-light;
+            }
+            &.bluetooth {
+                @include circleButton(2em, #fff, lighten($grass-dark, 10%), 2px solid $grass-dark);
+                //background: #fff;
+                //color: $grass-dark;
+            }
+            &.address, &.nfc {
+                @include circleButton(2em, #fff, lighten($darkgray-dark, 10%), 2px solid $darkgray-dark);
+                //background: #fff;
+                //color: $darkgray-dark;
+            }
+        }
+    }
+    .message-display{
+        margin-top: 2rem;
+        text-align: center;
+
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        height: 100%;
+        padding-top: 50%;
+        background: rgba(#fff, 0.3);
+        z-index: 101;
+
+        &.displayed {
+            top: 0;
+            transition: top 0.8s cubic-bezier(.4,.1,.11,.98);
+            -webkit-transition: top 0.8s cubic-bezier(.4,.1,.11,.98);
+        }
+
+    }
+    .message-display {
+        background: rgba(#fff, 0.8);
+        .body {
+            margin-bottom: 1rem;
+        }
+        button.dismiss {
+            @include squareButton($good-green);
+            width: 6rem;
+            margin-top: 2rem;
+        }
+    }
+
+    .contacts-list-screen {
+        //top: -100%;
+        background: #fff;
+        .screen-title {
+            padding: 1.5rem 1.5rem 0.5rem;
+            text-align: center;
+            color: $bittersweet-dark;
+        }
+        .filter-input {
+            position: absolute;
+            background: #bbb;
+            border-bottom: 1px solid #e1e1e1;
+            width: 100%;
+            height: 50px;
+            top: $bar-height;
+            z-index: 100;
+        }
+        .scroll-content {
+            padding-top: 50px;
+            //@include transform(translate(0, 50px));   //don't use this, causes issues with scroll bar and height detection
+        }
+        .clear-input {
+            position: absolute;
+            right: 22px;
+            font-size: 20px;
+            line-height: 29px;
+            height: 29px;
+            z-index: 10;
+        }
+        .contact-token {
+            position: absolute;
+            top: 11px;
+            left: 11px;
+            max-width: 50px;
+            max-height: 50px;
+            background-color: lighten($bittersweet-dark, 5%);
+
+            .initials {
+                color: #fff;
+            }
+        }
+        .item {
+            //background-color: lighten($bittersweet-dark, 5%);
+            //border-color: darken($bittersweet-dark, 5%);
+            border-color: lighten($bittersweet-dark, 35%);
+            &, h2 {
+                color: darken($bittersweet-dark, 30%);
+            }
+            p {
+                color: desaturate($bittersweet-dark, 60%);
+            }
+            .invite {
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                font-size: 0.7rem;
+            }
+
+            &.activated {
+                background-color: lighten($bittersweet-dark, 5%);
+                &, h2, p {
+                    color: #fff;
+                }
+                .contact-token {
+                    background: darken($bittersweet-dark, 20%);
+                }
+            }
+            &.no-wallet {
+                h2 {
+                    color: $darkgray-light;
+                }
+                p {
+                    color: lighten($darkgray-light, 20%);
+                }
+                .contact-token {
+                    background: darken($lightgray-dark, 5%);
+                }
+                &.activated {
+                    background-color: lighten($darkgray-light, 5%);
+                    &, h2, p {
+                        color: #fff;
+                    }
+                    .contact-token {
+                        background: darken($lightgray-dark, 15%);
+                    }
+                }
+            }
+
+        }
+        .toggle-contacts {
+            margin-top: 30px;
+        }
+    }
+}
+//platform specifics
+.platform-android {
+}
+.platform-ios {
+    .contacts-list-screen .filter-input {
+        margin-top: $ios-statusbar-height;
+    }
+}
+
+//--- send screens ---
+.platform-android .user-balance-display {
+    //disable animation on android
+    @include transition(none !important);
+}
+.state-send {
+    background: $lightgray-dark;
+    //general
+    .scroll-content {
+        z-index: 50;
+
+        .placeholder-label {
+            font-size: 18px;
+            color: #ABAEB2;
+        }
+        .user-balance-display {
+            .balance-label {
+                opacity: 0.8;
+            }
+            .btc-display .canvas-display {
+                float: right;
+            }
+            .fiat-display .canvas-display {
+                position: relative;
+                float: right;
+            }
+
+            /*---transitions---*/
+            &.minimise {
+                height: 21vw;
+                padding: $bar-padding-portrait/2 $bar-padding-portrait;
+                //@include transition(all 0.5s ease-in-out);
+            }
+        }
+        .amount-input-section {
+            $input-height: 35px;
+            $input-padding: 10px;
+            $input-padding-2: 2px;
+
+            position: relative;
+            color: #666;
+            width: 100%;
+            height: $input-height*2 + $input-padding*2 + $input-padding-2*2;
+            background: #fff;
+            transition: background-color 0.5s ease-in-out;
+            -webkit-transition: background-color 0.5s ease-in-out;
+
+            .input-group {
+                position: absolute;
+                padding: $input-padding $bar-padding-portrait;
+                width: 100%;
+
+                input {
+                    position: relative;
+                    width: 100%;
+                    height: $input-height;
+                    line-height: $input-height;
+                    padding: 0;
+                    margin: 0;
+                    outline: 0;
+                    color: #666;
+                    background: transparent;
+                    z-index: 10;
+
+                    //provides the offset for the currency label
+                    &[name='btcValue'] {
+                        padding: 0 2.25em 0 0;
+                    }
+                    &[name='fiatValue'] {
+                        padding: 0 0 0 0.775em;
+                    }
+                }
+
+                &.position-first {
+                    top: 0;
+                    height: 65px;
+
+                    &,
+                    input{
+                        text-align: right;
+                        font-size: 22px;
+                        font-weight: 200;
+                    }
+                }
+                &.position-last {
+                    top: $input-height + $input-padding*2;
+                    background: #f2f2f2;
+
+                    &,
+                    input{
+                        color: #999;
+                        text-align: right;
+                        font-size: 18px;
+                        font-weight: 200;
+                    }
+                    .placeholder-label {
+                        display: none !important;
+                    }
+                    &,
+                    .label-group {
+                        padding-top: $input-padding-2;
+                        padding-bottom: $input-padding-2;
+                    }
+                }
+
+                .label-group {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    padding: $input-padding $bar-padding-portrait;
+                    height: 100%;
+                    z-index: 5;
+
+                    .placeholder-label {
+                        display: inline-block;
+                        height: $input-height;
+                        line-height: $input-height;
+                        float: left;
+                    }
+                    .spacer {
+                        display: inline-block;
+                        height: $input-height;
+                        line-height: $input-height;
+                        vertical-align: middle;
+                        opacity: 0;
+                    }
+                    .label {
+                        display: inline-block;
+                        height: $input-height;
+                        line-height: $input-height;
+                        vertical-align: middle;
+                    }
+                }
+                &.btc-input .label {
+                    position: relative;
+                    top: 0.02em;
+                    left: -0.075em;
+                }
+                &.fiat-input .label {
+                    position: relative;
+                    top: 0.02em;
+                    left: 0.2em;
+                }
+            }
+
+            //click area to swap input currency
+            .input-swapping-overlay {
+                display: block;
+                position: absolute;
+                top: 50px;
+                height: 50px;
+                z-index: 100;
+                width: 100%;
+
+                //background: rgba(255,150,150,0.25);  //@todo remove,  this is for debugging
+
+                .swap-icon {
+                    font-size: 1.25rem;
+                    padding: 0 $bar-padding-portrait;
+                    line-height: 50px;
+                    opacity: 0.45;
+
+                    -moz-transform: rotate(90deg);
+                    -webkit-transform: rotate(90deg);
+                    -o-transform: rotate(90deg);
+                    -ms-transform: rotate(90deg);
+                    transform: rotate(90deg);
+                }
+            }
+        }
+        .recipient-input-section {
+            margin-top: 1rem;
+            .options {
+                padding: $bar-padding-portrait;
+                text-align: center;
+            }
+            .option {
+                width: auto;
+                font-size: 16px;
+            }
+            .select-group {
+                line-height: 50px;
+                height: 50px + $bar-padding-portrait*2;
+                padding: $bar-padding-portrait;
+            }
+            .recipient-display {
+                position: relative;
+            }
+            .contact-token {
+
+            }
+            .recipient-display-name {
+                min-height: 45px;
+                padding-right: 15px + $bar-padding-portrait;
+                font-size: 1rem;
+                line-height: 45px;
+                color: #555;
+
+                max-width: 100%;
+                display: inline-block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+            .clear-input {
+                position: absolute;
+                top: 0;
+                line-height: 70px;
+                right: 0;
+                font-size: 22px;
+                color: $bad-red;
+                min-width: 20px + $bar-padding-portrait*2;
+                text-align: center;
+            }
+
+        }
+        .send-button-section {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+
+            .button.send {
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                color: $good-green;
+                font-size: 17px;
+                //box-shadow: 0 -10px 20px #fff;
+
+                z-index: 100;
+
+                //style 1 - round button
+                /*
+                @include circleButton(90px, $good-green, #fff);
+                i {
+                    font-size: 50px;
+                    color: lighten($good-green, 8%);
+                }
+                //*/
+
+                //style 2 - square button
+                //*
+                border: 2px solid $good-green;
+                width: 10rem;
+                //*/
+
+                .label {
+                    position: absolute;
+                    bottom: 3%;
+                    left: 0;
+                    width: 100%;
+                    text-align: center;
+                    display: block;
+                }
+
+                //no shadow - more iOS like
+                box-shadow: none;
+            }
+        }
+    }
+    .contacts-list-screen, .address-input-screen, .pin-input-screen, .scan-screen {
+        position: absolute;
+        //top: 100%;
+        width: 100vw;
+        height: 100vh;
+        z-index: 101;
+        //transition: top 1s cubic-bezier(.13,.87,.42,.96);
+        //-webkit-transition: top 1s cubic-bezier(.13,.87,.42,.96);
+    }
+    [ui-view].overlay-screen-wrapper {
+        //transition animation for ui-view screens
+        position: absolute;
+        top: 0;
+        transition: top 0.8s cubic-bezier(.13,.87,.42,.96);
+        -webkit-transition: top 0.8s cubic-bezier(.13,.87,.42,.96);
+
+        &.ng-enter {
+            top: 100%;
+            transition: top 0.65s cubic-bezier(.4,.1,.11,.98);
+            -webkit-transition: top 0.65s cubic-bezier(.4,.1,.11,.98);
+        }
+        &.ng-enter-active {
+            top: 0;
+            transition: top 0.65s cubic-bezier(.4,.1,.11,.98);
+            -webkit-transition: top 0.65s cubic-bezier(.4,.1,.11,.98);
+        }
+        &.ng-leave {
+            top: 0;
+            transition: top 0.65s cubic-bezier(.4,.1,.11,.98);
+            -webkit-transition: top 0.65s cubic-bezier(.4,.1,.11,.98);
+        }
+        &.ng-leave-active {
+            opacity: 1;
+            top: 100%;
+            transition: top 0.65s cubic-bezier(.4,.1,.11,.98);
+            -webkit-transition: top 0.65s cubic-bezier(.4,.1,.11,.98);
+        }
+    }
+    /*
+    .sending-section {
+        position: absolute;
+        top: 0;
+        background: $app-default-color;
+        @include transform(translate(0, 100vh));
+        width: 100vw;
+        height: 100vh;
+        z-index: 101;
+        transition: transform 1s cubic-bezier(.13,.87,.42,.96);
+        -webkit-transition: transform 1s cubic-bezier(.13,.87,.42,.96);
+
+        &.displayed {
+            @include transform(translate(0, 0vh));
+            transition: transform 0.65s cubic-bezier(.4,.1,.11,.98);
+            -webkit-transition: transform 0.65s cubic-bezier(.4,.1,.11,.98);
+        }
+    }
+    */
+    .pin-input-section, .sending-progress-section {
+        padding-top: 1rem;
+
+        &, h1, h2, h3, h4 {
+            text-align: center;
+            color: #fff;
+        }
+
+        .item-input {
+            padding: 6px 16px 5px 16px;
+        }
+        input {
+            height: auto;
+            padding: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            font-size: 1.5rem;
+
+            -webkit-text-security: disc;
+
+            @include transition(all 0.2s linear);
+        }
+        .error input {
+            border: 1px solid rgb(187, 136, 136);
+            background: rgba(232, 100, 100, 0.29);
+            @include transition(all 0.2s linear);
+        }
+        .pin-error {
+            min-height: 1.5rem;
+        }
+        .min-height {
+            min-height: 3.5rem;
+        }
+        .confirm-button {
+            margin-top: 1rem;
+            min-width: 7rem;
+            color: #fff;
+            color: rgba(0,0,0,0.5);
+            border-color: #fff;
+            background-color: rgba(255,255,255,0.4);
+        }
+
+        .spinner svg {
+            width: 60px;
+            height: 60px;
+        }
+        .progress-message {
+            margin-top: 1.5rem;
+            font-size: 1.75rem;
+            &.complete {
+                font-size: 3rem;
+            }
+        }
+
+        .fee-info {
+            margin: 0 auto;
+            font-size: 0.85rem;
+            padding-bottom: 1.5rem;
+            left: 0;
+            right: 0;
+        }
+    }
+    .pin-input-screen {
+        background: $app-default-color;
+    }
+    .address-input-screen {
+        background: $lightgray-dark;
+        
+        .message {
+            min-height: 5rem;
+            padding: $bar-padding-portrait $bar-padding-portrait 0;
+            color: $darkgray-light;
+        }
+        .card .title {
+            font-size: 1.5rem;
+            color: $darkgray-light;
+        }
+        .address-input {
+            background: #e1e1e1;
+        }
+    }
+    .scan-screen {
+        line-height: 100%;
+        padding-top: 50vw;
+        h1 {
+            color: #fff;
+        }
+        text-align: center;
+        z-index: 100;
+    }
+}
+
+//--- receive screens ---
+.state-receive {
+    background: $lightgray-dark;
+
+    .qrcode-display-section {
+        position: relative;
+        width: 100%;
+        padding: $bar-padding-portrait 0 0 0;
+
+        min-height: 12rem;
+        height: auto;
+
+        canvas,
+        img {
+            height: 30vh;
+            width: auto;
+        }
+
+        .spinner svg {
+            margin-top:2rem;
+            width: 60px;
+            height: 60px;
+        }
+    }
+    .request-button-section {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+
+        .button.request {
+            left: 0;
+            right: 0;
+            margin: 20px auto;
+            color: darken(#999, 5%);
+            font-size: 17px;
+            //box-shadow: 0 -10px 20px #fff;
+            box-shadow: $app-default-shadow;
+            background: rgba(#fff, 0.9);
+
+            z-index: 100;
+
+
+            //style 2 - square button
+            border: 2px solid #999;
+            min-width: 10rem;
+
+        }
+    }
+    .request-options,
+    .message-display {
+        background: rgba(#fff, 0.9);
+    }
+}

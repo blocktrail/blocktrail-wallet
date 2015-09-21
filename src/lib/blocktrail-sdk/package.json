@@ -1,0 +1,89 @@
+{
+  "name": "blocktrail-sdk",
+  "description": "BlockTrail's Developer Friendly API binding for NodeJS",
+  "keywords": [
+    "blocktrail",
+    "bitcoin",
+    "sdk",
+    "api",
+    "blockchain",
+    "payment",
+    "bitcoin data",
+    "wallet",
+    "multi-signature",
+    "transaction"
+  ],
+  "version": "1.3.13",
+  "homepage": "https://www.blocktrail.com/api/docs/lang/nodejs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/blocktrail/blocktrail-sdk-nodejs.git"
+  },
+  "bugs": {
+    "url": "http://github.com/blocktrail/blocktrail-sdk-nodejs/issues"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "main": "./main.js",
+  "browser": {
+    "./lib/backup_generator.js": "./lib/backup_generator-browser.js"
+  },
+  "dependencies": {
+    "assert-plus": "0.1.5",
+    "async": "0.9.0",
+    "bip39": "git://github.com/blocktrail/bip39.git#sjcl-browser",
+    "bitcoinjs-lib": "1.5.6",
+    "bops": "0.0.6",
+    "bowser": "^0.7.2",
+    "colors": "*",
+    "create-hash": "^1.1.0",
+    "create-hmac": "^1.1.3",
+    "crypto-js": "^3.1.5",
+    "debug": "0.8.1",
+    "html-pdf": "1.0.*",
+    "lodash": "3.1.0",
+    "promise": "^6.1.0",
+    "q": "1.0.1",
+    "qrcode-canvas": "~0.0.1",
+    "qrcode-js": "0.0.*",
+    "randombytes": "^2.0.1",
+    "superagent": "^0.21.0",
+    "superagent-http-signature": "0.1.3",
+    "superagent-promise": "^0.2.0",
+    "webworkify": "^1.0.2"
+  },
+  "author": {
+    "name": "Ruben de Vries <ruben@blocktrail.com>"
+  },
+  "contributors": [
+    {
+      "name": "Ruben de Vries",
+      "email": "ruben@blocktrail.com"
+    },
+    {
+      "name": "Oisin Akiboye Conolly",
+      "email": "oisin@blocktrail.com"
+    }
+  ],
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-browserify": "~3.5.1",
+    "grunt-contrib-uglify": "~0.8.1",
+    "grunt-contrib-concat": "~0.5.1",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-notify": "~0.2.17",
+    "mocha": "*",
+    "jshint": "*",
+    "jscs": "*",
+    "browserify": "*",
+    "watchify": "*",
+    "brfs": "*"
+  },
+  "scripts": {
+    "test": "mocha",
+    "browserify": "grunt build",
+    "lint": "jshint main.js lib/ test/ && jscs main.js lib/ test/"
+  }
+}

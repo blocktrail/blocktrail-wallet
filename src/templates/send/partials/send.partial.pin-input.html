@@ -1,0 +1,52 @@
+<div class="pin-input-screen">
+    <ion-content>
+
+        <div class="pin-input-section" ng-if="appControl.showPinInput">
+            <div class="fee-info capitalise">
+                {{ 'ESTIMATED_FEE' | translate }}: {{ fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }} 
+                <small>({{ fee | satoshiToCurrency: settings.localCurrency : bitcoinPrices }})</small>
+            </div>
+
+            <h2 class="capitalise">{{ 'WALLET_PIN' | translate }}</h2>
+            <label class="item-input" ng-class="{error: appControl.showPinInputError}">
+                <input type="tel" ng-model="sendInput.pin" required ng-enter="send()" ng-change="appControl.showPinInputError = false" tabindex="-1">
+            </label>
+            <div class="pin-error">
+                <span ng-show="appControl.showPinInputError">{{ appControl.result.error[0] | translate }}</span>
+            </div>
+
+            <a class="button button-outline confirm-button capitalise" ng-click="send()">{{ 'CONFIRM' | translate }}</a>
+        </div>
+        <!-- /password confirmation -->
+
+        <div class="sending-progress-section" ng-if="appControl.isSending">
+            <div class="fee-info capitalise">
+                <span ng-if="!appControl.complete">
+                    {{ 'ESTIMATED_FEE' | translate }}: {{ fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}
+                    <small>({{ fee | satoshiToCurrency: settings.localCurrency : bitcoinPrices }})</small>
+                </span>
+                <span ng-if="appControl.complete" to-clipboard="appControl.result.txHash">{{ 'TX_INFO_HASH' | translate }}: {{ appControl.result.txHash | characters:8 }}</span>
+            </div>
+
+            <h3 class="progress-message capitalise" ng-class="{complete: appControl.complete}">{{ appControl.result.message | translate }}</h3>
+            <ion-spinner icon="dots" ng-if="appControl.working" class="spinner-stable"></ion-spinner>
+
+            <div class="results error" ng-if="appControl.result.error">
+                <div class="errors min-height">
+                    <label class="help-block" ng-repeat="(key, value) in appControl.result.error" ng-bind="value | translate"></label>
+                </div>
+
+                <a class="button button-outline confirm-button capitalise" ng-click="$btBackButtonDelegate.goBack()">{{ 'GO_BACK' | translate }}</a>
+            </div>
+            <div class="results" ng-if="appControl.complete">
+                <div class="min-height">
+                    {{ 'TRANSACTION_SEND_SUCCESS' | translate }}.<br/>
+                </div>
+
+                <a class="button button-outline confirm-button capitalise" nav-direction="exit" menu-close ui-sref="app.wallet.summary({refresh: true})">{{ 'DONE' | translate }}</a>
+            </div>
+        </div>
+        <!-- /sending screen -->
+
+    </ion-content>
+</div>

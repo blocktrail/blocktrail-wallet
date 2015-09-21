@@ -1,0 +1,17 @@
+{
+  "name": "blocktrail-sdk-nodejs",
+  "homepage": "https://github.com/blocktrail/blocktrail-sdk-nodejs",
+  "authors": [
+    "Ruben de Vries <ruben@rubensayshi.com>"
+  ],
+  "description": "BlockTrail's Developer Friendly API binding for NodeJS",
+  "main": "main.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "browserify-cryptojs",
+  "version": "0.3.1",
+   "keywords": [
+    "browserify",
+    "cryptojs",
+    "crypto",
+    "cipher",
+    "encrypt",
+    "decrypt"
+  ],
+  "dependencies": {
+  }
+}

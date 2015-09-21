@@ -1,0 +1,188 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+
+
+/*---Colours---*/
+$bluejeans-dark:              #4A89DC !default;
+$bluejeans-light:             #5D9CEC !default;
+
+$aqua-dark:                   #3BAFDA !default;
+$aqua-light:                  #4FC1E9 !default;
+
+$mint-dark:                   #37BC9B !default;
+$mint-light:                  #48CFAD !default;
+
+$grass-dark:                  #8CC152 !default;
+$grass-light:                 #A0D468 !default;
+
+$sunflower-dark:              #F6BB42 !default;
+$sunflower-light:             #FFCE54 !default;
+
+$bittersweet-dark:            #E9573F !default;
+$bittersweet-light:           #FC6E51 !default;
+
+$grapefruit-dark:             #DA4453 !default;
+$grapefruit-light:            #ED5565 !default;
+
+$lavender-dark:               #967ADC !default;
+$lavender-light:              #AC92EC !default;
+
+$pinkrose-dark:               #D770AD !default;
+$pinkrose-light:              #EC87C0 !default;
+
+$lightgray-dark:              #E6E9ED !default;
+$lightgray-light:             #F5F7FA !default;
+
+$mediumgray-dark:             #AAB2BD !default;
+$mediumgray-light:            #CCD1D9 !default;
+
+$darkgray-dark:               #434A54 !default;
+$darkgray-light:              #656D78 !default;
+
+//more colours
+$bt-red:                #E0224B;
+$bt-black:              #191919;
+$bt-grey:               #414443;
+$bt-emerald:            #35B89C;
+$bt-green:              #5CBF99;
+$bt-mint:               #91CC8E;
+$bt-lemon:              #E7E27D;
+$bt-neon:               #EBE70D;
+
+
+$good-green:            $bt-green;      //#5fd675;
+$dark-green:            #08A635;
+$bad-red:               #d47e7e;
+$app-default-color:     $bt-green;      //#007384;	//dark blue if you will
+$app-default-shadow:      0 1px 4px rgba(0,0,0,0.15);
+
+$energized:     $app-default-color;
+//$balanced: $mediumgray-dark;
+
+
+// Base
+// -------------------------------
+
+$font-family-sans-serif:          "Helvetica Neue", "Roboto", "Segoe UI", sans-serif !default;
+$font-family-light-sans-serif:    "HelveticaNeue-Light", "Roboto-Light", "Segoe UI-Light", sans-serif-light, sans-serif !default;
+$font-family-thin-sans-serif:     "HelveticaNeue-Light", "Roboto-thin", "Segoe UI-Light", sans-serif-thin, sans-serif !default;   //not used by ionic framework
+$font-family-serif:               serif !default;
+$font-family-monospace:           monospace !default;
+
+$font-family-base:                $font-family-sans-serif !default;
+$font-size-base:                  14px !default;
+$font-size-large:                 18px !default;
+$font-size-small:                 11px !default;
+
+$line-height-base:                1.428571429 !default; // 20/14
+$line-height-computed:            floor($font-size-base * $line-height-base) !default; // ~20px
+$line-height-large:               1.33 !default;
+$line-height-small:               1.5 !default;
+
+$headings-font-family:            $font-family-base !default;
+$headings-font-weight:            300 !default;
+$headings-line-height:            1.2 !default;
+
+$base-background-color:           #fff !default;
+$base-color:                      #000 !default;
+
+$content-padding:                 10px !default;
+
+$padding-base-vertical:           6px !default;
+$padding-base-horizontal:         12px !default;
+
+$padding-large-vertical:          10px !default;
+$padding-large-horizontal:        16px !default;
+
+$padding-small-vertical:          5px !default;
+$padding-small-horizontal:        10px !default;
+
+$border-radius-base:              4px !default;
+$border-radius-large:             6px !default;
+$border-radius-small:             3px !default;
+
+/*---Top Bar---*/
+$bar-height:                      65px;
+$bar-title-font-size:             22px;
+$bar-padding-portrait:            15px;
+$bar-padding-landscape:           15px;
+$bar-transparency:                1;
+
+$bar-energized-bg:                  rgba($app-default-color, $bar-transparency);
+$bar-energized-text:                #fff;
+$bar-energized-border:              #fff;
+$bar-energized-active-bg:           darken($app-default-color, 20%);
+$bar-energized-active-border:       darken(#fff, 10%);
+
+
+
+// Menus
+// -------------------------------
+
+$menu-bg:                         #ececec !default;
+$menu-width:                      275px !default;
+$menu-animation-speed:            200ms !default;
+$menu-side-shadow:                -1px 0px 7px rgba(0, 0, 0, 0.2), 1px 0px 7px rgba(0,0,0,0.2) !default;
+
+/*--- Main Side Menu ---*/
+$sidemenu-header-bg:               #a5a5a5;
+
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../fonts" !default;
+
+// Include all of Ionic
+@import "../lib/ionic/scss/ionic";
+
+//iOS 9 patches
+@import "partials/ios9-fixes";
+
+//Add our mixins
+@import "mixins";
+
+
+//Add our custom version of the back-button
+@import "bt-back-button";
+
+//custom fonts
+@import "bt-fonts";
+@import "fontello-codes";
+
+//add other libs
+@import "../lib/ngImgCrop/source/scss/ng-img-crop.scss";
+
+//import our theme
+@import "theme";
+
+
+
+
+//NOTE - watch out when using .ion class anywhere, sass will do some crazy stuff when extending and in certain situations can really mess everything up (uncomment snippet below to see
+//problem caused by @extend .ion in _ionicon-icons.scss, read more: http://csswizardry.com/2014/01/extending-silent-classes-in-sass/
+/*
+.state-send {
+    .two {
+        .three {
+            .four {
+                i.ion {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+*/

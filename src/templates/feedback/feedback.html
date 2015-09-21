@@ -1,0 +1,37 @@
+<ion-view class="state-feedback">
+    <ion-nav-title class="capitalise">{{ 'FEEDBACK' | translate }}</ion-nav-title>
+    <ion-nav-buttons side="right">
+        <div class="button" ng-show="!appControl.showMessage && isKeyboardShown" ng-click="sendFeedback()">{{ 'SEND' | translate }}</div>
+    </ion-nav-buttons>
+
+
+    <ion-content scroll="!appControl.showPasswordInput" ng-class="{'blur-me': appControl.showMessage}">
+
+        <div class="list card">
+            <div class="item item-body">
+                <label class="item item-input msg">
+                    <i class="icon ion-edit placeholder-icon"></i>
+                    <textarea cols="30" rows="8" ng-model="feedbackInput.msg" placeholder="{{ 'SEND_FEEDBACK_PLACEHOLDER' | translate}}"></textarea>
+                </label>
+            </div>
+            <label class="item item-input email">
+                <i class="icon ion-email placeholder-icon"></i>
+                <input type="email" ng-model="feedbackInput.email" placeholder="{{ 'EMAIL' | translate }} ({{ 'OPTIONAL' | translate}})">
+            </label>
+        </div>
+
+        <div class="send-button-group text-right">
+            <div class="button center clear capitalise" ng-click="sendFeedback()">
+                {{ 'SEND' | translate }}
+            </div>
+        </div>
+    </ion-content>
+
+    <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="dismissMessage()">
+        <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+        <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
+        <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
+        <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
+    </div>
+    <!-- /message screen -->
+</ion-view>

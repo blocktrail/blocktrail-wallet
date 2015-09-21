@@ -1,0 +1,19 @@
+{
+    "DEBUG": false,
+    "MINIFY": true,
+    "TESTNET": true,
+    "NG_CORDOVA_MOCKS": false,
+    "POUCHDB_DRIVER": null,
+    "API_HOST": "api.blocktrail.com",
+    "API_HTTPS": true,
+
+    // default ionic apps keys for usage stats logging in development
+    "IO_CONFIG": {
+        "app_id": "ee6eae44",
+        "api_key": "9e0747befc483f602b04ba0f938db9422800d917d25b1ee9"
+    },
+
+    "DEFAULT_IDENTIFIER": "blocktrail-wallet",
+    
+    "NULL": null // just here so we can have a trailing , on every line
+}

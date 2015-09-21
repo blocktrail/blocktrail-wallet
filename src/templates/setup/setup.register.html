@@ -1,0 +1,78 @@
+<ion-view class="state-setup state-login" ng-class="{'blur-me': appControl.showMessage}">
+    <ion-nav-title class="capitalise">{{ 'SETUP_REGISTER' | translate }}</ion-nav-title>
+    <ion-nav-buttons side="left">
+        <button ng-click="$btBackButtonDelegate.goBack($event)"
+                class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
+                ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content scroll="true">
+        <ng-form name="registerForm">
+            <div class="list">
+                <label class="item item-input item-select signup-type-select">
+                    <div class="input-label">
+                        Sign up with
+                    </div>
+                    <select ng-model="form.registerWithEmail" ng-change="form.username=null; form.email=null;" convert-to-number>
+                        <option value="1">Email</option>
+                        <option value="0">Username</option>
+                    </select>
+                </label>
+                <!-- /register type -->
+
+                <label class="item item-input item-floating-label input-email" ng-if="form.registerWithEmail">
+                    <div class="input-label text-neutral">{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}</div>
+                    <input type="email" placeholder="{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}" required ng-model="form.email">
+                </label>
+                <!-- /email -->
+
+                <label class="item item-input item-floating-label input-username" ng-if="!form.registerWithEmail">
+                    <div class="input-label text-neutral">
+                        <span>{{ 'SETUP_USERNAME_PLACEHOLDER' | translate }}</span>
+                        <div class="username-check text-right text-bad capitalise">
+                            <div ng-if="usernameTaken">{{ 'TAKEN' | translate }}</div>
+                            <div ng-if="registerForm.username.$invalid && registerForm.username.$dirty">{{ 'MSG_INVALID_USERNAME' | translate }}</div>
+                            <i class="icon ion-checkmark-circled text-good" ng-if="form.username && usernameTaken==false"></i>
+                            <ion-spinner ng-if="appControl.checkingUsername"></ion-spinner>
+                        </div>
+                    </div>
+                    <input type="text"
+                           name="username"
+                           placeholder="{{ 'SETUP_USERNAME_PLACEHOLDER' | translate }}"
+                           ng-pattern="'[a-zA-Z0-9_]*'"
+                           ng-model="form.username"
+                           ng-model-options='{ debounce: 400 }'
+                           ng-change="checkUsername()">
+                </label>
+                <!-- /username -->
+
+                <label class="item item-input item-floating-label">
+                    <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
+                    <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password">
+                </label>
+                <!-- /password -->
+            </div>
+
+            <div class="row text-center">
+                <div class="col col-offset-25 col-50 padding-bottom">
+                    <button class="button button-block capitalise" ng-click="doRegister()">{{ 'SETUP_REGISTER' | translate }}</button>
+                </div>
+            </div>
+
+
+            <div class="card" ng-if="!form.registerWithEmail">
+                <p class="item item-text-wrap text-neutral">*Signing up with a username gives you greater privacy and anonymity, but at a cost of being able to recover passwords and receive critical emails from us.</p>
+            </div>
+        </ng-form>
+    </ion-content>
+
+</ion-view>
+
+<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
+    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
+    <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
+    <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
+</div>
+<!-- /message screen -->

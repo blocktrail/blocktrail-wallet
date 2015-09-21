@@ -1,0 +1,41 @@
+<ion-view class="state-setup state-phone" ng-class="{'blur-me': appControl.showMessage}">
+    <ion-nav-title class="capitalise">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</ion-nav-title>
+
+    <ion-content>
+        <div class="info-section">
+            <div class="item item-text-wrap">
+                <h2 class="text-neutral">Link your phone number to your wallet?</h2>
+                <p class="padding-t">
+                    Your contacts will then be able to send funds directly to your wallet using your phone number.
+                </p>
+            </div>
+
+            <div class="item item-borderless" ng-if="!settings.phoneVerified">
+                <p class="padding-t">
+                    <small>You can always do this later in the settings.</small>
+                </p>
+                <button class="button button-block button-positive capitalise"
+                        ui-sref="app.setup.phone-verify({goBackTo: 'app.setup.contacts'})">{{ 'SETUP_PHONE' | translate }}
+                </button>
+                <a class="padding-t pull-right skip-step" ui-sref="app.setup.profile">{{ 'SKIP_STEP' | translate }}...</a>
+                <!-- @todo decide to use link or button style
+                <a class="margin-t pull-right button button-small button-neutral sentence-case" ui-sref="app.setup.profile">{{ 'SKIP_STEP' | translate }}...</a>
+                -->
+            </div>
+            <div class="item item-borderless" ng-if="settings.phoneVerified">
+                <p>Phone linked: {{ settings.phoneNumber }}</p>
+                <button class="button button-block button-positive capitalise"
+                        ui-sref="app.setup.contacts">{{ 'CONTINUE' | translate }}
+                </button>
+            </div>
+        </div>
+    </ion-content>
+
+</ion-view>
+
+<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
+    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
+    <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
+    <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
+</div>

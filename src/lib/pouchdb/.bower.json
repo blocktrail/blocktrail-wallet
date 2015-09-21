@@ -1,0 +1,37 @@
+{
+  "name": "pouchdb",
+  "description": "PouchDB is a pocket-sized database.",
+  "repo": "daleharvey/pouchdb",
+  "keywords": [
+    "db",
+    "couchdb",
+    "pouchdb"
+  ],
+  "dependencies": {},
+  "development": {},
+  "license": "Apache",
+  "main": "dist/pouchdb.js",
+  "scripts": [
+    "dist/pouchdb.js",
+    "dist/pouchdb.min.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests",
+    "vendor",
+    "npm-debug.log",
+    "phantomjsdriver.log"
+  ],
+  "homepage": "https://github.com/blocktrail/pouchdb",
+  "_release": "01eb7fe14f",
+  "_resolution": {
+    "type": "branch",
+    "branch": "blocktrail",
+    "commit": "01eb7fe14f10fbf00e3520df24cb9a52fe5a3966"
+  },
+  "_source": "git@github.com:blocktrail/pouchdb.git",
+  "_target": "blocktrail",
+  "_originalSource": "git@github.com:blocktrail/pouchdb.git"
+}

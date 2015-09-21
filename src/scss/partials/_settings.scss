@@ -1,0 +1,204 @@
+
+//--- settings screens ---
+.state-settings {
+    background: $lightgray-dark;
+
+    .scroll-content {
+        background: $lightgray-dark;
+
+        .group-title {
+            margin: 20px 10px 10px 14px;
+            padding: 0;
+            font-size: 1.2rem;
+            font-weight: lighter;
+            color: $darkgray-light;
+        }
+        .list-inset {
+            margin: 0 10px 35px 10px;
+            box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .display-name {
+            margin: 0 15px;
+        }
+        .contact-token {
+            top: -2px;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 20px;
+        }
+        .phone-status {
+            display: block;
+            color: #666;
+            //margin-top: 5px;
+            font-size: 14px;
+        }
+        .spin-me {
+            display: inline-block;
+            -webkit-transform-origin: 74% 46%;
+            transform-origin: 74% 46%;
+        }
+
+    }
+    .button .icon {
+        margin-left: 1rem;
+    }
+
+    //profile image select and crop
+    .profile-image.contact-token {
+        top: -2px;
+        width: 120px;
+        height: 120px;
+        margin-right: 20px;
+        line-height: 120px;
+        font-size: 60px;
+        float: left;
+
+        .initials {
+            font-size: 140px;
+            color: $lightgray-dark;
+        }
+    }
+    .action-sheet {
+        .button {
+            display: inline-block;
+            &::first-letter {
+                text-transform: uppercase;
+            }
+        }
+    }
+    .photo-crop-screen {
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        height: 100%;
+        padding-top: $bar-height;
+        margin-top: -1px;
+        background: #000;
+        z-index: 101;
+        transition: top 1s cubic-bezier(.13, .87, .42, .96);
+        -webkit-transition: top 1s cubic-bezier(.13, .87, .42, .96);
+        text-align: center;
+
+        &.displayed {
+            top: 0 !important;
+            transition: top 0.8s cubic-bezier(.4, .1, .11, .98);
+            -webkit-transition: top 0.8s cubic-bezier(.4, .1, .11, .98);
+        }
+
+        .confirm-button {
+            @include squareButton(#666, rgba(255, 255, 255, 0.5));
+            transition: none;
+            -webkit-transition: none;
+            min-width: 8rem;
+
+            position: absolute;
+            bottom: 1.5rem;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+        }
+
+        img-crop {
+            height: 100%;
+            width: 100%;
+            background: #000;
+            box-shadow: $app-default-shadow;
+
+            canvas {
+                //@TODO gotta work on this...issues with landscape images, and the touch detection on iOS also seems to suffer
+                //height: 100%;
+                //width: auto;
+            }
+        }
+        .loading {
+            color: #fff;
+            position: absolute;
+            top: 45%;
+            width: 100%;
+
+            h3 {
+                color: #fff;
+            }
+            .spinner svg {
+                color: #fff;
+                width: 60px;
+                height: 60px;
+            }
+        }
+    }
+
+    &.state-phone {
+        background: $lightgray-dark;
+
+        label.item-input {
+            background: $lightgray-dark;
+
+            i.placeholder-icon {
+                font-size: 18px;
+                margin-left: -5px;
+                padding-right: 8px;
+            }
+        }
+        .tabs {
+            background-image: none; //for some reason they've used a gradient to create a thin line instead of border....very annoying to discover and remove >:(
+        }
+        .country-code {
+            padding: 0 0 5px 0;
+            p {
+                padding-top: 8px;
+            }
+        }
+        .country-select-screen {
+            margin-top: 0;
+            padding: 0;
+            padding-top: $bar-height;
+            text-align: left;
+
+            .clear-input {
+                position: absolute;
+                right: 22px;
+                font-size: 20px;
+                line-height: 29px;
+                height: 29px;
+                z-index: 10;
+            }
+
+            .filter-input {
+                position: absolute;
+                background: #bbb;
+                border-bottom: 1px solid #e1e1e1;
+                width: 100%;
+                height: 50px;
+                top: $bar-height;
+                z-index: 100;
+            }
+            .scroll-content {
+                padding-top: 50px;
+                //@include transform(translate(0, 50px));
+            }
+        }
+    }
+}
+//platform specifics
+.platform-android {
+    .state-settings {
+        //...
+    }
+}
+.platform-ios {
+    .state-settings {
+        .photo-crop-screen {
+            padding-top: $bar-height + $ios-statusbar-height;
+        }
+    }
+    .state-phone {
+        .country-select-screen {
+            //padding-top: $bar-height + $ios-statusbar-height;
+
+            .filter-input {
+                margin-top: $ios-statusbar-height;
+            }
+        }
+    }
+}

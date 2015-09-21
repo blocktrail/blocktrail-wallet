@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title></title>
+
+        <script>
+            window.NG_CORDOVA_MOCKS = <%= NG_CORDOVA_MOCKS %>;
+        </script>
+
+        <link href="css/ionic.app.css" rel="stylesheet">
+
+        <script src="js/libs.js"></script>
+        <script src="js/sdk.js"></script>
+
+        <script src="js/ng-cordova.js"></script>
+        <script src="cordova.js"></script>
+
+        <script src="js/app.js"></script>
+
+        <script>
+            angular.module('blocktrail.config', []).constant('CONFIG', <%= APPCONFIG_JSON %>);
+        </script>
+
+        <script>
+            ionic.Platform.ready(function() {
+                console.log('Ionic Platform ready');
+                angular.bootstrap(document.body, ["blocktrail.wallet"]);
+            }, false);
+        </script>
+    </head>
+
+    <body class="platform-cordova">
+        <ion-nav-view>
+            <div class="loading-screen" ng-hide="hideLoadingScreen"
+                 style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #35B89c; background: #fff; text-align: center; color: #fff;">
+
+                <div class="loader" ng-cloak>
+                    <span class="capitalise">{{ 'LOADING' | translate }}...</span>
+                </div>
+            </div>
+        </ion-nav-view>
+    </body>
+</html>

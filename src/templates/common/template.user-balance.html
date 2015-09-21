@@ -1,0 +1,65 @@
+<section class="user-balance-display">
+    <div class="row">
+        <div class="col col-33 no-padding user-avatar-col">
+            <div class="display-token">
+                <div class="initials"><i class="ion-person"></i></div>
+                <img class="avatar" ng-if="settings.profilePic" ng-src="{{ settings.profilePic }}" alt=""/>
+            </div>
+
+        </div>
+        <div class="col col-679 no-padding user-balance-col">
+            <div class="row balance-label">
+                <div class="col">
+                    <div class="balance-label" ng-if="balance !== null">
+                        <canvas-display
+                                text="'Your Bitcoins'"
+                                width="100%"
+                                height="18"
+                                font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                text-baseline="bottom"
+                                color="#FFFFFF">
+                        </canvas-display>
+                    </div>
+                </div>
+            </div>
+            <div class="row btc-display">
+                <div class="col">
+                    <div class="btc-value" ng-if="balance !== null">
+                        <canvas-display
+                                text="(balance+uncBalance | satoshiToCurrency: 'BTC' : bitcoinPrices : 4 : htmlMarkup=false : hideDisp=true)"
+                                width="100%"
+                                height="40"
+                                font="40px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                text-baseline="bottom"
+                                color="#FFFFFF">
+                        </canvas-display>
+                    </div>
+                </div>
+                <div class="col col-20">
+                        <canvas-display
+                                text="'BTC'"
+                                width="100%"
+                                height="18"
+                                font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                text-baseline="top"
+                                color="#FFFFFF">
+                        </canvas-display>
+                </div>
+            </div>
+            <div class="row fiat-display">
+                <div class="col">
+                    <div class="fiat-value" ng-if="balance !== null">
+                        <canvas-display
+                                text="(balance+uncBalance) | satoshiToCurrency: settings.localCurrency :  bitcoinPrices : 2 : htmlMarkup=false"
+                                width="100%"
+                                height="20"
+                                font="20px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                text-baseline="bottom"
+                                color="#FFFFFF">
+                        </canvas-display>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

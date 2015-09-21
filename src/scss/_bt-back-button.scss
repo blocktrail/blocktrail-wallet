@@ -1,0 +1,28 @@
+/*
+    css for our custom Back Button
+    (basically a copy of the .back-button, but with a different class to avoid ionic controlling through the selector)
+*/
+
+.button {
+    &.bt-back-button {
+        display: block;
+        margin-right: 5px;
+        padding: 0;
+        white-space: nowrap;
+        font-weight: 400;
+    }
+
+    &.bt-back-button.active,
+    &.bt-back-button.activated {
+        opacity: 0.2;
+    }
+}
+
+
+.platform-android {
+    .bar {
+        .bt-back-button .icon:before {
+            font-size: 24px;
+        }
+    }
+}

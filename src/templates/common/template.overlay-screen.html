@@ -1,0 +1,9 @@
+<div class="overlay-screen transaction-info-section"
+     ng-class="{displayed: display, 'hide-left': hideLeft}"
+     on-swipe-down="onSwipeDown($event)"
+     on-swipe-left="onSwipeLeft($event)">
+
+    <div class="darken-overlay" ng-show="display"></div>
+    <div class="inner-content" ng-if="template" ng-include="template"></div>
+    <ng-transclude ng-if="!template" class="inner-content"></ng-transclude>
+</div>

@@ -1,0 +1,7 @@
+node_modules/
+appconfig.json
+
+platforms/android/assets/www/*
+platforms/ios/www/*
+platforms/ios/cordova/console.log
+platforms/android/CordovaLib/build

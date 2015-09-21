@@ -1,0 +1,302 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.liteglue.SQLitePlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"ContactsPhoneNumbers\"><param name=\"android-package\" value=\"com.dbaq.cordova.contactsPhoneNumbers.ContactsManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Clipboard\"><param name=\"android-package\" value=\"com.verso.cordova.clipboard.Clipboard\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"CsZBar\"><param name=\"android-package\" value=\"org.cloudsky.cordovaPlugins.ZBar\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"android-package\" value=\"org.apache.cordova.globalization.Globalization\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"PinDialog\"><param name=\"android-package\" value=\"hu.dpal.phonegap.plugins.PinDialog\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FileOpener2\"><param name=\"android-package\" value=\"io.github.pwlin.cordova.plugins.fileopener2.FileOpener2\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppVersion\"><param name=\"android-package\" value=\"uk.co.whiteoctober.cordova.AppVersion\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppRate\"><param name=\"android-package\" value=\"org.pushandplay.cordova.apprate.AppRate\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"LaunchMyApp\"><param name=\"android-package\" value=\"nl.xservices.plugins.LaunchMyApp\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"EmailComposer\"><param name=\"android-package\" value=\"de.appplant.cordova.emailcomposer.EmailComposer\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Sms\"><param name=\"android-package\" value=\"com.cordova.plugins.sms.Sms\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.READ_CONTACTS\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.camera\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.camera.autofocus\" android:required=\"false\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.camera.flash\" android:required=\"false\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.camera.front\" android:required=\"false\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.CAMERA\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        }
+                    ],
+                    "application": [
+                        {
+                            "xml": "<activity android:name=\"org.cloudsky.cordovaPlugins.ZBarScannerActivity\" android:screenOrientation=\"portrait\" android:theme=\"@android:style/Theme.Black.NoTitleBar.Fullscreen\"></activity>",
+                            "count": 1
+                        }
+                    ],
+                    "/manifest": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.telephony\" android:required=\"false\" />",
+                            "count": 1
+                        }
+                    ],
+                    "/manifest/application": [
+                        {
+                            "xml": "<activity android:label=\"@string/multi_app_name\" android:name=\"com.synconset.MultiImageChooserActivity\" android:theme=\"@android:style/Theme.Holo.Light\"></activity>",
+                            "count": 1
+                        }
+                    ],
+                    "/*/application/activity": [
+                        {
+                            "xml": "<intent-filter><data android:scheme=\"bitcoin\" /><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /><category android:name=\"android.intent.category.BROWSABLE\" /></intent-filter>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "res/values/strings.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<string name=\"csZbarScannerTitle\">Scan QR Code</string>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<string name=\"csZbarScannerInstructions\">Please point your camera at the QR code.</string>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<color name=\"csZbarScannerTextColor\">#ffffff</color>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<color name=\"csZbarScannerTextBackground\">#88000000</color>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<color name=\"csZbarScannerBackground\">#000000</color>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "org.apache.cordova.console": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "io.litehelpers.cordova.sqlite": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "com.dbaq.cordova.contactsPhoneNumbers": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "com.verso.cordova.clipboard": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "org.cloudsky.cordovaplugins.zbar": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "com.synconset.imagepicker": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "hu.dpal.phonegap.plugins.PinDialog": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "fr.spirotron.cordova.disabledatadetectors": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "io.github.pwlin.cordova.plugins.fileopener2": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "uk.co.whiteoctober.cordova.appversion": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "org.pushandplay.cordova.apprate": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "org.apache.cordova.statusbar": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-customurlscheme": {
+            "URL_SCHEME": "bitcoin",
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "de.appplant.cordova.plugin.email-composer": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "com.cordova.plugins.sms": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        }
+    },
+    "dependent_plugins": {
+        "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        }
+    }
+}

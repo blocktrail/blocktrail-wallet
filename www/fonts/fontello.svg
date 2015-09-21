@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2015 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="blocktrail-wallet" unicode="&#xe800;" d="m979 17l0 0c0-58-46-105-104-105l0 0h-750l0 0c-57 0-104 47-104 105v604c0 46 37 83 83 83l0 0h420l169 61c11 4 23-1 27-12l17-49h76c46 0 83-37 83-83v-42l0 0c46 0 83-37 83-83v-479z m-875 646l0 0c-23 0-41-19-41-42s18-42 41-42h72l0 0h4c0 0 0 1 1 1l228 83h-305z m606-4l-22 61 0 0 0 0-43-16h0l-115-41h0l-230-84h439l-29 80z m144-38c0 23-18 42-41 42h-61l31-84h71l0 0v42z m42-83h-792l0 0c-15 0-29 4-41 11v-532c0-35 28-63 62-63h750c35 0 63 28 63 63v146h-84c-46 0-83 37-83 83s37 83 83 83h84v167c0 23-19 42-42 42z m42-334v84h-84c-23 0-41-19-41-42s18-42 41-42h84z m-84 63h42v-42h-42v42z m-533 113v68c0 0 191 0 198 0 12-3 117 5 127-113 0-49-29-78-29-78 10-10 42-32 44-94 1-67-45-117-137-117-32 0-67 0-67 0v71h64c0 0 62-4 63 51-3 57-57 50-63 51-4 0-126 0-126 0v-173h-74v240c0 0 175 0 199 0s51 17 51 47c-1 37-40 47-55 47-20 0-195 0-195 0l0 0z" horiz-adv-x="1000" />
+<glyph glyph-name="qrcode" unicode="&#xe801;" d="m214 207v-71h-71v71h71z m0 429v-72h-71v72h71z m429 0v-72h-72v72h72z m-572-571h215v214h-215v-214z m0 428h215v214h-215v-214z m429 0h214v214h-214v-214z m-143-143v-357h-357v357h357z m286-286v-71h-72v71h72z m143 0v-71h-72v71h72z m0 286v-214h-215v71h-71v-214h-71v357h214v-71h71v71h72z m-429 429v-358h-357v358h357z m429 0v-358h-357v358h357z" horiz-adv-x="785.7" />
+<glyph glyph-name="filter" unicode="&#xe802;" d="m783 685q9-23-8-39l-275-275v-414q0-23-22-33-7-3-14-3-15 0-25 11l-143 143q-10 10-10 25v271l-275 275q-18 16-8 39 9 22 33 22h714q23 0 33-22z" horiz-adv-x="785.7" />
+</font>
+</defs>
+</svg>

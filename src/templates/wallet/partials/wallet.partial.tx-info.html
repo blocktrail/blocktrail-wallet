@@ -1,0 +1,74 @@
+<h3 class="title capitalise" ng-class="{received: data.wallet_value_change > 0, sent: data.wallet_value_change <= 0}">
+    <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_SENT' | translate }}</span>
+    <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED' | translate }}</span>
+</h3>
+<small class="tx-hash text-ellipsis" to-clipboard="data.hash">
+    <span class="value">{{ data.hash }}</span>
+    <span class="label capitalise">
+        {{ 'TX_INFO_HASH' | translate }}
+    </span>
+</small>
+<ion-content class="">
+<div class="amount" ng-class="{received: data.wallet_value_change > 0, sent: data.wallet_value_change <= 0}">
+    <canvas-display text="(data.amount | mathAbs | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 )" width="100%" height="40"></canvas-display>
+    <div class="fiat text-ellipsis" ng-if="data.price">
+        <span class="value">{{ data.amount | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  data.price }}</span>
+        <span class="label">{{ 'TX_INFO_TIME_SUBTITLE' | translate }}</span>
+    </div>
+    <div class="fiat text-ellipsis opacity-50" ng-if="data.price">
+        <span class="value">{{ data.amount | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  bitcoinPrices }}</span>
+        <span class="label">{{ 'TX_INFO_TIME_SUBTITLE_2' | translate }}</span>
+    </div>
+</div>
+
+<div class="fee" ng-if="data.wallet_value_change <= 0">
+    <div class="label capitalise">
+        {{ 'TX_INFO_FEE' | translate }}
+    </div>
+    <div class="value">
+        {{ data.fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8}}
+         <span class="fiat opacity-50">
+             {{ data.fee | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  data.price }}
+         </span>
+    </div>
+</div>
+
+<div class="date">
+    <div class="label capitalise">
+        <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_DATE_SENT' | translate }}</span>
+        <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_DATE_RECEIVED' | translate }}</span>
+    </div>
+    <div class="value">{{ data.time | amDateFormat:'Do MMMM YYYY, h:mm:ss a' : 'unix' }}</div>
+</div>
+
+<div class="confirmations">
+    <div class="label capitalise">
+        {{ 'TX_INFO_CONFIRMATIONS_TITLE' | translate }}
+    </div>
+    <div class="value">
+        <span ng-if="data.block_height">{{ data.block_height | confirmations }}</span>
+        <span ng-if="data.block_height == null">{{ 'TX_INFO_PENDING' | translate }}</span>
+    </div>
+</div>
+
+<div class="contact">
+    <div class="label capitalise">
+        <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_SENT_TO' | translate }}</span>
+        <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED_FROM' | translate }}</span>
+    </div>
+    <div class="value text-ellipsis">{{ data.contact && data.contact.displayName || data.altDisplay }}</div>
+</div>
+
+<div class="message" ng-if="false">
+    <div class="label capitalise">
+        {{ 'TX_INFO_MESSAGE_TITLE' | translate }}
+    </div>
+    <div class="value">this feature is coming soon!</div>
+</div>
+</ion-content>
+
+<button class="button dismiss capitalise" ng-click="dismiss()">{{ 'OK' | translate }}</button>
+
+<div class="close" ng-click="dismiss()">
+    <i class="ion ion-ios-close-empty"></i>
+</div>

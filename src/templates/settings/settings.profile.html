@@ -1,0 +1,53 @@
+<ion-view class="state-settings state-profile">
+    <ion-nav-title class="capitalise">{{ 'SETTINGS_PROFILE' | translate }}</ion-nav-title>
+    <ion-nav-buttons side="right">
+        <div class="button hide"
+            nav-direction="back" 
+            ng-class="{'hide': !isIOS || !appControl.showImageCrop}" 
+            ng-click="$btBackButtonDelegate.goBack()">{{ 'CANCEL' | translate }}
+        </div>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <div class="list card">
+            <div class="item item-body">
+                <div class="display-token contact-token profile-image" ng-click="updatePicture()">
+                    <div class="initials"><i class="ion-person"></i></div>
+                    <span class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: {{ settings.profilePosX }}%; background-position-y: {{ settings.profilePosY }}%;"></span>
+                </div>
+                <div ng-if="settings.username" class="username"><label class="capitalise">{{ 'SETTING_USERNAME' | translate }}: </label>{{ settings.username }}</div>
+                <div ng-if="settings.email" class="email"><label class="capitalise">{{ 'EMAIL' | translate }}: </label>{{ settings.email }}</div>
+
+                <p>Set a profile picture that your contacts will see when you send to them.</p>
+            </div>
+            <div class="item tabs tabs-secondary tabs-icon-left">
+                <a class="tab-item" ng-click="updatePicture()">
+                    <i class="icon ion-edit"></i>
+                    Update Picture
+                </a>
+                <a class="tab-item" ng-click="removePicture()">
+                    <i class="icon ion-trash-b"></i>
+                    Remove
+                </a>
+            </div>
+        </div>
+    </ion-content>
+
+    <div class="photo-crop-screen" ng-class="{displayed: appControl.showImageCrop}">
+        <img-crop image="newProfileImage"
+                  result-image="croppedProfileImage"
+                  area-type="circle"
+                  area-min-size="100"
+                  result-image-size="500"
+                  result-image-format="image/jpeg"
+                  result-image-quality="0.8">late
+        </img-crop>
+        <div class="loading" ng-if="appControl.showImageCrop && !newProfileImage" >
+            <ion-spinner icon="dots" class="spinner-stable"></ion-spinner>
+            <p>{{ 'LOADING' | translate }}</p>
+        </div>
+
+        <button class="button button-outline confirm-button capitalise" ng-click="assignProfileImage(croppedProfileImage)">{{ 'APPLY' | translate }}</button>
+    </div>
+    <!-- /photo crop screen -->
+</ion-view>

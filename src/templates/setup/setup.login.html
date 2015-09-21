@@ -1,0 +1,40 @@
+<ion-view class="state-setup state-login" ng-class="{'blur-me': appControl.showMessage}">
+    <ion-nav-bar class="bar-energized">
+        <ion-nav-title class="capitalise">{{ 'SETUP_LOGIN' | translate }}</ion-nav-title>
+
+        <ion-nav-buttons side="left">
+            <button ng-click="$btBackButtonDelegate.goBack($event)"
+                    class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
+                    ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+            </button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-content scroll="true" >
+        <div class="list">
+            <label class="item item-input item-floating-label">
+                <span class="input-label text-neutral">{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}</span>
+                <input type="text" placeholder="{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}" ng-model="form.username">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
+                <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password" ng-enter="doLogin()">
+            </label>
+        </div>
+
+        <div class="row text-center">
+            <div class="col col-offset-25 col-50 padding-bottom">
+                <button class="button button-block capitalise" ng-click="doLogin()">{{ 'SETUP_LOGIN' | translate }}</button>
+            </div>
+        </div>
+    </ion-content>
+
+</ion-view>
+
+<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
+    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
+    <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
+    <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
+</div>
+<!-- /message screen -->

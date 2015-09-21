@@ -1,0 +1,35 @@
+<div class="contacts-list-screen">
+    <div class="filter-input item-input item-input-inset">
+        <label class="item-input-wrapper">
+            <input type="text" placeholder="{{ 'SEARCH_CONTACTS' | translate }}" ng-model="contactsFilter.displayName" ng-enter="blurInput($event)">
+        </label>
+        <a class="button-clear clear-input" ng-show="contactsFilter.displayName" ng-click="contactsFilter.displayName = ''"><i class="ion ion-backspace"></i></a>
+    </div>
+    <ion-content>
+        <ion-refresher
+            pulling-text="{{'ION_REFRESHER' | translate}}"
+            on-refresh="reloadContacts()">
+        </ion-refresher>
+        <ion-list>
+            <div class="item item-avatar" 
+              collection-repeat="contact in contacts | filter:contactsFilter"
+              ng-class="{'no-wallet': !contact.matches.length, 'has-wallet': contact.matches.length}"
+              item-width="100%" item-height="contact.phoneNumbers.length > 1 && '86px' || '75px'"
+              ng-click="selectContact(contact)">
+                <div class="display-token contact-token">
+                    <div class="initials">{{ contact.displayName | contactInitials }}</div>
+                    <span class="avatar" ng-if="contact.avatarUrl" style="background-image: url('data:image/jpeg;base64, {{ contact.avatarUrl }}');"></span>
+                </div>
+                <h2>{{ contact.displayName }}</h2>
+                <div>{{ contact.phoneNumbers[0].number }}</div>
+                <small ng-if="contact.phoneNumbers.length>1">{{ contact.phoneNumbers[1].number }}</small>
+                <small class="padding-left" ng-if="contact.phoneNumbers.length>2">+{{ contact.phoneNumbers.length-2 }} {{ 'CONTACTS_MORE_NUMBERS' | translate }}</small>
+                <div class="invite" ng-if="!contact.matches.length">{{ 'CONTACTS_INVITE' | translate }}</div>
+            </div>
+        </ion-list>
+        <div class="text-center padding-t" ng-hide="contactsFilter.displayName">
+            <p class="sentence-case" ng-if="contacts.length == 0 && contactsWithWalletOnly">{{ 'CONTACTS_NO_WALLETS' | translate }}</p>
+            <p class="sentence-case" ng-if="contacts.length == 0 && !contactsWithWalletOnly">{{ 'CONTACTS_NONE' | translate }}</p>
+        </div>
+    </ion-content>
+</div>

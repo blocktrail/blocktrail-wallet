@@ -1,0 +1,135 @@
+@mixin circleButton($size: 100%, $color: #ccc, $bg: #fff, $borderStyle: 2px solid $color, $shadow: 0 3px 5px rgba(0, 0, 0, 0.15)) {
+    width: $size;
+    height: $size;
+    border-radius: $size;
+    border: $borderStyle;
+    background: $bg;
+    box-shadow: $shadow;
+
+    transition: background-color 0.15s ease-in-out;
+    &.activated {
+        color: $bg;
+        background: rgba($color, 0.9);
+    }
+}
+
+@mixin squareButton($color: #999, $bg: #fff, $borderStyle: 2px solid $color, $shadow: $app-default-shadow) {
+    width: 10rem;
+    font-size: 17px;
+    border: $borderStyle;
+    box-shadow: $shadow;
+    color: darken($color, 5%);
+    background: rgba($bg, 0.9);
+
+    transition: background-color 0.15s ease-in-out;
+    &.activated {
+        color: $bg;
+        background: rgba($color, 0.9);
+    }
+}
+
+@mixin display-token($width: 100%, $bg: #bcbcbc, $textColor: invert($bg)) {
+    position: relative;
+    display: inline-block;
+    width: $width; /* desired width */
+    height: $width;
+    background-color: $bg;
+
+    //make the token square
+    /* padding-top at 100% gives initial ratio of 1:1*/
+    /*
+    &:before {
+        content: "";
+        display: block;
+        padding-top: 100%; 
+    }
+    */
+
+    &>div, 
+    &>.avatar,
+    &>.initialsxxx,
+    &>img, 
+    .display-content {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    //make it a circle
+    border-radius: 100%;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.13);
+    text-decoration: none;
+
+    //initials text
+    .initials {
+        color: $textColor;
+        text-align: center;
+        font-size: $width/2;
+        line-height: $width;
+        text-transform: uppercase;
+        font-weight: 200;
+    }
+}
+
+/*
+.display-token {
+    position: relative;
+    display: inline-block;
+    width: $display-token-size;
+    height: $display-token-size;
+    border-radius: 100%;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.13);
+    text-decoration: none;
+
+    &.contact-token {
+        background-color: #bcbcbc;
+        color: #fff;
+        text-align: center;
+        font-size: $display-token-size/2;
+        line-height: $display-token-size;
+        text-transform: uppercase;
+        font-weight: 200;
+
+        color: transparent;
+        text-shadow: 0 0 0px #fff, 0 -1px 1px rgba(0,0,0,0.35);
+
+        .avatar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-position: 50% 50%;
+            background-size: cover;
+        }
+    }
+    &.anon-token {
+        background-color: #fff;
+        color: $darkgray-light;
+        text-align: center;
+        font-size: $display-token-size/1.5;
+        line-height: $display-token-size;
+
+        &.received {
+            border: 2px solid $good-green;
+        }
+        &.sent {
+            border: 2px solid $bad-red;
+        }
+    }
+}
+*/
+
+@mixin transform($transforms) {
+    -moz-transform: $transforms;
+    -o-transform: $transforms;
+    -ms-transform: $transforms;
+    -webkit-transform: $transforms;
+    transform: $transforms;
+}

@@ -1,0 +1,71 @@
+<ion-side-menus enable-menu-with-back-views="true">
+    <ion-side-menu-content>
+
+        <ion-nav-bar id="appTopBar" class="bar-energized" ng-class="{'darken-overlay': showOverlay}">
+            <ion-nav-buttons side="left">
+                <button 
+                    menu-toggle="left" 
+                    class="button button-icon icon ion-navicon menu-button {{ ($btBackButtonDelegate.isDisplayed || !$btBackButtonDelegate.enableMenuButton) && 'hide' || '' }}">
+                </button>
+                <button ng-click="$btBackButtonDelegate.goBack($event)" 
+                    class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
+                    ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+                </button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+
+        <ion-nav-view name="mainView"></ion-nav-view>
+    </ion-side-menu-content>
+
+    <!-- Left menu -->
+    <ion-side-menu side="left">
+        <div class="header-bar">
+            <div class="row row-no-padding">
+                <div class="col col-25">
+                    <a menu-close ng-href="{{ $state.href('app.wallet.settings.profile') }}" class="display-token contact-token">
+                        <div class="initials"><i class="ion-person"></i></div>
+                        <img class="avatar" ng-if="settings.profilePic" ng-src="{{ settings.profilePic }}" alt=""/>
+                    </a>
+                </div>
+                <div class="col col-75">
+                    <div class="display-name">
+                        {{ settings.displayName && settings.displayName || settings.username }}
+                    </div>
+                    <div class="email">
+                        {{ settings.email }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ion-content>
+            <ion-list class="options-list">
+                <ion-item menu-close ng-href="{{ $state.href('app.wallet.summary') }}">
+                    <i class="icon icon-blocktrail-wallet"></i>
+                    <span class="capitalise">{{ 'MY_WALLET' | translate }}</span>
+                </ion-item>
+                <ion-item menu-close ng-href="{{ $state.href('app.wallet.send') }}">
+                    <i class="icon ion-ios-redo-outline"></i>
+                    <span class="capitalise">{{ 'SEND' | translate }}</span>
+                </ion-item>
+                <ion-item menu-close ng-href="{{ $state.href('app.wallet.receive') }}">
+                    <i class="icon ion-ios-undo-outline"></i>
+                    <span class="capitalise">{{ 'RECEIVE' | translate }}</span>
+                </ion-item>
+                <div class="item-divider"><hr/></div>
+                <ion-item menu-close ng-href="{{ $state.href('app.wallet.settings') }}">
+                    <i class="icon ion-ios-gear-outline"></i>
+                    <span class="capitalise">{{ 'SETTINGS' | translate }}</span>
+                </ion-item>
+                <ion-item menu-close ng-href="{{ $state.href('app.wallet.promo') }}">
+                    <i class="icon ion-ios-heart-outline"></i>
+                    <span class="capitalise">{{ 'PROMO_CODES' | translate }}</span>
+                </ion-item>
+                <ion-item menu-close ng-href="{{ $state.href('app.wallet.feedback') }}">
+                    <i class="icon ion-ios-chatboxes-outline"></i>
+                    <span class="capitalise">{{ 'SEND_FEEDBACK' | translate }}</span>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
+</ion-side-menus>

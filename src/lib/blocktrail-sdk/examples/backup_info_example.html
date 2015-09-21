@@ -1,0 +1,65 @@
+<html>
+<body>
+    <span id="userAgent"></span>
+    <span id="saveAsSupported"></span>
+    <button onclick="createBackupPDF()">create backup PDF</button>
+    <button onclick="createBackupPopup()">create backup popup with HTML</button>
+
+    <script src="../build/blocktrail-sdk-full.js"></script>
+    <script>
+        var blocktrail = window.blocktrailSDK;
+        var CryptoJS = blocktrail.CryptoJS;
+        blocktrail.debug.enable('*');
+
+        var identifier = "rubensayshi";
+        var encryptedPrimarySeed = "fat arena brown skull echo quick cargo stereo welcome option pair warrior silk badge try churn note frog lemon open assault squirrel cave echo inch diagram army disease lobster version organ slow pride slush bunker blade diet bundle pair over flavor nerve name debate disease glow illness weather ";
+        var recoveryEncryptedSecret = "fat arena brown skull echo quit spring paddle nut private chronic genre prison security earth choose smooth trumpet woman depart identify recall pave van note pear because engine snow south pool relax solid language riot double denial filter palm beyond senior club illness prize ritual orange pelican eyebrow consider purse dress screen during rubber length path jealous juice display style hunt lunch nothing valve drill forum spray frequent assault range night lounge ";
+        var backupSeed = "satoshi mango during hybrid inch order expose height quantum bulb vast mansion little swift nature network pioneer fan airport symptom imitate task tooth element";
+        var encryptedSecret = "fat arena brown skull echo question sick foster december damage critic novel shed prevent wise group picture swift avoid round problem share sure chat dose pear defense remember fringe office attack speed tent nose person mammal pipe design fuel brush follow peasant defense derive pledge absent shock file gravity output search senior accuse entire awkward private crunch spoon symbol mountain inch rather butter kiss planet impulse curious border burger lake shop engine";
+        var blocktrailPublicKeys = {
+            0: blocktrail.bitcoin.HDNode.fromSeedHex("010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101"),
+            1: blocktrail.bitcoin.HDNode.fromSeedHex("020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202"),
+            2: blocktrail.bitcoin.HDNode.fromSeedHex("020202020202020202020203020202020202020202020203020202020202020202020203020202020202020202020203"),
+            3: blocktrail.bitcoin.HDNode.fromSeedHex("040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404")
+        };
+
+        var backup = new blocktrail.BackupGenerator(
+            identifier,
+            {
+                encryptedPrimarySeed: encryptedPrimarySeed,
+                recoveryEncryptedSecret: recoveryEncryptedSecret,
+                backupSeed: backupSeed,
+                encryptedSecret: encryptedSecret,
+                blocktrailPublicKeys: blocktrailPublicKeys
+            },
+            {
+                username: 'testing123',
+                'note to self': 'buy pizza'
+            }
+        );
+
+        document.getElementById('userAgent').innerHTML = navigator.userAgent;
+        document.getElementById('saveAsSupported').innerHTML = "Saving as file is " + (blocktrail.BackupGenerator.saveAsSupported() ? '' : 'not ') + "supported";
+
+        function createBackupPopup() {
+            backup.generateHTML(function(err, html) {
+                var popup = window.open();
+                popup.document.write(html);
+            });
+        }
+
+        function createBackupPDF() {
+            if (!blocktrail.BackupGenerator.saveAsSupported()) {
+                alert("Saving as file is not supported on your OS / browser");
+                return;
+            }
+
+            backup.generatePDF(function(err, pdf) {
+                console.log(err, pdf);
+
+                pdf.save("BlockTrail Wallet Recovery Data Sheet - " + backup.identifier + " .pdf");
+            });
+        }
+    </script>
+</body>
+</html>

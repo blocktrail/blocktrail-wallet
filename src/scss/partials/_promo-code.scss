@@ -1,0 +1,21 @@
+
+.state-promo {
+    background: $lightgray-dark;
+
+    .message {
+        min-height: 5rem;
+        padding: $bar-padding-portrait $bar-padding-portrait 0;
+        color: $darkgray-light;
+    }
+    .card .title {
+        font-size: 1.5rem;
+        color: $darkgray-light;
+    }
+    .address-input {
+        background: #e1e1e1;
+    }
+
+    .message-display {
+        background: rgba(255, 255, 255, 0.3);
+    }
+}
