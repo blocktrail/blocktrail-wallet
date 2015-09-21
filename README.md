@@ -22,6 +22,9 @@ Access your wallet anywhere, anytime; use the mobile app when you're on the go, 
 - Backup document incase the worst happens
 - Local currency display using live price updates
 
+## Web Wallet
+For the Web Wallet see; https://github.com/blocktrail/blocktrail-webwallet
+
 ## Install
 ```
 npm install -g ionic-cli gulp
