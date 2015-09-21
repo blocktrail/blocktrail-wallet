@@ -1,8 +1,10 @@
 # Blocktrail Mobile Wallet
 Take back control of your Bitcoin!
-BlockTrail's Bitcoin wallet features unparalleled security through MultiSignature technology, keeping you in full control of your coins at all time. Transactions are signed on your device so we never see your private keys.
+BlockTrail's Bitcoin wallet features unparalleled security through MultiSignature technology, keeping you in full control of your coins at all time.  
+Transactions are signed on your device so we never see your private keys.
 
-With our HD wallets you can create an unlimited number of addresses to help protect your privacy without the need for multiple private key backups. Our system will also generate new addresses for change and fund requests automatically.
+With our HD wallets you can create an unlimited number of addresses to help protect your privacy without the need for multiple private key backups.  
+Our system will also generate new addresses for change and fund requests automatically.
 
 Access your wallet anywhere, anytime; use the mobile app when you're on the go, or log in to the web-interface when at home or in the office.
 
@@ -32,6 +34,10 @@ gulp
 ```
 ionic run android|ios
 ```
+
+## App Permissions
+Due to cordova plugins we're asking for a few more (android) permissions right now then neccesary, 
+there will be a release ASAP cleaning that up and a blog post (and some text here) about the remaining ones and why they're needed.
 
 ## Release Process
 ### Android
