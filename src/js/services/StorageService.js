@@ -32,9 +32,13 @@ angular.module('blocktrail.wallet').factory(
 
         var resetSingle = function(name) {
             var adapter = db(name).adapter;
-            return db(name).destroy().then(function() {
+            return db(name).destroy().then(function(result) {
+
+                console.log(result);
                 if (adapter === 'idb') {
-                    indexedDB.deleteDatabase('_pouch_' + name);
+                    var DBDeleteRequest = indexedDB.deleteDatabase('_pouch_' + name);
+                    DBDeleteRequest.onsuccess = function(event) {};
+                    DBDeleteRequest.onerror = function(event) {};
                 }
                 dbs[name] = null;
 

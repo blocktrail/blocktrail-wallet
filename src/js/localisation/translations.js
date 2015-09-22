@@ -189,7 +189,9 @@ angular.module('blocktrail.localisation', [
             CONTACTS_WALLETS_ONLY: 'with wallets',
             CONTACTS_REFRESH: 'refresh contacts',
             CONTACTS_RESYNC: 're-sync contacts',
-            MSG_INVITE_CONTACT: 'Hi, get the Blocktrail Wallet app for Bitcoin!\nDownload it here: https://wallet.blocktrail.com/download',
+            CONTACTS_DISABLED: "contacts disabled",
+            MSG_REQUIRE_CONTACTS_ACCESS: "Please enable 'Contacts' in the settings to use this feature",
+            MSG_INVITE_CONTACT: 'Hi, get the Blocktrail Wallet app for Bitcoin!\nDownload it here: https://blocktrail.com/download',
 
             //Receiving Screens
             REQUEST_SEND: 'send request',
