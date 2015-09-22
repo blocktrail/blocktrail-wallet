@@ -57,7 +57,11 @@ angular.module('blocktrail.wallet')
             //sync any changes to contacts, if syncing enabled
             if (settingsService.enableContacts) {
                 Contacts.sync()
-                    .then(function(list) {
+                    .then(function() {
+                        //rebuild the cached contacts list
+                        return Contacts.list(true);
+                    })
+                    .then(function() {
                         settingsService.contactsLastSync = new Date().valueOf();
                         settingsService.permissionContacts = true;
                         return settingsService.$store();

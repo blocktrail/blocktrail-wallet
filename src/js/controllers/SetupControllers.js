@@ -1036,7 +1036,11 @@ angular.module('blocktrail.wallet')
             }
             $scope.appControl.syncing = true;
 
-            $q.when(Contacts.refresh(true))
+            $q.when(Contacts.sync(true))
+                .then(function() {
+                    //build the cached contacts list
+                    return Contacts.list(true);
+                })
                 .then(function() {
                     //load the settings so we can update them
                     return settingsService.$isLoaded();

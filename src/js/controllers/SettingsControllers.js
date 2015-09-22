@@ -265,8 +265,12 @@ angular.module('blocktrail.wallet')
             $scope.appControl.syncing = true;
             $scope.appControl.syncingAll = !!forceAll;
 
-            $q.when(Contacts.refresh(!!forceAll))
-                .then(function(list) {
+            $q.when(Contacts.sync(!!forceAll))
+                .then(function() {
+                    //rebuild the cached contacts list
+                    return Contacts.list(!!forceAll);
+                })
+                .then(function() {
                     settingsService.contactsLastSync = new Date().valueOf();
                     settingsService.permissionContacts = true;
                     return settingsService.$store();

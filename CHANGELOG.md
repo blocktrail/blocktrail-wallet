@@ -3,6 +3,7 @@
 ###Next Version
  - added ability to now disable contacts syncing at any time and have the synced data deleted from the servers
  - fixed minor delay between displaying newly received transaction and getting updated balance
+ - more efficient contact syncing, with default listing of contacts with wallets on send screen
 
 
 ###Version 1.0.14

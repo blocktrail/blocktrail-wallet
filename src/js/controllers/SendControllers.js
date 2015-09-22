@@ -576,10 +576,10 @@ angular.module('blocktrail.wallet')
             });
         };
 
-        $scope.getContacts = function() {
+        $scope.getContacts = function(forceRebuild) {
             return $scope.getTranslations()
                 .then(function() {
-                    return $q.when(Contacts.list());
+                    return $q.when(Contacts.list(forceRebuild));
                 })
                 .then(function(list) {
                     settingsService.permissionContacts = true;      //ensure permissions are up to date
@@ -610,9 +610,10 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.reloadContacts = function() {
-            return Contacts.refresh()
-                .then(function(list) {
-                    return $scope.getContacts();
+            //resync and rebuild the contacts list
+            return Contacts.sync(true)
+                .then(function() {
+                    return $scope.getContacts(true);
                 }).then(function() {
                     settingsService.permissionContacts = true;      //ensure permissions are up to date
                     settingsService.contactsLastSync = new Date().valueOf();
