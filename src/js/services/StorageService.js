@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'storageService',
-    function(CONFIG, $log, $window, $ionicApp) {
+    function(CONFIG, $log, $window, $ionicApp, $q) {
         var dbs = {};
 
         var db = function(name) {
@@ -38,8 +38,10 @@ angular.module('blocktrail.wallet').factory(
                 }
                 dbs[name] = null;
 
+                $log.debug('cleared database: ' + name);
+
                 //recreate the database, empty
-                return db(name);
+                return $q.when(db(name));
             });
         };
 

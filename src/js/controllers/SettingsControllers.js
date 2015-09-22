@@ -224,6 +224,7 @@ angular.module('blocktrail.wallet')
                         return $q.reject('CANCELLED');
                     }
 
+                    $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
                     return $q.when(sdkService.sdk());
                 })
                 .then(function(sdk) {
@@ -234,17 +235,21 @@ angular.module('blocktrail.wallet')
                     //delete cache from local storage
                     return Contacts.clearCache();
                 })
-                .then(function() {
+                .then(function(result) {
                     //disable
                     settingsService.enableContacts = false;
                     settingsService.contactsWebSync = false;
                     settingsService.contactsLastSync = null;
                     settingsService.$store();
+
+                    $ionicLoading.hide();
                 })
                 .catch(function(error) {
                     if (error !== 'CANCELLED') {
                         $cordovaDialogs.alert(error.toString(), $translate.instant('FAILED').capitalize(), $translate.instant('OK'));
                     }
+
+                    $ionicLoading.hide();
                 });
         };
 
