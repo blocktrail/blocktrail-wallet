@@ -45,6 +45,7 @@ angular.module('blocktrail.wallet').config(function() {
     });
 
     blocktrail.ContactsPermissionError = Error.extend("ContactsPermissionError", 400);
+    blocktrail.ContactsDisabledError = Error.extend("ContactsDisabledError", 400);
     blocktrail.ContactsError = Error.extend("ContactsError", 400);
     blocktrail.ContactAddressError = Error.extend("ContactAddressError", 400);
     blocktrail.WalletPinError = Error.extend("WalletPinError", 400);
@@ -459,7 +460,7 @@ angular.module('blocktrail.wallet').config(
                             return data;
                         });
                     },
-                    loadingDone: function(Wallet, $q, $rootScope, $log) {
+                    loadingDone: function(Wallet, $q, $rootScope, $log, $cordovaDialogs, $translate, $state) {
                         //do an initial load of cached user data
                         return $q.all([
                             Wallet.balance(true),
@@ -473,6 +474,17 @@ angular.module('blocktrail.wallet').config(
                             $rootScope.bitcoinPrices = data[1];
                             $rootScope.blockHeight = data[2].height;
                             return true;
+                        }).catch(function(error) {
+                            if (error.message && error.message == "missing") {
+                                //missing account info, go to reset state to force user to log in again
+                                $cordovaDialogs.alert(
+                                    $translate.instant('MSG_CORRUPT_DATA').sentenceCase(),
+                                    $translate.instant('ERROR_TITLE_3').capitalize(),
+                                    $translate.instant('OK')
+                                ).then(function() {
+                                    $state.go('app.reset');
+                                });
+                            }
                         });
                     }
                 }

@@ -23,13 +23,16 @@ angular.module('blocktrail.wallet').service(
         profileSynced: true,
         profilePosX:  50,
         profilePosY:  50,
+
         phoneNumber: null,
         phoneNationalNumber: null,
         phoneRegionCode: null,
         phoneHash: null,
         phoneVerified: false,
+        enableContacts: true,       //contacts access and syncing. default to true for previous installs
         contactsLastSync: null,
-        contactsWebSync: true,
+        contactsWebSync: true,      //enable syncing contacts to web wallet
+
         backupSaved: false,
         backupSkipped: false,
         setupStarted: false,
@@ -42,11 +45,11 @@ angular.module('blocktrail.wallet').service(
         enablePolling: true,    //dev setting - disables auto polling for transactions
         useTestnet: false,      //dev setting - enables testnet for SDK
 
-        permissionUsageData: true,
-        permissionCamera: false,
-        permissionPhotos: false,
-        permissionContacts: false,
-        permissionNotifications: false
+        permissionUsageData: true,      //permission to send anonymous usage data
+        permissionCamera: false,        //iOS camera access
+        permissionPhotos: false,        //iOS photo access
+        permissionContacts: false,      //iOS contacts access
+        permissionNotifications: false  //push notification allowed
     };
     angular.extend(this, defaults);
 

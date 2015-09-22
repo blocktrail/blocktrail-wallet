@@ -8,10 +8,26 @@ angular.module('blocktrail.wallet').factory(
             return self.client.post("/metadata", null, data, cb);
         };
 
+        /**
+         * sync contact data to discover contacts' wallets
+         * @param data
+         * @param cb
+         */
         blocktrailSDK.prototype.syncContacts = function (data, cb) {
             var self = this;
 
             return self.client.post("/contacts", null, data, cb);
+        };
+
+        /**
+         * remove all synced contact data
+         * @param data
+         * @param cb
+         */
+        blocktrailSDK.prototype.deleteContacts = function (cb) {
+            var self = this;
+
+            return self.client.delete("/contacts", null, null, cb);
         };
 
         /**

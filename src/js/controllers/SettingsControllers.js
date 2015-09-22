@@ -169,15 +169,7 @@ angular.module('blocktrail.wallet')
             ;
         };
 
-        /**
-         * synchronise contacts with the Blocktrail service
-         * @returns {boolean}
-         */
-        $scope.syncContacts = function(forceAll) {
-            if ($scope.appControl.syncing) {
-                return false;
-            }
-
+        $scope.enableContacts = function() {
             if (!settingsService.phoneVerified) {
                 $scope.getTranslations()
                     .then(function() {
@@ -186,6 +178,82 @@ angular.module('blocktrail.wallet')
                     .then(function() {
                         $state.go('.phone');
                     });
+                return false;
+            }
+
+            //confirm with user first
+            $cordovaDialogs.confirm(
+                $translate.instant('MSG_ENABLE_CONTACTS').sentenceCase(),
+                $translate.instant('SETTINGS_ENABLE_CONTACTS').capitalize(),
+                [$translate.instant('OK').sentenceCase(), $translate.instant('CANCEL').sentenceCase()]
+                )
+                .then(function(dialogResult) {
+                    if (dialogResult == 2) {
+                        return $q.reject('CANCELLED');
+                    }
+
+                    //update settings
+                    settingsService.enableContacts = true;
+                    settingsService.contactsWebSync = true;
+                    return settingsService.$store()
+                })
+                .then(function() {
+                    //force a complete contacts sync
+                    return $scope.syncContacts(true);
+                })
+                .catch(function(error) {
+                    settingsService.enableContacts = false;
+                    settingsService.contactsWebSync = false;
+                    settingsService.$store();
+
+                    if (error !== 'CANCELLED') {
+                        $cordovaDialogs.alert(error.toString(), $translate.instant('FAILED').capitalize(), $translate.instant('OK'));
+                    }
+                });
+        };
+
+        $scope.disableContacts = function() {
+            //confirm with user first
+            $cordovaDialogs.confirm(
+                $translate.instant('MSG_DISABLE_CONTACTS').sentenceCase(),
+                $translate.instant('MSG_ARE_YOU_SURE').capitalize(),
+                [$translate.instant('OK').sentenceCase(), $translate.instant('CANCEL').sentenceCase()]
+                )
+                .then(function(dialogResult) {
+                    if (dialogResult == 2) {
+                        return $q.reject('CANCELLED');
+                    }
+
+                    return $q.when(sdkService.sdk());
+                })
+                .then(function(sdk) {
+                    //delete contacts from server
+                    return sdk.deleteContacts();
+                })
+                .then(function() {
+                    //delete cache from local storage
+                    return Contacts.clearCache();
+                })
+                .then(function() {
+                    //disable
+                    settingsService.enableContacts = false;
+                    settingsService.contactsWebSync = false;
+                    settingsService.contactsLastSync = null;
+                    settingsService.$store();
+                })
+                .catch(function(error) {
+                    if (error !== 'CANCELLED') {
+                        $cordovaDialogs.alert(error.toString(), $translate.instant('FAILED').capitalize(), $translate.instant('OK'));
+                    }
+                });
+        };
+
+        /**
+         * synchronise contacts with the Blocktrail service
+         * @returns {boolean}
+         */
+        $scope.syncContacts = function(forceAll) {
+            if ($scope.appControl.syncing) {
                 return false;
             }
 
@@ -266,7 +334,7 @@ angular.module('blocktrail.wallet')
                         } else if (err === 'CANCELLED') {
                             return false;
                         } else {
-                            $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].capitalize(), $scope.translations['OK'])
+                            $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].capitalize(), $scope.translations['OK']);
                         }
                     });
             } else {
@@ -338,13 +406,9 @@ angular.module('blocktrail.wallet')
                 });
         };
 
-        $scope.enableDev = function() {
-            $scope.devEnabled = true;
-            $scope.getTranslations().then(function() {
-                $cordovaDialogs.alert("Developer mode enabled", $scope.translations['SUCCESS'].capitalize(), $scope.translations['OK']);
-            });
-        };
-
+        /**
+         * enable/disable sending anonymous usage data
+         */
         $scope.updateSettingsPrivacy = function() {
             $scope.updateSettings();
 
@@ -357,6 +421,13 @@ angular.module('blocktrail.wallet')
             $ionicAnalytics.register({
                 silent: !CONFIG.DEBUG,
                 dryRun: !settingsService.permissionUsageData
+            });
+        };
+
+        $scope.enableDev = function() {
+            $scope.devEnabled = true;
+            $scope.getTranslations().then(function() {
+                $cordovaDialogs.alert("Developer mode enabled", $scope.translations['SUCCESS'].capitalize(), $scope.translations['OK']);
             });
         };
 

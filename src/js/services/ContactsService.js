@@ -276,6 +276,13 @@ angular.module('blocktrail.wallet').factory(
             });
         };
 
+        /**
+         * clear all cached data for contacts
+         */
+        Contacts.prototype.clearCache = function() {
+            return storageService.reset('contacts');
+        };
+
 
         // when not enabled return a mock object
         if (typeof navigator.contactsPhoneNumbers === "undefined") {

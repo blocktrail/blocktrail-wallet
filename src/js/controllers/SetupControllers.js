@@ -165,6 +165,7 @@ angular.module('blocktrail.wallet')
                                 //save the default settings and do a profile sync
                                 settingsService.username = $scope.form.username;
                                 settingsService.displayName = $scope.form.username;
+                                settingsService.enableContacts = false;
                                 settingsService.email = $scope.form.email;
                                 settingsService.$store().then(function() {
                                     settingsService.$syncProfileDown();
@@ -390,6 +391,7 @@ angular.module('blocktrail.wallet')
                         //save the default user settings
                         settingsService.username = $scope.form.username;
                         settingsService.displayName = $scope.form.username; //@TODO maybe try and determine a display name from their email
+                        settingsService.enableContacts = false;
                         settingsService.email = $scope.form.email;
                         settingsService.$store().then(function() {
                             $scope.dismissMessage();
@@ -1042,6 +1044,8 @@ angular.module('blocktrail.wallet')
                 .then(function(list) {
                     settingsService.contactsLastSync = new Date().valueOf();
                     settingsService.permissionContacts = true;
+                    settingsService.enableContacts = true;
+                    settingsService.contactsWebSync = false;
                     return settingsService.$store();
                 })
                 .then(function() {
@@ -1057,9 +1061,9 @@ angular.module('blocktrail.wallet')
                         $scope.getTranslations()
                             .then(function() {
                                 $cordovaDialogs.alert(
-                                    $scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(),
-                                    $scope.translations['PERMISSION_REQUIRED_CONTACTS'].capitalize(),
-                                    $scope.translations['OK']
+                                    $translate.instant('MSG_CONTACTS_PERMISSIONS').sentenceCase(),
+                                    $translate.instant('PERMISSION_REQUIRED_CONTACTS').capitalize(),
+                                    $translate.instant('OK')
                                 )
                             });
                     }

@@ -24,6 +24,10 @@ angular.module('blocktrail.localisation', [
             DONE: 'done',
             CONFIRM: 'confirm',
             APPLY: 'apply',
+            ENABLE: "enable",
+            DISABLE: "disable",
+            ENABLED: "enabled",
+            DISABLED: "disabled",
             SYNC: 'sync',
             SYNC_NOW: 'sync now',
             OPTIONAL: 'optional',
@@ -58,6 +62,7 @@ angular.module('blocktrail.localisation', [
             BALANCE_CONFIRMED: 'confirmed balance',
             BALANCE_UNCONFIRMED: 'unconfirmed balance',
             MSG_COPIED_TO_CLIPBOARD: "copied to clipboard",
+            MSG_CORRUPT_DATA: "Unfortunately your data has become corrupted. Please log back in to reload your wallet.",
 
             //launch & setup screens
             LAUNCH_NEW_ACCOUNT: 'new account',
@@ -264,6 +269,8 @@ angular.module('blocktrail.localisation', [
             MSG_BAD_PIN_LENGTH: 'the new PIN must be at least 4 numbers',
             MSG_TRY_AGAIN: 'please try again',
             MSG_PIN_CHANGED: 'your PIN has been changed',
+            MSG_ENABLE_CONTACTS: "This will enable contacts syncing to discover who in your contacts has a wallet. \nYou will then be able to send directly to them.",
+            MSG_DISABLE_CONTACTS: "Disabling contacts will delete all synced data and you won't be able send to your contacts any more.",
             MSG_BACKUP_SAVED_ALREADY: "your backup has already been saved. \nThe backup data is no longer stored on this phone.",
 
             SEND_PHONE_NUMBER_REQUIRED: "To be able to send bitcoin to contacts in your phone's address book you need to provide your phone number.",

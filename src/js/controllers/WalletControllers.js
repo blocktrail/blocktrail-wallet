@@ -54,22 +54,27 @@ angular.module('blocktrail.wallet')
         };
 
         $rootScope.syncContacts = function() {
-            //sync any changes to contacts
-            Contacts.sync()
-                .then(function(list) {
-                    settingsService.contactsLastSync = new Date().valueOf();
-                    settingsService.permissionContacts = true;
-                    return settingsService.$store();
-                })
-                .catch(function(err) {
-                    //check if permission related error happened and update settings accordingly
-                    if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.permissionContacts = false;
-                        settingsService.$store();
-                    } else {
-                        $log.error(err);
-                    }
-                });
+            //sync any changes to contacts, if syncing enabled
+            if (settingsService.enableContacts) {
+                Contacts.sync()
+                    .then(function(list) {
+                        settingsService.contactsLastSync = new Date().valueOf();
+                        settingsService.permissionContacts = true;
+                        return settingsService.$store();
+                    })
+                    .catch(function(err) {
+                        //check if permission related error happened and update settings accordingly
+                        if (err instanceof blocktrail.ContactsPermissionError) {
+                            settingsService.permissionContacts = false;
+                            settingsService.enableContacts = false;
+                            settingsService.$store();
+
+                            //alert user that contact syncing is disabled
+                        } else {
+                            $log.error(err);
+                        }
+                    });
+            }
         };
 
         // do initial updates then poll for changes, all with small offsets to reducing blocking / slowing down of rendering
@@ -88,19 +93,19 @@ angular.module('blocktrail.wallet')
             if ($rootScope.STATE.ACTIVE) {
                 $rootScope.getBalance();
             }
-        }, 15000);
+        }, 10000);
 
         var blockheightPolling = $interval(function() {
             if ($rootScope.STATE.ACTIVE) {
                 $rootScope.getBlockHeight();
             }
-        }, 16000); // small offset form balance polling to avoid 2 requests at the same time
+        }, 11000); // small offset form balance polling to avoid 2 requests at the same time
 
         var contactSyncPolling = $interval(function() {
             if ($rootScope.STATE.ACTIVE) {
                 $rootScope.syncContacts();
             }
-        }, 300000); // 5 mins
+        }, 150000); // 2.5 mins
 
         var profileSyncPolling = $interval(function() {
             if ($rootScope.STATE.ACTIVE) {
@@ -135,9 +140,9 @@ angular.module('blocktrail.wallet')
 
             //refresh transactions, block height and wallet balance
             $q.all([
-                $q.when(Wallet.pollTransactions()),
+                $q.when($rootScope.getBalance()),
                 $q.when($rootScope.getBlockHeight()),
-                $q.when($rootScope.getBalance())
+                $q.when(Wallet.pollTransactions())
             ]).then(function(result) {
                 $scope.paginationOptions.from = 0;
                 return $scope.getTransactions($scope.paginationOptions.from, $scope.paginationOptions.limit, true)
@@ -245,10 +250,14 @@ angular.module('blocktrail.wallet')
         $scope.$on('new_transactions', function(event, transactions) {
             $log.debug('new_transactions', transactions);
 
+
             transactions.forEach(function(transaction) {
                 $scope.transactionsData.unshift(transaction);
             });
             $scope.$apply(function() {
+                //update balance now
+                $rootScope.getBalance();
+
                 $scope.transactionList = $scope.groupTransactions($scope.transactionsData);
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             });
@@ -258,6 +267,9 @@ angular.module('blocktrail.wallet')
             $log.debug('confirmed_transactions', confirmedTxs);
             //refresh the txs that have changed (just update the block heights)
             $scope.$apply(function() {
+                //update balance now
+                $rootScope.getBalance();
+
                 $scope.transactionList.forEach(function(transaction) {
                     $log.debug('checking tx: ' + transaction.hash + ' against ' + confirmedTxs.length);
                     if (!confirmedTxs.length) {
@@ -279,6 +291,9 @@ angular.module('blocktrail.wallet')
             if ($scope.isActive) {
                 $scope.$apply(function() {
                     $log.debug('WalletCtrl.ORPHAN');
+
+                    //update balance now
+                    $rootScope.getBalance();
 
                     $scope.transactions = [];
                     $scope.paginationOptions.from = 0;

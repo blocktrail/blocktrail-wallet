@@ -62,9 +62,9 @@
                     <button class="button button-small button-neutral capitalise pull-right no-animate"
                             ng-class="{'button-neutral': !appControl.syncing, 'button-positive': appControl.syncing}"
                             ng-if="!appControl.syncComplete"
-                            ng-click="syncContacts()"
-                            on-hold="syncContacts(true)">
-                        <span ng-if="!appControl.syncing">{{ 'SYNC_NOW' | translate }}</span>
+                            ng-click="settings.enableContacts ? disableContacts() : enableContacts()">
+                        <span ng-if="!settings.enableContacts && !appControl.syncing">{{ 'ENABLE' | translate }}</span>
+                        <span ng-if="settings.enableContacts && !appControl.syncing">{{ 'DISABLE' | translate }}</span>
                         <span ng-if="appControl.syncing && !appControl.syncingAll">{{ 'SYNCING' | translate }}</span>
                         <span ng-if="appControl.syncing && appControl.syncingAll">{{ 'SYNCING_ALL' | translate }}</span>
                         <span ng-if="appControl.syncing" ng-class="{'spin-me': appControl.syncing}"><i class="icon ion-refresh"></i></span>
@@ -76,7 +76,7 @@
                         <span class="">{{ 'STATUS' | translate }}: </span>
                         <span ng-class="{'text-good': settings.contactsLastSync, 'text-bad': !settings.contactsLastSync}">
                             {{ settings.contactsLastSync && ('SETTINGS_CONTACTS_SYNCED' | translate) || ('SETTINGS_CONTACTS_UNSYNCED' | translate) }}
-                            <small class="text-neutral opacity-50" ng-if="settings.contactsLastSync">({{ settings.contactsLastSync | amDateFormat:'Do MMMM YYYY' }})</small>
+                            <small class="text-neutral opacity-50" ng-if="settings.contactsLastSync">({{ settings.contactsLastSync | amDateFormat:'Do MMM YYYY' }})</small>
                         </span>
                     </label>
                 </div>
