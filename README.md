@@ -27,7 +27,7 @@ For the Web Wallet see; https://github.com/blocktrail/blocktrail-webwallet
 
 ## Install
 ```
-npm install -g ionic-cli gulp
+npm install -g ionic gulp
 npm install
 cp appconfig.example.json appconfig.json
 gulp
