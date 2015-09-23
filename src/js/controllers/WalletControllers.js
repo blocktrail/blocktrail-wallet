@@ -84,17 +84,19 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.$on('new_transactions', function(event, transactions) {
-            //show popup and vibrate on new tx
-            $log.debug('New Transaction have been found!!!', transactions);
+            //show popup and vibrate on new receiving tx
+            $log.debug('New Transactions have been found!!!', transactions);
             transactions.forEach(function(transaction) {
-                $cordovaToast.showLongTop($translate.instant('MSG_NEW_TX').sentenceCase()).then(function(success) {
-                    if (settingsService.vibrateOnTx) {
-                        $cordovaVibration.vibrate(600);
-                    }
-                    // success
-                }, function (err) {
-                    console.error(err);
-                });
+                if (transaction.wallet_value_change > 0) {
+                    $cordovaToast.showLongTop($translate.instant('MSG_NEW_TX').sentenceCase()).then(function(success) {
+                        if (settingsService.vibrateOnTx) {
+                            $cordovaVibration.vibrate(600);
+                        }
+                        // success
+                    }, function(err) {
+                        console.error(err);
+                    });
+                }
             });
         });
 
