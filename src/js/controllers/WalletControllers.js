@@ -147,10 +147,12 @@ angular.module('blocktrail.wallet')
             //refresh transactions, block height and wallet balance
             $q.all([
                 $q.when($rootScope.getBalance()),
+                $q.when($rootScope.getPrice()),
                 $q.when($rootScope.getBlockHeight()),
                 $q.when(Wallet.pollTransactions())
             ]).then(function(result) {
                 $scope.paginationOptions.from = 0;
+                $scope.canLoadMoreTransactions = true;
                 return $scope.getTransactions($scope.paginationOptions.from, $scope.paginationOptions.limit, true)
                     .then(function() {
                         $scope.$broadcast('scroll.refreshComplete');
@@ -160,19 +162,22 @@ angular.module('blocktrail.wallet')
             });
         };
 
-        $scope.getTransactions = function(from, to, reset) {
+        $scope.getTransactions = function(from, limit, reset) {
             //get cached transactions
-            return Wallet.transactions(from, to).then(function(result) {
-                $scope.transactionsData = result;
+            console.log('getTransactions', from, limit);
+            return Wallet.transactions(from, limit).then(function(result) {
+                console.log('getTransactions.result', result);
 
                 if (reset) {
                     $scope.lastDateHeader = 0;
+                    $scope.transactionsData = [];
                     $scope.transactionList = [];
                 }
-                var processedTxs = $scope.groupTransactions($scope.transactionsData);
-                $scope.transactionList = $scope.transactionList.concat(processedTxs);
+
+                $scope.transactionsData = $scope.transactionsData.concat(result);
+                $scope.transactionList = $scope.groupTransactions($scope.transactionsData);
                 $scope.paginationOptions.from += result.length;
-                $scope.canLoadMoreTransactions = result.length > 0;
+                $scope.canLoadMoreTransactions = result.length >= limit;
 
                 $log.debug("transactionList", $scope.transactionList);
             });
@@ -256,10 +261,10 @@ angular.module('blocktrail.wallet')
         $scope.$on('new_transactions', function(event, transactions) {
             $log.debug('new_transactions', transactions);
 
-
             transactions.forEach(function(transaction) {
                 $scope.transactionsData.unshift(transaction);
             });
+
             $scope.$apply(function() {
                 //update balance now
                 $rootScope.getBalance();
@@ -295,15 +300,10 @@ angular.module('blocktrail.wallet')
 
         $scope.$on('ORPHAN', function() {
             if ($scope.isActive) {
-                $scope.$apply(function() {
+                $timeout(function() {
                     $log.debug('WalletCtrl.ORPHAN');
 
-                    //update balance now
-                    $rootScope.getBalance();
-
-                    $scope.transactions = [];
-                    $scope.paginationOptions.from = 0;
-                    $scope.getTransactions($scope.paginationOptions.from, $scope.paginationOptions.limit);
+                    $scope.refreshTransactions();
                 });
             }
         });

@@ -6,6 +6,8 @@
  - added ability to now disable contacts syncing at any time and have the synced data deleted from the servers
  - fixed minor delay between displaying newly received transaction and getting updated balance
  - more efficient contact syncing, with default listing of contacts with wallets on send screen
+ - sync down changes to profile picture made on other devices
+ - popup whenever a new transaction is received (push notifications will be added soon!)
 
 ###Version 1.0.14
  - fixed iOS 9 bug affecting navigation between screens

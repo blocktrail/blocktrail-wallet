@@ -63,7 +63,7 @@
         <ion-infinite-scroll
                 ng-if="canLoadMoreTransactions"
                 on-infinite="loadMoreTransactions()"
-                immediate-check="true" 
+                immediate-check="false"
                 distance="30%">
         </ion-infinite-scroll>
         <div class="text-center opacity-50" style="margin-top: 1rem;" ng-if="!canLoadMoreTransactions">

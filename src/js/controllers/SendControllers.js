@@ -347,9 +347,13 @@ angular.module('blocktrail.wallet')
 
         $scope.$on('appResume', function() {
             $scope.checkBitcoinUri();
+            //update balance now
+            $rootScope.getBalance();
         });
         $scope.$on('$ionicView.enter', function() {
             $scope.checkBitcoinUri();
+            //update balance now
+            $rootScope.getBalance();
         });
     })
     .controller('ConfirmSendCtrl', function($scope) {
