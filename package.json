@@ -1,6 +1,6 @@
 {
   "name": "blocktrail-wallet",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Wallet - by Blocktrail",
   "dependencies": {},
   "devDependencies": {
