@@ -176,6 +176,9 @@ angular.module('blocktrail.wallet')
                     }, function(err) {
                         $scope.$broadcast('scroll.refreshComplete');
                     });
+            }).catch(function (err) {
+                //should probably alert user...
+                $scope.$broadcast('scroll.refreshComplete');
             });
         };
 
