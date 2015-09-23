@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
     .controller('ReceiveCtrl', function($scope, $rootScope, Wallet, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
-                                        $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast, $cordovaVibration) {
+                                        $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast) {
         $scope.address = null;
         $scope.path = null;
         $scope.bitcoinUri = null;
@@ -223,22 +223,6 @@ angular.module('blocktrail.wallet')
 
         //generate the first address
         $scope.newAddress();
-
-
-        $scope.$on('new_transactions', function(event, transactions) {
-            //show popup (and maybe vibrate?) on new tx
-            $log.debug('New Transaction have been found!!!', transactions);
-            $scope.getTranslations().then(function(translations) {
-                transactions.forEach(function(transaction) {
-                    $cordovaToast.showLongTop(translations['MSG_NEW_TX'].sentenceCase()).then(function(success) {
-                        $cordovaVibration.vibrate(600);
-                        // success
-                    }, function (err) {
-                        console.error(err);
-                    });
-                });
-            });
-        });
     })
     .controller('RequestContactCtrl', function($scope, $log, CurrencyConverter, Wallet, $timeout) {
         //...

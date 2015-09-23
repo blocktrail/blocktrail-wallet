@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
-    .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, $ionicUser, sdkService,
-                                       Wallet, Contacts, CONFIG, settingsService, $timeout, $ionicAnalytics) {
+    .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, $ionicUser, sdkService, $translate,
+                                       Wallet, Contacts, CONFIG, settingsService, $timeout, $ionicAnalytics, $cordovaVibration, $cordovaToast) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -82,6 +82,21 @@ angular.module('blocktrail.wallet')
                     });
             }
         };
+
+        $scope.$on('new_transactions', function(event, transactions) {
+            //show popup and vibrate on new tx
+            $log.debug('New Transaction have been found!!!', transactions);
+            transactions.forEach(function(transaction) {
+                $cordovaToast.showLongTop($translate.instant('MSG_NEW_TX').sentenceCase()).then(function(success) {
+                    if (settingsService.vibrateOnTx) {
+                        $cordovaVibration.vibrate(600);
+                    }
+                    // success
+                }, function (err) {
+                    console.error(err);
+                });
+            });
+        });
 
         // do initial updates then poll for changes, all with small offsets to reducing blocking / slowing down of rendering
         $timeout(function() { $rootScope.getPrice(); }, 1000);

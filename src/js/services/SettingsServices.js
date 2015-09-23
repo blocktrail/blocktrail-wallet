@@ -41,6 +41,7 @@ angular.module('blocktrail.wallet').service(
 
         //display options
         btcPrecision: defaultBtcPrecision,        //show 8 decimals by default, 4 on smaller screens
+        vibrateOnTx: true,
 
         enablePolling: true,    //dev setting - disables auto polling for transactions
         useTestnet: false,      //dev setting - enables testnet for SDK

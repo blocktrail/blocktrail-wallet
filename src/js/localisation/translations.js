@@ -242,7 +242,7 @@ angular.module('blocktrail.localisation', [
             SETTINGS_ABOUT: 'about',
             SETTINGS_VERSION: 'version',
             SETTINGS_DEVELOPMENT: 'development',
-            SETTINGS_WALLET_POLLING: 'wallet polling',
+            SETTINGS_WALLET_POLLING: 'background polling',
             SETTINGS_PHONE: 'phone',
             SETTINGS_CONTACTS_SYNC: 'contacts sync',
             SETTINGS_CONTACTS_SYNCED: 'synced',

@@ -188,16 +188,6 @@
             <div ng-if="devEnabled">
                 <h3 class="group-title capitalise">{{ 'SETTINGS_DEVELOPMENT' | translate }}</h3>
                 <div class="list list-inset">
-                    <div class="item item-toggle">
-                        <span class="sentence-case">Contacts Web Syncing</span>
-                        <label class="toggle toggle-balanced">
-                            <input type="checkbox" ng-model="settings.contactsWebSync" ng-change="updateSettings()">
-                            <div class="track">
-                                <div class="handle"></div>
-                            </div>
-                        </label>
-                    </div>
-                    <!-- /contact syncing to web -->
 
                     <div class="item item-toggle">
                         <span class="sentence-case">{{ 'SETTINGS_WALLET_POLLING' | translate }}</span>
@@ -211,7 +201,29 @@
                     <!-- /polling -->
 
                     <div class="item item-toggle">
-                        <span class="sentence-case">Ignore Phone Verification</span>
+                        <span class="sentence-case">Vibrate on new transaction</span>
+                        <label class="toggle toggle-balanced">
+                            <input type="checkbox" ng-model="settings.vibrateOnTx" ng-change="updateSettings()">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <!-- /vibrate on new tx -->
+
+                    <div class="item item-toggle">
+                        <span class="sentence-case">Contacts web syncing</span>
+                        <label class="toggle toggle-balanced">
+                            <input type="checkbox" ng-model="settings.contactsWebSync" ng-change="updateSettings()">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <!-- /contact syncing to web -->
+
+                    <div class="item item-toggle">
+                        <span class="sentence-case">Ignore phone verification</span>
                         <label class="toggle toggle-balanced">
                             <input type="checkbox" ng-model="settings.phoneVerified">
                             <div class="track">
