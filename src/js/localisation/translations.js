@@ -189,7 +189,9 @@ angular.module('blocktrail.localisation', [
             CONTACTS_WALLETS_ONLY: 'with wallets',
             CONTACTS_REFRESH: 'refresh contacts',
             CONTACTS_RESYNC: 're-sync contacts',
-            MSG_INVITE_CONTACT: 'Hi, get the Blocktrail Wallet app for Bitcoin!\nDownload it here: https://wallet.blocktrail.com/download',
+            CONTACTS_DISABLED: "contacts disabled",
+            MSG_REQUIRE_CONTACTS_ACCESS: "Please enable 'Contacts' on the settings menu to use this feature",
+            MSG_INVITE_CONTACT: 'Hi, get the Blocktrail Wallet app for Bitcoin!\nDownload it here: https://blocktrail.com/download',
 
             //Receiving Screens
             REQUEST_SEND: 'send request',
@@ -245,6 +247,8 @@ angular.module('blocktrail.localisation', [
             SETTINGS_CONTACTS_SYNC: 'contacts sync',
             SETTINGS_CONTACTS_SYNCED: 'synced',
             SETTINGS_CONTACTS_UNSYNCED: 'not synced',
+            SETTINGS_ENABLE_CONTACTS: 'enable contacts?',
+            SETTINGS_DISABLE_CONTACTS: 'disable contacts syncing?',
             SETTINGS_PHONE_NUMBER: 'phone number',
             SETTINGS_PHONE_UPDATE: 'update phone',
             SETTINGS_PHONE_CHANGE: 'change phone',
@@ -269,7 +273,7 @@ angular.module('blocktrail.localisation', [
             MSG_BAD_PIN_LENGTH: 'the new PIN must be at least 4 numbers',
             MSG_TRY_AGAIN: 'please try again',
             MSG_PIN_CHANGED: 'your PIN has been changed',
-            MSG_ENABLE_CONTACTS: "This will enable contacts syncing to discover who in your contacts has a wallet. \nYou will then be able to send directly to them.",
+            MSG_ENABLE_CONTACTS: "This will enable contacts syncing to discover contacts on your device with a wallet. \nYou will then be able to send directly to them.",
             MSG_DISABLE_CONTACTS: "Disabling contacts will delete all synced data and you won't be able send to your contacts any more.",
             MSG_BACKUP_SAVED_ALREADY: "your backup has already been saved. \nThe backup data is no longer stored on this phone.",
 
@@ -302,9 +306,9 @@ angular.module('blocktrail.localisation', [
             PERMISSION_REQUIRED_CONTACTS: 'Wallet needs access to your contacts',
             PERMISSION_REQUIRED_CAMERA: 'Wallet needs access to your camera',
             PERMISSION_REQUIRED_PHOTOS: 'Wallet needs access to your photos',
-            MSG_CONTACTS_PERMISSIONS: 'To grant access to your contacts go to settings>Blocktrail Wallet>Contacts',
-            MSG_CAMERA_PERMISSIONS: 'To grant access to your camera go to settings>Blocktrail Wallet>App.photo',
-            MSG_PHOTOS_PERMISSIONS: 'To grant access to your photos go to settings>Blocktrail Wallet>Photos'
+            MSG_CONTACTS_PERMISSIONS: 'To grant access to your contacts on your device, go to settings>Blocktrail Wallet>Contacts',
+            MSG_CAMERA_PERMISSIONS: 'To grant access to your camera on your device, go to settings>Blocktrail Wallet>App.photo',
+            MSG_PHOTOS_PERMISSIONS: 'To grant access to your photos on your device, go to settings>Blocktrail Wallet>Photos'
         };
         var americanEnglish = angular.extend(angular.copy(english), {
             MSG_INIT_WALLET: 'initializing wallet...',

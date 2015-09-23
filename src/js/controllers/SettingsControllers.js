@@ -199,7 +199,7 @@ angular.module('blocktrail.wallet')
                 })
                 .then(function() {
                     //force a complete contacts sync
-                    return $scope.syncContacts(true);
+                    $scope.syncContacts(true);
                 })
                 .catch(function(error) {
                     settingsService.enableContacts = false;
@@ -265,8 +265,12 @@ angular.module('blocktrail.wallet')
             $scope.appControl.syncing = true;
             $scope.appControl.syncingAll = !!forceAll;
 
-            $q.when(Contacts.refresh(!!forceAll))
-                .then(function(list) {
+            $q.when(Contacts.sync(!!forceAll))
+                .then(function() {
+                    //rebuild the cached contacts list
+                    return Contacts.list(!!forceAll);
+                })
+                .then(function() {
                     settingsService.contactsLastSync = new Date().valueOf();
                     settingsService.permissionContacts = true;
                     return settingsService.$store();
@@ -283,6 +287,8 @@ angular.module('blocktrail.wallet')
                     $log.error(err);
                     //check if permission related error happened and update settings accordingly
                     if (err instanceof blocktrail.ContactsPermissionError) {
+                        settingsService.enableContacts = false;
+                        settingsService.contactsWebSync = false;
                         settingsService.permissionContacts = false;
                         settingsService.$store();
                         $scope.getTranslations()

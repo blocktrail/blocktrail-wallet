@@ -9,12 +9,6 @@ angular.module('blocktrail.wallet').factory(
             self._list = null;
         };
 
-        Contacts.prototype.refresh = function(forceAll) {
-            var self = this;
-
-            return self.sync(forceAll);
-        };
-
         /**
          * get the list of contacts, with their avatars and presence of a Wallet
          * @param forceFetch
@@ -37,7 +31,7 @@ angular.module('blocktrail.wallet').factory(
         Contacts.prototype.buildList = function() {
             var self = this;
 
-            return self.contactsCache.get('synced')
+            return $q.when(self.contactsCache.get('synced'))
                 .then(function(syncedDoc) {
                     return syncedDoc;
                 }, function() {
@@ -101,7 +95,7 @@ angular.module('blocktrail.wallet').factory(
 
         Contacts.prototype.sync = function(forceAll) {
             var self = this;
-            return self.contactsCache.get('synced')
+            return $q.when(self.contactsCache.get('synced'))
                 .then(function(syncedDoc) {
                     $log.debug('contacts: notfirst sync');
                     return syncedDoc;
@@ -260,7 +254,7 @@ angular.module('blocktrail.wallet').factory(
             var self = this;
             hashIndex = hashIndex ? hashIndex: 0;
 
-            return sdkService.sdk().then(function(sdk) {
+            return $q.when(sdkService.sdk()).then(function(sdk) {
                 return sdk.requestContactAddress(contact.hashes[hashIndex]).then(function(result) {
                     return result;
                 }, function(err) {
@@ -280,7 +274,10 @@ angular.module('blocktrail.wallet').factory(
          * clear all cached data for contacts
          */
         Contacts.prototype.clearCache = function() {
-            return storageService.reset('contacts');
+            var self = this;
+            return storageService.reset('contacts').then(function(newCache) {
+                return $q.when(self.contactsCache = newCache);
+            });
         };
 
 

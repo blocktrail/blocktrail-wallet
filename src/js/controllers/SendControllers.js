@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
     .controller('SendCtrl', function($scope, $ionicAnalytics, $log, CurrencyConverter, Contacts, Wallet,
-                                     $timeout, $ionicHistory, QR, $q, $btBackButtonDelegate, $state,
+                                     $timeout, $ionicHistory, QR, $q, $btBackButtonDelegate, $state, settingsService,
                                      $cordovaClipboard, $rootScope, $translate, $cordovaDialogs, $ionicLoading) {
         $scope.fiatFirst = false;
         $scope.sendInput = {
@@ -126,7 +126,7 @@ angular.module('blocktrail.wallet')
 
         $scope.selectContact = function() {
             //check if phone has been verified yet
-            if (!$rootScope.settings.phoneVerified) {
+            if (!settingsService.phoneVerified) {
                 $scope.getTranslations()
                     .then(function() {
                         return $cordovaDialogs.alert($scope.translations['MSG_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['SETTINGS_PHONE_REQUIRE_VERIFY'].capitalize(), $scope.translations['OK']);
@@ -135,6 +135,12 @@ angular.module('blocktrail.wallet')
                         $state.go('app.wallet.settings.phone', {goBackTo: 'app.wallet.send.contacts'});
                     });
                 return false;
+            } else if(!settingsService.enableContacts) {
+                $cordovaDialogs.alert(
+                    $translate.instant('MSG_REQUIRE_CONTACTS_ACCESS').sentenceCase(),
+                    $translate.instant('CONTACTS_DISABLED').capitalize(),
+                    $translate.instant('OK')
+                );
             } else {
                 $state.go('app.wallet.send.contacts');
             }
@@ -490,9 +496,11 @@ angular.module('blocktrail.wallet')
             );
         }, 500);
     })
-    .controller('ContactsListCtrl', function($scope, $state, $q, Contacts, $timeout, $translate, $btBackButtonDelegate, $ionicScrollDelegate, $ionicActionSheet, $ionicLoading, $cordovaDialogs, $log, settingsService, $cordovaSms) {
+    .controller('ContactsListCtrl', function($scope, $state, $q, Contacts, $timeout, $translate, $btBackButtonDelegate,
+                                             $ionicScrollDelegate, $ionicActionSheet, $ionicLoading, $cordovaDialogs,
+                                             $log, settingsService, $cordovaSms, $q) {
         $scope.contactsFilter = {};
-        $scope.contactsWithWalletOnly = false;
+        $scope.contactsWithWalletOnly = true;
         $scope.contactsWithPhoneOnly = true;
         $scope.contactsWithEmailOnly = false;
         $scope.translations = null;
@@ -568,13 +576,20 @@ angular.module('blocktrail.wallet')
             });
         };
 
-        $scope.getContacts = function() {
+        $scope.getContacts = function(forceRebuild) {
+            //if user manages to get here (i.e. after verifying phone) automatically enable contacts and force a first sync
+            if (!settingsService.enableContacts) {
+                settingsService.enableContacts = true;
+                settingsService.contactsWebSync = true;
+                return $scope.reloadContacts();
+            }
+
             return $scope.getTranslations()
                 .then(function() {
-                    return Contacts.list();
+                    return $q.when(Contacts.list(forceRebuild));
                 })
                 .then(function(list) {
-                    settingsService.permissionContacts = true;      //ensure permissions are up to date
+                    settingsService.permissionContacts = true;      //ensure iOS permissions are up to date
                     settingsService.$store();
 
                     $scope.contacts = list.contacts.filter(function(contact) {
@@ -582,15 +597,18 @@ angular.module('blocktrail.wallet')
                         var phoneOnlyFilter = ($scope.contactsWithPhoneOnly && contact.phoneNumbers || !$scope.contactsWithPhoneOnly);      //apply the phoneOnly filter if enabled
                         return walletOnlyFilter && phoneOnlyFilter;
                     });
-                    return $scope.contacts;
+                    return $q.when($scope.contacts);
                 })
                 .catch(function(err) {
                     $log.error(err);
                     if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.permissionContacts = false;      //ensure permissions are up to date
+                        settingsService.permissionContacts = false;      //ensure iOS permissions are up to date
+                        settingsService.enableContacts = false;
                         settingsService.$store();
                         $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].capitalize(), $scope.translations['OK'])
                     }
+
+                    return $q.reject(err);
                 });
         };
 
@@ -602,11 +620,12 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.reloadContacts = function() {
-            return Contacts.refresh()
-                .then(function(list) {
-                    return $scope.getContacts();
+            //resync and rebuild the contacts list
+            return Contacts.sync(true)
+                .then(function() {
+                    return $scope.getContacts(true);
                 }).then(function() {
-                    settingsService.permissionContacts = true;      //ensure permissions are up to date
+                    settingsService.permissionContacts = true;      //ensure iOS permissions are up to date
                     settingsService.contactsLastSync = new Date().valueOf();
                     settingsService.$store();
                     return $q.when($scope.$broadcast('scroll.refreshComplete'));
@@ -614,10 +633,12 @@ angular.module('blocktrail.wallet')
                 .catch(function(err) {
                     $log.error(err);
                     if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.permissionContacts = false; //ensure permissions are up to date
+                        settingsService.enableContacts = false;
+                        settingsService.permissionContacts = false; //ensure iOS permissions are up to date
                         settingsService.$store();
                         $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].capitalize(), $scope.translations['OK'])
                     }
+                    return $q.when($scope.$broadcast('scroll.refreshComplete'));
                 });
         };
         
