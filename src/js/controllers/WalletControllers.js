@@ -47,9 +47,11 @@ angular.module('blocktrail.wallet')
         };
 
         $rootScope.syncProfile = function() {            
-            //sync profile if a pending update is present
+            //sync profile if a pending update is present, else check for upstream changes
             if (!settingsService.profileSynced) {
                 settingsService.$syncProfileUp();
+            } else {
+                settingsService.$syncProfileDown();
             }
         };
 
