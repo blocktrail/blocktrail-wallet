@@ -577,12 +577,19 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.getContacts = function(forceRebuild) {
+            //if user manages to get here (i.e. after verifying phone) automatically enable contacts and force a first sync
+            if (!settingsService.enableContacts) {
+                settingsService.enableContacts = true;
+                settingsService.contactsWebSync = true;
+                return $scope.reloadContacts();
+            }
+
             return $scope.getTranslations()
                 .then(function() {
                     return $q.when(Contacts.list(forceRebuild));
                 })
                 .then(function(list) {
-                    settingsService.permissionContacts = true;      //ensure permissions are up to date
+                    settingsService.permissionContacts = true;      //ensure iOS permissions are up to date
                     settingsService.$store();
 
                     $scope.contacts = list.contacts.filter(function(contact) {
@@ -595,10 +602,13 @@ angular.module('blocktrail.wallet')
                 .catch(function(err) {
                     $log.error(err);
                     if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.permissionContacts = false;      //ensure permissions are up to date
+                        settingsService.permissionContacts = false;      //ensure iOS permissions are up to date
+                        settingsService.enableContacts = false;
                         settingsService.$store();
                         $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].capitalize(), $scope.translations['OK'])
                     }
+
+                    return $q.reject(err);
                 });
         };
 
@@ -615,7 +625,7 @@ angular.module('blocktrail.wallet')
                 .then(function() {
                     return $scope.getContacts(true);
                 }).then(function() {
-                    settingsService.permissionContacts = true;      //ensure permissions are up to date
+                    settingsService.permissionContacts = true;      //ensure iOS permissions are up to date
                     settingsService.contactsLastSync = new Date().valueOf();
                     settingsService.$store();
                     return $q.when($scope.$broadcast('scroll.refreshComplete'));
@@ -623,10 +633,12 @@ angular.module('blocktrail.wallet')
                 .catch(function(err) {
                     $log.error(err);
                     if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.permissionContacts = false; //ensure permissions are up to date
+                        settingsService.enableContacts = false;
+                        settingsService.permissionContacts = false; //ensure iOS permissions are up to date
                         settingsService.$store();
                         $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].capitalize(), $scope.translations['OK'])
                     }
+                    return $q.when($scope.$broadcast('scroll.refreshComplete'));
                 });
         };
         

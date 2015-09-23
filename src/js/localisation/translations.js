@@ -190,7 +190,7 @@ angular.module('blocktrail.localisation', [
             CONTACTS_REFRESH: 'refresh contacts',
             CONTACTS_RESYNC: 're-sync contacts',
             CONTACTS_DISABLED: "contacts disabled",
-            MSG_REQUIRE_CONTACTS_ACCESS: "Please enable 'Contacts' in the settings to use this feature",
+            MSG_REQUIRE_CONTACTS_ACCESS: "Please enable 'Contacts' on the settings menu to use this feature",
             MSG_INVITE_CONTACT: 'Hi, get the Blocktrail Wallet app for Bitcoin!\nDownload it here: https://blocktrail.com/download',
 
             //Receiving Screens
@@ -306,9 +306,9 @@ angular.module('blocktrail.localisation', [
             PERMISSION_REQUIRED_CONTACTS: 'Wallet needs access to your contacts',
             PERMISSION_REQUIRED_CAMERA: 'Wallet needs access to your camera',
             PERMISSION_REQUIRED_PHOTOS: 'Wallet needs access to your photos',
-            MSG_CONTACTS_PERMISSIONS: 'To grant access to your contacts go to settings>Blocktrail Wallet>Contacts',
-            MSG_CAMERA_PERMISSIONS: 'To grant access to your camera go to settings>Blocktrail Wallet>App.photo',
-            MSG_PHOTOS_PERMISSIONS: 'To grant access to your photos go to settings>Blocktrail Wallet>Photos'
+            MSG_CONTACTS_PERMISSIONS: 'To grant access to your contacts:\n on your device go to settings>Blocktrail Wallet>Contacts',
+            MSG_CAMERA_PERMISSIONS: 'To grant access to your camera:\n on your device go to settings>Blocktrail Wallet>App.photo',
+            MSG_PHOTOS_PERMISSIONS: 'To grant access to your photos:\n on your device go to settings>Blocktrail Wallet>Photos'
         };
         var americanEnglish = angular.extend(angular.copy(english), {
             MSG_INIT_WALLET: 'initializing wallet...',
