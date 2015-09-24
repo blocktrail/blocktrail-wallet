@@ -27,6 +27,7 @@ For the Web Wallet see; https://github.com/blocktrail/blocktrail-webwallet
 
 ## Install
 ```
+npm install -g npm@3.1 # issues with npm>=3.2, see https://github.com/npm/npm/issues/9204
 npm install -g ionic cordova gulp
 npm install
 cp appconfig.example.json appconfig.json
