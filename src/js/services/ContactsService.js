@@ -108,48 +108,59 @@ angular.module('blocktrail.wallet').factory(
 
                     return launchService.getAccountInfo()
                         .then(function(accountInfo) {
-                            //get a fresh list of contacts
-                            return self.list(true).then(function(list) {
-                                var contacts = list.contacts;
-                                var contactsByHash = list.contactsByHash;
+                            return $q.when(accountInfo.new_secret)
+                                .then(function(newSecret) {
+                                    // if a new secret is created then we need to resync everything
+                                    if (newSecret) {
+                                        forceAll = true;
+                                        return launchService.updateAccountInfo({new_secret: false});
+                                    }
+                                })
+                                .then(function() {
+                                    //get a fresh list of contacts
+                                    return self.list(true).then(function(list) {
+                                        var contacts = list.contacts;
+                                        var contactsByHash = list.contactsByHash;
 
-                                var syncContactsByHash = {};
+                                        var syncContactsByHash = {};
 
-                                contacts.map(function(contact) {
-                                    contact.hashes.forEach(function(hash) {
-                                        if (hash && (forceAll || syncedDoc.synced.indexOf(hash) === -1) && !syncContactsByHash[hash]) {
-                                            syncContactsByHash[hash] =
-                                                settingsService.contactsWebSync ?
-                                                CryptoJS.AES.encrypt(contact.displayName, accountInfo.secret).toString() :
-                                                "";
-                                        }
-                                    });
-                                });
-
-                                return sdkService.sdk().then(function(sdk) {
-                                    return sdk.client.post("/contacts", null, {
-                                        contacts: syncContactsByHash,
-                                        category: 'phone',
-                                        last_synced: syncedDoc.lastSynced
-                                    }).then(function(result) {
-                                        $log.debug("contact updates", result.contacts.length);
-
-                                        syncedDoc.lastSynced = result.last_synced;
-                                        syncedDoc.synced = syncedDoc.synced.concat(Object.keys(syncContactsByHash)).unique();
-
-                                        result.contacts.forEach(function(contact) {
-                                            if (contactsByHash[contact.phone_number_hash]) {
-                                                syncedDoc.matches.push(contact.phone_number_hash);
-                                                syncedDoc.avatars[contact.phone_number_hash] = contact.avatar_url;
-                                            }
+                                        contacts.map(function(contact) {
+                                            contact.hashes.forEach(function(hash) {
+                                                if (hash && (forceAll || syncedDoc.synced.indexOf(hash) === -1) && !syncContactsByHash[hash]) {
+                                                    syncContactsByHash[hash] =
+                                                        settingsService.contactsWebSync ?
+                                                        CryptoJS.AES.encrypt(contact.displayName, accountInfo.secret).toString() :
+                                                        "";
+                                                }
+                                            });
                                         });
 
-                                        syncedDoc.matches = syncedDoc.matches.unique();
+                                        return sdkService.sdk().then(function(sdk) {
+                                            return sdk.client.post("/contacts", null, {
+                                                contacts: syncContactsByHash,
+                                                category: 'phone',
+                                                last_synced: syncedDoc.lastSynced
+                                            }).then(function(result) {
+                                                $log.debug("contact updates", result.contacts.length);
 
-                                        return self.contactsCache.put(syncedDoc);
+                                                syncedDoc.lastSynced = result.last_synced;
+                                                syncedDoc.synced = syncedDoc.synced.concat(Object.keys(syncContactsByHash)).unique();
+
+                                                result.contacts.forEach(function(contact) {
+                                                    if (contactsByHash[contact.phone_number_hash]) {
+                                                        syncedDoc.matches.push(contact.phone_number_hash);
+                                                        syncedDoc.avatars[contact.phone_number_hash] = contact.avatar_url;
+                                                    }
+                                                });
+
+                                                syncedDoc.matches = syncedDoc.matches.unique();
+
+                                                return self.contactsCache.put(syncedDoc);
+                                            });
+                                        });
                                     });
-                                });
-                            });
+                                })
+                            ;
                         })
                     ;
                 });

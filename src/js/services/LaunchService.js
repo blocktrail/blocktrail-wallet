@@ -26,12 +26,25 @@ angular.module('blocktrail.wallet').factory(
                     doc.api_secret = accountInfo.api_secret;
                     doc.testnet = accountInfo.testnet;
                     doc.secret = accountInfo.secret;
+                    doc.new_secret = accountInfo.new_secret;
 
                     return self.storage.put(doc).then(function() {
                         return doc;
                     });
                 }
             );
+        };
+
+        LaunchService.prototype.updateAccountInfo = function(updateAccountInfo) {
+            var self = this;
+
+            return self.getAccountInfo().then(function(accountInfo) {
+                Object.keys(updateAccountInfo).forEach(function(k) {
+                    accountInfo[k] = updateAccountInfo[k];
+                });
+
+                return self.storeAccountInfo(accountInfo);
+            });
         };
 
         LaunchService.prototype.getWalletInfo = function() {

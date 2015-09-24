@@ -138,25 +138,47 @@ angular.module('blocktrail.wallet')
                 skip_two_factor: true // will make the resulting API key not require 2FA in the future
             })
                 .then(function(result) {
+                    var newSecret = false;
+                    var createSecret = function() {
+                        var secret = randomBytes(32).toString('base64');
+                        var encryptedSecret = CryptoJS.AES.encrypt(secret, $scope.form.password).toString();
+
+                        return $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/secret?api_key=" + result.data.api_key, {
+                            encrypted_secret: encryptedSecret
+                        }).then(function() {
+                            newSecret = true;
+                            return secret;
+                        });
+                    };
+
                     return $q.when(result.data.encrypted_secret)
                         .then(function(encryptedSecret) {
-                            var secret;
-
                             if (!encryptedSecret) {
-                                secret = randomBytes(32).toString('base64');
-                                encryptedSecret = CryptoJS.AES.encrypt(secret, $scope.form.password).toString();
-
-                                return $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/secret?api_key=" + result.data.api_key, {
-                                    encrypted_secret: encryptedSecret
-                                }).then(function() {
-                                    return secret;
-                                });
+                                return createSecret();
                             } else {
-                                return CryptoJS.AES.decrypt(encryptedSecret, $scope.form.password).toString(CryptoJS.enc.Utf8);
+                                var secret;
+                                try {
+                                    secret = CryptoJS.AES.decrypt(encryptedSecret, $scope.form.password).toString(CryptoJS.enc.Utf8);
+                                } catch (e) {
+                                    $log.error(e);
+                                    secret = null;
+                                }
+
+                                // @TODO: we should have a checksum
+                                if (!secret || secret.length != 44) {
+                                    $log.error("failed to decrypt encryptedSecret");
+                                    secret = null;
+                                }
+
+                                if (secret) {
+                                    return secret;
+                                } else {
+                                    return createSecret();
+                                }
                             }
                         })
                         .then(function(secret) {
-                            return launchService.storeAccountInfo(_.merge({}, {secret: secret}, result.data)).then(function() {
+                            return launchService.storeAccountInfo(_.merge({}, {secret: secret, new_secret: newSecret}, result.data)).then(function() {
                                 $log.debug('existing_wallet', result.data.existing_wallet);
                                 $scope.setupInfo.password = $scope.form.password;
                                 $scope.setupInfo.identifier = result.data.existing_wallet || $scope.setupInfo.identifier;
