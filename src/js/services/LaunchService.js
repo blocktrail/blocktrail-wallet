@@ -26,7 +26,9 @@ angular.module('blocktrail.wallet').factory(
                     doc.api_secret = accountInfo.api_secret;
                     doc.testnet = accountInfo.testnet;
                     doc.secret = accountInfo.secret;
+                    doc.encrypted_secret = accountInfo.encrypted_secret;
                     doc.new_secret = accountInfo.new_secret;
+
 
                     return self.storage.put(doc).then(function() {
                         return doc;

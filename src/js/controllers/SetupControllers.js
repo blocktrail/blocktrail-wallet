@@ -143,11 +143,12 @@ angular.module('blocktrail.wallet')
                         var secret = randomBytes(32).toString('base64');
                         var encryptedSecret = CryptoJS.AES.encrypt(secret, $scope.form.password).toString();
 
+                        //@TODO put in sdk service
                         return $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/secret?api_key=" + result.data.api_key, {
                             encrypted_secret: encryptedSecret
                         }).then(function() {
                             newSecret = true;
-                            return secret;
+                            return {secret: secret, encrypted_secret: encryptedSecret};
                         });
                     };
 
@@ -171,14 +172,14 @@ angular.module('blocktrail.wallet')
                                 }
 
                                 if (secret) {
-                                    return secret;
+                                    return {secret: secret, encrypted_secret: encryptedSecret};
                                 } else {
                                     return createSecret();
                                 }
                             }
                         })
-                        .then(function(secret) {
-                            return launchService.storeAccountInfo(_.merge({}, {secret: secret, new_secret: newSecret}, result.data)).then(function() {
+                        .then(function(secretData) {
+                            return launchService.storeAccountInfo(_.merge({}, {secret: secretData.secret, encrypted_secret: secretData.encrypted_secret, new_secret: newSecret}, result.data)).then(function() {
                                 $log.debug('existing_wallet', result.data.existing_wallet);
                                 $scope.setupInfo.password = $scope.form.password;
                                 $scope.setupInfo.identifier = result.data.existing_wallet || $scope.setupInfo.identifier;
@@ -404,7 +405,7 @@ angular.module('blocktrail.wallet')
             };
             $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/register", postData)
                 .then(function(result) {
-                    return launchService.storeAccountInfo(_.merge({}, {secret: secret}, result.data)).then(function() {
+                    return launchService.storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
                         $scope.setupInfo.password = $scope.form.password;
 
                         $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: ''};
