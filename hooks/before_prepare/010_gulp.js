@@ -7,5 +7,8 @@ var exec = require('child_process').exec;
 var rootdir = process.argv[2];
 
 if (rootdir) {
-    exec("gulp");
+    exec("gulp", function puts(error, stdout, stderr) {
+        sys.puts(stderr);
+        sys.puts(stdout);
+    });
 }
