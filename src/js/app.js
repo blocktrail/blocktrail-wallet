@@ -265,6 +265,25 @@ angular.module('blocktrail.wallet').config(
             $cordovaAppRateProvider.setPreferences(prefs);
         }
 
+        // android 4.3 catch
+        if (window.device && device.platform === "Android") {
+            var v = device.version.split(".");
+
+            if (v[0] == 4 && v[1] <= 3) {
+                $stateProvider
+                    .state('app', {
+                        url: "/android43",
+                        templateUrl: "templates/android43.html",
+                        controller: "Android43Ctrl"
+                    })
+                ;
+
+                $urlRouterProvider.otherwise('android43');
+
+                return;
+            }
+        }
+
         $logProvider.debugEnabled(CONFIG.DEBUG);
         $stateProvider
             .state('app', {

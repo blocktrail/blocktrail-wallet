@@ -72,7 +72,7 @@ gulp.task('templates:index', ['appconfig'], function(done) {
 gulp.task('templates:rest', ['appconfig'], function(done) {
 
     appConfig.then(function(APPCONFIG) {
-        gulp.src("./src/templates/**/*")
+        gulp.src(["./src/templates/*", "./src/templates/**/*"])
             .pipe(gulp.dest("./www/templates"))
             .on('end', done);
     });

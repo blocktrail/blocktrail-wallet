@@ -48,3 +48,13 @@ angular.module('blocktrail.wallet')
         );
     }
 );
+
+angular.module('blocktrail.wallet')
+    .controller('Android43Ctrl', function($rootScope) {
+        $rootScope.hideLoadingScreen = true;
+
+        if (navigator.splashscreen) {
+            navigator.splashscreen.hide();
+        }
+    }
+);
