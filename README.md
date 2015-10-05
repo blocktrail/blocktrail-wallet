@@ -46,13 +46,21 @@ there will be a release ASAP cleaning that up and a blog post (and some text her
 ## Release Process
 ### Android
 ```
+mv appconfig.json .appconfig.json
+cp appconfig.prod.json appconfig.json
+
 rm -rf platforms/android/build/outputs/apk/* # clean up old builds
 
-ionic build --release android  
+ionic build --release android
+
+# you should commit and tag here...
+# git commit -am "v1.0.x"; git tag v1.0.x
 
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/blocktrail.keystore /work/blocktrail-wallet/platforms/android/build/outputs/apk/android-release-unsigned.apk blocktrail  
 
 zipalign -v 4 /work/blocktrail-wallet/platforms/android/build/outputs/apk/android-release-unsigned.apk /work/blocktrail-wallet/platforms/android/build/outputs/apk/blocktrail.apk
+
+mv .appconfig.json appconfig.json
 ```
 
 ### iOS
