@@ -1,5 +1,6 @@
 node_modules/
 appconfig.json
+.appconfig.json
 
 platforms/android/assets/www/*
 platforms/ios/www/*
