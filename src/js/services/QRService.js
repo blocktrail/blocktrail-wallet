@@ -162,7 +162,13 @@ angular.module('blocktrail.wallet')
         if (ENABLED) {
             $log.debug('start scanning');
             $cordovaBarcodeScanner.scan()
-                .then(success)
+                .then(function(result) {
+                    if (result.cancelled) {
+                        success("CANCELLED");
+                    } else {
+                        success(result.text);
+                    }
+                })
                 .catch(error);
         } else if (MOCK_ENABLED) {
             //...
