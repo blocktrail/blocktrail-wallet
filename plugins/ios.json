@@ -115,6 +115,10 @@
                         {
                             "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BarcodeScanner\"><param name=\"ios-package\" value=\"CDVBarcodeScanner\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -124,7 +128,7 @@
                     "CoreGraphics.framework": [
                         {
                             "xml": false,
-                            "count": 5
+                            "count": 6
                         }
                     ],
                     "AddressBook.framework": [
@@ -142,18 +146,28 @@
                     "AVFoundation.framework": [
                         {
                             "xml": false,
-                            "count": 1
+                            "count": 2
                         }
                     ],
                     "CoreMedia.framework": [],
-                    "CoreVideo.framework": [],
-                    "QuartzCore.framework": [
+                    "CoreVideo.framework": [
                         {
                             "xml": false,
                             "count": 1
                         }
                     ],
-                    "libiconv.dylib": [],
+                    "QuartzCore.framework": [
+                        {
+                            "xml": false,
+                            "count": 2
+                        }
+                    ],
+                    "libiconv.dylib": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
                     "SystemConfiguration.framework": [
                         {
                             "xml": true,
@@ -181,7 +195,7 @@
                     "AssetsLibrary.framework": [
                         {
                             "xml": false,
-                            "count": 2
+                            "count": 3
                         }
                     ],
                     "MobileCoreServices.framework": [
@@ -194,6 +208,10 @@
                         {
                             "xml": true,
                             "count": 2
+                        },
+                        {
+                            "xml": false,
+                            "count": 1
                         }
                     ],
                     "StoreKit.framework": [
@@ -202,7 +220,12 @@
                             "count": 1
                         }
                     ],
-                    "CoreImage.framework": []
+                    "CoreImage.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ]
                 }
             },
             "*-Info.plist": {
@@ -301,6 +324,9 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },

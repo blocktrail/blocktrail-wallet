@@ -90,6 +90,12 @@
     <feature name="Vibration">
         <param name="ios-package" value="CDVVibration" />
     </feature>
+    <feature name="Notification">
+        <param name="ios-package" value="CDVNotification" />
+    </feature>
+    <feature name="BarcodeScanner">
+        <param name="ios-package" value="CDVBarcodeScanner" />
+    </feature>
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -132,7 +138,4 @@
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="orientation" value="portrait" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <feature name="Notification">
-        <param name="ios-package" value="CDVNotification" />
-    </feature>
 </widget>
