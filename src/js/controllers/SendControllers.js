@@ -442,17 +442,20 @@ angular.module('blocktrail.wallet')
         }, 600);
 
     })
-    .controller('ScanQRCtrl', function($scope, $state, QR, $log, $btBackButtonDelegate, $timeout, $ionicHistory, $cordovaToast) {
+    .controller('ScanQRCtrl', function($scope, $state, QR, $log, $btBackButtonDelegate, $timeout, $ionicHistory, $cordovaToast, $ionicLoading) {
         //remove animation for next state - looks kinda buggy
         $ionicHistory.nextViewOptions({
             disableAnimate: true
         });
+
+        $ionicLoading.show({template: "<div>{{ 'LOADING' | translate }}...", hideOnStateChange: true});
 
         //wait for transition, then open the scanner and begin scanning
         $timeout(function() {
             QR.scan(
                 function(result) {
                     $log.debug('scan done', result);
+                    $ionicLoading.hide();
 
                     //parse result for address and value
                     var elm = angular.element('<a>').attr('href', result )[0];
@@ -493,13 +496,17 @@ angular.module('blocktrail.wallet')
                 function(error) {
                     $log.error(error);
                     $log.error("Scanning failed: " + error);
+
+                    $ionicLoading.hide();
                     $cordovaToast.showLongTop("Scanning failed: " + error);
                     $scope.appControl.isScanning = false;
 
                     $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                 }
             );
-        }, 500);
+            
+            $ionicLoading.hide();
+        }, 350);
     })
     .controller('ContactsListCtrl', function($scope, $state, $q, Contacts, $timeout, $translate, $btBackButtonDelegate,
                                              $ionicScrollDelegate, $ionicActionSheet, $ionicLoading, $cordovaDialogs,
