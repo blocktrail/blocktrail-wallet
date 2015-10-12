@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('SendCtrl', function($scope, $ionicAnalytics, $log, CurrencyConverter, Contacts, Wallet,
                                      $timeout, $ionicHistory, QR, $q, $btBackButtonDelegate, $state, settingsService,
-                                     $cordovaClipboard, $rootScope, $translate, $cordovaDialogs, $ionicLoading) {
+                                     $cordovaClipboard, $rootScope, $translate, $cordovaDialogs, $cordovaToast) {
         $scope.fiatFirst = false;
         $scope.sendInput = {
             btcValue: 0.00,
@@ -442,7 +442,7 @@ angular.module('blocktrail.wallet')
         }, 600);
 
     })
-    .controller('ScanQRCtrl', function($scope, $state, QR, $log, $btBackButtonDelegate, $timeout, $ionicHistory) {
+    .controller('ScanQRCtrl', function($scope, $state, QR, $log, $btBackButtonDelegate, $timeout, $ionicHistory, $cordovaToast) {
         //remove animation for next state - looks kinda buggy
         $ionicHistory.nextViewOptions({
             disableAnimate: true
@@ -491,8 +491,9 @@ angular.module('blocktrail.wallet')
                     }
                 },
                 function(error) {
-                    $log.debug('scan fail', error);
+                    $log.error(error);
                     $log.error("Scanning failed: " + error);
+                    $cordovaToast.showLongTop("Scanning failed: " + error);
                     $scope.appControl.isScanning = false;
 
                     $timeout(function() {$btBackButtonDelegate.goBack();}, 180);

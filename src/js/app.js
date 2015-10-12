@@ -69,7 +69,7 @@ angular.module('blocktrail.wallet').run(
         //fix for a quirk where the keyboard is triggered randomly without input focus (usually only happens on send screen)
         var keyboardShow = function(e) {
             $log.debug('keyboard is opening', e);
-            if(document.activeElement == document.body) {
+            if (document.activeElement == document.body) {
                 $log.error('keyboard opened in error. Closing it.');
                 cordova.plugins.Keyboard.close();
                 $timeout(function(){
@@ -123,7 +123,7 @@ angular.module('blocktrail.wallet').run(
         $ionicPlatform.registerBackButtonAction($btBackButtonDelegate.hardwareBack, 101);
 
         //get the real app version
-        if(window.cordova) {
+        if (window.cordova) {
             $cordovaAppVersion.getAppVersion()
                 .then(function(version) {
                     $rootScope.appVersion = version;
@@ -181,7 +181,7 @@ angular.module('blocktrail.wallet').run(
         }
 
         //set the iOS status bar style to light
-        if(window.StatusBar) {
+        if (window.StatusBar) {
             $cordovaStatusbar.overlaysWebView(true);
             $cordovaStatusbar.style(1);
         }
