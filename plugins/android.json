@@ -57,10 +57,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"FileOpener2\"><param name=\"android-package\" value=\"io.github.pwlin.cordova.plugins.fileopener2.FileOpener2\" /></feature>",
                             "count": 1
                         },
@@ -85,10 +81,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
@@ -102,6 +94,14 @@
                         },
                         {
                             "xml": "<feature name=\"Sms\"><param name=\"android-package\" value=\"com.cordova.plugins.sms.Sms\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -134,11 +134,11 @@
                             "count": 1
                         },
                         {
-                            "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
+                            "xml": "<uses-feature android:name=\"android.hardware.telephony\" android:required=\"false\" />",
                             "count": 1
                         },
                         {
-                            "xml": "<uses-feature android:name=\"android.hardware.telephony\" android:required=\"false\" />",
+                            "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
                             "count": 1
                         }
                     ],
@@ -158,7 +158,8 @@
             },
             "res/values/strings.xml": {
                 "parents": {
-                    "/*": []
+                    "/*": [],
+                    "/resources": []
                 }
             }
         }
@@ -203,9 +204,6 @@
         "hu.dpal.phonegap.plugins.PinDialog": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "fr.spirotron.cordova.disabledatadetectors": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
@@ -224,9 +222,6 @@
         "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "cordova-plugin-vibration": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "org.apache.cordova.statusbar": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
@@ -238,6 +233,12 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "com.cordova.plugins.sms": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },

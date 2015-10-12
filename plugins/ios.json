@@ -61,10 +61,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"DisableDataDetectors\"><param name=\"ios-package\" value=\"DisableDataDetectors\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
@@ -93,10 +89,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Vibration\"><param name=\"ios-package\" value=\"CDVVibration\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" value=\"CDVStatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
@@ -114,6 +106,14 @@
                         },
                         {
                             "xml": "<feature name=\"Sms\"><param name=\"ios-package\" value=\"Sms\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Vibration\"><param name=\"ios-package\" value=\"CDVVibration\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -201,7 +201,8 @@
                             "xml": false,
                             "count": 1
                         }
-                    ]
+                    ],
+                    "CoreImage.framework": []
                 }
             },
             "*-Info.plist": {
@@ -262,9 +263,6 @@
         "hu.dpal.phonegap.plugins.PinDialog": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "fr.spirotron.cordova.disabledatadetectors": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
@@ -286,9 +284,6 @@
         "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "cordova-plugin-vibration": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "org.apache.cordova.statusbar": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
@@ -300,6 +295,12 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "com.cordova.plugins.sms": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },

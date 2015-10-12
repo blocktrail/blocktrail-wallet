@@ -40,9 +40,6 @@
     <feature name="PinDialog">
         <param name="android-package" value="hu.dpal.phonegap.plugins.PinDialog" />
     </feature>
-    <feature name="Notification">
-        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
-    </feature>
     <feature name="FileOpener2">
         <param name="android-package" value="io.github.pwlin.cordova.plugins.fileopener2.FileOpener2" />
     </feature>
@@ -61,9 +58,6 @@
     </feature>
     <feature name="Toast">
         <param name="android-package" value="nl.xservices.plugins.Toast" />
-    </feature>
-    <feature name="Vibration">
-        <param name="android-package" value="org.apache.cordova.vibration.Vibration" />
     </feature>
     <feature name="StatusBar">
         <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
@@ -108,4 +102,10 @@
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="orientation" value="portrait" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <feature name="Vibration">
+        <param name="android-package" value="org.apache.cordova.vibration.Vibration" />
+    </feature>
+    <feature name="Notification">
+        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
+    </feature>
 </widget>
