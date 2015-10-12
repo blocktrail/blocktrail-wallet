@@ -65,14 +65,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "org.cloudsky.cordovaplugins.zbar": {
-        "source": {
-            "type": "registry",
-            "id": "org.cloudsky.cordovaplugins.zbar"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-network-information": {
         "source": {
             "type": "registry",

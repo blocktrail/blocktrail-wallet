@@ -37,10 +37,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"CsZBar\"><param name=\"ios-package\" value=\"CsZBar\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
                             "count": 1
                         },
@@ -146,33 +142,18 @@
                     "AVFoundation.framework": [
                         {
                             "xml": false,
-                            "count": 2
-                        }
-                    ],
-                    "CoreMedia.framework": [
-                        {
-                            "xml": false,
                             "count": 1
                         }
                     ],
-                    "CoreVideo.framework": [
-                        {
-                            "xml": false,
-                            "count": 1
-                        }
-                    ],
+                    "CoreMedia.framework": [],
+                    "CoreVideo.framework": [],
                     "QuartzCore.framework": [
                         {
                             "xml": false,
-                            "count": 2
-                        }
-                    ],
-                    "libiconv.dylib": [
-                        {
-                            "xml": false,
                             "count": 1
                         }
                     ],
+                    "libiconv.dylib": [],
                     "SystemConfiguration.framework": [
                         {
                             "xml": true,
@@ -264,9 +245,6 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "com.verso.cordova.clipboard": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
-        "org.cloudsky.cordovaplugins.zbar": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-network-information": {

@@ -39,7 +39,6 @@
       "locator": "https://github.com/VersoSolutions/CordovaClipboard",
       "id": "com.verso.cordova.clipboard"
     },
-    "org.cloudsky.cordovaplugins.zbar",
     "cordova-plugin-network-information",
     {
       "locator": "https://github.com/wymsee/cordova-imagePicker.git",

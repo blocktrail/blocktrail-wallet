@@ -36,9 +36,6 @@
     <feature name="Clipboard">
         <param name="ios-package" value="CDVClipboard" />
     </feature>
-    <feature name="CsZBar">
-        <param name="ios-package" value="CsZBar" />
-    </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
     </feature>

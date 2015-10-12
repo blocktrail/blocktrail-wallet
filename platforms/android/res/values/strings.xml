@@ -3,9 +3,4 @@
     <string name="app_name">BlockTrail Wallet</string>
     <string name="launcher_name">@string/app_name</string>
     <string name="activity_name">@string/launcher_name</string>
-    <string name="csZbarScannerTitle">Scan QR Code</string>
-    <string name="csZbarScannerInstructions">Please point your camera at the QR code.</string>
-    <color name="csZbarScannerTextColor">#ffffff</color>
-    <color name="csZbarScannerTextBackground">#88000000</color>
-    <color name="csZbarScannerBackground">#000000</color>
 </resources>

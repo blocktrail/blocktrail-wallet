@@ -37,10 +37,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"CsZBar\"><param name=\"android-package\" value=\"org.cloudsky.cordovaPlugins.ZBar\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
                         },
@@ -119,26 +115,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<uses-feature android:name=\"android.hardware.camera\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.camera.autofocus\" android:required=\"false\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.camera.flash\" android:required=\"false\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.camera.front\" android:required=\"false\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.CAMERA\" />",
-                            "count": 1
-                        },
-                        {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
                             "count": 1
                         },
@@ -151,12 +127,7 @@
                             "count": 1
                         }
                     ],
-                    "application": [
-                        {
-                            "xml": "<activity android:name=\"org.cloudsky.cordovaPlugins.ZBarScannerActivity\" android:screenOrientation=\"portrait\" android:theme=\"@android:style/Theme.Black.NoTitleBar.Fullscreen\"></activity>",
-                            "count": 1
-                        }
-                    ],
+                    "application": [],
                     "/manifest": [
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
@@ -187,28 +158,7 @@
             },
             "res/values/strings.xml": {
                 "parents": {
-                    "/*": [
-                        {
-                            "xml": "<string name=\"csZbarScannerTitle\">Scan QR Code</string>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<string name=\"csZbarScannerInstructions\">Please point your camera at the QR code.</string>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<color name=\"csZbarScannerTextColor\">#ffffff</color>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<color name=\"csZbarScannerTextBackground\">#88000000</color>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<color name=\"csZbarScannerBackground\">#000000</color>",
-                            "count": 1
-                        }
-                    ]
+                    "/*": []
                 }
             }
         }
@@ -236,9 +186,6 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "com.verso.cordova.clipboard": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
-        "org.cloudsky.cordovaplugins.zbar": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-network-information": {
