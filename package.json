@@ -89,7 +89,8 @@
     {
       "locator": "https://github.com/blocktrail/cordova-sms-plugin.git",
       "id": "com.cordova.plugins.sms"
-    }
+    },
+    "phonegap-plugin-barcodescanner"
   ],
   "cordovaPlatforms": [
     "ios",
