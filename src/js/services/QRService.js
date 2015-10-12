@@ -105,7 +105,8 @@ angular.module('blocktrail.wallet')
             self.canvasElm.css('display', 'none');
         };
     })
-    .service( 'QR', function($ionicPlatform, $log, $rootScope, $translate) {
+    .service( 'QRZBar', function($ionicPlatform, $log, $rootScope, $translate) {
+        //old zBar version of QR scanner
         var self = this;
         var ENABLED = (typeof cloudSky != "undefined" && !!cloudSky.zBar);
 
@@ -113,7 +114,7 @@ angular.module('blocktrail.wallet')
         var MOCK_ENABLED = !ENABLED;
 
         $log.debug('qrScanner enabled? ' + ENABLED);
-        
+
 
         /**
          * open camera feed and start scanning for qr code
@@ -141,5 +142,32 @@ angular.module('blocktrail.wallet')
             }
         };
 
-    });
+    })
+.service( 'QR', function($ionicPlatform, $log, $rootScope, $translate, $cordovaBarcodeScanner) {
+    var self = this;
+    var ENABLED = window.cordova && window.cordova.plugins.barcodeScanner;
+
+    //For mock scanner - used in browser dev
+    var MOCK_ENABLED = !ENABLED;
+
+    $log.debug('qrScanner enabled? ' + ENABLED);
+
+
+    /**
+     * open camera feed and start scanning for qr code
+     * @param success
+     * @param error
+     */
+    this.scan = function(success, error) {
+        if (ENABLED) {
+            $log.debug('start scanning');
+            $cordovaBarcodeScanner.scan()
+                .then(success)
+                .catch(error);
+        } else if (MOCK_ENABLED) {
+            //...
+        }
+    };
+
+});
 
