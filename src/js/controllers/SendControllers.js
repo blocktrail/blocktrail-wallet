@@ -504,8 +504,6 @@ angular.module('blocktrail.wallet')
                     $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                 }
             );
-            
-            $ionicLoading.hide();
         }, 350);
     })
     .controller('ContactsListCtrl', function($scope, $state, $q, Contacts, $timeout, $translate, $btBackButtonDelegate,
