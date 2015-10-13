@@ -41,11 +41,11 @@
     "angular-mocks": ">= 1.2.23",
     "jquery": "~2.1.1"
   },
-  "_release": "a45beb847f",
+  "_release": "cd258a63ac",
   "_resolution": {
     "type": "branch",
     "branch": "blocktrail",
-    "commit": "a45beb847f3a170a2c2dda208c5f396f3d00f3d0"
+    "commit": "cd258a63acf9f1ecc80ee817eae6c66f45319934"
   },
   "_source": "git@github.com:blocktrail/ng-cordova.git",
   "_target": "blocktrail",
