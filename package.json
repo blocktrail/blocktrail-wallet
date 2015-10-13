@@ -50,10 +50,6 @@
       "locator": "https://github.com/Paldom/PinDialog.git",
       "id": "hu.dpal.phonegap.plugins.PinDialog"
     },
-    {
-      "locator": "https://github.com/blocktrail/cordova-plugin-dialogs.git#blocktrail",
-      "id": "cordova-plugin-dialogs"
-    },
     "fr.spirotron.cordova.disabledatadetectors",
     {
       "locator": "https://github.com/pwlin/cordova-plugin-file-opener2.git",
@@ -90,7 +86,11 @@
       "locator": "https://github.com/blocktrail/cordova-sms-plugin.git",
       "id": "com.cordova.plugins.sms"
     },
-    "phonegap-plugin-barcodescanner"
+    "phonegap-plugin-barcodescanner",
+    {
+      "locator": "https://github.com/blocktrail/cordova-plugin-dialogs.git#blocktrail",
+      "id": "cordova-plugin-dialogs"
+    }
   ],
   "cordovaPlatforms": [
     "ios",

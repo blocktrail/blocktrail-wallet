@@ -92,13 +92,13 @@ module.exports = {
      * @param {String} defaultText          Textbox input value (default: empty string)
      * @param {Boolean} isPassword          Textbox input should be secure (default: FALSE)
      */
-    prompt: function(message, resultCallback, title, buttonLabels, defaultText, isPassword) {
+    prompt: function(message, resultCallback, title, buttonLabels, defaultText, isPassword, keyboardType) {
         var _message = (message || "Prompt message");
         var _title = (title || "Prompt");
         var _buttonLabels = (buttonLabels || ["OK","Cancel"]);
         var _defaultText = (defaultText || "");
         var _isPassword = (isPassword || false);
-        exec(resultCallback, null, "Notification", "prompt", [_message, _title, _buttonLabels, _defaultText, _isPassword]);
+        exec(resultCallback, null, "Notification", "prompt", [_message, _title, _buttonLabels, _defaultText, _isPassword, keyboardType]);
     },
 
     /**

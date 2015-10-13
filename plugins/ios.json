@@ -113,11 +113,11 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
+                            "xml": "<feature name=\"BarcodeScanner\"><param name=\"ios-package\" value=\"CDVBarcodeScanner\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"BarcodeScanner\"><param name=\"ios-package\" value=\"CDVBarcodeScanner\" /></feature>",
+                            "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -323,10 +323,10 @@
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "cordova-plugin-dialogs": {
+        "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "phonegap-plugin-barcodescanner": {
+        "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },

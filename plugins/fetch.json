@@ -228,20 +228,20 @@
         "is_top_level": true,
         "variables": {}
     },
+    "phonegap-plugin-barcodescanner": {
+        "source": {
+            "type": "registry",
+            "id": "phonegap-plugin-barcodescanner"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
     "cordova-plugin-dialogs": {
         "source": {
             "type": "git",
             "url": "https://github.com/blocktrail/cordova-plugin-dialogs.git",
             "subdir": ".",
             "ref": "blocktrail"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "phonegap-plugin-barcodescanner": {
-        "source": {
-            "type": "registry",
-            "id": "phonegap-plugin-barcodescanner"
         },
         "is_top_level": true,
         "variables": {}

@@ -36,6 +36,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.text.method.PasswordTransformationMethod;
+import android.text.InputType;
 
 
 /**
@@ -87,7 +89,7 @@ public class Notification extends CordovaPlugin {
             return true;
         }
         else if (action.equals("prompt")) {
-            this.prompt(args.getString(0), args.getString(1), args.getJSONArray(2), args.getString(3), args.getBoolean(4), callbackContext);
+            this.prompt(args.getString(0), args.getString(1), args.getJSONArray(2), args.getString(3), args.getBoolean(4), args.getString(5), callbackContext);
             return true;
         }
         else if (action.equals("activityStart")) {
@@ -269,7 +271,7 @@ public class Notification extends CordovaPlugin {
      * @param buttonLabels      A comma separated list of button labels (Up to 3 buttons)
      * @param callbackContext   The callback context.
      */
-    public synchronized void prompt(final String message, final String title, final JSONArray buttonLabels, final String defaultText, final boolean isPassword, final CallbackContext callbackContext) {
+    public synchronized void prompt(final String message, final String title, final JSONArray buttonLabels, final String defaultText, final boolean isPassword, final String inputType, final CallbackContext callbackContext) {
 
         final CordovaInterface cordova = this.cordova;
 
@@ -277,11 +279,22 @@ public class Notification extends CordovaPlugin {
             public void run() {
                 final EditText promptInput =  new EditText(cordova.getActivity());
                 promptInput.setHint(defaultText);
-                if (isPassword) {
-                    promptInput.setInputType(0x00000081); // set the input type to secure plaintext
+                //set the keyboard type
+                if (inputType.equals("tel")) {
+                    promptInput.setInputType(InputType.TYPE_CLASS_PHONE);
+                } else if (inputType.equals("number")) {
+                    promptInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+                } else if (inputType.equals("date")) {
+                    promptInput.setInputType(InputType.TYPE_CLASS_DATETIME);
                 } else {
-                    promptInput.setInputType(0x00000001); // set the input type to plaintext
+                    //default to text
+                    promptInput.setInputType(InputType.TYPE_CLASS_TEXT);
                 }
+                
+                if (isPassword) {
+                    promptInput.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                
                 AlertDialog.Builder dlg = createDialog(cordova); // new AlertDialog.Builder(cordova.getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
                 dlg.setMessage(message);
                 dlg.setTitle(title);
