@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
     .controller('SettingsCtrl', function($scope, $rootScope, $q, sdkService, launchService, settingsService,
-                                         Wallet, Contacts, storageService, $cordovaDialogs, $cordovaPinDialog, $ionicLoading,
+                                         Wallet, Contacts, storageService, $cordovaDialogs, $ionicLoading,
                                          $translate, $timeout, $state, $log, $ionicAnalytics, CONFIG) {
         $scope.appControl = {
             syncing: false,
@@ -67,7 +67,14 @@ angular.module('blocktrail.wallet')
         $scope.changePin = function() {
             $scope.getTranslations()
                 .then(function() {
-                    return $cordovaPinDialog.prompt($scope.translations['MSG_ENTER_PIN'].sentenceCase(), $scope.translations['SETTINGS_CHANGE_PIN'].capitalize(), [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()]);
+                    return $cordovaDialogs.prompt(
+                        $scope.translations['MSG_ENTER_PIN'].sentenceCase(),
+                        $scope.translations['SETTINGS_CHANGE_PIN'].capitalize(),
+                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
+                        "",
+                        true,   //isPassword
+                        "tel"   //input type (uses html5 style)
+                    );
                 })
                 .then(function(dialogResult) {
                     if (dialogResult.buttonIndex == 2) {
@@ -131,7 +138,14 @@ angular.module('blocktrail.wallet')
             return $scope.getTranslations()
                 .then(function(translations) {
                     //prompt for new PIN
-                    return $cordovaPinDialog.prompt($scope.translations['MSG_ENTER_NEW_PIN'].sentenceCase(), $scope.translations['SETTINGS_NEW_PIN'].capitalize(), [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()]);
+                    return $cordovaDialogs.prompt(
+                        $scope.translations['MSG_ENTER_NEW_PIN'].sentenceCase(),
+                        $scope.translations['SETTINGS_NEW_PIN'].capitalize(),
+                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
+                        "",
+                        true,   //isPassword
+                        "tel"   //input type (uses html5 style)
+                    );
                 })
                 .then(function(dialogResult) {
                     if (dialogResult.buttonIndex == 2) {
@@ -140,7 +154,14 @@ angular.module('blocktrail.wallet')
 
                     newPIN = dialogResult.input1.trim();
                     //prompt for repeat of new PIN
-                    return $cordovaPinDialog.prompt($scope.translations['MSG_REPEAT_PIN'].sentenceCase(), $scope.translations['SETTINGS_REPEAT_PIN'].capitalize(), [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()]);
+                    return $cordovaDialogs.prompt(
+                        $scope.translations['MSG_REPEAT_PIN'].sentenceCase(),
+                        $scope.translations['SETTINGS_REPEAT_PIN'].capitalize(),
+                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
+                        "",
+                        true,   //isPassword
+                        "tel"   //input type (uses html5 style)
+                    );
                 })
                 .then(function(dialogResult) {
                     if (dialogResult.buttonIndex == 2) {
@@ -313,10 +334,14 @@ angular.module('blocktrail.wallet')
                 //confirm PIN...
                 $scope.getTranslations()
                     .then(function() {
-                        return $cordovaPinDialog.prompt(
+                        return $cordovaDialogs.prompt(
                             $scope.translations['MSG_ENTER_PIN'].sentenceCase(),
                             $scope.translations['WALLET_PIN'].capitalize(),
-                            [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()]);
+                            [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
+                            "",
+                            true,   //isPassword
+                            "tel"   //input type (uses html5 style)
+                        );
                     })
                     .then(function(dialogResult) {
                         if (dialogResult.buttonIndex == 2) {
@@ -363,10 +388,14 @@ angular.module('blocktrail.wallet')
         $scope.resetWallet = function() {
             $scope.getTranslations()
                 .then(function() {
-                    return $cordovaPinDialog.prompt(
+                    return $cordovaDialogs.prompt(
                         $scope.translations['MSG_ENTER_PIN'].sentenceCase(),
                         $scope.translations['WALLET_PIN'].capitalize(),
-                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()]);
+                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
+                        "",
+                        true,   //isPassword
+                        "tel"   //input type (uses html5 style)
+                    );
                 })
                 .then(function(dialogResult) {
                     if (dialogResult.buttonIndex == 2) {
