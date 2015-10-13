@@ -2,6 +2,14 @@
 
 ###Next Version
 
+
+###Version 1.0.17
+ - fix QR reader crash on various Samsung and other devices
+ - fix android PIN keyboard display bug
+
+###Version 1.0.16
+ - identified critical bug affecting Android 4.3 - disabling app for this version, a fix will be released soon
+
 ###Version 1.0.15
  - added ability to now disable contacts syncing at any time and have the synced data deleted from the servers
  - fixed minor delay between displaying newly received transaction and getting updated balance
