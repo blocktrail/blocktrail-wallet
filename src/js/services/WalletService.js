@@ -327,7 +327,7 @@ angular.module('blocktrail.wallet').factory(
                         })
                         .then(function(historyDoc) {
                             asyncData.historyDoc = historyDoc;
-                            asyncData.historyDoc.unconfirmed = asyncData.historyDoc.unconfirmed || [];
+                            asyncData.historyDoc.unconfirmed = [];  //clear old list of unconfirmed txs
 
                             var newTransactions = [];
 
