@@ -63,6 +63,7 @@ angular.module('blocktrail.localisation', [
             BALANCE_UNCONFIRMED: "unconfirmed balance",
             MSG_COPIED_TO_CLIPBOARD: "copied to clipboard",
             MSG_CORRUPT_DATA: "Unfortunately your data has become corrupted. Please log back in to reload your wallet.",
+            MSG_ORPHAN_BLOCK: "Warning: orphan block detected. Your wallet will resync it's transactions",
 
             //launch & setup screens
             LAUNCH_NEW_ACCOUNT: "new account",

@@ -100,6 +100,12 @@ angular.module('blocktrail.wallet')
             });
         });
 
+
+        $scope.$on('ORPHAN', function() {
+            //show popup when an Orphan happens and wallet needs to resync
+            $cordovaToast.showLongTop($translate.instant('MSG_ORPHAN_BLOCK').sentenceCase());
+        });
+
         // do initial updates then poll for changes, all with small offsets to reducing blocking / slowing down of rendering
         $timeout(function() { $rootScope.getPrice(); }, 1000);
         $timeout(function() { $rootScope.syncProfile(); }, 2000);
