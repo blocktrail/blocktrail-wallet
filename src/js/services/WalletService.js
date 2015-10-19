@@ -327,7 +327,8 @@ angular.module('blocktrail.wallet').factory(
                         })
                         .then(function(historyDoc) {
                             asyncData.historyDoc = historyDoc;
-                            asyncData.historyDoc.unconfirmed = [];  //clear old list of unconfirmed txs
+                            asyncData.historyDoc.old_unconfirmed = asyncData.historyDoc.unconfirmed || [];
+                            asyncData.historyDoc.unconfirmed = [];  //clear old list of unctxs to update against current mempool
 
                             var newTransactions = [];
 
@@ -344,10 +345,9 @@ angular.module('blocktrail.wallet').factory(
                                         isNew = true;
                                     }
 
-                                    // check if previously unconfirmed and remove from unconfirmed list
-                                    var uncIdx = asyncData.historyDoc.unconfirmed.indexOf(transaction.hash);
+                                    // check if previously saved as unconfirmed and mark for "updating"
+                                    var uncIdx = asyncData.historyDoc.old_unconfirmed.indexOf(transaction.hash);
                                     if (uncIdx !== -1) {
-                                        asyncData.historyDoc.unconfirmed[uncIdx] = null;
                                         isUpdated = true;
                                         isNew = false;
                                     }
@@ -447,7 +447,6 @@ angular.module('blocktrail.wallet').factory(
                             if (asyncData.confirmedTransactions.length) {
                                 $rootScope.$broadcast('confirmed_transactions', asyncData.confirmedTransactions);
                             }
-                            // $log.debug('async data', asyncData); //@todo delete me
                             return self.historyCache.put(asyncData.historyDoc);
                         })
                         .then(function() {
@@ -458,7 +457,7 @@ angular.module('blocktrail.wallet').factory(
                             $log.debug('TX polling done in [' + ((new Date).getTime() - t) + 'ms]');
                             self.poll = null;
                             return $q.when(result);
-                        })
+                        });
                 })
                 .catch(function(err) {
                     $log.debug('TX polling stopped', err);
