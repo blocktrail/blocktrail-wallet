@@ -57,6 +57,7 @@ angular.module('blocktrail.localisation', [
             ERROR_TITLE_2: "oops",
             ERROR_TITLE_3: "error",
             ION_REFRESHER: "Pull to refresh...",
+            ADDRESS: "address",
             BALANCE: "balance",
             BALANCE_AVAILABLE: "available balance",
             BALANCE_CONFIRMED: "confirmed balance",
@@ -149,6 +150,7 @@ angular.module('blocktrail.localisation', [
             INTERNAL_TRANSACTION_TITLE: "sent to self",
             WALLET_NO_TXS: "no transactions",
             WALLET_NO_MORE_TXS: "no more transactions",
+            WALLET_YOUR_BITCOINS: "Your Bitcoins",
             TX_INFO_SENT: "sent bitcoin",
             TX_INFO_RECEIVED: "received bitcoin",
             TX_INFO_HASH: "transaction hash",
@@ -162,12 +164,18 @@ angular.module('blocktrail.localisation', [
             TX_INFO_SENT_TO: "sent to",
             TX_INFO_RECEIVED_FROM: "received from",
             TX_INFO_MESSAGE_TITLE: "message/reference",
+            TX_INFO_MORE_TITLE: "more info",
+            TX_INFO_MORE_LINK: "see on blocktrail.com",
 
             //Sending screens
             QR: "QR",
             CONTACTS: "contacts",
             BLUETOOTH: "bluetooth",
-            BITCOIN_ADDRESS: "address",
+            BITCOIN_ADDRESS: "bitcoin address",
+            AVAILABLE_BALANCE: "Available Balance",
+            AMOUNT_PLACEHOLDER: "amount",
+            RECIPIENT_PLACEHOLDER: "send to",
+            ENTER_ADDRESS_TITLE: "enter a bitcoin address",
             SENDING: "sending",
             SEARCH_CONTACTS: "Search Contacts...",
             SEND_TO: "send to",
@@ -227,15 +235,6 @@ angular.module('blocktrail.localisation', [
             MSG_REQUEST_SMS_1: "Hi, \nPlease send funds to my Bitcoin wallet. \nAddress: {{address}}",
             MSG_REQUEST_SMS_2: "Hi, \nPlease send {{btcValue}} BTC (approx {{fiatValue}} {{localCurrency}}) to my Bitcoin wallet. \nAddress: {{address}}",
 
-
-            //Promo code page
-            PROMO_CODES: "Promo Codes",
-            REDEEM: "redeem",
-            CHECKING: "checking",
-            MSG_MISSING_PROMO_CODE: "please enter a promo code",
-            MSG_BAD_PROMO_CODE: "that doesn't seem to be a valid code",
-            //MSG_PROMO_CODE_SUCCESS: "",
-
             //Settings page
             SETTINGS: "settings",
             SETTINGS_ACCOUNT: "account",
@@ -250,6 +249,7 @@ angular.module('blocktrail.localisation', [
             SETTINGS_LANGUAGE: "language",
             SETTINGS_WALLET: "wallet",
             SETTINGS_CURRENT_WALLET: "current wallet",
+            SETTINGS_BTC_DECIMALS: "BTC decimal display",
             SETTINGS_CHANGE_PIN: "change pin",
             SETTINGS_RESET_ACCOUNT: "logout",
             SETTINGS_WALLET_BACKUP: "wallet backup",
@@ -301,6 +301,15 @@ angular.module('blocktrail.localisation', [
             SEND_PHONE_NUMBER_REQUIRED: "To be able to send bitcoin to contacts in your phone's address book you need to provide your phone number.",
             SEND_PHONE_NUMBER_REQUIRED_IOS: "To be able to send bitcoin to contacts in your phone's address book you need to provide your phone number " +
                                         "and give access to your contacts.",
+
+            //About
+            ABOUT_TITLE: "Wallet",
+            ABOUT_SUBTITLE: "by Blocktrail",
+            ABOUT_DESCRIPTION: "Blocktrail is an Amsterdam based Bitcoin tech startup.",
+            ABOUT_LABEL_NEWS: "news",
+            ABOUT_LABEL_RATEAPP: "Do you like the app?",
+            ABOUT_RATEAPP: "Please Rate Wallet!",
+
             //messages
             SETTINGS_PHONE_VERIFIED: "verified",
             SETTINGS_PHONE_UNVERIFIED: "unverified",
@@ -308,6 +317,18 @@ angular.module('blocktrail.localisation', [
             MSG_PHONE_UPDATED: "A code has been sent to your phone for verification",
             MSG_PHONE_VERIFIED: "your phone has been verified",
             MSG_PHONE_REQUIRE_VERIFY: "please verify your phone to continue",
+
+
+            //Promo code page
+            PROMO_CODES: "Promo Codes",
+            REDEEM: "redeem",
+            CHECKING: "checking",
+            PROMO_REDEEM: "redeem a promo code",
+            PROMO_CODE_PLACEHOLDER: "Promo Code",
+            MSG_MISSING_PROMO_CODE: "please enter a promo code",
+            MSG_BAD_PROMO_CODE: "that doesn't seem to be a valid code",
+            //MSG_PROMO_CODE_SUCCESS: "",
+
 
             //feedback
             FEEDBACK: "feedback",

@@ -58,6 +58,7 @@ angular.module('blocktrail.wallet').run(
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice) {
         $rootScope.CONFIG = CONFIG || {};
         $rootScope.$state = $state;
+        $rootScope.$translate = $translate;
         $rootScope.$cordovaNetwork = $cordovaNetwork;
         $rootScope.showSideMenu = true;
         $rootScope.hideLoadingScreen = false;
