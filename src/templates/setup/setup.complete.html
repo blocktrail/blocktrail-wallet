@@ -8,21 +8,22 @@
 
     <ion-content>
         <div class="info-section">
-            <div class="item item-text-wrap">
-                <h1 class="text-neutral text-center capitalise">You're all done!</h1>
-                <p class="padding-t text-center">
-                    Welcome to the world of Bitcoin, <br/>
-                    you are now your own bank.
-                    <br/>
-                </p>
-                <p class="padding-t text-center">
-                    Visit wallet.blocktrail.com/tips for tips and tricks.
-                </p>
-            </div>
+            <div class="card">
+                <div class="item item-text-wrap">
+                    <h1 class="text-neutral text-center capitalise">{{ 'SETUP_COMPLETE_TITLE' | translate }}</h1>
+                    <p class="padding-t text-center">
+                        {{ 'SETUP_COMPLETE_SUBTITLE' | translate }}
+                        <br/>
+                    </p>
+                    <p class="padding-t text-center">
+                        {{ 'SETUP_COMPLETE_SUBTITLE_2' | translate }}
+                    </p>
+                </div>
 
-            <div class="item item-borderless">
-                <button class="button button-block button-positive capitalise" ng-click="continue()">{{ 'SETUP_COMPLETE' | translate }}
-                </button>
+                <div class="item item-borderless">
+                    <button class="button button-block button-positive capitalise" ng-click="continue()">{{ 'SETUP_COMPLETE' | translate }}
+                    </button>
+                </div>
             </div>
         </div>
     </ion-content>

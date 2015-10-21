@@ -11,20 +11,23 @@
     </ion-nav-bar>
 
     <ion-content scroll="true" >
-        <div class="list">
-            <label class="item item-input item-floating-label">
-                <span class="input-label text-neutral">{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}</span>
-                <input type="text" placeholder="{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}" ng-model="form.username">
-            </label>
-            <label class="item item-input item-floating-label">
-                <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
-                <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password" ng-enter="doLogin()">
-            </label>
-        </div>
+        <div class="padding-t card">
+            <div class="list">
+                <label class="item item-input item-floating-label">
+                    <span class="input-label text-neutral">{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}</span>
+                    <input type="text" placeholder="{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}" ng-model="form.username">
+                </label>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
+                    <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password" ng-enter="doLogin()">
+                </label>
+                <div></div>
+            </div>
 
-        <div class="row text-center">
-            <div class="col col-offset-25 col-50 padding-bottom">
-                <button class="button button-block capitalise" ng-click="doLogin()">{{ 'SETUP_LOGIN' | translate }}</button>
+            <div class="row text-center">
+                <div class="col col-offset-25 col-50 padding-bottom">
+                    <button class="button button-block capitalise" ng-click="doLogin()">{{ 'SETUP_LOGIN' | translate }}</button>
+                </div>
             </div>
         </div>
     </ion-content>

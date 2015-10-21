@@ -133,9 +133,10 @@
     */
 }
 .state-login {
+    background: $lightgray-dark;
     .signup-type-select {
         &, select {
-            background: #EDEDED;
+            background: #EBECEF;
         }
     }
     .item-input {
@@ -161,6 +162,9 @@
     }
     .skip-step {
         padding: 15px;
+    }
+    &.state-pin {
+        background: $lightgray-dark;
     }
     &.state-backup {
         background: $lightgray-dark;
@@ -188,7 +192,12 @@
             }
         }
     }
+    &.state-phone {
+        background: $lightgray-dark;
+    }
     &.state-contacts {
+        background: $lightgray-dark;
+
         ion-spinner {
             position: absolute;
             left: 0;
@@ -220,7 +229,9 @@
                 color: $lightgray-dark;
             }
         }
-
+    }
+    &.state-complete {
+        background: $lightgray-dark;
     }
 }
 

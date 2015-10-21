@@ -9,60 +9,61 @@
 
     <ion-content scroll="true">
         <ng-form name="registerForm">
-            <div class="list">
-                <label class="item item-input item-select signup-type-select">
-                    <div class="input-label">
-                        Sign up with
-                    </div>
-                    <select ng-model="form.registerWithEmail" ng-change="form.username=null; form.email=null;" convert-to-number>
-                        <option value="1">Email</option>
-                        <option value="0">Username</option>
-                    </select>
-                </label>
-                <!-- /register type -->
-
-                <label class="item item-input item-floating-label input-email" ng-if="form.registerWithEmail">
-                    <div class="input-label text-neutral">{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}</div>
-                    <input type="email" placeholder="{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}" required ng-model="form.email">
-                </label>
-                <!-- /email -->
-
-                <label class="item item-input item-floating-label input-username" ng-if="!form.registerWithEmail">
-                    <div class="input-label text-neutral">
-                        <span>{{ 'SETUP_USERNAME_PLACEHOLDER' | translate }}</span>
-                        <div class="username-check text-right text-bad capitalise">
-                            <div ng-if="usernameTaken">{{ 'TAKEN' | translate }}</div>
-                            <div ng-if="registerForm.username.$invalid && registerForm.username.$dirty">{{ 'MSG_INVALID_USERNAME' | translate }}</div>
-                            <i class="icon ion-checkmark-circled text-good" ng-if="form.username && usernameTaken==false"></i>
-                            <ion-spinner ng-if="appControl.checkingUsername"></ion-spinner>
+            <div class="card">
+                <div class="list">
+                    <label class="item item-input item-select signup-type-select">
+                        <div class="input-label sentence-case">
+                            {{ 'SETUP_SIGNUP_METHOD' | translate }}
                         </div>
-                    </div>
-                    <input type="text"
-                           name="username"
-                           placeholder="{{ 'SETUP_USERNAME_PLACEHOLDER' | translate }}"
-                           ng-pattern="'[a-zA-Z0-9_]*'"
-                           ng-model="form.username"
-                           ng-model-options='{ debounce: 400 }'
-                           ng-change="checkUsername()">
-                </label>
-                <!-- /username -->
+                        <select ng-model="form.registerWithEmail" ng-change="form.username=null; form.email=null;" convert-to-number>
+                            <option value="1">{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}</option>
+                            <option value="0">{{ 'SETUP_USERNAME_PLACEHOLDER' | translate }}</option>
+                        </select>
+                    </label>
+                    <!-- /register type -->
 
-                <label class="item item-input item-floating-label">
-                    <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
-                    <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password">
-                </label>
-                <!-- /password -->
-            </div>
+                    <label class="item item-input item-floating-label input-email" ng-if="form.registerWithEmail">
+                        <div class="input-label text-neutral">{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}</div>
+                        <input type="email" placeholder="{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}" required ng-model="form.email">
+                    </label>
+                    <!-- /email -->
 
-            <div class="row text-center">
-                <div class="col col-offset-25 col-50 padding-bottom">
-                    <button class="button button-block capitalise" ng-click="doRegister()">{{ 'SETUP_REGISTER' | translate }}</button>
+                    <label class="item item-input item-floating-label input-username" ng-if="!form.registerWithEmail">
+                        <div class="input-label text-neutral">
+                            <span>{{ 'SETUP_USERNAME_PLACEHOLDER' | translate }}</span>
+                            <div class="username-check text-right text-bad capitalise">
+                                <div ng-if="usernameTaken">{{ 'TAKEN' | translate }}</div>
+                                <div ng-if="registerForm.username.$invalid && registerForm.username.$dirty">{{ 'MSG_INVALID_USERNAME' | translate }}</div>
+                                <i class="icon ion-checkmark-circled text-good" ng-if="form.username && usernameTaken==false"></i>
+                                <ion-spinner ng-if="appControl.checkingUsername"></ion-spinner>
+                            </div>
+                        </div>
+                        <input type="text"
+                               name="username"
+                               placeholder="{{ 'SETUP_USERNAME_PLACEHOLDER' | translate }}"
+                               ng-pattern="'[a-zA-Z0-9_]*'"
+                               ng-model="form.username"
+                               ng-model-options='{ debounce: 400 }'
+                               ng-change="checkUsername()">
+                    </label>
+                    <!-- /username -->
+
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
+                        <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password">
+                    </label>
+                    <!-- /password -->
+                    <div></div>
                 </div>
-            </div>
 
-
-            <div class="card" ng-if="!form.registerWithEmail">
-                <p class="item item-text-wrap text-neutral">*Signing up with a username gives you greater privacy and anonymity, but at a cost of being able to recover passwords and receive critical emails from us.</p>
+                <div class="row text-center">
+                    <div class="col col-offset-10 col-80 padding-bottom">
+                        <button class="button button-block capitalise" ng-click="doRegister()">{{ 'SETUP_REGISTER' | translate }}</button>
+                    </div>
+                </div>
+                <p ng-if="!form.registerWithEmail" class="item item-text-wrap text-neutral">
+                    {{ 'MSG_USERNAME_WARNING' | translate }}
+                </p>
             </div>
         </ng-form>
     </ion-content>

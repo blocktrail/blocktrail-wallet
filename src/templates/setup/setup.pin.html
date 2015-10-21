@@ -2,20 +2,27 @@
     <ion-nav-title class="capitalise">{{ 'WALLET_PIN' | translate }}</ion-nav-title>
 
     <ion-content scroll="false">
-        <div class="list">
-            <label class="item item-input item-floating-label">
-                <span class="input-label text-neutral">{{ 'SETUP_PIN_PLACEHOLDER' | translate }}</span>
-                <input class="password-mask" type="tel" placeholder="{{ 'SETUP_PIN_PLACEHOLDER' | translate }}" ng-model="form.pin">
-            </label>
-            <label class="item item-input item-floating-label">
-                <span class="input-label text-neutral">{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}</span>
-                <input class="password-mask" type="tel" placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}" ng-model="form.pinRepeat" ng-enter="setupWallet()">
-            </label>
-        </div>
+        <div class="padding-t card">
+            <div class="item item-text-wrap">
+                {{ 'SETUP_PIN_DESC_TITLE' | translate }}<br>
+                <small>{{ 'SETUP_PIN_DESC_SUBTITLE' | translate }}</small>
+            </div>
+            <div class="list">
+                <label class="item item-input item-floating-label">
+                    <span class="input-label text-neutral">{{ 'SETUP_PIN_PLACEHOLDER' | translate }}</span>
+                    <input class="password-mask" type="tel" placeholder="{{ 'SETUP_PIN_PLACEHOLDER' | translate }}" ng-model="form.pin">
+                </label>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label text-neutral">{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}</span>
+                    <input class="password-mask" type="tel" placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}" ng-model="form.pinRepeat" ng-enter="setupWallet()">
+                </label>
+                <div></div>
+            </div>
 
-        <div class="row text-center">
-            <div class="col col-offset-25 col-50 padding-bottom">
-                <button class="button button-block capitalise" ng-click="setupWallet()">{{ 'CONTINUE' | translate }}</button>
+            <div class="row text-center">
+                <div class="col col-offset-25 col-50 padding-bottom">
+                    <button class="button button-block capitalise" ng-click="setupWallet()">{{ 'CONTINUE' | translate }}</button>
+                </div>
             </div>
         </div>
     </ion-content>
