@@ -18,16 +18,16 @@
                 <div ng-if="settings.username" class="username"><label class="capitalise">{{ 'SETTING_USERNAME' | translate }}: </label>{{ settings.username }}</div>
                 <div ng-if="settings.email" class="email"><label class="capitalise">{{ 'EMAIL' | translate }}: </label>{{ settings.email }}</div>
 
-                <p>Set a profile picture that your contacts will see when you send to them.</p>
+                <p>{{ 'SETTINGS_PROFILE_DESCRIPTION' | translate }}</p>
             </div>
             <div class="item tabs tabs-secondary tabs-icon-left">
-                <a class="tab-item" ng-click="updatePicture()">
-                    <i class="icon ion-edit"></i>
-                    Update Picture
-                </a>
-                <a class="tab-item" ng-click="removePicture()">
+                <a class="tab-item capitalise" ng-click="removePicture()">
                     <i class="icon ion-trash-b"></i>
-                    Remove
+                    {{ 'SETTINGS_REMOVE_PHOTO' | translate }}
+                </a>
+                <a class="tab-item capitalise" ng-click="updatePicture()">
+                    <i class="icon ion-edit"></i>
+                    {{ 'SETTINGS_UPDATE_PHOTO' | translate }}
                 </a>
             </div>
         </div>

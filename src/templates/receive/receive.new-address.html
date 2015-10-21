@@ -12,7 +12,7 @@
                            ng-enter="blurInput($event)"
                            tabindex="{{ !fiatFirst && 1 || -1 }}"/>
                     <div class="label-group">
-                        <span class="placeholder-label">Amount</span>
+                        <span class="placeholder-label capitalise">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                         <span class="spacer">{{ btcValueRaw }}</span>
                         <span class="label" ng-class="{'opacity-30': newRequestForm.btcValue.$invalid}">BTC</span>
                     </div>
@@ -25,7 +25,7 @@
                            ng-enter="blurInput($event)"
                            tabindex="{{ fiatFirst && 1 || -1 }}"/>
                     <div class="label-group">
-                        <span class="placeholder-label">Amount</span>
+                        <span class="placeholder-label capitalise">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                         <span class="label">{{ settings.localCurrency | toCurrencySymbol}}</span>
                         <span class="spacer">{{ fiatValueRaw }}</span>
                     </div>

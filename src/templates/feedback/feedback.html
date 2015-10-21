@@ -18,12 +18,11 @@
                 <i class="icon ion-email placeholder-icon"></i>
                 <input type="email" ng-model="feedbackInput.email" placeholder="{{ 'EMAIL' | translate }} ({{ 'OPTIONAL' | translate}})">
             </label>
-        </div>
 
-        <div class="send-button-group text-right">
-            <div class="button center clear capitalise" ng-click="sendFeedback()">
-                {{ 'SEND' | translate }}
+            <div class="item padding-top padding-b text-center">
+                <button class="button button-block button-energized capitalise" ng-click="sendFeedback()">{{ 'SEND' | translate }}</button>
             </div>
+
         </div>
     </ion-content>
 

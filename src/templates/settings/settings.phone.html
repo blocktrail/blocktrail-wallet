@@ -1,7 +1,7 @@
 <ion-view class="state-settings state-phone">
     <ion-nav-title class="capitalise">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</ion-nav-title>
     <ion-nav-buttons side="right">
-        <div class="button hide"
+        <div class="button hide capitalise"
             nav-direction="back" 
             ng-class="{'hide': !isIOS || !appControl.showCountrySelect}" 
             ng-click="$btBackButtonDelegate.goBack()">{{ 'CANCEL' | translate }}
@@ -18,11 +18,9 @@
     <ion-content ng-class="{'blur-me': appControl.showMessage}">
         <div class="list card">
             <div class="item item-body">
-                <p>
-                    Linking your wallet to your phone number will allow you to send to contacts in your phone who also have a Blocktrail Wallet.
-                </p>
-                <label class="current-phone capitalise">Phone: {{ settings.phoneNumber && settings.phoneNumber || ('NONE' | translate) }}</label>
-                <label class="status capitalise pull-right" ng-if="settings.phoneNumber">Status: <span ng-if="settings.phoneNumber">{{ settings.phoneVerified && ('SETTINGS_PHONE_VERIFIED' | translate) || ('SETTINGS_PHONE_UNVERIFIED' | translate) }}</span></label>
+                <p>{{ 'SETTINGS_PHONE_DESCRIPTION' | translate }}</p>
+                <label class="current-phone capitalise">{{ 'SETTINGS_PHONE' | translate }}: {{ settings.phoneNumber && settings.phoneNumber || ('NONE' | translate) }}</label>
+                <label class="status capitalise pull-right" ng-if="settings.phoneNumber">{{ 'STATUS' | translate }}: <span ng-if="settings.phoneNumber">{{ settings.phoneVerified && ('SETTINGS_PHONE_VERIFIED' | translate) || ('SETTINGS_PHONE_UNVERIFIED' | translate) }}</span></label>
 
             </div>
             <div class="item item-no-border-b" ng-if="appControl.showPhoneInput">
@@ -39,24 +37,23 @@
                     <input type="tel" ng-model="formInput.newPhoneNumber" ng-tab="updatePhone(); blurInput($event)" ng-enter="updatePhone(); blurInput($event)" placeholder="{{ 'SETTINGS_PHONE_PLACEHOLDER' | translate}}">
                 </label>
             </div>
+            <!-- /phone input -->
 
-            <div class="item item-no-border tabs tabs-secondary tabs-icon-left" ng-if="appControl.showPhoneInput">
-                <a class="tab-item capitalise" ng-click="updatePhone()">
-                    <i class="icon ion-edit"></i>
-                    {{ (settings.phoneNationalNumber && formInput.newPhoneNumber == settings.phoneNationalNumber) && ('SETTINGS_PHONE_RESEND' | translate) || ('SETTINGS_PHONE_UPDATE' | translate) }}
-                </a>
-                <a class="tab-item capitalise" ng-click="removePhone()">
-                    <i class="icon ion-trash-b"></i>
+            <div class="item item-borderless padding-t" ng-if="appControl.showPhoneInput">
+                <button ng-hide="settings.phoneNumber && !formInput.newPhoneNumber" class="button button-block button-positive capitalise" ng-click="updatePhone()">
+                    {{ 'SETTINGS_PHONE_UPDATE' | translate }}
+                </button>
+                <button ng-if="settings.phoneNumber && !formInput.newPhoneNumber" class="button button-block button-assertive capitalise" ng-click="removePhone()">
                     {{ 'SETTINGS_PHONE_REMOVE' | translate }}
-                </a>
+                </button>
             </div>
+            <!-- /phone update/remove buttons -->
+
         </div>
 
         <div class="list card" ng-if="settings.phoneNumber && !settings.phoneVerified">
             <div class="item item-body">
-                <p>
-                    A code has been sent to your phone. Please enter it below to confirm your number.
-                </p>
+                <p>{{ 'MSG_PHONE_CODE_SENT' | translate }}</p>
                 <label class="item item-input verify-token">
                     <i class="icon ion-android-checkbox-outline placeholder-icon"></i>
                     <input type="tel" ng-model="formInput.verifyToken" placeholder="{{ 'SETTINGS_TOKEN_PLACEHOLDER' | translate}}" ng-tab="verifyPhone(); blurInput($event)" ng-enter="verifyPhone(); blurInput($event)">
@@ -64,18 +61,22 @@
             </div>
 
             <div class="item tabs tabs-secondary tabs-icon-left">
-                <a class="tab-item" ng-if="!appControl.showPhoneInput" ng-click="appControl.showPhoneInput = true">
+                <a class="tab-item capitalise" ng-if="!appControl.showPhoneInput" ng-click="appControl.showPhoneInput = true">
                     <i class="icon ion-close"></i>
                     {{ 'SETTINGS_PHONE_CHANGE' | translate }}
                 </a>
-                <a class="tab-item" ng-if="appControl.showPhoneInput"></a>
-                <a class="tab-item" ng-click="verifyPhone()">
+                <a class="tab-item capitalise" ng-if="appControl.showPhoneInput"></a>
+                <a class="tab-item capitalise" ng-click="verifyPhone()">
                     <i class="icon ion-checkmark"></i>
                     {{ 'CONFIRM' | translate }}
                 </a>
             </div>
         </div>
+        <!-- /verification code input-->
     </ion-content>
+
+
+
 
     <div class="message-display country-select-screen" ng-class="{displayed: appControl.showCountrySelect}">
         <div class="filter-input item-input item-input-inset">

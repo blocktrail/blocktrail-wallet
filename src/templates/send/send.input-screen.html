@@ -19,7 +19,7 @@
                 <div class="col">
                     <div class="balance-label" ng-if="balance !== null">
                         <canvas-display
-                                text="'Available Balance'"
+                                text="$translate.instant('AVAILABLE_BALANCE')"
                                 width="100%"
                                 height="17"
                                 font="17px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
@@ -83,7 +83,7 @@
                                ng-enter="blurInput($event)"
                                tabindex="{{ !fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
-                            <span class="placeholder-label">Amount</span>
+                            <span class="placeholder-label capitalise">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                             <span class="spacer">{{ btcValueRaw }}</span>
                             <span class="label" ng-class="{'opacity-30': sendInputForm.btcValue.$invalid}">BTC</span>
                         </div>
@@ -96,7 +96,7 @@
                                ng-enter="blurInput($event)"
                                tabindex="{{ fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
-                            <span class="placeholder-label">Amount</span>
+                            <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                             <span class="label">{{ settings.localCurrency | toCurrencySymbol}}</span>
                             <span class="spacer">{{ fiatValueRaw }}</span>
                         </div>
@@ -110,8 +110,8 @@
 
             <!-- recipient input -->
             <div class="recipient-input-section padding-t card">
-                <h4 class="opacity-50 padding-left no-padding-b">
-                    Send to
+                <h4 class="opacity-50 padding-left no-padding-b sentence-case">
+                    {{ 'RECIPIENT_PLACEHOLDER' | translate }}
                 </h4>
 
                 <div class="row recipient-display" ng-if="sendInput.recipientDisplay">
@@ -136,19 +136,19 @@
                     <div class="col text-center">
                         <div class="option">
                             <a class="contacts" ng-click="dismissMessage(); selectContact();"><i class="icon ion-person"></i></a>
-                            <span class="label">Contacts</span>
+                            <span class="label capitalise">{{ 'CONTACTS' | translate }}</span>
                         </div>
                     </div>
                     <div class="col text-center">
                         <div class="option">
                             <a class="qrcode" ui-sref="app.wallet.send.qrcode" ng-click="dismissMessage();"><i class="icon-qrcode"></i></a>
-                            <span class="label">QR</span>
+                            <span class="label capitalise">{{ 'QR' | translate }}</span>
                         </div>
                     </div>
                     <div class="col text-center">
                         <div class="option">
                             <a class="copy" ui-sref="app.wallet.send.address" ng-click="dismissMessage();"><i class="icon ion-ios-copy"></i></a>
-                            <span class="label">Address</span>
+                            <span class="label capitalise">{{ 'ADDRESS' | translate }}</span>
                         </div>
                     </div>
                 </div>

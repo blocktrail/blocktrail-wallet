@@ -4,51 +4,51 @@
     <ion-content>
         <div class="list card">
             <div class="item item-divider text-center">
-                <h1 class="text-neutral no-padding no-margin">Wallet</h1>
-                <h2 class="text-neutral padding-b">by Blocktrail</h2>
+                <h1 class="text-neutral no-padding no-margin">{{ 'ABOUT_TITLE' | translate }}</h1>
+                <h2 class="text-neutral padding-b">{{ 'ABOUT_SUBTITLE' | translate }}</h2>
                 <small class="text-neutral opacity-50">version {{ appVersion }}</small>
             </div>
             <div class="item item-body">
                 <div class="text-center padding-b"></div>
 
                 <p class="text-center">
-                    Blocktrail is an Amsterdam based Bitcoin tech startup.
+                    {{ 'ABOUT_DESCRIPTION' | translate }}
                 </p>
 
                 <div class="row padding-b">
-                    <div class="col col-33">Twitter:</div>
+                    <div class="col col-33 capitalise">Twitter:</div>
                     <div class="col">
-                        <a href="https://twitter.com/blocktrail" browse-to>@blocktrail</a>
+                        <small><a href="https://twitter.com/blocktrail" browse-to>@blocktrail</a></small>
                     </div>
                 </div>
                 <div class="row padding-b">
-                    <div class="col col-33">
+                    <div class="col col-33 capitalise">
                         Facebook:
                     </div>
                     <div class="col">
-                        <a href="https://www.facebook.com/blocktrail" browse-to>facebook.com/blocktrail</a>
+                        <small><a href="https://www.facebook.com/blocktrail" browse-to>facebook.com/blocktrail</a></small>
                     </div>
                 </div>
                 <div class="row padding-b">
-                    <div class="col col-33">
+                    <div class="col col-33 capitalise">
                         Website:
                     </div>
                     <div class="col">
-                        <a href="https://blocktrail.com" browse-to>blocktrail.com</a>
+                        <small><a href="https://blocktrail.com" browse-to>blocktrail.com</a></small>
                     </div>
                 </div>
                 <div class="row padding-b">
-                    <div class="col col-33">
-                        News and Info:
+                    <div class="col col-33 capitalise">
+                        {{ 'ABOUT_LABEL_NEWS' | translate }}:
                     </div>
                     <div class="col">
-                        <a href="https://blog.blocktrail.com/" browse-to>blog.blocktrail.com</a>
+                        <small><a href="https://blog.blocktrail.com/" browse-to>blog.blocktrail.com</a></small>
                     </div>
                 </div>
             </div>
-            <div class="item item-divider">
-                <small class="pull-left padding-t">Do you like the app?</small>
-                <button class="button button-small pull-right" ng-click="rateApp()">Please Rate Wallet!</button>
+            <div class="item text-center">
+                <small class="padding-t">{{ 'ABOUT_LABEL_RATEAPP' | translate }}</small>
+                <button class="button button-block button-energized" ng-click="rateApp()">{{ 'ABOUT_RATEAPP' | translate }}</button>
             </div>
         </div>
     </ion-content>

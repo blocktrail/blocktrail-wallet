@@ -8,12 +8,12 @@
 
         <div class="card">
             <div class="item">
-                <h2 class="capitalise text-center title">Enter a Bitcoin Address</h2>
+                <h2 class="capitalise text-center title capitalise">{{ 'ENTER_ADDRESS_TITLE' | translate }}</h2>
             </div>
 
             <div class="list list-inset address-input">
                 <label class="item item-input item-floating-label">
-                    <span class="input-label">Bitcoin Address</span>
+                    <span class="input-label">{{ 'BITCOIN_ADDRESS' | translate }}</span>
                     <input type="text" ng-model="addressInput" ng-enter="confirmInput(addressInput)" tabindex="-1" placeholder="Bitcoin address">
                 </label>
             </div>

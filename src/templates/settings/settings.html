@@ -93,7 +93,7 @@
             <div class="list list-inset">
 
                 <div class="item ">
-                    <span class="sentence-case">BTC Decimal Display</span>
+                    <span class="sentence-case">{{ 'SETTINGS_BTC_DECIMALS' | translate }}</span>
                     <br>
                     <div class="range range-positive">
                         <input type="range" name="volume" step="1" min="0" max="8" ng-model="settings.btcPrecision" ng-change="updateSettings()">
