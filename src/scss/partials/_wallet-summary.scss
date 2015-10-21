@@ -274,7 +274,7 @@ $display-token-size:        50px !default;
             margin: 0 auto 1.25rem auto;
             left: 0;
             right: 0;
-            width: 6rem;
+            width: 6.5rem;
         }
     }
 }
@@ -284,12 +284,4 @@ $display-token-size:        50px !default;
         -webkit-transform: translate(0, $bar-height + $ios-statusbar-height);
     }
 }
-/* @todo remove
-.platform-ios {
-    .state-wallet .hero {
-        transform: translate(0, $bar-height + $ios-statusbar-height);
-        -webkit-transform: translate(0, $bar-height + $ios-statusbar-height);
-    }
-}
-*/
 //--- /wallet summary ---
