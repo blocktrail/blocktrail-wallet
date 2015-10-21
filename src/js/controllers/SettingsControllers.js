@@ -554,7 +554,7 @@ angular.module('blocktrail.wallet')
             encodingType: Camera.EncodingType.JPEG,
             targetWidth: 800,
             targetHeight: 800,
-            popoverOptions: CameraPopoverOptions,
+            popoverOptions: (typeof CameraPopoverOptions == "undefined") ? null : CameraPopoverOptions,
             saveToPhotoAlbum: true
         };
         $scope.newProfileImage = '';
