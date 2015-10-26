@@ -49,6 +49,7 @@ angular.module('blocktrail.wallet')
                     'MSG_TRY_AGAIN',
                     'MSG_PIN_CHANGED',
                     'MSG_RESET_WALLET',
+                    'MSG_BACKUP_UNSAVED',
                     'MSG_ARE_YOU_SURE',
                     'MSG_PHONE_REQUIRE_VERIFY',
                     'PERMISSION_REQUIRED_CONTACTS',
@@ -388,34 +389,28 @@ angular.module('blocktrail.wallet')
         $scope.resetWallet = function() {
             $scope.getTranslations()
                 .then(function() {
-                    return $cordovaDialogs.prompt(
-                        $scope.translations['MSG_ENTER_PIN'].sentenceCase(),
-                        $scope.translations['WALLET_PIN'].capitalize(),
-                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
-                        "",
-                        true,   //isPassword
-                        "tel"   //input type (uses html5 style)
-                    );
-                })
-                .then(function(dialogResult) {
-                    if (dialogResult.buttonIndex == 2) {
-                        return $q.reject('CANCELLED');
-                    }
-                    // decrypt password with the provided PIN
-                    $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
-
-                    return Wallet.unlockData(dialogResult.input1).then(function() {
-                        $ionicLoading.hide();
-                        return true;
-                    });
-                })
-                .then(function() {
-                    //password correct, ask the user to finally confirm their action
+                    //ask the user to finally confirm their action
                     return $cordovaDialogs.confirm(
                         $scope.translations['MSG_RESET_WALLET'].sentenceCase(),
                         $scope.translations['MSG_ARE_YOU_SURE'].capitalize(),
                         [$scope.translations['OK'].sentenceCase(), $scope.translations['CANCEL'].sentenceCase()]
                     );
+                })
+                .then(function(dialogResult) {
+                    if (dialogResult == 1) {
+                        //if the backup hasn't been saved yet, warn user
+                        if (!settingsService.backupSaved) {
+                            return $cordovaDialogs.confirm(
+                                $scope.translations['MSG_BACKUP_UNSAVED'].sentenceCase(),
+                                $scope.translations['MSG_ARE_YOU_SURE'].capitalize(),
+                                [$scope.translations['OK'].sentenceCase(), $scope.translations['CANCEL'].sentenceCase()]
+                            );
+                        } else {
+                            return dialogResult;
+                        }
+                    } else {
+                        return $q.reject('CANCELLED');
+                    }
                 })
                 .then(function(dialogResult) {
                     if (dialogResult == 1) {

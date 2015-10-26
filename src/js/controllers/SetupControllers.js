@@ -329,38 +329,30 @@ angular.module('blocktrail.wallet')
                 return false;
             }
 
-            //if the user is registering with username, confirm their password
-            if (!$scope.form.registerWithEmail) {
-                $scope.getTranslations()
-                    .then(function(translations) {
-                        return $cordovaDialogs.prompt(
-                            $scope.translations['MSG_REPEAT_PASSWORD'].sentenceCase(),
-                            $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].capitalize(),
-                            [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
-                            "",
-                            /* isPassword= */true
-                        );
-                    })
-                    .then(function(dialogResult) {
-                        if (dialogResult.buttonIndex == 1) {
-                            if ($scope.form.password === dialogResult.input1.trim()) {
-                                $scope.message = {title: 'CREATING_ACCOUNT', title_class: 'text-neutral', body: ''};
-                                $scope.appControl.working = true;
-                                $scope.showMessage();
+            // prompt user to confirm their password
+            $scope.getTranslations()
+                .then(function(translations) {
+                    return $cordovaDialogs.prompt(
+                        $scope.translations['MSG_REPEAT_PASSWORD'].sentenceCase(),
+                        $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].capitalize(),
+                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
+                        "",
+                        /* isPassword= */true
+                    );
+                })
+                .then(function(dialogResult) {
+                    if (dialogResult.buttonIndex == 1) {
+                        if ($scope.form.password === dialogResult.input1.trim()) {
+                            $scope.message = {title: 'CREATING_ACCOUNT', title_class: 'text-neutral', body: ''};
+                            $scope.appControl.working = true;
+                            $scope.showMessage();
 
-                                $scope.register();
-                            } else {
-                                $cordovaDialogs.alert($scope.translations['MSG_BAD_PASSWORD_REPEAT'].sentenceCase(), $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].capitalize(), $scope.translations['OK']);
-                            }
+                            $scope.register();
+                        } else {
+                            $cordovaDialogs.alert($scope.translations['MSG_BAD_PASSWORD_REPEAT'].sentenceCase(), $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].capitalize(), $scope.translations['OK']);
                         }
-                    });
-            } else {
-                $scope.message = {title: 'CREATING_ACCOUNT', title_class: 'text-neutral', body: ''};
-                $scope.appControl.working = true;
-                $scope.showMessage();
-
-                $scope.register();
-            }
+                    }
+                });
         };
 
 
