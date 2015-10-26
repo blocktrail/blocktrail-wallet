@@ -3,7 +3,7 @@
 ###Next Version
  - properly handles lingering unconfirmed txs resulting from double-spend/malleability attacks
  - added link to external block explorer in tx info
- - various UI enhancements
+ - various UI enhancements and bug fixes
 
 ###Version 1.0.17
  - fix QR reader crash on various Samsung and other devices
