@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'Wallet',
-    function($rootScope, $state, $interval, $q, $log, $cordovaNetwork, sdkService, launchService, storageService, Contacts, CONFIG, $timeout) {
+    function($rootScope, $state, $interval, $q, $log, sdkService, launchService, storageService, Contacts, CONFIG, $timeout) {
         var Wallet = function() {
             var self = this;
 
@@ -125,7 +125,6 @@ angular.module('blocktrail.wallet').factory(
             var self = this;
 
             self.historyCache = storageService.db('history');
-            self.txCache = storageService.db('tx-cache');
             self.walletCache = storageService.db('wallet-cache');
         };
 
@@ -269,9 +268,9 @@ angular.module('blocktrail.wallet').factory(
                             });
                     }
                 },
-                function(e) { 
-                    $log.error("no offline addresses available yet. " + e); 
-                    throw e; 
+                function(e) {
+                    $log.error("no offline addresses available yet. " + e);
+                    throw e;
                 }
             );
         };
@@ -536,30 +535,6 @@ angular.module('blocktrail.wallet').factory(
                     $log.debug('Wallet.transactions.done', transactions.length, ((new Date).getTime() - t) / 1000);
                     return transactions;
                 });
-        };
-
-
-        //@TODO remove this? not currently being used
-        Wallet.prototype.transaction = function(hash) {
-            var self = this;
-
-            return $q.when(
-                self.txCache.get(hash).then(
-                    function(txRow) { return txRow.data; },
-                    function(e) {
-                        return self.sdk.then(function(sdk) {
-                            return sdk.transaction(hash).then(function(transaction) {
-                                return self.txCache.put({
-                                    _id: transaction.hash,
-                                    data: transaction
-                                }).then(function() {
-                                    return transaction;
-                                });
-                            });
-                        });
-                    }
-                )
-            );
         };
 
         /**
