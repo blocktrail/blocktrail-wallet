@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .factory('$btBackButtonDelegate', function($ionicHistory, $state, $rootScope, $ionicPlatform, $log, $ionicSideMenuDelegate, $ionicViewSwitcher) {
+    .factory('$btBackButtonDelegate', function($ionicHistory, $state, $rootScope, $ionicPlatform, $log, $ionicSideMenuDelegate, $ionicViewSwitcher, settingsService) {
         var priorityLevel = 101;    //priority level for the hardware back button handler
         var goingBack = false;      //flag to indicate if going back so we don't add previous state to stack
         var fireOnce = false;       //flag to indicate if an assigned back button handler should be used once and then returned to default
@@ -72,7 +72,7 @@ angular.module('blocktrail.wallet')
                 $state.go(back.state, back.params);
             } else {
                 // there is no back view. If a "root" state is defined and we're not on it, go to it otherwise close the app
-                if (self.rootState && $state.current.name != self.rootState) {
+                if (self.rootState && $state.current.name != self.rootState && settingsService.setupComplete) {
                     $state.go(self.rootState);
                 } else {
                     ionic.Platform.exitApp();

@@ -296,14 +296,16 @@ angular.module('blocktrail.wallet').config(
             .state('app.launch', {
                 url: "/launch",
                 data: {
-                    excludeFromHistory: true
+                    excludeFromHistory: true,
+                    clearHistory: true  //always clear history when entering this state
                 },
                 controller: "LaunchCtrl"
             })
             .state('app.reset', {
                 url: "/reset",
                 data: {
-                    excludeFromHistory: true
+                    excludeFromHistory: true,
+                    clearHistory: true
                 },
                 controller: "ResetCtrl"
             })
