@@ -1,6 +1,9 @@
 # Change Log
 
 ###Next Version
+
+
+###Version 1.0.18
  - properly handles lingering unconfirmed txs resulting from double-spend/malleability attacks
  - added link to external block explorer in tx info
  - various UI enhancements and bug fixes
