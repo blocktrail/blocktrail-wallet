@@ -287,13 +287,14 @@ angular.module('blocktrail.wallet')
         $scope.$on('new_transactions', function(event, transactions) {
             $log.debug('new_transactions', transactions);
 
-            //remove all previously unconfirmed txs
+            // remove all previously unconfirmed txs
             $scope.transactionsData.forEach(function(tx, index) {
                 if (!tx.block_height) {
                     delete $scope.transactionsData[index];
                 }
             });
-            //add the updated list of unconfirmed txs
+
+            // add the updated list of unconfirmed txs
             transactions.forEach(function(transaction) {
                 $scope.transactionsData.unshift(transaction);
             });
