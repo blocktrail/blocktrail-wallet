@@ -380,7 +380,7 @@ angular.module('blocktrail.localisation', [
             COMPLETE: "complet",
             THANKS_1: "merci",
             THANKS_2: "merci",
-            SORRY: "Désolé"
+            SORRY: "Désolé",
             FAIL: "manqué",
             LOADING: "chargement",
             SAVING: "sauvegarder",
@@ -485,7 +485,7 @@ angular.module('blocktrail.localisation', [
             MSG_EMAIL_NOT_SETUP: "Vous n'avez pas de compte email par défaut configuré sur ce téléphone.\n\nVeuillez configurer votre application email, ou passer cette étape et enregistrer votre sauvegarde plus tard quand nous supporteront des app alternatives",
             MSG_BACKUP_EMAIL_SUBJECT_1: "Sauvegarde du portefeuille mobile Blocktrail",
             MSG_BACKUP_EMAIL_BODY_1: "Votre document de sauvegarde du portefeuille mobile est attaché. \nConservez-le dans un endroit sûr. "
-                                    + 'Vous en aurez besoin avec votre mot de passe actuel pour récupérer votre portefeuille en cas d'urgence.',
+                                    + "Vous en aurez besoin avec votre mot de passe actuel pour récupérer votre portefeuille en cas d'urgence.",
 
             
             //side menu
@@ -691,7 +691,7 @@ angular.module('blocktrail.localisation', [
             ENGLISH_US: "anglais (USA)",
             FRENCH: "français",
             GERMAN: "allemand",
-            DUTCH: "néerlandais"
+            DUTCH: "néerlandais",
          
          
             //permission popups
