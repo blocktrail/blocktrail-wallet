@@ -482,7 +482,7 @@ angular.module('blocktrail.localisation', [
             MSG_SAVE_BACKUP: "veuillez enregistrer une sauvegarde pour continuer",
             MSG_SKIP_BACKUP: "Vous pourrez sauvegarder votre sauvegarde plus tard en allant dans Paramètres>Sauvegarde de portefeuille \n" +
                                 "Veuillez noter que les infos de sauvegarde resteront sur ce téléphone jusqu'à la sauvegarde, ce qui présente un risque de sécurité",
-            MSG_EMAIL_NOT_SETUP: "Vous n'avez pas de compte email par défaut configuré sur ce téléphone.\n\nVeuillez configurer votre application email, ou passer cette étape et enregistrer votre sauvegarde plus tard quand nous supporteront des app alternatives",
+            MSG_EMAIL_NOT_SETUP: "Vous n'avez pas de compte email par défaut configuré sur ce téléphone.\n\nVeuillez configurer votre application email, ou passer cette étape et enregistrer votre sauvegarde plus tard quand nous supporterons des app alternatives",
             MSG_BACKUP_EMAIL_SUBJECT_1: "Sauvegarde du portefeuille mobile Blocktrail",
             MSG_BACKUP_EMAIL_BODY_1: "Votre document de sauvegarde du portefeuille mobile est attaché. \nConservez-le dans un endroit sûr. "
                                     + 'Vous en aurez besoin avec votre mot de passe actuel pour récupérer votre portefeuille en cas d'urgence.',
@@ -529,7 +529,7 @@ angular.module('blocktrail.localisation', [
             SEND_ADDRESS_FOUND: "adresse copiée",
             SEND_MESSAGE_PLACEHOLDER: "Message ou référence de paiement...",
             WALLET_PIN: "PIN du portefeuille",
-            TRANSACTION_SEND_SUCCESS: "votre transaction a été envoyé",
+            TRANSACTION_SEND_SUCCESS: "votre transaction a été envoyée",
             ESTIMATED_FEE: "frais estimés",
             QR_SCAN_OVERLAY: "scanner un code QR",
          
