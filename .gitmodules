@@ -1,0 +1,3 @@
+[submodule "src/translations"]
+	path = src/translations
+	url = git@github.com:blocktrail/blocktrail-wallet-translations.git
