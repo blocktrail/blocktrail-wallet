@@ -699,7 +699,7 @@ angular.module('blocktrail.wallet')
     })
     .controller('LanguageSettingsCtrl', function($scope, settingsService, $btBackButtonDelegate, $translate) {
         $scope.languages = [
-            //{code: 'nl-NL', name: 'DUTCH'},
+            {code: 'nl-NL', name: 'DUTCH'},
             {code: 'en-GB', name: 'ENGLISH'},
             {code: 'en-US', name: 'ENGLISH_US'},
             {code: 'fr-FR', name: 'FRENCH'},

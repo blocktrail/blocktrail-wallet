@@ -73,10 +73,13 @@ gulp.task('templates:index', ['appconfig'], function(done) {
             english: readTranslations('./src/translations/translations/english.json'),
             americanEnglish: readTranslations('./src/translations/translations/americanEnglish.json'),
             french: readTranslations('./src/translations/translations/french.json'),
+            dutch: readTranslations('./src/translations/translations/dutch.json'),
 
             mobile: {
                 english: readTranslations('./src/translations/translations/mobile/english.json'),
-                french: readTranslations('./src/translations/translations/mobile/french.json')
+                americanEnglish: readTranslations('./src/translations/translations/mobile/americanEnglish.json'),
+                french: readTranslations('./src/translations/translations/mobile/french.json'),
+                dutch: readTranslations('./src/translations/translations/mobile/dutch.json')
             }
         };
     
