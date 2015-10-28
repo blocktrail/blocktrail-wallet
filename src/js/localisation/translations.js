@@ -21,7 +21,7 @@ angular.module('blocktrail.localisation', [
         $translateProvider.translations('en-GB', english);
         $translateProvider.translations('en-US', americanEnglish);
         $translateProvider.translations('fr-FR', french);
-        $translateProvider.translations('nl-NL', french);
+        $translateProvider.translations('nl-NL', dutch);
 
         $translateProvider.preferredLanguage(defaultLanguage);
     });
