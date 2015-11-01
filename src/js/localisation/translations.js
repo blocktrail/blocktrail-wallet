@@ -379,7 +379,7 @@ angular.module('blocktrail.localisation', [
             SUCCESS: "succès",
             COMPLETE: "complet",
             THANKS_1: "merci",
-            THANKS_2: "merci",
+            THANKS_2: "merci à vous",
             SORRY: "Désolé"
             FAIL: "manqué",
             LOADING: "chargement",
@@ -593,7 +593,7 @@ angular.module('blocktrail.localisation', [
             SETTINGS_CHOOSE_PHOTO: "choisir une photo",
             SETTINGS_REMOVE_PHOTO: "supprimer la photo",
             SETTINGS_UPDATE_PHOTO: "mettre à jour la photo",
-            SETTINGS_PROFILE_DESCRIPTION: "Ajoutez une photo de profil que vos contacts veront quand vous leur envoyez.",
+            SETTINGS_PROFILE_DESCRIPTION: "Ajoutez une photo de profil que vos contacts veront quand vous leur enverrez.",
             SETTINGS_CURRENCY: "monnaie",
             SETTINGS_LANGUAGE: "langue",
             SETTINGS_WALLET: "portefeuille",
