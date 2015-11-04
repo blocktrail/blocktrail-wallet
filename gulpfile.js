@@ -230,7 +230,7 @@ gulp.task('watch', function() {
     gulp.watch(['./src/scss/**/*.scss'], ['sass']);
     gulp.watch(['./src/js/**/*.js'], ['js:app']);
     gulp.watch(['./src/lib/**/*.js'], ['js:libs', 'js:sdk', 'js:ng-cordova']);
-    gulp.watch(['./src/templates/**/*', './src/index.html'], ['templates']);
+    gulp.watch(['./src/templates/**/*', './src/translations/translations/*', './src/index.html'], ['templates']);
     gulp.watch(['./appconfig.json', './appconfig.default.json'], ['default']);
 });
 
