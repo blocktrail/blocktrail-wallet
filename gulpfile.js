@@ -145,6 +145,8 @@ gulp.task('js:libs', ['appconfig'], function(done) {
             "./src/lib/intl-tel-input/src/js/data.js",
 
             "./src/lib/moment/moment.js",
+            "./src/lib/moment/locale/nl.js",
+            "./src/lib/moment/locale/fr.js",
             "./src/lib/angular-moment/angular-moment.js",
             "./src/lib/ngImgCrop/compile/unminified/ng-img-crop.js",
             "./src/lib/qrcode/lib/qrcode.js",

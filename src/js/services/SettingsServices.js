@@ -1,6 +1,7 @@
 angular.module('blocktrail.wallet').service(
     'settingsService',
     function($q, storageService, sdkService, $log, $window) {
+    $log.debug('navigator.language: ' + navigator.language);
 
     //default attributes
     var availableLocales = [
