@@ -27,10 +27,18 @@ For the Web Wallet see; https://github.com/blocktrail/blocktrail-webwallet
 
 ## Install
 ```
-npm install -g npm@3.1 # issues with npm>=3.2, see https://github.com/npm/npm/issues/9204
-npm install -g ionic cordova gulp
+npm install -g npm # make sure npm is latest version
+
+# engine_strict=false is required because cordova -> cordova-common -> plist -> xmlbuilder@2.2.1
+# next version of plist will use xmlbuilder@3.x which will fix this isse
+npm_config_engine_strict=false npm install -g ionic cordova gulp
+
 npm install
+
+git submodule update --init --recursive # for translations package
+
 cp appconfig.example.json appconfig.json
+
 gulp
 ```
 
