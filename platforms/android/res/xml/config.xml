@@ -50,9 +50,6 @@
     <feature name="AppVersion">
         <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
     </feature>
-    <feature name="InAppBrowser">
-        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
-    </feature>
     <feature name="AppRate">
         <param name="android-package" value="org.pushandplay.cordova.apprate.AppRate" />
     </feature>
@@ -81,6 +78,9 @@
     <feature name="Notification">
         <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
     </feature>
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
+    </feature>
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="android-minSdkVersion" value="17" />
@@ -88,6 +88,7 @@
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
     <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+    <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
     <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
     <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
     <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.9.png" />
@@ -110,5 +111,5 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="orientation" value="portrait" />
-    <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
 </widget>

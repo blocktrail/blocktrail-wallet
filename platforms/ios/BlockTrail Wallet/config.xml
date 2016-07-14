@@ -1,16 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.blocktrail.mywallet" version="1.0.15" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <preference name="AllowInlineMediaPlayback" value="false" />
-    <preference name="BackupWebStorage" value="cloud" />
-    <preference name="DisallowOverscroll" value="false" />
-    <preference name="EnableViewportScale" value="false" />
-    <preference name="KeyboardDisplayRequiresUserAction" value="true" />
-    <preference name="MediaPlaybackRequiresUserAction" value="false" />
-    <preference name="SuppressesIncrementalRendering" value="false" />
-    <preference name="GapBetweenPages" value="0" />
-    <preference name="PageLength" value="0" />
-    <preference name="PaginationBreakingMode" value="page" />
-    <preference name="PaginationMode" value="unpaginated" />
+<widget id="com.blocktrail.mywallet" version="1.0.18" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
@@ -45,7 +34,6 @@
     <feature name="Camera">
         <param name="ios-package" value="CDVCamera" />
     </feature>
-    <preference name="CameraUsesGeolocation" value="false" />
     <feature name="Globalization">
         <param name="ios-package" value="CDVGlobalization" />
     </feature>
@@ -79,8 +67,6 @@
         <param name="ios-package" value="CDVStatusBar" />
         <param name="onload" value="true" />
     </feature>
-    <preference name="StatusBarOverlaysWebView" value="true" />
-    <preference name="StatusBarStyle" value="lightcontent" />
     <feature name="EmailComposer">
         <param name="ios-package" value="APPEmailComposer" />
     </feature>
@@ -93,8 +79,19 @@
     <feature name="BarcodeScanner">
         <param name="ios-package" value="CDVBarcodeScanner" />
     </feature>
-    <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="ShowSplashScreenSpinner" value="false" />
+    <feature name="Notification">
+        <param name="ios-package" value="CDVNotification" />
+    </feature>
+    <name>BlockTrail Wallet</name>
+    <description>
+        Your personal Bitcoin wallet, powered by Blocktrail
+    </description>
+    <author email="devs@blocktrail.com" href="https://www.blocktrail.com/">
+      BlockTrail Team
+    </author>
+    <content original-src="index.html" src="http://10.15.109.103:8100" />
+    <access origin="*" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
     <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
     <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
@@ -118,24 +115,25 @@
     <splash height="1024" src="resources/ios/splash/Default-Portrait~ipad.png" width="768" />
     <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
     <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
-    <name>BlockTrail Wallet</name>
-    <description>
-        Your personal Bitcoin wallet, powered by Blocktrail
-    </description>
-    <author email="devs@blocktrail.com" href="https://www.blocktrail.com/">
-      BlockTrail Team
-    </author>
-    <content src="index.html" />
-    <access origin="*" />
+    <preference name="AllowInlineMediaPlayback" value="false" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="EnableViewportScale" value="false" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="true" />
+    <preference name="MediaPlaybackRequiresUserAction" value="false" />
+    <preference name="SuppressesIncrementalRendering" value="false" />
+    <preference name="GapBetweenPages" value="0" />
+    <preference name="PageLength" value="0" />
+    <preference name="PaginationBreakingMode" value="page" />
+    <preference name="PaginationMode" value="unpaginated" />
+    <preference name="CameraUsesGeolocation" value="false" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarStyle" value="lightcontent" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="orientation" value="portrait" />
-    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <feature name="Notification">
-        <param name="ios-package" value="CDVNotification" />
-    </feature>
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
 </widget>
