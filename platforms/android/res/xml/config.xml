@@ -95,12 +95,12 @@
     <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.9.png" />
     <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.9.png" />
     <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.9.png" />
-    <name>BlockTrail Wallet</name>
+    <name>BTC Wallet</name>
     <description>
-        Your personal Bitcoin wallet, powered by Blocktrail
+        Your personal Bitcoin wallet, powered by BTC.com
     </description>
-    <author email="devs@blocktrail.com" href="https://www.blocktrail.com/">
-      BlockTrail Team
+    <author email="support@btc.com" href="https://www.btc.com/">
+    BTC.com Team
     </author>
     <content src="index.html" />
     <access origin="*" />

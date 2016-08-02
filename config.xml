@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.blocktrail.mywallet" version="1.0.18" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>BlockTrail Wallet</name>
+  <name>BTC Wallet</name>
   <description>
-        Your personal Bitcoin wallet, powered by Blocktrail
+        Your personal Bitcoin wallet, powered by BTC.com
     </description>
-  <author email="devs@blocktrail.com" href="https://www.blocktrail.com/">
-      BlockTrail Team
+  <author email="support@btc.com" href="https://www.btc.com/">
+    BTC.com Team
     </author>
   <content src="index.html"/>
   <access origin="*"/>
