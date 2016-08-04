@@ -285,6 +285,9 @@ $spinnerSize: 8rem;
     z-index: 20;
 }
 
+$spinnerGradientColor1: #3c78c2;
+$spinnerGradientColor2: #ffffff;
+
 .loader::before {
     content: "";
     display: block;
@@ -292,7 +295,7 @@ $spinnerSize: 8rem;
     width: 100%;
     height: 100%;
     border-radius: 100%;
-    background-image: linear-gradient(to bottom right, #e7e481 0%, #69c296 100%);
+    background-image: linear-gradient(to bottom right, $spinnerGradientColor1 0%, $spinnerGradientColor2 100%);
     z-index: 10;
 
     -webkit-animation: spin 1.4s infinite linear;
