@@ -34,9 +34,7 @@ npm install -g npm # make sure npm is latest version
 npm_config_engine_strict=false npm install -g ionic cordova gulp
 
 npm install
-
 git submodule update --init --recursive # for translations package
-
 cp appconfig.example.json appconfig.json
 
 gulp
@@ -47,9 +45,13 @@ gulp
 ionic run android|ios
 ```
 
-## App Permissions
-Due to cordova plugins we're asking for a few more (android) permissions right now then neccesary, 
-there will be a release ASAP cleaning that up and a blog post (and some text here) about the remaining ones and why they're needed.
+## Translations
+Translations for both Web and Mobile Wallet are kept in: https://github.com/blocktrail/blocktrail-wallet-translations  
+And then submoduled into the projects.  
+
+Keep this in mind when adding / updating translations, don't forget to commit them to the translations repo.  
+
+It's okay to do PRs without bumping the translations submodule, we'll handle that before doing releases!
 
 ## Release Process
 ### Android

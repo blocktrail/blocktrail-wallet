@@ -55,7 +55,8 @@ angular.module('blocktrail.wallet').config(function() {
 angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $ionicUser, $ionicAnalytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
-             $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice) {
+             $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
+             amMoment) {
         $rootScope.CONFIG = CONFIG || {};
         $rootScope.$state = $state;
         $rootScope.$translate = $translate;
@@ -95,7 +96,10 @@ angular.module('blocktrail.wallet').run(
         //detect if device is samsung, and use input type=text instead of type=number
         $rootScope.isSamsung = !!$cordovaDevice.getModel().toLowerCase().match(/samsung/);
 
-
+        $rootScope.changeLanguage = function(language) {
+            amMoment.changeLocale(language);
+            $translate.use(language);
+        };
 
         // 'identify' user, by device.uuid
         //  won't have any effect unless $ionicAnalytics.register is called
@@ -233,8 +237,8 @@ angular.module('blocktrail.wallet')
         //preprocess: 'unix', // optional
         //timezone: 'Europe/London' // optional
     })
-    .run(function(amMoment) {
-        moment.locale('en-custom', {
+    .run(function() {
+        moment.locale('en', {
             calendar : {
                 lastDay : '[Yesterday]',
                 sameDay : '[Today]',
@@ -245,10 +249,31 @@ angular.module('blocktrail.wallet')
             }
         });
 
-        amMoment.changeLocale('en-custom');
+        moment.locale('nl', {
+            calendar : {
+                lastDay : '[Gisteren]',
+                sameDay : '[Vandaag]',
+                nextDay : '[Morgen]',
+                lastWeek : 'D MMMM',
+                nextWeek : 'D MMMM YYYY',
+                sameElse : 'D MMMM YYYY'
+            }
+        });
+
+        moment.locale('fr', {
+            calendar : {
+                lastDay : '[Hier]',
+                sameDay : "[Aujourd'hui]",
+                nextDay : '[Demain]',
+                lastWeek : 'D MMMM',
+                nextWeek : 'D MMMM YYYY',
+                sameElse : 'D MMMM YYYY'
+            }
+        });
     });
 angular.module('blocktrail.wallet').config(
-    function($stateProvider, $urlRouterProvider, $ionicAutoTrackProvider, $logProvider, $provide, CONFIG, $ionicConfigProvider, $cordovaAppRateProvider) {
+    function($stateProvider, $urlRouterProvider, $ionicAutoTrackProvider, $logProvider, $provide, CONFIG,
+             $ionicConfigProvider, $cordovaAppRateProvider) {
         $ionicAutoTrackProvider.disableTracking('Tap');
 
         //disable default iOS behaviour to navigate back in history via swipe (ionic history results in a lot of problems)
@@ -317,12 +342,11 @@ angular.module('blocktrail.wallet').config(
                 controller: "SetupCtrl",
                 templateUrl: "templates/setup/setup.html",
                 resolve: {
-                    settings: function(settingsService, $rootScope, $translate) {
+                    settings: function(settingsService, $rootScope, $translate, $log) {
                         //do an initial load of the user's settings (will return defaults if none have been saved yet)
                         return settingsService.$isLoaded().then(function() {
                             $rootScope.settings = settingsService;
-                            //set the preferred/detected language
-                            $translate.use(settingsService.language);
+                            $rootScope.changeLanguage(settingsService.language);
 
                             return settingsService;
                         });
