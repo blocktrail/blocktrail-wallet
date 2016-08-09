@@ -309,6 +309,15 @@ angular.module('blocktrail.wallet').config(
                 },
                 controller: "ResetCtrl"
             })
+            .state('app.rebrand', {
+                url: "/rebrand",
+                data: {
+                    excludeFromHistory: true,
+                    clearHistory: true
+                },
+                templateUrl: "templates/rebrand.html",
+                controller: "RebrandCtrl"
+            })
 
             /*---Setup---*/
             .state('app.setup', {

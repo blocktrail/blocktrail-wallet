@@ -6,3 +6,6 @@ platforms/android/assets/www/*
 platforms/ios/www/*
 platforms/ios/cordova/console.log
 platforms/android/CordovaLib/build
+
+platforms/android/.gradle/2.2.1/taskArtifacts/*
+

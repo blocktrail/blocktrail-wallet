@@ -1,7 +1,7 @@
 <div class="list card">
     <div class="item item-body">
         <p>
-            Linking your wallet to your phone number will allow you to send to contacts in your phone who also have a Blocktrail Wallet.
+            Linking your wallet to your phone number will allow you to send to contacts in your phone who also have a BTC.com Wallet.
         </p>
         <label class="current-phone capitalise">Phone: {{ settings.phoneNumber && settings.phoneNumber || ('NONE' | translate) }}</label>
         <label class="status capitalise pull-right" ng-if="settings.phoneNumber">Status: <span ng-if="settings.phoneNumber">{{ settings.phoneVerified && ('SETTINGS_PHONE_VERIFIED' | translate) || ('SETTINGS_PHONE_UNVERIFIED' | translate) }}</span></label>

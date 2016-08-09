@@ -102,7 +102,7 @@ angular.module('blocktrail.localisation', [
             SETUP_PROFILE_PIC: "set profile picture",
             SETUP_COMPLETE_TITLE: "You're all done!",
             SETUP_COMPLETE_SUBTITLE: "Welcome to the world of Bitcoin",
-            SETUP_COMPLETE_SUBTITLE_2: "Visit www.blocktrail.com/faq for tips and tricks.",
+            SETUP_COMPLETE_SUBTITLE_2: "Visit www.btc.com/faq for tips and tricks.",
             SETUP_COMPLETE: "go to my wallet",
             CREATING_ACCOUNT: "creating account",
             CREATING_WALLET: "creating wallet",
@@ -127,7 +127,7 @@ angular.module('blocktrail.localisation', [
             MSG_BAD_EMAIL: "invalid email",
             MSG_EMAIL_TAKEN: "that email is already taken",
             MSG_TWO_FACTOR_REQUIRED: "a 2fa code is required",
-            MSG_UPGRADE_REQUIRED: "Please login on www.blocktrail.com first to automatically upgrade your account and enable the mobile wallet",
+            MSG_UPGRADE_REQUIRED: "Please login on www.btc.com first to automatically upgrade your account and enable the mobile wallet",
             MSG_PIN_HELP: "Create a PIN which you will use to unlock your wallet to make transaction",
             MSG_WALLET_PASSWORD_MISMATCH: "You have an existing wallet which was created with a different password",
             MSG_WALLET_PASSWORD: "please enter the old wallet password",
@@ -137,7 +137,7 @@ angular.module('blocktrail.localisation', [
             MSG_SKIP_BACKUP: "You will be able to save your backup later by going to Settings>Wallet Backup \n" +
                                 "Please note that the backup info will remain on this phone until then, which is a security risk",
             MSG_EMAIL_NOT_SETUP: "You don't have a default mail account configured on this phone.\n\nPlease configure your mail app, or you can skip this step and save your backup later when we support alternative apps",
-            MSG_BACKUP_EMAIL_SUBJECT_1: "Blocktrail mobile wallet backup",
+            MSG_BACKUP_EMAIL_SUBJECT_1: "BTC.com mobile wallet backup",
             MSG_BACKUP_EMAIL_BODY_1: "Your mobile wallet backup document is attached. \nStore it in a safe place. "
                                     + 'You will need it along with your current password to recover your wallet in an emergency.',
 
@@ -165,7 +165,7 @@ angular.module('blocktrail.localisation', [
             TX_INFO_RECEIVED_FROM: "received from",
             TX_INFO_MESSAGE_TITLE: "message/reference",
             TX_INFO_MORE_TITLE: "more info",
-            TX_INFO_MORE_LINK: "see on blocktrail.com",
+            TX_INFO_MORE_LINK: "see on BTC.com",
 
             //Sending screens
             QR: "QR",
@@ -205,7 +205,7 @@ angular.module('blocktrail.localisation', [
 
             //contacts list
             CONTACTS_NONE: "no contacts found",
-            CONTACTS_NO_WALLETS: "none of your contacts have a Blocktrail wallet",
+            CONTACTS_NO_WALLETS: "none of your contacts have a BTC.com wallet",
             CONTACTS_INVITE: "invite to Wallet",
             CONTACTS_MORE_NUMBERS: "more",
             CONTACTS_FILTER_TITLE: "filter contacts",
@@ -215,7 +215,7 @@ angular.module('blocktrail.localisation', [
             CONTACTS_RESYNC: "re-sync contacts",
             CONTACTS_DISABLED: "contacts disabled",
             MSG_REQUIRE_CONTACTS_ACCESS: "Please enable 'Contacts' on the settings menu to use this feature",
-            MSG_INVITE_CONTACT: "Hi, get the Blocktrail Wallet app for Bitcoin!\nDownload it here: https://blocktrail.com/download",
+            MSG_INVITE_CONTACT: "Hi, get the BTC.com Wallet app for Bitcoin!\nDownload it here: https://BTC.com/download",
 
             //Receiving Screens
             REQUEST_SEND: "send request",
@@ -225,13 +225,13 @@ angular.module('blocktrail.localisation', [
             MSG_REQUEST_EMAIL_BODY_1: "Hi,<br><br>Please send funds to my Bitcoin wallet (QR code attached)"
                             + "<p>Address: <a href='{{addressURI}}'>{{address}}</a> "
                             //+ "<p><img src="{{qrcode}}" alt="qrcode"/></p>"
-                            + "<p><br>Sent with <a href='http://wallet.blocktrail.com'>Wallet by Blocktrail</a></p>",
+                            + "<p><br>Sent with <a href='https://wallet.btc.com'>Wallet by BTC.com</a></p>",
             MSG_REQUEST_EMAIL_SUBJECT_2: "Please send me {{btcValue}} bitcoins (approx {{fiatValue}} {{localCurrency}})",
             MSG_REQUEST_EMAIL_BODY_2: "Hi,<br><br>Please send funds to my Bitcoin wallet (QR code attached)"
                             + "<p>Address: <a href='{{addressURI}}'>{{address}}</a> "
                             + "<br>Amount: {{btcValue}} BTC (approx {{fiatValue}} {{localCurrency}})</p>"
                             //+ "<p><img src="{{qrcode}}" alt="qrcode"/></p>"
-                            + "<p><br>Sent with my <a href='http://wallet.blocktrail.com'>Blocktrail Wallet</a></p>",
+                            + "<p><br>Sent with my <a href='https://wallet.btc.com'>BTC.com Wallet</a></p>",
             MSG_REQUEST_SMS_1: "Hi, \nPlease send funds to my Bitcoin wallet. \nAddress: {{address}}",
             MSG_REQUEST_SMS_2: "Hi, \nPlease send {{btcValue}} BTC (approx {{fiatValue}} {{localCurrency}}) to my Bitcoin wallet. \nAddress: {{address}}",
 
@@ -267,7 +267,7 @@ angular.module('blocktrail.localisation', [
             SETTINGS_CONTACTS_UNSYNCED: "not synced",
             SETTINGS_ENABLE_CONTACTS: "enable contacts?",
             SETTINGS_DISABLE_CONTACTS: "disable contacts syncing?",
-            SETTINGS_PHONE_DESCRIPTION: "Linking your wallet to your phone number will allow you to send to contacts in your phone who also have a Blocktrail Wallet.",
+            SETTINGS_PHONE_DESCRIPTION: "Linking your wallet to your phone number will allow you to send to contacts in your phone who also have a BTC.com Wallet.",
             SETTINGS_PHONE_NUMBER: "phone number",
             SETTINGS_PHONE_UPDATE: "update phone",
             SETTINGS_PHONE_CHANGE: "change phone",
@@ -305,8 +305,8 @@ angular.module('blocktrail.localisation', [
 
             //About
             ABOUT_TITLE: "Wallet",
-            ABOUT_SUBTITLE: "by Blocktrail",
-            ABOUT_DESCRIPTION: "Blocktrail is an Amsterdam based Bitcoin tech startup.",
+            ABOUT_SUBTITLE: "by BTC.com",
+            ABOUT_DESCRIPTION: "BTC.com is an Amsterdam based Bitcoin tech startup.",
             ABOUT_LABEL_NEWS: "news",
             ABOUT_LABEL_RATEAPP: "Do you like the app?",
             ABOUT_RATEAPP: "Please Rate Wallet!",
@@ -349,9 +349,9 @@ angular.module('blocktrail.localisation', [
             PERMISSION_REQUIRED_CONTACTS: "Wallet needs access to your contacts",
             PERMISSION_REQUIRED_CAMERA: "Wallet needs access to your camera",
             PERMISSION_REQUIRED_PHOTOS: "Wallet needs access to your photos",
-            MSG_CONTACTS_PERMISSIONS: "To grant access to your contacts on your device, go to settings>Blocktrail Wallet>Contacts",
-            MSG_CAMERA_PERMISSIONS: "To grant access to your camera on your device, go to settings>Blocktrail Wallet>App.photo",
-            MSG_PHOTOS_PERMISSIONS: "To grant access to your photos on your device, go to settings>Blocktrail Wallet>Photo"
+            MSG_CONTACTS_PERMISSIONS: "To grant access to your contacts on your device, go to settings>BTC.com Wallet>Contacts",
+            MSG_CAMERA_PERMISSIONS: "To grant access to your camera on your device, go to settings>BTC.com Wallet>App.photo",
+            MSG_PHOTOS_PERMISSIONS: "To grant access to your photos on your device, go to settings>BTC.com Wallet>Photo"
         };
         var americanEnglish = angular.extend(angular.copy(english), {
             MSG_INIT_WALLET: "initializing wallet..."
@@ -457,13 +457,13 @@ angular.module('blocktrail.localisation', [
             MSG_REQUEST_EMAIL_BODY_1: "Bonjour,<br><br>s'il vous plaît envoyer bitcoins à mon portefeuille."
             + "<p>Adress: <a href='{{addressURI}}'>{{address}}</a> "
                 //+ "<p><img src="{{qrcode}}" alt="qrcode"/></p>"
-            + "<p><br>envoyé avec <a href='http://wallet.blocktrail.com'>Wallet by Blocktrail</a></p>",
+            + "<p><br>envoyé avec <a href='https://wallet.btc.com'>Wallet by BTC.com</a></p>",
             MSG_REQUEST_EMAIL_SUBJECT_2: "S'il vous plaît envoyez-moi {{btcValue}} bitcoins (environ {{fiatValue}} {{localCurrency}})",
             MSG_REQUEST_EMAIL_BODY_2: "Bonjour,<br><br>s'il vous plaît envoyer bitcoins à mon portefeuille."
             + "<p>Adress: <a href='{{addressURI}}'>{{address}}</a> "
             + "<br>Somme: {{btcValue}} BTC (environ {{fiatValue}} {{localCurrency}})</p>"
                 //+ "<p><img src="{{qrcode}}" alt="qrcode"/></p>"
-            + "<p><br>envoyé avec <a href='http://wallet.blocktrail.com'>Wallet by Blocktrail</a></p>",
+            + "<p><br>envoyé avec <a href='https://wallet.btc.com'>Wallet by BTC.com</a></p>",
             MSG_REQUEST_SMS_1: "Bonjour, \ns'il vous plaît envoyer bitcoins à mon portefeuille Bitcoin. \nAdress: {{address}}",
             MSG_REQUEST_SMS_2: "Bonjour, \ns'il vous plaît envoyer {{btcValue}} BTC (environ {{fiatValue}} {{localCurrency}}) a mon portefeuille Bitcoin. \nAddress: {{address}}",
 

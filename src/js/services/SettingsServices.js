@@ -24,6 +24,8 @@ angular.module('blocktrail.wallet').service(
         profilePosX:  50,
         profilePosY:  50,
 
+        showRebrandMessage: true,
+
         phoneNumber: null,
         phoneNationalNumber: null,
         phoneRegionCode: null,

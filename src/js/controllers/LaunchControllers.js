@@ -9,16 +9,27 @@ angular.module('blocktrail.wallet')
 
         settingsService.$isLoaded()
             .then(function() {
-
                 //setup not started yet
                 if (!settingsService.setupStarted) {
-                    $state.go('app.setup.start');
+                    // never show rebrand to user who just got started
+                    settingsService.$isLoaded().then(function() {
+                         settingsService.showRebrandMessage = false;
+                        settingsService.$store();
+                        $state.go('app.setup.start');
+                    });
+
                     return;
                 }
 
                 if (navigator.splashscreen) {
                     navigator.splashscreen.hide();
                 }
+
+                if (settingsService.showRebrandMessage) {
+                    $state.go('app.rebrand');
+                    return;
+                }
+
                 //setup has been started: resume from the relevant step
                 if (settingsService.setupComplete) {
                     $state.go('app.wallet.summary');
@@ -56,5 +67,22 @@ angular.module('blocktrail.wallet')
         if (navigator.splashscreen) {
             navigator.splashscreen.hide();
         }
+    }
+);
+
+angular.module('blocktrail.wallet')
+    .controller('RebrandCtrl', function($state, $scope, $rootScope, settingsService) {
+        $rootScope.hideLoadingScreen = true;
+
+        var readyToContinue = settingsService.$isLoaded().then(function() {
+             settingsService.showRebrandMessage = false;
+            settingsService.$store();
+        });
+
+        $scope.continue = function() {
+            readyToContinue.then(function() {
+                window.location.replace('');
+            });
+        };
     }
 );

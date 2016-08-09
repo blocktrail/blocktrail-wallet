@@ -16,9 +16,17 @@ $dark:                            #444 !default;
 */
 
 
+// custom function to create a -light version of a color
+@function lightencolor($color) {
+  @return hsl(hue(adjust_hue($color, -0.8%)),
+          saturation(saturate($color, 12%)),
+          lightness(lighten($color, 7%))
+  )
+}
+
 /*---Colours---*/
-$bluejeans-dark:              #4A89DC !default;
-$bluejeans-light:             #5D9CEC !default;
+$bluejeans-dark:              #3c78c2 !default;
+$bluejeans-light:             lightencolor($bluejeans-dark) !default;
 
 $aqua-dark:                   #3BAFDA !default;
 $aqua-light:                  #4FC1E9 !default;
@@ -64,14 +72,14 @@ $bt-lemon:              #E7E27D;
 $bt-neon:               #EBE70D;
 
 
-$good-green:            $bt-green;      //#5fd675;
+$good-green:            $bt-green;
 $dark-green:            #08A635;
 $bad-red:               #d47e7e;
-$app-default-color:     $bt-green;      //#007384;	//dark blue if you will
-$app-default-shadow:      0 1px 4px rgba(0,0,0,0.15);
+$app-default-color:     #3c78c2;
+$app-default-shadow:    0 1px 4px rgba(0,0,0,0.15);
 
-$energized:     $app-default-color;
-//$balanced: $mediumgray-dark;
+$energized: $app-default-color;
+// $balanced:  $mediumgray-dark;
 
 
 // Base
