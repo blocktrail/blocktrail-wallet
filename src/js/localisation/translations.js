@@ -11,7 +11,8 @@ angular.module('blocktrail.localisation', [
             'de-DE',
             'nl-NL'
         ];
-        var defaultLanguage = availableLocales.indexOf(navigator.language) > -1 ? navigator.language : 'en-GB';
+        // var defaultLanguage = availableLocales.indexOf(navigator.language) > -1 ? navigator.language : 'en-GB';
+        var defaultLanguage = 'en-GB';
         var english = angular.extend({}, TRANSLATIONS.english, TRANSLATIONS.mobile.english);
         var americanEnglish = angular.extend({}, english, TRANSLATIONS.americanEnglish, TRANSLATIONS.mobile.americanEnglish);
         var french = angular.extend({}, english, TRANSLATIONS.french, TRANSLATIONS.mobile.french);

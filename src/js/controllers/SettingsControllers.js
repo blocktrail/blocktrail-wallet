@@ -466,6 +466,10 @@ angular.module('blocktrail.wallet')
             });
         };
 
+        $scope.enableTranslations = function() {
+            $scope.translationsEnabled = true;
+        };
+
         $scope.updateSettings = function() {
             settingsService.$store();
         };

@@ -2,7 +2,7 @@
     <ion-nav-title class="capitalise">{{ 'SETTINGS' | translate }}</ion-nav-title>
     <ion-content>
         <form>
-            <h3 class="group-title capitalise">{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
+            <h3 class="group-title capitalise" on-hold="enableTranslations()">{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
             <div class="list list-inset">
                 <div class="item item-button-right">
                     <span class="sentence-case">{{ 'SETTINGS_PROFILE' | translate }}</span>
@@ -26,7 +26,7 @@
                 </div>
                 <!-- /currency -->
 
-                <div class="item item-button-right" ui-sref=".language">
+                <div class="item item-button-right" ui-sref=".language" ng-if="translationsEnabled">
                     <span class="sentence-case">{{ 'SETTINGS_LANGUAGE' | translate }}</span>
                     <button class="button button-clear capitalise">
                         {{ settings.language | languageName | translate }}
