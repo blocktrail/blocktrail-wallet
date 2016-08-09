@@ -1,6 +1,7 @@
 node_modules/
 appconfig.json
 .appconfig.json
+www/fontello
 
 platforms/android/assets/www/*
 platforms/ios/www/*

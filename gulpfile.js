@@ -16,6 +16,8 @@ var fs = require('fs');
 var Q = require('q');
 var gulpif = require('gulp-if');
 var notifier = require('node-notifier');
+var fontello = require('gulp-fontello');
+var clean = require('gulp-clean');
 
 var isWatch = false;
 
@@ -59,10 +61,35 @@ gulp.task('appconfig', function() {
 gulp.task('templates:index', ['appconfig'], function(done) {
 
     appConfig.then(function(APPCONFIG) {
+        var readTranslations = function(filename) {
+            var raw = fs.readFileSync(filename);
+
+            if (!raw) {
+                throw new Error("Missing translations!");
+            }
+
+            return JSON.parse(stripJsonComments(raw.toString('utf8')));
+        };
+
+        var translations = {
+            english: readTranslations('./src/translations/translations/english.json'),
+            americanEnglish: readTranslations('./src/translations/translations/americanEnglish.json'),
+            french: readTranslations('./src/translations/translations/french.json'),
+            dutch: readTranslations('./src/translations/translations/dutch.json'),
+
+            mobile: {
+                english: readTranslations('./src/translations/translations/mobile/english.json'),
+                americanEnglish: readTranslations('./src/translations/translations/mobile/americanEnglish.json'),
+                french: readTranslations('./src/translations/translations/mobile/french.json'),
+                dutch: readTranslations('./src/translations/translations/mobile/dutch.json')
+            }
+        };
+    
         gulp.src("./src/index.html")
             .pipe(template({
                 APPCONFIG_JSON: JSON.stringify(APPCONFIG),
-                NG_CORDOVA_MOCKS: APPCONFIG.NG_CORDOVA_MOCKS
+                NG_CORDOVA_MOCKS: APPCONFIG.NG_CORDOVA_MOCKS,
+                TRANSLATIONS: JSON.stringify(translations)
             }))
             .pipe(gulp.dest("./www"))
             .on('end', done);
@@ -120,6 +147,8 @@ gulp.task('js:libs', ['appconfig'], function(done) {
             "./src/lib/intl-tel-input/src/js/data.js",
 
             "./src/lib/moment/moment.js",
+            "./src/lib/moment/locale/nl.js",
+            "./src/lib/moment/locale/fr.js",
             "./src/lib/angular-moment/angular-moment.js",
             "./src/lib/ngImgCrop/compile/unminified/ng-img-crop.js",
             "./src/lib/qrcode/lib/qrcode.js",
@@ -176,8 +205,7 @@ gulp.task('js:sdk', ['appconfig'], function(done) {
     });
 });
 
-gulp.task('sass', ['appconfig'], function(done) {
-
+var sassTask = function(done) {
     appConfig.then(function(APPCONFIG) {
         gulp.src('./src/scss/ionic.app.scss')
             .pipe(sass({errLogToConsole: true}))
@@ -186,6 +214,40 @@ gulp.task('sass', ['appconfig'], function(done) {
             .pipe(gulp.dest('./www/css/'))
             .on('end', done);
     });
+};
+
+// create a sass with and without dependancy on fontello
+gulp.task('sass', ['appconfig'], sassTask);
+gulp.task('sassfontello', ['appconfig', 'fontello'], sassTask);
+
+
+gulp.task('fontello-dl', function(done) {
+
+    gulp.src('./fontello-config.json')
+        .pipe(fontello())
+        .pipe(gulp.dest('./www/fontello/'))
+        .on('end', done);
+});
+
+gulp.task('fontello-rename', ['fontello-dl'], function(done) {
+
+    gulp.src(['./www/fontello/css/fontello-codes.css'])
+        .pipe(rename('fontello-codes.scss'))
+        .pipe(gulp.dest('./www/fontello/css'))
+        .on('end', done);
+});
+
+gulp.task('fontello-clean', ['fontello-rename'], function() {
+
+    return gulp.src(['./www/fontello/css/*.css'])
+        .pipe(clean());
+});
+
+gulp.task('fontello', ['fontello-dl', 'fontello-rename', 'fontello-clean'], function(done) {
+
+    gulp.src('./www/fontello/font/*')
+        .pipe(gulp.dest('./www/fonts'))
+        .on('end', done);
 });
 
 gulp.task('copyfonts', ['appconfig'], function(done) {
@@ -203,10 +265,10 @@ gulp.task('watch', function() {
     gulp.watch(['./src/scss/**/*.scss'], ['sass']);
     gulp.watch(['./src/js/**/*.js'], ['js:app']);
     gulp.watch(['./src/lib/**/*.js'], ['js:libs', 'js:sdk', 'js:ng-cordova']);
-    gulp.watch(['./src/templates/**/*', './src/index.html'], ['templates']);
+    gulp.watch(['./src/templates/**/*', './src/translations/translations/*', './src/index.html'], ['templates']);
     gulp.watch(['./appconfig.json', './appconfig.default.json'], ['default']);
 });
 
 gulp.task('js', ['js:libs', 'js:app', 'js:ng-cordova', 'js:sdk']);
 gulp.task('templates', ['templates:index', 'templates:rest']);
-gulp.task('default', ['sass', 'templates', 'js', 'copyfonts']);
+gulp.task('default', ['sassfontello', 'templates', 'js', 'copyfonts']);

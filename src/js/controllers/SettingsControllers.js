@@ -466,6 +466,10 @@ angular.module('blocktrail.wallet')
             });
         };
 
+        $scope.enableTranslations = function() {
+            $scope.translationsEnabled = true;
+        };
+
         $scope.updateSettings = function() {
             settingsService.$store();
         };
@@ -697,9 +701,9 @@ angular.module('blocktrail.wallet')
             });
         };
     })
-    .controller('LanguageSettingsCtrl', function($scope, settingsService, $btBackButtonDelegate, $translate) {
+    .controller('LanguageSettingsCtrl', function($scope, $rootScope, settingsService, $btBackButtonDelegate, $translate) {
         $scope.languages = [
-            //{code: 'nl-NL', name: 'DUTCH'},
+            {code: 'nl-NL', name: 'DUTCH'},
             {code: 'en-GB', name: 'ENGLISH'},
             {code: 'en-US', name: 'ENGLISH_US'},
             {code: 'fr-FR', name: 'FRENCH'},
@@ -708,8 +712,8 @@ angular.module('blocktrail.wallet')
         $scope.form = {selected: ''};
 
         $scope.updateSettings = function(){
-            settingsService.$store().then(function(data){
-                $translate.use(data.language);
+            settingsService.$store().then(function(data) {
+                $rootScope.changeLanguage(data.language);
                 $btBackButtonDelegate.goBack();
             });
         };
