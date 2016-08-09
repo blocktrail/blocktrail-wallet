@@ -16,6 +16,8 @@ var fs = require('fs');
 var Q = require('q');
 var gulpif = require('gulp-if');
 var notifier = require('node-notifier');
+var fontello = require('gulp-fontello');
+var clean = require('gulp-clean');
 
 var isWatch = false;
 
@@ -203,8 +205,7 @@ gulp.task('js:sdk', ['appconfig'], function(done) {
     });
 });
 
-gulp.task('sass', ['appconfig'], function(done) {
-
+var sassTask = function(done) {
     appConfig.then(function(APPCONFIG) {
         gulp.src('./src/scss/ionic.app.scss')
             .pipe(sass({errLogToConsole: true}))
@@ -213,6 +214,40 @@ gulp.task('sass', ['appconfig'], function(done) {
             .pipe(gulp.dest('./www/css/'))
             .on('end', done);
     });
+};
+
+// create a sass with and without dependancy on fontello
+gulp.task('sass', ['appconfig'], sassTask);
+gulp.task('sassfontello', ['appconfig', 'fontello'], sassTask);
+
+
+gulp.task('fontello-dl', function(done) {
+
+    gulp.src('./fontello-config.json')
+        .pipe(fontello())
+        .pipe(gulp.dest('./www/fontello/'))
+        .on('end', done);
+});
+
+gulp.task('fontello-rename', ['fontello-dl'], function(done) {
+
+    gulp.src(['./www/fontello/css/fontello-codes.css'])
+        .pipe(rename('fontello-codes.scss'))
+        .pipe(gulp.dest('./www/fontello/css'))
+        .on('end', done);
+});
+
+gulp.task('fontello-clean', ['fontello-rename'], function() {
+
+    return gulp.src(['./www/fontello/css/*.css'])
+        .pipe(clean());
+});
+
+gulp.task('fontello', ['fontello-dl', 'fontello-rename', 'fontello-clean'], function(done) {
+
+    gulp.src('./www/fontello/font/*')
+        .pipe(gulp.dest('./www/fonts'))
+        .on('end', done);
 });
 
 gulp.task('copyfonts', ['appconfig'], function(done) {
@@ -236,4 +271,4 @@ gulp.task('watch', function() {
 
 gulp.task('js', ['js:libs', 'js:app', 'js:ng-cordova', 'js:sdk']);
 gulp.task('templates', ['templates:index', 'templates:rest']);
-gulp.task('default', ['sass', 'templates', 'js', 'copyfonts']);
+gulp.task('default', ['sassfontello', 'templates', 'js', 'copyfonts']);

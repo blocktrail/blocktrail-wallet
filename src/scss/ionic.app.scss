@@ -168,7 +168,7 @@ $ionicons-font-path: "../fonts" !default;
 
 //custom fonts
 @import "bt-fonts";
-@import "fontello-codes";
+@import "../../www/fontello/css/fontello-codes.scss";
 
 //add other libs
 @import "../lib/ngImgCrop/source/scss/ng-img-crop.scss";
