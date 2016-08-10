@@ -791,7 +791,7 @@ angular.module('blocktrail.wallet')
         $scope.backupSettings = {
             //NB: on android fileOpener2 only works with SD storage (i.e. non-private storage)
             path: window.cordova ? (ionic.Platform.isAndroid() ? cordova.file.externalDataDirectory : cordova.file.dataDirectory) : null,
-            filename: 'blocktrail-wallet-backup.pdf',
+            filename: 'btc-wallet-backup.pdf',
             replace: true
         };
         $scope.transactions = null;
