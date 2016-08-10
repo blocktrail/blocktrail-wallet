@@ -90,6 +90,11 @@ angular.module('blocktrail.wallet')
             return Math.abs(input);
         };
     })
+    .filter('nl2br', function($sce){
+        return function(msg) {
+            return $sce.trustAsHtml((msg + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2'));
+        }
+    })
     .filter('contactInitials', function($rootScope) {
         return function(input) {
             //take the first and last word and return initials

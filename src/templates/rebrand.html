@@ -1,16 +1,15 @@
 <ion-view class="state-rebrand">
     <ion-nav-bar class="bar-energized">
-        <ion-nav-title>Service Annoucement</ion-nav-title>
+        <ion-nav-title>{{ 'PSA_REBRAND_TITLE' | translate }}</ion-nav-title>
     </ion-nav-bar>
 
     <ion-content>
         <div style="padding: 20px">
-            <h3>Blocktrail Wallet is now BTC Wallet</h3>
+            <div ng-bind-html="'PSA_REBRAND_BODY' | translate | nl2br"></div>
 
-            <p>COPY GOES HERE</p>
+            <br />
 
-            <button ng-click="continue()" class="button">OK</button>
-            ​
+            <button ng-click="continue()" class="button">{{ 'PSA_REBRAND_OK' | translate }}</button>
         </div>
     </ion-content>
 </ion-view>
