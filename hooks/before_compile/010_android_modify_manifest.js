@@ -31,7 +31,6 @@ if (rootdir) {
                 'version': '1.0', 'encoding': 'UTF-8'
             }
         });
-        console.log(xmlBuilder.buildObject(doc));
         fs.writeFileSync(manifestPath, xmlBuilder.buildObject(doc), 'utf-8');
     });
 }
