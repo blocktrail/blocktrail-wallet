@@ -703,11 +703,13 @@ angular.module('blocktrail.wallet')
     })
     .controller('LanguageSettingsCtrl', function($scope, $rootScope, settingsService, $btBackButtonDelegate, $translate) {
         $scope.languages = [
-            {code: 'nl-NL', name: 'DUTCH'},
-            {code: 'en-GB', name: 'ENGLISH'},
+            {code: 'nl', name: 'DUTCH'},
+            {code: 'en', name: 'ENGLISH'},
             {code: 'en-US', name: 'ENGLISH_US'},
-            {code: 'fr-FR', name: 'FRENCH'},
-            //{code: 'de-DE', name: 'GERMAN'}
+            {code: 'fr', name: 'FRENCH'},
+            {code: 'es', name: 'SPANISH'},
+            {code: 'cn', name: 'CHINESE'},
+            {code: 'ru', name: 'RUSSIAN'}
         ];
         $scope.form = {selected: ''};
 

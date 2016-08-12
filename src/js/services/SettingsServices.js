@@ -1,23 +1,13 @@
 angular.module('blocktrail.wallet').service(
     'settingsService',
     function($q, storageService, sdkService, $log, $window) {
-    $log.debug('navigator.language: ' + navigator.language);
 
-    //default attributes
-    var availableLocales = [
-        'en-GB',
-        'en-US',
-        'fr-FR',
-        'de-DE',
-        'nl-NL'
-    ];
-    var defaultLanguage = availableLocales.indexOf(navigator.language) > -1 ? navigator.language : 'en-GB';
     var defaultBtcPrecision = $window.innerWidth <= 375 ? 4 : 8;
     var defaults = {
         displayName:  null,
         username:  '',
         email:  null,
-        language: defaultLanguage,
+        language: null,
         timezone:  "GMT+1",
         localCurrency:  "EUR",
         profilePic:  null,

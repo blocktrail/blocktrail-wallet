@@ -76,12 +76,18 @@ gulp.task('templates:index', ['appconfig'], function(done) {
             americanEnglish: readTranslations('./src/translations/translations/americanEnglish.json'),
             french: readTranslations('./src/translations/translations/french.json'),
             dutch: readTranslations('./src/translations/translations/dutch.json'),
+            chinese: readTranslations('./src/translations/translations/chinese.json'),
+            spanish: readTranslations('./src/translations/translations/spanish.json'),
+            russian: readTranslations('./src/translations/translations/russian.json'),
 
             mobile: {
                 english: readTranslations('./src/translations/translations/mobile/english.json'),
                 americanEnglish: readTranslations('./src/translations/translations/mobile/americanEnglish.json'),
                 french: readTranslations('./src/translations/translations/mobile/french.json'),
-                dutch: readTranslations('./src/translations/translations/mobile/dutch.json')
+                dutch: readTranslations('./src/translations/translations/mobile/dutch.json'),
+                chinese: readTranslations('./src/translations/translations/mobile/chinese.json'),
+                spanish: readTranslations('./src/translations/translations/mobile/spanish.json'),
+                russian: readTranslations('./src/translations/translations/mobile/russian.json')
             }
         };
     

@@ -97,8 +97,10 @@ angular.module('blocktrail.wallet').run(
         $rootScope.isSamsung = !!$cordovaDevice.getModel().toLowerCase().match(/samsung/);
 
         $rootScope.changeLanguage = function(language) {
-            amMoment.changeLocale(language);
-            $translate.use(language);
+            settingsService.language = language || $translate.preferredLanguage() || CONFIG.FALLBACK_LANGUAGE || 'en';
+
+            amMoment.changeLocale(settingsService.language);
+            $translate.use(settingsService.language);
         };
 
         // 'identify' user, by device.uuid
@@ -450,7 +452,7 @@ angular.module('blocktrail.wallet').config(
                         return settingsService.$isLoaded().then(function(data) {
                             $rootScope.settings = settingsService;
                             //set the preferred language
-                            $translate.use(settingsService.language);
+                            $rootScope.changeLanguage(settingsService.language);
 
                             return data;
                         });
@@ -510,7 +512,7 @@ angular.module('blocktrail.wallet').config(
                         return settingsService.$isLoaded().then(function(data){
                             $rootScope.settings = settingsService;
                             //set the preferred language
-                            $translate.use(settingsService.language);
+                            $rootScope.changeLanguage(settingsService.language);
 
                             return data;
                         });
