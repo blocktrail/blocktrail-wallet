@@ -155,10 +155,13 @@ gulp.task('js:libs', ['appconfig'], function(done) {
             "./src/lib/moment/moment.js",
             "./src/lib/moment/locale/nl.js",
             "./src/lib/moment/locale/fr.js",
+            "./src/lib/moment/locale/es.js",
+            "./src/lib/moment/locale/ru.js",
+            "./src/lib/moment/locale/zh-cn.js",
             "./src/lib/angular-moment/angular-moment.js",
             "./src/lib/ngImgCrop/compile/unminified/ng-img-crop.js",
             "./src/lib/qrcode/lib/qrcode.js",
-            "./src/lib/angular-qr/src/angular-qr.js",
+            "./src/lib/angular-qr/src/angular-qr.js"
         ])
             .pipe(concat('libs.js'))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify()))

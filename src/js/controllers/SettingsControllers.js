@@ -705,7 +705,7 @@ angular.module('blocktrail.wallet')
         $scope.languages = [
             {code: 'nl', name: 'DUTCH'},
             {code: 'en', name: 'ENGLISH'},
-            {code: 'en-US', name: 'ENGLISH_US'},
+            {code: 'en_US', name: 'ENGLISH_US'},
             {code: 'fr', name: 'FRENCH'},
             {code: 'es', name: 'SPANISH'},
             {code: 'cn', name: 'CHINESE'},

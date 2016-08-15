@@ -97,9 +97,15 @@ angular.module('blocktrail.wallet').run(
         $rootScope.isSamsung = !!$cordovaDevice.getModel().toLowerCase().match(/samsung/);
 
         $rootScope.changeLanguage = function(language) {
+            $log.debug('changeLanguage: ' + language);
             settingsService.language = language || $translate.preferredLanguage() || CONFIG.FALLBACK_LANGUAGE || 'en';
 
-            amMoment.changeLocale(settingsService.language);
+            var momentLocale = settingsService.language;
+            if (momentLocale == 'cn') {
+                momentLocale = 'zh-cn';
+            }
+
+            amMoment.changeLocale(momentLocale);
             $translate.use(settingsService.language);
         };
 
@@ -239,12 +245,16 @@ angular.module('blocktrail.wallet')
         //preprocess: 'unix', // optional
         //timezone: 'Europe/London' // optional
     })
-    .run(function() {
+    .run(function(TRANSLATIONS, CONFIG, $filter) {
+        var translate = function(key, language) {
+            return TRANSLATIONS[language][key] || (CONFIG.FALLBACK_LANGUAGE && TRANSLATIONS['english'][key]) || key;
+        };
+
         moment.locale('en', {
             calendar : {
-                lastDay : '[Yesterday]',
-                sameDay : '[Today]',
-                nextDay : '[Tomorrow]',
+                lastDay : '[' + translate('YESTERDAY', 'english').capitalize() + ']',
+                sameDay : '[' + translate('TODAY', 'english').capitalize() + ']',
+                nextDay : '[' + translate('TOMORROW', 'english').capitalize() + ']',
                 lastWeek : 'MMMM D',
                 nextWeek : 'MMMM Do YYYY',
                 sameElse : 'MMMM Do YYYY'
@@ -253,9 +263,9 @@ angular.module('blocktrail.wallet')
 
         moment.locale('nl', {
             calendar : {
-                lastDay : '[Gisteren]',
-                sameDay : '[Vandaag]',
-                nextDay : '[Morgen]',
+                lastDay : '[' + translate('YESTERDAY', 'dutch').capitalize() + ']',
+                sameDay : '[' + translate('TODAY', 'dutch').capitalize() + ']',
+                nextDay : '[' + translate('TOMORROW', 'dutch').capitalize() + ']',
                 lastWeek : 'D MMMM',
                 nextWeek : 'D MMMM YYYY',
                 sameElse : 'D MMMM YYYY'
@@ -264,12 +274,45 @@ angular.module('blocktrail.wallet')
 
         moment.locale('fr', {
             calendar : {
-                lastDay : '[Hier]',
-                sameDay : "[Aujourd'hui]",
-                nextDay : '[Demain]',
+                lastDay : '[' + translate('YESTERDAY', 'french').capitalize() + ']',
+                sameDay : '[' + translate('TODAY', 'french').capitalize() + ']',
+                nextDay : '[' + translate('TOMORROW', 'french').capitalize() + ']',
                 lastWeek : 'D MMMM',
                 nextWeek : 'D MMMM YYYY',
                 sameElse : 'D MMMM YYYY'
+            }
+        });
+
+        moment.locale('es', {
+            calendar : {
+                lastDay : '[' + translate('YESTERDAY', 'spanish').capitalize() + ']',
+                sameDay : '[' + translate('TODAY', 'spanish').capitalize() + ']',
+                nextDay : '[' + translate('TOMORROW', 'spanish').capitalize() + ']',
+                lastWeek : 'D [de] MMMM',
+                nextWeek : 'D [de] MMMM [de] YYYY',
+                sameElse : 'D [de] MMMM [de] YYYY'
+            }
+        });
+
+        moment.locale('ru', {
+            calendar : {
+                lastDay : '[' + translate('YESTERDAY', 'russian').capitalize() + ']',
+                sameDay : '[' + translate('TODAY', 'russian').capitalize() + ']',
+                nextDay : '[' + translate('TOMORROW', 'russian').capitalize() + ']',
+                lastWeek : 'D MMMM',
+                nextWeek : 'D MMMM YYYY',
+                sameElse : 'D MMMM YYYY'
+            }
+        });
+
+        moment.locale('zh-cn', {
+            calendar : {
+                lastDay : '[' + translate('YESTERDAY', 'chinese').capitalize() + ']',
+                sameDay : '[' + translate('TODAY', 'chinese').capitalize() + ']',
+                nextDay : '[' + translate('TOMORROW', 'chinese').capitalize() + ']',
+                lastWeek : 'YYYY-MM-DD',
+                nextWeek : 'YYYY-MM-DD',
+                sameElse : 'YYYY-MM-DD'
             }
         });
     });
