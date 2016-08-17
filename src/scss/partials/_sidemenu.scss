@@ -110,6 +110,8 @@ $sidemenu-header-height:    110px !default;
 
             &.icon-blocktrail-wallet:before {
                 margin-left: -5px;
+                top: -10px;
+                position:relative;
             }
             &.icon-blocktrail-wallet {
                 margin-right: 4px;
