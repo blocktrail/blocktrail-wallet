@@ -7,9 +7,9 @@ at https://www.blocktrail.com/api/docs/lang/nodejs
 [![Latest Stable Version](https://badge.fury.io/js/blocktrail-sdk.svg)](https://www.npmjs.org/package/blocktrail-sdk)
 [![Build Status](https://travis-ci.org/blocktrail/blocktrail-sdk-nodejs.png?branch=master)](https://travis-ci.org/blocktrail/blocktrail-sdk-nodejs)
 
-Upgrading from v1.3.x to v1.4.0
--------------------------------
-**IMPORTANT** `v1.4.0` has a few BC breaks, please check [docs/CHANGELOG.md](docs/CHANGELOG.md)!!
+Upgrading from v1.x to v2.0.0
+-----------------------------
+**IMPORTANT** `v2.0.0` has a few BC breaks, please check [docs/CHANGELOG.md](docs/CHANGELOG.md)!!
 
 IMPORTANT! FLOATS ARE EVIL!!
 ----------------------------
@@ -83,6 +83,16 @@ Files in `./build` are:
  - `blocktrail-sdk-full.js` (and `blocktrail-sdk-full.min.js`) the blocktrailSDK browserified + jsPDF bundled  
 
 If you use these browserified versions of our SDK it will be accessible as `window.blocktrailSDK` or plain `blocktrailSDK`.
+
+Known Supported and Tested Browsers:
+ - Android 4.3+ (Use Crosswalk for lower versions if neccesary)
+ - iOS6+
+ - IE9+
+
+For the following any modern version will work just fine:
+ - Chrome
+ - FireFox
+ - Safari
 
 Uglify
 ------

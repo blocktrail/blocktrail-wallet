@@ -16,6 +16,7 @@ var sendTransaction = function(wallet) {
 
         var pay = {};
         pay[address] = blocktrail.toSatoshi(0.001);
+        pay[blocktrail.Wallet.OP_RETURN] = "BLOCKTRAILTESTDATA";
 
         wallet.pay(pay, function(err, result) {
         // wallet.pay(pay, null, true, true, blocktrail.Wallet.FEE_STRATEGY_LOW_PRIORITY, function(err, result) {

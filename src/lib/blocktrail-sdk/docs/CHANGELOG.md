@@ -1,7 +1,11 @@
 BlockTrail NodeJS SDK Changelog
 ===============================
 
-v1.4.0
+v2.0.1
+------
+ - Add support for `OP_RETURN` in `wallet.pay` (see `examples/opreturn_payment_api_usage.js`)
+
+v2.0.0
 ------
  - New [Default] Wallet Version 2
  - `BackupGenerator` now supports `extra` to be printed on document for extra notes

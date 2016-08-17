@@ -149,7 +149,7 @@ Error.extend = function(subTypeName, errorCode /*optional*/) {
         //populate error details
         this.name = subTypeName;
         this.code = errorCode;
-        this.message = message || '';
+        this.message = message ? (message.message || message || '') : '';
 
         //include stack trace in error object (only supported in v8 browsers)
         if (Error.captureStackTrace) {
@@ -198,6 +198,7 @@ blocktrail.Error = Error.extend("Error", 500);
 
 blocktrail.FEE_STRATEGY_BASE_FEE = 'base_fee';
 blocktrail.FEE_STRATEGY_OPTIMAL = 'optimal';
+blocktrail.FEE_STRATEGY_LOW_PRIORITY = 'low_priority';
 
 // apply patch to Q to add spreadNodeify for all dependants of this module
 blocktrail.patchQ(require('q'));

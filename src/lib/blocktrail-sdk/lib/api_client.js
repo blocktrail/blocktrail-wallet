@@ -1,3 +1,4 @@
+/* globals window */
 var _ = require('lodash'),
     q = require('q'),
     bitcoin = require('bitcoinjs-lib'),
@@ -11,6 +12,7 @@ var _ = require('lodash'),
 var workify = require('webworkify');
 
 var isNodeJS = !process.browser;
+var useWebWorker = !isNodeJS && typeof window !== "undefined" && typeof window.Worker !== "undefined";
 
 /**
  * Bindings to conssume the BlockTrail API
@@ -84,8 +86,8 @@ APIClient.prototype.mnemonicToPrivateKey = function(mnemonic, passphrase, cb) {
     var network = self.testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
 
     deferred.resolve(q.fcall(function() {
-        return self.mnemonicToSeedHex(mnemonic, passphrase).then(function(seedBuffer) {
-            return bitcoin.HDNode.fromSeedBuffer(seedBuffer, network);
+        return self.mnemonicToSeedHex(mnemonic, passphrase).then(function(seedHex) {
+            return bitcoin.HDNode.fromSeedHex(seedHex, network);
         });
     }));
 
@@ -96,9 +98,7 @@ APIClient.prototype.mnemonicToSeedHex = function(mnemonic, passphrase, cb) {
     var deferred = q.defer();
     deferred.promise.spreadNodeify(cb);
 
-    if (isNodeJS) {
-        deferred.resolve(bip39.mnemonicToSeed(mnemonic, passphrase));
-    } else {
+    if (useWebWorker) {
         var worker = workify(require('./webworker'));
 
         worker.addEventListener('message', function(e) {
@@ -110,6 +110,8 @@ APIClient.prototype.mnemonicToSeedHex = function(mnemonic, passphrase, cb) {
         });
 
         worker.postMessage({method: 'mnemonicToSeedHex', mnemonic: mnemonic, passphrase: passphrase});
+    } else {
+        deferred.resolve(bip39.mnemonicToSeedHex(mnemonic, passphrase));
     }
 
     return deferred.promise;
@@ -248,6 +250,25 @@ APIClient.prototype.addressTransactions = function(address, params, cb) {
 };
 
 /**
+ * get all transactions for a batch of addresses (paginated)
+ *
+ * @param addresses     array       address hashes
+ * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [cb]          function    callback function to call when request is complete
+ * @return q.Promise
+ */
+APIClient.prototype.batchAddressHasTransactions = function(addresses, params, cb) {
+    var self = this;
+
+    if (typeof params === "function") {
+        cb = params;
+        params = null;
+    }
+
+    return self.client.post("/address/has-transactions", params, {"addresses": addresses}, cb);
+};
+
+/**
  * get all unconfirmed transactions for an address (paginated)
  *
  * @param address       string      address hash
@@ -267,7 +288,7 @@ APIClient.prototype.addressUnconfirmedTransactions = function(address, params, c
 };
 
 /**
- * get all inspent outputs for an address (paginated)
+ * get all unspent outputs for an address (paginated)
  *
  * @param address       string      address hash
  * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
@@ -283,6 +304,25 @@ APIClient.prototype.addressUnspentOutputs = function(address, params, cb) {
     }
 
     return self.client.get("/address/" + address + "/unspent-outputs", params, cb);
+};
+
+/**
+ * get all unspent outputs for a batch of addresses (paginated)
+ *
+ * @param addresses     array       address hashes
+ * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [cb]          function    callback function to call when request is complete
+ * @return q.Promise
+ */
+APIClient.prototype.batchAddressUnspentOutputs = function(addresses, params, cb) {
+    var self = this;
+
+    if (typeof params === "function") {
+        cb = params;
+        params = null;
+    }
+
+    return self.client.post("/address/unspent-outputs", params, {"addresses": addresses}, cb);
 };
 
 /**
@@ -669,6 +709,8 @@ APIClient.prototype.initWallet = function(options, cb) {
             result.upgrade_key_index,
             options.bypassNewAddressCheck
         );
+
+        wallet.recoverySecret = result.recovery_secret;
 
         if (!options.readOnly) {
             return wallet.unlock(options).then(function() {
@@ -1244,9 +1286,18 @@ APIClient.prototype.coinSelection = function(identifier, pay, lockUTXO, allowZer
                 fee_strategy: feeStrategy
             },
             pay
-        ).then(function(result) {
-            return [result.utxos, result.fee, result.change];
-        })
+        ).then(
+            function(result) {
+                return [result.utxos, result.fee, result.change];
+            },
+            function(err) {
+                if (err.message.match(/too low to pay the fee/)) {
+                    throw blocktrail.WalletFeeError(err);
+                }
+
+                throw err;
+            }
+        )
     );
 
     return deferred.promise;
@@ -1367,6 +1418,33 @@ APIClient.prototype.walletAddresses = function(identifier, params, cb) {
     return self.client.get("/wallet/" + identifier + "/addresses", params, true, cb);
 };
 
+APIClient.prototype.walletMaxSpendable = function(identifier, allowZeroConf, feeStrategy, options, cb) {
+    var self = this;
+
+    if (typeof feeStrategy === "function") {
+        cb = feeStrategy;
+        feeStrategy = null;
+    } else if (typeof options === "function") {
+        cb = options;
+        options = {};
+    }
+
+    feeStrategy = feeStrategy || Wallet.FEE_STRATEGY_OPTIMAL;
+    options = options || {};
+
+    return self.client.get(
+            "/wallet/" + identifier + "/max-spendable",
+            {
+                outputs: options.outputs ? options.outputs : 1,
+                zeroconf: allowZeroConf ? 1 : 0,
+                zeroconfself: (typeof options.allowZeroConfSelf !== "undefined" ? options.allowZeroConfSelf : true) ? 1 : 0,
+                fee_strategy: feeStrategy
+            },
+            true,
+            cb
+    );
+};
+
 /**
  * get all UTXOs for an wallet (paginated)
  *
@@ -1430,6 +1508,20 @@ APIClient.prototype.verifyMessage = function(message, address, signature, cb) {
     }
 
     return deferred.promise;
+};
+
+/**
+ * max is 0.001
+ * testnet only
+ *
+ * @param address
+ * @param amount
+ * @param cb
+ */
+APIClient.prototype.faucetWithdrawl = function(address, amount, cb) {
+    var self = this;
+
+    return self.client.post("/faucet/withdrawl", null, {address: address, amount: amount}, cb);
 };
 
 /**

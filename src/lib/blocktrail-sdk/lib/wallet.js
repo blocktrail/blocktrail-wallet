@@ -43,6 +43,7 @@ var Wallet = function(
     upgradeToKeyIndex,
     bypassNewAddressCheck
 ) {
+    /* jshint -W071 */
     var self = this;
 
     self.sdk = sdk;
@@ -69,6 +70,8 @@ var Wallet = function(
     self.encryptedPrimarySeed = encryptedPrimarySeed;
     self.encryptedSecret = encryptedSecret;
 
+    self.primaryPrivateKey = null;
+    self.backupPrivateKey = null;
 
     self.backupPublicKey = backupPublicKey;
     self.blocktrailPublicKeys = blocktrailPublicKeys;
@@ -86,6 +89,9 @@ Wallet.WALLET_VERSION_V2 = 'v2';
 
 Wallet.WALLET_ENTROPY_BITS = 256;
 
+Wallet.OP_RETURN = 'opreturn';
+Wallet.DATA = Wallet.OP_RETURN; // alias
+
 Wallet.PAY_PROGRESS_START = 0;
 Wallet.PAY_PROGRESS_COIN_SELECTION = 10;
 Wallet.PAY_PROGRESS_CHANGE_ADDRESS = 20;
@@ -95,6 +101,7 @@ Wallet.PAY_PROGRESS_DONE = 100;
 
 Wallet.FEE_STRATEGY_BASE_FEE = blocktrail.FEE_STRATEGY_BASE_FEE;
 Wallet.FEE_STRATEGY_OPTIMAL = blocktrail.FEE_STRATEGY_OPTIMAL;
+Wallet.FEE_STRATEGY_LOW_PRIORITY = blocktrail.FEE_STRATEGY_LOW_PRIORITY;
 
 Wallet.prototype.unlock = function(options, cb) {
     var self = this;
@@ -164,6 +171,7 @@ Wallet.prototype.unlockV2 = function(options, cb) {
     deferred.promise.nodeify(cb);
 
     deferred.resolve(q.fcall(function() {
+        /* jshint -W071, -W074 */
         options.encryptedPrimarySeed = typeof options.encryptedPrimarySeed !== "undefined" ? options.encryptedPrimarySeed : self.encryptedPrimarySeed;
         options.encryptedSecret = typeof options.encryptedSecret !== "undefined" ? options.encryptedSecret : self.encryptedSecret;
 
@@ -185,7 +193,7 @@ Wallet.prototype.unlockV2 = function(options, cb) {
                 if (!self.primarySeed.length) {
                     throw new Error();
                 }
-            } catch(e) {
+            } catch (e) {
                 throw new blocktrail.WalletDecryptError("Failed to decrypt primarySeed");
             }
 
@@ -202,7 +210,7 @@ Wallet.prototype.unlockV2 = function(options, cb) {
                 if (!self.secret.length) {
                     throw new Error();
                 }
-            } catch(e) {
+            } catch (e) {
                 throw new blocktrail.WalletDecryptError("Failed to decrypt secret");
             }
             try {
@@ -210,7 +218,7 @@ Wallet.prototype.unlockV2 = function(options, cb) {
                 if (!self.primarySeed.length) {
                     throw new Error();
                 }
-            } catch(e) {
+            } catch (e) {
                 throw new blocktrail.WalletDecryptError("Failed to decrypt primarySeed");
             }
         }
@@ -227,6 +235,7 @@ Wallet.prototype.lock = function() {
     self.secret = null;
     self.primarySeed = null;
     self.primaryPrivateKey = null;
+    self.backupPrivateKey = null;
 
     self.locked = true;
 };
@@ -661,12 +670,19 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
     deferred.promise.spreadNodeify(cb);
 
     q.nextTick(function() {
-        var send = {};
+        var send = [];
 
+        // normalize / validate sends
         Object.keys(pay).forEach(function(address) {
             address = address.trim();
             var value = pay[address];
             var err = null;
+
+            if (address === Wallet.OP_RETURN) {
+                var datachunk = Buffer.isBuffer(value) ? value : new Buffer(value, 'utf-8');
+                send.push({scriptPubKey: bitcoin.scripts.nullDataOutput(datachunk).toBuffer().toString('hex'), value: 0});
+                return;
+            }
 
             var addr;
             try {
@@ -690,10 +706,10 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                 return deferred.promise;
             }
 
-            send[address] = value;
+            send.push({address: address, value: parseInt(value, 10)});
         });
 
-        if (!Object.keys(send).length) {
+        if (!send.length) {
             deferred.reject(new blocktrail.WalletSendError("Need at least one recipient"));
             return deferred.promise;
         }
@@ -701,7 +717,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
         deferred.notify(Wallet.PAY_PROGRESS_COIN_SELECTION);
 
         deferred.resolve(
-            self.coinSelection(pay, true, allowZeroConf, feeStrategy, options)
+            self.coinSelection(send, true, allowZeroConf, feeStrategy, options)
             /**
              *
              * @param {Object[]} utxos
@@ -771,8 +787,14 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                          * @param cb
                          */
                         function(cb) {
-                            Object.keys(send).forEach(function(address) {
-                                outputs.push({address: address, value: parseInt(send[address], 10)});
+                            send.forEach(function(_send) {
+                                if (_send.address) {
+                                    outputs.push({address: _send.address, value: _send.value});
+                                } else if (_send.scriptPubKey) {
+                                    outputs.push({scriptPubKey: bitcoin.Script.fromBuffer(new Buffer(_send.scriptPubKey, 'hex')), value: _send.value});
+                                } else {
+                                    throw new Error("Invalid send");
+                                }
                             });
 
                             cb();
@@ -831,7 +853,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                          */
                         function(cb) {
                             outputs.forEach(function(outputInfo) {
-                                txb.addOutput(outputInfo.address, outputInfo.value);
+                                txb.addOutput(outputInfo.scriptPubKey || outputInfo.address, outputInfo.value);
                             });
 
                             cb();
@@ -842,12 +864,21 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                          * @param cb
                          */
                         function(cb) {
-                            var i;
+                            var i, privKey, path;
 
                             deferred.notify(Wallet.PAY_PROGRESS_SIGN);
 
                             for (i = 0; i < utxos.length; i++) {
-                                var privKey = Wallet.deriveByPath(self.primaryPrivateKey, utxos[i]['path'].replace("M", "m"), "m").privKey;
+                                path = utxos[i]['path'].replace("M", "m");
+
+                                if (self.primaryPrivateKey) {
+                                    privKey = Wallet.deriveByPath(self.primaryPrivateKey, path, "m").privKey;
+                                } else if (self.backupPrivateKey) {
+                                    privKey = Wallet.deriveByPath(self.backupPrivateKey, path.replace(/^m\/(\d+)\'/, 'm/$1'), "m").privKey;
+                                } else {
+                                    throw new Error("No master privateKey present");
+                                }
+
                                 var redeemScript = bitcoin.Script.fromHex(utxos[i]['redeem_script']);
 
                                 txb.sign(i, privKey, redeemScript);
@@ -1029,6 +1060,42 @@ Wallet.prototype.transactions = function(params, cb) {
     var self = this;
 
     return self.sdk.walletTransactions(self.identifier, params, cb);
+};
+
+Wallet.prototype.maxSpendable = function(allowZeroConf, feeStrategy, options, cb) {
+    var self = this;
+
+    if (typeof allowZeroConf === "function") {
+        cb = allowZeroConf;
+        allowZeroConf = false;
+    } else if (typeof feeStrategy === "function") {
+        cb = feeStrategy;
+        feeStrategy = null;
+    } else if (typeof options === "function") {
+        cb = options;
+        options = {};
+    }
+
+    if (typeof allowZeroConf === "object") {
+        options = allowZeroConf;
+        allowZeroConf = false;
+    } else if (typeof feeStrategy === "object") {
+        options = feeStrategy;
+        feeStrategy = null;
+    }
+
+    options = options || {};
+
+    if (typeof options.allowZeroConf !== "undefined") {
+        allowZeroConf = options.allowZeroConf;
+    }
+    if (typeof options.feeStrategy !== "undefined") {
+        feeStrategy = options.feeStrategy;
+    }
+
+    feeStrategy = feeStrategy || Wallet.FEE_STRATEGY_OPTIMAL;
+
+    return self.sdk.walletMaxSpendable(self.identifier, allowZeroConf, feeStrategy, options, cb);
 };
 
 /**

@@ -1,13 +1,11 @@
-var blocktrail = require('blocktrail-sdk');
+var blocktrail = require('../'); // require('blocktrail-sdk') when trying example from in your own project
 var bitcoin = blocktrail.bitcoin;
 
 var client = blocktrail.BlocktrailSDK({
-    apiKey : "MY_APIKEY",
-    apiSecret : "MY_APISECRET",
-    testnet : true
+    apiKey: "MY_APIKEY",
+    apiSecret: "MY_APISECRET",
+    testnet: true
 });
-
-console.log(blocktrail.Wallet.estimateFee(193, 1));
 
 client.initWallet({
     identifier: "example-wallet",
@@ -24,17 +22,30 @@ client.initWallet({
             return;
         }
 
-        wallet.unlock({passphrase: "example-strong-password"}, function(err) {
+        var allowZeroConf = true;
+        var allowZeroConfSelf = true;
+        var feeStrategy = blocktrail.Wallet.FEE_STRATEGY_BASE_FEE;
+        // var feeStrategy = blocktrail.Wallet.FEE_STRATEGY_OPTIMAL;
+        var options = {
+            allowZeroConfSelf: allowZeroConfSelf
+        };
+
+        wallet.maxSpendable(allowZeroConf, feeStrategy, options, function(err, maxSpendable) {
             if (err) {
                 console.log(err);
                 return;
             }
-            
-            wallet.getInfo(function(err, walletInfo) {
-                var estFee = blocktrail.Wallet.estimateFee(walletInfo.confirmed_utxos + walletInfo.unconfirmed_utxos, 1);
+
+            console.log(maxSpendable);
+
+            wallet.unlock({passphrase: "example-strong-password"}, function(err) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
 
                 var pay = {};
-                pay[selfAddress] = walletInfo.confirmed + walletInfo.unconfirmed - estFee;
+                pay[selfAddress] = maxSpendable.max;
 
                 wallet.pay(pay, function(err, txHash) {
                     if (err) {
