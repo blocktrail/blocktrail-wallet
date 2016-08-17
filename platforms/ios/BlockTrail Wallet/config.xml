@@ -84,12 +84,12 @@
     </feature>
     <name>BlockTrail Wallet</name>
     <description>
-        Your personal Bitcoin wallet, powered by Blocktrail
+        Your personal Bitcoin wallet, powered by BTC.com
     </description>
-    <author email="devs@blocktrail.com" href="https://www.blocktrail.com/">
-      BlockTrail Team
+    <author email="support@btc.com" href="https://www.btc.com/">
+    BTC.com Team
     </author>
-    <content original-src="index.html" src="http://10.15.109.103:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
