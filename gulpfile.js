@@ -18,11 +18,38 @@ var gulpif = require('gulp-if');
 var notifier = require('node-notifier');
 var fontello = require('gulp-fontello');
 var clean = require('gulp-clean');
+var path = require('path');
 
 var isWatch = false;
 
+/**
+ * helper to wrap a stream with a promise for easy chaining
+ * @param stream
+ * @returns {Q.Promise}
+ */
+var streamAsPromise = function(stream) {
+    var def = Q.defer();
+
+    stream
+        .on('end', function() {
+            def.resolve();
+        })
+        .on('error', function(e) {
+            def.reject(e);
+        })
+    ;
+
+    return def.promise;
+};
+
+/**
+ * build appconfig from .json files
+ *
+ * @returns {Q.Promise}
+ */
 var buildAppConfig = function() {
     var def = Q.defer();
+    var p = def.promise;
 
     gitRev.branch(function(branch) {
         gitRev.short(function(rev) {
@@ -49,89 +76,108 @@ var buildAppConfig = function() {
         });
     });
 
-    return def.promise;
+    return p;
 };
 
 var appConfig = Q.fcall(buildAppConfig);
 
 gulp.task('appconfig', function() {
+    // update global promise with a rebuild
     appConfig = Q.fcall(buildAppConfig);
+    return appConfig;
 });
 
-gulp.task('templates:index', ['appconfig'], function(done) {
+gulp.task('templates:index', ['appconfig'], function() {
+    var readTranslations = function(filename) {
+        var def = Q.defer();
 
-    appConfig.then(function(APPCONFIG) {
-        var readTranslations = function(filename) {
-            var raw = fs.readFileSync(filename);
-
+        fs.readFile(filename, function(err, raw) {
             if (!raw) {
                 throw new Error("Missing translations!");
             }
 
-            return JSON.parse(stripJsonComments(raw.toString('utf8')));
-        };
+            def.resolve(JSON.parse(stripJsonComments(raw.toString('utf8'))));
+        });
 
+        return def.promise;
+    };
+
+    return appConfig.then(function(APPCONFIG) {
         var translations = {
-            english: readTranslations('./src/translations/translations/english.json'),
-            americanEnglish: readTranslations('./src/translations/translations/americanEnglish.json'),
-            french: readTranslations('./src/translations/translations/french.json'),
-            dutch: readTranslations('./src/translations/translations/dutch.json'),
-            chinese: readTranslations('./src/translations/translations/chinese.json'),
-            spanish: readTranslations('./src/translations/translations/spanish.json'),
-            russian: readTranslations('./src/translations/translations/russian.json'),
-
-            mobile: {
-                english: readTranslations('./src/translations/translations/mobile/english.json'),
-                americanEnglish: readTranslations('./src/translations/translations/mobile/americanEnglish.json'),
-                french: readTranslations('./src/translations/translations/mobile/french.json'),
-                dutch: readTranslations('./src/translations/translations/mobile/dutch.json'),
-                chinese: readTranslations('./src/translations/translations/mobile/chinese.json'),
-                spanish: readTranslations('./src/translations/translations/mobile/spanish.json'),
-                russian: readTranslations('./src/translations/translations/mobile/russian.json')
-            }
+            'mobile': {}
         };
-    
-        gulp.src("./src/index.html")
-            .pipe(template({
-                APPCONFIG_JSON: JSON.stringify(APPCONFIG),
-                NG_CORDOVA_MOCKS: APPCONFIG.NG_CORDOVA_MOCKS,
-                TRANSLATIONS: JSON.stringify(translations)
-            }))
-            .pipe(gulp.dest("./www"))
-            .on('end', done);
+
+        return Q.all(_.map([
+            './src/translations/translations/english.json',
+            './src/translations/translations/americanEnglish.json',
+            './src/translations/translations/french.json',
+            './src/translations/translations/dutch.json',
+            './src/translations/translations/chinese.json',
+            './src/translations/translations/spanish.json',
+            './src/translations/translations/russian.json',
+
+            './src/translations/translations/mobile/english.json',
+            './src/translations/translations/mobile/americanEnglish.json',
+            './src/translations/translations/mobile/french.json',
+            './src/translations/translations/mobile/dutch.json',
+            './src/translations/translations/mobile/chinese.json',
+            './src/translations/translations/mobile/spanish.json',
+            './src/translations/translations/mobile/russian.json'
+        ], function(filename) {
+            var language = path.basename(filename, '.json');
+            var isMobile = filename.indexOf('mobile/') !== -1;
+
+            return readTranslations(filename).then(function(result) {
+                if (isMobile) {
+                    translations['mobile'][language] = result;
+                } else {
+                    translations[language] = result;
+                }
+            })
+        })).then(function() {
+            return streamAsPromise(gulp.src("./src/index.html")
+                .pipe(template({
+                    VERSION: APPCONFIG.VERSION,
+                    APPCONFIG_JSON: JSON.stringify(APPCONFIG),
+                    NG_CORDOVA_MOCKS: APPCONFIG.NG_CORDOVA_MOCKS,
+                    TRANSLATIONS: JSON.stringify(translations)
+                }))
+                .pipe(gulp.dest("./www"))
+            );
+        });
     });
 });
 
-gulp.task('templates:rest', ['appconfig'], function(done) {
+gulp.task('templates:rest', ['appconfig'], function() {
 
-    appConfig.then(function(APPCONFIG) {
-        gulp.src(["./src/templates/*", "./src/templates/**/*"])
+    return appConfig.then(function(APPCONFIG) {
+        return streamAsPromise(gulp.src(["./src/templates/*", "./src/templates/**/*"])
             .pipe(gulp.dest("./www/templates"))
-            .on('end', done);
+        );
     });
 });
 
-gulp.task('js:ng-cordova', ['appconfig'], function(done) {
+gulp.task('js:ng-cordova', ['appconfig'], function() {
 
-    appConfig.then(function(APPCONFIG) {
+    return appConfig.then(function(APPCONFIG) {
         var files = ['./src/lib/ngCordova/dist/ng-cordova.js'];
 
         if (APPCONFIG.NG_CORDOVA_MOCKS) {
             files.push("./src/lib/ngCordova/dist/ng-cordova-mocks.js");
         }
 
-        gulp.src(files)
+        return streamAsPromise(gulp.src(files)
             .pipe(concat('ng-cordova.js'))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
             .pipe(gulp.dest('./www/js/'))
-            .on('end', done);
+        );
     });
 });
 
-gulp.task('js:libs', ['appconfig'], function(done) {
+gulp.task('js:libs', ['appconfig'], function() {
 
-    appConfig.then(function(APPCONFIG) {
-        gulp.src([
+    return appConfig.then(function(APPCONFIG) {
+        return streamAsPromise(gulp.src([
             "./src/lib/q/q.js",
             "./src/lib/ionic/release/js/ionic.bundle.js",
             "./src/lib/ionic-service-core/ionic-core.js",
@@ -166,14 +212,14 @@ gulp.task('js:libs', ['appconfig'], function(done) {
             .pipe(concat('libs.js'))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
             .pipe(gulp.dest('./www/js/'))
-            .on('end', done);
+        );
     });
 });
 
-gulp.task('js:app', ['appconfig'], function(done) {
+gulp.task('js:app', ['appconfig'], function() {
 
-    appConfig.then(function(APPCONFIG) {
-        gulp.src([
+    return appConfig.then(function(APPCONFIG) {
+        return streamAsPromise(gulp.src([
             './src/js/**/*.js',
         ])
             .pipe(concat('app.js'))
@@ -192,15 +238,15 @@ gulp.task('js:app', ['appconfig'], function(done) {
             })
             .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
             .pipe(gulp.dest('./www/js/'))
-            .on('end', done)
-        ;
+        );
     });
 });
 
-gulp.task('js:sdk', ['appconfig'], function(done) {
+gulp.task('js:sdk', ['appconfig'], function() {
 
-    appConfig.then(function(APPCONFIG) {
-        gulp.src([
+    return appConfig.then(function(APPCONFIG) {
+
+        return streamAsPromise(gulp.src([
             "./src/lib/blocktrail-sdk/build/blocktrail-sdk-full.js"
         ])
             .pipe(concat('sdk.js'))
@@ -210,18 +256,18 @@ gulp.task('js:sdk', ['appconfig'], function(done) {
                 }
             })))
             .pipe(gulp.dest('./www/js/'))
-            .on('end', done);
+        );
     });
 });
 
-var sassTask = function(done) {
-    appConfig.then(function(APPCONFIG) {
-        gulp.src('./src/scss/ionic.app.scss')
+var sassTask = function() {
+    return appConfig.then(function(APPCONFIG) {
+        return streamAsPromise(gulp.src('./src/scss/ionic.app.scss')
             .pipe(sass({errLogToConsole: true}))
             .pipe(gulp.dest('./www/css/'))
             .pipe(gulpif(APPCONFIG.MINIFY, minifyCss({keepSpecialComments: 0})))
             .pipe(gulp.dest('./www/css/'))
-            .on('end', done);
+        );
     });
 };
 
@@ -230,20 +276,20 @@ gulp.task('sass', ['appconfig'], sassTask);
 gulp.task('sassfontello', ['appconfig', 'fontello'], sassTask);
 
 
-gulp.task('fontello-dl', function(done) {
+gulp.task('fontello-dl', function() {
 
-    gulp.src('./fontello-config.json')
+    return gulp.src('./fontello-config.json')
         .pipe(fontello())
         .pipe(gulp.dest('./www/fontello/'))
-        .on('end', done);
+    ;
 });
 
-gulp.task('fontello-rename', ['fontello-dl'], function(done) {
+gulp.task('fontello-rename', ['fontello-dl'], function() {
 
-    gulp.src(['./www/fontello/css/fontello-codes.css'])
+    return gulp.src(['./www/fontello/css/fontello-codes.css'])
         .pipe(rename('fontello-codes.scss'))
         .pipe(gulp.dest('./www/fontello/css'))
-        .on('end', done);
+    ;
 });
 
 gulp.task('fontello-clean', ['fontello-rename'], function() {
@@ -252,19 +298,19 @@ gulp.task('fontello-clean', ['fontello-rename'], function() {
         .pipe(clean());
 });
 
-gulp.task('fontello', ['fontello-dl', 'fontello-rename', 'fontello-clean'], function(done) {
+gulp.task('fontello', ['fontello-dl', 'fontello-rename', 'fontello-clean'], function() {
 
-    gulp.src('./www/fontello/font/*')
+    return gulp.src('./www/fontello/font/*')
         .pipe(gulp.dest('./www/fonts'))
-        .on('end', done);
+    ;
 });
 
-gulp.task('copyfonts', ['appconfig'], function(done) {
+gulp.task('copyfonts', ['appconfig'], function() {
 
-    appConfig.then(function(APPCONFIG) {
-        gulp.src('./src/lib/ionic/release/fonts/**/*.{ttf,woff,eof,eot,svg}')
+    return appConfig.then(function(APPCONFIG) {
+        return streamAsPromise(gulp.src('./src/lib/ionic/release/fonts/**/*.{ttf,woff,eof,eot,svg}')
             .pipe(gulp.dest('./www/fonts'))
-            .on('end', done);
+        );
     });
 });
 
@@ -281,3 +327,4 @@ gulp.task('watch', function() {
 gulp.task('js', ['js:libs', 'js:app', 'js:ng-cordova', 'js:sdk']);
 gulp.task('templates', ['templates:index', 'templates:rest']);
 gulp.task('default', ['sassfontello', 'templates', 'js', 'copyfonts']);
+gulp.task('nofontello', ['sass', 'templates', 'js', 'copyfonts']);
