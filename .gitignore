@@ -10,3 +10,6 @@ platforms/android/CordovaLib/build
 
 platforms/android/.gradle/2.2.1/taskArtifacts/*
 
+platforms/ios/BlockTrail Wallet.xcodeproj/project.xcworkspace/xcuserdata/*
+platforms/ios/BlockTrail Wallet.xcodeproj/xcuserdata/*
+platforms/ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/*
