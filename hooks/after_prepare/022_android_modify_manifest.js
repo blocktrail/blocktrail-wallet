@@ -3,22 +3,24 @@
 var fs = require('fs');
 var path = require('path');
 var xml2js = require('xml2js');
+
 var rootdir = process.argv[2];
 
 
 if (rootdir) {
-    var manifestPath = path.join(rootdir, 'platforms/android/AndroidManifest.xml');
+    var xmlPath = path.join(rootdir, 'platforms/android/AndroidManifest.xml');
 
-    var manifestXml = fs.readFileSync(manifestPath);
-    xml2js.parseString(manifestXml, function(err, doc) {
+    var xmlSrc = fs.readFileSync(xmlPath);
+    xml2js.parseString(xmlSrc, function(err, doc) {
         if (err) {
             throw err;
         }
 
         if (!doc.manifest) {
-            throw new Error(manifestPath + ' has incorrect root node name (expected "manifest")');
+            throw new Error(xmlPath + ' has incorrect root node name (expected "manifest")');
         }
 
+        // disable automatic backups to gdrive
         doc.manifest.application[0].$['android:allowBackup'] = false;
 
         //write the manifest file
@@ -31,6 +33,6 @@ if (rootdir) {
                 'version': '1.0', 'encoding': 'UTF-8'
             }
         });
-        fs.writeFileSync(manifestPath, xmlBuilder.buildObject(doc), 'utf-8');
+        fs.writeFileSync(xmlPath, xmlBuilder.buildObject(doc).replace(/\/>/g, ' />'), 'utf-8');
     });
 }
