@@ -4,12 +4,20 @@
     </ion-nav-bar>
 
     <ion-content>
-        <div style="padding: 20px">
+        <div style="padding: 20px; text-align: center;">
+            <img src="img/logo-btc.png" style="width: 50%; height: auto; margin-top:20px; margin-bottom: 20px;" />
+
             <div ng-bind-html="'PSA_REBRAND_BODY' | translate | nl2br"></div>
 
             <br />
 
-            <button ng-click="continue()" class="button">{{ 'PSA_REBRAND_OK' | translate }}</button>
+            <span>{{ 'PSA_REBRAND_BLOG_HREF_PRE' | translate }}</span>
+            <a href="https://blog.blocktrail.com/2016/07/blocktrail-is-now-a-part-of-the-bitmain-family/" browse-to>{{ 'PSA_REBRAND_BLOG_HREF' | translate }}</a>
+
+            <br />
+            <br />
+
+            <button ng-click="continue()" class="button button-energized">{{ 'PSA_REBRAND_OK' | translate }}</button>
         </div>
     </ion-content>
 </ion-view>
