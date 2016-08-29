@@ -68,6 +68,12 @@
           <string>bitcoin</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>fb1072524012838770</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>2.0.4</string>
@@ -75,6 +81,25 @@
     <true/>
     <key>NSAppTransportSecurity</key>
     <dict>
+      <key>NSExceptionDomains</key>
+      <dict>
+        <key>m.facebook.com</key>
+        <dict/>
+        <key>graph.facebook.com</key>
+        <dict/>
+        <key>api.facebook.com</key>
+        <dict/>
+        <key>fbcdn.net</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+        </dict>
+        <key>akamaihd.net</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+        </dict>
+      </dict>
       <key>NSAllowsArbitraryLoads</key>
       <true/>
     </dict>
@@ -199,5 +224,9 @@
       <string>UIInterfaceOrientationPortrait</string>
       <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
+    <key>FacebookAppID</key>
+    <string>1072524012838770</string>
+    <key>FacebookDisplayName</key>
+    <string>BTC.com</string>
   </dict>
 </plist>

@@ -82,6 +82,16 @@
     <feature name="Notification">
         <param name="ios-package" value="CDVNotification" />
     </feature>
+    <feature name="FacebookConnectPlugin">
+        <param name="ios-package" value="FacebookConnectPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <plugin name="FacebookConnectPlugin" value="FacebookConnectPlugin" />
+    <access origin="https://m.facebook.com" />
+    <access origin="https://graph.facebook.com" />
+    <access origin="https://api.facebook.com" />
+    <access origin="https://*.fbcdn.net" />
+    <access origin="https://*.akamaihd.net" />
     <name>BlockTrail Wallet</name>
     <description>
         Your personal Bitcoin wallet, powered by BTC.com
@@ -89,7 +99,7 @@
     <author email="support@btc.com" href="https://www.btc.com/">
     BTC.com Team
     </author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://10.15.109.171:8100" />
     <access origin="*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />

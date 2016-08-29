@@ -119,6 +119,34 @@
                         {
                             "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FacebookConnectPlugin\"><param name=\"ios-package\" value=\"FacebookConnectPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<plugin name=\"FacebookConnectPlugin\" value=\"FacebookConnectPlugin\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://m.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://graph.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://api.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://*.fbcdn.net\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://*.akamaihd.net\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -134,6 +162,22 @@
                     "CFBundleURLTypes": [
                         {
                             "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>bitcoin</string></array></dict></array>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>fb1072524012838770</string></array></dict></array>",
+                            "count": 1
+                        }
+                    ],
+                    "FacebookAppID": [
+                        {
+                            "xml": "<string>1072524012838770</string>",
+                            "count": 1
+                        }
+                    ],
+                    "FacebookDisplayName": [
+                        {
+                            "xml": "<string>BTC.com</string>",
                             "count": 1
                         }
                     ]
@@ -222,6 +266,11 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "phonegap-facebook-plugin": {
+            "APP_ID": "1072524012838770",
+            "APP_NAME": "BTC.com",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -647,6 +696,14 @@
             "merges": [
                 "navigator.notification"
             ]
+        },
+        {
+            "file": "plugins/phonegap-facebook-plugin/facebookConnectPlugin.js",
+            "id": "phonegap-facebook-plugin.FacebookConnectPlugin",
+            "pluginId": "phonegap-facebook-plugin",
+            "clobbers": [
+                "facebookConnectPlugin"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -676,6 +733,7 @@
         "com.cordova.plugins.sms": "0.1.5",
         "cordova-plugin-vibration": "1.2.0",
         "phonegap-plugin-barcodescanner": "4.0.2",
-        "cordova-plugin-dialogs": "1.1.2-dev"
+        "cordova-plugin-dialogs": "1.1.2-dev",
+        "phonegap-facebook-plugin": "0.12.0"
     }
 }

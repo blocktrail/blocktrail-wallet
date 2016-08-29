@@ -107,6 +107,30 @@
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FacebookConnectPlugin\"><param name=\"android-package\" value=\"org.apache.cordova.facebook.ConnectPlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://m.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://graph.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://api.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://*.fbcdn.net\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://*.akamaihd.net\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -178,6 +202,16 @@
                     "/*/application/activity": [
                         {
                             "xml": "<intent-filter><data android:scheme=\"bitcoin\" /><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /><category android:name=\"android.intent.category.BROWSABLE\" /></intent-filter>",
+                            "count": 1
+                        }
+                    ],
+                    "application": [
+                        {
+                            "xml": "<meta-data android:name=\"com.facebook.sdk.ApplicationId\" android:value=\"@string/fb_app_id\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<activity android:label=\"@string/fb_app_name\" android:name=\"com.facebook.LoginActivity\" android:theme=\"@android:style/Theme.Translucent.NoTitleBar\" />",
                             "count": 1
                         }
                     ]
@@ -664,6 +698,20 @@
                         }
                     ]
                 }
+            },
+            "res/values/facebookconnect.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<string name=\"fb_app_id\">1072524012838770</string>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<string name=\"fb_app_name\">BTC.com</string>",
+                            "count": 1
+                        }
+                    ]
+                }
             }
         }
     },
@@ -748,6 +796,11 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "phonegap-facebook-plugin": {
+            "APP_ID": "1072524012838770",
+            "APP_NAME": "BTC.com",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -1171,6 +1224,14 @@
             "clobbers": [
                 "window.open"
             ]
+        },
+        {
+            "file": "plugins/phonegap-facebook-plugin/facebookConnectPlugin.js",
+            "id": "phonegap-facebook-plugin.FacebookConnectPlugin",
+            "pluginId": "phonegap-facebook-plugin",
+            "clobbers": [
+                "facebookConnectPlugin"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -1200,6 +1261,7 @@
         "cordova-plugin-vibration": "1.2.0",
         "phonegap-plugin-barcodescanner": "4.0.2",
         "cordova-plugin-dialogs": "1.1.2-dev",
-        "org.apache.cordova.inappbrowser": "0.6.0"
+        "org.apache.cordova.inappbrowser": "0.6.0",
+        "phonegap-facebook-plugin": "0.12.0"
     }
 }

@@ -33,6 +33,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:label="@string/fb_app_name" android:name="com.facebook.LoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/fb_app_id" />
     </application>
     <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="22" />
     <uses-permission android:name="android.permission.INTERNET" />

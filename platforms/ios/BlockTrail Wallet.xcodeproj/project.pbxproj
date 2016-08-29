@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		0356A090D8464D4183F35B0A /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E0D6BBD2D07470CBAB1ACFC /* CDVInAppBrowser.m */; };
 		0686F15D09864C96946A736E /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A09A5DDB818465391DD8478 /* CDVCamera.m */; };
@@ -100,6 +99,12 @@
 		F2411F7D1BCC05AF0066F3E1 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687F7E004A784DCEB31925C6 /* CoreVideo.framework */; };
 		F55E606FD9EF4C7BAA056477 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F0BD4C55D4BFB89E58B14 /* CoreImage.framework */; };
 		FB51793894F04B5DAEE729B3 /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1A3CE087D0641C59D128308 /* ELCAlbumPickerController.m */; };
+		EBDE71A3B7F745069F9EC888 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 907D5F0504D141B8A5D89C39 /* libsqlite3.dylib */; };
+		680CAC3405E44C3782821714 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DA6811B7D004429BAE82184 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		40FA2736253B4D18B4B8DD8A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 686D574B75164D5FA8098CB1 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		B263EE20072B4DB0852D3BA0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4FDC661E7C4DFEBAC8D468 /* Security.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */; };
+		08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +300,13 @@
 		FB92BAE23A234F94871B16A8 /* AppVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppVersion.m; path = uk.co.whiteoctober.cordova.appversion/AppVersion.m; sourceTree = "<group>"; };
 		FC0810698B854367AA189532 /* CoreMedia.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		FF78D9D50653435192A65928 /* ZBarReaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarReaderViewController.h; path = org.cloudsky.cordovaplugins.zbar/ZBarReaderViewController.h; sourceTree = "<group>"; };
+		907D5F0504D141B8A5D89C39 /* libsqlite3.dylib */ = {isa = PBXFileReference; name = "libsqlite3.dylib"; path = "usr/lib/libsqlite3.dylib"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = compiled.mach-o.dylib; explicitFileType = undefined; includeInIndex = 0; };
+		5DA6811B7D004429BAE82184 /* Social.framework */ = {isa = PBXFileReference; name = "Social.framework"; path = "System/Library/Frameworks/Social.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		686D574B75164D5FA8098CB1 /* Accounts.framework */ = {isa = PBXFileReference; name = "Accounts.framework"; path = "System/Library/Frameworks/Accounts.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		DF4FDC661E7C4DFEBAC8D468 /* Security.framework */ = {isa = PBXFileReference; name = "Security.framework"; path = "System/Library/Frameworks/Security.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.m"; path = "phonegap-facebook-plugin/FacebookConnectPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		2816EAEF88F346EE9033F3EF /* FacebookConnectPlugin.h */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.h"; path = "phonegap-facebook-plugin/FacebookConnectPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */ = {isa = PBXFileReference; name = "FacebookSDK.framework"; path = "BlockTrail Wallet/Plugins/phonegap-facebook-plugin/FacebookSDK.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +330,11 @@
 				59ED471AC1AB4F0299BEA4D9 /* CoreLocation.framework in Frameworks */,
 				266915F307A743999C427B4C /* StoreKit.framework in Frameworks */,
 				F55E606FD9EF4C7BAA056477 /* CoreImage.framework in Frameworks */,
+				EBDE71A3B7F745069F9EC888 /* libsqlite3.dylib in Frameworks */,
+				680CAC3405E44C3782821714 /* Social.framework in Frameworks */,
+				40FA2736253B4D18B4B8DD8A /* Accounts.framework in Frameworks */,
+				B263EE20072B4DB0852D3BA0 /* Security.framework in Frameworks */,
+				08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +433,11 @@
 				ED28961806D048CBBB6C4331 /* AudioToolbox.framework */,
 				1B212729E9434FDD9A0C4797 /* StoreKit.framework */,
 				6C7F0BD4C55D4BFB89E58B14 /* CoreImage.framework */,
+				907D5F0504D141B8A5D89C39 /* libsqlite3.dylib */,
+				5DA6811B7D004429BAE82184 /* Social.framework */,
+				686D574B75164D5FA8098CB1 /* Accounts.framework */,
+				DF4FDC661E7C4DFEBAC8D468 /* Security.framework */,
+				DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -537,6 +559,8 @@
 				6A876C5FB6704471AEA98A44 /* zxing-all-in-one.h */,
 				9C8E6B5B72DC4C5D8D2A4A02 /* CDVNotification.m */,
 				C8BF6E2CA19C4F05AA2AA293 /* CDVNotification.h */,
+				A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */,
+				2816EAEF88F346EE9033F3EF /* FacebookConnectPlugin.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -774,6 +798,7 @@
 				79604475BE634C6EA7060075 /* CDVBarcodeScanner.mm in Sources */,
 				1E3B53CCF5254D159742E253 /* zxing-all-in-one.cpp in Sources */,
 				5FDD693A71F84919AD8AA0EB /* CDVNotification.m in Sources */,
+				BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -826,6 +851,11 @@
 				);
 				PRODUCT_NAME = "BlockTrail Wallet";
 				TARGETED_DEVICE_FAMILY = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
+					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
+				);
 			};
 			name = Debug;
 		};
@@ -865,6 +895,11 @@
 				);
 				PRODUCT_NAME = "BlockTrail Wallet";
 				TARGETED_DEVICE_FAMILY = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
+					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
+				);
 			};
 			name = Release;
 		};

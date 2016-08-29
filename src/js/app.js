@@ -67,6 +67,8 @@ angular.module('blocktrail.wallet').run(
         $rootScope.isAndroid = ionic.Platform.isAndroid();
         $rootScope.isIOS = ionic.Platform.isIOS();
 
+        facebookConnectPlugin.activateApp();
+
         /*----iOS Keyboard fix---*/
         //fix for a quirk where the keyboard is triggered randomly without input focus (usually only happens on send screen)
         var keyboardShow = function(e) {
@@ -157,6 +159,7 @@ angular.module('blocktrail.wallet').run(
             $log.debug('RESUME');
             $rootScope.STATE.ACTIVE = true;
             $rootScope.$broadcast('appResume');
+            facebookConnectPlugin.activateApp();
         });
 
         //indicate when keyboard is displayed
