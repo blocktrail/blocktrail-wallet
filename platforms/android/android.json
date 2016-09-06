@@ -131,6 +131,10 @@
                         {
                             "xml": "<access origin=\"https://*.akamaihd.net\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"GoogleAppTracking\"><param name=\"android-package\" value=\"com.myhealthteams.plugins.GoogleAppTracking\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -144,7 +148,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
@@ -152,6 +156,10 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
                             "count": 1
                         }
                     ],
@@ -170,6 +178,10 @@
                         },
                         {
                             "xml": "<activity android:label=\"@string/share_name\" android:name=\"com.google.zxing.client.android.HelpActivity\"><intent-filter><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter></activity>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:exported=\"true\" android:name=\"com.google.ads.conversiontracking.InstallReceiver\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
                             "count": 1
                         }
                     ],
@@ -802,6 +814,9 @@
             "APP_ID": "1072524012838770",
             "APP_NAME": "BTC.com",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-google-app-conversion-tracker": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {},
@@ -1232,6 +1247,14 @@
             "clobbers": [
                 "facebookConnectPlugin"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-google-app-conversion-tracker/www/gapp_track.js",
+            "id": "cordova-plugin-google-app-conversion-tracker.GoogleAppTracking",
+            "pluginId": "cordova-plugin-google-app-conversion-tracker",
+            "clobbers": [
+                "GappTrack"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -1262,6 +1285,7 @@
         "phonegap-plugin-barcodescanner": "4.0.2",
         "cordova-plugin-dialogs": "1.1.2-dev",
         "org.apache.cordova.inappbrowser": "0.6.0",
-        "phonegap-facebook-plugin": "0.12.0"
+        "phonegap-facebook-plugin": "0.12.0",
+        "cordova-plugin-google-app-conversion-tracker": "0.0.2"
     }
 }

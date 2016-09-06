@@ -7,6 +7,9 @@
     "API_HOST": "api.blocktrail.com",
     "API_HTTPS": true,
 
+    "GAPPTRACK_ID": null,
+    "GAPPTRACK_LABELS": [],
+
     // default ionic apps keys for usage stats logging in development
     "IO_CONFIG": {
         "app_id": "ee6eae44",

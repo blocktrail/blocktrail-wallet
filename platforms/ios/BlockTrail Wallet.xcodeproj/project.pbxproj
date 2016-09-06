@@ -105,6 +105,9 @@
 		B263EE20072B4DB0852D3BA0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4FDC661E7C4DFEBAC8D468 /* Security.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */; };
 		08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */; };
+		07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */; };
+		45B1492521844F81B1DCEB7B /* libGoogleConversionTracking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */; };
+		4D8B71B91A334B1BA5639CCA /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -307,6 +310,11 @@
 		A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.m"; path = "phonegap-facebook-plugin/FacebookConnectPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		2816EAEF88F346EE9033F3EF /* FacebookConnectPlugin.h */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.h"; path = "phonegap-facebook-plugin/FacebookConnectPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */ = {isa = PBXFileReference; name = "FacebookSDK.framework"; path = "BlockTrail Wallet/Plugins/phonegap-facebook-plugin/FacebookSDK.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */ = {isa = PBXFileReference; name = "GoogleAppTracking.m"; path = "cordova-plugin-google-app-conversion-tracker/GoogleAppTracking.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */ = {isa = PBXFileReference; name = "libGoogleConversionTracking.a"; path = "BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker/libGoogleConversionTracking.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		A77F326597174BA9A8011E5F /* ACTReporter.h */ = {isa = PBXFileReference; name = "ACTReporter.h"; path = "cordova-plugin-google-app-conversion-tracker/ACTReporter.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		9F923C5E7E584CAD9BBDECC9 /* GoogleAppTracking.h */ = {isa = PBXFileReference; name = "GoogleAppTracking.h"; path = "cordova-plugin-google-app-conversion-tracker/GoogleAppTracking.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */ = {isa = PBXFileReference; name = "AdSupport.framework"; path = "System/Library/Frameworks/AdSupport.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,6 +343,8 @@
 				40FA2736253B4D18B4B8DD8A /* Accounts.framework in Frameworks */,
 				B263EE20072B4DB0852D3BA0 /* Security.framework in Frameworks */,
 				08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */,
+				45B1492521844F81B1DCEB7B /* libGoogleConversionTracking.a in Frameworks */,
+				4D8B71B91A334B1BA5639CCA /* AdSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +448,8 @@
 				686D574B75164D5FA8098CB1 /* Accounts.framework */,
 				DF4FDC661E7C4DFEBAC8D468 /* Security.framework */,
 				DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */,
+				B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */,
+				7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -561,6 +573,9 @@
 				C8BF6E2CA19C4F05AA2AA293 /* CDVNotification.h */,
 				A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */,
 				2816EAEF88F346EE9033F3EF /* FacebookConnectPlugin.h */,
+				A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */,
+				A77F326597174BA9A8011E5F /* ACTReporter.h */,
+				9F923C5E7E584CAD9BBDECC9 /* GoogleAppTracking.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -799,6 +814,7 @@
 				1E3B53CCF5254D159742E253 /* zxing-all-in-one.cpp in Sources */,
 				5FDD693A71F84919AD8AA0EB /* CDVNotification.m in Sources */,
 				BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */,
+				07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -835,7 +851,10 @@
 				);
 				INFOPLIST_FILE = "BlockTrail Wallet/BlockTrail Wallet-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
+				);
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					CoreFoundation,
@@ -879,7 +898,10 @@
 				);
 				INFOPLIST_FILE = "BlockTrail Wallet/BlockTrail Wallet-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
+				);
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					CoreFoundation,

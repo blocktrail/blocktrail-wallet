@@ -69,6 +69,12 @@ angular.module('blocktrail.wallet').run(
 
         facebookConnectPlugin.activateApp();
 
+        if (CONFIG.GAPPTRACK_ID && CONFIG.GAPPTRACK_LABELS && CONFIG.GAPPTRACK_LABELS.length) {
+            CONFIG.GAPPTRACK_LABELS.forEach(function(label) {
+                GappTrack.track(CONFIG.GAPPTRACK_ID, label, "1.00", false);
+            });
+        }
+
         /*----iOS Keyboard fix---*/
         //fix for a quirk where the keyboard is triggered randomly without input focus (usually only happens on send screen)
         var keyboardShow = function(e) {

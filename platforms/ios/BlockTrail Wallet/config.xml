@@ -92,6 +92,9 @@
     <access origin="https://api.facebook.com" />
     <access origin="https://*.fbcdn.net" />
     <access origin="https://*.akamaihd.net" />
+    <feature name="GoogleAppTracking">
+        <param name="ios-package" value="GoogleAppTracking" />
+    </feature>
     <name>BlockTrail Wallet</name>
     <description>
         Your personal Bitcoin wallet, powered by BTC.com
@@ -99,7 +102,7 @@
     <author email="support@btc.com" href="https://www.btc.com/">
     BTC.com Team
     </author>
-    <content original-src="index.html" src="http://10.15.109.171:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />

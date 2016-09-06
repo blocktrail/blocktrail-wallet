@@ -83,6 +83,9 @@
     <feature name="FacebookConnectPlugin">
         <param name="android-package" value="org.apache.cordova.facebook.ConnectPlugin" />
     </feature>
+    <feature name="GoogleAppTracking">
+        <param name="android-package" value="com.myhealthteams.plugins.GoogleAppTracking" />
+    </feature>
     <access origin="https://m.facebook.com" />
     <access origin="https://graph.facebook.com" />
     <access origin="https://api.facebook.com" />

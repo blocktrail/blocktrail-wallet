@@ -147,6 +147,10 @@
                         {
                             "xml": "<access origin=\"https://*.akamaihd.net\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"GoogleAppTracking\"><param name=\"ios-package\" value=\"GoogleAppTracking\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -271,6 +275,9 @@
         "phonegap-facebook-plugin": {
             "APP_ID": "1072524012838770",
             "APP_NAME": "BTC.com",
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-google-app-conversion-tracker": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -704,6 +711,14 @@
             "clobbers": [
                 "facebookConnectPlugin"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-google-app-conversion-tracker/www/gapp_track.js",
+            "id": "cordova-plugin-google-app-conversion-tracker.GoogleAppTracking",
+            "pluginId": "cordova-plugin-google-app-conversion-tracker",
+            "clobbers": [
+                "GappTrack"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -734,6 +749,7 @@
         "cordova-plugin-vibration": "1.2.0",
         "phonegap-plugin-barcodescanner": "4.0.2",
         "cordova-plugin-dialogs": "1.1.2-dev",
-        "phonegap-facebook-plugin": "0.12.0"
+        "phonegap-facebook-plugin": "0.12.0",
+        "cordova-plugin-google-app-conversion-tracker": "0.0.2"
     }
 }

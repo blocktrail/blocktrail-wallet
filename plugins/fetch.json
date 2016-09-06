@@ -256,5 +256,14 @@
             "APP_ID": "1072524012838770",
             "APP_NAME": "BTC.com"
         }
+    },
+    "cordova-plugin-google-app-conversion-tracker": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/MyHealthTeams/google-app-conversion-tracker.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

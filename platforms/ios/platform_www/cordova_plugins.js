@@ -428,6 +428,14 @@ module.exports = [
         "clobbers": [
             "facebookConnectPlugin"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-google-app-conversion-tracker/www/gapp_track.js",
+        "id": "cordova-plugin-google-app-conversion-tracker.GoogleAppTracking",
+        "pluginId": "cordova-plugin-google-app-conversion-tracker",
+        "clobbers": [
+            "GappTrack"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -460,7 +468,8 @@ module.exports.metadata =
     "cordova-plugin-vibration": "1.2.0",
     "phonegap-plugin-barcodescanner": "4.0.2",
     "cordova-plugin-dialogs": "1.1.2-dev",
-    "phonegap-facebook-plugin": "0.12.0"
+    "phonegap-facebook-plugin": "0.12.0",
+    "cordova-plugin-google-app-conversion-tracker": "0.0.2"
 }
 // BOTTOM OF METADATA
 });
