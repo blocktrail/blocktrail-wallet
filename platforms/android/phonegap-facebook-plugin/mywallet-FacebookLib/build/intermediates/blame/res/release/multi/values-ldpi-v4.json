@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/work/blocktrail-wallet/platforms/android/phonegap-facebook-plugin/mywallet-FacebookLib/build/intermediates/res/merged/release/values-ldpi-v4/values-ldpi-v4.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 63,
+                    "endOffset": 114
+                },
+                "from": {
+                    "file": "/work/blocktrail-wallet/platforms/android/phonegap-facebook-plugin/mywallet-FacebookLib/res/values-ldpi/dimens.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 63,
+                        "endOffset": 114
+                    }
+                }
+            }
+        ]
+    }
+]

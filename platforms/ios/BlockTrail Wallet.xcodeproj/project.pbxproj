@@ -108,6 +108,11 @@
 		07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */; };
 		45B1492521844F81B1DCEB7B /* libGoogleConversionTracking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */; };
 		4D8B71B91A334B1BA5639CCA /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */; };
+		176AF960E58E41E494F86FFD /* FabricPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4D927F1F0345DCB6D77E52 /* FabricPlugin.m */; };
+		5B8984565C89489682DD8B29 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 85F78675D26D430C876659EF /* libz.dylib */; };
+		441ECBCBD5354213837273BA /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FAB7EFBEB8B747B5A3B5F22B /* libc++.dylib */; };
+		B60F1D9D22EE4E08B5EA8102 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C8942023604034BA2EA4AC /* Fabric.framework */; };
+		19F26ED04BDB4FAAB3676729 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42E677D6D5254687AFCC2969 /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,6 +320,11 @@
 		A77F326597174BA9A8011E5F /* ACTReporter.h */ = {isa = PBXFileReference; name = "ACTReporter.h"; path = "cordova-plugin-google-app-conversion-tracker/ACTReporter.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		9F923C5E7E584CAD9BBDECC9 /* GoogleAppTracking.h */ = {isa = PBXFileReference; name = "GoogleAppTracking.h"; path = "cordova-plugin-google-app-conversion-tracker/GoogleAppTracking.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */ = {isa = PBXFileReference; name = "AdSupport.framework"; path = "System/Library/Frameworks/AdSupport.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		2B4D927F1F0345DCB6D77E52 /* FabricPlugin.m */ = {isa = PBXFileReference; name = "FabricPlugin.m"; path = "cordova-fabric-plugin/FabricPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		85F78675D26D430C876659EF /* libz.dylib */ = {isa = PBXFileReference; name = "libz.dylib"; path = "usr/lib/libz.dylib"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = compiled.mach-o.dylib; explicitFileType = undefined; includeInIndex = 0; };
+		FAB7EFBEB8B747B5A3B5F22B /* libc++.dylib */ = {isa = PBXFileReference; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = compiled.mach-o.dylib; explicitFileType = undefined; includeInIndex = 0; };
+		18C8942023604034BA2EA4AC /* Fabric.framework */ = {isa = PBXFileReference; name = "Fabric.framework"; path = "BlockTrail Wallet/Plugins/cordova-fabric-plugin/Fabric.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		42E677D6D5254687AFCC2969 /* Crashlytics.framework */ = {isa = PBXFileReference; name = "Crashlytics.framework"; path = "BlockTrail Wallet/Plugins/cordova-fabric-plugin/Crashlytics.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -345,6 +355,10 @@
 				08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */,
 				45B1492521844F81B1DCEB7B /* libGoogleConversionTracking.a in Frameworks */,
 				4D8B71B91A334B1BA5639CCA /* AdSupport.framework in Frameworks */,
+				5B8984565C89489682DD8B29 /* libz.dylib in Frameworks */,
+				441ECBCBD5354213837273BA /* libc++.dylib in Frameworks */,
+				B60F1D9D22EE4E08B5EA8102 /* Fabric.framework in Frameworks */,
+				19F26ED04BDB4FAAB3676729 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +464,10 @@
 				DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */,
 				B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */,
 				7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */,
+				85F78675D26D430C876659EF /* libz.dylib */,
+				FAB7EFBEB8B747B5A3B5F22B /* libc++.dylib */,
+				18C8942023604034BA2EA4AC /* Fabric.framework */,
+				42E677D6D5254687AFCC2969 /* Crashlytics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -576,6 +594,7 @@
 				A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */,
 				A77F326597174BA9A8011E5F /* ACTReporter.h */,
 				9F923C5E7E584CAD9BBDECC9 /* GoogleAppTracking.h */,
+				2B4D927F1F0345DCB6D77E52 /* FabricPlugin.m */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -640,6 +659,7 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				D2C9B18B96E3485792146926 /* "Fabric.io: Crashlytics" */,
 			);
 			buildRules = (
 			);
@@ -763,6 +783,21 @@
 			shellScript = "cordova/lib/copy-www-build-step.sh";
 			showEnvVarsInLog = 0;
 		};
+		D2C9B18B96E3485792146926 /* "Fabric.io: Crashlytics" */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Fabric.io: Crashlytics";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../../plugins/cordova-fabric-plugin/lib/ios/Crashlytics.framework/run 059fcf328d73ce164c3ab1c4436293db0d6718ca 2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -815,6 +850,7 @@
 				5FDD693A71F84919AD8AA0EB /* CDVNotification.m in Sources */,
 				BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */,
 				07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */,
+				176AF960E58E41E494F86FFD /* FabricPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -874,6 +910,8 @@
 					"$(inherited)",
 					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
 					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
+					"\"BlockTrail Wallet/Plugins/cordova-fabric-plugin\"",
+					"\"BlockTrail Wallet/Plugins/cordova-fabric-plugin\"",
 				);
 			};
 			name = Debug;
@@ -921,6 +959,8 @@
 					"$(inherited)",
 					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
 					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
+					"\"BlockTrail Wallet/Plugins/cordova-fabric-plugin\"",
+					"\"BlockTrail Wallet/Plugins/cordova-fabric-plugin\"",
 				);
 			};
 			name = Release;

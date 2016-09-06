@@ -434,6 +434,27 @@ module.exports = [
         "clobbers": [
             "GappTrack"
         ]
+    },
+    {
+        "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.js",
+        "id": "cordova-fabric-plugin.FabricPlugin",
+        "clobbers": [
+            "window.fabric.core"
+        ]
+    },
+    {
+        "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.Answers.js",
+        "id": "cordova-fabric-plugin.FabricAnswersPlugin",
+        "clobbers": [
+            "window.fabric.Answers"
+        ]
+    },
+    {
+        "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.Crashlytics.js",
+        "id": "cordova-fabric-plugin.FabricCrashlyticsPlugin",
+        "clobbers": [
+            "window.fabric.Crashlytics"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -467,7 +488,8 @@ module.exports.metadata =
     "cordova-plugin-dialogs": "1.1.2-dev",
     "org.apache.cordova.inappbrowser": "0.6.0",
     "phonegap-facebook-plugin": "0.12.0",
-    "cordova-plugin-google-app-conversion-tracker": "0.0.2"
-}
+    "cordova-plugin-google-app-conversion-tracker": "0.0.2",
+    "cordova-fabric-plugin": "1.0.8"
+};
 // BOTTOM OF METADATA
 });

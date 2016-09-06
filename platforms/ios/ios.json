@@ -151,6 +151,10 @@
                         {
                             "xml": "<feature name=\"GoogleAppTracking\"><param name=\"ios-package\" value=\"GoogleAppTracking\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FabricPlugin\"><param name=\"ios-package\" value=\"FabricPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -182,6 +186,12 @@
                     "FacebookDisplayName": [
                         {
                             "xml": "<string>BTC.com</string>",
+                            "count": 1
+                        }
+                    ],
+                    "Fabric": [
+                        {
+                            "xml": "<dict><key>APIKey</key><string>059fcf328d73ce164c3ab1c4436293db0d6718ca</string></dict>",
                             "count": 1
                         }
                     ]
@@ -278,6 +288,11 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-google-app-conversion-tracker": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-fabric-plugin": {
+            "FABRIC_API_KEY": "059fcf328d73ce164c3ab1c4436293db0d6718ca",
+            "FABRIC_API_SECRET": "2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -719,6 +734,30 @@
             "clobbers": [
                 "GappTrack"
             ]
+        },
+        {
+            "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.js",
+            "id": "cordova-fabric-plugin.FabricPlugin",
+            "pluginId": "cordova-fabric-plugin",
+            "clobbers": [
+                "window.fabric.core"
+            ]
+        },
+        {
+            "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.Answers.js",
+            "id": "cordova-fabric-plugin.FabricAnswersPlugin",
+            "pluginId": "cordova-fabric-plugin",
+            "clobbers": [
+                "window.fabric.Answers"
+            ]
+        },
+        {
+            "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.Crashlytics.js",
+            "id": "cordova-fabric-plugin.FabricCrashlyticsPlugin",
+            "pluginId": "cordova-fabric-plugin",
+            "clobbers": [
+                "window.fabric.Crashlytics"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -750,6 +789,7 @@
         "phonegap-plugin-barcodescanner": "4.0.2",
         "cordova-plugin-dialogs": "1.1.2-dev",
         "phonegap-facebook-plugin": "0.12.0",
-        "cordova-plugin-google-app-conversion-tracker": "0.0.2"
+        "cordova-plugin-google-app-conversion-tracker": "0.0.2",
+        "cordova-fabric-plugin": "1.0.8"
     }
 }

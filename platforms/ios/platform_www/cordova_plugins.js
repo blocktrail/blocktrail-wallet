@@ -436,6 +436,30 @@ module.exports = [
         "clobbers": [
             "GappTrack"
         ]
+    },
+    {
+        "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.js",
+        "id": "cordova-fabric-plugin.FabricPlugin",
+        "pluginId": "cordova-fabric-plugin",
+        "clobbers": [
+            "window.fabric.core"
+        ]
+    },
+    {
+        "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.Answers.js",
+        "id": "cordova-fabric-plugin.FabricAnswersPlugin",
+        "pluginId": "cordova-fabric-plugin",
+        "clobbers": [
+            "window.fabric.Answers"
+        ]
+    },
+    {
+        "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.Crashlytics.js",
+        "id": "cordova-fabric-plugin.FabricCrashlyticsPlugin",
+        "pluginId": "cordova-fabric-plugin",
+        "clobbers": [
+            "window.fabric.Crashlytics"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -469,7 +493,8 @@ module.exports.metadata =
     "phonegap-plugin-barcodescanner": "4.0.2",
     "cordova-plugin-dialogs": "1.1.2-dev",
     "phonegap-facebook-plugin": "0.12.0",
-    "cordova-plugin-google-app-conversion-tracker": "0.0.2"
+    "cordova-plugin-google-app-conversion-tracker": "0.0.2",
+    "cordova-fabric-plugin": "1.0.8"
 }
 // BOTTOM OF METADATA
 });

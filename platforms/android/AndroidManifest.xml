@@ -35,6 +35,7 @@
         </activity>
         <activity android:label="@string/fb_app_name" android:name="com.facebook.LoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/fb_app_id" />
+        <meta-data android:name="io.fabric.ApiKey" android:value="059fcf328d73ce164c3ab1c4436293db0d6718ca" />
         <receiver android:exported="true" android:name="com.google.ads.conversiontracking.InstallReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />

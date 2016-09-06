@@ -265,5 +265,16 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-fabric-plugin": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-fabric-plugin"
+        },
+        "is_top_level": true,
+        "variables": {
+            "FABRIC_API_KEY": "059fcf328d73ce164c3ab1c4436293db0d6718ca",
+            "FABRIC_API_SECRET": "2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741"
+        }
     }
 }
