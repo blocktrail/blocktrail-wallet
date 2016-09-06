@@ -7,14 +7,15 @@ window._ = blocktrailSDK.lodash;
 
 var blocktrail = angular.module('blocktrail.wallet', [
     'ionic',
-    'ionic.service.core',
-    'ionic.service.analytics',
     'ngCordova',
     NG_CORDOVA_MOCKS ? 'ngCordovaMocks' : null,
     'angularMoment',
     'ja.qr',
     'ngImgCrop',
     'blocktrail.localisation',
+
+    'angulartics',
+    'angulartics.google.analytics.cordova',
 
     'blocktrail.config',
 
@@ -54,7 +55,7 @@ angular.module('blocktrail.wallet').config(function() {
 
 angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
-             $ionicUser, $ionicAnalytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
+             $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
              amMoment) {
         $rootScope.CONFIG = CONFIG || {};
@@ -117,22 +118,12 @@ angular.module('blocktrail.wallet').run(
             $translate.use(settingsService.language);
         };
 
-        // 'identify' user, by device.uuid
-        //  won't have any effect unless $ionicAnalytics.register is called
-        $ionicUser.identify({
-            user_id: window.device ? device.uuid : $ionicUser.generateGUID()
-        });
-
         // trigger loading of settings
         settingsService.$isLoaded().then(function() {
             if (settingsService.permissionUsageData) {
-                $ionicAnalytics.register({
-                    silent: !CONFIG.DEBUG
-                });
-
                 if (!settingsService.installTracked) {
-                    $ionicAnalytics.track('Install', {});
-                    
+                    $analytics.eventTrack('install', {category: 'Events'});
+
                     settingsService.installTracked = true;
                     settingsService.$store();
                 }
@@ -166,6 +157,7 @@ angular.module('blocktrail.wallet').run(
             $rootScope.STATE.ACTIVE = true;
             $rootScope.$broadcast('appResume');
             facebookConnectPlugin.activateApp();
+
         });
 
         //indicate when keyboard is displayed
@@ -326,9 +318,10 @@ angular.module('blocktrail.wallet')
         });
     });
 angular.module('blocktrail.wallet').config(
-    function($stateProvider, $urlRouterProvider, $ionicAutoTrackProvider, $logProvider, $provide, CONFIG,
-             $ionicConfigProvider, $cordovaAppRateProvider) {
-        $ionicAutoTrackProvider.disableTracking('Tap');
+    function($stateProvider, $urlRouterProvider, $logProvider, $provide, CONFIG,
+             $ionicConfigProvider, $analyticsProvider, $cordovaAppRateProvider, googleAnalyticsCordovaProvider) {
+
+        googleAnalyticsCordovaProvider.trackingId = CONFIG.GA_TRACKING_ID;
 
         //disable default iOS behaviour to navigate back in history via swipe (ionic history results in a lot of problems)
         $ionicConfigProvider.views.swipeBackEnabled(false);

@@ -455,6 +455,14 @@ module.exports = [
         "clobbers": [
             "window.fabric.Crashlytics"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-google-analytics/www/analytics.js",
+        "id": "cordova-plugin-google-analytics.UniversalAnalytics",
+        "clobbers": [
+            "analytics",
+            "ga"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -489,7 +497,8 @@ module.exports.metadata =
     "org.apache.cordova.inappbrowser": "0.6.0",
     "phonegap-facebook-plugin": "0.12.0",
     "cordova-plugin-google-app-conversion-tracker": "0.0.2",
-    "cordova-fabric-plugin": "1.0.8"
+    "cordova-fabric-plugin": "1.0.8",
+    "cordova-plugin-google-analytics": "1.5.6"
 };
 // BOTTOM OF METADATA
 });

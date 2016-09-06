@@ -8,7 +8,12 @@ var rootdir = process.argv[2];
 
 if (rootdir) {
     exec("gulp", function puts(error, stdout, stderr) {
+        sys.puts(error);
         sys.puts(stderr);
         sys.puts(stdout);
+
+        if (error) {
+            process.exit(1);
+        }
     });
 }

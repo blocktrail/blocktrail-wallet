@@ -445,7 +445,7 @@ angular.module('blocktrail.wallet')
                 });
         };
     })
-    .controller('SetupWalletPinCtrl', function($q, $scope, $state, $cordovaNetwork, $ionicAnalytics, launchService, $btBackButtonDelegate,
+    .controller('SetupWalletPinCtrl', function($q, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
                                                sdkService, $cordovaDialogs, $ionicLoading, $log, $translate, $timeout, settingsService) {
         $scope.transactions = null;
         $scope.retry = 0;
@@ -557,7 +557,7 @@ angular.module('blocktrail.wallet')
                 })
                 .then(
                     function(wallet) {
-                        $ionicAnalytics.track('initWallet', {});
+                        $analytics.eventTrack('initWallet', {category: 'Events'});
                         $log.debug('wallet initialised', wallet);
                         //wallet already exists with these detail
                         return $q.when(wallet);
@@ -568,7 +568,7 @@ angular.module('blocktrail.wallet')
                             $log.debug('creating new wallet');
                             $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'PLEASE_WAIT'};
                             var t = (new Date).getTime();
-                            $ionicAnalytics.track('createNewWallet', {});
+                            $analytics.eventTrack('createNewWallet', {category: 'Events'});
                             return $scope.sdk.createNewWallet({identifier: $scope.setupInfo.identifier, password: $scope.setupInfo.password})
                                 .progress(function(progress) {
                                     switch (progress) {

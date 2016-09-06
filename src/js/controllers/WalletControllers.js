@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
-    .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, $ionicUser, sdkService, $translate,
-                                       Wallet, Contacts, CONFIG, settingsService, $timeout, $ionicAnalytics, $cordovaVibration, $cordovaToast) {
+    .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
+                                       Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration, $cordovaToast) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -35,11 +35,6 @@ angular.module('blocktrail.wallet')
         $rootScope.getBalance = function() {
             //get a live balance update
             return $q.when(Wallet.balance(false).then(function(balanceData) {
-                if ((balanceData.balance > 0 || balanceData.uncBalance > 0) && !$ionicUser.get().isActive) {
-                    $ionicUser.identify({user_id: $ionicUser.get().user_id, isActive: 1});
-                    $ionicAnalytics.track('Actived', {});
-                }
-
                 $rootScope.balance = balanceData.balance;
                 $rootScope.uncBalance = balanceData.uncBalance;
                 return {balance: balanceData.balance, uncBalance: balanceData.uncBalance};

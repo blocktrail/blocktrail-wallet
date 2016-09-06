@@ -3,6 +3,12 @@
     "MINIFY": true,
     "TESTNET": false,
 
+    "GAPPTRACK_ID": "875536627",
+    "GAPPTRACK_LABELS": [
+        "jQXVCOiC6mkQ88G-oQM"
+    ],
+    "GA_TRACKING_ID": "UA-66176065-21",
+
     "IO_CONFIG": {
         "app_id": "3dadf3bf",
         "api_key": "3b518a9f046fb61498ed39695700a1a2c6052260a729a376"

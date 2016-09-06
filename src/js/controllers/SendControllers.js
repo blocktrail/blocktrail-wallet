@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('SendCtrl', function($scope, $ionicAnalytics, $log, CurrencyConverter, Contacts, Wallet,
+    .controller('SendCtrl', function($scope, $analytics, $log, CurrencyConverter, Contacts, Wallet,
                                      $timeout, $ionicHistory, QR, $q, $btBackButtonDelegate, $state, settingsService,
                                      $cordovaClipboard, $rootScope, $translate, $cordovaDialogs, $cordovaToast) {
         $scope.fiatFirst = false;
@@ -254,9 +254,9 @@ angular.module('blocktrail.wallet')
                     $scope.appControl.isSending = true;
                     $scope.appControl.result = {message: 'MSG_SENDING'};
 
-                    $ionicAnalytics.track('Pre-Pay', {
-                        amount: $scope.sendInput.btcValue,
-                        source: $scope.sendInput.recipientSource || 'NaN'
+                    $analytics.eventTrack('pre-pay', {
+                        category: 'Events',
+                        label: $scope.sendInput.btcValue + " " + ($scope.sendInput.recipientSource || 'NaN')
                     });
 
                     //attempt to make the payment
@@ -270,9 +270,9 @@ angular.module('blocktrail.wallet')
                     });
                 })
             .then(function(txHash) {
-                    $ionicAnalytics.track('Pay', {
-                        amount: $scope.sendInput.btcValue,
-                        source: $scope.sendInput.recipientSource || 'NaN'
+                    $analytics.eventTrack('pay', {
+                        category: 'Events',
+                        label: $scope.sendInput.btcValue + " " + ($scope.sendInput.recipientSource || 'NaN')
                     });
 
                     $log.info("wallet: paid", txHash);

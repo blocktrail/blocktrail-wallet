@@ -139,6 +139,10 @@
                         {
                             "xml": "<feature name=\"FabricPlugin\"><param name=\"android-package\" value=\"com.sarriaroman.fabric.FabricPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"UniversalAnalytics\"><param name=\"android-package\" value=\"com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -152,7 +156,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
@@ -164,7 +168,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-                            "count": 2
+                            "count": 3
                         }
                     ],
                     "/manifest/application": [
@@ -186,6 +190,22 @@
                         },
                         {
                             "xml": "<receiver android:exported=\"true\" android:name=\"com.google.ads.conversiontracking.InstallReceiver\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:enabled=\"true\" android:name=\"com.google.android.gms.analytics.AnalyticsReceiver\"><intent-filter><action android:name=\"com.google.android.gms.analytics.ANALYTICS_DISPATCH\" /></intent-filter></receiver>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:enabled=\"true\" android:exported=\"false\" android:name=\"com.google.android.gms.analytics.AnalyticsService\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:enabled=\"true\" android:exported=\"true\" android:name=\"com.google.android.gms.analytics.CampaignTrackingReceiver\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:enabled=\"true\" android:exported=\"false\" android:name=\"com.google.android.gms.analytics.CampaignTrackingService\" />",
                             "count": 1
                         }
                     ],
@@ -830,6 +850,9 @@
             "FABRIC_API_KEY": "059fcf328d73ce164c3ab1c4436293db0d6718ca",
             "FABRIC_API_SECRET": "2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {},
@@ -1289,6 +1312,14 @@
             "clobbers": [
                 "window.fabric.Crashlytics"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-google-analytics/www/analytics.js",
+            "id": "cordova-plugin-google-analytics.UniversalAnalytics",
+            "clobbers": [
+                "analytics",
+                "ga"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -1321,6 +1352,7 @@
         "org.apache.cordova.inappbrowser": "0.6.0",
         "phonegap-facebook-plugin": "0.12.0",
         "cordova-plugin-google-app-conversion-tracker": "0.0.2",
-        "cordova-fabric-plugin": "1.0.8"
+        "cordova-fabric-plugin": "1.0.8",
+        "cordova-plugin-google-analytics": "1.5.6"
     }
 }

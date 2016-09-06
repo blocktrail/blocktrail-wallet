@@ -155,6 +155,10 @@
                         {
                             "xml": "<feature name=\"FabricPlugin\"><param name=\"ios-package\" value=\"FabricPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"UniversalAnalytics\"><param name=\"ios-package\" value=\"UniversalAnalyticsPlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -293,6 +297,9 @@
         "cordova-fabric-plugin": {
             "FABRIC_API_KEY": "059fcf328d73ce164c3ab1c4436293db0d6718ca",
             "FABRIC_API_SECRET": "2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741",
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-google-analytics": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -758,6 +765,15 @@
             "clobbers": [
                 "window.fabric.Crashlytics"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-google-analytics/www/analytics.js",
+            "id": "cordova-plugin-google-analytics.UniversalAnalytics",
+            "pluginId": "cordova-plugin-google-analytics",
+            "clobbers": [
+                "analytics",
+                "ga"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -790,6 +806,7 @@
         "cordova-plugin-dialogs": "1.1.2-dev",
         "phonegap-facebook-plugin": "0.12.0",
         "cordova-plugin-google-app-conversion-tracker": "0.0.2",
-        "cordova-fabric-plugin": "1.0.8"
+        "cordova-fabric-plugin": "1.0.8",
+        "cordova-plugin-google-analytics": "1.5.6"
     }
 }

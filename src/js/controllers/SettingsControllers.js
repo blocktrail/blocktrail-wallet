@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('SettingsCtrl', function($scope, $rootScope, $q, sdkService, launchService, settingsService,
                                          Wallet, Contacts, storageService, $cordovaDialogs, $ionicLoading,
-                                         $translate, $timeout, $state, $log, $ionicAnalytics, CONFIG) {
+                                         $translate, $timeout, $state, $log, $analytics, CONFIG) {
         $scope.appControl = {
             syncing: false,
             syncingAll: false,
@@ -448,15 +448,8 @@ angular.module('blocktrail.wallet')
             $scope.updateSettings();
 
             if (!settingsService.permissionUsageData) {
-                $ionicAnalytics.track('DisableUsageData', {});
+                $analytics.eventTrack('DisableUsageData', {category: 'Events'});
             }
-
-            // can't completely unregister anymore, dryRun=true will suffice to prevent any futher tracking
-            //  and on app restart it won't register anymore
-            $ionicAnalytics.register({
-                silent: !CONFIG.DEBUG,
-                dryRun: !settingsService.permissionUsageData
-            });
         };
 
         $scope.enableDev = function() {

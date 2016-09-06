@@ -138,6 +138,7 @@ gulp.task('templates:index', ['appconfig'], function() {
             return streamAsPromise(gulp.src("./src/index.html")
                 .pipe(template({
                     VERSION: APPCONFIG.VERSION,
+                    APPCONFIG: APPCONFIG,
                     APPCONFIG_JSON: JSON.stringify(APPCONFIG),
                     NG_CORDOVA_MOCKS: APPCONFIG.NG_CORDOVA_MOCKS,
                     TRANSLATIONS: JSON.stringify(translations)
@@ -180,9 +181,10 @@ gulp.task('js:libs', ['appconfig'], function() {
         return streamAsPromise(gulp.src([
             "./src/lib/q/q.js",
             "./src/lib/ionic/release/js/ionic.bundle.js",
-            "./src/lib/ionic-service-core/ionic-core.js",
-            "./src/lib/ionic-service-analytics/ionic-analytics.js",
             "./src/lib/pouchdb/dist/pouchdb.js",
+
+            "./src/lib/angulartics/src/angulartics.js",
+            "./src/lib/angulartics/src/angulartics-ga-cordova-google-analytics-plugin.js",
 
             "./src/lib/browserify-cryptojs/components/core.js",
             "./src/lib/browserify-cryptojs/components/x64-core.js",

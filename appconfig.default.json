@@ -9,6 +9,7 @@
 
     "GAPPTRACK_ID": null,
     "GAPPTRACK_LABELS": [],
+    "GA_TRACKING_ID": null,
 
     // default ionic apps keys for usage stats logging in development
     "IO_CONFIG": {

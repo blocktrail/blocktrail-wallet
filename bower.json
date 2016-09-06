@@ -13,7 +13,8 @@
     "angular-translate": "~2.7.0",
     "libphonenumber": "~0.9.0",
     "ngImgCrop": "~0.3.2",
-    "intl-tel-input": "~6.0.0"
+    "intl-tel-input": "~6.0.0",
+    "angulartics": "^1.1.3"
   },
   "resolutions": {
     "angular": ">= 1.2.23"

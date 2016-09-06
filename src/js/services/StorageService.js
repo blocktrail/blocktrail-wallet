@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'storageService',
-    function(CONFIG, $log, $window, $ionicApp, $q) {
+    function(CONFIG, $log, $window, $q) {
         var dbs = {};
 
         var db = function(name) {
@@ -23,9 +23,6 @@ angular.module('blocktrail.wallet').factory(
                     return db(name);
                 });
             }))
-                .then(function(dbs) {
-                    $window.localStorage.removeItem('ionic_analytics_user_' + $ionicApp.getApp().app_id);
-                })
                 .catch(function(e) { $log.error(e); })
             ;
         };
