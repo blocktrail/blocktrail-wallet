@@ -61,7 +61,7 @@ cp appconfig.prod.json appconfig.json
 
 rm -rf platforms/android/build/outputs/apk/* # clean up old builds
 
-ionic build --release android
+ionic build android --release 
 
 # you should commit and tag here...
 # git commit -am "v1.0.x"; git tag v1.0.x
