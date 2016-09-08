@@ -640,6 +640,8 @@ angular.module('blocktrail.wallet')
                 })
                 .then(function(wallet) {
                     if ($scope.setupInfo.backupInfo) {
+                        window.fabric.Answers.sendSignUp("App", true);
+
                         //store the backup info temporarily
                         $log.debug('saving backup info');
                         var pubKeys = [];
