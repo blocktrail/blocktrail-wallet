@@ -29,7 +29,7 @@
 
                 <a class="item-content" ng-if="transaction.hash" ng-click="showTransaction(transaction)">
                     <div class="row row-no-padding">
-                        <div class="transaction-info col">
+                        <div class="transaction-info col col-50">
                             <div ng-if="transaction.contact" class="display-token contact-token">
                                 <div class="initials">{{ transaction.contactInitials }}</div>
                                 <span class="avatar" style="background-image: url('data:image/jpeg;base64, {{ transaction.contact.avatarUrl }}');"></span>
