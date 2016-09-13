@@ -103,17 +103,23 @@ angular.module('blocktrail.wallet').factory(
             return self.client.post("/mywallet/main", null, {identifier: identifier}, cb);
         };
 
-        /**
-         * redeem promotional codes into a specified address
-         * @param identifier
-         * @param cb
-         */
         blocktrailSDK.prototype.redeemPromoCode = function (data, cb) {
             var self = this;
 
             return self.client.post("/promo/redeem", null, data, cb);
         };
 
+        blocktrailSDK.prototype.syncSettings = function (data) {
+            var self = this;
+
+            return self.client.post("/mywallet/settings", null, data);
+        };
+
+        blocktrailSDK.prototype.getSettings = function (data) {
+            var self = this;
+
+            return self.client.get("/mywallet/settings");
+        };
 
         /**
          * send feedback

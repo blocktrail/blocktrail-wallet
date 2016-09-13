@@ -1,0 +1,86 @@
+<ion-view class="state-buybtc">
+    <ion-nav-title class="capitalise">{{ 'BUYBTC_NAVTITLE' | translate }}</ion-nav-title>
+
+    <form name="buyInputForm" novalidate>
+        <ion-content has-bouncing="false">
+            <section class="buybtc-currentprice">
+                <div class="fetchingprice" ng-if="fetchingPrice">
+                    <div class="fetchingprice-label capitalise">
+                        {{ 'FETCHING_CURRENT_PRICE' | translate }}
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="currentprice-label capitalise">
+                            {{ 'CURRENT_PRICE' | translate }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="currentprice-value">
+                            {{ priceBTCCurrency | toCurrencySymbol }}{{ priceBTC | number:2 }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="list">
+                        <div class="item item-text-wrap">
+                            <h2 class="text-neutral capitalise">{{ broker }}</h2>
+                            <p class="padding-t">{{ 'BUYBTC_BUY_SUBTITLE' | translate }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="card">
+                <div class="amount-input-section" ng-class="{'with-footer': sendInput.btcValue || sendInput.fiatValue, 'btc-first': !fiatFirst, 'fiat-first': fiatFirst}">
+                    <div class="input-group btc-input" ng-class="{'position-first': !fiatFirst, 'position-last': fiatFirst}">
+                        <input type="{{ isSamsung && 'text' || 'number' }}" step="0.0001" name="btcValue" select-on-focus
+                               ng-model="sendInput.btcValue"
+                               raw-model="btcValueRaw"
+                               ng-change="setFiat(); sendInputForm.fiatValue.$setDirty()"
+                               ng-enter="blurInput($event)"
+                               tabindex="{{ !fiatFirst && 1 || -1 }}"/>
+                        <div class="label-group">
+                            <span class="placeholder-label capitalise">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
+                            <span class="spacer">{{ btcValueRaw }}</span>
+                            <span class="label" ng-class="{'opacity-30': sendInputForm.btcValue.$invalid}">BTC</span>
+                        </div>
+                    </div>
+                    <div class="input-group fiat-input" ng-class="{'position-first': fiatFirst, 'position-last': !fiatFirst}">
+                        <input type="{{ isSamsung && 'text' || 'number' }}" step="0.01" name="fiatValue"
+                               ng-model="sendInput.fiatValue"
+                               raw-model="fiatValueRaw"
+                               ng-change="setBTC(); sendInputForm.btcValue.$setDirty()"
+                               ng-enter="blurInput($event)"
+                               tabindex="{{ fiatFirst && 1 || -1 }}"/>
+                        <div class="label-group">
+                            <span class="placeholder-label capitalise">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
+                            <span class="label">{{ priceBTCCurrency | toCurrencySymbol }}</span>
+                            <span class="spacer">{{ fiatValueRaw }}</span>
+                        </div>
+                    </div>
+                    <div class="input-swapping-overlay" ng-click="swapInputs()">
+                        <i class="swap-icon ion-arrow-swap"></i>
+                    </div>
+
+                    <div class="amount-footer amount-feefooter" ng-if="sendInput.btcValue || sendInput.fiatValue">
+                        <div class="feefooter-left sentence-case">{{ 'BUYBTC_INCL_FEE' | translate }} ({{ sendInput.feePercentage | number:1 }}%):</div>
+                        <div class="feefooter-right">
+                            {{ priceBTCCurrency | toCurrencySymbol }}{{ sendInput.feeValue | number:2 }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipient-input-section padding-t card">
+                <div class="list">
+                    <div class="item">
+                        <button class="button send-button button-block button-energized capitalise" ng-click="buyBTC()">{{ 'BUYBTC_BUY' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </form>
+</ion-view>

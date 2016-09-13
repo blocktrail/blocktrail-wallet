@@ -1,0 +1,22 @@
+.user-balance-display {
+    .balance-label {
+        opacity: 1;
+    }
+    .btc-display .canvas-display {
+        //width: 100% !important;
+        float: right;
+    }
+    .fiat-display .canvas-display {
+        position: relative;
+        //left: 5px;
+        float: right;
+        //max-width: 100% !important;
+    }
+
+    /*---transitions---*/
+    &.minimise {
+        height: 21vw;
+        padding: $bar-padding-portrait/2 $bar-padding-portrait;
+        //@include transition(all 0.5s ease-in-out);
+    }
+}

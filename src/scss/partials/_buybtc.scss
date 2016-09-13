@@ -1,0 +1,64 @@
+
+.state-buybtc {
+    background: $lightgray-dark;
+
+    .scroll-content {
+        z-index: 50;
+
+        .group-title {
+            margin: 20px 10px 10px 14px;
+            padding: 0;
+            font-size: 1.2rem;
+            font-weight: lighter;
+            color: $darkgray-light;
+        }
+        .list-inset {
+            margin: 0 10px 35px 10px;
+            box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .placeholder-label {
+            font-size: 18px;
+            color: #ABAEB2;
+        }
+
+        @import "_amount-input";
+    }
+
+    .buybtc-currentprice {
+        background: $app-default-color;
+        padding: $bar-padding-portrait / 2;
+        box-shadow: $app-default-shadow;
+        color: #fff;
+        overflow: hidden;
+        position: relative;
+
+        .fetchingprice {
+            background: $app-default-color;
+            padding: $bar-padding-portrait / 2;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            bottom: 0px;
+            right: 0px;
+            z-index: 10;
+            text-align: center;
+
+            padding-top: 20%;
+
+            .fetchinglabel-label {
+                font-size: $font-size-xlarge;
+
+            }
+        }
+
+        .currentprice-label {
+            font-size: $font-size-large;
+        }
+
+        .currentprice-value {
+            float: right;
+            font-size: $font-size-xlarge;
+        }
+    }
+}

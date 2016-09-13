@@ -1,0 +1,165 @@
+.amount-input-section {
+    $input-height: 35px;
+    $input-padding: 10px;
+    $input-padding-2: 2px;
+    $footer-height: 20px;
+
+    position: relative;
+    color: #666;
+    width: 100%;
+    height: $input-height*2 + $input-padding*2 + $input-padding-2*2;
+    background: #fff;
+    transition: background-color 0.5s ease-in-out;
+    -webkit-transition: background-color 0.5s ease-in-out;
+
+    &.with-footer {
+        height: $input-height*2 + $input-padding*2 + $input-padding-2*2 + $footer-height + $input-padding*2;
+    }
+
+    .input-group {
+        position: absolute;
+        padding: $input-padding $bar-padding-portrait;
+        width: 100%;
+
+        input {
+            position: relative;
+            width: 100%;
+            height: $input-height;
+            line-height: $input-height;
+            padding: 0;
+            margin: 0;
+            outline: 0;
+            color: #666;
+            background: transparent;
+            z-index: 10;
+
+            //provides the offset for the currency label
+            &[name='btcValue'] {
+                padding: 0 2.25em 0 0;
+            }
+            &[name='fiatValue'] {
+                padding: 0 0 0 0.775em;
+            }
+        }
+
+        &.position-first {
+            top: 0;
+            height: 65px;
+
+            &,
+            input{
+                text-align: right;
+                font-size: 22px;
+                font-weight: 200;
+            }
+        }
+        &.position-last {
+            top: $input-height + $input-padding*2;
+            background: #f2f2f2;
+
+            &,
+            input{
+                color: #999;
+                text-align: right;
+                font-size: 18px;
+                font-weight: 200;
+            }
+            .placeholder-label {
+                display: none !important;
+            }
+            &,
+            .label-group {
+                padding-top: $input-padding-2;
+                padding-bottom: $input-padding-2;
+            }
+        }
+
+        .label-group {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            padding: $input-padding $bar-padding-portrait;
+            height: 100%;
+            z-index: 5;
+
+            .placeholder-label {
+                display: inline-block;
+                height: $input-height;
+                line-height: $input-height;
+                float: left;
+            }
+            .spacer {
+                display: inline-block;
+                height: $input-height;
+                line-height: $input-height;
+                vertical-align: middle;
+                opacity: 0;
+            }
+            .label {
+                display: inline-block;
+                height: $input-height;
+                line-height: $input-height;
+                vertical-align: middle;
+            }
+        }
+        &.btc-input .label {
+            position: relative;
+            top: 0.02em;
+            left: -0.075em;
+        }
+        &.fiat-input .label {
+            position: relative;
+            top: 0.02em;
+            left: 0.2em;
+        }
+    }
+
+    //click area to swap input currency
+    .input-swapping-overlay {
+        display: block;
+        position: absolute;
+        top: 50px;
+        height: 50px;
+        z-index: 100;
+        width: 100%;
+
+        //background: rgba(255,150,150,0.25);  //@todo remove,  this is for debugging
+
+        .swap-icon {
+            font-size: 1.25rem;
+            padding: 0 $bar-padding-portrait;
+            line-height: 50px;
+            opacity: 0.45;
+
+            -moz-transform: rotate(90deg);
+            -webkit-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+    }
+
+    .amount-footer {
+        display: block;
+        position: absolute;
+        bottom: 0px;
+        height: $footer-height + $input-padding*2;
+        z-index: 100;
+        width: 100%;
+
+        &.amount-feefooter {
+            padding: $input-padding $bar-padding-portrait;
+
+            .feefooter-left {
+                float: left;
+                white-space: nowrap;
+            }
+
+            .feefooter-right {
+                float: right;
+            }
+        }
+    }
+}

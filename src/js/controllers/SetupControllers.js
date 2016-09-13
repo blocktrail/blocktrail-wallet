@@ -53,10 +53,11 @@ angular.module('blocktrail.wallet')
             $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
         };
     })
-    .controller('SetupStartCtrl', function($scope, $state) {
+    .controller('SetupStartCtrl', function($scope, $http, CONFIG, $state, $q, blocktrailLocalisation) {
         $scope.slider = {
             displayed: 0
         };
+
         $scope.newAccount = function() {
             $state.go('app.setup.register');
         };
@@ -182,7 +183,11 @@ angular.module('blocktrail.wallet')
                             }
                         })
                         .then(function(secretData) {
-                            return launchService.storeAccountInfo(_.merge({}, {secret: secretData.secret, encrypted_secret: secretData.encrypted_secret, new_secret: newSecret}, result.data)).then(function() {
+                            return launchService.storeAccountInfo(_.merge({}, {
+                                secret: secretData.secret, 
+                                encrypted_secret: secretData.encrypted_secret, 
+                                new_secret: newSecret
+                            }, result.data)).then(function() {
                                 $log.debug('existing_wallet', result.data.existing_wallet);
                                 $scope.setupInfo.password = $scope.form.password;
                                 if (!$scope.form.forceNewWallet) {
@@ -192,8 +197,8 @@ angular.module('blocktrail.wallet')
                                 $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: ''};
 
                                 //save the default settings and do a profile sync
-                                settingsService.username = $scope.form.username;
-                                settingsService.displayName = $scope.form.username;
+                                settingsService.username = $scope.form.username || result.data.username;
+                                settingsService.displayName = $scope.form.username || result.data.username;
                                 settingsService.enableContacts = false;
                                 settingsService.accountCreated = result.data.timestamp_registered;
                                 settingsService.email = $scope.form.email;

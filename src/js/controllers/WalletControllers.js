@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
                                        Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration,
-                                       $cordovaToast, trackingService) {
+                                       $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -14,6 +14,68 @@ angular.module('blocktrail.wallet')
                 }
             });
         }, 400);
+
+        /*
+         * check for extra languages to enable
+         *  if one is preferred, prompt user to switch
+         */
+        $http.get(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?v=" + CONFIG.VERSION)
+            .then(function(result) {
+                return result.data.extraLanguages;
+            })
+            .then(function(extraLanguages) {
+                return settingsService.$isLoaded().then(function() {
+                    // filter out languages we already know
+                    var knownLanguages = blocktrailLocalisation.getLanguages();
+                    extraLanguages = extraLanguages.filter(function(language) {
+                        return knownLanguages.indexOf(language) === -1;
+                    });
+
+                    if (extraLanguages.length === 0) {
+                        return;
+                    }
+                    
+                    // enable extra languages
+                    _.each(extraLanguages, function(extraLanguage) {
+                        blocktrailLocalisation.enableLanguage(extraLanguage, {});
+                    });
+    
+                    // determine (new) preferred language
+                    var preferredLanguage = blocktrailLocalisation.setupPreferredLanguage();
+
+                    // store extra languages
+                    settingsService.extraLanguages = settingsService.extraLanguages.concat(extraLanguages).unique();
+                    return settingsService.$store()
+                        .then(function() {
+                            // check if we have a new preferred language
+                            if (preferredLanguage != settingsService.language && extraLanguages.indexOf(preferredLanguage) !== -1) {
+                                // prompt to enable
+                                return $cordovaDialogs.confirm(
+                                    $translate.instant('MSG_BETTER_LANGUAGE', {
+                                        oldLanguage: $translate.instant(blocktrailLocalisation.languageName(settingsService.language)),
+                                        newLanguage: $translate.instant(blocktrailLocalisation.languageName(preferredLanguage))
+                                    }).sentenceCase(),
+                                    $translate.instant('MSG_BETTER_LANGUAGE_TITLE').capitalize(),
+                                    [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
+                                )
+                                    .then(function(dialogResult) {
+                                        if (dialogResult == 2) {
+                                            return;
+                                        }
+
+                                        // enable new language
+                                        settingsService.language = preferredLanguage;
+                                        $rootScope.changeLanguage(preferredLanguage);
+
+                                        return settingsService.$store();
+                                    })
+                                ;
+                            }
+                        })
+                    ;
+                });
+            })
+            .then(function() {}, function(e) { console.error('extraLanguages', e && (e.msg || e.message || "" + e)); });
 
         if (!$rootScope.settings.enablePolling) {
             Wallet.disablePolling();
@@ -126,35 +188,45 @@ angular.module('blocktrail.wallet')
         $timeout(function() { Wallet.refillOfflineAddresses(1); }, 6000);
         $timeout(function() { settingsService.$syncSettingsDown(); }, 500);
 
-        var pricePolling = $interval(function() {
-            if ($rootScope.STATE.ACTIVE) {
-                $rootScope.getPrice();
-            }
-        }, 20000);
+        if (CONFIG.POLL_INTERVAL_PRICE) {
+            var pricePolling = $interval(function() {
+                if ($rootScope.STATE.ACTIVE) {
+                    $rootScope.getPrice();
+                }
+            }, CONFIG.POLL_INTERVAL_PRICE);
+        }
 
-        var balancePolling = $interval(function() {
-            if ($rootScope.STATE.ACTIVE) {
-                $rootScope.getBalance();
-            }
-        }, 10000);
+        if (CONFIG.POLL_INTERVAL_BALANCE) {
+            var balancePolling = $interval(function() {
+                if ($rootScope.STATE.ACTIVE) {
+                    $rootScope.getBalance();
+                }
+            }, CONFIG.POLL_INTERVAL_BALANCE);
+        }
 
-        var blockheightPolling = $interval(function() {
-            if ($rootScope.STATE.ACTIVE) {
-                $rootScope.getBlockHeight();
-            }
-        }, 11000); // small offset form balance polling to avoid 2 requests at the same time
+        if (CONFIG.POLL_INTERVAL_BLOCKHEIGHT) {
+            var blockheightPolling = $interval(function() {
+                if ($rootScope.STATE.ACTIVE) {
+                    $rootScope.getBlockHeight();
+                }
+            }, CONFIG.POLL_INTERVAL_BLOCKHEIGHT);
+        }
 
-        var contactSyncPolling = $interval(function() {
-            if ($rootScope.STATE.ACTIVE) {
-                $rootScope.syncContacts();
-            }
-        }, 150000); // 2.5 mins
+        if (CONFIG.POLL_INTERVAL_CONTACTS) {
+            var contactSyncPolling = $interval(function() {
+                if ($rootScope.STATE.ACTIVE) {
+                    $rootScope.syncContacts();
+                }
+            }, CONFIG.POLL_INTERVAL_CONTACTS);
+        }
 
-        var profileSyncPolling = $interval(function() {
-            if ($rootScope.STATE.ACTIVE) {
-                $rootScope.syncProfile();
-            }
-        }, 300500); // 5 mins
+        if (CONFIG.POLL_INTERVAL_PROFILE) {
+            var profileSyncPolling = $interval(function() {
+                if ($rootScope.STATE.ACTIVE) {
+                    $rootScope.syncProfile();
+                }
+            }, CONFIG.POLL_INTERVAL_PROFILE);
+        }
     }
 );
 

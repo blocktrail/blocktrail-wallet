@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('LaunchCtrl', function($state, $log, launchService, settingsService, $ionicHistory) {
+    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http, settingsService, $ionicHistory) {
         $log.debug('starting');
 
         //disable animation on transition from this state
@@ -32,7 +32,29 @@ angular.module('blocktrail.wallet')
 
                 //setup has been started: resume from the relevant step
                 if (settingsService.setupComplete) {
-                    $state.go('app.wallet.summary');
+                    if ($rootScope.handleOpenURL) {
+                        $log.log("launching app with uri: " + $rootScope.handleOpenURL);
+                        $log.log("bitcoin? " + $rootScope.handleOpenURL.startsWith("bitcoin"));
+                        $log.log("glidera? " + $rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback"));
+                        if ($rootScope.handleOpenURL.startsWith("bitcoin")) {
+                            $rootScope.bitcoinuri = $rootScope.handleOpenURL;
+                            $state.go('app.wallet.send');
+                            $ionicSideMenuDelegate.toggleLeft(false);
+                        } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/oauth2")) {
+                            $rootScope.glideraCallback = $rootScope.handleOpenURL;
+                            $state.go('app.wallet.buybtc.glidera_oauth2_callback');
+                            $ionicSideMenuDelegate.toggleLeft(false);
+                        } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
+                            $state.go('app.wallet.buybtc.choose');
+                            $ionicSideMenuDelegate.toggleLeft(false);
+                        } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/bitid")) {
+                            $rootScope.glideraCallback = $rootScope.handleOpenURL;
+                            $state.go('app.wallet.buybtc.glidera_bitid_callback');
+                            $ionicSideMenuDelegate.toggleLeft(false);
+                        }
+                    } else {
+                        $state.go('app.wallet.summary');
+                    }
                 } else if(!settingsService.backupSaved && !settingsService.backupSkipped) {
                     //backup saving
                     $state.go('app.setup.backup');

@@ -10,6 +10,7 @@ angular.module('blocktrail.wallet').service(
         username:  '',
         email:  null,
         language: null,
+        extraLanguages: [],
         timezone:  "GMT+1",
         localCurrency:  "EUR",
         profilePic:  null,
@@ -18,6 +19,11 @@ angular.module('blocktrail.wallet').service(
         profilePosY:  50,
 
         showRebrandMessage: true,
+
+        glideraRequest: null,
+        glideraAccessToken: null,
+
+        buyBTCRegion: null,
 
         phoneNumber: null,
         phoneNationalNumber: null,
@@ -173,7 +179,6 @@ angular.module('blocktrail.wallet').service(
             });
     };
 
-
     this.$syncSettingsUp = function() {
         var self = this;
 
@@ -183,7 +188,9 @@ angular.module('blocktrail.wallet').service(
                     localCurrency: self.localCurrency,
                     username: self.username,
                     email: self.email,
-                    walletActivated: self.walletActivated
+                    walletActivated: self.walletActivated,
+                    glideraAccessToken: self.glideraAccessToken,
+                    buyBTCRegion: self.buyBTCRegion
                 };
 
                 return sdk.syncSettings(settingsData);
@@ -202,6 +209,8 @@ angular.module('blocktrail.wallet').service(
                     self.username = result.username;
                     self.email = result.email;
                     self.walletActivated = result.walletActivated;
+                    self.glideraAccessToken = result.glideraAccessToken;
+                    self.buyBTCRegion = result.buyBTCRegion;
 
                     return self.$store();
                 });

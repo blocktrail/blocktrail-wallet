@@ -692,26 +692,23 @@ angular.module('blocktrail.wallet')
         $scope.form = {selected: ''};
 
         $scope.updateSettings = function(){
-            settingsService.$store().then(function(){
+            settingsService.$store().then(function() {
+                settingsService.$syncSettingsUp();
                 $btBackButtonDelegate.goBack();
             });
         };
     })
-    .controller('LanguageSettingsCtrl', function($scope, $rootScope, settingsService, $btBackButtonDelegate, $translate) {
-        $scope.languages = [
-            {code: 'nl', name: 'DUTCH'},
-            {code: 'en', name: 'ENGLISH'},
-            {code: 'en_US', name: 'ENGLISH_US'},
-            {code: 'fr', name: 'FRENCH'},
-            {code: 'es', name: 'SPANISH'},
-            {code: 'cn', name: 'CHINESE'},
-            {code: 'ru', name: 'RUSSIAN'}
-        ];
+    .controller('LanguageSettingsCtrl', function($scope, $rootScope, settingsService, $btBackButtonDelegate, blocktrailLocalisation, $translate) {
+        $scope.languages = blocktrailLocalisation.getLanguages().map(function(language) {
+            var name = blocktrailLocalisation.languageName(language);
+            return name ? {code: language, name: name} : null;
+        }).clean();
         $scope.form = {selected: ''};
 
-        $scope.updateSettings = function(){
-            settingsService.$store().then(function(data) {
-                $rootScope.changeLanguage(data.language);
+        $scope.updateSettings = function() {
+            settingsService.$store().then(function() {
+                $rootScope.changeLanguage(settingsService.language);
+                settingsService.$syncSettingsUp();
                 $btBackButtonDelegate.goBack();
             });
         };

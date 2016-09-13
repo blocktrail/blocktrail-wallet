@@ -36,7 +36,6 @@ angular.module('blocktrail.wallet').factory(
     }
 );
 
-/*--- Blocktrail Error Classes ---*/
 angular.module('blocktrail.wallet').config(function() {
     //merge in sdk error classes
     Object.keys(blocktrailSDK).forEach(function(val) {
@@ -51,13 +50,15 @@ angular.module('blocktrail.wallet').config(function() {
     blocktrail.ContactAddressError = Error.extend("ContactAddressError", 400);
     blocktrail.WalletPinError = Error.extend("WalletPinError", 400);
     blocktrail.WalletPollError = Error.extend("WalletPollError", 400);
+
+    window._ = window._ || blocktrailSDK.lodash;
 });
 
 angular.module('blocktrail.wallet').run(
-    function($rootScope, $state, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
+    function($rootScope, $state, $q, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
-             amMoment, tuneTrackingService, trackingService) {
+             amMoment, tuneTrackingService, trackingService, blocktrailLocalisation) {
         $rootScope.CONFIG = CONFIG || {};
         $rootScope.$state = $state;
         $rootScope.$translate = $translate;
@@ -67,6 +68,10 @@ angular.module('blocktrail.wallet').run(
         $rootScope.appVersion = CONFIG.VERSION;
         $rootScope.isAndroid = ionic.Platform.isAndroid();
         $rootScope.isIOS = ionic.Platform.isIOS();
+
+        if (CONFIG.DEBUG) {
+            blocktrailSDK.debug.enable('*,-pouchdb:*');
+        }
 
         facebookConnectPlugin.activateApp();
 
@@ -109,7 +114,7 @@ angular.module('blocktrail.wallet').run(
 
         $rootScope.changeLanguage = function(language) {
             $log.debug('changeLanguage: ' + language);
-            settingsService.language = language || $translate.preferredLanguage() || CONFIG.FALLBACK_LANGUAGE || 'en';
+            settingsService.language = language || blocktrailLocalisation.preferredAvailableLanguage() || CONFIG.FALLBACK_LANGUAGE || 'en';
 
             var momentLocale = settingsService.language;
             if (momentLocale == 'cn') {
@@ -236,12 +241,9 @@ angular.module('blocktrail.wallet').run(
             });
         };
 
-        //bitcoin uri intent handler
+        // uri intent handler, rest is handled by LaunchController
         $window.handleOpenURL = function(url) {
-            $log.debug("launching app with uri:" + url);
-            $rootScope.bitcoinuri = url;
-            $state.go('app.wallet.send');
-            $ionicSideMenuDelegate.toggleLeft(false);
+            $rootScope.handleOpenURL = "" + url;
         };
     }
 );
@@ -386,7 +388,19 @@ angular.module('blocktrail.wallet').config(
         $stateProvider
             .state('app', {
                 abstract: true,
-                template: "<ion-nav-view />"
+                template: "<ion-nav-view />",
+                resolve: {
+                    /**
+                     * load extra languages we are aware of
+                     */
+                    extraLanguages: function(settingsService, blocktrailLocalisation) {
+                        return settingsService.$isLoaded().then(function() {
+                            _.each(settingsService.extraLanguages, function(extraLanguage) {
+                                blocktrailLocalisation.enableLanguage(extraLanguage);
+                            });
+                        });
+                    }
+                }
             })
 
             /*---Launch---*/
@@ -423,12 +437,51 @@ angular.module('blocktrail.wallet').config(
                 controller: "SetupCtrl",
                 templateUrl: "templates/setup/setup.html",
                 resolve: {
-                    settings: function(settingsService, $rootScope, $translate, $log) {
+                    /**
+                     * check for extra languages to enable
+                     * if new language is new preferred, set it
+                     */
+                    preferredLanguage: function(CONFIG, $rootScope, settingsService, blocktrailLocalisation, $http) {
+                        return $http.get(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?v=" + CONFIG.VERSION)
+                            .then(function(result) {
+                                return result.data.extraLanguages;
+                            })
+                            .then(function(extraLanguages) {
+                                // filter out languages we already know
+                                var knownLanguages = blocktrailLocalisation.getLanguages();
+                                extraLanguages = extraLanguages.filter(function(language) {
+                                    return knownLanguages.indexOf(language) === -1;
+                                });
+
+                                if (extraLanguages.length === 0) {
+                                    return;
+                                }
+                                
+                                // enable extra languages
+                                _.each(extraLanguages, function(extraLanguage) {
+                                    blocktrailLocalisation.enableLanguage(extraLanguage, {});
+                                });
+
+                                // determine (new) preferred language
+                                var preferredLanguage = blocktrailLocalisation.setupPreferredLanguage();
+
+                                // activate preferred language
+                                $rootScope.changeLanguage(preferredLanguage);
+
+                                // store preferred language
+                                return settingsService.$isLoaded().then(function() {
+                                    settingsService.language = preferredLanguage;
+                                    settingsService.extraLanguages = settingsService.extraLanguages.concat(extraLanguages).unique();
+
+                                    return settingsService.$store();
+                                });
+                            })
+                            .then(function() {}, function(e) { console.error(e); });
+                    },
+                    settings: function(settingsService, $rootScope) {
                         //do an initial load of the user's settings (will return defaults if none have been saved yet)
                         return settingsService.$isLoaded().then(function() {
                             $rootScope.settings = settingsService;
-                            $rootScope.changeLanguage(settingsService.language);
-
                             return settingsService;
                         });
                     }
@@ -626,6 +679,51 @@ angular.module('blocktrail.wallet').config(
                     "mainView@app.wallet": {
                         templateUrl: "templates/wallet/wallet.summary.html",
                         controller: 'WalletSummaryCtrl'
+                    }
+                }
+            })
+
+            .state('app.wallet.buybtc', {
+                url: "/buy",
+                abstract: true,
+                template: "<ion-nav-view />"
+            })
+            .state('app.wallet.buybtc.choose', {
+                url: "/choose",
+                data: {
+                    clearHistory: true  //always clear history when entering this state
+                },
+                views: {
+                    "mainView@app.wallet": {
+                        templateUrl: "templates/buybtc/buybtc.choose.html",
+                        controller: 'BuyBTCChooseCtrl'
+                    }
+                }
+            })
+            .state('app.wallet.buybtc.glidera_bitid_callback', {
+                url: "/glidera/bitid/callback",
+                views: {
+                    "mainView@app.wallet": {
+                        templateUrl: "templates/buybtc/buybtc.glidera_callback.html",
+                        controller: 'BuyBTCGlideraBitIDCallbackCtrl'
+                    }
+                }
+            })
+            .state('app.wallet.buybtc.glidera_oauth2_callback', {
+                url: "/glidera/oaoth2/callback",
+                views: {
+                    "mainView@app.wallet": {
+                        templateUrl: "templates/buybtc/buybtc.glidera_callback.html",
+                        controller: 'BuyBTCGlideraOauthCallbackCtrl'
+                    }
+                }
+            })
+            .state('app.wallet.buybtc.buy', {
+                url: "/buy?broker",
+                views: {
+                    "mainView@app.wallet": {
+                        templateUrl: "templates/buybtc/buybtc.buy.html",
+                        controller: 'BuyBTCBuyCtrl'
                     }
                 }
             })
@@ -890,40 +988,6 @@ angular.module('blocktrail.wallet').config(
     }
 );
 
-
-
-// patching ES6 Promises :/
-if (typeof Promise !== "undefined") {
-    Promise.prototype.done = function() {
-        return this.then(
-            function(r) {
-                return r;
-            },
-            function(e) {
-                setTimeout(function() {
-                    throw e;
-                });
-            }
-        );
-    };
-}
-
-// patching promise library that PoucDB uses
-if (typeof PouchDB.utils.Promise.prototype.done === "undefined") {
-    PouchDB.utils.Promise.prototype.done = function() {
-        return this.then(
-            function(r) {
-                return r;
-            },
-            function(e) {
-                setTimeout(function() {
-                    throw e;
-                });
-            }
-        );
-    };
-}
-
 String.prototype.sentenceCase = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
@@ -933,6 +997,12 @@ String.prototype.capitalize = function() {
         return txt.sentenceCase();
     });
 };
+
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function(s) {
+        return this.substr(0, s.length) === s;
+    };
+}
 
 Array.prototype.unique = function() {
     return this.filter(function onlyUnique(value, index, self) {
@@ -986,6 +1056,21 @@ if (!window.repeat) {
 
         return r;
     };
+}
+
+function parseQuery(url) {
+    url = (url || "").split("?");
+    if (url.length < 2) {
+        return {};
+    }
+    var qstr = url[1];
+    var query = {};
+    var a = qstr.split('&');
+    for (var i = 0; i < a.length; i++) {
+        var b = a[i].split('=');
+        query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+    }
+    return query;
 }
 
 /**

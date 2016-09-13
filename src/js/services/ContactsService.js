@@ -184,7 +184,7 @@ angular.module('blocktrail.wallet').factory(
                 $log.debug('contacts[' + contacts.length + ']');
                 deferred.resolve(contacts);
             }, function(err) {
-                $log.error(err);
+                $log.error('contacts ERR ' + err);
 
                 if (err == "unauthorized") {
                     return deferred.reject(new blocktrail.ContactsPermissionError(err));
@@ -274,7 +274,7 @@ angular.module('blocktrail.wallet').factory(
                         hashIndex++;
                         return self.getSendingAddress(contact, hashIndex);
                     } else {
-                        $log.error(err);
+                        $log.error('contacts ERR ' + err);
                         throw err;
                     }
                 });

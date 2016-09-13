@@ -1511,6 +1511,7 @@ angular.module('ngCordova.plugins.dialogs', [])
         }
         else {
           navigator.notification.prompt(message, function (result) {
+            console.log('q.resolve', result);
             q.resolve(result);
           }, title, buttonLabels, defaultText, isPassword, inputType);
         }

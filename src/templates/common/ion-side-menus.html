@@ -61,6 +61,10 @@
                     <i class="icon ion-ios-heart-outline"></i>
                     <span class="capitalise">{{ 'PROMO_CODES' | translate }}</span>
                 </ion-item>
+                <ion-item menu-close ng-href="{{ $state.href('app.wallet.buybtc.choose') }}">
+                    <i class="icon ion-card"></i>
+                    <span class="capitalise">{{ 'BUYBTC' | translate }}</span>
+                </ion-item>
                 <ion-item menu-close ng-href="{{ $state.href('app.wallet.feedback') }}">
                     <i class="icon ion-ios-chatboxes-outline"></i>
                     <span class="capitalise">{{ 'SEND_FEEDBACK' | translate }}</span>

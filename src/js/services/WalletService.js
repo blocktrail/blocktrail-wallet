@@ -8,7 +8,7 @@ angular.module('blocktrail.wallet').factory(
 
             self.poll = null;
             self.interval = null;
-            self.noPolling = false;
+            self.noPolling = true;
             self.isRefilling = null;
             self.addressRefillPromise = null;
 
@@ -174,7 +174,7 @@ angular.module('blocktrail.wallet').factory(
         Wallet.prototype.setupInterval = function() {
             var self = this;
 
-            if(self.noPolling) {
+            if(self.noPolling || !CONFIG.POLL_INTERVAL_TRANSACTIONS) {
                 return false;
             }
 
@@ -184,7 +184,7 @@ angular.module('blocktrail.wallet').factory(
                 if ($rootScope.STATE.ACTIVE) {
                     self.pollTransactions();
                 }
-            }, 10000);
+            }, CONFIG.POLL_INTERVAL_TRANSACTIONS);
         };
 
         /**
@@ -579,7 +579,7 @@ angular.module('blocktrail.wallet').factory(
                     }
                 })
                 // use a .then because a .done would break the promise chains that rely on self.wallet
-                .then(function(balanceDoc) { return balanceDoc; }, function(e) { $log.error(e); throw e; });
+                .then(function(balanceDoc) { return balanceDoc; }, function(e) { $log.error("balance ERR" + e); throw e; });
         };
 
         /**
@@ -611,7 +611,7 @@ angular.module('blocktrail.wallet').factory(
                     }
                 })
                 // use a .then because a .done would break the promise chains that rely on self.wallet
-                .then(function(pricesDoc) { return pricesDoc; }, function(e) { $log.error(e); throw e; });
+                .then(function(pricesDoc) { return pricesDoc; }, function(e) { $log.error('prices ERR ' + e); throw e; });
         };
 
         /**
@@ -643,12 +643,12 @@ angular.module('blocktrail.wallet').factory(
                     }
                 })
                 // use a .then because a .done would break the promise chains that rely on self.wallet
-                .then(function(blockHeightDoc) { return blockHeightDoc; }, function(e) { $log.error(e); throw e; });
+                .then(function(blockHeightDoc) { return blockHeightDoc; }, function(e) { $log.error('height ERR' + e); throw e; });
         };
 
         var wallet = new Wallet();
 
-        wallet.setupInterval(8000);
+        wallet.setupInterval();
 
         return wallet;
     }

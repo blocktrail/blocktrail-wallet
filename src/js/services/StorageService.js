@@ -6,6 +6,10 @@ angular.module('blocktrail.wallet').factory(
         var db = function(name) {
             if (!dbs[name]) {
                 dbs[name] = new PouchDB(name, {adapter: CONFIG.POUCHDB_DRIVER});
+
+                dbs[name].on('error', function(err) {
+                    alert(name + ' ERR');
+                });
             }
 
             return dbs[name];
@@ -23,7 +27,7 @@ angular.module('blocktrail.wallet').factory(
                     return db(name);
                 });
             }))
-                .catch(function(e) { $log.error(e); })
+                .catch(function(e) { $log.error('storage ERR' + e); })
             ;
         };
 
@@ -53,7 +57,7 @@ angular.module('blocktrail.wallet').factory(
         return {
             db: db,
             reset: resetSingle,
-            resetAll: resetAll,
+            resetAll: resetAll
         };
     }
 );
