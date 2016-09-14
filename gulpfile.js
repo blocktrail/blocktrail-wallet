@@ -138,6 +138,7 @@ gulp.task('templates:index', ['appconfig'], function() {
         })).then(function() {
             return streamAsPromise(gulp.src("./src/index.html")
                 .pipe(template({
+                    CSP: APPCONFIG.DEBUG ? ['*'] : ['api.blocktrail.com'],
                     VERSION: APPCONFIG.VERSION,
                     APPCONFIG: APPCONFIG,
                     APPCONFIG_JSON: JSON.stringify(APPCONFIG),
