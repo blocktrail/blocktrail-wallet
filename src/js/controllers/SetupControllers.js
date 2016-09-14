@@ -446,7 +446,7 @@ angular.module('blocktrail.wallet')
         };
     })
     .controller('SetupWalletPinCtrl', function($q, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
-                                               sdkService, $cordovaDialogs, $ionicLoading, $log, $translate, $timeout, settingsService) {
+                                               sdkService, $cordovaDialogs, $ionicLoading, $log, $translate, $timeout, settingsService, CONFIG) {
         $scope.transactions = null;
         $scope.retry = 0;
         $scope.form = {
@@ -641,6 +641,15 @@ angular.module('blocktrail.wallet')
                 .then(function(wallet) {
                     if ($scope.setupInfo.backupInfo) {
                         window.fabric.Answers.sendSignUp("App", true);
+                        facebookConnectPlugin.logEvent("CompleteRegistration");
+                        if (CONFIG.GAPPTRACK_ID) {
+                            if (CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS) {
+                                GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS, "1.00", false);
+                            }
+                            if (CONFIG.GAPPTRACK_ACTIVATE_LABELS.android) {
+                                GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_SIGNUP_LABELS.android, "1.00", false);
+                            }
+                        }
 
                         //store the backup info temporarily
                         $log.debug('saving backup info');

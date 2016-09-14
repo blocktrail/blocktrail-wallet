@@ -8,7 +8,8 @@
     "API_HTTPS": true,
 
     "GAPPTRACK_ID": null,
-    "GAPPTRACK_LABELS": [],
+    "GAPPTRACK_ACTIVATE_LABELS": {"iOS": null, "android": null},
+    "GAPPTRACK_SIGNUP_LABELS": {"iOS": null, "android": null},
     "GA_TRACKING_ID": null,
 
     // default ionic apps keys for usage stats logging in development

@@ -70,10 +70,13 @@ angular.module('blocktrail.wallet').run(
 
         facebookConnectPlugin.activateApp();
 
-        if (CONFIG.GAPPTRACK_ID && CONFIG.GAPPTRACK_LABELS && CONFIG.GAPPTRACK_LABELS.length) {
-            CONFIG.GAPPTRACK_LABELS.forEach(function(label) {
-                GappTrack.track(CONFIG.GAPPTRACK_ID, label, "1.00", false);
-            });
+        if (CONFIG.GAPPTRACK_ID) {
+            if (CONFIG.GAPPTRACK_ACTIVATE_LABELS.iOS) {
+                GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_ACTIVATE_LABELS.iOS, "1.00", false);
+            }
+            if (CONFIG.GAPPTRACK_ACTIVATE_LABELS.android) {
+                GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_ACTIVATE_LABELS.android, "1.00", false);
+            }
         }
 
         /*----iOS Keyboard fix---*/
