@@ -338,7 +338,7 @@ angular.module('blocktrail.wallet').factory(
                                 var isUpdated = false;
 
                                 if (transaction.block_height) {
-                                    //add to confirmed list
+                                    // add to confirmed list
                                     if (asyncData.historyDoc.confirmed.indexOf(transaction.hash) === -1) {
                                         asyncData.historyDoc.confirmed.unshift(transaction.hash);
                                         isNew = true;
@@ -353,11 +353,11 @@ angular.module('blocktrail.wallet').factory(
 
                                     $log.debug('tx '+transaction.hash + " isNew: " + isNew + " isUpdated: " + isUpdated);
                                 } else {
-                                    //add to unconfirmed list
+                                    // add to unconfirmed list
                                     if (asyncData.historyDoc.unconfirmed.indexOf(transaction.hash) === -1) {
                                         asyncData.historyDoc.unconfirmed.unshift(transaction.hash);
-                                        isNew = true;
                                     }
+                                    isNew = asyncData.historyDoc.old_unconfirmed.indexOf(transaction.hash) === -1;
 
                                     $log.debug('tx '+transaction.hash + " isNew: " + isNew + " isUnconfirmed: true");
                                 }
