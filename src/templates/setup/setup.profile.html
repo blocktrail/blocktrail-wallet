@@ -2,7 +2,7 @@
     <div ng-controller="SetupProfileCtrl">
         <!-- Bind separate controller specifically to change $btBackButtonDelegate -->
     </div>
-    <ion-nav-title class="capitalise">{{ 'SETTINGS_PROFILE' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'SETTINGS_PROFILE' | translate }}</ion-nav-title>
     <ion-nav-buttons side="right">
         <div class="button hide"
              nav-direction="back"
@@ -29,12 +29,12 @@
                     <span class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: {{ settings.profilePosX }}%; background-position-y: {{ settings.profilePosY }}%;"></span>
                 </div>
                 <div ng-if="settings.profilePic">
-                    <a class="capitalise" ng-click="updatePicture()">{{ 'SETTINGS_UPDATE_PHOTO' | translate }}</a>
+                    <a class="" ng-click="updatePicture()">{{ 'SETTINGS_UPDATE_PHOTO' | translate }}</a>
                 </div>
             </div>
 
             <div class="item item-borderless" ng-if="!settings.profilePic">
-                <button class="button button-block button-positive capitalise"
+                <button class="button button-block button-positive"
                         ng-click="updatePicture()">{{ 'SETUP_PROFILE_PIC' | translate }}
                 </button>
                 <div class="padding-t">
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="item item-borderless" ng-if="settings.profilePic">
-                <button class="button button-block button-positive capitalise"
+                <button class="button button-block button-positive"
                         ui-sref="app.setup.complete">{{ 'CONTINUE' | translate }}
                 </button>
             </div>
@@ -63,14 +63,14 @@
             <p>{{ 'LOADING' | translate }}</p>
         </div>
 
-        <button class="button button-outline confirm-button capitalise" ng-click="assignProfileImage(croppedProfileImage)">{{ 'APPLY' | translate }}</button>
+        <button class="button button-outline confirm-button" ng-click="assignProfileImage(croppedProfileImage)">{{ 'APPLY' | translate }}</button>
     </div>
     <!-- /photo crop screen -->
 
 </ion-view>
 
 <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
     <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
     <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
     <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>

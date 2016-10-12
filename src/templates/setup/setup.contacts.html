@@ -1,5 +1,5 @@
 <ion-view class="state-setup state-contacts" ng-class="{'blur-me': appControl.showMessage}">
-    <ion-nav-title class="capitalise">{{ 'SETUP_SYNC_CONTACTS' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'SETUP_SYNC_CONTACTS' | translate }}</ion-nav-title>
     <ion-nav-buttons side="left">
         <button ng-click="$btBackButtonDelegate.goBack($event)"
                 class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="item item-borderless" ng-if="!settings.contactsLastSync">
-                    <button class="button button-block button-positive capitalise no-animate"
+                    <button class="button button-block button-positive no-animate"
                             ng-class="{'button-neutral': appControl.syncing}"
                             ng-if="!appControl.syncComplete"
                             ng-click="syncContacts()">
@@ -43,7 +43,7 @@
                         {{ settings.contactsLastSync && ('SETTINGS_CONTACTS_SYNCED' | translate) || ('SETTINGS_CONTACTS_UNSYNCED' | translate) }}
                         <small class="text-neutral opacity-50" ng-if="settings.contactsLastSync">({{ settings.contactsLastSync | amDateFormat:'Do MMMM YYYY' }})</small>
                     </small>
-                    <button class="button button-block button-positive capitalise"
+                    <button class="button button-block button-positive"
                             ui-sref="app.setup.profile">{{ 'CONTINUE' | translate }}
                     </button>
                 </div>
@@ -54,7 +54,7 @@
 </ion-view>
 
 <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
     <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
     <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
     <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>

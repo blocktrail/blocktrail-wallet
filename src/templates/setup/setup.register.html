@@ -1,5 +1,5 @@
 <ion-view class="state-setup state-login" ng-class="{'blur-me': appControl.showMessage}">
-    <ion-nav-title class="capitalise">{{ 'SETUP_REGISTER' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'SETUP_REGISTER' | translate }}</ion-nav-title>
     <ion-nav-buttons side="left">
         <button ng-click="$btBackButtonDelegate.goBack($event)"
                 class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
@@ -20,7 +20,7 @@
                     <label class="item item-input item-floating-label input-username" ng-if="!form.registerWithEmail">
                         <div class="input-label text-neutral">
                             <span>{{ 'SETUP_USERNAME_PLACEHOLDER' | translate }}</span>
-                            <div class="username-check text-right text-bad capitalise">
+                            <div class="username-check text-right text-bad">
                                 <div ng-if="usernameTaken">{{ 'TAKEN' | translate }}</div>
                                 <div ng-if="registerForm.username.$invalid && registerForm.username.$dirty">{{ 'MSG_INVALID_USERNAME' | translate }}</div>
                                 <i class="icon ion-checkmark-circled text-good" ng-if="form.username && usernameTaken==false"></i>
@@ -63,7 +63,7 @@
 
                 <div class="row text-center">
                     <div class="col col-offset-10 col-80 padding-bottom">
-                        <button class="button button-block capitalise" ng-click="doRegister()">{{ 'SETUP_REGISTER' | translate }}</button>
+                        <button class="button button-block" ng-click="doRegister()">{{ 'SETUP_REGISTER' | translate }}</button>
                     </div>
                 </div>
                 <p ng-if="!form.registerWithEmail" class="item item-text-wrap text-neutral">
@@ -76,7 +76,7 @@
 </ion-view>
 
 <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
     <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
     <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
     <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>

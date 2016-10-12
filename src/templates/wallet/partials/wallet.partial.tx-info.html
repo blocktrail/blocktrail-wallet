@@ -1,17 +1,18 @@
 <div ng-if="data">
-    <h3 class="title capitalise" ng-class="{received: data.wallet_value_change > 0, sent: data.wallet_value_change <= 0}">
+    <h3 class="title" ng-class="{received: data.wallet_value_change > 0, sent: data.wallet_value_change <= 0}">
         <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_SENT' | translate }}</span>
         <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED' | translate }}</span>
     </h3>
     <small class="tx-hash text-ellipsis" to-clipboard="data.hash">
         <span class="value">{{ data.hash }}</span>
-        <span class="label capitalise">
+        <span class="label">
             {{ 'TX_INFO_HASH' | translate }}
         </span>
     </small>
     <ion-content class="">
         <div class="amount" ng-class="{received: data.wallet_value_change > 0, sent: data.wallet_value_change <= 0}">
-            <canvas-display text="(data.amount | mathAbs | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 )" width="100%" height="40"></canvas-display>
+            <canvas-display text="(data.amount | mathAbs | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 )" width="100%"
+                            height="40"></canvas-display>
             <div class="fiat text-ellipsis" ng-if="data.price">
                 <span class="value">{{ data.amount | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  data.price }}</span>
                 <span class="label">{{ 'TX_INFO_TIME_SUBTITLE' | translate }}</span>
@@ -23,19 +24,19 @@
         </div>
 
         <div class="fee" ng-if="data.wallet_value_change <= 0">
-            <div class="label capitalise">
+            <div class="label">
                 {{ 'TX_INFO_FEE' | translate }}
             </div>
             <div class="value">
                 {{ data.fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8}}
-                 <span class="fiat opacity-50">
+                <span class="fiat opacity-50">
                      {{ data.fee | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  data.price }}
                  </span>
             </div>
         </div>
 
         <div class="date">
-            <div class="label capitalise">
+            <div class="label">
                 <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_DATE_SENT' | translate }}</span>
                 <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_DATE_RECEIVED' | translate }}</span>
             </div>
@@ -43,7 +44,7 @@
         </div>
 
         <div class="confirmations">
-            <div class="label capitalise">
+            <div class="label">
                 {{ 'TX_INFO_CONFIRMATIONS_TITLE' | translate }}
             </div>
             <div class="value">
@@ -52,8 +53,9 @@
             </div>
         </div>
 
-        <div class="contact" ng-if="data.contact && data.contact.displayName || (data.altDisplay && data.wallet_value_change <= 0)">
-            <div class="label capitalise">
+        <div class="contact"
+             ng-if="data.contact && data.contact.displayName || (data.altDisplay && data.wallet_value_change <= 0)">
+            <div class="label">
                 <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_SENT_TO' | translate }}</span>
                 <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED_FROM' | translate }}</span>
             </div>
@@ -61,14 +63,14 @@
         </div>
 
         <div class="message" ng-if="false">
-            <div class="label capitalise">
+            <div class="label">
                 {{ 'TX_INFO_MESSAGE_TITLE' | translate }}
             </div>
             <div class="value">this feature is coming soon!</div>
         </div>
 
         <div class="more-info padding-b">
-            <div class="label capitalise">
+            <div class="label">
                 {{ 'TX_INFO_MORE_TITLE' | translate }} <i class="ion-android-open"></i>
             </div>
             <div class="value">
@@ -78,7 +80,7 @@
 
     </ion-content>
 
-    <button class="button dismiss button-energized capitalise" ng-click="dismiss()">{{ 'OK' | translate }}</button>
+    <button class="button dismiss button-energized" ng-click="dismiss()">{{ 'OK' | translate }}</button>
 
     <div class="close" ng-click="dismiss()">
         <i class="ion ion-ios-close-empty"></i>

@@ -63,7 +63,7 @@ angular.module('blocktrail.wallet')
                                         $translate.instant('MSG_BUYBTC_SETUP_MORE_GLIDERA_BODY', {
                                             message: settingsService.glideraAccessToken.userCanTransactInfo.message
                                         }).sentenceCase(),
-                                        $translate.instant('MSG_BUYBTC_SETUP_MORE_GLIDERA_TITLE').capitalize(),
+                                        $translate.instant('MSG_BUYBTC_SETUP_MORE_GLIDERA_TITLE').sentenceCase(),
                                         [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
                                     )
                                         .then(function(dialogResult) {
@@ -85,7 +85,7 @@ angular.module('blocktrail.wallet')
                         } else {
                             return $cordovaDialogs.confirm(
                                 $translate.instant('MSG_BUYBTC_SETUP_GLIDERA_BODY').sentenceCase(),
-                                $translate.instant('MSG_BUYBTC_SETUP_GLIDERA_TITLE').capitalize(),
+                                $translate.instant('MSG_BUYBTC_SETUP_GLIDERA_TITLE').sentenceCase(),
                                 [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
                             )
                                 .then(function(dialogResult) {
@@ -193,7 +193,7 @@ angular.module('blocktrail.wallet')
                         currency: 'USD',
                         yourCurrency: $scope.settings.localCurrency
                     }).sentenceCase(),
-                    $translate.instant('MSG_BUYBTC_FIAT_USD_ONLY_TITLE').capitalize(),
+                    $translate.instant('MSG_BUYBTC_FIAT_USD_ONLY_TITLE').sentenceCase(),
                     [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
                 )
                     .then(function(dialogResult) {
@@ -309,7 +309,7 @@ angular.module('blocktrail.wallet')
                         fee: $filter('number')($scope.sendInput.feeValue, 2),
                         currencySymbol: $filter('toCurrencySymbol')('USD')
                     }).sentenceCase(),
-                    $translate.instant('MSG_BUYBTC_CONFIRM_TITLE').capitalize(),
+                    $translate.instant('MSG_BUYBTC_CONFIRM_TITLE').sentenceCase(),
                     [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
                 )
                     .then(function(dialogResult) {
@@ -330,7 +330,7 @@ angular.module('blocktrail.wallet')
                                         fee: $filter('number')($scope.sendInput.feeValue, 2),
                                         currencySymbol: $filter('toCurrencySymbol')('USD')
                                     }).sentenceCase(),
-                                    $translate.instant('MSG_BUYBTC_BOUGHT_TITLE').capitalize(),
+                                    $translate.instant('MSG_BUYBTC_BOUGHT_TITLE').sentenceCase(),
                                     $translate.instant('OK')
                                 );
 

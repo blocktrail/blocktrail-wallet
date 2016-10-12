@@ -342,7 +342,7 @@ gulp.task('watch', function() {
     gulp.watch(['./src/js/**/*.js'], ['js:app']);
     gulp.watch(['./src/lib/**/*.js', '!./src/lib/blocktrail-sdk/**'], ['js:libs', 'js:ng-cordova']);
     gulp.watch(['./src/lib/blocktrail-sdk/build/blocktrail-sdk-full.js'], ['js:sdk']);
-    gulp.watch(['./src/templates/**/*', './src/translations/translations/*', './src/index.html'], ['templates']);
+    gulp.watch(['./src/templates/**/*', './src/translations/translations/*', './src/translations/translations/mobile/*', './src/index.html'], ['templates']);
     gulp.watch(['./appconfig.json', './appconfig.default.json'], ['default']);
 });
 

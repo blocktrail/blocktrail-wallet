@@ -1,5 +1,5 @@
 <ion-view class="state-setup state-phone" ng-class="{'blur-me': appControl.showMessage}">
-    <ion-nav-title class="capitalise">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</ion-nav-title>
 
     <ion-content>
         <div class="info-section">
@@ -13,7 +13,7 @@
                     <p class="padding-t">
                         <small>{{ 'SETUP_PHONE_SKIP_MSG' | translate }}</small>
                     </p>
-                    <button class="button button-block button-positive capitalise"
+                    <button class="button button-block button-positive"
                             ui-sref="app.setup.phone-verify({goBackTo: 'app.setup.contacts'})">{{ 'SETUP_PHONE' | translate }}
                     </button>
                     <div class="padding-t">
@@ -22,7 +22,7 @@
                 </div>
                 <div class="item item-borderless" ng-if="settings.phoneVerified">
                     <p>{{ 'SETUP_PHONE_LINKED' | translate }}: {{ settings.phoneNumber }}</p>
-                    <button class="button button-block button-positive capitalise"
+                    <button class="button button-block button-positive"
                             ui-sref="app.setup.contacts">{{ 'CONTINUE' | translate }}
                     </button>
                 </div>
@@ -33,7 +33,7 @@
 </ion-view>
 
 <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
     <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
     <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
     <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>

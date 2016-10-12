@@ -10,7 +10,7 @@
         <div class="info-section">
             <div class="card">
                 <div class="item item-text-wrap">
-                    <h1 class="text-neutral text-center capitalise">{{ 'SETUP_COMPLETE_TITLE' | translate }}</h1>
+                    <h1 class="text-neutral text-center">{{ 'SETUP_COMPLETE_TITLE' | translate }}</h1>
                     <p class="padding-t text-center">
                         {{ 'SETUP_COMPLETE_SUBTITLE' | translate }}
                         <br/>
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="item item-borderless">
-                    <button class="button button-block button-positive capitalise" ng-click="continue()">{{ 'SETUP_COMPLETE' | translate }}
+                    <button class="button button-block button-positive" ng-click="continue()">{{ 'SETUP_COMPLETE' | translate }}
                     </button>
                 </div>
             </div>
@@ -31,7 +31,7 @@
 </ion-view>
 
 <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
     <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
     <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
     <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>

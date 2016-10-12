@@ -3,8 +3,8 @@
         <p>
             Linking your wallet to your phone number will allow you to send to contacts in your phone who also have a BTC.com Wallet.
         </p>
-        <label class="current-phone capitalise">Phone: {{ settings.phoneNumber && settings.phoneNumber || ('NONE' | translate) }}</label>
-        <label class="status capitalise pull-right" ng-if="settings.phoneNumber">Status: <span ng-if="settings.phoneNumber">{{ settings.phoneVerified && ('SETTINGS_PHONE_VERIFIED' | translate) || ('SETTINGS_PHONE_UNVERIFIED' | translate) }}</span></label>
+        <label class="current-phone">Phone: {{ settings.phoneNumber && settings.phoneNumber || ('NONE' | translate) }}</label>
+        <label class="status pull-right" ng-if="settings.phoneNumber">Status: <span ng-if="settings.phoneNumber">{{ settings.phoneVerified && ('SETTINGS_PHONE_VERIFIED' | translate) || ('SETTINGS_PHONE_UNVERIFIED' | translate) }}</span></label>
 
     </div>
     <div class="item item-no-border-b">
@@ -13,7 +13,7 @@
                 <p ng-if="formInput.selectedCountry">{{ formInput.selectedCountry.name | shortenCountryName }} (+{{ formInput.selectedCountry.dialCode }})</p>
             </div>
             <div class="col">
-                <div class="button button-small pull-right capitalise" ng-click="showCountrySelect()">{{ 'SETTINGS_PHONE_CHANGE_COUNTRY' | translate }}</div>
+                <div class="button button-small pull-right" ng-click="showCountrySelect()">{{ 'SETTINGS_PHONE_CHANGE_COUNTRY' | translate }}</div>
             </div>
         </div>
         <label class="item item-input msg">
@@ -23,11 +23,11 @@
     </div>
 
     <div class="item item-no-border tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item capitalise" ng-click="updatePhone()">
+        <a class="tab-item" ng-click="updatePhone()">
             <i class="icon ion-edit"></i>
             {{ (settings.phoneNationalNumber && formInput.newPhoneNumber == settings.phoneNationalNumber) && ('SETTINGS_PHONE_RESEND' | translate) || ('SETTINGS_PHONE_UPDATE' | translate) }}
         </a>
-        <a class="tab-item capitalise" ng-click="removePhone()">
+        <a class="tab-item" ng-click="removePhone()">
             <i class="icon ion-trash-b"></i>
             {{ 'SETTINGS_PHONE_REMOVE' | translate }}
         </a>

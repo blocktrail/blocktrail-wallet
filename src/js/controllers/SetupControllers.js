@@ -221,7 +221,7 @@ angular.module('blocktrail.wallet')
                     if (error.data && error.data.requires_2fa) {
                         return $cordovaDialogs.prompt(
                             $translate.instant('MSG_TWO_FACTOR_REQUIRED').sentenceCase(),
-                            $translate.instant('TWO_FACTOR_REQUIRED').capitalize(),
+                            $translate.instant('TWO_FACTOR_REQUIRED').sentenceCase(),
                             [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()],
                             ""
                         )
@@ -352,7 +352,7 @@ angular.module('blocktrail.wallet')
                     // prompt user to confirm their password
                     return $cordovaDialogs.prompt(
                         $scope.translations['MSG_REPEAT_PASSWORD'].sentenceCase(),
-                        $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].capitalize(),
+                        $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].sentenceCase(),
                         [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
                         "",
                         /* isPassword= */true
@@ -765,7 +765,7 @@ angular.module('blocktrail.wallet')
                     //prompt for wallet password
                     return $cordovaDialogs.prompt(
                         $scope.translations['MSG_WALLET_PASSWORD'].sentenceCase(),
-                        $scope.translations['SETUP_WALLET_PASSWORD'].capitalize(),
+                        $scope.translations['SETUP_WALLET_PASSWORD'].sentenceCase(),
                         [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
                         "",
                         /* isPassword= */true
@@ -783,7 +783,7 @@ angular.module('blocktrail.wallet')
 
                     $scope.setupInfo.password = dialogResult.input1.trim();
                     if (!$scope.setupInfo.password) {
-                        return $cordovaDialogs.alert($scope.translations['MSG_BAD_PWD'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].capitalize(), $scope.translations['OK'])
+                        return $cordovaDialogs.alert($scope.translations['MSG_BAD_PWD'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['OK'])
                             .then(function() {
                                 return $scope.promptWalletPassword();
                             });
@@ -801,7 +801,7 @@ angular.module('blocktrail.wallet')
                             $ionicLoading.hide();
                             if (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError) {
                                 //password still incorrect, try again
-                                return $cordovaDialogs.alert($scope.translations['MSG_BAD_PWD'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].capitalize(), $scope.translations['OK'])
+                                return $cordovaDialogs.alert($scope.translations['MSG_BAD_PWD'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['OK'])
                                     .then(function() {
                                         return $scope.promptWalletPassword();
                                     });
@@ -972,7 +972,7 @@ angular.module('blocktrail.wallet')
                                                 //no mail support...sad times :(
                                                 $cordovaDialogs.alert(
                                                     $translate.instant('MSG_EMAIL_NOT_SETUP').sentenceCase(), 
-                                                    $translate.instant('SORRY').capitalize(), 
+                                                    $translate.instant('SORRY').sentenceCase(),
                                                     $translate.instant('OK')
                                                 ).then(function() {
                                                     deferred.reject('NO_EMAIL');
@@ -1021,7 +1021,7 @@ angular.module('blocktrail.wallet')
         $scope.continue = function() {
             if (!$scope.appControl.backupSaved) {
                 $scope.getTranslations().then(function() {
-                    $cordovaDialogs.alert($scope.translations['MSG_SAVE_BACKUP'].sentenceCase(), $scope.translations['SETUP_WALLET_BACKUP'].capitalize(), $scope.translations['OK'])
+                    $cordovaDialogs.alert($scope.translations['MSG_SAVE_BACKUP'].sentenceCase(), $scope.translations['SETUP_WALLET_BACKUP'].sentenceCase(), $scope.translations['OK'])
                 });
             } else {
                 //delete all temp backup info
@@ -1055,7 +1055,7 @@ angular.module('blocktrail.wallet')
         $scope.skipBackup = function() {
             $cordovaDialogs.confirm(
                 $translate.instant('MSG_SKIP_BACKUP').sentenceCase(),
-                $translate.instant('MSG_ARE_YOU_SURE').capitalize(),
+                $translate.instant('MSG_ARE_YOU_SURE').sentenceCase(),
                 [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
             )
                 .then(function(dialogResult) {
@@ -1137,7 +1137,7 @@ angular.module('blocktrail.wallet')
                             .then(function() {
                                 $cordovaDialogs.alert(
                                     $translate.instant('MSG_CONTACTS_PERMISSIONS').sentenceCase(),
-                                    $translate.instant('PERMISSION_REQUIRED_CONTACTS').capitalize(),
+                                    $translate.instant('PERMISSION_REQUIRED_CONTACTS').sentenceCase(),
                                     $translate.instant('OK')
                                 )
                             });

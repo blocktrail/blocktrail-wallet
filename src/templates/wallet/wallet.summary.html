@@ -1,6 +1,6 @@
 <div class="state-wallet state-summary">
 <ion-view ng-class="{'blur-me': appControl.showTransactionInfo}">
-    <ion-nav-title class="capitalise">{{ 'MY_WALLET' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'MY_WALLET' | translate }}</ion-nav-title>
     <ion-nav-buttons side="right">
         <div class="button button-clear button-quickscan" nav-direction="forward" ui-sref="app.wallet.send.qrcode({backdrop: true})"><i class="icon-qrcode"></i></div>
     </ion-nav-buttons>
@@ -44,7 +44,7 @@
                                 <i class="icon ion-clock"></i>
                             </div>
                             <div class="tx-type">
-                                <span class="tx-display-name capitalise">{{ transaction.contact && transaction.contact.displayName || transaction.altDisplay }}</span>
+                                <span class="tx-display-name">{{ transaction.contact && transaction.contact.displayName || transaction.altDisplay }}</span>
                                 <div class="tx-time">{{ transaction.time | amDateFormat : 'h:mm a' : 'unix' }}</div>
                                 <!--<canvas-display text="(transaction.contact && transaction.contact.displayName || transaction.altDisplay)" width="100%" height="40"></canvas-display>-->
                             </div>

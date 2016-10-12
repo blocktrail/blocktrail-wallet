@@ -1,5 +1,5 @@
 <ion-view class="state-setup state-backup" ng-class="{'blur-me': appControl.showMessage}">
-    <ion-nav-title class="capitalise">{{ 'SETUP_WALLET_BACKUP' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'SETUP_WALLET_BACKUP' | translate }}</ion-nav-title>
 
     <ion-content>
         <div class="backup-info padding-t card">
@@ -8,7 +8,7 @@
             </div>
             <div class="list">
                 <div class="item no-padding-b">
-                    <button class="button send-button button-block button-energized capitalise" ng-click="showExportOptions()">{{ 'SAVE' | translate }}</button>
+                    <button class="button send-button button-block button-energized" ng-click="showExportOptions()">{{ 'SAVE' | translate }}</button>
                 </div>
                 <div class="item item-borderless">
                     <a ng-click="skipBackup()" class="pull-right button button-small button-neutral sentence-case">{{ 'SETUP_SKIP_BACKUP' | translate }}...</a>
@@ -24,7 +24,7 @@
                 <span class="sentence-case">{{ 'SETUP_WALLET_BACKUP_CONFIRM' | translate }}</span>
             </div>
             <div class="item item-borderless">
-                <button class="button button-block capitalise"
+                <button class="button button-block"
                         ng-class="{'button-neutral': !appControl.backupSaved, 'button-positive': appControl.backupSaved}"
                         ng-click="continue()">{{ 'CONTINUE' | translate }}
                 </button>
@@ -35,7 +35,7 @@
 </ion-view>
 
 <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
     <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
     <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
     <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>

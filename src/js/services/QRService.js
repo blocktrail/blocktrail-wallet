@@ -125,7 +125,7 @@ angular.module('blocktrail.wallet')
             if (ENABLED) {
                 $log.debug('start scanning');
                 var params = {
-                    text_title: $translate.instant('QR_SCAN_OVERLAY').capitalize(), // Android only
+                    text_title: $translate.instant('QR_SCAN_OVERLAY').sentenceCase(), // Android only
                     text_instructions: "",      // Android only
                     camera: "back",             // defaults to "back"
                     flash: "off",               // defaults to "auto". anoying when scanning a QR on a screen

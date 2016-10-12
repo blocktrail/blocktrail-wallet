@@ -166,7 +166,7 @@ angular.module('blocktrail.wallet').factory(
                             return settingsService.$isLoaded().then(function() {
                                 return $cordovaDialogs.prompt(
                                         $translate.instant('MSG_BUYBTC_PIN_TO_ENCRYPT').sentenceCase(),
-                                        $translate.instant('MSG_ENTER_PIN').capitalize(),
+                                        $translate.instant('MSG_ENTER_PIN').sentenceCase(),
                                         [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()],
                                         "",
                                         true,   //isPassword
@@ -264,7 +264,7 @@ angular.module('blocktrail.wallet').factory(
                         $translate.instant('MSG_BUYBTC_GLIDERA_2FA_BODY', {
                             mode: twoFactorMode
                         }).sentenceCase(),
-                        $translate.instant('MSG_BUYBTC_GLIDERA_2FA_TITLE').capitalize(),
+                        $translate.instant('MSG_BUYBTC_GLIDERA_2FA_TITLE').sentenceCase(),
                         [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()],
                         ""
                     )
@@ -333,7 +333,7 @@ angular.module('blocktrail.wallet').factory(
                         console.log('promptForPin');
                         return $cordovaDialogs.prompt(
                             $translate.instant('MSG_BUYBTC_PIN_TO_DECRYPT').sentenceCase(),
-                            $translate.instant('MSG_ENTER_PIN').capitalize(),
+                            $translate.instant('MSG_ENTER_PIN').sentenceCase(),
                             [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()],
                             "",
                             true,   //isPassword

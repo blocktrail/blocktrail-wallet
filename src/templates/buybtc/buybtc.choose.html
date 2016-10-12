@@ -1,6 +1,6 @@
 <ion-view class="state-buybtc">
     <ion-nav-title>
-        <span on-hold="resetBuyBTC()" class="capitalise">{{ 'BUYBTC_NAVTITLE' | translate }}</span>
+        <span on-hold="resetBuyBTC()" class="">{{ 'BUYBTC_NAVTITLE' | translate }}</span>
     </ion-nav-title>
 
     <ion-content>
@@ -13,7 +13,7 @@
                 </div>
 
                 <div ng-if="!usSelected">
-                    <h3 class="group-title capitalise">{{ 'BUYBTC_REGIONS' | translate }}</h3>
+                    <h3 class="group-title">{{ 'BUYBTC_REGIONS' | translate }}</h3>
                     <div class="list list-inset">
                         <div class="item item-button-right" ng-click="selectUS()">
                             <span class="sentence-case">USA</span>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div ng-if="usSelected">
-                    <h3 class="group-title capitalise">{{ 'BUYBTC_REGIONS' | translate }}</h3>
+                    <h3 class="group-title">{{ 'BUYBTC_REGIONS' | translate }}</h3>
                     <div class="list list-inset">
                         <div ng-repeat="usState in usStates" class="item item-button-right" ng-click="selectRegion(usState.code, usState.name)">
                             <span class="sentence-case">{{ usState.name }} ({{ usState.code.replace('US-', '') }})</span>
@@ -58,14 +58,14 @@
             <!-- REGION NOT OK -->
             <div ng-if="chooseRegion.code && !chooseRegion.regionOk">
                 <div class="item item-text-wrap">
-                    <h2 class="text-neutral capitalise">{{ 'BUYBTC_REGION_NOTOK_TITLE' | translate }}: <span class="capitalise">{{ chooseRegion.name | translate }}</span></h2>
+                    <h2 class="text-neutral">{{ 'BUYBTC_REGION_NOTOK_TITLE' | translate }}: <span class="">{{ chooseRegion.name | translate }}</span></h2>
                     <p class="padding-t sentence-case" ng-bind-html="'BUYBTC_REGION_NOTOK_BODY' | translate | nl2br"></p>
                 </div>
 
                 <div class="padding-t card">
                     <div class="list">
                         <div class="item">
-                            <button class="button send-button button-block button-energized capitalise" ng-click="selectRegion(null, null)">
+                            <button class="button send-button button-block button-energized" ng-click="selectRegion(null, null)">
                                 {{ 'BUYBTC_CHANGE_REGION' | translate }}
                             </button>
                         </div>
@@ -80,7 +80,7 @@
                     <p class="padding-t" ng-bind-html="'BUYBTC_CHOOSE_SUBTITLE' | translate | nl2br"></p>
                 </div>
 
-                <h3 class="group-title capitalise">{{ 'BUYBTC_PROVIDERS' | translate }}</h3>
+                <h3 class="group-title">{{ 'BUYBTC_PROVIDERS' | translate }}</h3>
                 <div class="list list-inset">
                     <div ng-if="brokers.indexOf('glidera') !== -1" class="item item-button-right" ng-click="goGlideraBrowser()">
                         <span class="sentence-case">Glidera</span>

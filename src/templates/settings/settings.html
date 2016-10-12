@@ -1,8 +1,8 @@
 <ion-view class="state-settings">
-    <ion-nav-title class="capitalise">{{ 'SETTINGS' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'SETTINGS' | translate }}</ion-nav-title>
     <ion-content>
         <form>
-            <h3 class="group-title capitalise" on-hold="enableTranslations()">{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
+            <h3 class="group-title" on-hold="enableTranslations()">{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
             <div class="list list-inset">
                 <div class="item item-button-right">
                     <span class="sentence-case">{{ 'SETTINGS_PROFILE' | translate }}</span>
@@ -28,7 +28,7 @@
 
                 <div class="item item-button-right" ui-sref=".language" ng-if="translationsEnabled">
                     <span class="sentence-case">{{ 'SETTINGS_LANGUAGE' | translate }}</span>
-                    <button class="button button-clear capitalise">
+                    <button class="button button-clear">
                         {{ settings.language | languageName | translate }}
                         <i class="icon ion-chevron-right"></i>
                     </button>
@@ -37,7 +37,7 @@
             </div>
 
 
-            <h3 class="group-title capitalise">{{ 'SETTINGS_PHONE' | translate }}</h3>
+            <h3 class="group-title">{{ 'SETTINGS_PHONE' | translate }}</h3>
             <div class="list card list-inset">
                 <div class="item item-button-right" ui-sref=".phone">
                     <span class="sentence-case">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</span>
@@ -55,7 +55,7 @@
 
                 <div class="item">
                     <span class="sentence-case">{{ 'CONTACTS' | translate }}</span>
-                    <button class="button button-small button-neutral capitalise pull-right no-animate"
+                    <button class="button button-small button-neutral pull-right no-animate"
                             ng-class="{'button-neutral': !appControl.syncing, 'button-positive': appControl.syncing}"
                             ng-if="!appControl.syncComplete"
                             ng-click="settings.enableContacts ? disableContacts() : enableContacts()">
@@ -65,7 +65,7 @@
                         <span ng-if="appControl.syncing && appControl.syncingAll">{{ 'SYNCING_ALL' | translate }}</span>
                         <span ng-if="appControl.syncing" ng-class="{'spin-me': appControl.syncing}"><i class="icon ion-refresh"></i></span>
                     </button>
-                    <button class="button button-small button-balanced capitalise pull-right no-animate" ng-if="appControl.syncComplete">
+                    <button class="button button-small button-balanced pull-right no-animate" ng-if="appControl.syncComplete">
                         {{ 'COMPLETE' | translate }}
                     </button> 
                     <label class="phone-status">
@@ -85,7 +85,7 @@
 
 
 
-            <h3 class="group-title capitalise">{{ 'SETTINGS_DISPLAY' | translate }}</h3>
+            <h3 class="group-title">{{ 'SETTINGS_DISPLAY' | translate }}</h3>
             <div class="list list-inset">
 
                 <div class="item ">
@@ -104,7 +104,7 @@
 
 
 
-            <h3 class="group-title capitalise">{{ 'SETTINGS_WALLET' | translate }}</h3>
+            <h3 class="group-title">{{ 'SETTINGS_WALLET' | translate }}</h3>
             <div class="list list-inset">
                 <div class="item item-button-right">
                     <span class="sentence-case">{{ 'SETTINGS_CURRENT_WALLET' | translate }}</span>
@@ -139,7 +139,7 @@
                 <!-- /PIN -->
 
                 <div class="item ">
-                    <button class="button button-block button-assertive capitalise" ng-click="resetWallet()">
+                    <button class="button button-block button-assertive" ng-click="resetWallet()">
                         {{ 'SETTINGS_RESET_ACCOUNT' | translate }}
                     </button>
                 </div>
@@ -149,7 +149,7 @@
 
 
 
-            <h3 class="group-title capitalise">{{ 'SETTINGS_PRIVACY' | translate }}</h3>
+            <h3 class="group-title">{{ 'SETTINGS_PRIVACY' | translate }}</h3>
             <div class="list list-inset">
                 <div class="item item-toggle">
                     <span class="sentence-case">{{ 'SETTINGS_USAGE_DATA' | translate }}</span>
@@ -163,7 +163,7 @@
             </div>
 
 
-            <h3 class="group-title capitalise">{{ 'SETTINGS_INFO' | translate }}</h3>
+            <h3 class="group-title">{{ 'SETTINGS_INFO' | translate }}</h3>
             <div class="list list-inset">
                 <div class="item item-button-right" ui-sref=".about">
                     <span class="sentence-case">{{ 'SETTINGS_ABOUT' | translate }}</span>
@@ -182,7 +182,7 @@
 
 
             <div ng-if="devEnabled">
-                <h3 class="group-title capitalise">{{ 'SETTINGS_DEVELOPMENT' | translate }}</h3>
+                <h3 class="group-title">{{ 'SETTINGS_DEVELOPMENT' | translate }}</h3>
                 <div class="list list-inset">
 
                     <div class="item item-toggle">

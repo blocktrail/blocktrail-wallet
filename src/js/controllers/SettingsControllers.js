@@ -70,7 +70,7 @@ angular.module('blocktrail.wallet')
                 .then(function() {
                     return $cordovaDialogs.prompt(
                         $scope.translations['MSG_ENTER_PIN'].sentenceCase(),
-                        $scope.translations['SETTINGS_CHANGE_PIN'].capitalize(),
+                        $scope.translations['SETTINGS_CHANGE_PIN'].sentenceCase(),
                         [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
                         "",
                         true,   //isPassword
@@ -110,7 +110,7 @@ angular.module('blocktrail.wallet')
                 })
                 .then(function(result) {
                     //success
-                    return $cordovaDialogs.alert($scope.translations['MSG_PIN_CHANGED'].sentenceCase(), $scope.translations['SUCCESS'].capitalize(), $scope.translations['OK']);
+                    return $cordovaDialogs.alert($scope.translations['MSG_PIN_CHANGED'].sentenceCase(), $scope.translations['SUCCESS'].sentenceCase(), $scope.translations['OK']);
                 })
                 .catch(function(err) {
                     $log.error('PIN change error: ' + err);
@@ -119,13 +119,13 @@ angular.module('blocktrail.wallet')
 
                     if (err instanceof blocktrail.WalletPinError) {
                         //incorrect PIN...try again Mr. user
-                        $cordovaDialogs.alert($scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['MSG_BAD_PIN'].capitalize(), $scope.translations['OK']).then(function() {
+                        $cordovaDialogs.alert($scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['MSG_BAD_PIN'].sentenceCase(), $scope.translations['OK']).then(function() {
                             $scope.changePin();
                         });
                     } else if (err === 'CANCELLED') {
                         return false;
                     } else {
-                        $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].capitalize(), $scope.translations['OK'])
+                        $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].sentenceCase(), $scope.translations['OK'])
                     }
                 });
         };
@@ -143,7 +143,7 @@ angular.module('blocktrail.wallet')
                     //prompt for new PIN
                     return $cordovaDialogs.prompt(
                         $scope.translations['MSG_ENTER_NEW_PIN'].sentenceCase(),
-                        $scope.translations['SETTINGS_NEW_PIN'].capitalize(),
+                        $scope.translations['SETTINGS_NEW_PIN'].sentenceCase(),
                         [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
                         "",
                         true,   //isPassword
@@ -159,7 +159,7 @@ angular.module('blocktrail.wallet')
                     //prompt for repeat of new PIN
                     return $cordovaDialogs.prompt(
                         $scope.translations['MSG_REPEAT_PIN'].sentenceCase(),
-                        $scope.translations['SETTINGS_REPEAT_PIN'].capitalize(),
+                        $scope.translations['SETTINGS_REPEAT_PIN'].sentenceCase(),
                         [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
                         "",
                         true,   //isPassword
@@ -175,13 +175,13 @@ angular.module('blocktrail.wallet')
                     //check PINs match and are valid
                     if (newPIN !== repeatPIN) {
                         //no match, try again Mr. user
-                        return $cordovaDialogs.alert($scope.translations['MSG_BAD_PIN_REPEAT'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].capitalize(), $scope.translations['OK'])
+                        return $cordovaDialogs.alert($scope.translations['MSG_BAD_PIN_REPEAT'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['OK'])
                             .then(function() {
                                 return $scope.promptNewPin();
                             });
                     } else if (newPIN.length < 4) {
                         //PIN must be at least 4 chrs, try again Mr. user
-                        return $cordovaDialogs.alert($scope.translations['MSG_BAD_PIN_LENGTH'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].capitalize(), $scope.translations['OK'])
+                        return $cordovaDialogs.alert($scope.translations['MSG_BAD_PIN_LENGTH'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['OK'])
                             .then(function() {
                                 return $scope.promptNewPin();
                             });
@@ -197,7 +197,7 @@ angular.module('blocktrail.wallet')
             if (!settingsService.phoneVerified) {
                 $scope.getTranslations()
                     .then(function() {
-                        return $cordovaDialogs.alert($scope.translations['MSG_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['SETTINGS_PHONE_REQUIRE_VERIFY'].capitalize(), $scope.translations['OK']);
+                        return $cordovaDialogs.alert($scope.translations['MSG_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['SETTINGS_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['OK']);
                     })
                     .then(function() {
                         $state.go('.phone');
@@ -208,7 +208,7 @@ angular.module('blocktrail.wallet')
             //confirm with user first
             $cordovaDialogs.confirm(
                 $translate.instant('MSG_ENABLE_CONTACTS').sentenceCase(),
-                $translate.instant('SETTINGS_ENABLE_CONTACTS').capitalize(),
+                $translate.instant('SETTINGS_ENABLE_CONTACTS').sentenceCase(),
                 [$translate.instant('OK').sentenceCase(), $translate.instant('CANCEL').sentenceCase()]
                 )
                 .then(function(dialogResult) {
@@ -231,7 +231,7 @@ angular.module('blocktrail.wallet')
                     settingsService.$store();
 
                     if (error !== 'CANCELLED') {
-                        $cordovaDialogs.alert(error.toString(), $translate.instant('FAILED').capitalize(), $translate.instant('OK'));
+                        $cordovaDialogs.alert(error.toString(), $translate.instant('FAILED').sentenceCase(), $translate.instant('OK'));
                     }
                 });
         };
@@ -240,7 +240,7 @@ angular.module('blocktrail.wallet')
             //confirm with user first
             $cordovaDialogs.confirm(
                 $translate.instant('MSG_DISABLE_CONTACTS').sentenceCase(),
-                $translate.instant('MSG_ARE_YOU_SURE').capitalize(),
+                $translate.instant('MSG_ARE_YOU_SURE').sentenceCase(),
                 [$translate.instant('OK').sentenceCase(), $translate.instant('CANCEL').sentenceCase()]
                 )
                 .then(function(dialogResult) {
@@ -270,7 +270,7 @@ angular.module('blocktrail.wallet')
                 })
                 .catch(function(error) {
                     if (error !== 'CANCELLED') {
-                        $cordovaDialogs.alert(error.toString(), $translate.instant('FAILED').capitalize(), $translate.instant('OK'));
+                        $cordovaDialogs.alert(error.toString(), $translate.instant('FAILED').sentenceCase(), $translate.instant('OK'));
                     }
 
                     $ionicLoading.hide();
@@ -319,7 +319,7 @@ angular.module('blocktrail.wallet')
                             .then(function() {
                                 $cordovaDialogs.alert(
                                     $scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(),
-                                    $scope.translations['PERMISSION_REQUIRED_CONTACTS'].capitalize(),
+                                    $scope.translations['PERMISSION_REQUIRED_CONTACTS'].sentenceCase(),
                                     $scope.translations['OK']
                                 );
                             });
@@ -339,7 +339,7 @@ angular.module('blocktrail.wallet')
                     .then(function() {
                         return $cordovaDialogs.prompt(
                             $scope.translations['MSG_ENTER_PIN'].sentenceCase(),
-                            $scope.translations['WALLET_PIN'].capitalize(),
+                            $scope.translations['WALLET_PIN'].sentenceCase(),
                             [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
                             "",
                             true,   //isPassword
@@ -367,19 +367,19 @@ angular.module('blocktrail.wallet')
                         $ionicLoading.hide();
                         if (err instanceof blocktrail.WalletPinError) {
                             //incorrect PIN...try again Mr. user
-                            $cordovaDialogs.alert($scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['MSG_BAD_PIN'].capitalize(), $scope.translations['OK']).then(function() {
+                            $cordovaDialogs.alert($scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['MSG_BAD_PIN'].sentenceCase(), $scope.translations['OK']).then(function() {
                                 $scope.walletBackup();
                             });
                         } else if (err === 'CANCELLED') {
                             return false;
                         } else {
-                            $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].capitalize(), $scope.translations['OK']);
+                            $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].sentenceCase(), $scope.translations['OK']);
                         }
                     });
             } else {
                 $cordovaDialogs.alert(
                     $translate.instant('MSG_BACKUP_SAVED_ALREADY').sentenceCase(),
-                    $translate.instant('SETTINGS_BACKUP_COMPLETE').capitalize(),
+                    $translate.instant('SETTINGS_BACKUP_COMPLETE').sentenceCase(),
                     $translate.instant('OK')
                 );
             }
@@ -394,7 +394,7 @@ angular.module('blocktrail.wallet')
                     //ask the user to finally confirm their action
                     return $cordovaDialogs.confirm(
                         $scope.translations['MSG_RESET_WALLET'].sentenceCase(),
-                        $scope.translations['MSG_ARE_YOU_SURE'].capitalize(),
+                        $scope.translations['MSG_ARE_YOU_SURE'].sentenceCase(),
                         [$scope.translations['OK'].sentenceCase(), $scope.translations['CANCEL'].sentenceCase()]
                     );
                 })
@@ -404,7 +404,7 @@ angular.module('blocktrail.wallet')
                         if (!settingsService.backupSaved) {
                             return $cordovaDialogs.confirm(
                                 $scope.translations['MSG_BACKUP_UNSAVED'].sentenceCase(),
-                                $scope.translations['MSG_ARE_YOU_SURE'].capitalize(),
+                                $scope.translations['MSG_ARE_YOU_SURE'].sentenceCase(),
                                 [$scope.translations['OK'].sentenceCase(), $scope.translations['CANCEL'].sentenceCase()]
                             );
                         } else {
@@ -432,13 +432,13 @@ angular.module('blocktrail.wallet')
                     $ionicLoading.hide();
                     if (err instanceof blocktrail.WalletPinError) {
                         //incorrect PIN...try again Mr. user
-                        $cordovaDialogs.alert($scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['MSG_BAD_PIN'].capitalize(), $scope.translations['OK']).then(function() {
+                        $cordovaDialogs.alert($scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['MSG_BAD_PIN'].sentenceCase(), $scope.translations['OK']).then(function() {
                             $scope.resetWallet();
                         });
                     } else if (err === 'CANCELLED') {
                         return false;
                     } else {
-                        $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].capitalize(), $scope.translations['OK'])
+                        $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].sentenceCase(), $scope.translations['OK'])
                     }
                 });
         };
@@ -457,7 +457,7 @@ angular.module('blocktrail.wallet')
         $scope.enableDev = function() {
             $scope.devEnabled = true;
             $scope.getTranslations().then(function() {
-                $cordovaDialogs.alert("Developer mode enabled", $scope.translations['SUCCESS'].capitalize(), $scope.translations['OK']);
+                $cordovaDialogs.alert("Developer mode enabled", $scope.translations['SUCCESS'].sentenceCase(), $scope.translations['OK']);
             });
         };
 
@@ -924,7 +924,7 @@ angular.module('blocktrail.wallet')
         if (!backupInfo) {
             $cordovaDialogs.alert(
                 $translate.instant('MSG_BACKUP_SAVED_ALREADY').sentenceCase(),
-                $translate.instant('SETTINGS_BACKUP_COMPLETE').capitalize(),
+                $translate.instant('SETTINGS_BACKUP_COMPLETE').sentenceCase(),
                 $translate.instant('OK')
             ).then(function() {
                 $btBackButtonDelegate.goBack();
@@ -1091,7 +1091,7 @@ angular.module('blocktrail.wallet')
                                                 //no mail support...sad times :(
                                                 $cordovaDialogs.alert(
                                                     $translate.instant('MSG_EMAIL_NOT_SETUP').sentenceCase(), 
-                                                    $translate.instant('SORRY').capitalize(), 
+                                                    $translate.instant('SORRY').sentenceCase(),
                                                     $translate.instant('OK')
                                                 ).then(function() {
                                                     deferred.reject('NO_EMAIL');
@@ -1141,7 +1141,7 @@ angular.module('blocktrail.wallet')
         $scope.continue = function() {
             if (!$scope.appControl.backupSaved) {
                 $scope.getTranslations().then(function() {
-                    $cordovaDialogs.alert($scope.translations['MSG_SAVE_BACKUP'].sentenceCase(), $scope.translations['SETUP_WALLET_BACKUP'].capitalize(), $scope.translations['OK'])
+                    $cordovaDialogs.alert($scope.translations['MSG_SAVE_BACKUP'].sentenceCase(), $scope.translations['SETUP_WALLET_BACKUP'].sentenceCase(), $scope.translations['OK'])
                 });
             } else {
                 //delete all temp backup info
@@ -1176,7 +1176,7 @@ angular.module('blocktrail.wallet')
         $scope.skipBackup = function() {
             $cordovaDialogs.confirm(
                 $translate.instant('MSG_SKIP_BACKUP').sentenceCase(),
-                $translate.instant('MSG_ARE_YOU_SURE').capitalize(),
+                $translate.instant('MSG_ARE_YOU_SURE').sentenceCase(),
                 [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
             )
                 .then(function(dialogResult) {

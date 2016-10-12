@@ -1,5 +1,5 @@
 <ion-view class="state-settings state-profile">
-    <ion-nav-title class="capitalise">{{ 'SETTINGS_PROFILE' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'SETTINGS_PROFILE' | translate }}</ion-nav-title>
     <ion-nav-buttons side="right">
         <div class="button hide"
             nav-direction="back" 
@@ -15,17 +15,17 @@
                     <div class="initials"><i class="ion-person"></i></div>
                     <span class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: {{ settings.profilePosX }}%; background-position-y: {{ settings.profilePosY }}%;"></span>
                 </div>
-                <div ng-if="settings.username" class="username"><label class="capitalise">{{ 'SETTING_USERNAME' | translate }}: </label>{{ settings.username }}</div>
-                <div ng-if="settings.email" class="email"><label class="capitalise">{{ 'EMAIL' | translate }}: </label>{{ settings.email }}</div>
+                <div ng-if="settings.username" class="username"><label class="">{{ 'SETTING_USERNAME' | translate }}: </label>{{ settings.username }}</div>
+                <div ng-if="settings.email" class="email"><label class="">{{ 'EMAIL' | translate }}: </label>{{ settings.email }}</div>
 
                 <p>{{ 'SETTINGS_PROFILE_DESCRIPTION' | translate }}</p>
             </div>
             <div class="item tabs tabs-secondary tabs-icon-left">
-                <a class="tab-item capitalise" ng-click="removePicture()">
+                <a class="tab-item" ng-click="removePicture()">
                     <i class="icon ion-trash-b"></i>
                     {{ 'SETTINGS_REMOVE_PHOTO' | translate }}
                 </a>
-                <a class="tab-item capitalise" ng-click="updatePicture()">
+                <a class="tab-item" ng-click="updatePicture()">
                     <i class="icon ion-edit"></i>
                     {{ 'SETTINGS_UPDATE_PHOTO' | translate }}
                 </a>
@@ -47,7 +47,7 @@
             <p>{{ 'LOADING' | translate }}</p>
         </div>
 
-        <button class="button button-outline confirm-button capitalise" ng-click="assignProfileImage(croppedProfileImage)">{{ 'APPLY' | translate }}</button>
+        <button class="button button-outline confirm-button" ng-click="assignProfileImage(croppedProfileImage)">{{ 'APPLY' | translate }}</button>
     </div>
     <!-- /photo crop screen -->
 </ion-view>

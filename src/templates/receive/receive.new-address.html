@@ -1,5 +1,5 @@
 <ion-view view-title="Receive" class="state-receive">
-    <ion-nav-title class="capitalise">{{ 'RECEIVE' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'RECEIVE' | translate }}</ion-nav-title>
 
     <ion-content scroll="true" has-bouncing="true">
         <div class="card">
@@ -12,7 +12,7 @@
                            ng-enter="blurInput($event)"
                            tabindex="{{ !fiatFirst && 1 || -1 }}"/>
                     <div class="label-group">
-                        <span class="placeholder-label capitalise">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
+                        <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                         <span class="spacer">{{ btcValueRaw }}</span>
                         <span class="label" ng-class="{'opacity-30': newRequestForm.btcValue.$invalid}">BTC</span>
                     </div>
@@ -25,7 +25,7 @@
                            ng-enter="blurInput($event)"
                            tabindex="{{ fiatFirst && 1 || -1 }}"/>
                     <div class="label-group">
-                        <span class="placeholder-label capitalise">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
+                        <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                         <span class="label">{{ settings.localCurrency | toCurrencySymbol}}</span>
                         <span class="spacer">{{ fiatValueRaw }}</span>
                     </div>
@@ -61,13 +61,13 @@
                 <div class="col text-center">
                     <div class="option">
                         <a class="copy" ng-click="toClipboard()"><i class="icon ion-ios-copy"></i></a>
-                        <span class="label capitalise">{{ 'COPY' | translate }}</span>
+                        <span class="label">{{ 'COPY' | translate }}</span>
                     </div>
                 </div>
                 <div class="col text-center">
                     <div class="option">
                         <a class="sms" ng-click="toSMS()"><i class="icon ion-ios-chatbubble"></i></a>
-                        <span class="label capitalise">{{ 'SMS' | translate }}</span>
+                        <span class="label">{{ 'SMS' | translate }}</span>
                     </div>
                 </div>
             </div>

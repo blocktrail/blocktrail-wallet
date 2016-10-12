@@ -129,7 +129,7 @@ angular.module('blocktrail.wallet')
             if (!settingsService.phoneVerified) {
                 $scope.getTranslations()
                     .then(function() {
-                        return $cordovaDialogs.alert($scope.translations['MSG_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['SETTINGS_PHONE_REQUIRE_VERIFY'].capitalize(), $scope.translations['OK']);
+                        return $cordovaDialogs.alert($scope.translations['MSG_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['SETTINGS_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['OK']);
                     })
                     .then(function() {
                         $state.go('app.wallet.settings.phone', {goBackTo: 'app.wallet.send.contacts'});
@@ -138,7 +138,7 @@ angular.module('blocktrail.wallet')
             } else if(!settingsService.enableContacts) {
                 $cordovaDialogs.alert(
                     $translate.instant('MSG_REQUIRE_CONTACTS_ACCESS').sentenceCase(),
-                    $translate.instant('CONTACTS_DISABLED').capitalize(),
+                    $translate.instant('CONTACTS_DISABLED').sentenceCase(),
                     $translate.instant('OK')
                 );
             } else {
@@ -554,7 +554,7 @@ angular.module('blocktrail.wallet')
                         { text: transactions['CONTACTS_WALLETS_ONLY'].sentenceCase() }
                     ],
                     cancelText: transactions['CANCEL'].sentenceCase(),
-                    titleText: transactions['CONTACTS_FILTER_TITLE'].capitalize(),
+                    titleText: transactions['CONTACTS_FILTER_TITLE'].sentenceCase(),
                     destructiveText: transactions['CONTACTS_RESYNC'].sentenceCase(),
                     cancel: function() {},
                     buttonClicked: function(index) {
@@ -578,7 +578,7 @@ angular.module('blocktrail.wallet')
                                 $ionicLoading.hide();
                             }, function(err) {
                                 $ionicLoading.hide();
-                                return $cordovaDialogs.alert(err.toString(), $scope.translations['ERROR'].capitalize(), $scope.translations['OK']);
+                                return $cordovaDialogs.alert(err.toString(), $scope.translations['ERROR'].sentenceCase(), $scope.translations['OK']);
                             });
                         return true;
                     }
@@ -615,7 +615,7 @@ angular.module('blocktrail.wallet')
                         settingsService.permissionContacts = false;      //ensure iOS permissions are up to date
                         settingsService.enableContacts = false;
                         settingsService.$store();
-                        $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].capitalize(), $scope.translations['OK'])
+                        $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].sentenceCase(), $scope.translations['OK'])
                     }
 
                     return $q.reject(err);
@@ -646,7 +646,7 @@ angular.module('blocktrail.wallet')
                         settingsService.enableContacts = false;
                         settingsService.permissionContacts = false; //ensure iOS permissions are up to date
                         settingsService.$store();
-                        $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].capitalize(), $scope.translations['OK'])
+                        $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].sentenceCase(), $scope.translations['OK'])
                     }
                     return $q.when($scope.$broadcast('scroll.refreshComplete'));
                 });

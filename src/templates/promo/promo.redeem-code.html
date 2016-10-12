@@ -1,18 +1,18 @@
 <ion-view class="state-promo">
-    <ion-nav-title class="capitalise">{{ 'PROMO_CODES' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'PROMO_CODES' | translate }}</ion-nav-title>
     <ion-nav-buttons side="right">
-        <div class="button capitalise" ng-show="!appControl.showMessage && isKeyboardShown" ng-click="confirmInput()">{{ 'REDEEM' | translate }}</div>
+        <div class="button" ng-show="!appControl.showMessage && isKeyboardShown" ng-click="confirmInput()">{{ 'REDEEM' | translate }}</div>
     </ion-nav-buttons>
 
     <ion-content ng-class="{'blur-me': appControl.showMessage && isIOS}">
         <div class="message text-center">
-            <h3 class="title capitalise" ng-class="message.title_class" ng-show="!appControl.working">{{ message.title | translate }}</h3>
+            <h3 class="title" ng-class="message.title_class" ng-show="!appControl.working">{{ message.title | translate }}</h3>
             <p class="body" ng-class="message.body_class" ng-show="!appControl.working">{{ message.body | translate }}</p>
         </div>
 
         <div class="card">
             <div class="item">
-                <h2 class="capitalise text-center title">{{ 'PROMO_REDEEM' | translate }}</h2>
+                <h2 class=" text-center title">{{ 'PROMO_REDEEM' | translate }}</h2>
             </div>
 
             <div class="list list-inset address-input">
@@ -24,14 +24,14 @@
 
             <div class="list">
                 <div class="item">
-                    <button class="button capitalise button-block button-energized" ng-click="confirmInput()">{{ 'REDEEM' | translate }}</button>
+                    <button class="button button-block button-energized" ng-click="confirmInput()">{{ 'REDEEM' | translate }}</button>
                 </div>
             </div>
         </div>
     </ion-content>
 
     <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="dismissMessage()">
-        <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+        <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
         <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
         <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
         <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>

@@ -261,9 +261,9 @@ angular.module('blocktrail.wallet')
 
         moment.locale('en', {
             calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'english').capitalize() + ']',
-                sameDay : '[' + translate('TODAY', 'english').capitalize() + ']',
-                nextDay : '[' + translate('TOMORROW', 'english').capitalize() + ']',
+                lastDay : '[' + translate('YESTERDAY', 'english').sentenceCase() + ']',
+                sameDay : '[' + translate('TODAY', 'english').sentenceCase() + ']',
+                nextDay : '[' + translate('TOMORROW', 'english').sentenceCase() + ']',
                 lastWeek : 'MMMM D',
                 nextWeek : 'MMMM Do YYYY',
                 sameElse : 'MMMM Do YYYY'
@@ -272,9 +272,9 @@ angular.module('blocktrail.wallet')
 
         moment.locale('nl', {
             calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'dutch').capitalize() + ']',
-                sameDay : '[' + translate('TODAY', 'dutch').capitalize() + ']',
-                nextDay : '[' + translate('TOMORROW', 'dutch').capitalize() + ']',
+                lastDay : '[' + translate('YESTERDAY', 'dutch').sentenceCase() + ']',
+                sameDay : '[' + translate('TODAY', 'dutch').sentenceCase() + ']',
+                nextDay : '[' + translate('TOMORROW', 'dutch').sentenceCase() + ']',
                 lastWeek : 'D MMMM',
                 nextWeek : 'D MMMM YYYY',
                 sameElse : 'D MMMM YYYY'
@@ -283,9 +283,9 @@ angular.module('blocktrail.wallet')
 
         moment.locale('fr', {
             calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'french').capitalize() + ']',
-                sameDay : '[' + translate('TODAY', 'french').capitalize() + ']',
-                nextDay : '[' + translate('TOMORROW', 'french').capitalize() + ']',
+                lastDay : '[' + translate('YESTERDAY', 'french').sentenceCase() + ']',
+                sameDay : '[' + translate('TODAY', 'french').sentenceCase() + ']',
+                nextDay : '[' + translate('TOMORROW', 'french').sentenceCase() + ']',
                 lastWeek : 'D MMMM',
                 nextWeek : 'D MMMM YYYY',
                 sameElse : 'D MMMM YYYY'
@@ -294,9 +294,9 @@ angular.module('blocktrail.wallet')
 
         moment.locale('es', {
             calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'spanish').capitalize() + ']',
-                sameDay : '[' + translate('TODAY', 'spanish').capitalize() + ']',
-                nextDay : '[' + translate('TOMORROW', 'spanish').capitalize() + ']',
+                lastDay : '[' + translate('YESTERDAY', 'spanish').sentenceCase() + ']',
+                sameDay : '[' + translate('TODAY', 'spanish').sentenceCase() + ']',
+                nextDay : '[' + translate('TOMORROW', 'spanish').sentenceCase() + ']',
                 lastWeek : 'D [de] MMMM',
                 nextWeek : 'D [de] MMMM [de] YYYY',
                 sameElse : 'D [de] MMMM [de] YYYY'
@@ -305,9 +305,9 @@ angular.module('blocktrail.wallet')
 
         moment.locale('ru', {
             calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'russian').capitalize() + ']',
-                sameDay : '[' + translate('TODAY', 'russian').capitalize() + ']',
-                nextDay : '[' + translate('TOMORROW', 'russian').capitalize() + ']',
+                lastDay : '[' + translate('YESTERDAY', 'russian').sentenceCase() + ']',
+                sameDay : '[' + translate('TODAY', 'russian').sentenceCase() + ']',
+                nextDay : '[' + translate('TOMORROW', 'russian').sentenceCase() + ']',
                 lastWeek : 'D MMMM',
                 nextWeek : 'D MMMM YYYY',
                 sameElse : 'D MMMM YYYY'
@@ -316,9 +316,9 @@ angular.module('blocktrail.wallet')
 
         moment.locale('zh-cn', {
             calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'chinese').capitalize() + ']',
-                sameDay : '[' + translate('TODAY', 'chinese').capitalize() + ']',
-                nextDay : '[' + translate('TOMORROW', 'chinese').capitalize() + ']',
+                lastDay : '[' + translate('YESTERDAY', 'chinese').sentenceCase() + ']',
+                sameDay : '[' + translate('TODAY', 'chinese').sentenceCase() + ']',
+                nextDay : '[' + translate('TOMORROW', 'chinese').sentenceCase() + ']',
                 lastWeek : 'YYYY-MM-DD',
                 nextWeek : 'YYYY-MM-DD',
                 sameElse : 'YYYY-MM-DD'
@@ -659,7 +659,7 @@ angular.module('blocktrail.wallet').config(
                                 //missing account info, go to reset state to force user to log in again
                                 $cordovaDialogs.alert(
                                     $translate.instant('MSG_CORRUPT_DATA').sentenceCase(),
-                                    $translate.instant('ERROR_TITLE_3').capitalize(),
+                                    $translate.instant('ERROR_TITLE_3').sentenceCase(),
                                     $translate.instant('OK')
                                 ).then(function() {
                                     $state.go('app.reset');

@@ -55,7 +55,7 @@ angular.module('blocktrail.wallet')
                                         oldLanguage: $translate.instant(blocktrailLocalisation.languageName(settingsService.language)),
                                         newLanguage: $translate.instant(blocktrailLocalisation.languageName(preferredLanguage))
                                     }).sentenceCase(),
-                                    $translate.instant('MSG_BETTER_LANGUAGE_TITLE').capitalize(),
+                                    $translate.instant('MSG_BETTER_LANGUAGE_TITLE').sentenceCase(),
                                     [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
                                 )
                                     .then(function(dialogResult) {

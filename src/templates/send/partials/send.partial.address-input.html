@@ -2,13 +2,13 @@
     <ion-content>
 
         <div class="message text-center">
-            <h3 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h3>
+            <h3 class="title" ng-class="message.title_class">{{ message.title | translate }}</h3>
             <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
         </div>
 
         <div class="card">
             <div class="item">
-                <h2 class="capitalise text-center title capitalise">{{ 'ENTER_ADDRESS_TITLE' | translate }}</h2>
+                <h2 class=" text-center title">{{ 'ENTER_ADDRESS_TITLE' | translate }}</h2>
             </div>
 
             <div class="list list-inset address-input">
@@ -20,7 +20,7 @@
 
             <div class="list">
                 <div class="item">
-                    <button class="button button-block button-energized capitalise" ng-click="confirmInput(addressInput)">{{ 'CONFIRM' | translate }}</button>
+                    <button class="button button-block button-energized" ng-click="confirmInput(addressInput)">{{ 'CONFIRM' | translate }}</button>
                 </div>
             </div>
         </div>

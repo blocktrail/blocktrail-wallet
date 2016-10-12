@@ -1,5 +1,5 @@
 <ion-view class="state-feedback">
-    <ion-nav-title class="capitalise">{{ 'FEEDBACK' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'FEEDBACK' | translate }}</ion-nav-title>
     <ion-nav-buttons side="right">
         <div class="button" ng-show="!appControl.showMessage && isKeyboardShown" ng-click="sendFeedback()">{{ 'SEND' | translate }}</div>
     </ion-nav-buttons>
@@ -20,14 +20,14 @@
             </label>
 
             <div class="item padding-top padding-b text-center">
-                <button class="button button-block button-energized capitalise" ng-click="sendFeedback()">{{ 'SEND' | translate }}</button>
+                <button class="button button-block button-energized" ng-click="sendFeedback()">{{ 'SEND' | translate }}</button>
             </div>
 
         </div>
     </ion-content>
 
     <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="dismissMessage()">
-        <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+        <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
         <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
         <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
         <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>

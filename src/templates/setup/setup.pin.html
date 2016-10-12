@@ -1,5 +1,5 @@
 <ion-view class="state-setup state-pin" ng-class="{'blur-me': appControl.showMessage}">
-    <ion-nav-title class="capitalise">{{ 'WALLET_PIN' | translate }}</ion-nav-title>
+    <ion-nav-title class="">{{ 'WALLET_PIN' | translate }}</ion-nav-title>
 
     <ion-content scroll="false">
         <div class="padding-t card">
@@ -21,7 +21,7 @@
 
             <div class="row text-center">
                 <div class="col col-offset-25 col-50 padding-bottom">
-                    <button class="button button-block capitalise" ng-click="setupWallet()">{{ 'CONTINUE' | translate }}</button>
+                    <button class="button button-block" ng-click="setupWallet()">{{ 'CONTINUE' | translate }}</button>
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@
 </ion-view>
 
 <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title capitalise" ng-class="message.title_class">{{ message.title | translate }}</h2>
+    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
     <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
     <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
     <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
