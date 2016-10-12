@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
     .controller('BuyBTCChooseCtrl', function($q, $scope, $state, $rootScope, $cordovaDialogs, settingsService, $ionicLoading,
-                                             $translate, $ionicScrollDelegate, glideraService, $log) {
+                                             $translate, $ionicScrollDelegate, glideraService, buyBTCService, $log) {
         $scope.brokers = [];
 
         // load chooseRegion from settingsService
@@ -12,10 +12,10 @@ angular.module('blocktrail.wallet')
         });
         settingsService.$isLoaded().then(function() {
             $q.all([
-                glideraService.regions().then(function(regions) {
+                buyBTCService.regions().then(function(regions) {
                     $scope.regions = regions;
                 }),
-                glideraService.usStates().then(function(usStates) {
+                buyBTCService.usStates().then(function(usStates) {
                     $scope.usStates = usStates;
                 })
             ]).then(function() {
@@ -24,7 +24,7 @@ angular.module('blocktrail.wallet')
                     name: null
                 });
 
-                return glideraService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
+                return buyBTCService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
                     $scope.brokers = brokers;
                     $scope.chooseRegion.regionOk = $scope.brokers.length;
 
@@ -38,7 +38,7 @@ angular.module('blocktrail.wallet')
             $scope.chooseRegion.code = region;
             $scope.chooseRegion.name = name;
 
-            glideraService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
+            buyBTCService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
                 $scope.brokers = brokers;
                 $scope.chooseRegion.regionOk = $scope.brokers.length;
 
@@ -162,7 +162,7 @@ angular.module('blocktrail.wallet')
 ;
 
 angular.module('blocktrail.wallet')
-    .controller('BuyBTCBuyCtrl', function($scope, $state, $rootScope, $ionicLoading, $cordovaDialogs, glideraService,
+    .controller('BuyBTCBuyCtrl', function($scope, $state, $rootScope, $ionicLoading, $cordovaDialogs, glideraService, buyBTCService,
                                           $stateParams, $log, $timeout, $interval, $translate, $filter, CurrencyConverter) {
         $scope.broker = $stateParams.broker;
 
