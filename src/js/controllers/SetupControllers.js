@@ -515,7 +515,7 @@ angular.module('blocktrail.wallet')
                 return false;
             }
 
-            $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: ''};
+            $scope.message = {title: 'CREATING_INIT_WALLET', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
 
