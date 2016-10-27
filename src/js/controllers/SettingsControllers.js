@@ -684,7 +684,8 @@ angular.module('blocktrail.wallet')
         $scope.currencies = [
             {code: 'USD', symbol: '$'},
             {code: 'EUR', symbol: '€'},
-            {code: 'GBP', symbol: '£'}
+            {code: 'GBP', symbol: '£'},
+            {code: 'CNY', symbol: '¥'}
         ];
         $scope.form = {selected: ''};
 

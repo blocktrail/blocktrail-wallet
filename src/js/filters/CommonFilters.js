@@ -35,6 +35,9 @@ angular.module('blocktrail.wallet')
                 case 'AUD':
                     currencyDisplay = useMarkup ? ('<span class="disp">$</span>') : "$";
                     return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
+                case 'CNY':
+                    currencyDisplay = useMarkup ? ('<span class="disp">¥</span>') : "¥";
+                    return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
                 case 'BTC':
                     currencyDisplay = useMarkup ? (' <span class="disp">BTC</span>') : " BTC";
                     return hideCurrencyDisplay ? btc.toFixed(fractionSize) : btc.toFixed(fractionSize) + currencyDisplay;
