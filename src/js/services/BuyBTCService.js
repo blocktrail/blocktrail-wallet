@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'buyBTCService',
-    function(CONFIG, $log, $q, Wallet, $cordovaDialogs, $translate, $http) {
+    function(CONFIG, $log, $q, Wallet, $cordovaDialogs, $translate, $http, glideraService) {
         var SUPPORTED_BROKERS = ['glidera'];
 
         var _regions = [
@@ -64,6 +64,8 @@ angular.module('blocktrail.wallet').factory(
         var getBrokers = function() {
             return $http.get(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?v=" + CONFIG.VERSION)
                 .then(function(result) {
+                    glideraService.setClientId(result.data.glidera_client_id);
+
                     return result.data.brokers;
                 })
                 .then(function(brokers) {

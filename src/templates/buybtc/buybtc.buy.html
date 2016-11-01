@@ -34,25 +34,25 @@
             </section>
 
             <div class="card">
-                <div class="amount-input-section" ng-class="{'with-footer': sendInput.btcValue || sendInput.fiatValue, 'btc-first': !fiatFirst, 'fiat-first': fiatFirst}">
+                <div class="amount-input-section" ng-class="{'with-footer': buyInput.btcValue || buyInput.fiatValue, 'btc-first': !fiatFirst, 'fiat-first': fiatFirst}">
                     <div class="input-group btc-input" ng-class="{'position-first': !fiatFirst, 'position-last': fiatFirst}">
                         <input type="{{ isSamsung && 'text' || 'number' }}" step="0.0001" name="btcValue" select-on-focus
-                               ng-model="sendInput.btcValue"
+                               ng-model="buyInput.btcValue"
                                raw-model="btcValueRaw"
-                               ng-change="setFiat(); sendInputForm.fiatValue.$setDirty()"
+                               ng-change="setFiat(); buyInputForm.fiatValue.$setDirty()"
                                ng-enter="blurInput($event)"
                                tabindex="{{ !fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
                             <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                             <span class="spacer">{{ btcValueRaw }}</span>
-                            <span class="label" ng-class="{'opacity-30': sendInputForm.btcValue.$invalid}">BTC</span>
+                            <span class="label" ng-class="{'opacity-30': buyInputForm.btcValue.$invalid}">BTC</span>
                         </div>
                     </div>
                     <div class="input-group fiat-input" ng-class="{'position-first': fiatFirst, 'position-last': !fiatFirst}">
                         <input type="{{ isSamsung && 'text' || 'number' }}" step="0.01" name="fiatValue"
-                               ng-model="sendInput.fiatValue"
+                               ng-model="buyInput.fiatValue"
                                raw-model="fiatValueRaw"
-                               ng-change="setBTC(); sendInputForm.btcValue.$setDirty()"
+                               ng-change="setBTC(); buyInputForm.btcValue.$setDirty()"
                                ng-enter="blurInput($event)"
                                tabindex="{{ fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
@@ -65,10 +65,10 @@
                         <i class="swap-icon ion-arrow-swap"></i>
                     </div>
 
-                    <div class="amount-footer amount-feefooter" ng-if="sendInput.btcValue || sendInput.fiatValue">
-                        <div class="feefooter-left sentence-case">{{ 'BUYBTC_INCL_FEE' | translate }} ({{ sendInput.feePercentage | number:1 }}%):</div>
+                    <div class="amount-footer amount-feefooter" ng-if="buyInput.btcValue || buyInput.fiatValue">
+                        <div class="feefooter-left sentence-case">{{ 'BUYBTC_INCL_FEE' | translate }} ({{ buyInput.feePercentage | number:1 }}%):</div>
                         <div class="feefooter-right">
-                            {{ priceBTCCurrency | toCurrencySymbol }}{{ sendInput.feeValue | number:2 }}
+                            {{ priceBTCCurrency | toCurrencySymbol }}{{ buyInput.feeValue | number:2 }}
                         </div>
                     </div>
                 </div>

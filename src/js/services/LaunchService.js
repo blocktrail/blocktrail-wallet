@@ -7,6 +7,18 @@ angular.module('blocktrail.wallet').factory(
             self.storage = storageService.db('launch');
         };
 
+        var walletSecret = null;
+        LaunchService.prototype.stashWalletSecret = function(secret) {
+            walletSecret = secret;
+        };
+
+        LaunchService.prototype.getWalletSecret = function() {
+            var secret = walletSecret;
+            walletSecret = null;
+
+            return secret;
+        };
+
         LaunchService.prototype.getAccountInfo = function() {
             var self = this;
 

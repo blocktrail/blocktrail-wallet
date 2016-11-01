@@ -22,6 +22,7 @@ angular.module('blocktrail.wallet').service(
 
         glideraRequest: null,
         glideraAccessToken: null,
+        glideraTransactions: [],
 
         buyBTCRegion: null,
 
@@ -190,6 +191,7 @@ angular.module('blocktrail.wallet').service(
                     email: self.email,
                     walletActivated: self.walletActivated,
                     glideraAccessToken: self.glideraAccessToken,
+                    glideraTransactions: self.glideraTransactions || [],
                     buyBTCRegion: self.buyBTCRegion
                 };
 
@@ -210,6 +212,7 @@ angular.module('blocktrail.wallet').service(
                     self.email = result.email;
                     self.walletActivated = result.walletActivated;
                     self.glideraAccessToken = result.glideraAccessToken;
+                    self.glideraTransactions = result.glideraTransactions || [];
                     self.buyBTCRegion = result.buyBTCRegion;
 
                     return self.$store();

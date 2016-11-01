@@ -243,7 +243,12 @@ angular.module('blocktrail.wallet').run(
 
         // uri intent handler, rest is handled by LaunchController
         $window.handleOpenURL = function(url) {
+            $log.debug('handleOpenURL: ' + url + ' (' + $state.is('app.launch') + ')');
             $rootScope.handleOpenURL = "" + url;
+
+            if (!$state.is('app.launch')) {
+                $state.go('app.launch');
+            }
         };
     }
 );
@@ -406,6 +411,7 @@ angular.module('blocktrail.wallet').config(
             /*---Launch---*/
             .state('app.launch', {
                 url: "/launch",
+                cache: false,
                 data: {
                     excludeFromHistory: true,
                     clearHistory: true  //always clear history when entering this state
@@ -700,16 +706,8 @@ angular.module('blocktrail.wallet').config(
                     }
                 }
             })
-            .state('app.wallet.buybtc.glidera_bitid_callback', {
-                url: "/glidera/bitid/callback",
-                views: {
-                    "mainView@app.wallet": {
-                        templateUrl: "templates/buybtc/buybtc.glidera_callback.html",
-                        controller: 'BuyBTCGlideraBitIDCallbackCtrl'
-                    }
-                }
-            })
             .state('app.wallet.buybtc.glidera_oauth2_callback', {
+                cache: false,
                 url: "/glidera/oaoth2/callback",
                 views: {
                     "mainView@app.wallet": {
@@ -836,7 +834,7 @@ angular.module('blocktrail.wallet').config(
             /*--- Settings ---*/
             .state('app.wallet.settings', {
                 url: "/settings",
-                cache: true,
+                cache: false,
                 data: {
                     clearHistory: true
                 },
@@ -1130,4 +1128,16 @@ window.QforEachLimit = function(list, n, fn) {
             })
         ;
     })();
+};
+
+window.Qwaterfall = function(fns, arg) {
+    var p = Q.when(arg);
+
+    fns.slice().forEach(function(fn) {
+        p = p.then(function(arg) {
+            return fn(arg);
+        });
+    });
+
+    return p;
 };

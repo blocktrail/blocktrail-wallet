@@ -11,6 +11,7 @@ angular.module('blocktrail.wallet').factory(
             self.noPolling = true;
             self.isRefilling = null;
             self.addressRefillPromise = null;
+            self.transsactionMetaResolvers = [];
 
             self.sdk = sdkService.sdk();
 
@@ -38,6 +39,12 @@ angular.module('blocktrail.wallet').factory(
         };
 
         Wallet.OFFLINE_ADDRESSES = 30;
+
+        Wallet.prototype.addTransactionMetaResolver = function(resolver) {
+            var self = this;
+
+            self.transsactionMetaResolvers.push(resolver);
+        };
 
         Wallet.prototype.validateAddress = function(address) {
             var self = this;
@@ -414,7 +421,7 @@ angular.module('blocktrail.wallet').factory(
                                                         });
                                                     })
                                                     .then(function() {
-                                                        return self.mergeContact(transaction);
+                                                        return Qwaterfall(self.transsactionMetaResolvers.concat([self.mergeContact]), transaction);
                                                     });
                                             } else if (isNew) {
                                                 // add the new tx data to the cache and return the tx merged with contact info
@@ -428,7 +435,7 @@ angular.module('blocktrail.wallet').factory(
                                                         });
                                                     })
                                                     .then(function() {
-                                                        return self.mergeContact(transaction);
+                                                        return Qwaterfall(self.transsactionMetaResolvers.concat([self.mergeContact]), transaction);
                                                     });
                                             } else {
                                                 // this tx is old and will be cleaned out in the next step
@@ -540,7 +547,7 @@ angular.module('blocktrail.wallet').factory(
                     //combine the un/confirmed txs, get their full data and merge contact info for each
                     return Q.all(historyDoc.unconfirmed.concat(historyDoc.confirmed).slice(from, to).map(function(hash) {
                         return self.historyCache.get(hash).then(function(row) {
-                            return self.mergeContact(row.data);
+                            return Qwaterfall(self.transsactionMetaResolvers.concat([self.mergeContact]), row.data);
                         });
                     }));
                 })

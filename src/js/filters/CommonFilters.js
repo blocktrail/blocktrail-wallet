@@ -16,7 +16,7 @@ angular.module('blocktrail.wallet')
             if (typeof(currencyRates) == "undefined") {
                 currencyRates = $rootScope.bitcoinPrices;
             }
-            if (currency in currencyRates) {
+            if (typeof currencyRates[currencyRates] !== "undefined") {
                 var localValue = (btc * currencyRates[currency]).toFixed(fractionSize);
             } else {
                 var localValue = (0).toFixed(fractionSize);

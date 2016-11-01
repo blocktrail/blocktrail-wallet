@@ -682,6 +682,11 @@ angular.module('blocktrail.wallet')
                     return launchService.storeWalletInfo($scope.setupInfo.identifier, encryptedPassword, encryptedSecret).then(function() { return wallet; });
                 })
                 .then(function(wallet) {
+                    // while logging in we stash the secret so we can decrypt the glidera accesstoken
+                    launchService.stashWalletSecret(wallet.secret);
+                    wallet.lock();
+                })
+                .then(function() {
                     if ($scope.setupInfo.backupInfo) {
                         window.fabric.Answers.sendSignUp("App", true);
                         facebookConnectPlugin.logEvent("CompleteRegistration");

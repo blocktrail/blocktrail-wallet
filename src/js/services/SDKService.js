@@ -121,6 +121,18 @@ angular.module('blocktrail.wallet').factory(
             return self.client.get("/mywallet/settings");
         };
 
+        blocktrailSDK.prototype.glideraOauth = function (code, redirect_uri, sandbox) {
+            var self = this;
+
+            return self.client.post("/mywallet/glidera/oauth", null, {code: code, redirect_uri: redirect_uri, sandbox: sandbox});
+        };
+
+        blocktrailSDK.prototype.glideraBuyPrices = function (qty, fiat, sandbox) {
+            var self = this;
+
+            return self.client.get("/mywallet/glidera/prices/buy", {qty: qty, fiat: fiat, sandbox: sandbox});
+        };
+
         /**
          * send feedback
          * @param identifier
@@ -166,7 +178,7 @@ angular.module('blocktrail.wallet').factory(
                         });
                     }, function(e) {
                         $log.error('Missing account info for SDK');
-                        $state.go('app.launch');
+                        $state.go('app.reset');
                         throw e;
                     })
                     .then(function(sdk) {
