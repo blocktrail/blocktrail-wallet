@@ -57,7 +57,7 @@ angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
-             amMoment) {
+             amMoment, tuneTrackingService) {
         $rootScope.CONFIG = CONFIG || {};
         $rootScope.$state = $state;
         $rootScope.$translate = $translate;
@@ -71,10 +71,9 @@ angular.module('blocktrail.wallet').run(
         facebookConnectPlugin.activateApp();
 
         if (CONFIG.GAPPTRACK_ID) {
-            if (CONFIG.GAPPTRACK_ACTIVATE_LABELS.iOS) {
+            if ($rootScope.isIOS && CONFIG.GAPPTRACK_ACTIVATE_LABELS.iOS) {
                 GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_ACTIVATE_LABELS.iOS, "1.00", false);
-            }
-            if (CONFIG.GAPPTRACK_ACTIVATE_LABELS.android) {
+            } else if ($rootScope.isAndroid && CONFIG.GAPPTRACK_ACTIVATE_LABELS.android) {
                 GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_ACTIVATE_LABELS.android, "1.00", false);
             }
         }
@@ -129,6 +128,9 @@ angular.module('blocktrail.wallet').run(
 
                     settingsService.installTracked = true;
                     settingsService.$store();
+                    tuneTrackingService.init(/* existingUser= */false)
+                } else {
+                    tuneTrackingService.init(/* existingUser= */true);
                 }
             }
         });
@@ -150,6 +152,7 @@ angular.module('blocktrail.wallet').run(
         $rootScope.STATE = {
             ACTIVE: true
         };
+        tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.OPEN);
         $ionicPlatform.on('pause', function() {
             $log.debug('PAUSE');
             $rootScope.STATE.ACTIVE = false;
@@ -160,6 +163,7 @@ angular.module('blocktrail.wallet').run(
             $rootScope.STATE.ACTIVE = true;
             $rootScope.$broadcast('appResume');
             facebookConnectPlugin.activateApp();
+            tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.OPEN);
 
         });
 

@@ -54,6 +54,18 @@ angular.module('blocktrail.wallet').factory(
             return self.client.post("/mywallet/profile", null, data, cb);
         };
 
+        blocktrailSDK.prototype.syncSettings = function (data) {
+            var self = this;
+
+            return self.client.post("/mywallet/settings", null, data);
+        };
+
+        blocktrailSDK.prototype.getSettings = function (data) {
+            var self = this;
+
+            return self.client.get("/mywallet/settings");
+        };
+
         /**
          * request a new receiving address for a known contact by their phone number
          *

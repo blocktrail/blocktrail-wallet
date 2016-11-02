@@ -1,6 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
-                                       Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration, $cordovaToast) {
+                                       Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration,
+                                       $cordovaToast, tuneTrackingService) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -37,6 +38,23 @@ angular.module('blocktrail.wallet')
             return $q.when(Wallet.balance(false).then(function(balanceData) {
                 $rootScope.balance = balanceData.balance;
                 $rootScope.uncBalance = balanceData.uncBalance;
+
+                settingsService.$isLoaded().then(function() {
+                    // track activation when balance > 0 and we haven't tracked it yet
+                    if (!settingsService.walletActivated && ($rootScope.balance + $rootScope.uncBalance) > 0) {
+                        settingsService.walletActivated = true;
+
+                        // only track it for wallets newer than DEFAULT_ACCOUNT_CREATED
+                        if (settingsService.accountCreated >= settingsService.DEFAULT_ACCOUNT_CREATED) {
+                            tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.ACTIVATED);
+                        }
+
+                        return settingsService.$store().then(function() {
+                            return settingsService.$syncSettingsUp();
+                        })
+                    }
+                });
+
                 return {balance: balanceData.balance, uncBalance: balanceData.uncBalance};
             }));
         };
@@ -106,6 +124,7 @@ angular.module('blocktrail.wallet')
         $timeout(function() { $rootScope.syncProfile(); }, 2000);
         $timeout(function() { $rootScope.syncContacts(); }, 4000);
         $timeout(function() { Wallet.refillOfflineAddresses(1); }, 6000);
+        $timeout(function() { settingsService.$syncSettingsDown(); }, 500);
 
         var pricePolling = $interval(function() {
             if ($rootScope.STATE.ACTIVE) {

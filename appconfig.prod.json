@@ -14,6 +14,11 @@
     },
     "GA_TRACKING_ID": "UA-66176065-21",
 
+    "TUNE": {
+        "ADVERTISER_ID": {"iOS": "193271", "android": "193271"},
+        "CONVERSION_KEY": {"iOS": "7e480951da2f478258683bc6d51d4d1b", "android": "7e480951da2f478258683bc6d51d4d1b"}
+    },
+
     "IO_CONFIG": {
         "app_id": "3dadf3bf",
         "api_key": "3b518a9f046fb61498ed39695700a1a2c6052260a729a376"

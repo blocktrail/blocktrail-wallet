@@ -2,6 +2,8 @@ angular.module('blocktrail.wallet').service(
     'settingsService',
     function($q, storageService, sdkService, $log, $window) {
 
+    var DEFAULT_ACCOUNT_CREATED = 1478097190;
+
     var defaultBtcPrecision = $window.innerWidth <= 375 ? 4 : 8;
     var defaults = {
         displayName:  null,
@@ -26,11 +28,15 @@ angular.module('blocktrail.wallet').service(
         contactsLastSync: null,
         contactsWebSync: true,      //enable syncing contacts to web wallet
 
+        // defaults to an arbitrary timestamp prior to when this was added
+        //  so that we can use this to check for activation of new stuff etc
+        accountCreated: DEFAULT_ACCOUNT_CREATED,
         backupSaved: false,
         backupSkipped: false,
         setupStarted: false,
         setupComplete: false,
         installTracked: false,
+        walletActivated: false, // balance > 0
 
         //display options
         btcPrecision: defaultBtcPrecision,        //show 8 decimals by default, 4 on smaller screens
@@ -48,6 +54,8 @@ angular.module('blocktrail.wallet').service(
     angular.extend(this, defaults);
 
     var storage = storageService.db('settings');
+
+    this.DEFAULT_ACCOUNT_CREATED = DEFAULT_ACCOUNT_CREATED;
 
     this._id = "user_settings";
 
@@ -165,4 +173,38 @@ angular.module('blocktrail.wallet').service(
             });
     };
 
+
+    this.$syncSettingsUp = function() {
+        var self = this;
+
+        return $q.when(sdkService.sdk())
+            .then(function(sdk) {
+                var settingsData = {
+                    localCurrency: self.localCurrency,
+                    username: self.username,
+                    email: self.email,
+                    walletActivated: self.walletActivated
+                };
+
+                return sdk.syncSettings(settingsData);
+            });
+    };
+
+    this.$syncSettingsDown = function() {
+        var self = this;
+        return $q.when(sdkService.sdk())
+            .then(function(sdk) {
+                return sdk.getSettings();
+            })
+            .then(function(result) {
+                return self.$isLoaded().then(function() {
+                    self.localCurrency = result.localCurrency !== null ? result.localCurrency : self.localCurrency;
+                    self.username = result.username;
+                    self.email = result.email;
+                    self.walletActivated = result.walletActivated;
+
+                    return self.$store();
+                });
+            });
+    };
 });

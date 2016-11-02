@@ -12,6 +12,11 @@
     "GAPPTRACK_SIGNUP_LABELS": {"iOS": null, "android": null},
     "GA_TRACKING_ID": null,
 
+    "TUNE": {
+        "ADVERTISER_ID": {"iOS": null, "android": null},
+        "CONVERSION_KEY": {"iOS": null, "android": null}
+    },
+
     // default ionic apps keys for usage stats logging in development
     "IO_CONFIG": {
         "app_id": "ee6eae44",

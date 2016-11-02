@@ -65,7 +65,7 @@ angular.module('blocktrail.wallet')
         };
     })
     .controller('SetupLoginCtrl', function($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG,
-                                           settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate) {
+                                           settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, tuneTrackingService) {
         $scope.retry = 0;
 
         $scope.form = {
@@ -138,6 +138,8 @@ angular.module('blocktrail.wallet')
                 skip_two_factor: true // will make the resulting API key not require 2FA in the future
             })
                 .then(function(result) {
+                    tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.LOGIN);
+
                     var newSecret = false;
                     var createSecret = function() {
                         var secret = randomBytes(32).toString('base64');
@@ -189,8 +191,10 @@ angular.module('blocktrail.wallet')
                                 settingsService.username = $scope.form.username;
                                 settingsService.displayName = $scope.form.username;
                                 settingsService.enableContacts = false;
+                                settingsService.accountCreated = result.data.timestamp_registered;
                                 settingsService.email = $scope.form.email;
                                 settingsService.$store().then(function() {
+                                    settingsService.$syncSettingsDown();
                                     settingsService.$syncProfileDown();
                                     $timeout(function() {
                                         $scope.dismissMessage();
@@ -260,7 +264,9 @@ angular.module('blocktrail.wallet')
             ;
         };
     })
-    .controller('SetupNewAccountCtrl', function($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, $log, launchService, CONFIG, settingsService, $btBackButtonDelegate, $cordovaDialogs, $translate) {
+    .controller('SetupNewAccountCtrl', function($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, $log,
+                                                launchService, CONFIG, settingsService, $btBackButtonDelegate,
+                                                $cordovaDialogs, $translate, tuneTrackingService) {
         $scope.retry = 0;
         $scope.usernameTaken = null;
         $scope.form = {
@@ -397,6 +403,7 @@ angular.module('blocktrail.wallet')
             };
             $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/register", postData)
                 .then(function(result) {
+                    tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.REGISTRATION);
                     return launchService.storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
                         $scope.setupInfo.password = $scope.form.password;
 
@@ -404,6 +411,7 @@ angular.module('blocktrail.wallet')
                         $scope.appControl.working = false;
 
                         //save the default user settings
+                        settingsService.accountCreated = parseInt(((new Date).getTime() / 1000).toFixed(0), 10);
                         settingsService.username = $scope.form.username;
                         settingsService.displayName = $scope.form.username; //@TODO maybe try and determine a display name from their email
                         settingsService.enableContacts = false;
