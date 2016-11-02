@@ -105,6 +105,9 @@
     <feature name="UniversalAnalytics">
         <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
     </feature>
+    <feature name="TunePlugin">
+        <param name="android-package" value="com.tune.TunePlugin" />
+    </feature>
     <access origin="https://m.facebook.com" />
     <access origin="https://graph.facebook.com" />
     <access origin="https://api.facebook.com" />
@@ -128,5 +131,5 @@
     <author email="support@btc.com" href="https://www.btc.com/">
     BTC.com Team
     </author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://10.4.86.160:8100" />
 </widget>

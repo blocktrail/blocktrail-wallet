@@ -159,6 +159,10 @@
                         {
                             "xml": "<feature name=\"UniversalAnalytics\"><param name=\"ios-package\" value=\"UniversalAnalyticsPlugin\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"TunePlugin\"><param name=\"ios-package\" value=\"TunePlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -300,6 +304,9 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-tune": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -774,6 +781,14 @@
                 "analytics",
                 "ga"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-tune/www/TunePlugin.js",
+            "id": "cordova-plugin-tune.TunePlugin",
+            "pluginId": "cordova-plugin-tune",
+            "clobbers": [
+                "window.plugins.tunePlugin"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -807,6 +822,7 @@
         "phonegap-facebook-plugin": "0.12.0",
         "cordova-plugin-google-app-conversion-tracker": "0.0.2",
         "cordova-fabric-plugin": "1.0.8",
-        "cordova-plugin-google-analytics": "1.5.6"
+        "cordova-plugin-google-analytics": "1.5.6",
+        "cordova-plugin-tune": "5.0.0"
     }
 }

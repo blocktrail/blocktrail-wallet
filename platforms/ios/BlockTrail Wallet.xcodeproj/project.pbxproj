@@ -117,6 +117,11 @@
 		E6492ECD09BE41AC8D087951 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D3672998AB44B095F27583 /* libGoogleAnalyticsServices.a */; };
 		C1B930B528D048EBA6885A81 /* libAdIdAccess.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED6C492B9DFF4F42979D4217 /* libAdIdAccess.a */; };
 		7AEAE379D0134561B8E46D86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D848EC0A324E5499C23A69 /* CoreData.framework */; };
+		13CEBF250D294B31ADF77CDE /* TunePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 3791B2EBF3954351BED36F34 /* TunePlugin.m */; };
+		0D337A5731344DD8975DFEE8 /* Tune-4.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D29734E2B5449F1A351AE18 /* Tune-4.4.0.a */; };
+		DCBA73E28AD14E1EAEDE8811 /* CoreSpotlight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A7EA9740DC4D71A24473CD /* CoreSpotlight.framework */; };
+		7AC60B782278488AAEE6BFD9 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B550826D0AD471BA37EE857 /* CoreTelephony.framework */; };
+		E573ED15D6AA451EBCEF1072 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140783A558074966A26F4E5B /* iAd.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -344,6 +349,22 @@
 		F8C0AC7F268B474CA8A61715 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; name = "GAIEcommerceProductAction.h"; path = "cordova-plugin-google-analytics/GAIEcommerceProductAction.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		F0ABB27241E84CB3ABE21353 /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; name = "GAIEcommercePromotion.h"; path = "cordova-plugin-google-analytics/GAIEcommercePromotion.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		42D848EC0A324E5499C23A69 /* CoreData.framework */ = {isa = PBXFileReference; name = "CoreData.framework"; path = "System/Library/Frameworks/CoreData.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		3791B2EBF3954351BED36F34 /* TunePlugin.m */ = {isa = PBXFileReference; name = "TunePlugin.m"; path = "cordova-plugin-tune/TunePlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		6D29734E2B5449F1A351AE18 /* Tune-4.4.0.a */ = {isa = PBXFileReference; name = "Tune-4.4.0.a"; path = "BlockTrail Wallet/Plugins/cordova-plugin-tune/Tune-4.4.0.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		F4A56375B5AC41F882B6D522 /* TunePlugin.h */ = {isa = PBXFileReference; name = "TunePlugin.h"; path = "cordova-plugin-tune/TunePlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		58E2E0808FDA4F9D8BACEC70 /* Tune.h */ = {isa = PBXFileReference; name = "Tune.h"; path = "cordova-plugin-tune/Tune.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		49EAC8977DA54A23967FF615 /* TuneConstants.h */ = {isa = PBXFileReference; name = "TuneConstants.h"; path = "cordova-plugin-tune/TuneConstants.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		13BC0C041A6F4D76A7C4DEFE /* TuneEvent.h */ = {isa = PBXFileReference; name = "TuneEvent.h"; path = "cordova-plugin-tune/TuneEvent.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		0CE3AE05AC4C4398BFF8BBDF /* TuneEventItem.h */ = {isa = PBXFileReference; name = "TuneEventItem.h"; path = "cordova-plugin-tune/TuneEventItem.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		DC727848E2C74A03A75A239D /* TuneExperimentDetails.h */ = {isa = PBXFileReference; name = "TuneExperimentDetails.h"; path = "cordova-plugin-tune/TuneExperimentDetails.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		DF1DB9563F7D4F15B20719D4 /* TuneInAppMessageExperimentDetails.h */ = {isa = PBXFileReference; name = "TuneInAppMessageExperimentDetails.h"; path = "cordova-plugin-tune/TuneInAppMessageExperimentDetails.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		FBEEF878547F49348952A771 /* TuneLocation.h */ = {isa = PBXFileReference; name = "TuneLocation.h"; path = "cordova-plugin-tune/TuneLocation.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		E4043779F3A1408BAF0AFA08 /* TunePowerHookExperimentDetails.h */ = {isa = PBXFileReference; name = "TunePowerHookExperimentDetails.h"; path = "cordova-plugin-tune/TunePowerHookExperimentDetails.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		9C3F94611B214EF9B2EC3C86 /* TunePreloadData.h */ = {isa = PBXFileReference; name = "TunePreloadData.h"; path = "cordova-plugin-tune/TunePreloadData.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		0AF8BC5200954BEAA4E9993B /* TunePushInfo.h */ = {isa = PBXFileReference; name = "TunePushInfo.h"; path = "cordova-plugin-tune/TunePushInfo.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		E9A7EA9740DC4D71A24473CD /* CoreSpotlight.framework */ = {isa = PBXFileReference; name = "CoreSpotlight.framework"; path = "System/Library/Frameworks/CoreSpotlight.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		7B550826D0AD471BA37EE857 /* CoreTelephony.framework */ = {isa = PBXFileReference; name = "CoreTelephony.framework"; path = "System/Library/Frameworks/CoreTelephony.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		140783A558074966A26F4E5B /* iAd.framework */ = {isa = PBXFileReference; name = "iAd.framework"; path = "System/Library/Frameworks/iAd.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -381,6 +402,10 @@
 				E6492ECD09BE41AC8D087951 /* libGoogleAnalyticsServices.a in Frameworks */,
 				C1B930B528D048EBA6885A81 /* libAdIdAccess.a in Frameworks */,
 				7AEAE379D0134561B8E46D86 /* CoreData.framework in Frameworks */,
+				0D337A5731344DD8975DFEE8 /* Tune-4.4.0.a in Frameworks */,
+				DCBA73E28AD14E1EAEDE8811 /* CoreSpotlight.framework in Frameworks */,
+				7AC60B782278488AAEE6BFD9 /* CoreTelephony.framework in Frameworks */,
+				E573ED15D6AA451EBCEF1072 /* iAd.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,6 +518,10 @@
 				92D3672998AB44B095F27583 /* libGoogleAnalyticsServices.a */,
 				ED6C492B9DFF4F42979D4217 /* libAdIdAccess.a */,
 				42D848EC0A324E5499C23A69 /* CoreData.framework */,
+				6D29734E2B5449F1A351AE18 /* Tune-4.4.0.a */,
+				E9A7EA9740DC4D71A24473CD /* CoreSpotlight.framework */,
+				7B550826D0AD471BA37EE857 /* CoreTelephony.framework */,
+				140783A558074966A26F4E5B /* iAd.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -632,6 +661,18 @@
 				0AFAAFD7DAA74EE6B8727F12 /* GAIEcommerceProduct.h */,
 				F8C0AC7F268B474CA8A61715 /* GAIEcommerceProductAction.h */,
 				F0ABB27241E84CB3ABE21353 /* GAIEcommercePromotion.h */,
+				3791B2EBF3954351BED36F34 /* TunePlugin.m */,
+				F4A56375B5AC41F882B6D522 /* TunePlugin.h */,
+				58E2E0808FDA4F9D8BACEC70 /* Tune.h */,
+				49EAC8977DA54A23967FF615 /* TuneConstants.h */,
+				13BC0C041A6F4D76A7C4DEFE /* TuneEvent.h */,
+				0CE3AE05AC4C4398BFF8BBDF /* TuneEventItem.h */,
+				DC727848E2C74A03A75A239D /* TuneExperimentDetails.h */,
+				DF1DB9563F7D4F15B20719D4 /* TuneInAppMessageExperimentDetails.h */,
+				FBEEF878547F49348952A771 /* TuneLocation.h */,
+				E4043779F3A1408BAF0AFA08 /* TunePowerHookExperimentDetails.h */,
+				9C3F94611B214EF9B2EC3C86 /* TunePreloadData.h */,
+				0AF8BC5200954BEAA4E9993B /* TunePushInfo.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -889,6 +930,7 @@
 				07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */,
 				176AF960E58E41E494F86FFD /* FabricPlugin.m in Sources */,
 				D2BEE0F8AAC84FF49B65C14A /* UniversalAnalyticsPlugin.m in Sources */,
+				13CEBF250D294B31ADF77CDE /* TunePlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -930,6 +972,7 @@
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
+					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-tune\"",
 				);
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -981,6 +1024,7 @@
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
+					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-tune\"",
 				);
 				OTHER_LDFLAGS = (
 					"-weak_framework",

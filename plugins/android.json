@@ -764,6 +764,9 @@
         },
         "cordova-plugin-google-analytics": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-tune": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {

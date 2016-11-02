@@ -285,5 +285,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-tune": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-tune"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

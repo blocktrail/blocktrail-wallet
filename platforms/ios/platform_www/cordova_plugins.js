@@ -469,6 +469,14 @@ module.exports = [
             "analytics",
             "ga"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-tune/www/TunePlugin.js",
+        "id": "cordova-plugin-tune.TunePlugin",
+        "pluginId": "cordova-plugin-tune",
+        "clobbers": [
+            "window.plugins.tunePlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -504,7 +512,8 @@ module.exports.metadata =
     "phonegap-facebook-plugin": "0.12.0",
     "cordova-plugin-google-app-conversion-tracker": "0.0.2",
     "cordova-fabric-plugin": "1.0.8",
-    "cordova-plugin-google-analytics": "1.5.6"
+    "cordova-plugin-google-analytics": "1.5.6",
+    "cordova-plugin-tune": "5.0.0"
 }
 // BOTTOM OF METADATA
 });
