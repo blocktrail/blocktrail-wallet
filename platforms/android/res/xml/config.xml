@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget id="com.blocktrail.mywallet" version="2.1.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.blocktrail.mywallet" version="2.2.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="AutoHideSplashScreen" value="true" />
@@ -131,5 +131,5 @@
     <author email="support@btc.com" href="https://www.btc.com/">
     BTC.com Team
     </author>
-    <content original-src="index.html" src="http://10.4.86.160:8100" />
+    <content src="index.html" />
 </widget>
