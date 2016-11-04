@@ -5,7 +5,6 @@ angular.module('blocktrail.wallet')
         $scope.path = null;
         $scope.bitcoinUri = null;
         $scope.qrcode = null;
-        $scope.translations = null;
         $scope.newRequest = {
             address: null,
             path: null,
@@ -35,37 +34,6 @@ angular.module('blocktrail.wallet')
             }
         };
 
-
-        $scope.getTranslations = function(params) {
-            //always get a fresh translation if params are provided
-            if ($scope.translations && !params) {
-                return $q.when($scope.translations);
-            } else {
-                var requiredTranslations = [
-                    'OK',
-                    'CANCEL',
-                    'ERROR',
-                    'CONTACTS_FILTER_TITLE',
-                    'CONTACTS_SHOW_ALL',
-                    'CONTACTS_WALLETS_ONLY',
-                    'CONTACTS_RESYNC',
-                    'MSG_CONTACTS_PERMISSIONS',
-                    'PERMISSION_REQUIRED_CONTACTS',
-                    'MSG_NEW_TX',
-                    'MSG_INVITE_CONTACT',
-                    'MSG_REQUEST_EMAIL_SUBJECT_1',
-                    'MSG_REQUEST_EMAIL_SUBJECT_2',
-                    'MSG_REQUEST_EMAIL_BODY_1',
-                    'MSG_REQUEST_EMAIL_BODY_2',
-                    'MSG_REQUEST_SMS_1',
-                    'MSG_REQUEST_SMS_2'
-                ];
-                return $translate(requiredTranslations, params).then(function(translations) {
-                    $scope.translations = translations;
-                    return $q.when(translations);
-                });
-            }
-        };
 
         $scope.swapInputs = function() {
             $scope.fiatFirst = !$scope.fiatFirst;
@@ -168,20 +136,19 @@ angular.module('blocktrail.wallet')
                 localCurrency: $rootScope.settings.localCurrency,
                 qrcode: qrcode.src
             };
-            $scope.getTranslations(params)
-                .then(function(translations) {
-                    //launch email
-                    var options = {
-                        to: '',
-                        attachments: [
-                            'base64:qrcode.png//' + qrcode.src.replace(/^data\:([^\;]+)\;base64,/gmi, '')
-                        ],
-                        subject: $scope.newRequest.btcValue ? translations['MSG_REQUEST_EMAIL_SUBJECT_2'].sentenceCase() : translations['MSG_REQUEST_EMAIL_SUBJECT_1'].sentenceCase(),
-                        body: $scope.newRequest.btcValue ? translations['MSG_REQUEST_EMAIL_BODY_2'] : translations['MSG_REQUEST_EMAIL_BODY_1'],
-                        isHtml: true
-                    };
-                    return $cordovaEmailComposer.open(options);
-                })
+
+            //launch email
+            var options = {
+                to: '',
+                attachments: [
+                    'base64:qrcode.png//' + qrcode.src.replace(/^data\:([^\;]+)\;base64,/gmi, '')
+                ],
+                subject: $scope.newRequest.btcValue ? $translate.instant('MSG_REQUEST_EMAIL_SUBJECT_2', params).sentenceCase() : $translate.instant('MSG_REQUEST_EMAIL_SUBJECT_1', params).sentenceCase(),
+                body: $scope.newRequest.btcValue ? $translate.instant('MSG_REQUEST_EMAIL_BODY_2', params) : $translate.instant('MSG_REQUEST_EMAIL_BODY_1', params),
+                isHtml: true
+            };
+
+            return $cordovaEmailComposer.open(options)
                 .then(function() {
                     $log.debug('email success');
                     $scope.hideExportOptions();
@@ -199,11 +166,9 @@ angular.module('blocktrail.wallet')
                 fiatValue: $scope.newRequest.fiatValue,
                 localCurrency: $rootScope.settings.localCurrency
             };
-            $scope.getTranslations(params)
-                .then(function(translations) {
-                    var smsMessage = $scope.newRequest.btcValue ? translations['MSG_REQUEST_SMS_2'] : translations['MSG_REQUEST_SMS_1'];
-                    return $cordovaSms.send('', smsMessage, $scope.smsOptions);
-                })
+
+            var smsMessage = $scope.newRequest.btcValue ? $translate.instant('MSG_REQUEST_SMS_2', params) : $translate.instant('MSG_REQUEST_SMS_1', params);
+            return $cordovaSms.send('', smsMessage, $scope.smsOptions)
                 .then(function() {
                     $scope.hideExportOptions();
                 })
