@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
                                        Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration,
-                                       $cordovaToast, tuneTrackingService) {
+                                       $cordovaToast, trackingService) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -46,7 +46,7 @@ angular.module('blocktrail.wallet')
 
                         // only track it for wallets newer than DEFAULT_ACCOUNT_CREATED
                         if (settingsService.accountCreated >= settingsService.DEFAULT_ACCOUNT_CREATED) {
-                            tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.ACTIVATED);
+                            trackingService.trackEvent(trackingService.EVENTS.ACTIVATED);
                         }
 
                         return settingsService.$store().then(function() {

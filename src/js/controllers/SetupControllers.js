@@ -65,7 +65,7 @@ angular.module('blocktrail.wallet')
         };
     })
     .controller('SetupLoginCtrl', function($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG,
-                                           settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, tuneTrackingService) {
+                                           settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, trackingService) {
         $scope.retry = 0;
 
         $scope.form = {
@@ -138,7 +138,7 @@ angular.module('blocktrail.wallet')
                 skip_two_factor: true // will make the resulting API key not require 2FA in the future
             })
                 .then(function(result) {
-                    tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.LOGIN);
+                    trackingService.trackEvent(trackingService.EVENTS.LOGIN);
 
                     var newSecret = false;
                     var createSecret = function() {
@@ -266,7 +266,7 @@ angular.module('blocktrail.wallet')
     })
     .controller('SetupNewAccountCtrl', function($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, $log,
                                                 launchService, CONFIG, settingsService, $btBackButtonDelegate,
-                                                $cordovaDialogs, $translate, tuneTrackingService) {
+                                                $cordovaDialogs, $translate, trackingService) {
         $scope.retry = 0;
         $scope.usernameTaken = null;
         $scope.form = {
@@ -403,7 +403,7 @@ angular.module('blocktrail.wallet')
             };
             $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/register", postData)
                 .then(function(result) {
-                    tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.REGISTRATION);
+                    trackingService.trackEvent(trackingService.EVENTS.REGISTRATION);
                     return launchService.storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
                         $scope.setupInfo.password = $scope.form.password;
 
@@ -651,10 +651,10 @@ angular.module('blocktrail.wallet')
                         window.fabric.Answers.sendSignUp("App", true);
                         facebookConnectPlugin.logEvent("CompleteRegistration");
                         if (CONFIG.GAPPTRACK_ID) {
-                            if (CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS) {
+                            if ($rootScope.isIOS && CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS) {
                                 GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS, "1.00", false);
                             }
-                            if (CONFIG.GAPPTRACK_ACTIVATE_LABELS.android) {
+                            if ($rootScope.isAndroid && CONFIG.GAPPTRACK_ACTIVATE_LABELS.android) {
                                 GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_SIGNUP_LABELS.android, "1.00", false);
                             }
                         }

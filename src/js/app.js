@@ -57,7 +57,7 @@ angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
-             amMoment, tuneTrackingService) {
+             amMoment, tuneTrackingService, trackingService) {
         $rootScope.CONFIG = CONFIG || {};
         $rootScope.$state = $state;
         $rootScope.$translate = $translate;
@@ -152,7 +152,7 @@ angular.module('blocktrail.wallet').run(
         $rootScope.STATE = {
             ACTIVE: true
         };
-        tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.OPEN);
+        trackingService.trackEvent(trackingService.EVENTS.OPEN);
         $ionicPlatform.on('pause', function() {
             $log.debug('PAUSE');
             $rootScope.STATE.ACTIVE = false;
@@ -163,8 +163,7 @@ angular.module('blocktrail.wallet').run(
             $rootScope.STATE.ACTIVE = true;
             $rootScope.$broadcast('appResume');
             facebookConnectPlugin.activateApp();
-            tuneTrackingService.measureEvent(tuneTrackingService.EVENTS.OPEN);
-
+            trackingService.trackEvent(trackingService.EVENTS.OPEN);
         });
 
         //indicate when keyboard is displayed

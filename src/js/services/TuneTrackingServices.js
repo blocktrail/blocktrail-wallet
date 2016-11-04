@@ -1,11 +1,8 @@
 angular.module('blocktrail.wallet')
-    .factory('tuneTrackingService', function(CONFIG, $q, $log, $rootScope) {
+    .factory('tuneTrackingService', function(CONFIG, $q) {
 
-        var EVENTS = {
-            OPEN: 1844683089,
-            REGISTRATION: "registration",
-            LOGIN: "login",
-            ACTIVATED: "activated"
+        var EVENT_ALIASES = {
+            "open": 1844683089
         };
 
         var tune = window.plugins.tunePlugin;
@@ -27,12 +24,11 @@ angular.module('blocktrail.wallet')
 
         var measureEvent = function(event) {
             return initialized.promise.then(function() {
-                return tune.measureEvent(event);
+                return tune.measureEvent(EVENT_ALIASES[event] || event);
             })
         };
 
         return {
-            EVENTS: EVENTS,
             init: init,
             measureEvent: measureEvent
         }
