@@ -344,6 +344,25 @@ angular.module('blocktrail.wallet').config(
             $cordovaAppRateProvider.setPreferences(prefs);
         }
 
+        if (window.device && device.platform === "amazon-fireos") {
+            $stateProvider
+                .state('app', {
+                    url: "/android43",
+                    templateUrl: "templates/android43.html",
+                    controller: "Android43Ctrl",
+                    resolve: {
+                        altNotice: function() {
+                            return "Amazon Fire OS";
+                        }
+                    }
+                })
+            ;
+
+            $urlRouterProvider.otherwise('android43');
+
+            return;
+        }
+
         // android 4.3 catch
         if (window.device && device.platform === "Android") {
             var v = device.version.split(".");

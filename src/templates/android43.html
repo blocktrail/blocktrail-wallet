@@ -1,19 +1,19 @@
 <ion-view class="state-android43">
     <ion-nav-bar class="bar-energized">
-        <ion-nav-title>Android 4.3 BUG!</ion-nav-title>
+        <ion-nav-title>{{ altNotice || 'Android 4.3' }} BUG!</ion-nav-title>
     </ion-nav-bar>
 
     <ion-content>
         <div style="padding: 20px">
-            <h3>Important Notice For Android v4.3 Users</h3>
+            <h3>Important Notice For {{ altNotice || 'Android 4.3' }} Users</h3>
             ​
             <p>
-                Due to a bug that was discovered in older Android versions (4.3 and below), <br />
+                Due to a bug that was discovered in {{ altNotice || 'older Android versions (4.3 and below)' }}, <br />
                 we've removed the wallet app from the Google Play store for these older versions.
             </p>
             ​
             <p>
-                If your wallet was created on your Android 4.3 device, this bug is severe enough that you cannot continue using the wallet, both on mobile and web.
+                If your wallet was created on your {{ altNotice || 'Android 4.3' }} device, this bug is severe enough that you cannot continue using the wallet, both on mobile and web.
             </p>
             ​
             <p>

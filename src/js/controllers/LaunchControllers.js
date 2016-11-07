@@ -61,8 +61,10 @@ angular.module('blocktrail.wallet')
 );
 
 angular.module('blocktrail.wallet')
-    .controller('Android43Ctrl', function($rootScope) {
+    .controller('Android43Ctrl', function($rootScope, $scope, altNotice) {
         $rootScope.hideLoadingScreen = true;
+
+        $scope.altNotice = altNotice;
 
         if (navigator.splashscreen) {
             navigator.splashscreen.hide();
