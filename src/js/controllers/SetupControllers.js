@@ -454,7 +454,7 @@ angular.module('blocktrail.wallet')
         };
     })
     .controller('SetupWalletPinCtrl', function($q, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
-                                               sdkService, $cordovaDialogs, $ionicLoading, $log, $translate, $timeout, settingsService, CONFIG) {
+                                               sdkService, $cordovaDialogs, $ionicLoading, $rootScope, $log, $translate, $timeout, settingsService, CONFIG) {
         $scope.transactions = null;
         $scope.retry = 0;
         $scope.form = {
