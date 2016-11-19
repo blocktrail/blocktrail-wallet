@@ -115,6 +115,8 @@ angular.module('blocktrail.wallet')
                 .catch(function(err) {
                     $log.error('PIN change error: ' + err);
 
+                    $ionicLoading.hide();
+
                     if (err instanceof blocktrail.WalletPinError) {
                         //incorrect PIN...try again Mr. user
                         $cordovaDialogs.alert($scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['MSG_BAD_PIN'].capitalize(), $scope.translations['OK']).then(function() {
