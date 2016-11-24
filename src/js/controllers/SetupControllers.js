@@ -70,7 +70,8 @@ angular.module('blocktrail.wallet')
 
         $scope.form = {
             username: "",
-            password: ""
+            password: "",
+            forceNewWallet: false
         };
 
         $scope.doLogin = function() {
@@ -184,7 +185,10 @@ angular.module('blocktrail.wallet')
                             return launchService.storeAccountInfo(_.merge({}, {secret: secretData.secret, encrypted_secret: secretData.encrypted_secret, new_secret: newSecret}, result.data)).then(function() {
                                 $log.debug('existing_wallet', result.data.existing_wallet);
                                 $scope.setupInfo.password = $scope.form.password;
-                                $scope.setupInfo.identifier = result.data.existing_wallet || $scope.setupInfo.identifier;
+                                if (!$scope.form.forceNewWallet) {
+                                    $scope.setupInfo.identifier = result.data.existing_wallet || $scope.setupInfo.identifier;
+                                }
+
                                 $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: ''};
 
                                 //save the default settings and do a profile sync
@@ -463,40 +467,10 @@ angular.module('blocktrail.wallet')
             identifier: $scope.setupInfo.identifier,
             password: $scope.setupInfo.password
         };
-        $scope.translations = null;
 
         //disable back button
         $btBackButtonDelegate.setBackButton(angular.noop);
         $btBackButtonDelegate.setHardwareBackButton(angular.noop);
-
-
-        $scope.getTranslations = function() {
-            if ($scope.translations) {
-                return $q.when($scope.translations);
-            } else {
-                var requiredTranslations = [
-                    'OK',
-                    'CANCEL',
-                    'WORKING',
-                    'SETUP_EXISTING_WALLET',
-                    'SETUP_WALLET_PASSWORD',
-                    'MSG_WALLET_PASSWORD_MISMATCH',
-                    'MSG_WALLET_PASSWORD',
-                    'MSG_BAD_PWD',
-                    'MSG_TRY_AGAIN',
-                    'CREATING_GENERATE_PRIMARYKEY',
-                    'CREATING_GENERATE_BACKUPKEY',
-                    'CREATING_SUBMIT_WALLET',
-                    'CREATING_INIT_WALLET',
-                    'CREATING_DONE',
-                    'PLEASE_WAIT'
-                ];
-                return $translate(requiredTranslations).then(function(translations) {
-                    $scope.translations = translations;
-                    return $q.when(translations);
-                });
-            }
-        };
 
         //override parent scope to ensure backbutton is disabled after dismissal
         $scope.dismissMessage = function() {
@@ -554,74 +528,122 @@ angular.module('blocktrail.wallet')
             }
             $scope.retry = 0;
 
-            return $scope.getTranslations()
-                .then(function() {
-                    return $q.when(sdkService.sdk());
-                })
+
+            return $q.when(sdkService.sdk())
                 .then(function(sdk) {
                     $scope.sdk = sdk;
                     $log.debug('initialising wallet: ' + $scope.setupInfo.identifier, $scope.sdk);
                     return $scope.sdk.initWallet({identifier: $scope.setupInfo.identifier, password: $scope.setupInfo.password});
                 })
-                .then(
-                    function(wallet) {
-                        $analytics.eventTrack('initWallet', {category: 'Events'});
-                        $log.debug('wallet initialised', wallet);
-                        //wallet already exists with these detail
-                        return $q.when(wallet);
-                    },
-                    function(error) {
-                        if (error.message.match(/not found/) || error.message.match(/couldn't be found/)) {
-                            //no existing wallet - create one
-                            $log.debug('creating new wallet');
-                            $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'PLEASE_WAIT'};
-                            var t = (new Date).getTime();
-                            $analytics.eventTrack('createNewWallet', {category: 'Events'});
-                            return $scope.sdk.createNewWallet({identifier: $scope.setupInfo.identifier, password: $scope.setupInfo.password})
-                                .progress(function(progress) {
-                                    switch (progress) {
-                                        case blocktrailSDK.CREATE_WALLET_PROGRESS_START:
-                                            $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: $scope.translations['PLEASE_WAIT'].sentenceCase()};
-                                            break;
-                                        case blocktrailSDK.CREATE_WALLET_PROGRESS_PRIMARY:
-                                            $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: $scope.translations['CREATING_GENERATE_PRIMARYKEY'].sentenceCase()};
-                                            break;
-                                        case blocktrailSDK.CREATE_WALLET_PROGRESS_BACKUP:
-                                            $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: $scope.translations['CREATING_GENERATE_BACKUPKEY'].sentenceCase()};
-                                            break;
-                                        case blocktrailSDK.CREATE_WALLET_PROGRESS_SUBMIT:
-                                            $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: $scope.translations['CREATING_SUBMIT_WALLET'].sentenceCase()};
-                                            break;
-                                        case blocktrailSDK.CREATE_WALLET_PROGRESS_INIT:
-                                            $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: $scope.translations['CREATING_INIT_WALLET'].sentenceCase()};
-                                            break;
-                                        case blocktrailSDK.CREATE_WALLET_PROGRESS_DONE:
-                                            $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: $scope.translations['CREATING_DONE'].sentenceCase()};
-                                            break;
-                                    }
-                                })
-                                .spread(function(wallet, backupInfo, more) {
-                                    $log.debug('new wallet created in [' + ((new Date).getTime() - t) + 'ms]');
-                                    $scope.setupInfo.backupInfo = backupInfo;
+                .then(function(wallet) {
+                    $analytics.eventTrack('initWallet', {category: 'Events'});
 
-                                    return $q.when(wallet);
-                                })
-                            ;
-                        } else if (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError) {
-                            //wallet exists but with different password
-                            $log.debug("wallet with identifier [" + $scope.setupInfo.identifier + "] already exists, prompting for old password");
-                            return $cordovaDialogs.alert($scope.translations['MSG_WALLET_PASSWORD_MISMATCH'].sentenceCase(), $scope.translations['SETUP_EXISTING_WALLET'].capitalize(), $scope.translations['OK'])
-                                .then(function() {
-                                    //prompt for old wallet password
-                                    $scope.message = {title: 'LOADING_WALLET', title_class: 'text-neutral', body: ''};
-                                    return $scope.promptWalletPassword();
-                                });
-                        } else {
-                            $log.error('error encountered', error);
-                            return $q.reject(error);
-                        }
+                    // time to upgrade to V3 ppl!
+                    if (wallet.walletVersion != blocktrailSDK.Wallet.WALLET_VERSION_V3) {
+                        $scope.message = {title: 'UPGRADING_WALLET', title_class: 'text-neutral', body: 'UPGRADING_WALLET_BODY'};
+
+                        return wallet.upgradeToV3($scope.setupInfo.password)
+                            .progress(function(progress) {
+                                /*
+                                 * per step we increment the progress bar and display some new progress text
+                                 * some of the text doesn't really match what is being done,
+                                 * but we just want the user to feel like something is happening.
+                                 */
+                                switch (progress) {
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_START:
+                                        $scope.message = {title: 'UPGRADING_WALLET', title_class: 'text-neutral', body: 'UPGRADING_WALLET_BODY'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_SECRET:
+                                        $scope.message = {title: 'UPGRADING_WALLET', title_class: 'text-neutral', body: 'CREATING_GENERATE_PRIMARYKEY'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_PRIMARY:
+                                        $scope.message = {title: 'UPGRADING_WALLET', title_class: 'text-neutral', body: 'CREATING_GENERATE_BACKUPKEY'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_RECOVERY:
+                                        $scope.message = {title: 'UPGRADING_WALLET', title_class: 'text-neutral', body: 'CREATING_GENERATE_RECOVERY'};
+                                        break;
+                                }
+
+                            })
+                            .then(function() {
+                                $scope.message = {title: 'UPGRADING_WALLET', title_class: 'text-neutral', body: 'UPGRADING_WALLET_BODY'};
+
+                                return wallet;
+                            });
+
+                    } else {
+                        $log.debug('wallet initialised', wallet);
+                        return wallet;
                     }
-                )
+                }, function(error) {
+                    if (error.message.match(/not found/) || error.message.match(/couldn't be found/)) {
+                        //no existing wallet - create one
+                        $log.debug('creating new wallet');
+                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'PLEASE_WAIT'};
+                        var t = (new Date).getTime();
+                        $analytics.eventTrack('createNewWallet', {category: 'Events'});
+                        return $scope.sdk.createNewWallet({
+                            identifier: $scope.setupInfo.identifier,
+                            password: $scope.setupInfo.password,
+                            walletVersion: CONFIG.WALLET_DEFAULT_VERSION
+                        })
+                            .progress(function(progress) {
+                                /*
+                                 * per step we increment the progress bar and display some new progress text
+                                 * some of the text doesn't really match what is being done,
+                                 * but we just want the user to feel like something is happening.
+                                 */
+                                switch (progress) {
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_START:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'PLEASE_WAIT'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_SECRET:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'CREATING_GENERATE_PRIMARYKEY'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_PRIMARY:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'CREATING_GENERATE_BACKUPKEY'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_RECOVERY:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'CREATING_GENERATE_RECOVERY'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_PRIMARY:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'CREATING_INIT_KEYS'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_BACKUP:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'CREATING_INIT_KEYS'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_SUBMIT:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'CREATING_SUBMIT_WALLET'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_INIT:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'CREATING_INIT_WALLET'};
+                                        break;
+                                    case blocktrailSDK.CREATE_WALLET_PROGRESS_DONE:
+                                        $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'CREATING_DONE'};
+                                        break;
+                                }
+                            })
+                            .spread(function(wallet, backupInfo, more) {
+                                $log.debug('new wallet created in [' + ((new Date).getTime() - t) + 'ms]');
+                                $scope.setupInfo.backupInfo = backupInfo;
+
+                                return $q.when(wallet);
+                            })
+                        ;
+                    } else if (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError) {
+                        //wallet exists but with different password
+                        $log.debug("wallet with identifier [" + $scope.setupInfo.identifier + "] already exists, prompting for old password");
+                        return $cordovaDialogs.alert($translate.instant('MSG_WALLET_PASSWORD_MISMATCH'), $translate.instant('SETUP_EXISTING_WALLET'), $translate.instant('OK'))
+                            .then(function() {
+                                //prompt for old wallet password
+                                $scope.message = {title: 'LOADING_WALLET', title_class: 'text-neutral', body: ''};
+                                return $scope.promptWalletPassword();
+                            });
+                    } else {
+                        $log.error('error encountered', error);
+                        return $q.reject(error);
+                    }
+                })
                 .then(function(wallet) {
                     //set the wallet as the main wallet
                     $log.debug('setting wallet as main wallet');
@@ -637,7 +659,7 @@ angular.module('blocktrail.wallet')
                     // legacy wallets use password instead of secret,
                     //  using secret is a lot better since someone cracking a PIN won't get your much reused password xD
                     if (wallet.secret) {
-                        encryptedSecret = CryptoJS.AES.encrypt(wallet.secret, $scope.form.pin).toString();
+                        encryptedSecret = CryptoJS.AES.encrypt(wallet.secret.toString('hex'), $scope.form.pin).toString();
                     } else {
                         encryptedPassword = CryptoJS.AES.encrypt($scope.setupInfo.password, $scope.form.pin).toString();
                     }
