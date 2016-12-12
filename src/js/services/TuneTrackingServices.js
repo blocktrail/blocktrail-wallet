@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .factory('tuneTrackingService', function(CONFIG, $q) {
+    .factory('tuneTrackingService', function(CONFIG, $q, $log) {
 
         var EVENT_ALIASES = {
             "open": 1844683089
@@ -18,7 +18,10 @@ angular.module('blocktrail.wallet')
             if (CONFIG.DEBUG) {
                 tune.setDebugMode(true);
             }
-            tune.setExistingUser(existingUser);
+            $log.debug('existingUser: ' + existingUser);
+            if (existingUser) {
+                tune.setExistingUser(existingUser);
+            }
             tune.measureSession();
 
             initialized.resolve();
