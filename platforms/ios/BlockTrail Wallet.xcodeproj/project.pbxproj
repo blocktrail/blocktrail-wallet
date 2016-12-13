@@ -103,8 +103,6 @@
 		680CAC3405E44C3782821714 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DA6811B7D004429BAE82184 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		40FA2736253B4D18B4B8DD8A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 686D574B75164D5FA8098CB1 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		B263EE20072B4DB0852D3BA0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4FDC661E7C4DFEBAC8D468 /* Security.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */; };
-		08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */; };
 		07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */; };
 		45B1492521844F81B1DCEB7B /* libGoogleConversionTracking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */; };
 		4D8B71B91A334B1BA5639CCA /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */; };
@@ -122,6 +120,11 @@
 		DCBA73E28AD14E1EAEDE8811 /* CoreSpotlight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A7EA9740DC4D71A24473CD /* CoreSpotlight.framework */; };
 		7AC60B782278488AAEE6BFD9 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B550826D0AD471BA37EE857 /* CoreTelephony.framework */; };
 		E573ED15D6AA451EBCEF1072 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140783A558074966A26F4E5B /* iAd.framework */; };
+		5CF7F37F83BF45AA9BAFB09D /* FacebookConnectPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = DB59205F60E44DCCB84C8B95 /* FacebookConnectPlugin.m */; };
+		1F8EF428AC1B431BA328F5BA /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C6C32C347B246AB8AEED3EE /* Bolts.framework */; };
+		A4AAC457D95E4065BF841D83 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4D0736F66B4AE984514D6C /* FBSDKCoreKit.framework */; };
+		C649C1E5F63044E6845E624B /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97D7DA0E6CC14F5DBD7F46B4 /* FBSDKLoginKit.framework */; };
+		36797B79C10B4242B700EEF2 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A585C2C25840B3AD9E386B /* FBSDKShareKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -321,9 +324,6 @@
 		5DA6811B7D004429BAE82184 /* Social.framework */ = {isa = PBXFileReference; name = "Social.framework"; path = "System/Library/Frameworks/Social.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		686D574B75164D5FA8098CB1 /* Accounts.framework */ = {isa = PBXFileReference; name = "Accounts.framework"; path = "System/Library/Frameworks/Accounts.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		DF4FDC661E7C4DFEBAC8D468 /* Security.framework */ = {isa = PBXFileReference; name = "Security.framework"; path = "System/Library/Frameworks/Security.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
-		A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.m"; path = "phonegap-facebook-plugin/FacebookConnectPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		2816EAEF88F346EE9033F3EF /* FacebookConnectPlugin.h */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.h"; path = "phonegap-facebook-plugin/FacebookConnectPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */ = {isa = PBXFileReference; name = "FacebookSDK.framework"; path = "BlockTrail Wallet/Plugins/phonegap-facebook-plugin/FacebookSDK.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */ = {isa = PBXFileReference; name = "GoogleAppTracking.m"; path = "cordova-plugin-google-app-conversion-tracker/GoogleAppTracking.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */ = {isa = PBXFileReference; name = "libGoogleConversionTracking.a"; path = "BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker/libGoogleConversionTracking.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		A77F326597174BA9A8011E5F /* ACTReporter.h */ = {isa = PBXFileReference; name = "ACTReporter.h"; path = "cordova-plugin-google-app-conversion-tracker/ACTReporter.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
@@ -365,6 +365,12 @@
 		E9A7EA9740DC4D71A24473CD /* CoreSpotlight.framework */ = {isa = PBXFileReference; name = "CoreSpotlight.framework"; path = "System/Library/Frameworks/CoreSpotlight.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		7B550826D0AD471BA37EE857 /* CoreTelephony.framework */ = {isa = PBXFileReference; name = "CoreTelephony.framework"; path = "System/Library/Frameworks/CoreTelephony.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		140783A558074966A26F4E5B /* iAd.framework */ = {isa = PBXFileReference; name = "iAd.framework"; path = "System/Library/Frameworks/iAd.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		DB59205F60E44DCCB84C8B95 /* FacebookConnectPlugin.m */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.m"; path = "cordova-plugin-facebook4/FacebookConnectPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		37BB38BF3EC84AEB8BC377AF /* FacebookConnectPlugin.h */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.h"; path = "cordova-plugin-facebook4/FacebookConnectPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		5C6C32C347B246AB8AEED3EE /* Bolts.framework */ = {isa = PBXFileReference; name = "Bolts.framework"; path = "BlockTrail Wallet/Plugins/cordova-plugin-facebook4/Bolts.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		7F4D0736F66B4AE984514D6C /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; name = "FBSDKCoreKit.framework"; path = "BlockTrail Wallet/Plugins/cordova-plugin-facebook4/FBSDKCoreKit.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		97D7DA0E6CC14F5DBD7F46B4 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; name = "FBSDKLoginKit.framework"; path = "BlockTrail Wallet/Plugins/cordova-plugin-facebook4/FBSDKLoginKit.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		20A585C2C25840B3AD9E386B /* FBSDKShareKit.framework */ = {isa = PBXFileReference; name = "FBSDKShareKit.framework"; path = "BlockTrail Wallet/Plugins/cordova-plugin-facebook4/FBSDKShareKit.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,7 +398,6 @@
 				680CAC3405E44C3782821714 /* Social.framework in Frameworks */,
 				40FA2736253B4D18B4B8DD8A /* Accounts.framework in Frameworks */,
 				B263EE20072B4DB0852D3BA0 /* Security.framework in Frameworks */,
-				08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */,
 				45B1492521844F81B1DCEB7B /* libGoogleConversionTracking.a in Frameworks */,
 				4D8B71B91A334B1BA5639CCA /* AdSupport.framework in Frameworks */,
 				5B8984565C89489682DD8B29 /* libz.dylib in Frameworks */,
@@ -406,6 +411,10 @@
 				DCBA73E28AD14E1EAEDE8811 /* CoreSpotlight.framework in Frameworks */,
 				7AC60B782278488AAEE6BFD9 /* CoreTelephony.framework in Frameworks */,
 				E573ED15D6AA451EBCEF1072 /* iAd.framework in Frameworks */,
+				1F8EF428AC1B431BA328F5BA /* Bolts.framework in Frameworks */,
+				A4AAC457D95E4065BF841D83 /* FBSDKCoreKit.framework in Frameworks */,
+				C649C1E5F63044E6845E624B /* FBSDKLoginKit.framework in Frameworks */,
+				36797B79C10B4242B700EEF2 /* FBSDKShareKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,7 +517,6 @@
 				5DA6811B7D004429BAE82184 /* Social.framework */,
 				686D574B75164D5FA8098CB1 /* Accounts.framework */,
 				DF4FDC661E7C4DFEBAC8D468 /* Security.framework */,
-				DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */,
 				B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */,
 				7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */,
 				85F78675D26D430C876659EF /* libz.dylib */,
@@ -522,6 +530,10 @@
 				E9A7EA9740DC4D71A24473CD /* CoreSpotlight.framework */,
 				7B550826D0AD471BA37EE857 /* CoreTelephony.framework */,
 				140783A558074966A26F4E5B /* iAd.framework */,
+				5C6C32C347B246AB8AEED3EE /* Bolts.framework */,
+				7F4D0736F66B4AE984514D6C /* FBSDKCoreKit.framework */,
+				97D7DA0E6CC14F5DBD7F46B4 /* FBSDKLoginKit.framework */,
+				20A585C2C25840B3AD9E386B /* FBSDKShareKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -643,8 +655,6 @@
 				6A876C5FB6704471AEA98A44 /* zxing-all-in-one.h */,
 				9C8E6B5B72DC4C5D8D2A4A02 /* CDVNotification.m */,
 				C8BF6E2CA19C4F05AA2AA293 /* CDVNotification.h */,
-				A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */,
-				2816EAEF88F346EE9033F3EF /* FacebookConnectPlugin.h */,
 				A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */,
 				A77F326597174BA9A8011E5F /* ACTReporter.h */,
 				9F923C5E7E584CAD9BBDECC9 /* GoogleAppTracking.h */,
@@ -673,6 +683,8 @@
 				E4043779F3A1408BAF0AFA08 /* TunePowerHookExperimentDetails.h */,
 				9C3F94611B214EF9B2EC3C86 /* TunePreloadData.h */,
 				0AF8BC5200954BEAA4E9993B /* TunePushInfo.h */,
+				DB59205F60E44DCCB84C8B95 /* FacebookConnectPlugin.m */,
+				37BB38BF3EC84AEB8BC377AF /* FacebookConnectPlugin.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -926,11 +938,11 @@
 				79604475BE634C6EA7060075 /* CDVBarcodeScanner.mm in Sources */,
 				1E3B53CCF5254D159742E253 /* zxing-all-in-one.cpp in Sources */,
 				5FDD693A71F84919AD8AA0EB /* CDVNotification.m in Sources */,
-				BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */,
 				07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */,
 				176AF960E58E41E494F86FFD /* FabricPlugin.m in Sources */,
 				D2BEE0F8AAC84FF49B65C14A /* UniversalAnalyticsPlugin.m in Sources */,
 				13CEBF250D294B31ADF77CDE /* TunePlugin.m in Sources */,
+				5CF7F37F83BF45AA9BAFB09D /* FacebookConnectPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -995,6 +1007,10 @@
 					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
 					"\"BlockTrail Wallet/Plugins/cordova-fabric-plugin\"",
 					"\"BlockTrail Wallet/Plugins/cordova-fabric-plugin\"",
+					"\"BlockTrail Wallet/Plugins/cordova-plugin-facebook4\"",
+					"\"BlockTrail Wallet/Plugins/cordova-plugin-facebook4\"",
+					"\"BlockTrail Wallet/Plugins/cordova-plugin-facebook4\"",
+					"\"BlockTrail Wallet/Plugins/cordova-plugin-facebook4\"",
 				);
 			};
 			name = Debug;
@@ -1047,6 +1063,10 @@
 					"\"BlockTrail Wallet/Plugins/phonegap-facebook-plugin\"",
 					"\"BlockTrail Wallet/Plugins/cordova-fabric-plugin\"",
 					"\"BlockTrail Wallet/Plugins/cordova-fabric-plugin\"",
+					"\"BlockTrail Wallet/Plugins/cordova-plugin-facebook4\"",
+					"\"BlockTrail Wallet/Plugins/cordova-plugin-facebook4\"",
+					"\"BlockTrail Wallet/Plugins/cordova-plugin-facebook4\"",
+					"\"BlockTrail Wallet/Plugins/cordova-plugin-facebook4\"",
 				);
 			};
 			name = Release;
