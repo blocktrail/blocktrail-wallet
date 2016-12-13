@@ -1,11 +1,29 @@
 cordova.define("cordova-plugin-tune.TunePlugin", function(require, exports, module) {
 var exec = require("cordova/exec");
 
-var TunePlugin = function() {}
+var TunePlugin = function() {};
 
-TunePlugin.prototype.init = function(tuneAdvertiserId, tuneConversionKey, tunePackageName, tuneIsWearable) {
+var completeCallback = function(fnname, cb) {
+    cb = cb || function noop() {};
+
+    return function(r) {
+        console.log('complete(' + fnname + ')', r);
+        cb(null, r);
+    }
+};
+
+var errorCallback = function(fnname, cb) {
+    cb = cb || function noop() {};
+
+    return function(e) {
+        console.log('error(' + fnname + ')', e);
+        cb(e, null);
+    }
+};
+
+TunePlugin.prototype.init = function(tuneAdvertiserId, tuneConversionKey, tunePackageName, tuneIsWearable, cb) {
     console.log("TunePlugin.js: Calling init");
-    exec(null, null, "TunePlugin", "init", [tuneAdvertiserId, tuneConversionKey, tunePackageName, tuneIsWearable]);
+    exec(completeCallback('init', cb), errorCallback('init', cb), "TunePlugin", "init", [tuneAdvertiserId, tuneConversionKey, tunePackageName, tuneIsWearable]);
     return this;
 };
 
@@ -271,9 +289,9 @@ TunePlugin.prototype.setRedirectUrl = function(redirectUrl) {
     return this;
 };
 
-TunePlugin.prototype.measureSession = function() {
+TunePlugin.prototype.measureSession = function(cb) {
     console.log("TunePlugin.js: calling measureSession");
-    exec(null, null, "TunePlugin", "measureSession", []);
+    exec(completeCallback('measureSession', cb), errorCallback('measureSession', cb), "TunePlugin", "measureSession", []);
     return this;
 };
 

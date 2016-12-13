@@ -76,6 +76,7 @@ public class TunePlugin extends CordovaPlugin {
     
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) {
+        try {
         if (INIT.equals(action)) {
             String advertiserId = args.optString(0);
             String advertiserKey = args.optString(1);
@@ -534,6 +535,11 @@ public class TunePlugin extends CordovaPlugin {
             return true;
         } else {
             callbackContext.error("Unsupported action on Android");
+            return false;
+        }
+        } catch (Throwable t) {
+            t.printStackTrace();
+            callbackContext.error("Internal Error: " + t.getMessage());
             return false;
         }
     }
