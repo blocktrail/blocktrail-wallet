@@ -22,9 +22,9 @@
 apply plugin: 'android'
 
 // exclude support-v4 to avoid conflicts between FB SDK and GA SDK
-configurations {
-   all*.exclude group: 'com.android.support', module: 'support-v4'
-}
+// configurations {
+//    all*.exclude group: 'com.android.support', module: 'support-v4'
+// }
 
 buildscript {
     repositories {
@@ -247,12 +247,11 @@ dependencies {
     // SUB-PROJECT DEPENDENCIES START
     debugCompile project(path: "CordovaLib", configuration: "debug")
     releaseCompile project(path: "CordovaLib", configuration: "release")
-    debugCompile project(path: "phonegap-facebook-plugin:FacebookLib", configuration: "debug")
-    releaseCompile project(path: "phonegap-facebook-plugin:FacebookLib", configuration: "release")
     compile "com.google.android.gms:play-services-analytics:+"
     compile "com.android.support:support-v4:23.+"
     compile "com.google.android.gms:play-services-ads:+"
     compile "de.greenrobot:eventbus:2.4.0"
+    compile "com.facebook.android:facebook-android-sdk:4.14.+"
     // SUB-PROJECT DEPENDENCIES END
 }
 

@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/work/blocktrail-wallet/platforms/android/phonegap-facebook-plugin/mywallet-FacebookLib/assets"/></dataSet><dataSet config="release"><source path="/work/blocktrail-wallet/platforms/android/phonegap-facebook-plugin/mywallet-FacebookLib/src/release/assets"/></dataSet></merger>

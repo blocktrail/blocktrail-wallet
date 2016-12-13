@@ -749,11 +749,6 @@
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "phonegap-facebook-plugin": {
-            "APP_ID": "1072524012838770",
-            "APP_NAME": "BTC.com",
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "cordova-plugin-google-app-conversion-tracker": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
@@ -766,6 +761,11 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-tune": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-facebook4": {
+            "APP_ID": "1072524012838770",
+            "APP_NAME": "BTC.com",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },

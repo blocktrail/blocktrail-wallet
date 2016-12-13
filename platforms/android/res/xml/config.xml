@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget id="com.blocktrail.mywallet" version="2.2.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
+    <preference name="android-minSdkVersion" value="15" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="android-minSdkVersion" value="17" />
@@ -92,9 +93,6 @@
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
-    <feature name="FacebookConnectPlugin">
-        <param name="android-package" value="org.apache.cordova.facebook.ConnectPlugin" />
-    </feature>
     <feature name="GoogleAppTracking">
         <param name="android-package" value="com.myhealthteams.plugins.GoogleAppTracking" />
     </feature>
@@ -107,6 +105,10 @@
     </feature>
     <feature name="TunePlugin">
         <param name="android-package" value="com.tune.TunePlugin" />
+    </feature>
+    <feature name="FacebookConnectPlugin">
+        <param name="android-package" value="org.apache.cordova.facebook.ConnectPlugin" />
+        <param name="onload" value="true" />
     </feature>
     <access origin="https://m.facebook.com" />
     <access origin="https://graph.facebook.com" />
