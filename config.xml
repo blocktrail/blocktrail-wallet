@@ -74,4 +74,8 @@
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+  <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
+    <variable name="APP_ID" value="1072524012838770"/>
+    <variable name="APP_NAME" value="BTC.com"/>
+  </plugin>
 </widget>
