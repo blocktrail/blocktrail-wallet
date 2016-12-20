@@ -87,6 +87,7 @@ angular.module('blocktrail.wallet').factory(
                 .then(function(doc) { return doc; }, function() { return {_id: "wallet_backup"}; })
                 .then(function(doc) {
                     doc.identifier = walletInfo.identifier;
+                    doc.walletVersion = walletInfo.walletVersion;
                     doc.encryptedPassword = walletInfo.encryptedPassword || null;
                     doc.encryptedPrimarySeed = walletInfo.encryptedPrimarySeed;
                     doc.backupSeed = walletInfo.backupSeed;
