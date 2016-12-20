@@ -15,7 +15,7 @@ backupSeed = randomBits(256)
 secret = randomBits(256)
 recoverySecret = randomBits(256)
 
-passwordEncryptedSecret = AES.encrypt(secret, password)
+passwordEncryptedSecret = AES.encrypt(secret, userPassword)
 
 encryptedPrimarySeed = AES.encrypt(primarySeed, secret)
 

@@ -3,6 +3,8 @@ var bitcoin = require('bitcoinjs-lib');
 var bip39 = require("bip39");
 var CryptoJS = require('crypto-js');
 var blocktrail = require('./blocktrail');
+var EncryptionMnemonic = require('./encryption_mnemonic');
+var Encryption = require('./encryption');
 var walletSDK = require('./wallet');
 var _ = require('lodash');
 var q = require('q');
@@ -40,67 +42,77 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
     if (!Array.isArray(backupData.blocktrailKeys)) {
         throw new Error('blocktrail pub keys are required (must be type Array)');
     }
-    if (1 === backupData.walletVersion) {
-        if (typeof backupData.primaryMnemonic === "undefined" || !backupData.primaryMnemonic) {
-            throw new Error('missing primary mnemonic for version 1 wallet');
-        }
-        if (typeof backupData.backupMnemonic === "undefined" || !backupData.backupMnemonic) {
-            throw new Error('missing backup mnemonic for version 1 wallet');
-        }
-        if (typeof backupData.primaryPassphrase === "undefined") {
-            throw new Error('missing primary passphrase for version 1 wallet');
-        }
 
-        // cleanup copy paste errors from mnemonics
-        backupData.primaryMnemonic = backupData.primaryMnemonic.trim()
-                                        .replace(new RegExp("\r\n", 'g'), " ")
-                                        .replace(new RegExp("\n", 'g'), " ")
-                                        .replace(/\s+/g, " ");
-        backupData.backupMnemonic = backupData.backupMnemonic.trim()
-                                        .replace(new RegExp("\r\n", 'g'), " ")
-                                        .replace(new RegExp("\n", 'g'), " ")
-                                        .replace(/\s+/g, " ");
-    } else {
-        if (typeof backupData.encryptedPrimaryMnemonic === "undefined" || !backupData.encryptedPrimaryMnemonic) {
-            throw new Error('missing encrypted primary seed for version 2 wallet');
-        }
-        if (typeof backupData.backupMnemonic === "undefined" || !backupData.backupMnemonic) {
-            throw new Error('missing backup seed for version 2 wallet');
-        }
-        //can either recover with password and password encrypted secret, or with encrypted recovery secret and a decryption key
-        usePassword = typeof backupData.password !== "undefined" && backupData.password !== null;
-        if (usePassword) {
-            if (typeof backupData.passwordEncryptedSecretMnemonic === "undefined" || !backupData.passwordEncryptedSecretMnemonic) {
-                throw new Error('missing password encrypted secret for version 2 wallet');
+    switch (backupData.walletVersion) {
+        case 1:
+            if (typeof backupData.primaryMnemonic === "undefined" || !backupData.primaryMnemonic) {
+                throw new Error('missing primary mnemonic for version 1 wallet');
             }
-            if (typeof backupData.password === "undefined") {
-                throw new Error('missing primary passphrase for version 2 wallet');
+            if (typeof backupData.backupMnemonic === "undefined" || !backupData.backupMnemonic) {
+                throw new Error('missing backup mnemonic for version 1 wallet');
             }
-        } else {
-            if (typeof backupData.encryptedRecoverySecretMnemonic === "undefined" || !backupData.encryptedRecoverySecretMnemonic) {
-                throw new Error('missing encrypted recovery secret for version 2 wallet (recovery without password)');
+            if (typeof backupData.primaryPassphrase === "undefined") {
+                throw new Error('missing primary passphrase for version 1 wallet');
             }
-            if (!backupData.recoverySecretDecryptionKey) {
-                throw new Error('missing recovery secret decryption key for version 2 wallet (recovery without password)');
-            }
-        }
 
-        // cleanup copy paste errors from mnemonics
-        backupData.encryptedPrimaryMnemonic = backupData.encryptedPrimaryMnemonic.trim()
-                                                .replace(new RegExp("\r\n", 'g'), " ")
-                                                .replace(new RegExp("\n", 'g'), " ")
-                                                .replace(/\s+/g, " ");
-        backupData.backupMnemonic = backupData.backupMnemonic.trim()
-                                    .replace(new RegExp("\r\n", 'g'), " ")
-                                    .replace(new RegExp("\n", 'g'), " ")
-                                    .replace(/\s+/g, " ");
-        if (usePassword) {
-            backupData.passwordEncryptedSecretMnemonic = backupData.passwordEncryptedSecretMnemonic.trim()
-                .replace(new RegExp("\r\n", 'g'), " ").replace(new RegExp("\n", 'g'), " ").replace(/\s+/g, " ");
-        } else {
-            backupData.encryptedRecoverySecretMnemonic = backupData.encryptedRecoverySecretMnemonic.trim()
-                .replace(new RegExp("\r\n", 'g'), " ").replace(new RegExp("\n", 'g'), " ").replace(/\s+/g, " ");
-        }
+            // cleanup copy paste errors from mnemonics
+            backupData.primaryMnemonic = backupData.primaryMnemonic.trim()
+                .replace(new RegExp("\r\n", 'g'), " ")
+                .replace(new RegExp("\n", 'g'), " ")
+                .replace(/\s+/g, " ");
+            backupData.backupMnemonic = backupData.backupMnemonic.trim()
+                .replace(new RegExp("\r\n", 'g'), " ")
+                .replace(new RegExp("\n", 'g'), " ")
+                .replace(/\s+/g, " ");
+        break;
+
+        case 2:
+        case 3:
+            if (typeof backupData.encryptedPrimaryMnemonic === "undefined" || !backupData.encryptedPrimaryMnemonic) {
+                throw new Error('missing encrypted primary seed for version 2 wallet');
+            }
+            if (typeof backupData.backupMnemonic === "undefined" || !backupData.backupMnemonic) {
+                throw new Error('missing backup seed for version 2 wallet');
+            }
+            //can either recover with password and password encrypted secret, or with encrypted recovery secret and a decryption key
+            usePassword = typeof backupData.password !== "undefined" && backupData.password !== null;
+            if (usePassword) {
+                if (typeof backupData.passwordEncryptedSecretMnemonic === "undefined" || !backupData.passwordEncryptedSecretMnemonic) {
+                    throw new Error('missing password encrypted secret for version 2 wallet');
+                }
+                if (typeof backupData.password === "undefined") {
+                    throw new Error('missing primary passphrase for version 2 wallet');
+                }
+            } else {
+                if (typeof backupData.encryptedRecoverySecretMnemonic === "undefined" || !backupData.encryptedRecoverySecretMnemonic) {
+                    throw new Error('missing encrypted recovery secret for version 2 wallet (recovery without password)');
+                }
+                if (!backupData.recoverySecretDecryptionKey) {
+                    throw new Error('missing recovery secret decryption key for version 2 wallet (recovery without password)');
+                }
+            }
+
+            // cleanup copy paste errors from mnemonics
+            backupData.encryptedPrimaryMnemonic = backupData.encryptedPrimaryMnemonic.trim()
+                .replace(new RegExp("\r\n", 'g'), " ")
+                .replace(new RegExp("\n", 'g'), " ")
+                .replace(/\s+/g, " ");
+            backupData.backupMnemonic = backupData.backupMnemonic.trim()
+                .replace(new RegExp("\r\n", 'g'), " ")
+                .replace(new RegExp("\n", 'g'), " ")
+                .replace(/\s+/g, " ");
+            if (usePassword) {
+                backupData.passwordEncryptedSecretMnemonic = backupData.passwordEncryptedSecretMnemonic.trim()
+                    .replace(new RegExp("\r\n", 'g'), " ").replace(new RegExp("\n", 'g'), " ").replace(/\s+/g, " ");
+            } else {
+                backupData.encryptedRecoverySecretMnemonic = backupData.encryptedRecoverySecretMnemonic.trim()
+                    .replace(new RegExp("\r\n", 'g'), " ").replace(new RegExp("\n", 'g'), " ").replace(/\s+/g, " ");
+            }
+
+        break;
+
+        default:
+            throw new Error('Wrong version [' + backupData.walletVersion + ']');
     }
 
 
@@ -111,38 +123,70 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
     });
 
     // convert the primary and backup mnemonics to seeds (using BIP39)
-    var primarySeed, backupSeed;
-    if (1 === backupData.walletVersion) {
-        primarySeed = bip39.mnemonicToSeed(backupData.primaryMnemonic, backupData.primaryPassphrase);
-        backupSeed = bip39.mnemonicToSeed(backupData.backupMnemonic, "");
-    } else {
-        // if a version 2 wallet, need to process backup data a bit more first...
+    var primarySeed, backupSeed, secret;
+    switch (backupData.walletVersion) {
+        case 1:
+            primarySeed = bip39.mnemonicToSeed(backupData.primaryMnemonic, backupData.primaryPassphrase);
+            backupSeed = bip39.mnemonicToSeed(backupData.backupMnemonic, "");
+        break;
 
-        // convert mnemonics to hex (bip39) and then base64 for decryption
-        backupData.encryptedPrimaryMnemonic = blocktrail.convert(bip39.mnemonicToEntropy(backupData.encryptedPrimaryMnemonic), 'hex', 'base64');
-        if (usePassword) {
-            backupData.passwordEncryptedSecretMnemonic = blocktrail.convert(
-                bip39.mnemonicToEntropy(backupData.passwordEncryptedSecretMnemonic), 'hex', 'base64');
-        } else {
-            backupData.encryptedRecoverySecretMnemonic = blocktrail.convert(
-                bip39.mnemonicToEntropy(backupData.encryptedRecoverySecretMnemonic), 'hex', 'base64');
-        }
+        case 2:
+            // convert mnemonics to hex (bip39) and then base64 for decryption
+            backupData.encryptedPrimaryMnemonic = blocktrail.convert(bip39.mnemonicToEntropy(backupData.encryptedPrimaryMnemonic), 'hex', 'base64');
+            if (usePassword) {
+                backupData.passwordEncryptedSecretMnemonic = blocktrail.convert(
+                    bip39.mnemonicToEntropy(backupData.passwordEncryptedSecretMnemonic), 'hex', 'base64');
+            } else {
+                backupData.encryptedRecoverySecretMnemonic = blocktrail.convert(
+                    bip39.mnemonicToEntropy(backupData.encryptedRecoverySecretMnemonic), 'hex', 'base64');
+            }
 
-        // decrypt encryption secret
-        var secret;
-        if (usePassword) {
-            secret = CryptoJS.AES.decrypt(backupData.passwordEncryptedSecretMnemonic, backupData.password).toString(CryptoJS.enc.Utf8);
-        } else {
-            secret = CryptoJS.AES.decrypt(backupData.encryptedRecoverySecretMnemonic, backupData.recoverySecretDecryptionKey).toString(CryptoJS.enc.Utf8);
-        }
+            // decrypt encryption secret
+            if (usePassword) {
+                secret = CryptoJS.AES.decrypt(backupData.passwordEncryptedSecretMnemonic, backupData.password).toString(CryptoJS.enc.Utf8);
+            } else {
+                secret = CryptoJS.AES.decrypt(backupData.encryptedRecoverySecretMnemonic, backupData.recoverySecretDecryptionKey).toString(CryptoJS.enc.Utf8);
+            }
 
-        if (!secret) {
-            throw new Error("Could not decrypt secret with " + (usePassword ? "password" : "decryption key"));
-        }
+            if (!secret) {
+                throw new Error("Could not decrypt secret with " + (usePassword ? "password" : "decryption key"));
+            }
 
-        // now finally decrypt the primary seed and convert to buffer (along with backup seed)
-        primarySeed = new Buffer(CryptoJS.AES.decrypt(backupData.encryptedPrimaryMnemonic, secret).toString(CryptoJS.enc.Utf8), 'base64');
-        backupSeed = new Buffer(bip39.mnemonicToEntropy(backupData.backupMnemonic), 'hex');
+            // now finally decrypt the primary seed and convert to buffer (along with backup seed)
+            primarySeed = new Buffer(CryptoJS.AES.decrypt(backupData.encryptedPrimaryMnemonic, secret).toString(CryptoJS.enc.Utf8), 'base64');
+            backupSeed = new Buffer(bip39.mnemonicToEntropy(backupData.backupMnemonic), 'hex');
+
+        break;
+
+        case 3:
+            // convert mnemonics to hex (bip39) and then base64 for decryption
+            backupData.encryptedPrimaryMnemonic = EncryptionMnemonic.decode(backupData.encryptedPrimaryMnemonic);
+            if (usePassword) {
+                backupData.passwordEncryptedSecretMnemonic = EncryptionMnemonic.decode(backupData.passwordEncryptedSecretMnemonic);
+            } else {
+                backupData.encryptedRecoverySecretMnemonic = EncryptionMnemonic.decode(backupData.encryptedRecoverySecretMnemonic);
+            }
+
+            // decrypt encryption secret
+            if (usePassword) {
+                secret = Encryption.decrypt(backupData.passwordEncryptedSecretMnemonic, new Buffer(backupData.password));
+            } else {
+                secret = Encryption.decrypt(backupData.encryptedRecoverySecretMnemonic, backupData.recoverySecretDecryptionKey);
+            }
+
+            if (!secret) {
+                throw new Error("Could not decrypt secret with " + (usePassword ? "password" : "decryption key"));
+            }
+
+            // now finally decrypt the primary seed and convert to buffer (along with backup seed)
+            primarySeed = Encryption.decrypt(backupData.encryptedPrimaryMnemonic, secret);
+            backupSeed = new Buffer(bip39.mnemonicToEntropy(backupData.backupMnemonic), 'hex');
+            // backupSeed = Mnemonic.decode(backupData.backupMnemonic);
+
+        break;
+
+        default:
+            throw new Error('Wrong version [' + backupData.walletVersion + ']');
     }
 
     // convert the primary and backup seeds to private keys (using BIP32)

@@ -1,6 +1,12 @@
 BlockTrail NodeJS SDK Changelog
 ===============================
 
+v3.0.0
+------
+ - New [Default] Wallet Version 3  
+   Better encryption scheme / key derivation.
+ - Deprecated passing in `primaryPrivateKey`, should use `primarySeed` instead.
+
 v2.0.1
 ------
  - Add support for `OP_RETURN` in `wallet.pay` (see `examples/opreturn_payment_api_usage.js`)

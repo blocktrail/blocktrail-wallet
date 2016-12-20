@@ -6,7 +6,7 @@ var bip39 = require('bip39');
 var blocktrail = {
     COIN: 100000000,
     PRECISION: 8,
-    DUST: 546,
+    DUST: 2730,
     BASE_FEE: 10000
 };
 
@@ -61,6 +61,12 @@ blocktrail.aesDecryptMnemonicToSeedHex = aesDecryptMnemonicToSeedHex;
 blocktrail.aesEncryptSeedToMnemonic = aesEncryptSeedToMnemonic;
 blocktrail.aesEncryptSeedHexToMnemonic = aesEncryptSeedHexToMnemonic;
 blocktrail.aesEncryptSeedBufferToMnemonic = aesEncryptSeedBufferToMnemonic;
+
+blocktrail.V3Crypt = {
+    KeyDerivation: require('./keyderivation'),
+    Encryption: require('./encryption'),
+    EncryptionMnemonic: require('./encryption_mnemonic')
+};
 
 /**
  * convert a BTC value to Satoshi

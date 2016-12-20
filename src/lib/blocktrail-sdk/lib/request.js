@@ -38,6 +38,7 @@ function Request(options) {
     self.port = options.port;
     self.apiKey = options.apiKey;
     self.apiSecret = options.apiSecret;
+    self.contentMd5 = typeof options.contentMd5 !== "undefined" ? options.contentMd5 : true;
 
     self.params = _.defaults({}, options.params);
     self.headers = _.defaults({}, options.headers);
@@ -90,16 +91,20 @@ Request.prototype.request = function(method, resource, params, data, fn) {
     if (data) {
         self.payload = JSON.stringify(data);
         self.headers['Content-Type'] = 'application/json';
+    } else {
+        self.payload = "";
     }
 
     if (isNodeJS) {
         self.headers['Content-Length'] = self.payload ? self.payload.length : 0;
     }
 
-    if (method === 'GET' || method === 'DELETE') {
-        self.headers['Content-MD5'] = createHash('md5').update(self.path).digest().toString('hex');
-    } else {
-        self.headers['Content-MD5'] = createHash('md5').update(self.payload).digest().toString('hex');
+    if (self.contentMd5 === true) {
+        if (method === 'GET' || method === 'DELETE') {
+            self.headers['Content-MD5'] = createHash('md5').update(self.path).digest().toString('hex');
+        } else {
+            self.headers['Content-MD5'] = createHash('md5').update(self.payload).digest().toString('hex');
+        }
     }
 
     debug('%s %s %s', method, self.host, self.path);

@@ -1,5 +1,4 @@
 var blocktrail = require('../');
-var crypto = require('crypto');
 
 /**
  * backup data from a Wallet V1 Backup PDF (Developer wallets)
@@ -85,7 +84,7 @@ var bitcoinDataClient = new blocktrail.BlocktrailBitcoinService({
 
 
 
-var discoverAndSweep = true;        //do we want to discover funds and sweep them to another wallet at the same time?
+var discoverAndSweep = false;        //do we want to discover funds and sweep them to another wallet at the same time?
 var recoverWithPassword = false;     //do we want to try and recover with or without the password?
 
 

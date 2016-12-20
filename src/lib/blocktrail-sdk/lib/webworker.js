@@ -1,4 +1,5 @@
 var bip39 = require("bip39");
+var Encryption = require('./encryption');
 
 module.exports = function(self) {
     self.addEventListener('message', function(e) {
@@ -7,20 +8,52 @@ module.exports = function(self) {
         switch (data.method) {
             case 'mnemonicToSeedHex':
                 (function() {
-                    var mnemonic = data.mnemonic;
-                    var passphrase = data.passphrase;
+                    try {
+                        var mnemonic = data.mnemonic;
+                        var passphrase = data.passphrase;
 
-                    if (!bip39.validateMnemonic(mnemonic)) {
-                        throw new Error('Invalid passphrase');
+                        if (!bip39.validateMnemonic(mnemonic)) {
+                            e = new Error('Invalid passphrase');
+                            e.id = data.id;
+                            throw e;
+                        }
+                        var seed = bip39.mnemonicToSeedHex(mnemonic, passphrase);
+
+                        self.postMessage({id: data.id, seed: seed, mnemonic: mnemonic});
+                    } catch (e) {
+                        e.id = data.id;
+                        throw e;
                     }
-                    var seed = bip39.mnemonicToSeedHex(mnemonic, passphrase);
+                })();
+            break;
 
-                    self.postMessage({seed: seed, mnemonic: mnemonic});
+            case 'Encryption.encryptWithSaltAndIV':
+                (function() {
+                    try {
+                        if (!data.pt || !data.pw || !data.saltBuf || !data.iv || !data.iterations) {
+                            throw new Error("Invalid input");
+                        }
+
+                        var pt = Buffer.from(data.pt.buffer);
+                        var pw = Buffer.from(data.pw.buffer);
+                        var saltBuf = Buffer.from(data.saltBuf.buffer);
+                        var iv = Buffer.from(data.iv.buffer);
+                        var iterations = data.iterations;
+
+                        var cipherText = Encryption.encryptWithSaltAndIV(pt,  pw, saltBuf, iv, iterations);
+
+                        self.postMessage({id: data.id, cipherText: cipherText});
+                    } catch (e) {
+                        e.id = data.id;
+                        throw e;
+                    }
                 })();
             break;
 
             default:
-                throw new Error('Invalid method [' + e.method + ']');
+                e = new Error('Invalid method [' + e.method + ']');
+                e.id = data.id;
+                throw e;
         }
     }, false);
 };

@@ -1,18 +1,18 @@
-/* globals window */
 var _ = require('lodash'),
     q = require('q'),
     bitcoin = require('bitcoinjs-lib'),
     bip39 = require("bip39"),
     Wallet = require('./wallet'),
     RestClient = require('./rest_client'),
+    Encryption = require('./encryption'),
+    KeyDerivation = require('./keyderivation'),
+    EncryptionMnemonic = require('./encryption_mnemonic'),
     blocktrail = require('./blocktrail'),
     randomBytes = require('randombytes'),
-    CryptoJS = require('crypto-js');
+    CryptoJS = require('crypto-js'),
+    webworkifier = require('./webworkifier');
 
-var workify = require('webworkify');
-
-var isNodeJS = !process.browser;
-var useWebWorker = !isNodeJS && typeof window !== "undefined" && typeof window.Worker !== "undefined";
+var useWebWorker = require('./use-webworker')();
 
 /**
  * Bindings to conssume the BlockTrail API
@@ -77,6 +77,187 @@ var APIClient = function(options) {
     self.client = new RestClient(options);
 };
 
+var determineDataStorageV2_3 = function(options) {
+    return q.when(options)
+        .then(function(options) {
+            // legacy
+            if (options.storePrimaryMnemonic) {
+                options.storeDataOnServer = options.storePrimaryMnemonic;
+            }
+
+            // storeDataOnServer=false when primarySeed is provided
+            if (typeof options.storeDataOnServer === "undefined") {
+                options.storeDataOnServer = !options.primarySeed;
+            }
+
+            return options;
+        });
+};
+
+var produceEncryptedDataV2 = function(options, notify) {
+    return q.when(options)
+        .then(function(options) {
+            if (options.storeDataOnServer) {
+                if (!options.secret) {
+                    if (!options.passphrase) {
+                        throw new blocktrail.WalletCreateError("Can't encrypt data without a passphrase");
+                    }
+
+                    notify(APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_SECRET);
+
+                    options.secret = randomBytes(Wallet.WALLET_ENTROPY_BITS / 8).toString('hex'); // string because we use it as passphrase
+                    options.encryptedSecret = CryptoJS.AES.encrypt(options.secret, options.passphrase).toString(CryptoJS.format.OpenSSL); // 'base64' string
+                }
+
+                notify(APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_PRIMARY);
+
+                options.encryptedPrimarySeed = CryptoJS.AES.encrypt(options.primarySeed.toString('base64'), options.secret)
+                    .toString(CryptoJS.format.OpenSSL); // 'base64' string
+                options.recoverySecret = randomBytes(Wallet.WALLET_ENTROPY_BITS / 8).toString('hex'); // string because we use it as passphrase
+
+                notify(APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_RECOVERY);
+
+                options.recoveryEncryptedSecret = CryptoJS.AES.encrypt(options.secret, options.recoverySecret)
+                                                              .toString(CryptoJS.format.OpenSSL); // 'base64' string
+            }
+
+            return options;
+        });
+};
+
+var promisedEncrypt = function(pt, pw) {
+    if (useWebWorker) {
+        // generate randomness outside of webworker because many browsers don't have crypto.getRandomValues inside webworkers
+        var saltBuf = randomBytes(Encryption.defaultSaltLen);
+        var iv = randomBytes(Encryption.ivLenBits / 8);
+        var iterations = KeyDerivation.defaultIterations;
+
+        return webworkifier.workify(promisedEncrypt, function() {
+            return require('./webworker');
+        }, {
+            method: 'Encryption.encryptWithSaltAndIV',
+            pt: pt,
+            pw: pw,
+            saltBuf: saltBuf,
+            iv: iv,
+            iterations: iterations
+        })
+            .then(function(data) {
+                return Buffer.from(data.cipherText.buffer);
+            });
+    } else {
+        try {
+            return q.when(Encryption.encrypt(pt, pw));
+        } catch (e) {
+            return q.reject(e);
+        }
+    }
+};
+
+APIClient.prototype.produceEncryptedDataV3 = function(options, notify) {
+    return q.when(options)
+        .then(function(options) {
+            if (options.storeDataOnServer) {
+                return q.when()
+                    .then(function() {
+                        if (!options.secret) {
+                            if (!options.passphrase) {
+                                throw new blocktrail.WalletCreateError("Can't encrypt data without a passphrase");
+                            }
+
+                            notify(APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_SECRET);
+
+                            // -> now a buffer
+                            options.secret = randomBytes(Wallet.WALLET_ENTROPY_BITS / 8);
+
+                            // -> now a buffer
+                            return promisedEncrypt(options.secret, new Buffer(options.passphrase))
+                                .then(function(encryptedSecret) {
+                                    options.encryptedSecret = encryptedSecret;
+                                });
+                        } else {
+                            if (!(options.secret instanceof Buffer)) {
+                                throw new Error('Secret must be a buffer');
+                            }
+                        }
+                    })
+                    .then(function() {
+                        notify(APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_PRIMARY);
+
+                        return promisedEncrypt(options.primarySeed, options.secret)
+                            .then(function(encryptedPrimarySeed) {
+                                options.encryptedPrimarySeed = encryptedPrimarySeed;
+                            });
+                    })
+                    .then(function() {
+                        // skip generating recovery secret when explicitly set to false
+                        if (options.recoverySecret === false) {
+                            return;
+                        }
+
+                        notify(APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_RECOVERY);
+                        if (!options.recoverySecret) {
+                            options.recoverySecret = randomBytes(Wallet.WALLET_ENTROPY_BITS / 8);
+                        }
+
+                        return promisedEncrypt(options.secret, options.recoverySecret)
+                            .then(function(recoveryEncryptedSecret) {
+                                options.recoveryEncryptedSecret = recoveryEncryptedSecret;
+                            });
+                    })
+                    .then(function() {
+                        return options;
+                    });
+            } else {
+                return options;
+            }
+        });
+};
+
+var doRemainingWalletDataV2_3 = function(options, network, notify) {
+    return q.when(options)
+        .then(function(options) {
+            if (!options.backupPublicKey) {
+                options.backupSeed = options.backupSeed || randomBytes(Wallet.WALLET_ENTROPY_BITS / 8);
+            }
+
+            notify(APIClient.CREATE_WALLET_PROGRESS_PRIMARY);
+
+            options.primaryPrivateKey = bitcoin.HDNode.fromSeedBuffer(options.primarySeed, network);
+
+            notify(APIClient.CREATE_WALLET_PROGRESS_BACKUP);
+
+            if (!options.backupPublicKey) {
+                options.backupPrivateKey = bitcoin.HDNode.fromSeedBuffer(options.backupSeed, network);
+                options.backupPublicKey = options.backupPrivateKey.neutered();
+            }
+
+            options.primaryPublicKey = options.primaryPrivateKey.deriveHardened(options.keyIndex).neutered();
+
+            notify(APIClient.CREATE_WALLET_PROGRESS_SUBMIT);
+
+            return options;
+        });
+};
+
+APIClient.prototype.testWebWorker = function(payload, passphrase) {
+    var self = this;
+
+    return webworkifier.workify(
+        self.testWebWorker,
+        function() { return require('./webworker'); },
+        {method: 'Encryption.encrypt', payload: payload, passphrase: passphrase})
+        .then(function(data) {
+            return Buffer.from(data.cipherText.buffer);
+        });
+};
+
+APIClient.prototype._testWebWorker = function(message) {
+    var self = this;
+
+    return webworkifier.workify(self.testWebWorker, function() { return require('./webworker'); }, message);
+};
+
 APIClient.prototype.mnemonicToPrivateKey = function(mnemonic, passphrase, cb) {
     var self = this;
 
@@ -94,27 +275,23 @@ APIClient.prototype.mnemonicToPrivateKey = function(mnemonic, passphrase, cb) {
     return deferred.promise;
 };
 
-APIClient.prototype.mnemonicToSeedHex = function(mnemonic, passphrase, cb) {
-    var deferred = q.defer();
-    deferred.promise.spreadNodeify(cb);
+APIClient.prototype.mnemonicToSeedHex = function(mnemonic, passphrase) {
+    var self = this;
 
     if (useWebWorker) {
-        var worker = workify(require('./webworker'));
-
-        worker.addEventListener('message', function(e) {
-            deferred.resolve(e.data.seed);
-        }, false);
-
-        worker.addEventListener('error', function(e) {
-            deferred.reject(new blocktrail.Error(e.message.replace("Uncaught Error: ", '')));
-        });
-
-        worker.postMessage({method: 'mnemonicToSeedHex', mnemonic: mnemonic, passphrase: passphrase});
+        return webworkifier.workify(self.mnemonicToSeedHex, function() {
+            return require('./webworker');
+        }, {method: 'mnemonicToSeedHex', mnemonic: mnemonic, passphrase: passphrase})
+            .then(function(data) {
+                return data.seed;
+            });
     } else {
-        deferred.resolve(bip39.mnemonicToSeedHex(mnemonic, passphrase));
+        try {
+            return q.when(bip39.mnemonicToSeedHex(mnemonic, passphrase));
+        } catch (e) {
+            return q.reject(e);
+        }
     }
-
-    return deferred.promise;
 };
 
 APIClient.prototype.resolvePrimaryPrivateKeyFromOptions = function(options, cb) {
@@ -132,34 +309,44 @@ APIClient.prototype.resolvePrimaryPrivateKeyFromOptions = function(options, cb) 
         }
         // normalize passphrase/password
         options.passphrase = options.passphrase || options.password;
+        delete options.password;
 
         // avoid conflicting options
-        if (options.primaryMnemonic && options.primaryPrivateKey) {
-            throw new blocktrail.WalletInitError("Can only specify one of; Primary Mnemonic or Primary PrivateKey");
+        if (options.primaryMnemonic && options.primarySeed) {
+            throw new blocktrail.WalletInitError("Can only specify one of; Primary Mnemonic or Primary Seed");
+        }
+
+        // avoid deprecated options
+        if (options.primaryPrivateKey) {
+            throw new blocktrail.WalletInitError("Can't specify; Primary PrivateKey");
         }
 
         // make sure we have at least one thing to use
-        if (!options.primaryMnemonic && !options.primaryPrivateKey) {
-            throw new blocktrail.WalletInitError("Need to specify at least one of; Primary Mnemonic or Primary PrivateKey");
+        if (!options.primaryMnemonic && !options.primarySeed) {
+            throw new blocktrail.WalletInitError("Need to specify at least one of; Primary Mnemonic or Primary Seed");
         }
 
-        if (options.primaryPrivateKey) {
-            if (options.primaryPrivateKey instanceof bitcoin.HDNode) {
-                deferred.resolve(options.primaryPrivateKey);
-            } else {
-                deferred.resolve(bitcoin.HDNode.fromBase58(options.primaryPrivateKey, network));
-            }
+        if (options.primarySeed) {
+            self.primarySeed = options.primarySeed;
+            options.primaryPrivateKey = bitcoin.HDNode.fromSeedBuffer(self.primarySeed, network);
+            deferred.resolve(options);
         } else {
             if (!options.passphrase) {
                 throw new blocktrail.WalletInitError("Can't init wallet with Primary Mnemonic without a passphrase");
             }
 
-            deferred.resolve(
-                self.mnemonicToSeedHex(options.primaryMnemonic, options.passphrase)
-                    .then(function(seedHex) {
-                        return bitcoin.HDNode.fromSeedHex(seedHex, network);
-                    })
-            );
+            self.mnemonicToSeedHex(options.primaryMnemonic, options.passphrase)
+                .then(function(seedHex) {
+                    try {
+                        options.primarySeed = new Buffer(seedHex, 'hex');
+                        options.primaryPrivateKey = bitcoin.HDNode.fromSeedBuffer(options.primarySeed, network);
+                        deferred.resolve(options);
+                    } catch (e) {
+                        deferred.reject(e);
+                    }
+                }, function(e) {
+                    deferred.reject(e);
+                });
         }
     } catch (e) {
         deferred.reject(e);
@@ -189,14 +376,18 @@ APIClient.prototype.resolveBackupPublicKeyFromOptions = function(options, cb) {
 
         if (options.backupPublicKey) {
             if (options.backupPublicKey instanceof bitcoin.HDNode) {
-                deferred.resolve(options.backupPublicKey);
+                deferred.resolve(options);
             } else {
-                deferred.resolve(bitcoin.HDNode.fromBase58(options.backupPublicKey, network));
+                options.backupPublicKey = bitcoin.HDNode.fromBase58(options.backupPublicKey, network);
+                deferred.resolve(options);
             }
         } else {
-            deferred.resolve(self.mnemonicToPrivateKey(options.backupMnemonic, "").then(function(backupPrivateKey) {
-                return backupPrivateKey.neutered();
-            }));
+            self.mnemonicToPrivateKey(options.backupMnemonic, "").then(function(backupPrivateKey) {
+                options.backupPublicKey = backupPrivateKey.neutered();
+                deferred.resolve(options);
+            }, function(e) {
+                deferred.reject(e);
+            });
         }
     } catch (e) {
         deferred.reject(e);
@@ -725,6 +916,9 @@ APIClient.prototype.initWallet = function(options, cb) {
 };
 
 APIClient.CREATE_WALLET_PROGRESS_START = 0;
+APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_SECRET = 4;
+APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_PRIMARY = 5;
+APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_RECOVERY = 6;
 APIClient.CREATE_WALLET_PROGRESS_PRIMARY = 10;
 APIClient.CREATE_WALLET_PROGRESS_BACKUP = 20;
 APIClient.CREATE_WALLET_PROGRESS_SUBMIT = 30;
@@ -775,8 +969,8 @@ APIClient.prototype.createNewWallet = function(options, cb) {
         };
     }
 
-    // default to v2
-    options.walletVersion = options.walletVersion || Wallet.WALLET_VERSION_V2;
+    // default to v3
+    options.walletVersion = options.walletVersion || Wallet.WALLET_VERSION_V3;
 
     var deferred = q.defer();
     deferred.promise.spreadNodeify(cb);
@@ -786,6 +980,7 @@ APIClient.prototype.createNewWallet = function(options, cb) {
 
         options.keyIndex = options.keyIndex || 0;
         options.passphrase = options.passphrase || options.password;
+        delete options.password;
 
         if (!options.identifier) {
             deferred.reject(new blocktrail.WalletCreateError("Identifier is required"));
@@ -799,6 +994,11 @@ APIClient.prototype.createNewWallet = function(options, cb) {
             ;
         } else if (options.walletVersion === Wallet.WALLET_VERSION_V2) {
             self._createNewWalletV2(options)
+                .progress(function(p) { deferred.notify(p); })
+                .then(function(r) { deferred.resolve(r); }, function(e) { deferred.reject(e); })
+            ;
+        } else if (options.walletVersion === Wallet.WALLET_VERSION_V3) {
+            self._createNewWalletV3(options)
                 .progress(function(p) { deferred.notify(p); })
                 .then(function(r) { deferred.resolve(r); }, function(e) { deferred.reject(e); })
             ;
@@ -817,7 +1017,7 @@ APIClient.prototype._createNewWalletV1 = function(options) {
 
     q.nextTick(function() {
 
-        if (!options.primaryMnemonic && !options.primaryPrivateKey) {
+        if (!options.primaryMnemonic && !options.primarySeed) {
             if (!options.passphrase && !options.password) {
                 deferred.reject(new blocktrail.WalletCreateError("Can't generate Primary Mnemonic without a passphrase"));
                 return deferred.promise;
@@ -836,32 +1036,30 @@ APIClient.prototype._createNewWalletV1 = function(options) {
         deferred.notify(APIClient.CREATE_WALLET_PROGRESS_PRIMARY);
 
         self.resolvePrimaryPrivateKeyFromOptions(options)
-            .then(function(primaryPrivateKey) {
-
+            .then(function(options) {
                 deferred.notify(APIClient.CREATE_WALLET_PROGRESS_BACKUP);
 
                 return self.resolveBackupPublicKeyFromOptions(options)
-                    .then(function(backupPublicKey) {
+                    .then(function(options) {
                         deferred.notify(APIClient.CREATE_WALLET_PROGRESS_SUBMIT);
 
                         // create a checksum of our private key which we'll later use to verify we used the right password
-                        var checksum = primaryPrivateKey.getAddress().toBase58Check();
+                        var checksum = options.primaryPrivateKey.getAddress().toBase58Check();
                         var keyIndex = options.keyIndex;
 
-                        var primaryPublicKey = primaryPrivateKey.deriveHardened(keyIndex).neutered();
+                        var primaryPublicKey = options.primaryPrivateKey.deriveHardened(keyIndex).neutered();
 
                         // send the public keys to the server to store them
                         //  and the mnemonic, which is safe because it's useless without the password
                         return self.storeNewWalletV1(
                             options.identifier,
                             [primaryPublicKey.toBase58(), "M/" + keyIndex + "'"],
-                            [backupPublicKey.toBase58(), "M"],
+                            [options.backupPublicKey.toBase58(), "M"],
                             options.storePrimaryMnemonic ? options.primaryMnemonic : false,
                             checksum,
                             keyIndex
                         )
-                            .then(
-                            function(result) {
+                            .then(function(result) {
                                 deferred.notify(APIClient.CREATE_WALLET_PROGRESS_INIT);
 
                                 var blocktrailPublicKeys = _.mapValues(result.blocktrail_public_keys, function(blocktrailPublicKey) {
@@ -876,7 +1074,7 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                                     null,
                                     null,
                                     {keyIndex: primaryPublicKey},
-                                    backupPublicKey,
+                                    options.backupPublicKey,
                                     blocktrailPublicKeys,
                                     keyIndex,
                                     self.testnet,
@@ -885,25 +1083,24 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                                     options.bypassNewAddressCheck
                                 );
 
-                                // pass along primaryPrivateKey to avoid another bip39 mnemonic -> seed
                                 return wallet.unlock({
                                     walletVersion: Wallet.WALLET_VERSION_V1,
                                     passphrase: options.passphrase,
-                                    primaryPrivateKey: primaryPrivateKey,
-                                    primaryMnemonic: null // explicitly NULL
+                                    primarySeed: options.primarySeed,
+                                    primaryMnemonic: null // explicit null
                                 }).then(function() {
                                     deferred.notify(APIClient.CREATE_WALLET_PROGRESS_DONE);
                                     return [
                                         wallet,
                                         {
+                                            walletVersion: wallet.walletVersion,
                                             primaryMnemonic: options.primaryMnemonic,
                                             backupMnemonic: options.backupMnemonic,
                                             blocktrailPublicKeys: blocktrailPublicKeys
                                         }
                                     ];
                                 });
-                            }
-                        );
+                            });
                     }
                 );
             })
@@ -931,138 +1128,205 @@ APIClient.prototype._createNewWalletV2 = function(options) {
 
     var network = self.testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
 
-    // legacy
-    if (options.storePrimaryMnemonic) {
-        options.storeDataOnServer = options.storePrimaryMnemonic;
-    }
+    determineDataStorageV2_3(options)
+        .then(function(options) {
+            options.passphrase = options.passphrase || options.password;
+            delete options.password;
 
-    if (typeof options.storeDataOnServer === "undefined") {
-        if (options.primaryPrivateKey) {
-            options.storeDataOnServer = false;
-        } else {
-            options.storeDataOnServer = true;
-        }
-    }
+            // avoid deprecated options
+            if (options.primaryPrivateKey) {
+                throw new blocktrail.WalletInitError("Can't specify; Primary PrivateKey");
+            }
 
-    q.fcall(function() {
-        /* jshint -W071, -W074 */
-        options.passphrase = options.passphrase || options.password;
-
-        if (!options.primaryPrivateKey) {
+            // seed should be provided or generated
             options.primarySeed = options.primarySeed || randomBytes(Wallet.WALLET_ENTROPY_BITS / 8);
-        }
 
-        if (options.storeDataOnServer) {
-            if (!options.secret) {
-                if (!options.passphrase) {
-                    throw new blocktrail.WalletCreateError("Can't encrypt data without a passphrase");
+            return options;
+        })
+        .then(function(options) {
+            return produceEncryptedDataV2(options, deferred.notify.bind(deferred));
+        })
+        .then(function(options) {
+            return doRemainingWalletDataV2_3(options, network, deferred.notify.bind(deferred));
+        })
+        .then(function(options) {
+            // create a checksum of our private key which we'll later use to verify we used the right password
+            var checksum = options.primaryPrivateKey.getAddress().toBase58Check();
+            var keyIndex = options.keyIndex;
+
+            // send the public keys and encrypted data to server
+            return self.storeNewWalletV2(
+                options.identifier,
+                [options.primaryPublicKey.toBase58(), "M/" + keyIndex + "'"],
+                [options.backupPublicKey.toBase58(), "M"],
+                options.storeDataOnServer ? options.encryptedPrimarySeed : false,
+                options.storeDataOnServer ? options.encryptedSecret : false,
+                options.storeDataOnServer ? options.recoverySecret : false,
+                checksum,
+                keyIndex
+            )
+                .then(
+                function(result) {
+                    deferred.notify(APIClient.CREATE_WALLET_PROGRESS_INIT);
+
+                    var blocktrailPublicKeys = _.mapValues(result.blocktrail_public_keys, function(blocktrailPublicKey) {
+                        return bitcoin.HDNode.fromBase58(blocktrailPublicKey[0], self.network);
+                    });
+
+                    var wallet = new Wallet(
+                        self,
+                        options.identifier,
+                        Wallet.WALLET_VERSION_V2,
+                        null,
+                        options.storeDataOnServer ? options.encryptedPrimarySeed : null,
+                        options.storeDataOnServer ? options.encryptedSecret : null,
+                        {keyIndex: options.primaryPublicKey},
+                        options.backupPublicKey,
+                        blocktrailPublicKeys,
+                        keyIndex,
+                        self.testnet,
+                        checksum,
+                        result.upgrade_key_index,
+                        options.bypassNewAddressCheck
+                    );
+
+                    // pass along decrypted data to avoid extra work
+                    return wallet.unlock({
+                        walletVersion: Wallet.WALLET_VERSION_V2,
+                        passphrase: options.passphrase,
+                        primarySeed: options.primarySeed,
+                        secret: options.secret
+                    }).then(function() {
+                        deferred.notify(APIClient.CREATE_WALLET_PROGRESS_DONE);
+                        return [
+                            wallet,
+                            {
+                                walletVersion: wallet.walletVersion,
+                                encryptedPrimarySeed: options.encryptedPrimarySeed ?
+                                    bip39.entropyToMnemonic(blocktrail.convert(options.encryptedPrimarySeed, 'base64', 'hex')) :
+                                    null,
+                                backupSeed: options.backupSeed ? bip39.entropyToMnemonic(options.backupSeed.toString('hex')) : null,
+                                recoveryEncryptedSecret: options.recoveryEncryptedSecret ?
+                                    bip39.entropyToMnemonic(blocktrail.convert(options.recoveryEncryptedSecret, 'base64', 'hex')) :
+                                    null,
+                                encryptedSecret: options.encryptedSecret ?
+                                    bip39.entropyToMnemonic(blocktrail.convert(options.encryptedSecret, 'base64', 'hex')) :
+                                    null,
+                                blocktrailPublicKeys: blocktrailPublicKeys
+                            }
+                        ];
+                    });
                 }
+            );
+        })
+       .then(function(r) { deferred.resolve(r); }, function(e) { deferred.reject(e); });
 
-                options.secret = randomBytes(Wallet.WALLET_ENTROPY_BITS / 8).toString('hex'); // string because we use it as passphrase
-                options.encryptedSecret = CryptoJS.AES.encrypt(options.secret, options.passphrase).toString(CryptoJS.format.OpenSSL); // 'base64' string
+    return deferred.promise;
+};
+
+APIClient.prototype._createNewWalletV3 = function(options) {
+    var self = this;
+
+    var deferred = q.defer();
+
+    // avoid modifying passed options
+    options = _.merge({}, options);
+
+    var network = self.testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
+
+    determineDataStorageV2_3(options)
+        .then(function(options) {
+            options.passphrase = options.passphrase || options.password;
+            delete options.password;
+
+            // avoid deprecated options
+            if (options.primaryPrivateKey) {
+                throw new blocktrail.WalletInitError("Can't specify; Primary PrivateKey");
             }
 
-            options.encryptedPrimarySeed = CryptoJS.AES.encrypt(options.primarySeed.toString('base64'), options.secret)
-                                                        .toString(CryptoJS.format.OpenSSL); // 'base64' string
-            options.recoverySecret = randomBytes(Wallet.WALLET_ENTROPY_BITS / 8).toString('hex'); // string because we use it as passphrase
+            // seed should be provided or generated
+            options.primarySeed = options.primarySeed || randomBytes(Wallet.WALLET_ENTROPY_BITS / 8);
 
-            options.recoveryEncryptedSecret = CryptoJS.AES.encrypt(options.secret, options.recoverySecret).toString(CryptoJS.format.OpenSSL); // 'base64' string
-        }
+            return options;
+        })
+        .then(function(options) {
+            return self.produceEncryptedDataV3(options, deferred.notify.bind(deferred));
+        })
+        .then(function(options) {
+            return doRemainingWalletDataV2_3(options, network, deferred.notify.bind(deferred));
+        })
+        .then(function(options) {
 
-        if (!options.backupPublicKey) {
-            options.backupSeed = options.backupSeed || randomBytes(Wallet.WALLET_ENTROPY_BITS / 8);
-        }
+            // create a checksum of our private key which we'll later use to verify we used the right password
+            var checksum = options.primaryPrivateKey.getAddress().toBase58Check();
+            var keyIndex = options.keyIndex;
 
-        deferred.notify(APIClient.CREATE_WALLET_PROGRESS_PRIMARY);
+            // send the public keys and encrypted data to server
+            return self.storeNewWalletV3(
+                options.identifier,
+                [options.primaryPublicKey.toBase58(), "M/" + keyIndex + "'"],
+                [options.backupPublicKey.toBase58(), "M"],
+                options.storeDataOnServer ? options.encryptedPrimarySeed : false,
+                options.storeDataOnServer ? options.encryptedSecret : false,
+                options.storeDataOnServer ? options.recoverySecret : false,
+                checksum,
+                keyIndex
+            )
+                .then(
+                    // result, deferred, self(apiclient)
+                    function(result) {
+                        deferred.notify(APIClient.CREATE_WALLET_PROGRESS_INIT);
 
-        if (!options.primaryPrivateKey) {
-            options.primaryPrivateKey = bitcoin.HDNode.fromSeedBuffer(options.primarySeed, network);
-        }
+                        var blocktrailPublicKeys = _.mapValues(result.blocktrail_public_keys, function(blocktrailPublicKey) {
+                            return bitcoin.HDNode.fromBase58(blocktrailPublicKey[0], self.network);
+                        });
 
-        deferred.notify(APIClient.CREATE_WALLET_PROGRESS_BACKUP);
+                        var wallet = new Wallet(
+                            self,
+                            options.identifier,
+                            Wallet.WALLET_VERSION_V3,
+                            null,
+                            options.storeDataOnServer ? options.encryptedPrimarySeed : null,
+                            options.storeDataOnServer ? options.encryptedSecret : null,
+                            {keyIndex: options.primaryPublicKey},
+                            options.backupPublicKey,
+                            blocktrailPublicKeys,
+                            keyIndex,
+                            self.testnet,
+                            checksum,
+                            result.upgrade_key_index,
+                            options.bypassNewAddressCheck
+                        );
 
-        if (!options.backupPublicKey) {
-            options.backupPrivateKey = bitcoin.HDNode.fromSeedBuffer(options.backupSeed, network);
-            options.backupPublicKey = options.backupPrivateKey.neutered();
-        }
-
-        // create a checksum of our private key which we'll later use to verify we used the right password
-        var checksum = options.primaryPrivateKey.getAddress().toBase58Check();
-        var keyIndex = options.keyIndex;
-
-        options.primaryPublicKey = options.primaryPrivateKey.deriveHardened(keyIndex).neutered();
-
-        deferred.notify(APIClient.CREATE_WALLET_PROGRESS_SUBMIT);
-
-        // send the public keys and encrypted data to server
-        return self.storeNewWalletV2(
-            options.identifier,
-            [options.primaryPublicKey.toBase58(), "M/" + keyIndex + "'"],
-            [options.backupPublicKey.toBase58(), "M"],
-            options.storeDataOnServer ? options.encryptedPrimarySeed : false,
-            options.storeDataOnServer ? options.encryptedSecret : false,
-            options.storeDataOnServer ? options.recoverySecret : false,
-            checksum,
-            keyIndex
-        )
-            .then(
-            function(result) {
-                deferred.notify(APIClient.CREATE_WALLET_PROGRESS_INIT);
-
-                var blocktrailPublicKeys = _.mapValues(result.blocktrail_public_keys, function(blocktrailPublicKey) {
-                    return bitcoin.HDNode.fromBase58(blocktrailPublicKey[0], self.network);
-                });
-
-                var wallet = new Wallet(
-                    self,
-                    options.identifier,
-                    Wallet.WALLET_VERSION_V2,
-                    null,
-                    options.storeDataOnServer ? options.encryptedPrimarySeed : null,
-                    options.storeDataOnServer ? options.encryptedSecret : null,
-                    {keyIndex: options.primaryPublicKey},
-                    options.backupPublicKey,
-                    blocktrailPublicKeys,
-                    keyIndex,
-                    self.testnet,
-                    checksum,
-                    result.upgrade_key_index,
-                    options.bypassNewAddressCheck
+                        // pass along decrypted data to avoid extra work
+                        return wallet.unlock({
+                            walletVersion: Wallet.WALLET_VERSION_V3,
+                            passphrase: options.passphrase,
+                            primarySeed: options.primarySeed,
+                            secret: options.secret
+                        }).then(function() {
+                            deferred.notify(APIClient.CREATE_WALLET_PROGRESS_DONE);
+                            return [
+                                wallet,
+                                {
+                                    walletVersion: wallet.walletVersion,
+                                    encryptedPrimarySeed: options.encryptedPrimarySeed ? EncryptionMnemonic.encode(options.encryptedPrimarySeed) : null,
+                                    backupSeed: options.backupSeed ? bip39.entropyToMnemonic(options.backupSeed) : null,
+                                    recoveryEncryptedSecret: options.recoveryEncryptedSecret ?
+                                        EncryptionMnemonic.encode(options.recoveryEncryptedSecret) : null,
+                                    encryptedSecret: options.encryptedSecret ? EncryptionMnemonic.encode(options.encryptedSecret) : null,
+                                    blocktrailPublicKeys: blocktrailPublicKeys
+                                }
+                            ];
+                        });
+                    }
                 );
-
-                // pass along decrypted data to avoid extra work
-                return wallet.unlock({
-                    walletVersion: Wallet.WALLET_VERSION_V2,
-                    passphrase: options.passphrase,
-                    primaryPrivateKey: options.primaryPrivateKey,
-                    primarySeed: options.primarySeed,
-                    secret: options.secret
-                }).then(function() {
-                    deferred.notify(APIClient.CREATE_WALLET_PROGRESS_DONE);
-                    return [
-                        wallet,
-                        {
-                            encryptedPrimarySeed: options.encryptedPrimarySeed ?
-                                bip39.entropyToMnemonic(blocktrail.convert(options.encryptedPrimarySeed, 'base64', 'hex')) :
-                                null,
-                            backupSeed: options.backupSeed ? bip39.entropyToMnemonic(options.backupSeed.toString('hex')) : null,
-                            recoveryEncryptedSecret: options.recoveryEncryptedSecret ?
-                                bip39.entropyToMnemonic(blocktrail.convert(options.recoveryEncryptedSecret, 'base64', 'hex')) :
-                                null,
-                            encryptedSecret: options.encryptedSecret ?
-                                bip39.entropyToMnemonic(blocktrail.convert(options.encryptedSecret, 'base64', 'hex')) :
-                                null,
-                            blocktrailPublicKeys: blocktrailPublicKeys
-                        }
-                    ];
-                });
-            }
-        );
-    })
+        })
         .then(function(r) { deferred.resolve(r); }, function(e) { deferred.reject(e); });
 
     return deferred.promise;
 };
+
 
 /**
  * create wallet using the API
@@ -1098,9 +1362,9 @@ APIClient.prototype.storeNewWalletV1 = function(identifier, primaryPublicKey, ba
  * @param identifier            string      the wallet identifier to create
  * @param primaryPublicKey      array       the primary public key - [key, path] should be M/<keyIndex>'
  * @param backupPublicKey       array       the backup public key - [key, path] should be M/<keyIndex>'
- * @param encryptedPrimarySeed
- * @param encryptedSecret
- * @param recoverySecret
+ * @param encryptedPrimarySeed  string      openssl format
+ * @param encryptedSecret       string      openssl format
+ * @param recoverySecret        string      openssl format
  * @param checksum              string      checksum to store
  * @param keyIndex              int         keyIndex that was used to create wallet
  * @param [cb]                  function    callback(err, result)
@@ -1125,6 +1389,38 @@ APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, ba
     return self.client.post("/wallet", null, postData, cb);
 };
 
+/**
+ * create wallet using the API
+ *
+ * @param identifier            string      the wallet identifier to create
+ * @param primaryPublicKey      array       the primary public key - [key, path] should be M/<keyIndex>'
+ * @param backupPublicKey       array       the backup public key - [key, path] should be M/<keyIndex>'
+ * @param encryptedPrimarySeed  Buffer      buffer of ciphertext
+ * @param encryptedSecret       Buffer      buffer of ciphertext
+ * @param recoverySecret        Buffer      buffer of recovery secret
+ * @param checksum              string      checksum to store
+ * @param keyIndex              int         keyIndex that was used to create wallet
+ * @param [cb]                  function    callback(err, result)
+ * @returns {q.Promise}
+ */
+APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, backupPublicKey, encryptedPrimarySeed, encryptedSecret,
+                                                recoverySecret, checksum, keyIndex, cb) {
+    var self = this;
+
+    var postData = {
+        identifier: identifier,
+        wallet_version: Wallet.WALLET_VERSION_V3,
+        primary_public_key: primaryPublicKey,
+        backup_public_key: backupPublicKey,
+        encrypted_primary_seed: encryptedPrimarySeed.toString('base64'),
+        encrypted_secret: encryptedSecret.toString('base64'),
+        recovery_secret: recoverySecret.toString('hex'),
+        checksum: checksum,
+        key_index: keyIndex
+    };
+
+    return self.client.post("/wallet", null, postData, cb);
+};
 
 /**
  * create wallet using the API

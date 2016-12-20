@@ -163,7 +163,7 @@ BackupGenerator.prototype.generatePDF = function(callback) {
                     );
 
                     pdf.FONT_SIZE_HEADER(function() {
-                        pdf.TEXT("Wallet Identifier");
+                        pdf.TEXT("Wallet Identifier (" + self.backupInfo.walletVersion + ")");
                         pdf.HR(0, 0);
                     });
 

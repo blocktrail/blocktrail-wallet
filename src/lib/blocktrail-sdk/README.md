@@ -6,6 +6,32 @@ at https://www.blocktrail.com/api/docs/lang/nodejs
 
 [![Latest Stable Version](https://badge.fury.io/js/blocktrail-sdk.svg)](https://www.npmjs.org/package/blocktrail-sdk)
 [![Build Status](https://travis-ci.org/blocktrail/blocktrail-sdk-nodejs.png?branch=master)](https://travis-ci.org/blocktrail/blocktrail-sdk-nodejs)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/team_blocktrail)](https://saucelabs.com/u/team_blocktrail)
+
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/team_blocktrail.svg)](https://saucelabs.com/u/team_blocktrail)
+
+The Blocktrail SDK is tested against;  
+ - NodeJS:
+   - 0.11
+   - 0.12
+   - 5.11
+   - 6.3.0
+   - 7.1.0
+ - Browser:
+   - Google Chrome 48 / latest
+   - Firefox 49 / latest
+   - Safari 10.0 / latest
+   - Edge 14.14393
+   - IE 11.103
+   - Android 4.4
+   - Android 5.0
+   - iPhone OS X 10.10
+
+
+Upgrading from v2.x to v3.0.0
+-----------------------------
+**IMPORTANT** `v3.0.0` introduces a new **DEFAULT** wallet encryption, please make sure you upgrade the SDK everywhere you're using it!!
 
 Upgrading from v1.x to v2.0.0
 -----------------------------
