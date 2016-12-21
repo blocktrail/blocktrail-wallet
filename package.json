@@ -17,7 +17,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.0.3",
     "gulp-template": "^3.0.0",
-    "gulp-uglify": "^1.2.0",
+    "gulp-uglify": "^2.0.0",
     "gulp-util": "^2.2.14",
     "lodash": "^3.7.0",
     "node-notifier": "^4.2.1",
