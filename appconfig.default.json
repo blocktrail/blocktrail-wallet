@@ -23,6 +23,7 @@
         "api_key": "9e0747befc483f602b04ba0f938db9422800d917d25b1ee9"
     },
 
+    "PREFERRED_LANGUAGE": "en",
     "FALLBACK_LANGUAGE": false, // don't fallback to make it explicit that we're missing a translation
 
     "DEFAULT_WALLET_VERSION": "v3",

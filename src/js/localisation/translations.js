@@ -45,5 +45,5 @@ angular.module('blocktrail.localisation', [
         });
 
         // $translateProvider.determinePreferredLanguage();
-        $translateProvider.preferredLanguage('en'); // hardcoded until we're ready to release
+        $translateProvider.preferredLanguage(CONFIG.PREFERRED_LANGUAGE); // hardcoded until we're ready to release
     });
