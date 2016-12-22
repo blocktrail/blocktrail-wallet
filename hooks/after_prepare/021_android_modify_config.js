@@ -26,9 +26,10 @@ if (rootdir) {
     // figure out our local IPs from `ifconfig`
     var r = spawnSync('ifconfig');
     var ifconfig = r.stdout.toString('ascii');
-    var localaddrlist = ifconfig.match(/inet addr:(.+?) /g).map(function(inetaddr) {
-      var ip = inetaddr.substr('inet addr:'.length);
-      return 'http://' + ip.substr(0, ip.length - 1);
+    var localaddrlist = ifconfig.match(/inet (addr:)?(\d.+?) /g).map(function(inetaddr) {
+      var ip = inetaddr.match(/inet (addr:)?(\d.+?) /)[2];
+
+      return 'http://' + ip;
     });
 
     // add localaddrs which aren't in config.xml yet
