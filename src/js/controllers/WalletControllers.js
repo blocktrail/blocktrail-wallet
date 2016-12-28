@@ -266,13 +266,13 @@ angular.module('blocktrail.wallet')
                         }
                     } else if (transaction.wallet_value_change > 0) {
                         //received from anonymous
-                        transaction.altDisplay = transaction.txin_other_addresses.length >= 1 && transaction.txin_other_addresses[0];
+                        transaction.altDisplay = transaction.txin_other_addresses.length == 1 && transaction.txin_other_addresses[0];
                     } else if (transaction.is_internal) {
                         //sent to self
                         transaction.altDisplay = $translate.instant('INTERNAL_TRANSACTION_TITLE');
                     } else {
                         //sent to anonymous
-                        transaction.altDisplay = transaction.txout_other_addresses.length >= 1 && transaction.txout_other_addresses[0];
+                        transaction.altDisplay = transaction.txout_other_addresses.length == 1 && transaction.txout_other_addresses[0];
                     }
 
                     groupedList.push(transaction);
