@@ -104,6 +104,19 @@ angular.module('blocktrail.wallet').factory(
 
             return self.wallet.then(function(wallet) {
                 return self.unlockData(pin).then(function(unlock) {
+                    switch (wallet.walletVersion) {
+                        case 'v2':
+                            break;
+
+                        case 'v3':
+                            unlock.secret = new blocktrailSDK.Buffer(unlock.secret, 'hex');
+                            break;
+
+                        default:
+                            throw new Error("Unsupported wallet version [" + wallet.walletVersion + "]")
+                            break;
+                    }
+
                     return wallet.unlock(unlock).then(function() {
                         return wallet;
                     });
