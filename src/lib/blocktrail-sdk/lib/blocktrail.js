@@ -202,6 +202,7 @@ blocktrail.InvalidAddressError = Error.extend("InvalidAddressError", 400);
 //Other Errors
 blocktrail.Error = Error.extend("Error", 500);
 
+blocktrail.FEE_STRATEGY_FORCE_FEE = 'force_fee';
 blocktrail.FEE_STRATEGY_BASE_FEE = 'base_fee';
 blocktrail.FEE_STRATEGY_OPTIMAL = 'optimal';
 blocktrail.FEE_STRATEGY_LOW_PRIORITY = 'low_priority';

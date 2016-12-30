@@ -10,10 +10,19 @@ var Encryption = {
     ivLenWords: 128 / 32
 };
 
-Encryption.encrypt = function(pt, pw) {
-    var salt = randomBytes(this.defaultSaltLen);
-    var iv = randomBytes(this.ivLenBits / 8);
-    var iterations = KeyDerivation.defaultIterations;
+Encryption.generateSalt = function() {
+    return randomBytes(this.defaultSaltLen);
+};
+
+Encryption.generateIV = function() {
+    return randomBytes(this.ivLenBits / 8);
+};
+
+Encryption.encrypt = function(pt, pw, iterations) {
+    var salt = this.generateSalt();
+    var iv = this.generateIV();
+
+    iterations = typeof iterations === 'undefined' ? KeyDerivation.defaultIterations : iterations;
     return this.encryptWithSaltAndIV(pt, pw, salt, iv, iterations);
 };
 

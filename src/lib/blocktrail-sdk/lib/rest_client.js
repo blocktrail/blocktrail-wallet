@@ -29,7 +29,7 @@ var RestClient = function(options) {
     };
 
     self.defaultHeaders = {
-        'X-SDK-Version': 'blocktrail-sdk-nodejs/1.3.x'
+        'X-SDK-Version': 'blocktrail-sdk-nodejs/3.0.x'
     };
 };
 

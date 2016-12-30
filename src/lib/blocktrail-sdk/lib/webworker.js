@@ -50,6 +50,26 @@ module.exports = function(self) {
                 })();
             break;
 
+            case 'Encryption.decrypt':
+                (function() {
+                    try {
+                        if (!data.ct || !data.pw) {
+                            throw new Error("Invalid input");
+                        }
+
+                        var ct = Buffer.from(data.ct.buffer);
+                        var pw = Buffer.from(data.pw.buffer);
+
+                        var plainText = Encryption.decrypt(ct,  pw);
+
+                        self.postMessage({id: data.id, plainText: plainText});
+                    } catch (e) {
+                        e.id = data.id;
+                        throw e;
+                    }
+                })();
+            break;
+
             default:
                 e = new Error('Invalid method [' + e.method + ']');
                 e.id = data.id;

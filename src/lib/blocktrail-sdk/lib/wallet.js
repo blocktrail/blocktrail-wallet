@@ -101,6 +101,7 @@ Wallet.PAY_PROGRESS_SIGN = 30;
 Wallet.PAY_PROGRESS_SEND = 40;
 Wallet.PAY_PROGRESS_DONE = 100;
 
+Wallet.FEE_STRATEGY_FORCE_FEE = blocktrail.FEE_STRATEGY_FORCE_FEE;
 Wallet.FEE_STRATEGY_BASE_FEE = blocktrail.FEE_STRATEGY_BASE_FEE;
 Wallet.FEE_STRATEGY_OPTIMAL = blocktrail.FEE_STRATEGY_OPTIMAL;
 Wallet.FEE_STRATEGY_LOW_PRIORITY = blocktrail.FEE_STRATEGY_LOW_PRIORITY;
@@ -246,57 +247,58 @@ Wallet.prototype.unlockV3 = function(options, cb) {
     deferred.promise.nodeify(cb);
 
     deferred.resolve(q.fcall(function() {
-        /* jshint -W071, -W074 */
-        options.encryptedPrimarySeed = typeof options.encryptedPrimarySeed !== "undefined" ? options.encryptedPrimarySeed : self.encryptedPrimarySeed;
-        options.encryptedSecret = typeof options.encryptedSecret !== "undefined" ? options.encryptedSecret : self.encryptedSecret;
+        return q.when()
+            .then(function() {
+                /* jshint -W071, -W074 */
+                options.encryptedPrimarySeed = typeof options.encryptedPrimarySeed !== "undefined" ? options.encryptedPrimarySeed : self.encryptedPrimarySeed;
+                options.encryptedSecret = typeof options.encryptedSecret !== "undefined" ? options.encryptedSecret : self.encryptedSecret;
 
-        if (options.secret) {
-            self.secret = options.secret;
-        }
-
-        if (options.primaryPrivateKey) {
-            throw new blocktrail.WalletInitError("specifying primaryPrivateKey has been deprecated");
-        }
-
-        if (options.primarySeed) {
-            self.primarySeed = options.primarySeed;
-        } else if (options.secret) {
-            try {
-                self.primarySeed = Encryption.decrypt(new Buffer(options.encryptedPrimarySeed), self.secret);
-                if (!self.primarySeed.length) {
-                    throw new Error();
+                if (options.secret) {
+                    self.secret = options.secret;
                 }
-            } catch (e) {
-                throw new blocktrail.WalletDecryptError("Failed to decrypt primarySeed");
-            }
 
-        } else {
-            // avoid conflicting options
-            if (options.passphrase && options.password) {
-                throw new blocktrail.WalletCreateError("Can't specify passphrase and password");
-            }
-            // normalize passphrase/password
-            options.passphrase = options.passphrase || options.password;
-
-            try {
-                self.secret = Encryption.decrypt(new Buffer(options.encryptedSecret, 'base64'), new Buffer(options.passphrase));
-                if (!self.secret.length) {
-                    throw new Error();
+                if (options.primaryPrivateKey) {
+                    throw new blocktrail.WalletInitError("specifying primaryPrivateKey has been deprecated");
                 }
-            } catch (e) {
-                throw new blocktrail.WalletDecryptError("Failed to decrypt secret");
-            }
-            try {
-                self.primarySeed = Encryption.decrypt(new Buffer(options.encryptedPrimarySeed, 'base64'), self.secret);
-                if (!self.primarySeed.length) {
-                    throw new Error();
-                }
-            } catch (e) {
-                throw new blocktrail.WalletDecryptError("Failed to decrypt primarySeed");
-            }
-        }
 
-        return bitcoin.HDNode.fromSeedBuffer(self.primarySeed, self.network);
+                if (options.primarySeed) {
+                    self.primarySeed = options.primarySeed;
+                } else if (options.secret) {
+                    return self.sdk.promisedDecrypt(new Buffer(options.encryptedPrimarySeed, 'base64'), self.secret)
+                        .then(function(primarySeed) {
+                            self.primarySeed = primarySeed;
+                        }, function() {
+                            throw new blocktrail.WalletDecryptError("Failed to decrypt primarySeed");
+                        });
+                } else {
+                    // avoid conflicting options
+                    if (options.passphrase && options.password) {
+                        throw new blocktrail.WalletCreateError("Can't specify passphrase and password");
+                    }
+                    // normalize passphrase/password
+                    options.passphrase = options.passphrase || options.password;
+                    delete options.password;
+
+                    return self.sdk.promisedDecrypt(new Buffer(options.encryptedSecret, 'base64'), new Buffer(options.passphrase))
+                        .then(function(secret) {
+                            self.secret = secret;
+                        }, function() {
+                            throw new blocktrail.WalletDecryptError("Failed to decrypt secret");
+                        })
+                        .then(function() {
+                            return self.sdk.promisedDecrypt(new Buffer(options.encryptedPrimarySeed, 'base64'), self.secret)
+                                .then(function(primarySeed) {
+                                    self.primarySeed = primarySeed;
+                                }, function() {
+                                    throw new blocktrail.WalletDecryptError("Failed to decrypt primarySeed");
+                                });
+                        });
+                }
+            })
+            .then(function() {
+                return bitcoin.HDNode.fromSeedBuffer(self.primarySeed, self.network);
+            })
+        ;
     }));
 
     return deferred.promise;
@@ -755,7 +757,6 @@ Wallet.prototype.deleteWallet = function(force, cb) {
  * @param [changeAddress]       bool        change address to use (auto generated if NULL)
  * @param [allowZeroConf]       bool        allow zero confirmation unspent outputs to be used in coin selection
  * @param [randomizeChangeIdx]  bool        randomize the index of the change output (default TRUE, only disable if you have a good reason to)
- * @param [randomizeChangeIdx]  bool        randomize the index of the change output (default TRUE, only disable if you have a good reason to)
  * @param [feeStrategy]         string      defaults to Wallet.FEE_STRATEGY_OPTIMAL
  * @param [twoFactorToken]      string      2FA token
  * @param options
@@ -789,6 +790,7 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
     randomizeChangeIdx = typeof randomizeChangeIdx !== "undefined" ? randomizeChangeIdx : true;
     feeStrategy = feeStrategy || Wallet.FEE_STRATEGY_OPTIMAL;
     options = options || {};
+    var checkFee = typeof options.checkFee !== "undefined" ? options.checkFee : true;
 
     var deferred = q.defer();
     deferred.promise.nodeify(cb);
@@ -813,7 +815,7 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
             function(tx, utxos) {
                 deferred.notify(Wallet.PAY_PROGRESS_SEND);
 
-                return self.sendTransaction(tx.toHex(), utxos.map(function(utxo) { return utxo['path']; }), true, twoFactorToken)
+                return self.sendTransaction(tx.toHex(), utxos.map(function(utxo) { return utxo['path']; }), checkFee, twoFactorToken)
                     .then(function(result) {
                         deferred.notify(Wallet.PAY_PROGRESS_DONE);
 
@@ -1104,7 +1106,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                                 case Wallet.FEE_STRATEGY_OPTIMAL:
                                     if (fee > estimatedFee * 20) {
                                         return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
-                                            "seems awefull high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
+                                            "seems awefully high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
                                     }
                                 break;
                             }

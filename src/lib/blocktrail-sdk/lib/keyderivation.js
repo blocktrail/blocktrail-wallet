@@ -3,6 +3,7 @@ var assert = require('assert'),
 
 var KeyDerivation = {
     defaultIterations: 35000,
+    subkeyIterations: 1,
     keySizeBits: 256
 };
 
@@ -12,7 +13,7 @@ KeyDerivation.compute = function(pw, salt, iterations) {
     assert(salt instanceof Buffer, 'Salt must be provided as a Buffer');
     assert(salt.length > 0, 'Salt must not be empty');
     assert(typeof iterations === 'number', 'Iterations must be a number');
-    assert(iterations >= 512, 'Iteration count should be at least 512');
+    assert(iterations > 0, 'Iteration count should be at least 1');
 
     if (salt.length > 0x80) {
         throw new Error('Sanity check: Invalid salt, length can never be greater than 128');

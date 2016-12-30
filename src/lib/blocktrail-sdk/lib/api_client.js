@@ -125,14 +125,13 @@ var produceEncryptedDataV2 = function(options, notify) {
         });
 };
 
-var promisedEncrypt = function(pt, pw) {
+APIClient.prototype.promisedEncrypt = function(pt, pw, iter) {
     if (useWebWorker) {
         // generate randomness outside of webworker because many browsers don't have crypto.getRandomValues inside webworkers
-        var saltBuf = randomBytes(Encryption.defaultSaltLen);
-        var iv = randomBytes(Encryption.ivLenBits / 8);
-        var iterations = KeyDerivation.defaultIterations;
+        var saltBuf = Encryption.generateSalt();
+        var iv = Encryption.generateIV();
 
-        return webworkifier.workify(promisedEncrypt, function() {
+        return webworkifier.workify(APIClient.prototype.promisedEncrypt, function() {
             return require('./webworker');
         }, {
             method: 'Encryption.encryptWithSaltAndIV',
@@ -140,14 +139,35 @@ var promisedEncrypt = function(pt, pw) {
             pw: pw,
             saltBuf: saltBuf,
             iv: iv,
-            iterations: iterations
+            iterations: iter
         })
             .then(function(data) {
                 return Buffer.from(data.cipherText.buffer);
             });
     } else {
         try {
-            return q.when(Encryption.encrypt(pt, pw));
+            return q.when(Encryption.encrypt(pt, pw, iter));
+        } catch (e) {
+            return q.reject(e);
+        }
+    }
+};
+
+APIClient.prototype.promisedDecrypt = function(ct, pw) {
+    if (useWebWorker) {
+        return webworkifier.workify(APIClient.prototype.promisedDecrypt, function() {
+            return require('./webworker');
+        }, {
+            method: 'Encryption.decrypt',
+            ct: ct,
+            pw: pw
+        })
+            .then(function(data) {
+                return Buffer.from(data.plainText.buffer);
+            });
+    } else {
+        try {
+            return q.when(Encryption.decrypt(ct, pw));
         } catch (e) {
             return q.reject(e);
         }
@@ -155,6 +175,8 @@ var promisedEncrypt = function(pt, pw) {
 };
 
 APIClient.prototype.produceEncryptedDataV3 = function(options, notify) {
+    var self = this;
+
     return q.when(options)
         .then(function(options) {
             if (options.storeDataOnServer) {
@@ -171,7 +193,7 @@ APIClient.prototype.produceEncryptedDataV3 = function(options, notify) {
                             options.secret = randomBytes(Wallet.WALLET_ENTROPY_BITS / 8);
 
                             // -> now a buffer
-                            return promisedEncrypt(options.secret, new Buffer(options.passphrase))
+                            return self.promisedEncrypt(options.secret, new Buffer(options.passphrase), KeyDerivation.defaultIterations)
                                 .then(function(encryptedSecret) {
                                     options.encryptedSecret = encryptedSecret;
                                 });
@@ -184,7 +206,7 @@ APIClient.prototype.produceEncryptedDataV3 = function(options, notify) {
                     .then(function() {
                         notify(APIClient.CREATE_WALLET_PROGRESS_ENCRYPT_PRIMARY);
 
-                        return promisedEncrypt(options.primarySeed, options.secret)
+                        return self.promisedEncrypt(options.primarySeed, options.secret, KeyDerivation.subkeyIterations)
                             .then(function(encryptedPrimarySeed) {
                                 options.encryptedPrimarySeed = encryptedPrimarySeed;
                             });
@@ -200,7 +222,7 @@ APIClient.prototype.produceEncryptedDataV3 = function(options, notify) {
                             options.recoverySecret = randomBytes(Wallet.WALLET_ENTROPY_BITS / 8);
                         }
 
-                        return promisedEncrypt(options.secret, options.recoverySecret)
+                        return self.promisedEncrypt(options.secret, options.recoverySecret, KeyDerivation.defaultIterations)
                             .then(function(recoveryEncryptedSecret) {
                                 options.recoveryEncryptedSecret = recoveryEncryptedSecret;
                             });
@@ -238,24 +260,6 @@ var doRemainingWalletDataV2_3 = function(options, network, notify) {
 
             return options;
         });
-};
-
-APIClient.prototype.testWebWorker = function(payload, passphrase) {
-    var self = this;
-
-    return webworkifier.workify(
-        self.testWebWorker,
-        function() { return require('./webworker'); },
-        {method: 'Encryption.encrypt', payload: payload, passphrase: passphrase})
-        .then(function(data) {
-            return Buffer.from(data.cipherText.buffer);
-        });
-};
-
-APIClient.prototype._testWebWorker = function(message) {
-    var self = this;
-
-    return webworkifier.workify(self.testWebWorker, function() { return require('./webworker'); }, message);
 };
 
 APIClient.prototype.mnemonicToPrivateKey = function(mnemonic, passphrase, cb) {
@@ -1572,17 +1576,19 @@ APIClient.prototype.coinSelection = function(identifier, pay, lockUTXO, allowZer
     var deferred = q.defer();
     deferred.promise.spreadNodeify(cb);
 
+    var params = {
+        lock: lockUTXO,
+        zeroconf: allowZeroConf ? 1 : 0,
+        zeroconfself: (typeof options.allowZeroConfSelf !== "undefined" ? options.allowZeroConfSelf : true) ? 1 : 0,
+        fee_strategy: feeStrategy
+    };
+
+    if (options.forcefee) {
+        params['forcefee'] = options.forcefee;
+    }
+
     deferred.resolve(
-        self.client.post(
-            "/wallet/" + identifier + "/coin-selection",
-            {
-                lock: lockUTXO,
-                zeroconf: allowZeroConf ? 1 : 0,
-                zeroconfself: (typeof options.allowZeroConfSelf !== "undefined" ? options.allowZeroConfSelf : true) ? 1 : 0,
-                fee_strategy: feeStrategy
-            },
-            pay
-        ).then(
+        self.client.post("/wallet/" + identifier + "/coin-selection", params, pay).then(
             function(result) {
                 return [result.utxos, result.fee, result.change];
             },
@@ -1728,17 +1734,18 @@ APIClient.prototype.walletMaxSpendable = function(identifier, allowZeroConf, fee
     feeStrategy = feeStrategy || Wallet.FEE_STRATEGY_OPTIMAL;
     options = options || {};
 
-    return self.client.get(
-            "/wallet/" + identifier + "/max-spendable",
-            {
-                outputs: options.outputs ? options.outputs : 1,
-                zeroconf: allowZeroConf ? 1 : 0,
-                zeroconfself: (typeof options.allowZeroConfSelf !== "undefined" ? options.allowZeroConfSelf : true) ? 1 : 0,
-                fee_strategy: feeStrategy
-            },
-            true,
-            cb
-    );
+    var params = {
+        outputs: options.outputs ? options.outputs : 1,
+        zeroconf: allowZeroConf ? 1 : 0,
+        zeroconfself: (typeof options.allowZeroConfSelf !== "undefined" ? options.allowZeroConfSelf : true) ? 1 : 0,
+        fee_strategy: feeStrategy
+    };
+
+    if (options.forcefee) {
+        params['forcefee'] = options.forcefee;
+    }
+
+    return self.client.get("/wallet/" + identifier + "/max-spendable", params, true, cb);
 };
 
 /**

@@ -199,7 +199,7 @@ module.exports = function (grunt) {
                 tasks : ['default']
             },
             browserify : {
-                files : ['main.js', 'test.js', 'test/*', 'test/**/*', 'lib/*', 'lib/**/*'],
+                files : ['main.js', 'test.js', 'test/*', 'test/**/*', 'lib/*', 'lib/**/*', '!test/run-tests.html'],
                 tasks : ['browserify', 'concat', 'template']
             },
             deps : {
