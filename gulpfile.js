@@ -21,6 +21,7 @@ var clean = require('gulp-clean');
 var path = require('path');
 
 var isWatch = false;
+var noFontello = process.argv.indexOf('--no-fontello') !== -1 || process.argv.indexOf('--nofontello') !== -1;
 
 /**
  * helper to wrap a stream with a promise for easy chaining
@@ -279,6 +280,9 @@ gulp.task('sassfontello', ['appconfig', 'fontello'], sassTask);
 
 
 gulp.task('fontello-dl', function() {
+    if (noFontello) {
+        return;
+    }
 
     return gulp.src('./fontello-config.json')
         .pipe(fontello())
