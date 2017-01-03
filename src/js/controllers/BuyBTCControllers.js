@@ -46,7 +46,9 @@ angular.module('blocktrail.wallet')
 
                 settingsService.$isLoaded().then(function() {
                     settingsService.buyBTCRegion = _.defaults({}, $scope.chooseRegion);
-                    return settingsService.$store();
+                    return settingsService.$store().then(function() {
+                        return settingsService.$syncSettingsUp();
+                    });
                 })
             });
         };
