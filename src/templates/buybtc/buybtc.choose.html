@@ -4,7 +4,11 @@
     </ion-nav-title>
 
     <ion-content>
-        <div ng-if="chooseRegion">
+        <div ng-if="chooseState.gettingStarted">
+            TEASER
+            <button class="button" ng-click="chooseState.gettingStarted=false">GOGO</button>
+        </div>
+        <div ng-if="!chooseState.gettingStarted && chooseRegion">
             <!-- CHOOSE REGION -->
             <div ng-if="!chooseRegion.code" ng-controller="BuyBTCChooseRegionCtrl">
                 <div class="item item-text-wrap">

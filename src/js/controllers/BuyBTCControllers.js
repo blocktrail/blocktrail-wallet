@@ -6,6 +6,9 @@ angular.module('blocktrail.wallet')
         // load chooseRegion from settingsService
         //  show loading spinner while we wait (should be microseconds)
         $scope.chooseRegion = null;
+        $scope.chooseState = {
+            gettingStarted: true
+        };
         $ionicLoading.show({
             template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
             hideOnStateChange: true
@@ -23,6 +26,7 @@ angular.module('blocktrail.wallet')
                     code: null,
                     name: null
                 });
+                $scope.chooseState.gettingStarted = !$scope.chooseRegion.code;
 
                 return buyBTCService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
                     $scope.brokers = brokers;
