@@ -92,6 +92,9 @@
 .text-white {
     color: #fff;
 }
+.text-muted {
+    color:#999;
+}
 .text-ellipsis {
     display: block;
     text-overflow: ellipsis;
@@ -192,7 +195,20 @@ input[type=number] {
     -moz-appearance:textfield;
 }
 
-
+.list {
+    .item-button-right {
+        .help {
+            font-size:0.8rem;
+            color:#999;
+        }
+        .help-block {
+            display:block;
+        }
+        &.disabled {
+            background-color:#dadada;
+        }
+    }
+}
 
 
 //--- General ---
