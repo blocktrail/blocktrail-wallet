@@ -78,6 +78,11 @@
                 <div class="item item-text-wrap">
                     <h2 class="text-neutral">{{ 'BUYBTC_CHOOSE_TITLE' | translate }}</h2>
                     <p class="padding-t" ng-bind-html="'BUYBTC_CHOOSE_SUBTITLE' | translate | nl2br"></p>
+                    <p class="padding-t">
+                        {{ 'BUYBTC_SELECTED_REGION' | translate }}: 
+                        <b>{{ chooseRegion.name | translate }}</b>
+                        (<a href="#" ng-click="selectRegion(null, null)">change</a>)
+                    </p>
                 </div>
 
                 <h3 class="group-title">{{ 'BUYBTC_PROVIDERS' | translate }}</h3>
