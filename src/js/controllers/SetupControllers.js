@@ -682,8 +682,12 @@ angular.module('blocktrail.wallet')
                     return launchService.storeWalletInfo($scope.setupInfo.identifier, encryptedPassword, encryptedSecret).then(function() { return wallet; });
                 })
                 .then(function(wallet) {
+                    var walletSecret = wallet.secret;
+                    if (wallet.walletVersion !== 'v2') {
+                        walletSecret = walletSecret.toString('hex');
+                    }
                     // while logging in we stash the secret so we can decrypt the glidera accesstoken
-                    launchService.stashWalletSecret(wallet.secret);
+                    launchService.stashWalletSecret(walletSecret);
                     wallet.lock();
                 })
                 .then(function() {
