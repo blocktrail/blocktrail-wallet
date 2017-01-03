@@ -1,0 +1,52 @@
+<div class="state-buybtc opacity-30 blur-me">
+    
+    <form name="buyInputForm" novalidate>
+        
+        <div class="card">
+            <div class="amount-input-section btc-first">
+                
+                <div class="input-group btc-input position-first">
+                    <input type="text" name="btcValue" disabled="true" />
+                    <div class="label-group">
+                        <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
+                        <span class="spacer">0</span>
+                        <span class="label">BTC</span>
+                    </div>
+                </div>
+                
+                <div class="input-group fiat-input position-last">
+                    <input type="text" name="btcValue" disabled="true" />
+                    <div class="label-group">
+                        <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
+                        <span class="label">
+                           
+                        </span>
+                        <span class="spacer"></span>
+                    </div>
+                    
+                </div>
+                <div class="input-swapping-overlay">
+                    <i class="swap-icon ion-arrow-swap"></i>
+                </div>
+            </div>         
+        </div>
+
+      
+        <div class="recipient-input-section padding-t card">
+            <div class="list">
+                <div class="item">
+                    <button class="button send-button button-block button-energized" disabled="true">
+                    {{ 'BUYBTC_BUY' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="buy-btc-via-vendor">
+            {{ 'BUYBTC_VIA' | translate }} <span class="sentence-case"></span> 
+            <a href="#">{{ 'CHANGE' | translate }}</a>
+        </div>
+
+    </form>
+</div>  
+

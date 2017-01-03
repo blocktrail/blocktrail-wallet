@@ -25,40 +25,25 @@
         @import "_amount-input";
     }
 
-    .buybtc-currentprice {
-        background: $app-default-color;
-        padding: $bar-padding-portrait / 2;
-        box-shadow: $app-default-shadow;
-        color: #fff;
-        overflow: hidden;
-        position: relative;
-
-        .fetchingprice {
-            background: $app-default-color;
-            padding: $bar-padding-portrait / 2;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            bottom: 0px;
-            right: 0px;
-            z-index: 10;
-            text-align: center;
-
-            padding-top: 20%;
-
-            .fetchinglabel-label {
-                font-size: $font-size-xlarge;
-
-            }
-        }
-
-        .currentprice-label {
-            font-size: $font-size-large;
-        }
-
-        .currentprice-value {
-            float: right;
-            font-size: $font-size-xlarge;
-        }
+    .buy-rate-percoin {
+        display: block;
+        position: absolute;
+        top: 50px;
+        height: 50px;
+        z-index: 90;
+        width: 100%;
+        padding-left: 40px;
+        line-height: 50px;
+        color: $bluejeans-light;
+        font-size: 0.8rem;
+        font-weight:400;
     }
+
+    .buy-btc-via-vendor {
+        padding:0px 40px;
+        text-align: center;
+        font-size: 0.8rem;
+        color:#999;
+    }
+
 }

@@ -4,10 +4,17 @@
     </ion-nav-title>
 
     <ion-content>
-        <div ng-if="chooseState.gettingStarted">
-            TEASER
-            <button class="button" ng-click="chooseState.gettingStarted=false">GOGO</button>
+        <div ng-if="chooseState.gettingStarted">            
+            <div class="item item-text-wrap">
+                <h2 class="text-neutral sentence-case"> {{ 'BUYBTC_GETSTARTED_HEAD' | translate }}</h2>
+                <p class="padding-t sentence-case" ng-bind-html="'BUYBTC_GETSTARTED_BODY' | translate | nl2br"></p>
+                <button class="button button-block button-balanced" ng-click="chooseState.gettingStarted=false">
+                    {{ 'BUYBTC_GETSTARTED_BUTTON' | translate }}
+                </button>
+            </div>
+            <div ng-include="'templates/buybtc/buybtc.teaser.html'"></div>
         </div>
+
         <div ng-if="!chooseState.gettingStarted && chooseRegion">
             <!-- CHOOSE REGION -->
             <div ng-if="!chooseRegion.code" ng-controller="BuyBTCChooseRegionCtrl">
@@ -82,14 +89,13 @@
                 <div class="item item-text-wrap">
                     <h2 class="text-neutral">{{ 'BUYBTC_CHOOSE_TITLE' | translate }}</h2>
                     <p class="padding-t" ng-bind-html="'BUYBTC_CHOOSE_SUBTITLE' | translate | nl2br"></p>
-                    <p class="padding-t">
-                        {{ 'BUYBTC_SELECTED_REGION' | translate }}: 
-                        <b>{{ chooseRegion.name | translate }}</b>
-                        (<a href="#" ng-click="selectRegion(null, null)">change</a>)
+                    <p>
+                    {{ 'BUYBTC_SELECTED_REGION' | translate }} {{ chooseRegion.name | translate }} 
+                    <a href="#" ng-click="selectRegion(null, null)">{{ 'CHANGE' | translate }}</a>
                     </p>
                 </div>
 
-                <h3 class="group-title">{{ 'BUYBTC_PROVIDERS' | translate }}</h3>
+                <h3 class="group-title">{{ 'BUYBTC_PROVIDERS' | translate }} {{ 'BUYBTC_SELECTED_REGION' | translate }} {{ chooseRegion.name | translate }} </h3>
                 <div class="list list-inset">
                     <div ng-if="brokers.indexOf('glidera') !== -1" class="item item-button-right" ng-click="goGlideraBrowser()">
                         <span class="sentence-case">Glidera</span>

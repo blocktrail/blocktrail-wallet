@@ -170,15 +170,14 @@ angular.module('blocktrail.wallet')
 
 angular.module('blocktrail.wallet')
     .controller('BuyBTCBuyCtrl', function($scope, $state, $rootScope, $ionicLoading, $cordovaDialogs, glideraService, buyBTCService,
-                                          $stateParams, $log, $timeout, $interval, $translate, $filter, CurrencyConverter) {
+                                          $stateParams, $log, $timeout, $interval, $translate, $filter, CurrencyConverter, CONFIG) {
         $scope.broker = $stateParams.broker;
 
-        $scope.fetchingMainPrice = true;
-        $scope.priceBTC = null;
         $scope.priceBTCCurrency = 'USD';
         $scope.fetchingInputPrice = false;
         $scope.fiatFirst = false;
         $scope.buyInput = {
+            displayFee: CONFIG.DISPLAY_FEE,
             btcValue: 0.00,
             fiatValue: 0.00,
             feeValue: null,
@@ -222,29 +221,19 @@ angular.module('blocktrail.wallet')
             updateInputPrice();
         };
 
-        var updateMainPrice = function() {
-            $scope.fetchingMainPrice = true;
-
-            return glideraService.buyPrices(1.0).then(function(result) {
-                $timeout(function() {
-                    $scope.priceBTC = result.total;
-
-                    $scope.fetchingMainPrice = false;
-                });
-            });
-        };
-
         var updateInputPrice = function() {
             $scope.fetchingInputPrice = true;
 
             if ($scope.fiatFirst) {
                 $scope.buyInput.btcValue = null;
                 $scope.buyInput.feeValue = null;
+                $scope.buyInput.btcPrice = null;
 
                 return glideraService.buyPrices(null, $scope.buyInput.fiatValue).then(function(result) {
                     $timeout(function() {
                         $scope.buyInput.btcValue = parseFloat(result.qty);
                         $scope.buyInput.feeValue = parseFloat(result.fees);
+                        $scope.buyInput.btcPrice = parseFloat(result.total) / parseFloat(result.qty);
                         $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
                         $scope.fetchingInputPrice = false;
                     });
@@ -252,11 +241,13 @@ angular.module('blocktrail.wallet')
             } else {
                 $scope.buyInput.fiatValue = null;
                 $scope.buyInput.feeValue = null;
+                $scope.buyInput.btcPrice = null;
 
                 return glideraService.buyPrices($scope.buyInput.btcValue, null).then(function(result) {
                     $timeout(function() {
                         $scope.buyInput.fiatValue = parseFloat(result.total);
                         $scope.buyInput.feeValue = parseFloat(result.fees);
+                        $scope.buyInput.btcPrice = parseFloat(result.total) / parseFloat(result.qty);
                         $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
                         $scope.fetchingInputPrice = false;
                     });
@@ -264,28 +255,14 @@ angular.module('blocktrail.wallet')
             }
         };
 
-        /*
-         * init buy getting an access token, repeat until we have an access token
-         *  then update main price and set interval for updating price
-         */
         var init = function() {
-            $ionicLoading.show({
-                template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
-                hideOnStateChange: true
-            });
-
-            // update main price for display straight away
-            updateMainPrice().then(function() {
-                $timeout(function() {
-                    $ionicLoading.hide();
-                });
-            });
-
+            // $ionicLoading.show({
+            //     template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
+            //     hideOnStateChange: true
+            // });
 
             // update every minute
             $interval(function() {
-                // update main price
-                updateMainPrice();
                 // update input price
                 updateInputPrice();
             }, 60 * 1000);
