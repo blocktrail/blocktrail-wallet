@@ -1,5 +1,6 @@
 {
     "DEBUG": false,
+    "TUNE_DEBUG": false,
     "MINIFY": true,
     "TESTNET": true,
     "NG_CORDOVA_MOCKS": false,

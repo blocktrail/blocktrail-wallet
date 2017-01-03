@@ -15,7 +15,7 @@ angular.module('blocktrail.wallet')
         }
 
         var init = function(existingUser) {
-            if (CONFIG.DEBUG) {
+            if (CONFIG.TUNE_DEBUG) {
                 tune.setDebugMode(true);
             }
             tune.setExistingUser(existingUser);
