@@ -4,9 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var xml2js = require('xml2js');
 var _ = require('lodash');
+var hookUtils = require('../utils');
 
 var rootdir = process.argv[2];
-
 
 if (rootdir) {
   var stringsPath = path.join(rootdir, 'platforms/android/res/values/strings.xml');
@@ -34,10 +34,9 @@ if (rootdir) {
         pretty: true,
         indent: '    '
       },
-      xmldec: {
-        'version': '1.0', 'encoding': 'UTF-8'
-      }
+      xmldec: hookUtils.parseXmlDec(stringsXml.toString('utf8'))
     });
+
     fs.writeFileSync(stringsPath, xmlBuilder.buildObject(doc).replace(/\/>/g, ' />'), 'utf-8');
   });
 }

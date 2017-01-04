@@ -3,6 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var xml2js = require('xml2js');
+var hookUtils = require('../utils');
 
 var rootdir = process.argv[2];
 
@@ -29,9 +30,7 @@ if (rootdir) {
                 pretty: true,
                 indent: '    '
             },
-            xmldec: {
-                'version': '1.0', 'encoding': 'UTF-8'
-            }
+            xmldec: hookUtils.parseXmlDec(xmlSrc.toString('utf8'))
         });
         fs.writeFileSync(xmlPath, xmlBuilder.buildObject(doc).replace(/\/>/g, ' />'), 'utf-8');
     });
