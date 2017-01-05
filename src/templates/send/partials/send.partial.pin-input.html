@@ -33,7 +33,12 @@
 
             <div class="results error" ng-if="appControl.result.error">
                 <div class="errors min-height">
-                    <label class="help-block" ng-repeat="(key, value) in appControl.result.error" ng-bind="value | translate"></label>
+                    <div>
+                        {{ appControl.result.error | translate }}
+                    </div>
+                    <div ng-if="appControl.result.detailed">
+                        {{ appControl.result.detailed | translate }}
+                    </div>
                 </div>
 
                 <a class="button button-outline confirm-button capitalise" ng-click="$btBackButtonDelegate.goBack()">{{ 'GO_BACK' | translate }}</a>

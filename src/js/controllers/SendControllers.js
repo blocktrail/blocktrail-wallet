@@ -298,10 +298,10 @@ angular.module('blocktrail.wallet')
                     $scope.appControl.working = false;
                     if (err instanceof blocktrail.ContactAddressError) {
                         //Error getting sending address
-                        $scope.appControl.result = {message: 'ERROR_TITLE_1', error: ['MSG_BAD_CONTACT']};
+                        $scope.appControl.result = {message: 'ERROR_TITLE_1', error: 'MSG_BAD_CONTACT'};
                     } else if (err instanceof blocktrail.WalletPinError || err instanceof blocktrail.WalletChecksumError || err instanceof blocktrail.WalletDecryptError) {
                         //PIN or password error
-                        var errorDetails = err instanceof blocktrail.WalletPinError ? ['MSG_BAD_PIN'] : ['MSG_BAD_PWD'];
+                        var errorDetails = err instanceof blocktrail.WalletPinError ? 'MSG_BAD_PIN' : 'MSG_BAD_PWD';
                         $scope.appControl.result = {message: 'ERROR_TITLE_2', error: errorDetails, pinInputError: true};
                         $scope.appControl.showPinInputError = true;
                         $scope.appControl.showPinInput = true;
@@ -311,7 +311,7 @@ angular.module('blocktrail.wallet')
                     } else {
                         //other error
                         $scope.appControl.showPinInputError = true;
-                        $scope.appControl.result = {message: 'FAIL', error: ['MSG_SEND_FAIL_UNKNOWN']};
+                        $scope.appControl.result = {message: 'FAIL', error: 'MSG_SEND_FAIL_UNKNOWN', detailed: ("" + err).replace(/^Error: /, '')};
                     }
 
                     //enable menu button
