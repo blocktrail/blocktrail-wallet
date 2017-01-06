@@ -28,7 +28,7 @@
 
     "DEFAULT_WALLET_VERSION": "v3",
 
-    "DEFAULT_IDENTIFIER": "blocktrail-wallet",
+    "DEFAULT_IDENTIFIER": "mywallet",
     
     "NULL": null // just here so we can have a trailing , on every line
 }
