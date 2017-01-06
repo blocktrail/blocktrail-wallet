@@ -3929,6 +3929,9 @@ Wallet.prototype._upgradeV2ToV3 = function(passphrase, notify) {
                         encrypted_secret: options.encryptedSecret.toString('base64'),
                         wallet_version: Wallet.WALLET_VERSION_V3
                     }).then(function() {
+                        self.secret = options.secret;
+                        self.encryptedPrimarySeed = options.encryptedPrimarySeed;
+                        self.encryptedSecret = options.encryptedSecret;
                         self.walletVersion = Wallet.WALLET_VERSION_V3;
 
                         return self;
@@ -3960,6 +3963,9 @@ Wallet.prototype._upgradeV1ToV3 = function(passphrase, notify) {
                         recovery_secret: options.recoverySecret.toString('hex'),
                         wallet_version: Wallet.WALLET_VERSION_V3
                     }).then(function() {
+                        self.secret = options.secret;
+                        self.encryptedPrimarySeed = options.encryptedPrimarySeed;
+                        self.encryptedSecret = options.encryptedSecret;
                         self.walletVersion = Wallet.WALLET_VERSION_V3;
 
                         return self;
