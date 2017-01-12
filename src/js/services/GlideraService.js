@@ -124,11 +124,14 @@ angular.module('blocktrail.wallet').factory(
                                         });
 
                                         return Wallet.unlock(dialogResult.input1).then(function(wallet) {
-                                            var secret = wallet.secret;
-                                            if (wallet.walletVersion !== 'v2') {
-                                                secret = secret.toString('hex');
+                                            var secretBuf = wallet.secret;
+                                            if (wallet.walletVersion === 'v2') {
+                                                secretBuf = new blocktrailSDK.Buffer(secretBuf, 'hex');
                                             }
-                                            glideraAccessToken.encryptedAccessToken = CryptoJS.AES.encrypt(accessToken, secret).toString();
+                                            var accessTokenBuf = new blocktrailSDK.Buffer(accessToken, 'utf8');
+                                            glideraAccessToken.encryptedAccessToken = blocktrailSDK.Encryption.encrypt(
+                                                accessTokenBuf, secretBuf, blocktrailSDK.KeyDerivation.subkeyIterations
+                                            ).toString('base64');
                                         })
                                     })
                                     .then(function() {
@@ -246,7 +249,7 @@ angular.module('blocktrail.wallet').factory(
             ;
         };
 
-        var decryptAccessToken = function(secret) {
+        var decryptAccessToken = function(secretBuf) {
             return settingsService.$isLoaded().then(function() {
                 $log.debug('glideraAccessToken', JSON.stringify(settingsService.glideraAccessToken, null, 4));
 
@@ -256,7 +259,7 @@ angular.module('blocktrail.wallet').factory(
                     return;
                 }
 
-                var accessToken = CryptoJS.AES.decrypt(encryptedAccessToken, secret).toString(CryptoJS.enc.Utf8);
+                var accessToken = blocktrailSDK.Encryption.decrypt(new blocktrailSDK.Buffer(encryptedAccessToken, 'base64'), secretBuf).toString('utf8');
 
                 setDecryptedAccessToken(accessToken);
 
@@ -320,14 +323,14 @@ angular.module('blocktrail.wallet').factory(
 
                     return unlockWallet()
                         .then(function(wallet) {
-                            var walletSecret = wallet.secret;
-                            if (wallet.walletVersion !== 'v2') {
-                                walletSecret = walletSecret.toString('hex');
+                            var walletSecretBuf = wallet.secret;
+                            if (wallet.walletVersion === 'v2') {
+                                walletSecretBuf = new blocktrailSDK.Buffer(walletSecretBuf, 'hex');
                             }
 
                             wallet.lock();
 
-                            return decryptAccessToken(walletSecret)
+                            return decryptAccessToken(walletSecretBuf)
                                 .then(function(r) {
                                     $ionicLoading.hide();
                                     return r;
@@ -560,8 +563,9 @@ angular.module('blocktrail.wallet').factory(
                 if (!walletSecret) {
                     return;
                 }
+                var walletSecretBuf = new blocktrailSDK.Buffer(walletSecret, 'hex');
 
-                return decryptAccessToken(walletSecret);
+                return decryptAccessToken(walletSecretBuf);
             }, function(e) { console.log('initDecryptAccessToken ERR ' + e)})
             .then(function() {
                 // updateAllTransactions(); // @TODO: DEBUG
