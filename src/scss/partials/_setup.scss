@@ -155,6 +155,31 @@
             font-size: 26px;
         }
     }
+    .input-password {
+        .password-check {
+            position: absolute;
+            right: $content-padding;
+        }
+        .icon {
+            font-size: 26px;
+        }
+    }
+
+    .password-checker {
+        font-size: 0.7em;
+
+        &.password-checker-score-0,
+        &.password-checker-score-1 {
+            color: $bad-red;
+        }
+        &.password-checker-score-2 {
+            color: $sunflower-dark;
+        }
+        &.password-checker-score-3,
+        &.password-checker-score-4 {
+            color: $good-green;
+        }
+    }
 }
 .state-setup {
     .message-display {

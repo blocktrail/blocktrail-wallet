@@ -263,6 +263,20 @@ gulp.task('js:sdk', ['appconfig'], function() {
     });
 });
 
+gulp.task('js:zxcvbn', ['appconfig'], function() {
+
+    return appConfig.then(function(APPCONFIG) {
+
+        return streamAsPromise(gulp.src([
+            "./src/lib/zxcvbn/dist/zxcvbn.js"
+        ])
+            .pipe(concat('zxcvbn.js'))
+            .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
+            .pipe(gulp.dest('./www/js/'))
+        );
+    });
+});
+
 var sassTask = function() {
     return appConfig.then(function(APPCONFIG) {
         return streamAsPromise(gulp.src('./src/scss/ionic.app.scss')
@@ -331,7 +345,7 @@ gulp.task('watch', function() {
     gulp.watch(['./appconfig.json', './appconfig.default.json'], ['default']);
 });
 
-gulp.task('js', ['js:libs', 'js:app', 'js:ng-cordova', 'js:sdk']);
+gulp.task('js', ['js:libs', 'js:app', 'js:ng-cordova', 'js:sdk', 'js:zxcvbn']);
 gulp.task('templates', ['templates:index', 'templates:rest']);
 gulp.task('default', ['sassfontello', 'templates', 'js', 'copyfonts']);
 gulp.task('nofontello', ['sass', 'templates', 'js', 'copyfonts']);

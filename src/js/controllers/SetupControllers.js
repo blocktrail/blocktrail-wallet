@@ -270,33 +270,30 @@ angular.module('blocktrail.wallet')
     })
     .controller('SetupNewAccountCtrl', function($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, $log,
                                                 launchService, CONFIG, settingsService, $btBackButtonDelegate,
-                                                $cordovaDialogs, $translate, trackingService) {
+                                                $cordovaDialogs, $translate, trackingService, PasswordStrength, $filter) {
         $scope.retry = 0;
         $scope.usernameTaken = null;
         $scope.form = {
             username: null,
             email: null,
             password: null,
-            registerWithEmail: 1 //can't use bool, must be number equivalent
+            registerWithEmail: 1, //can't use bool, must be number equivalent
+            passwordCheck: null
         };
-        $scope.translations = null;
 
-        $scope.getTranslations = function() {
-            if ($scope.translations) {
-                return $q.when($scope.translations);
-            } else {
-                var requiredTranslations = [
-                    'OK',
-                    'CANCEL',
-                    'SETUP_PASSWORD_REPEAT_PLACEHOLDER',
-                    'MSG_REPEAT_PASSWORD',
-                    'MSG_BAD_PASSWORD_REPEAT'
-                ];
-                return $translate(requiredTranslations).then(function(translations) {
-                    $scope.translations = translations;
-                    return $q.when(translations);
-                });
+        $scope.checkPassword = function() {
+            if (!$scope.form.password) {
+                $scope.passwordCheck = null;
+                return $q.when(false);
             }
+
+            return PasswordStrength.check($scope.form.password, [$scope.form.username, $scope.form.email, "BTC.com", "wallet"])
+                .then(function(result) {
+                    result.duration = $filter('duration')(result.crack_times_seconds.online_no_throttling_10_per_second * 1000);
+                    $scope.form.passwordCheck = result;
+
+                    return result;
+                });
         };
 
         $scope.checkUsername = function() {
@@ -339,29 +336,39 @@ angular.module('blocktrail.wallet')
                 return false;
             }
 
-            // prompt user to confirm their password
-            $scope.getTranslations()
-                .then(function(translations) {
+            return $scope.checkPassword()
+                .then(function(passwordCheck) {
+                    if (!passwordCheck || passwordCheck.score < CONFIG.REQUIRED_PASSWORD_STRENGTH) {
+                        $scope.message = {title: 'FAIL', title_class: 'text-bad', body: 'MSG_WEAK_PASSWORD'};
+                        $scope.showMessage();
+                        return false;
+                    }
+
+                    // prompt user to confirm their password
                     return $cordovaDialogs.prompt(
                         $scope.translations['MSG_REPEAT_PASSWORD'].sentenceCase(),
                         $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].capitalize(),
                         [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
                         "",
                         /* isPassword= */true
-                    );
-                })
-                .then(function(dialogResult) {
-                    if (dialogResult.buttonIndex == 1) {
-                        if ($scope.form.password === dialogResult.input1.trim()) {
-                            $scope.message = {title: 'CREATING_ACCOUNT', title_class: 'text-neutral', body: ''};
-                            $scope.appControl.working = true;
-                            $scope.showMessage();
+                    )
+                        .then(function (dialogResult) {
+                            if (dialogResult.buttonIndex == 1) {
+                                if ($scope.form.password === dialogResult.input1.trim()) {
+                                    $scope.message = {title: 'CREATING_ACCOUNT', title_class: 'text-neutral', body: ''};
+                                    $scope.appControl.working = true;
+                                    $scope.showMessage();
 
-                            $scope.register();
-                        } else {
-                            $cordovaDialogs.alert($scope.translations['MSG_BAD_PASSWORD_REPEAT'].sentenceCase(), $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].capitalize(), $scope.translations['OK']);
-                        }
-                    }
+                                    return $scope.register();
+                                } else {
+                                    return $cordovaDialogs.alert(
+                                        $translate.instant('MSG_BAD_PASSWORD_REPEAT').sentenceCase(),
+                                        $translate.instant('SETUP_PASSWORD_REPEAT_PLACEHOLDER').capitalize(),
+                                        $translate.instant('OK')
+                                    );
+                                }
+                            }
+                        });
                 });
         };
 
@@ -398,6 +405,7 @@ angular.module('blocktrail.wallet')
                 username: $scope.form.username,
                 email: $scope.form.email,
                 password: CryptoJS.SHA512($scope.form.password).toString(),
+                password_score: $scope.form.passwordCheck && $scope.form.passwordCheck.score || 0,
                 platform: $rootScope.isIOS && "iOS" || "Android",
                 version: $rootScope.appVersion,
                 encrypted_secret: encryptedSecret,

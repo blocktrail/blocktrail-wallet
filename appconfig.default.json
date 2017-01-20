@@ -28,6 +28,8 @@
 
     "DEFAULT_WALLET_VERSION": "v3",
 
+    "REQUIRED_PASSWORD_STRENGTH": 2,
+
     "DEFAULT_IDENTIFIER": "mywallet",
     
     "NULL": null // just here so we can have a trailing , on every line

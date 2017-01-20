@@ -154,4 +154,9 @@ angular.module('blocktrail.wallet')
             }
             return input;
         };
+    })
+    .filter('duration', function () {
+        return function (input) {
+            return moment.duration(input).humanize();
+        };
     });
