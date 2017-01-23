@@ -4,7 +4,9 @@ angular.module('blocktrail.wallet').factory(
              $http, $timeout, $ionicLoading, settingsService, launchService, $rootScope) {
         var clientId;
         var returnuri = "btccomwallet://glideraCallback/oauth2";
-        var SANDBOX = true;
+        var SANDBOX = CONFIG.GLIDERA_SANDBOX;
+        var GLIDERA_HOST = SANDBOX ? 'sandbox.glidera.io' : 'glidera.io';
+        var GLIDERA_URL = 'https://' + GLIDERA_HOST;
 
         var encodeOpenURI = function(uri) {
             return uri.replace('#', '%23');
@@ -32,7 +34,7 @@ angular.module('blocktrail.wallet').factory(
 
             options = _.defaults({}, (options || {}), {
                 https: true,
-                host: 'sandbox.glidera.io',
+                host: GLIDERA_HOST,
                 endpoint: '/api/v1',
                 params: {},
                 headers: _.defaults({}, (options.headers || {}), headers),
@@ -55,7 +57,7 @@ angular.module('blocktrail.wallet').factory(
                 'redirect_uri=' + returnuri
             ];
 
-            var glideraUrl = "https://sandbox.glidera.io/oauth2/auth?" + qs.join("&");
+            var glideraUrl = GLIDERA_URL + "/oauth2/auth?" + qs.join("&");
 
             $log.debug('oauth2', glideraUrl);
 
@@ -69,7 +71,7 @@ angular.module('blocktrail.wallet').factory(
                     'access_token=' + accessToken
                 ];
 
-                var glideraUrl = "https://sandbox.glidera.io/user/setup?" + qs.join("&");
+                var glideraUrl = GLIDERA_URL + "/user/setup?" + qs.join("&");
 
                 $log.debug('setup', glideraUrl);
 
@@ -294,7 +296,7 @@ angular.module('blocktrail.wallet').factory(
                     var promptForPin = function() {
                         return $cordovaDialogs.prompt(
                             $translate.instant('MSG_BUYBTC_PIN_TO_DECRYPT').sentenceCase(),
-                            $translate.instant('MSG_ENTER_PIN').sentenceCase(),
+                            $translate.instant('MSG_BUYBTC_PIN_TO_DECRYPT_TITLE').sentenceCase(),
                             [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()],
                             "",
                             true,   //isPassword
@@ -388,6 +390,12 @@ angular.module('blocktrail.wallet').factory(
 
                         return twoFactor().then(function(twoFactor) {
                             var r = createRequest(null, accessToken, twoFactor);
+                            $log.debug('buy', JSON.stringify({
+                                destinationAddress: address,
+                                qty: qty,
+                                priceUuid: priceUuid,
+                                useCurrentPrice: false
+                            }, null, 4));
                             return r.request('POST', '/buy', {}, {
                                 destinationAddress: address,
                                 qty: qty,

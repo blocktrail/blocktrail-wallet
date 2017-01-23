@@ -281,8 +281,12 @@ angular.module('blocktrail.wallet')
                     btcValue = $scope.buyInput.btcValue;
                 }
 
+                $ionicLoading.show();
+
                 return glideraService.buyPricesUuid(btcValue, fiatValue)
                     .then(function(result) {
+                        $ionicLoading.hide();
+
                         return $cordovaDialogs.confirm(
                             $translate.instant('MSG_BUYBTC_CONFIRM_BODY', {
                                 qty: $filter('number')(result.qty, 6),
@@ -317,7 +321,11 @@ angular.module('blocktrail.wallet')
 
                                         $state.go('app.wallet.summary');
                                     }, function(e) {
-                                        alert('buyERR ' + e);
+                                        $log.debug(e.code);
+                                        $log.debug(e.details);
+                                        $log.debug(e.invalidParameters);
+                                        alert(e.details);
+                                        $ionicLoading.hide();
                                     })
                                     ;
                             });

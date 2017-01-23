@@ -6,8 +6,8 @@
     <ion-content>
         <div ng-if="chooseState.gettingStarted">            
             <div class="item item-text-wrap">
-                <h2 class="text-neutral sentence-case"> {{ 'BUYBTC_GETSTARTED_HEAD' | translate }}</h2>
-                <p class="padding-t sentence-case" ng-bind-html="'BUYBTC_GETSTARTED_BODY' | translate | nl2br"></p>
+                <h2 class="text-neutral">{{ 'BUYBTC_GETSTARTED_HEAD' | translate }}</h2>
+                <p class="padding-t" ng-bind-html="'BUYBTC_GETSTARTED_BODY' | translate | nl2br"></p>
                 <button class="button button-block button-balanced" ng-click="chooseState.gettingStarted=false">
                     {{ 'BUYBTC_GETSTARTED_BUTTON' | translate }}
                 </button>
@@ -19,8 +19,8 @@
             <!-- CHOOSE REGION -->
             <div ng-if="!chooseRegion.code" ng-controller="BuyBTCChooseRegionCtrl">
                 <div class="item item-text-wrap">
-                    <h2 class="text-neutral sentence-case">{{ 'BUYBTC_CHOOSE_REGION_TITLE' | translate }}</h2>
-                    <p class="padding-t sentence-case" ng-bind-html="'BUYBTC_CHOOSE_REGION_BODY' | translate | nl2br"></p>
+                    <h2 class="text-neutral">{{ 'BUYBTC_CHOOSE_REGION_TITLE' | translate }}</h2>
+                    <p class="padding-t" ng-bind-html="'BUYBTC_CHOOSE_REGION_BODY' | translate | nl2br"></p>
                 </div>
 
                 <div ng-if="!usSelected">
