@@ -265,14 +265,14 @@ angular.module('blocktrail.wallet')
                             transaction.contactInitials = transaction.contact.firstName.substr(0, 1) + transaction.contact.lastName.substr(0, 1);
                         }
                     } else if (transaction.wallet_value_change > 0) {
-                        //received from anonymous
-                        transaction.altDisplay = transaction.txin_other_addresses.length == 1 && transaction.txin_other_addresses[0];
+                        // received from anonymous
+                        transaction.altDisplay = $translate.instant('TX_INFO_RECEIVED');
                     } else if (transaction.is_internal) {
-                        //sent to self
+                        // sent to self
                         transaction.altDisplay = $translate.instant('INTERNAL_TRANSACTION_TITLE');
                     } else {
-                        //sent to anonymous
-                        transaction.altDisplay = transaction.txout_other_addresses.length == 1 && transaction.txout_other_addresses[0];
+                        // sent to anonymous
+                        transaction.altDisplay = $translate.instant('TX_INFO_SENT');
                     }
 
                     groupedList.push(transaction);
