@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'launchService',
-    function(storageService) {
+    function(storageService, $http, CONFIG) {
         var LaunchService = function() {
             var self = this;
 
@@ -17,6 +17,13 @@ angular.module('blocktrail.wallet').factory(
             walletSecret = null;
 
             return secret;
+        };
+
+        LaunchService.prototype.getWalletConfig = function() {
+            return $http.get(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?v=" + CONFIG.VERSION)
+                .then(function(result) {
+                    return result.data;
+                });
         };
 
         LaunchService.prototype.getAccountInfo = function() {

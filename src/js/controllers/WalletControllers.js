@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
                                        Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration,
-                                       $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, buyBTCService) {
+                                       $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService, buyBTCService) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -19,36 +19,23 @@ angular.module('blocktrail.wallet')
          * check for extra languages to enable
          *  if one is preferred, prompt user to switch
          */
-        $http.get(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?v=" + CONFIG.VERSION)
+        launchService.getWalletConfig()
             .then(function(result) {
-                return result.data.extraLanguages;
+                return result.extraLanguages;
             })
             .then(function(extraLanguages) {
                 return settingsService.$isLoaded().then(function() {
-                    // filter out languages we already know
-                    var knownLanguages = blocktrailLocalisation.getLanguages();
-                    extraLanguages = extraLanguages.filter(function(language) {
-                        return knownLanguages.indexOf(language) === -1;
-                    });
-
-                    if (extraLanguages.length === 0) {
-                        return;
-                    }
-                    
-                    // enable extra languages
-                    _.each(extraLanguages, function(extraLanguage) {
-                        blocktrailLocalisation.enableLanguage(extraLanguage, {});
-                    });
-    
                     // determine (new) preferred language
-                    var preferredLanguage = blocktrailLocalisation.setupPreferredLanguage();
+                    var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
+                    var newLanguages = r[0];
+                    var preferredLanguage = r[1];
 
                     // store extra languages
-                    settingsService.extraLanguages = settingsService.extraLanguages.concat(extraLanguages).unique();
+                    settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
                     return settingsService.$store()
                         .then(function() {
                             // check if we have a new preferred language
-                            if (preferredLanguage != settingsService.language && extraLanguages.indexOf(preferredLanguage) !== -1) {
+                            if (preferredLanguage != settingsService.language && newLanguages.indexOf(preferredLanguage) !== -1) {
                                 // prompt to enable
                                 return $cordovaDialogs.confirm(
                                     $translate.instant('MSG_BETTER_LANGUAGE', {

@@ -144,8 +144,6 @@ angular.module('blocktrail.localisation', [
 
         var enableLanguage = function(language, _aliases) {
             if (languages.indexOf(language) === -1) {
-                console.log('enableLanguage', language);
-
                 languages.push(language);
                 _.each(_aliases, function(v, k) {
                     aliases[k] = v;
@@ -161,14 +159,12 @@ angular.module('blocktrail.localisation', [
 
         var determinePreferredLanguage = function() {
             var r = negotiateLocale(getFirstBrowserLanguage());
-            console.log('determinePreferredLanguage', r);
             return r;
         };
 
         var preferredAvailableLanguage = function() {
             var preferredLanguage = determinePreferredLanguage();
             var r = isAvailableLanguage(preferredLanguage) ? preferredLanguage : null;
-            console.log('preferredAvailableLanguage', preferredLanguage, r);
             return r;
         };
 
@@ -177,6 +173,26 @@ angular.module('blocktrail.localisation', [
             $translateProvider.preferredLanguage(language);
 
             return language;
+        };
+
+        var parseExtraLanguages = function(extraLanguages) {
+            // filter out languages we already know
+            var knownLanguages = getLanguages();
+            var newLanguages = extraLanguages.filter(function(language) {
+                return knownLanguages.indexOf(language) === -1;
+            });
+
+            if (newLanguages.length === 0) {
+                return;
+            }
+
+            // enable extra languages
+            _.each(newLanguages, function(newLanguage) {
+                enableLanguage(newLanguage, {});
+            });
+
+            // determine (new) preferred language
+            return [newLanguages, setupPreferredLanguage()];
         };
 
         // expose as provider
@@ -189,6 +205,7 @@ angular.module('blocktrail.localisation', [
         this.determinePreferredLanguage = determinePreferredLanguage;
         this.languageName = languageName;
         this.getLanguages = getLanguages;
+        this.parseExtraLanguages = parseExtraLanguages;
 
         // expose as service
         this.$get = function() {
@@ -201,7 +218,8 @@ angular.module('blocktrail.localisation', [
                 registerLanguages: registerLanguages,
                 determinePreferredLanguage: determinePreferredLanguage,
                 languageName: languageName,
-                getLanguages: getLanguages
+                getLanguages: getLanguages,
+                parseExtraLanguages: parseExtraLanguages
             };
         };
     })
