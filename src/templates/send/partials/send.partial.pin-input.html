@@ -12,7 +12,7 @@
                 <input type="tel" ng-model="sendInput.pin" required ng-enter="send()" ng-change="appControl.showPinInputError = false" tabindex="-1">
             </label>
             <div class="pin-error">
-                <span ng-show="appControl.showPinInputError">{{ appControl.result.error[0] | translate }}</span>
+                <span ng-show="appControl.showPinInputError">{{ appControl.result.error | translate }}</span>
             </div>
 
             <a class="button button-outline confirm-button capitalise" ng-click="send()">{{ 'CONFIRM' | translate }}</a>
