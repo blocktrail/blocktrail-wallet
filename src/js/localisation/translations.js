@@ -98,17 +98,14 @@ angular.module('blocktrail.localisation', [
         };
 
         // enabled languages
+        //  languages should be added to CONFIG.LANGUAGES, not here
+        //  because when added here it won't result in a popup asking the user to switch to them
         var languages = [
             'en-US',
-            'en',
-            // 'fr',
-            'es',
-            'nl',
-            // 'ru',
-            // 'cn'
+            'en'
         ];
         // language aliases used to map system language to a language key
-        //  mapping won't work without these so without a working alias languages will never be abled
+        //  mapping won't work without these so without a working alias languages will never be enabled
         var aliases = {
             'en-US': 'en-US',
             'en-*': 'en',

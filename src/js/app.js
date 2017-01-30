@@ -69,8 +69,10 @@ angular.module('blocktrail.wallet').run(
         $rootScope.isAndroid = ionic.Platform.isAndroid();
         $rootScope.isIOS = ionic.Platform.isIOS();
 
-        if (CONFIG.DEBUG) {
+        if (CONFIG.DEBUGLIBS) {
             blocktrailSDK.debug.enable('*,-pouchdb:*');
+        } else {
+            blocktrailSDK.debug.disable();
         }
 
         facebookConnectPlugin.activateApp();
@@ -450,7 +452,7 @@ angular.module('blocktrail.wallet').config(
                     preferredLanguage: function(CONFIG, $rootScope, settingsService, blocktrailLocalisation, launchService) {
                         return launchService.getWalletConfig()
                             .then(function(result) {
-                                return result.extraLanguages;
+                                return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
                             })
                             .then(function(extraLanguages) {
                                 var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);

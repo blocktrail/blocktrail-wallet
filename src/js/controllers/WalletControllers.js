@@ -21,7 +21,7 @@ angular.module('blocktrail.wallet')
          */
         launchService.getWalletConfig()
             .then(function(result) {
-                return result.extraLanguages;
+                return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
             })
             .then(function(extraLanguages) {
                 return settingsService.$isLoaded().then(function() {

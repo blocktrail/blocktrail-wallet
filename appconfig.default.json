@@ -8,6 +8,8 @@
     "API_HOST": "api.blocktrail.com",
     "API_HTTPS": true,
 
+    "EXTRA_LANGUAGES": ["es", "nl"],
+
     "CSP": ["https://api.blocktrail.com", "https://glidera.io", "https://sandbox.glidera.io"],
 
     "BUYBTC": false,
