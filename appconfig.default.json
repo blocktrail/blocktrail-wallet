@@ -7,7 +7,11 @@
     "POUCHDB_DRIVER": null,
     "API_HOST": "api.blocktrail.com",
     "API_HTTPS": true,
+
+    "CSP": ["https://api.blocktrail.com", "https://glidera.io", "https://sandbox.glidera.io"],
+
     "BUYBTC": false,
+    "GLIDERA_SANDBOX": true,
 
     "GAPPTRACK_ID": null,
     "GAPPTRACK_ACTIVATE_LABELS": {"iOS": null, "android": null},

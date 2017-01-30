@@ -99,9 +99,13 @@
           <key>NSIncludesSubdomains</key>
           <true/>
         </dict>
+        <key>api.blocktrail.com</key>
+        <dict/>
+        <key>sandbox.glidera.io</key>
+        <dict/>
+        <key>glidera.io</key>
+        <dict/>
       </dict>
-      <key>NSAllowsArbitraryLoads</key>
-      <true/>
     </dict>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string/>

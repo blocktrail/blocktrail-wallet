@@ -47,10 +47,6 @@ angular.module('blocktrail.wallet')
                         } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
                             $state.go('app.wallet.buybtc.choose');
                             $ionicSideMenuDelegate.toggleLeft(false);
-                        } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/bitid")) {
-                            $rootScope.glideraCallback = $rootScope.handleOpenURL;
-                            $state.go('app.wallet.buybtc.glidera_bitid_callback');
-                            $ionicSideMenuDelegate.toggleLeft(false);
                         }
                     } else {
                         $state.go('app.wallet.summary');

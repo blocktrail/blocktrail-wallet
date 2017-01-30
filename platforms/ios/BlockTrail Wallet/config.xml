@@ -114,7 +114,9 @@
     BTC.com Team
     </author>
     <content src="index.html" />
-    <access origin="*" />
+    <access origin="https://api.blocktrail.com" />
+    <access origin="https://sandbox.glidera.io" />
+    <access origin="https://glidera.io" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
     <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
