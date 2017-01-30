@@ -53,7 +53,7 @@ angular.module('blocktrail.wallet')
             $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
         };
     })
-    .controller('SetupStartCtrl', function($scope, $http, CONFIG, $state, $q, blocktrailLocalisation) {
+    .controller('SetupStartCtrl', function($scope, $http, CONFIG, $state) {
         $scope.slider = {
             displayed: 0
         };
@@ -220,9 +220,9 @@ angular.module('blocktrail.wallet')
                 .catch(function(error) {
                     if (error.data && error.data.requires_2fa) {
                         return $cordovaDialogs.prompt(
-                            $translate.instant('MSG_TWO_FACTOR_REQUIRED').sentenceCase(),
-                            $translate.instant('TWO_FACTOR_REQUIRED').sentenceCase(),
-                            [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()],
+                            $translate.instant('MSG_TWO_FACTOR_REQUIRED'),
+                            $translate.instant('TWO_FACTOR_REQUIRED'),
+                            [$translate.instant('OK'), $translate.instant('CANCEL')],
                             ""
                         )
                             .then(
@@ -361,9 +361,9 @@ angular.module('blocktrail.wallet')
 
                     // prompt user to confirm their password
                     return $cordovaDialogs.prompt(
-                        $scope.translations['MSG_REPEAT_PASSWORD'].sentenceCase(),
-                        $scope.translations['SETUP_PASSWORD_REPEAT_PLACEHOLDER'].sentenceCase(),
-                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
+                        $translate.instant('MSG_REPEAT_PASSWORD'),
+                        $translate.instant('SETUP_PASSWORD_REPEAT_PLACEHOLDER'),
+                        [$translate.instant('OK'), $translate.instant('CANCEL')],
                         "",
                         /* isPassword= */true
                     )
@@ -377,8 +377,8 @@ angular.module('blocktrail.wallet')
                                     return $scope.register();
                                 } else {
                                     return $cordovaDialogs.alert(
-                                        $translate.instant('MSG_BAD_PASSWORD_REPEAT').sentenceCase(),
-                                        $translate.instant('SETUP_PASSWORD_REPEAT_PLACEHOLDER').capitalize(),
+                                        $translate.instant('MSG_BAD_PASSWORD_REPEAT'),
+                                        $translate.instant('SETUP_PASSWORD_REPEAT_PLACEHOLDER'),
                                         $translate.instant('OK')
                                     );
                                 }
@@ -482,7 +482,6 @@ angular.module('blocktrail.wallet')
     })
     .controller('SetupWalletPinCtrl', function($q, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
                                                sdkService, $cordovaDialogs, $ionicLoading, $rootScope, $log, $translate, $timeout, settingsService, CONFIG) {
-        $scope.transactions = null;
         $scope.retry = 0;
         $scope.form = {
             pin: "",
@@ -779,57 +778,53 @@ angular.module('blocktrail.wallet')
          */
         $scope.promptWalletPassword = function(wallet) {
             //prompt for a correct wallet password and retry the wallet creation process
-            return $scope.getTranslations()
-                .then(function(translations) {
-                    //prompt for wallet password
-                    return $cordovaDialogs.prompt(
-                        $scope.translations['MSG_WALLET_PASSWORD'].sentenceCase(),
-                        $scope.translations['SETUP_WALLET_PASSWORD'].sentenceCase(),
-                        [$scope.translations['OK'], $scope.translations['CANCEL'].sentenceCase()],
-                        "",
-                        /* isPassword= */true
-                    );
-                })
-                .then(function(dialogResult) {
-                    if (dialogResult.buttonIndex == 2) {
-                        //user cancelled...reset the back button and go back to login page
-                        $scope.dismissMessage();
-                        $btBackButtonDelegate.setBackButton($btBackButtonDelegate._default);
-                        $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
-                        $btBackButtonDelegate.goBack();
-                        return $q.reject('CANCELLED');
-                    }
+            return $cordovaDialogs.prompt(
+                $translate.instant('MSG_WALLET_PASSWORD'),
+                $translate.instant('SETUP_WALLET_PASSWORD'),
+                [$translate.instant('OK'), $translate.instant('CANCEL')],
+                "",
+                /* isPassword= */true
+            )
+            .then(function(dialogResult) {
+                if (dialogResult.buttonIndex == 2) {
+                    //user cancelled...reset the back button and go back to login page
+                    $scope.dismissMessage();
+                    $btBackButtonDelegate.setBackButton($btBackButtonDelegate._default);
+                    $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
+                    $btBackButtonDelegate.goBack();
+                    return $q.reject('CANCELLED');
+                }
 
-                    $scope.setupInfo.password = dialogResult.input1.trim();
-                    if (!$scope.setupInfo.password) {
-                        return $cordovaDialogs.alert($scope.translations['MSG_BAD_PWD'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['OK'])
-                            .then(function() {
-                                return $scope.promptWalletPassword();
-                            });
-                    }
-
-                    //try the new password
-                    $log.debug('re-initialising wallet with new password: ' + $scope.setupInfo.identifier);
-                    $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
-                    return $scope.sdk.initWallet({identifier: $scope.setupInfo.identifier, password: $scope.setupInfo.password})
-                        .then(function(wallet) {
-                            //success, password is correct. We can continue
-                            $ionicLoading.hide();
-                            return $q.when(wallet);
-                        }, function(error) {
-                            $ionicLoading.hide();
-                            if (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError) {
-                                //password still incorrect, try again
-                                return $cordovaDialogs.alert($scope.translations['MSG_BAD_PWD'].sentenceCase(), $scope.translations['MSG_TRY_AGAIN'].sentenceCase(), $scope.translations['OK'])
-                                    .then(function() {
-                                        return $scope.promptWalletPassword();
-                                    });
-                            } else {
-                                //some other error encountered
-                                return $q.reject(error);
-                            }
+                $scope.setupInfo.password = dialogResult.input1.trim();
+                if (!$scope.setupInfo.password) {
+                    return $cordovaDialogs.alert($translate.instant('MSG_BAD_PWD'), $translate.instant('MSG_TRY_AGAIN'), $translate.instant('OK'))
+                        .then(function() {
+                            return $scope.promptWalletPassword();
                         });
-                });
+                }
+
+                //try the new password
+                $log.debug('re-initialising wallet with new password: ' + $scope.setupInfo.identifier);
+                $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
+                return $scope.sdk.initWallet({identifier: $scope.setupInfo.identifier, password: $scope.setupInfo.password})
+                    .then(function(wallet) {
+                        //success, password is correct. We can continue
+                        $ionicLoading.hide();
+                        return $q.when(wallet);
+                    }, function(error) {
+                        $ionicLoading.hide();
+                        if (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError) {
+                            //password still incorrect, try again
+                            return $cordovaDialogs.alert($translate.instant('MSG_BAD_PWD'), $translate.instant('MSG_TRY_AGAIN'), $translate.instant('OK'))
+                                .then(function() {
+                                    return $scope.promptWalletPassword();
+                                });
+                        } else {
+                            //some other error encountered
+                            return $q.reject(error);
+                        }
+                    });
+            });
         };
     })
     .controller('SetupWalletBackupCtrl', function($scope, backupInfo, $state, $q, $btBackButtonDelegate, $translate, $cordovaDialogs,
@@ -869,168 +864,141 @@ angular.module('blocktrail.wallet')
             filename: 'btc-wallet-backup.pdf',
             replace: true
         };
-        $scope.transactions = null;
-
-        $scope.getTranslations = function() {
-            if ($scope.translations) {
-                return $q.when($scope.translations);
-            } else {
-                var requiredTranslations = [
-                    'OK',
-                    'CANCEL',
-                    'ERROR',
-                    'MSG_SAVE_BACKUP',
-                    'SETUP_WALLET_BACKUP',
-                    'MSG_CANT_OPEN_PDF',
-                    'BACKUP_EMAIL_PDF',
-                    'BACKUP_CREATE_PDF',
-                    'MSG_BACKUP_EMAIL_SUBJECT_1',
-                    'MSG_BACKUP_EMAIL_BODY_1'
-                ];
-                return $translate(requiredTranslations).then(function(translations) {
-                    $scope.translations = translations;
-                    return $q.when(translations);
-                });
-            }
-        };
 
         //disable back button
         $btBackButtonDelegate.setBackButton(angular.noop);
         $btBackButtonDelegate.setHardwareBackButton(angular.noop);
 
         $scope.showExportOptions = function() {
-            $scope.getTranslations().then(function(transactions) {
-
-                //Temporary handling of a bug in iOS with the $cordovaFileOpener2
-                var optionButtons = [
-                    { text: transactions['BACKUP_EMAIL_PDF'].sentenceCase() },
-                    { text: transactions['BACKUP_CREATE_PDF'].sentenceCase() },
+            //Temporary handling of a bug in iOS with the $cordovaFileOpener2
+            var optionButtons = [
+                { text: $translate.instant('BACKUP_EMAIL_PDF') },
+                { text: $translate.instant('BACKUP_CREATE_PDF') }
+            ];
+            if (ionic.Platform.isIOS()) {
+                optionButtons = [
+                    { text: $translate.instant('BACKUP_EMAIL_PDF') }
                 ];
-                if (ionic.Platform.isIOS()) {
-                    optionButtons = [
-                        { text: transactions['BACKUP_EMAIL_PDF'].sentenceCase() },
-                    ];
-                }
+            }
 
-                $scope.hideExportOptions = $ionicActionSheet.show({
-                    buttons: optionButtons,
-                    cancelText: transactions['CANCEL'].sentenceCase(),
-                    cancel: function() {},
-                    buttonClicked: function(index) {    
-                        $timeout(function() {
-                            $q.when(true)
-                                .then(function() {
+            $scope.hideExportOptions = $ionicActionSheet.show({
+                buttons: optionButtons,
+                cancelText: $translate.instant('CANCEL'),
+                cancel: function() {},
+                buttonClicked: function(index) {
+                    $timeout(function() {
+                        $q.when(true)
+                            .then(function() {
+                                var deferred = $q.defer();
+
+                                var extraInfo = [];
+
+                                if (settingsService.username) {
+                                    extraInfo.push({title: 'Username', value: settingsService.username});
+                                }
+                                if (settingsService.email) {
+                                    extraInfo.push({title: 'Email', value: settingsService.email});
+                                }
+
+                                var backup = new sdkService.BackupGenerator(
+                                    $scope.setupInfo.identifier,
+                                    $scope.setupInfo.backupInfo,
+                                    extraInfo
+                                );
+
+                                //create a backup pdf
+                                backup.generatePDF(function (err, pdf) {
+                                    if (err) {
+                                        return deferred.reject(err);
+                                    }
+
+                                    deferred.resolve(pdf.output());
+                                });
+
+                                return deferred.promise;
+                            })
+                            .then(function(pdfData) {
+                                // FUNKY ASS HACK
+                                // https://coderwall.com/p/nc8hia/making-work-cordova-phonegap-jspdf
+                                var buffer = new ArrayBuffer(pdfData.length);
+                                var array = new Uint8Array(buffer);
+                                for (var i = 0; i < pdfData.length; i++) {
+                                    array[i] = pdfData.charCodeAt(i);
+                                }
+
+                                return buffer;
+                            })
+                            .then(function(buffer) {
+
+                                //save file temporarily
+                                $log.debug('writing to ' + $scope.backupSettings.path + $scope.backupSettings.filename);
+                                return $cordovaFile.writeFile($scope.backupSettings.path, $scope.backupSettings.filename, buffer, $scope.backupSettings.replace);
+                            })
+                            .then(function(result) {
+                                if (index == 0) {
+                                    //email the backup pdf
+                                    var options = {
+                                        to: '',
+                                        attachments: [
+                                            $scope.backupSettings.path + $scope.backupSettings.filename
+                                        ],
+                                        subject: $translate.instant('MSG_BACKUP_EMAIL_SUBJECT_1'),
+                                        body: $translate.instant('MSG_BACKUP_EMAIL_BODY_1'),
+                                        isHtml: true
+                                    };
                                     var deferred = $q.defer();
 
-                                    var extraInfo = [];
-
-                                    if (settingsService.username) {
-                                        extraInfo.push({title: 'Username', value: settingsService.username});
-                                    }
-                                    if (settingsService.email) {
-                                        extraInfo.push({title: 'Email', value: settingsService.email});
-                                    }
-
-                                    var backup = new sdkService.BackupGenerator(
-                                        $scope.setupInfo.identifier,
-                                        $scope.setupInfo.backupInfo,
-                                        extraInfo
-                                    );
-
-                                    //create a backup pdf
-                                    backup.generatePDF(function (err, pdf) {
-                                        if (err) {
-                                            return deferred.reject(err);
+                                    //check that emails can be sent (try with normal mail, can't do attachments with gmail)
+                                    cordova.plugins.email.isAvailable(function(isAvailable) {
+                                        $log.debug('is email supported? ' + isAvailable);
+                                        if (isAvailable) {
+                                            $scope.appControl.saveButtonClicked = true;
+                                            cordova.plugins.email.open(options, function(result) {
+                                                deferred.resolve(result);
+                                            });
+                                        } else {
+                                            //no mail support...sad times :(
+                                            $cordovaDialogs.alert(
+                                                $translate.instant('MSG_EMAIL_NOT_SETUP'),
+                                                $translate.instant('SORRY'),
+                                                $translate.instant('OK')
+                                            ).then(function() {
+                                                deferred.reject('NO_EMAIL');
+                                            });
                                         }
-
-                                        deferred.resolve(pdf.output());
                                     });
 
                                     return deferred.promise;
-                                })
-                                .then(function(pdfData) {
-                                    // FUNKY ASS HACK
-                                    // https://coderwall.com/p/nc8hia/making-work-cordova-phonegap-jspdf
-                                    var buffer = new ArrayBuffer(pdfData.length);
-                                    var array = new Uint8Array(buffer);
-                                    for (var i = 0; i < pdfData.length; i++) {
-                                        array[i] = pdfData.charCodeAt(i);
-                                    }
 
-                                    return buffer;
-                                })
-                                .then(function(buffer) {
-
-                                    //save file temporarily
-                                    $log.debug('writing to ' + $scope.backupSettings.path + $scope.backupSettings.filename);
-                                    return $cordovaFile.writeFile($scope.backupSettings.path, $scope.backupSettings.filename, buffer, $scope.backupSettings.replace);
-                                })
-                                .then(function(result) {
-                                    if (index == 0) {
-                                        //email the backup pdf
-                                        var options = {
-                                            to: '',
-                                            attachments: [
-                                                $scope.backupSettings.path + $scope.backupSettings.filename
-                                            ],
-                                            subject: $scope.translations['MSG_BACKUP_EMAIL_SUBJECT_1'].sentenceCase(),
-                                            body: $scope.translations['MSG_BACKUP_EMAIL_BODY_1'],
-                                            isHtml: true
-                                        };
-                                        var deferred = $q.defer();
-
-                                        //check that emails can be sent (try with normal mail, can't do attachments with gmail)
-                                        cordova.plugins.email.isAvailable(function(isAvailable) {
-                                            $log.debug('is email supported? ' + isAvailable);
-                                            if (isAvailable) {
-                                                $scope.appControl.saveButtonClicked = true;
-                                                cordova.plugins.email.open(options, function(result) {
-                                                    deferred.resolve(result);
-                                                });
-                                            } else {
-                                                //no mail support...sad times :(
-                                                $cordovaDialogs.alert(
-                                                    $translate.instant('MSG_EMAIL_NOT_SETUP').sentenceCase(), 
-                                                    $translate.instant('SORRY').sentenceCase(),
-                                                    $translate.instant('OK')
-                                                ).then(function() {
-                                                    deferred.reject('NO_EMAIL');
-                                                });
-                                            }
-                                        });
-
-                                        return deferred.promise;
-
-                                    } else if (index == 1) {
-                                        //export the backup to PDF for user to handle
-                                        //call an intent or similar service to allow user decide what to do with PDF
-                                        $log.debug('opening file ' + $scope.backupSettings.path + $scope.backupSettings.filename);
-                                        $scope.appControl.saveButtonClicked = true;
-                                        return $cordovaFileOpener2.open($scope.backupSettings.path + $scope.backupSettings.filename, 'application/pdf');
-                                    }
-                                })
-                                .then(function() {
-                                    // backup export successful
-                                    $log.debug("backup export complete");
-                                    $scope.hideExportOptions();
-                                })
-                                .catch(function(err) {
-                                    $log.error(err);
-                                    if (err) {
-                                        if (err.status && err.status == 9) {
-                                            $cordovaDialogs.alert($scope.translations['MSG_CANT_OPEN_PDF'], $scope.translations['ERROR'], $scope.translations['OK']);
-                                        } else {
-                                            $cordovaDialogs.alert(err, $scope.translations['ERROR'], $scope.translations['OK']);
-                                        }
+                                } else if (index == 1) {
+                                    //export the backup to PDF for user to handle
+                                    //call an intent or similar service to allow user decide what to do with PDF
+                                    $log.debug('opening file ' + $scope.backupSettings.path + $scope.backupSettings.filename);
+                                    $scope.appControl.saveButtonClicked = true;
+                                    return $cordovaFileOpener2.open($scope.backupSettings.path + $scope.backupSettings.filename, 'application/pdf');
+                                }
+                            })
+                            .then(function() {
+                                // backup export successful
+                                $log.debug("backup export complete");
+                                $scope.hideExportOptions();
+                            })
+                            .catch(function(err) {
+                                $log.error(err);
+                                if (err) {
+                                    if (err.status && err.status == 9) {
+                                        $cordovaDialogs.alert($translate.instant('MSG_CANT_OPEN_PDF'), $translate.instant('ERROR'), $translate.instant('OK'));
                                     } else {
-                                        //some of the above plugins reject the promise even on success...
-                                        $scope.hideExportOptions();
+                                        $cordovaDialogs.alert(err, $translate.instant('ERROR'), $translate.instant('OK'));
                                     }
-                                })
-                            ;
-                        });
-                    }
-                });
+                                } else {
+                                    //some of the above plugins reject the promise even on success...
+                                    $scope.hideExportOptions();
+                                }
+                            })
+                        ;
+                    });
+                }
             });
         };
 
@@ -1039,9 +1007,7 @@ angular.module('blocktrail.wallet')
          */
         $scope.continue = function() {
             if (!$scope.appControl.backupSaved) {
-                $scope.getTranslations().then(function() {
-                    $cordovaDialogs.alert($scope.translations['MSG_SAVE_BACKUP'].sentenceCase(), $scope.translations['SETUP_WALLET_BACKUP'].sentenceCase(), $scope.translations['OK'])
-                });
+                $cordovaDialogs.alert($translate.instant('MSG_SAVE_BACKUP'), $translate.instant('SETUP_WALLET_BACKUP'), $translate.instant('OK'));
             } else {
                 //delete all temp backup info
                 launchService.clearBackupInfo()
@@ -1073,9 +1039,9 @@ angular.module('blocktrail.wallet')
          */
         $scope.skipBackup = function() {
             $cordovaDialogs.confirm(
-                $translate.instant('MSG_SKIP_BACKUP').sentenceCase(),
-                $translate.instant('MSG_ARE_YOU_SURE').sentenceCase(),
-                [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
+                $translate.instant('MSG_SKIP_BACKUP'),
+                $translate.instant('MSG_ARE_YOU_SURE'),
+                [$translate.instant('OK'), $translate.instant('CANCEL')]
             )
                 .then(function(dialogResult) {
                     if (dialogResult == 1) {
@@ -1101,24 +1067,6 @@ angular.module('blocktrail.wallet')
     })
     .controller('SetupContactsCtrl', function($scope, Contacts, settingsService, $q, $btBackButtonDelegate, $cordovaDialogs, $translate, $log) {
         $btBackButtonDelegate.rootState = null;
-        $scope.transactions = null;
-
-        $scope.getTranslations = function() {
-            if ($scope.translations) {
-                return $q.when($scope.translations);
-            } else {
-                var requiredTranslations = [
-                    'OK',
-                    'CANCEL',
-                    'PERMISSION_REQUIRED_CONTACTS',
-                    'MSG_CONTACTS_PERMISSIONS'
-                ];
-                return $translate(requiredTranslations).then(function(translations) {
-                    $scope.translations = translations;
-                    return $q.when(translations);
-                });
-            }
-        };
 
         $scope.syncContacts = function() {
             if ($scope.appControl.syncing) {
@@ -1152,14 +1100,11 @@ angular.module('blocktrail.wallet')
                     if (err instanceof blocktrail.ContactsPermissionError) {
                         settingsService.permissionContacts = false;
                         settingsService.$store();
-                        $scope.getTranslations()
-                            .then(function() {
-                                $cordovaDialogs.alert(
-                                    $translate.instant('MSG_CONTACTS_PERMISSIONS').sentenceCase(),
-                                    $translate.instant('PERMISSION_REQUIRED_CONTACTS').sentenceCase(),
-                                    $translate.instant('OK')
-                                )
-                            });
+                        $cordovaDialogs.alert(
+                            $translate.instant('MSG_CONTACTS_PERMISSIONS'),
+                            $translate.instant('PERMISSION_REQUIRED_CONTACTS'),
+                            $translate.instant('OK')
+                        );
                     }
                     $scope.appControl.syncing = false;
                     $scope.appControl.syncComplete = false;
