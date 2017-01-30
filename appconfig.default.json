@@ -7,6 +7,7 @@
     "POUCHDB_DRIVER": null,
     "API_HOST": "api.blocktrail.com",
     "API_HTTPS": true,
+    "BUYBTC": false,
 
     "GAPPTRACK_ID": null,
     "GAPPTRACK_ACTIVATE_LABELS": {"iOS": null, "android": null},
