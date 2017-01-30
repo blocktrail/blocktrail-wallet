@@ -454,19 +454,21 @@ angular.module('blocktrail.wallet').config(
                             })
                             .then(function(extraLanguages) {
                                 var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
-                                var newLanguages = r[0];
-                                var preferredLanguage = r[1];
+                                if (r) {
+                                    var newLanguages = r[0];
+                                    var preferredLanguage = r[1];
 
-                                // activate preferred language
-                                $rootScope.changeLanguage(preferredLanguage);
+                                    // activate preferred language
+                                    $rootScope.changeLanguage(preferredLanguage);
 
-                                // store preferred language
-                                return settingsService.$isLoaded().then(function() {
-                                    settingsService.language = preferredLanguage;
-                                    settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
+                                    // store preferred language
+                                    return settingsService.$isLoaded().then(function () {
+                                        settingsService.language = preferredLanguage;
+                                        settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
 
-                                    return settingsService.$store();
-                                });
+                                        return settingsService.$store();
+                                    });
+                                }
                             })
                             .then(function() {}, function(e) { console.error(e); });
                     },

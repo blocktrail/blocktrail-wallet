@@ -27,39 +27,41 @@ angular.module('blocktrail.wallet')
                 return settingsService.$isLoaded().then(function() {
                     // determine (new) preferred language
                     var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
-                    var newLanguages = r[0];
-                    var preferredLanguage = r[1];
+                    if (r) {
+                        var newLanguages = r[0];
+                        var preferredLanguage = r[1];
 
-                    // store extra languages
-                    settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
-                    return settingsService.$store()
-                        .then(function() {
-                            // check if we have a new preferred language
-                            if (preferredLanguage != settingsService.language && newLanguages.indexOf(preferredLanguage) !== -1) {
-                                // prompt to enable
-                                return $cordovaDialogs.confirm(
-                                    $translate.instant('MSG_BETTER_LANGUAGE', {
-                                        oldLanguage: $translate.instant(blocktrailLocalisation.languageName(settingsService.language)),
-                                        newLanguage: $translate.instant(blocktrailLocalisation.languageName(preferredLanguage))
-                                    }).sentenceCase(),
-                                    $translate.instant('MSG_BETTER_LANGUAGE_TITLE').sentenceCase(),
-                                    [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
-                                )
-                                    .then(function(dialogResult) {
-                                        if (dialogResult == 2) {
-                                            return;
-                                        }
+                        // store extra languages
+                        settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
+                        return settingsService.$store()
+                            .then(function () {
+                                // check if we have a new preferred language
+                                if (preferredLanguage != settingsService.language && newLanguages.indexOf(preferredLanguage) !== -1) {
+                                    // prompt to enable
+                                    return $cordovaDialogs.confirm(
+                                        $translate.instant('MSG_BETTER_LANGUAGE', {
+                                            oldLanguage: $translate.instant(blocktrailLocalisation.languageName(settingsService.language)),
+                                            newLanguage: $translate.instant(blocktrailLocalisation.languageName(preferredLanguage))
+                                        }).sentenceCase(),
+                                        $translate.instant('MSG_BETTER_LANGUAGE_TITLE').sentenceCase(),
+                                        [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
+                                    )
+                                        .then(function (dialogResult) {
+                                            if (dialogResult == 2) {
+                                                return;
+                                            }
 
-                                        // enable new language
-                                        settingsService.language = preferredLanguage;
-                                        $rootScope.changeLanguage(preferredLanguage);
+                                            // enable new language
+                                            settingsService.language = preferredLanguage;
+                                            $rootScope.changeLanguage(preferredLanguage);
 
-                                        return settingsService.$store();
-                                    })
-                                ;
-                            }
-                        })
-                    ;
+                                            return settingsService.$store();
+                                        })
+                                        ;
+                                }
+                            })
+                            ;
+                    }
                 });
             })
             .then(function() {}, function(e) { console.error('extraLanguages', e && (e.msg || e.message || "" + e)); });
