@@ -455,22 +455,28 @@ angular.module('blocktrail.wallet').config(
                                 return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
                             })
                             .then(function(extraLanguages) {
-                                var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
-                                if (r) {
-                                    var newLanguages = r[0];
-                                    var preferredLanguage = r[1];
+                                return settingsService.$isLoaded().then(function() {
+                                    // parse extra languages to determine if there's any new
+                                    var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
+                                    var preferredLanguage;
+
+                                    // if there's any new we should store those
+                                    if (r) {
+                                        var newLanguages = r[0];
+                                        preferredLanguage = r[1];
+                                        settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
+                                    } else {
+                                        preferredLanguage = blocktrailLocalisation.setupPreferredLanguage();
+                                    }
 
                                     // activate preferred language
                                     $rootScope.changeLanguage(preferredLanguage);
 
                                     // store preferred language
-                                    return settingsService.$isLoaded().then(function () {
-                                        settingsService.language = preferredLanguage;
-                                        settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
+                                    settingsService.language = preferredLanguage;
 
-                                        return settingsService.$store();
-                                    });
-                                }
+                                    return settingsService.$store();
+                                });
                             })
                             .then(function() {}, function(e) { console.error(e); });
                     },

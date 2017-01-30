@@ -37,7 +37,7 @@
                     </label>
                     <!-- /username -->
 
-                    <label class="item item-input item-floating-label input-password">
+                    <label class="item item-input item-text-wrap item-floating-label input-password">
                         <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
                         <div class="password-check text-right">
                             <i class="icon ion-close-circled text-bad" ng-if="form.passwordCheck && form.passwordCheck.score < 2"></i>
@@ -47,8 +47,8 @@
                         <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}"
                                ng-model="form.password"
                                ng-change="checkPassword()">
-                        
-                        <div class="password-checker password-checker-score-{{ form.passwordCheck.score }}" ng-if="form.passwordCheck">
+
+                        <div class="password-checker" ng-class="'password-checker-score-' + form.passwordCheck.score" ng-if="form.passwordCheck">
                             <span ng-if="form.passwordCheck.score == 0">{{ 'PASSWORD_SUPER_WEAK' | translate }} </span>
                             <span ng-if="form.passwordCheck.score == 1">{{ 'PASSWORD_WEAK' | translate }} </span>
                             <span ng-if="form.passwordCheck.score == 2">{{ 'PASSWORD_MEDIOCRE' | translate }} </span>

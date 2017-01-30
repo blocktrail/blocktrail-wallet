@@ -286,14 +286,24 @@ angular.module('blocktrail.wallet')
             passwordCheck: null
         };
 
+        var passwordCheckingId = 0;
+
         $scope.checkPassword = function() {
             if (!$scope.form.password) {
-                $scope.passwordCheck = null;
+                $scope.form.passwordCheck = null;
                 return $q.when(false);
             }
 
+            // increment check counter
+            var id = ++passwordCheckingId;
+
             return PasswordStrength.check($scope.form.password, [$scope.form.username, $scope.form.email, "BTC.com", "wallet"])
                 .then(function(result) {
+                    // ensure this is the latest check to avoid conflicting state
+                    if (id !== passwordCheckingId) {
+                        return;
+                    }
+
                     result.duration = $filter('duration')(result.crack_times_seconds.online_no_throttling_10_per_second * 1000);
                     $scope.form.passwordCheck = result;
 
