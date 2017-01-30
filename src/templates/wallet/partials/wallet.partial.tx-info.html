@@ -67,21 +67,14 @@
                 <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_SENT_TO' | translate }}</span>
                 <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED_FROM' | translate }}</span>
             </div>
+        </div>
 
-            <div class="message" ng-if="false">
-                <div class="label">
-                    {{ 'TX_INFO_MESSAGE_TITLE' | translate }}
-                </div>
-                <div class="value">this feature is coming soon!</div>
+        <div class="more-info padding-b">
+            <div class="label">
+                {{ 'TX_INFO_MORE_TITLE' | translate }} <i class="ion-android-open"></i>
             </div>
-
-            <div class="more-info padding-b">
-                <div class="label">
-                    {{ 'TX_INFO_MORE_TITLE' | translate }} <i class="ion-android-open"></i>
-                </div>
-                <div class="value">
-                    <a href="https://btc.com/{{ data.hash }}" browse-to>{{ 'TX_INFO_MORE_LINK' | translate }}</a>
-                </div>
+            <div class="value">
+                <a href="https://btc.com/{{ data.hash }}" browse-to>{{ 'TX_INFO_MORE_LINK' | translate }}</a>
             </div>
         </div>
 
