@@ -53,26 +53,9 @@ angular.module('blocktrail.wallet')
             }
         };
     })
-    .filter('languageName', function($filter) {
+    .filter('languageName', function(blocktrailLocalisation) {
         return function(input) {
-            var languages = [
-                {code: 'nl', name: 'DUTCH'},
-                {code: 'en', name: 'ENGLISH'},
-                {code: 'en_US', name: 'ENGLISH_US'},
-                {code: 'fr', name: 'FRENCH'},
-                {code: 'de', name: 'GERMAN'},
-                {code: 'cn', name: 'CHINESE'},
-                {code: 'es', name: 'SPANISH'},
-                {code: 'ru', name: 'RUSSIAN'}
-            ];
-            if (!input) {
-                return "";
-            }
-
-            var language = ($filter('filter')(languages, function(value, key) {
-                return (value.code.toLowerCase() == input.toLowerCase()) || (value.code.split('-')[0] == input.toLowerCase());
-            }));
-            return language.length && language[0].name || input;
+            return blocktrailLocalisation.languageName(input);
         };
     })
     .filter('confirmations', function($rootScope) {

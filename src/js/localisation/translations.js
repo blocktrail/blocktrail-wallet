@@ -128,7 +128,7 @@ angular.module('blocktrail.localisation', [
         };
 
         var languageName = function(langKey) {
-            return names[langKey];
+            return names[langKey.replace("_", "-")];
         };
 
         var registerLanguages = function() {
