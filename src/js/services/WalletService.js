@@ -590,38 +590,6 @@ angular.module('blocktrail.wallet').factory(
         };
 
         /**
-         * get the current btc prices (defaults to live, can force getting a cached version)
-         * @param getCached
-         * @returns {*}
-         */
-        Wallet.prototype.price = function(getCached) {
-            var self = this;
-
-            var forceFetch = !getCached;
-
-            return self.walletCache.get('price')
-                .then(function(b) { return b; }, function() { forceFetch = true; return {_id: "price"}; })
-                .then(function(pricesDoc) {
-                    if (forceFetch) {
-                        return self.sdk.then(function(sdk) {
-                            return sdk.price().then(function(result) {
-                                angular.extend(pricesDoc, result);
-
-                                //store in cache and then return
-                                return self.walletCache.put(pricesDoc).then(function() {
-                                    return pricesDoc;
-                                });
-                            });
-                        });
-                    } else {
-                        return pricesDoc;
-                    }
-                })
-                // use a .then because a .done would break the promise chains that rely on self.wallet
-                .then(function(pricesDoc) { return pricesDoc; }, function(e) { $log.error('prices ERR ' + e); throw e; });
-        };
-
-        /**
          * get the current block height (defaults to live, can force getting a cached version)
          * @param getCached
          * @returns {*}

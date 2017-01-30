@@ -642,11 +642,11 @@ angular.module('blocktrail.wallet').config(
                             return data;
                         });
                     },
-                    loadingDone: function(Wallet, $q, $rootScope, $log, $cordovaDialogs, $translate, $state) {
+                    loadingDone: function(Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state) {
                         //do an initial load of cached user data
                         return $q.all([
                             Wallet.balance(true),
-                            Wallet.price(true),
+                            Currencies.updatePrices(true),
                             Wallet.blockHeight(true)
                         ]).then(function(data) {
                             $log.debug('initial load complete');

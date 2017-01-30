@@ -1,66 +1,55 @@
 angular.module('blocktrail.wallet')
-    .filter('satoshiToCurrency', function($rootScope) {
-        return function(input, currency, currencyRates, fractionSize, useMarkup, hideCurrencyDisplay) {
+    .filter('satoshiToCurrency', function($rootScope, Currencies) {
+        var coin = 100000000;
+        var precision = 8;
 
-            //convert satoshi to btc
+        return function(input, currency, currencyRates, fractionSize, useMarkup, hideCurrencyDisplay) {
+            // normalize
             currency = currency.toUpperCase();
-            var coin = 100000000;
-            var precision = 8;
+
             var btc = parseFloat((input/ coin).toFixed(precision));
-            var currencyDisplay = "BTC";
+
             if (typeof(fractionSize) == "undefined") {
                 fractionSize = 2;
             } else {
                 fractionSize = parseInt(fractionSize);
             }
+
+            // use global prices
             if (typeof(currencyRates) == "undefined") {
                 currencyRates = $rootScope.bitcoinPrices;
             }
-            if (typeof currencyRates[currencyRates] !== "undefined") {
-                var localValue = (btc * currencyRates[currency]).toFixed(fractionSize);
+
+            var localValue;
+            if (typeof currencyRates[currency] !== "undefined" && Currencies.price(currency)) {
+                localValue = (btc * Currencies.price(currency)).toFixed(fractionSize);
             } else {
-                var localValue = (0).toFixed(fractionSize);
+                localValue = (0).toFixed(fractionSize);
             }
 
-            switch(currency){
-                case 'GBP':
-                    currencyDisplay = useMarkup ? ('<span class="disp">£</span>') : "£";
-                    return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
-                case 'EUR':
-                    currencyDisplay = useMarkup ? ('<span class="disp">€</span>') : "€";
-                    return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
-                case 'USD':
-                    currencyDisplay = useMarkup ? ('<span class="disp">$</span>') : "$";
-                    return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
-                case 'AUD':
-                    currencyDisplay = useMarkup ? ('<span class="disp">$</span>') : "$";
-                    return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
-                case 'CNY':
-                    currencyDisplay = useMarkup ? ('<span class="disp">¥</span>') : "¥";
-                    return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
-                case 'BTC':
-                    currencyDisplay = useMarkup ? (' <span class="disp">BTC</span>') : " BTC";
-                    return hideCurrencyDisplay ? btc.toFixed(fractionSize) : btc.toFixed(fractionSize) + currencyDisplay;
-                default:
-                    return currency;
+            var symbol;
+            if (typeof Currencies.currencies[currency] === "undefined") {
+                symbol = input;
+            } else {
+                symbol = Currencies.currencies[currency].symbol || currency;
+            }
+
+            var currencyDisplay;
+            if (currency === "BTC") {
+                currencyDisplay = useMarkup ? (' <span class="disp">BTC</span>') : " BTC";
+                return hideCurrencyDisplay ? btc.toFixed(fractionSize) : btc.toFixed(fractionSize) + currencyDisplay;
+            } else {
+                currencyDisplay = useMarkup ? ('<span class="disp">' + symbol + '</span>') : symbol;
+                return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
             }
         };
     })
-    .filter('toCurrencySymbol', function($rootScope) {
+    .filter('toCurrencySymbol', function($rootScope, Currencies) {
         return function(input) {
-            switch(input){
-                case 'GBP':
-                    return "£";
-                case 'EUR':
-                    return "€";
-                case 'USD':
-                    return "$";
-                case 'AUD':
-                    return "$";
-                case 'BTC':
-                    return "฿";
-                default:
-                    return input;
+            if (typeof Currencies.currencies[input] === "undefined") {
+                return input;
+            } else {
+                return Currencies.currencies[input].symbol || input;
             }
         };
     })

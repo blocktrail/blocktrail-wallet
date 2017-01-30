@@ -5,7 +5,7 @@
             <label class="item item-radio" ng-repeat="currency in currencies">
                 <input type="radio" name="group" ng-model="settings.localCurrency" value="{{ currency.code }}" ng-change="updateSettings()">
                 <div class="item-content">
-                    {{currency.code}}
+                    {{ currency.code }} ({{ currency.symbol }})
                 </div>
                 <i class="radio-icon ion-checkmark"></i>
             </label>

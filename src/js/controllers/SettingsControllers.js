@@ -683,13 +683,8 @@ angular.module('blocktrail.wallet')
             settingsService.$store();
         };
     })
-    .controller('CurrencySettingsCtrl', function($scope, settingsService, $btBackButtonDelegate) {
-        $scope.currencies = [
-            {code: 'USD', symbol: '$'},
-            {code: 'EUR', symbol: '€'},
-            {code: 'GBP', symbol: '£'},
-            {code: 'CNY', symbol: '¥'}
-        ];
+    .controller('CurrencySettingsCtrl', function($scope, settingsService, $btBackButtonDelegate, Currencies) {
+        $scope.currencies = Currencies.getFiatCurrencies();
         $scope.form = {selected: ''};
 
         $scope.updateSettings = function(){

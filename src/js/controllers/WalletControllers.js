@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
-                                       Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration,
+                                       Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration, Currencies,
                                        $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService, buyBTCService) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
@@ -21,6 +21,12 @@ angular.module('blocktrail.wallet')
          */
         launchService.getWalletConfig()
             .then(function(result) {
+                if (result.currencies) {
+                    result.currencies.forEach(function (currency) {
+                        Currencies.enableCurrency(currency);
+                    });
+                }
+
                 return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
             })
             .then(function(extraLanguages) {
@@ -71,10 +77,10 @@ angular.module('blocktrail.wallet')
         }
 
         $rootScope.getPrice = function() {
-            //get a live prices update
-            return $q.when(Wallet.price(false).then(function(data) {
-                return $rootScope.bitcoinPrices = data;
-            }));
+            return Currencies.updatePrices(false)
+                .then(function(prices) {
+                    $rootScope.bitcoinPrices = prices;
+                });
         };
 
         $rootScope.getBlockHeight = function() {

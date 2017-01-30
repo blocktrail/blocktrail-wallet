@@ -170,7 +170,7 @@ angular.module('blocktrail.wallet')
 
 angular.module('blocktrail.wallet')
     .controller('BuyBTCBuyCtrl', function($scope, $state, $rootScope, $ionicLoading, $cordovaDialogs, glideraService, buyBTCService,
-                                          $stateParams, $log, $timeout, $interval, $translate, $filter, CurrencyConverter, CONFIG) {
+                                          $stateParams, $log, $timeout, $interval, $translate, $filter, CONFIG) {
         $scope.broker = $stateParams.broker;
 
         $scope.priceBTCCurrency = 'USD';

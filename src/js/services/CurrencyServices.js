@@ -1,5 +1,122 @@
 angular.module('blocktrail.wallet')
-    .service( 'CurrencyConverter', function($rootScope) {
+    .service( 'Currencies', function($rootScope, storageService, sdkService, CONFIG) {
+        var self = this;
+
+        self.cache = storageService.db('currency-rates-cache');
+        self.sdk = sdkService.sdk();
+
+        var currencies = {
+            BTC: {code: "BTC", symbol: "฿"},
+            GBP: {code: "GBP", symbol: "£"},
+            EUR: {code: "EUR", symbol: "£"},
+            USD: {code: "USD", symbol: "$"},
+            CNY: {code: "CNY", symbol: "¥"},
+            PAB: {code: "PAB", symbol: "B/."},
+            ARS: {code: "ARS", symbol: "$"},
+            BOB: {code: "BOB", symbol: "$b"},
+            CLP: {code: "CLP", symbol: "$"},
+            PEN: {code: "PEN", symbol: "S/."},
+            PYG: {code: "PYG", symbol: "Gs"},
+            UYU: {code: "UYU", symbol: "$U"},
+            VEF: {code: "VEF", symbol: "Bs"},
+            CRC: {code: "CRC", symbol: "₡"},
+            MXN: {code: "MXN", symbol: "$"},
+            NGN: {code: "NGN", symbol: "₦"},
+            INR: {code: "INR", symbol: "₹"}
+        };
+
+        self.currencies = {};
+
+        self.getCurrencies = function() {
+            var self = this;
+            return Object.keys(self.currencies).map(function(code) {
+                return self.currencies[code];
+            });
+        };
+
+        self.getFiatCurrencies = function() {
+            var self = this;
+            return self.getCurrencies().filter(function(currency) { return !!currency.isFiat; });
+        };
+
+        self.price = function(currency) {
+            if (typeof currencies[currency] === "undefined") {
+                return 0;
+            } else {
+                return currencies[currency].price || 0;
+            }
+        };
+
+        self.prices = function() {
+            var prices = {};
+
+            Object.keys(self.currencies).forEach(function(code) {
+                prices[code] = self.currencies[code].price;
+            });
+
+            return prices;
+        };
+
+        /**
+         * get the current btc prices (defaults to live, can force getting a cached version)
+         * @param getCached
+         * @returns {*}
+         */
+        self.updatePrices = function(getCached) {
+            var self = this;
+
+            var forceFetch = !getCached;
+
+            return self.cache.get('price')
+                .then(function(b) { return b; }, function() { forceFetch = true; return {_id: "price"}; })
+                .then(function(pricesDoc) {
+                    if (forceFetch) {
+                        return self.sdk.then(function(sdk) {
+                            return sdk.price().then(function(result) {
+                                angular.extend(pricesDoc, result);
+
+                                //store in cache and then return
+                                return self.cache.put(pricesDoc).then(function() {
+                                    return pricesDoc;
+                                });
+                            });
+                        });
+                    } else {
+                        return pricesDoc;
+                    }
+                })
+                // use a .then because a .done would break the promise chains that rely on self.wallet
+                .then(function(pricesDoc) {
+                    Object.keys(self.currencies).forEach(function(code) {
+                        self.currencies[code].price = parseFloat(pricesDoc[code] || 0);
+                    });
+
+                    return pricesDoc;
+                }, function(e) {
+                    $log.error('prices ERR ' + e); throw e;
+                });
+        };
+
+        self.enableCurrency = function(code) {
+            var self = this;
+
+            if (typeof currencies[code] === "undefined") {
+                return false;
+            }
+
+            self.currencies[code] = currencies[code];
+            self.currencies[code].isFiat = self.currencies[code].code !== "BTC";
+            self.currencies[code].btcRate = 0;
+
+            return true;
+        };
+
+        CONFIG.CURRENCIES.forEach(function(code) {
+            self.enableCurrency(code);
+        });
+    })
+    .service('CurrencyConverter', function($rootScope, Currencies) {
+        var self = this;
         var coin = 100000000;
         var precision = 8;
 
@@ -9,17 +126,12 @@ angular.module('blocktrail.wallet')
          * @param currency
          * @param fractionSize (optional)
          */
-        this.fromBTC = function(value, currency, fractionSize) {
+        self.fromBTC = function(value, currency, fractionSize) {
             if (typeof(fractionSize) == "undefined") {
                 fractionSize = 2;
             }
 
-            if (currency in $rootScope.bitcoinPrices) {
-                return (parseFloat(value) * $rootScope.bitcoinPrices[currency]).toFixed(fractionSize);
-            } else {
-                return (0).toFixed(fractionSize);
-                //return null;      //return 0 or null? meh
-            }
+            return Currencies.price(currency) ? (parseFloat(value) * Currencies.price(currency)).toFixed(fractionSize) : (0).toFixed(fractionSize);
         };
 
         /**
@@ -28,17 +140,12 @@ angular.module('blocktrail.wallet')
          * @param currency
          * @param fractionSize (optional)
          */
-        this.toBTC = function(value, currency, fractionSize) {
+        self.toBTC = function(value, currency, fractionSize) {
             if (typeof(fractionSize) == "undefined") {
                 fractionSize = 8;
             }
 
-            if (currency in $rootScope.bitcoinPrices) {
-                return (parseFloat(value) / $rootScope.bitcoinPrices[currency]).toFixed(fractionSize);
-            } else {
-                return (0).toFixed(fractionSize);
-                //return null;      //return 0 or null? meh
-            }
+            return Currencies.price(currency) ? (parseFloat(value) / Currencies.price(currency)).toFixed(fractionSize) : (0).toFixed(fractionSize);
         };
 
         /**
@@ -47,18 +154,13 @@ angular.module('blocktrail.wallet')
          * @param currency
          * @param fractionSize (optional)
          */
-        this.fromSatoshi = function(value, currency, fractionSize) {
+        self.fromSatoshi = function(value, currency, fractionSize) {
             var btcValue = parseFloat((value/ coin).toFixed(precision));
             if (typeof(fractionSize) == "undefined") {
                 fractionSize = 2;
             }
 
-            if (currency in $rootScope.bitcoinPrices) {
-                return (btcValue * $rootScope.bitcoinPrices[currency]).toFixed(fractionSize);
-            } else {
-                return (0).toFixed(fractionSize);
-                //return null;      //return 0 or null? meh
-            }
+            return Currencies.price(currency) ? (btcValue * Currencies.price(currency)).toFixed(fractionSize) : (0).toFixed(fractionSize);
         };
 
         /**
@@ -66,14 +168,14 @@ angular.module('blocktrail.wallet')
          * @param value
          * @param currency
          */
-        this.toSatoshi = function(value, currency) {
+        self.toSatoshi = function(value, currency) {
+            var btcValue;
             if (currency == "BTC") {
-                var btcValue = parseFloat(value);
+                btcValue = parseFloat(value);
             } else {
-                var btcValue = this.toBTC(value, currency, precision);
+                btcValue = self.toBTC(value, currency, precision);
             }
 
             return parseFloat((btcValue * coin).toFixed(0));
         };
-
     });

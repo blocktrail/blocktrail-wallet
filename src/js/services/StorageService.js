@@ -53,6 +53,7 @@ angular.module('blocktrail.wallet').factory(
         db('wallet-cache');
         db('history');
         db('settings');
+        db('currency-rates-cache');
 
         return {
             db: db,
