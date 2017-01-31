@@ -94,7 +94,7 @@ gulp.task('templates:index', ['appconfig'], function() {
 
         fs.readFile(filename, function(err, raw) {
             if (!raw) {
-                throw new Error("Missing translations!");
+                throw new Error("Missing translations [" + filename + "]!");
             }
 
             def.resolve(JSON.parse(stripJsonComments(raw.toString('utf8'))));
@@ -116,6 +116,9 @@ gulp.task('templates:index', ['appconfig'], function() {
             './src/translations/translations/chinese.json',
             './src/translations/translations/spanish.json',
             './src/translations/translations/russian.json',
+            './src/translations/translations/swahili.json',
+            './src/translations/translations/arabic.json',
+            './src/translations/translations/hindi.json',
 
             './src/translations/translations/mobile/english.json',
             './src/translations/translations/mobile/americanEnglish.json',
@@ -123,7 +126,10 @@ gulp.task('templates:index', ['appconfig'], function() {
             './src/translations/translations/mobile/dutch.json',
             './src/translations/translations/mobile/chinese.json',
             './src/translations/translations/mobile/spanish.json',
-            './src/translations/translations/mobile/russian.json'
+            './src/translations/translations/mobile/russian.json',
+            './src/translations/translations/mobile/swahili.json',
+            './src/translations/translations/mobile/arabic.json',
+            './src/translations/translations/mobile/hindi.json'
         ], function(filename) {
             var language = path.basename(filename, '.json');
             var isMobile = filename.indexOf('mobile/') !== -1;

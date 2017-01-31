@@ -5,7 +5,9 @@ angular.module('blocktrail.wallet')
         self.cache = storageService.db('currency-rates-cache');
         self.sdk = sdkService.sdk();
 
-        var currencies = {
+        // currencies that the app supports and their symbols
+        //  this list shouldn't be used directly `self.currencies` contains the enabled currencies
+        var _currencies = {
             BTC: {code: "BTC", symbol: "฿"},
             GBP: {code: "GBP", symbol: "£"},
             EUR: {code: "EUR", symbol: "£"},
@@ -40,10 +42,11 @@ angular.module('blocktrail.wallet')
         };
 
         self.price = function(currency) {
-            if (typeof currencies[currency] === "undefined") {
+            var self = this;
+            if (typeof self.currencies[currency] === "undefined") {
                 return 0;
             } else {
-                return currencies[currency].price || 0;
+                return self.currencies[currency].price || 0;
             }
         };
 
@@ -100,17 +103,18 @@ angular.module('blocktrail.wallet')
         self.enableCurrency = function(code) {
             var self = this;
 
-            if (typeof currencies[code] === "undefined") {
+            if (typeof _currencies[code] === "undefined") {
                 return false;
             }
 
-            self.currencies[code] = currencies[code];
+            self.currencies[code] = _currencies[code];
             self.currencies[code].isFiat = self.currencies[code].code !== "BTC";
             self.currencies[code].btcRate = 0;
 
             return true;
         };
 
+        // enable all currencies that are in the config
         CONFIG.CURRENCIES.forEach(function(code) {
             self.enableCurrency(code);
         });

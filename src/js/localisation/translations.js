@@ -113,7 +113,10 @@ angular.module('blocktrail.localisation', [
             'nl-*': 'nl',
             'es-*': 'es',
             'ru-*': 'ru',
-            'cn-*': 'cn'
+            'cn-*': 'cn',
+            'sw-*': 'sw',
+            'ar-*': 'ar',
+            'hi-*': 'hi'
         };
 
         // names used for translation keys
@@ -124,7 +127,10 @@ angular.module('blocktrail.localisation', [
             fr: 'FRENCH',
             es: 'SPANISH',
             cn: 'CHINESE',
-            ru: 'RUSSIAN'
+            ru: 'RUSSIAN',
+            sw: 'SWAHILI',
+            ar: 'ARABIC',
+            hi: 'HINDI'
         };
 
         var languageName = function(langKey) {
@@ -240,6 +246,9 @@ angular.module('blocktrail.localisation', [
         var spanish = angular.extend({}, TRANSLATIONS.spanish, TRANSLATIONS.mobile.spanish);
         var russian = angular.extend({}, TRANSLATIONS.russian, TRANSLATIONS.mobile.russian);
         var chinese = angular.extend({}, TRANSLATIONS.chinese, TRANSLATIONS.mobile.chinese);
+        var swahili = angular.extend({}, TRANSLATIONS.swahili, TRANSLATIONS.mobile.swahili);
+        var arabic = angular.extend({}, TRANSLATIONS.arabic, TRANSLATIONS.mobile.arabic);
+        var hindi = angular.extend({}, TRANSLATIONS.hindi, TRANSLATIONS.mobile.hindi);
 
         $translateProvider.translations('en-US', processTranslations(americanEnglish));
         $translateProvider.translations('en', processTranslations(english));
@@ -248,6 +257,9 @@ angular.module('blocktrail.localisation', [
         $translateProvider.translations('ru', processTranslations(russian));
         $translateProvider.translations('cn', processTranslations(chinese));
         $translateProvider.translations('es', processTranslations(spanish));
+        $translateProvider.translations('sw', processTranslations(swahili));
+        $translateProvider.translations('ar', processTranslations(arabic));
+        $translateProvider.translations('hi', processTranslations(hindi));
 
         if (CONFIG.FALLBACK_LANGUAGE) {
             $translateProvider.fallbackLanguage(CONFIG.FALLBACK_LANGUAGE);
