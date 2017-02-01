@@ -109,6 +109,8 @@
     </dict>
     <key>NSCameraUsageDescription</key>
     <string>BTC.com uses your camera to scan QR codes</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>BTC.com</string>
     <key>NSContactsUsageDescription</key>
     <string>BTC.com can use your addressbook to send and receive transactions from contacts</string>
     <key>NSMainNibFile~ipad</key>
