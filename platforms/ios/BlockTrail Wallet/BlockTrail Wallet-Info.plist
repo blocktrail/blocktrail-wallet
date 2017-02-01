@@ -107,8 +107,10 @@
         <dict/>
       </dict>
     </dict>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string/>
+    <key>NSCameraUsageDescription</key>
+    <string>BTC.com uses your camera to scan QR codes</string>
+    <key>NSContactsUsageDescription</key>
+    <string>BTC.com can use your addressbook to send and receive transactions from contacts</string>
     <key>NSMainNibFile~ipad</key>
     <string/>
     <key>UIInterfaceOrientation</key>
