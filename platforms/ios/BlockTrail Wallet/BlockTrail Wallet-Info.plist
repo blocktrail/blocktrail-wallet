@@ -57,7 +57,7 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>3.0.9</string>
+    <string>3.1.6</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -76,7 +76,7 @@
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>3.0.9</string>
+    <string>3.1.6</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
@@ -239,5 +239,7 @@
       <key>APIKey</key>
       <string>059fcf328d73ce164c3ab1c4436293db0d6718ca</string>
     </dict>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string/>
   </dict>
 </plist>
