@@ -14,7 +14,7 @@
     "CSP": ["https://api.blocktrail.com", "https://glidera.io", "https://sandbox.glidera.io"],
 
     "BUYBTC": false,
-    "GLIDERA_SANDBOX": true,
+    "GLIDERA_SANDBOX": false,
 
     "GAPPTRACK_ID": null,
     "GAPPTRACK_ACTIVATE_LABELS": {"iOS": null, "android": null},

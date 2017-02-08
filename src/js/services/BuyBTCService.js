@@ -4,7 +4,7 @@ angular.module('blocktrail.wallet').factory(
         var SUPPORTED_BROKERS = ['glidera'];
 
         var _regions = [
-            {code: 'NL', name: 'NETHERLANDS'}
+            // {code: 'NL', name: 'NETHERLANDS'}
         ];
         var _usStates = [
             {code: 'US-AL', name: 'Alabama'},
@@ -60,7 +60,7 @@ angular.module('blocktrail.wallet').factory(
             {code: 'US-WY', name: 'Wyoming'}
         ];
 
-        var _brokers = null;
+        var _brokers = [];
         var getBrokers = function() {
             return launchService.getWalletConfig()
                 .then(function(result) {
@@ -75,6 +75,7 @@ angular.module('blocktrail.wallet').factory(
                             _regions[idx].brokers = brokers[region.code].filter(function(broker) {
                                 return SUPPORTED_BROKERS.indexOf(broker) !== -1;
                             });
+                            _brokers = _brokers.concat(_regions[idx].brokers).unique();
                         } else {
                             // otherwise unset
                             _regions[idx].brokers = [];
@@ -87,21 +88,23 @@ angular.module('blocktrail.wallet').factory(
                             _usStates[idx].brokers = brokers[region.code].filter(function(broker) {
                                 return SUPPORTED_BROKERS.indexOf(broker) !== -1;
                             });
+                            _brokers = _brokers.concat(_usStates[idx].brokers).unique();
                         } else {
                             // otherwise unset
                             _usStates[idx].brokers = [];
                         }
                     });
                 })
-                .then(function(r) { return r; }, function(e) { console.error('getBrokers' + (e.msg || e.message || "" + e)); return getBrokers(); })
+                .then(function() { return _brokers; }, function(e) { console.error('getBrokers' + (e.msg || e.message || "" + e)); return getBrokers(); })
         };
 
+        var _brokersPromise = null;
         var brokers = function() {
-            if (!_brokers) {
-                _brokers = getBrokers();
+            if (!_brokersPromise) {
+                _brokersPromise = getBrokers();
             }
 
-            return _brokers;
+            return _brokersPromise;
         };
         brokers();
 
@@ -146,7 +149,15 @@ angular.module('blocktrail.wallet').factory(
             }
         };
 
+        var enabled = function() {
+            return brokers()
+                .then(function(brokers) {
+                    return brokers.length > 0;
+                });
+        };
+
         return {
+            enabled: enabled,
             brokers: brokers,
             regions: regions,
             usStates: usStates,

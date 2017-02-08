@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
                                        Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration, Currencies,
-                                       $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService, buyBTCService) {
+                                       $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {

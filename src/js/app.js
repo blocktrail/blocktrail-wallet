@@ -642,6 +642,12 @@ angular.module('blocktrail.wallet').config(
                             return data;
                         });
                     },
+                    brokers: function($rootScope, buyBTCService, CONFIG) {
+                        return buyBTCService.enabled()
+                            .then(function(enabled) {
+                                $rootScope.BUYBTC_ENABLED = CONFIG.BUYBTC || enabled;
+                            });
+                    },
                     loadingDone: function(Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state) {
                         //do an initial load of cached user data
                         return $q.all([

@@ -11,12 +11,11 @@ angular.module('blocktrail.wallet').service(
         email:  null,
         language: null,
         extraLanguages: [],
-        timezone:  "GMT+1",
-        localCurrency:  "EUR",
+        localCurrency:  "USD",
         profilePic:  null,
         profileSynced: true,
-        profilePosX:  50,
-        profilePosY:  50,
+        profilePosX: 50,
+        profilePosY: 50,
 
         showRebrandMessage: true,
 

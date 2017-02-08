@@ -53,7 +53,7 @@
                     <span class="">{{ 'RECEIVE' | translate }}</span>
                 </ion-item>
                 <div class="item-divider"><hr/></div>
-                <ion-item menu-close ng-if="CONFIG.BUYBTC" ng-href="{{ $state.href('app.wallet.buybtc.choose') }}">
+                <ion-item menu-close ng-if="BUYBTC_ENABLED" ng-href="{{ $state.href('app.wallet.buybtc.choose') }}">
                     <i class="icon ion-card"></i>
                     <span class="">{{ 'BUYBTC' | translate }}</span>
                 </ion-item>
