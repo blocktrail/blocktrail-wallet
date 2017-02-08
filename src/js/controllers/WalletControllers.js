@@ -61,9 +61,11 @@ angular.module('blocktrail.wallet')
                                             settingsService.language = preferredLanguage;
                                             $rootScope.changeLanguage(preferredLanguage);
 
-                                            return settingsService.$store();
-                                        })
-                                        ;
+                                            return settingsService.$store()
+                                                .then(function() {
+                                                    settingsService.$syncSettingsUp();
+                                                });
+                                        });
                                 }
                             })
                             ;
