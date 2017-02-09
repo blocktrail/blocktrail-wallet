@@ -21,11 +21,6 @@
 
 apply plugin: 'android'
 
-// exclude support-v4 to avoid conflicts between FB SDK and GA SDK
-configurations {
-   all*.exclude group: 'com.android.support', module: 'support-v4'
-}
-
 buildscript {
     repositories {
         mavenCentral()
