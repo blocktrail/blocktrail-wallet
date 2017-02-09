@@ -123,6 +123,34 @@
                         {
                             "xml": "<feature name=\"TunePlugin\"><param name=\"android-package\" value=\"com.tune.TunePlugin\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FacebookConnectPlugin\"><param name=\"android-package\" value=\"org.apache.cordova.facebook.ConnectPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://m.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://graph.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://api.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://*.fbcdn.net\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://*.akamaihd.net\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"android-minSdkVersion\" value=\"15\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -236,6 +264,18 @@
                     "application": [
                         {
                             "xml": "<meta-data android:name=\"io.fabric.ApiKey\" android:value=\"059fcf328d73ce164c3ab1c4436293db0d6718ca\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<meta-data android:name=\"com.facebook.sdk.ApplicationId\" android:value=\"@string/fb_app_id\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<meta-data android:name=\"com.facebook.sdk.ApplicationName\" android:value=\"@string/fb_app_name\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<activity android:configChanges=\"keyboard|keyboardHidden|screenLayout|screenSize|orientation\" android:label=\"@string/fb_app_name\" android:name=\"com.facebook.FacebookActivity\" android:theme=\"@android:style/Theme.Translucent.NoTitleBar\" />",
                             "count": 1
                         }
                     ]
@@ -725,7 +765,16 @@
             },
             "res/values/facebookconnect.xml": {
                 "parents": {
-                    "/*": []
+                    "/*": [
+                        {
+                            "xml": "<string name=\"fb_app_id\">1072524012838770</string>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<string name=\"fb_app_name\">BTC.com</string>",
+                            "count": 1
+                        }
+                    ]
                 }
             }
         }
@@ -825,6 +874,11 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-tune": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-facebook4": {
+            "APP_ID": "1072524012838770",
+            "APP_NAME": "BTC.com",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -1292,6 +1346,13 @@
             "clobbers": [
                 "window.plugins.tunePlugin"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
+            "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
+            "clobbers": [
+                "facebookConnectPlugin"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -1325,6 +1386,7 @@
         "cordova-plugin-google-app-conversion-tracker": "0.0.2",
         "cordova-fabric-plugin": "1.0.8",
         "cordova-plugin-google-analytics": "1.5.6",
-        "cordova-plugin-tune": "5.0.0"
+        "cordova-plugin-tune": "5.0.0",
+        "cordova-plugin-facebook4": "1.7.4"
     }
 }
