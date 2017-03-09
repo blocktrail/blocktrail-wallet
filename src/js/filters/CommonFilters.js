@@ -21,8 +21,8 @@ angular.module('blocktrail.wallet')
             }
 
             var localValue;
-            if (typeof currencyRates[currency] !== "undefined" && Currencies.price(currency)) {
-                localValue = (btc * Currencies.price(currency)).toFixed(fractionSize);
+            if (typeof currencyRates[currency] !== "undefined") {
+                localValue = (btc * currencyRates[currency]).toFixed(fractionSize);
             } else {
                 localValue = (0).toFixed(fractionSize);
             }
