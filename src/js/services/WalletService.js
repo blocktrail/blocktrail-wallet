@@ -82,10 +82,10 @@ angular.module('blocktrail.wallet').factory(
 
                 try {
                     // legacy; storing encrypted password instead of secret
-                    if (walletInfo.encryptedPassword) {
-                        password = CryptoJS.AES.decrypt(walletInfo.encryptedPassword, pin).toString(CryptoJS.enc.Utf8);
-                    } else {
+                    if (walletInfo.encryptedSecret) {
                         secret = CryptoJS.AES.decrypt(walletInfo.encryptedSecret, pin).toString(CryptoJS.enc.Utf8);
+                    } else {
+                        password = CryptoJS.AES.decrypt(walletInfo.encryptedPassword, pin).toString(CryptoJS.enc.Utf8);
                     }
                 } catch (e) {
                     throw new blocktrail.WalletPinError(e.message);
@@ -111,21 +111,29 @@ angular.module('blocktrail.wallet').factory(
 
             return self.wallet.then(function(wallet) {
                 return self.unlockData(pin).then(function(unlock) {
-                    switch (wallet.walletVersion) {
-                        case 'v2':
-                            break;
-
-                        case 'v3':
-                            unlock.secret = new blocktrailSDK.Buffer(unlock.secret, 'hex');
-                            break;
-
-                        default:
-                            throw new Error("Unsupported wallet version [" + wallet.walletVersion + "]")
-                            break;
+                    // if unlock.secret is set we need to switch it to a buffer for v3+ wallets
+                    if (unlock.secret && wallet.walletVersion !== 'v2') {
+                        unlock.secret = new blocktrailSDK.Buffer(unlock.secret, 'hex');
                     }
 
                     return wallet.unlock(unlock).then(function() {
-                        return wallet;
+                        // if we were still storing encrypted password we want to swtich to storing encrypted secret
+                        if (!unlock.secret) {
+                            var secretHex = null;
+                            if (wallet.walletVersion === 'v2') {
+                                secretHex = wallet.secret;
+                            } else {
+                                secretHex = wallet.secret.toString('hex');
+                            }
+
+                            // store encrypted secret
+                            return launchService.storeWalletInfo(wallet.identifier, null, CryptoJS.AES.encrypt(secretHex, pin).toString())
+                                .then(function () {
+                                    return wallet;
+                                });
+                        } else {
+                            return wallet;
+                        }
                     });
                 });
             });

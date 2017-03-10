@@ -41,7 +41,7 @@
 
     "FALLBACK_LANGUAGE": false, // don't fallback to make it explicit that we're missing a translation
 
-    "DEFAULT_WALLET_VERSION": "v3",
+    "WALLET_DEFAULT_VERSION": "v3",
 
     "REQUIRED_PASSWORD_STRENGTH": 2,
 
