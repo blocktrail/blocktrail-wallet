@@ -266,37 +266,23 @@ angular.module('blocktrail.wallet')
             return TRANSLATIONS[language][key] || (CONFIG.FALLBACK_LANGUAGE && TRANSLATIONS['english'][key]) || key;
         };
 
-        moment.locale('en', {
-            calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'english').sentenceCase() + ']',
-                sameDay : '[' + translate('TODAY', 'english').sentenceCase() + ']',
-                nextDay : '[' + translate('TOMORROW', 'english').sentenceCase() + ']',
-                lastWeek : 'MMMM D',
-                nextWeek : 'MMMM Do YYYY',
-                sameElse : 'MMMM Do YYYY'
-            }
-        });
+        var MMMMDoYYYYLocales = {
+            'en': 'english',
+            'en-US': 'english'
+        };
+        Object.keys(MMMMDoYYYYLocales).forEach(function(locale) {
+            var translationsKey = MMMMDoYYYYLocales[locale];
 
-        moment.locale('nl', {
-            calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'dutch').sentenceCase() + ']',
-                sameDay : '[' + translate('TODAY', 'dutch').sentenceCase() + ']',
-                nextDay : '[' + translate('TOMORROW', 'dutch').sentenceCase() + ']',
-                lastWeek : 'D MMMM',
-                nextWeek : 'D MMMM YYYY',
-                sameElse : 'D MMMM YYYY'
-            }
-        });
-
-        moment.locale('fr', {
-            calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'french').sentenceCase() + ']',
-                sameDay : '[' + translate('TODAY', 'french').sentenceCase() + ']',
-                nextDay : '[' + translate('TOMORROW', 'french').sentenceCase() + ']',
-                lastWeek : 'D MMMM',
-                nextWeek : 'D MMMM YYYY',
-                sameElse : 'D MMMM YYYY'
-            }
+            moment.locale(locale, {
+                calendar: {
+                    lastDay: '[' + translate('YESTERDAY', translationsKey).sentenceCase() + ']',
+                    sameDay: '[' + translate('TODAY', translationsKey).sentenceCase() + ']',
+                    nextDay: '[' + translate('TOMORROW', translationsKey).sentenceCase() + ']',
+                    lastWeek : 'MMMM D',
+                    nextWeek : 'MMMM Do YYYY',
+                    sameElse : 'MMMM Do YYYY'
+                }
+            });
         });
 
         moment.locale('es', {
@@ -310,26 +296,45 @@ angular.module('blocktrail.wallet')
             }
         });
 
-        moment.locale('ru', {
-            calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'russian').sentenceCase() + ']',
-                sameDay : '[' + translate('TODAY', 'russian').sentenceCase() + ']',
-                nextDay : '[' + translate('TOMORROW', 'russian').sentenceCase() + ']',
-                lastWeek : 'D MMMM',
-                nextWeek : 'D MMMM YYYY',
-                sameElse : 'D MMMM YYYY'
-            }
+        var DMMMMYYYYLocales = {
+            'ru': 'russian',
+            'fr': 'french',
+            'nl': 'dutch'
+        };
+        Object.keys(DMMMMYYYYLocales).forEach(function(locale) {
+            var translationsKey = DMMMMYYYYLocales[locale];
+
+            moment.locale(locale, {
+                calendar: {
+                    lastDay: '[' + translate('YESTERDAY', translationsKey).sentenceCase() + ']',
+                    sameDay: '[' + translate('TODAY', translationsKey).sentenceCase() + ']',
+                    nextDay: '[' + translate('TOMORROW', translationsKey).sentenceCase() + ']',
+                    lastWeek: 'YYYY-MM-DD',
+                    nextWeek: 'YYYY-MM-DD',
+                    sameElse: 'YYYY-MM-DD'
+                }
+            });
         });
 
-        moment.locale('zh-cn', {
-            calendar : {
-                lastDay : '[' + translate('YESTERDAY', 'chinese').sentenceCase() + ']',
-                sameDay : '[' + translate('TODAY', 'chinese').sentenceCase() + ']',
-                nextDay : '[' + translate('TOMORROW', 'chinese').sentenceCase() + ']',
-                lastWeek : 'YYYY-MM-DD',
-                nextWeek : 'YYYY-MM-DD',
-                sameElse : 'YYYY-MM-DD'
-            }
+        var yyyymmddLocales = {
+            'zh-cn': 'chinese',
+            'sw': 'swahili',
+            'ar': 'arabic',
+            'hi': 'hindi'
+        };
+        Object.keys(yyyymmddLocales).forEach(function(locale) {
+            var translationsKey = yyyymmddLocales[locale];
+
+            moment.locale(locale, {
+                calendar: {
+                    lastDay: '[' + translate('YESTERDAY', translationsKey).sentenceCase() + ']',
+                    sameDay: '[' + translate('TODAY', translationsKey).sentenceCase() + ']',
+                    nextDay: '[' + translate('TOMORROW', translationsKey).sentenceCase() + ']',
+                    lastWeek: 'YYYY-MM-DD',
+                    nextWeek: 'YYYY-MM-DD',
+                    sameElse: 'YYYY-MM-DD'
+                }
+            });
         });
     });
 angular.module('blocktrail.wallet').config(
