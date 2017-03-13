@@ -69,6 +69,12 @@ angular.module('blocktrail.wallet').factory(
                     return result.brokers;
                 })
                 .then(function(brokers) {
+                    if (CONFIG.DEBUG_OVERLOAD_BROKERS) {
+                        Object.keys(CONFIG.DEBUG_OVERLOAD_BROKERS).forEach(function(region) {
+                            brokers[region] = CONFIG.DEBUG_OVERLOAD_BROKERS[region];
+                        });
+                    }
+
                     _.each(_regions, function(region, idx) {
                         // set brokers if known
                         if (brokers[region.code]) {

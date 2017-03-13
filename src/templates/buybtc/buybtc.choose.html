@@ -88,14 +88,15 @@
             <div ng-if="chooseRegion.code && chooseRegion.regionOk">
                 <div class="item item-text-wrap">
                     <h2 class="text-neutral">{{ 'BUYBTC_CHOOSE_TITLE' | translate }}</h2>
-                    <p class="padding-t" ng-bind-html="'BUYBTC_CHOOSE_SUBTITLE' | translate | nl2br"></p>
-                    <p>
-                    {{ 'BUYBTC_SELECTED_REGION' | translate }} {{ chooseRegion.name | translate }} 
-                    <a href="#" ng-click="selectRegion(null, null)">{{ 'CHANGE' | translate }}</a>
-                    </p>
+                    <p translate="BUYBTC_CHOOSE_SUBTITLE"
+                       translate-compile
+                       translate-value-region="{{ chooseRegion.name | translate }}"
+                       translate-value-href="href ng-click='selectRegion(null, null)'"></p>
                 </div>
 
-                <h3 class="group-title">{{ 'BUYBTC_PROVIDERS' | translate }} {{ 'BUYBTC_SELECTED_REGION' | translate }} {{ chooseRegion.name | translate }} </h3>
+                <h3 class="group-title"
+                    translate="BUYBTC_PROVIDERS"
+                    translate-value-region="{{ chooseRegion.name | translate }}"></h3>
                 <div class="list list-inset">
                     <div ng-if="brokers.indexOf('glidera') !== -1" class="item item-button-right" ng-click="goGlideraBrowser()">
                         <span class="sentence-case">Glidera</span>
