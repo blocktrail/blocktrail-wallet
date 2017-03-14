@@ -11,10 +11,10 @@
     "EXTRA_LANGUAGES": ["es", "nl", "ru", "fr", "hi", "sw"],
     "CURRENCIES": ["USD", "EUR", "GBP", "AUD", "BTC", "CNY"],
 
-    "CSP": ["https://api.blocktrail.com", "https://glidera.io", "https://sandbox.glidera.io"],
+    "CSP": ["https://api.blocktrail.com", "https://www.glidera.io", "https://sandbox.glidera.io"],
 
     "BUYBTC": false,
-    "GLIDERA_SANDBOX": false,
+    "GLIDERA_URL": "https://www.glidera.io",
 
     "GAPPTRACK_ID": null,
     "GAPPTRACK_ACTIVATE_LABELS": {"iOS": null, "android": null},

@@ -26,6 +26,11 @@ if (rootdir) {
         return "http://" + ip;
       });
 
+      if (APPCONFIG.API_HOST) {
+        var apiHostHttps = typeof APPCONFIG.API_HTTPS !== "undefined" ? APPCONFIG.API_HTTPS : true;
+        localaddrlist.push((apiHostHttps ? "https://" : "http://") + APPCONFIG.API_HOST);
+      }
+
       // add localaddrs which aren't in config.xml yet
       doc.widget.access.forEach(function (access) {
         var k = localaddrlist.indexOf(access.$.origin);
