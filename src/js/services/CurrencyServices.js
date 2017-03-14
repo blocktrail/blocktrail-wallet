@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .service( 'Currencies', function($rootScope, storageService, sdkService, CONFIG) {
+    .service( 'Currencies', function($rootScope, storageService, $log, sdkService, CONFIG) {
         var self = this;
 
         self.cache = storageService.db('currency-rates-cache');
@@ -10,7 +10,7 @@ angular.module('blocktrail.wallet')
         var _currencies = {
             BTC: {code: "BTC", symbol: "฿"},
             GBP: {code: "GBP", symbol: "£"},
-            EUR: {code: "EUR", symbol: "€"},
+            EUR: {code: "EUR", symbol: "£"},
             USD: {code: "USD", symbol: "$"},
             CNY: {code: "CNY", symbol: "¥"},
             PAB: {code: "PAB", symbol: "B/"},
@@ -65,39 +65,64 @@ angular.module('blocktrail.wallet')
          * @param getCached
          * @returns {*}
          */
+        var updatePrices = null;
         self.updatePrices = function(getCached) {
             var self = this;
 
             var forceFetch = !getCached;
 
-            return self.cache.get('price')
-                .then(function(b) { return b; }, function() { forceFetch = true; return {_id: "price"}; })
-                .then(function(pricesDoc) {
-                    if (forceFetch) {
-                        return self.sdk.then(function(sdk) {
-                            return sdk.price().then(function(result) {
-                                angular.extend(pricesDoc, result);
+            if (updatePrices) {
+                if (updatePrices.forceFetch !== forceFetch) {
+                    return updatePrices.then(function() {
+                        return self.updatePrices(getCached);
+                    });
+                } else {
+                    return updatePrices;
+                }
+            } else {
+                updatePrices = self.cache.get('price')
+                    .then(function(b) {
+                        return b;
+                    }, function() {
+                        forceFetch = true;
+                        return {_id: "price"};
+                    })
+                    .then(function(pricesDoc) {
+                        if (forceFetch) {
+                            return self.sdk.then(function(sdk) {
+                                return sdk.price().then(function(result) {
+                                    angular.extend(pricesDoc, result);
 
-                                //store in cache and then return
-                                return self.cache.put(pricesDoc).then(function() {
-                                    return pricesDoc;
+                                    //store in cache and then return
+                                    return self.cache.put(pricesDoc).then(function() {
+                                        return pricesDoc;
+                                    });
                                 });
                             });
+                        } else {
+                            return pricesDoc;
+                        }
+                    })
+                    // use a .then because a .done would break the promise chains that rely on self.wallet
+                    .then(function(pricesDoc) {
+                        Object.keys(self.currencies).forEach(function(code) {
+                            self.currencies[code].price = parseFloat(pricesDoc[code] || 0);
                         });
-                    } else {
                         return pricesDoc;
-                    }
-                })
-                // use a .then because a .done would break the promise chains that rely on self.wallet
-                .then(function(pricesDoc) {
-                    Object.keys(self.currencies).forEach(function(code) {
-                        self.currencies[code].price = parseFloat(pricesDoc[code] || 0);
+                    }, function(e) {
+                        $log.error('prices ERR ' + e);
+                        throw e;
+                    })
+                    .then(function(r) {
+                        updatePrices = null;
+                        return r;
                     });
 
-                    return pricesDoc;
-                }, function(e) {
-                    $log.error('prices ERR ' + e); throw e;
-                });
+                // keep track if we forced for this
+                updatePrices.forceFetch = forceFetch;
+
+                return updatePrices;
+            }
         };
 
         self.enableCurrency = function(code) {
@@ -182,4 +207,9 @@ angular.module('blocktrail.wallet')
 
             return parseFloat((btcValue * coin).toFixed(0));
         };
+    })
+    .filter('currencySymbol', function(Currencies) {
+        return function(input) {
+            return Currencies.currencies[input].symbol;
+        }
     });
