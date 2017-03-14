@@ -4,9 +4,8 @@ angular.module('blocktrail.wallet').factory(
              $http, $timeout, $ionicLoading, settingsService, launchService, $rootScope) {
         var clientId;
         var returnuri = "btccomwallet://glideraCallback/oauth2";
-        var SANDBOX = CONFIG.GLIDERA_SANDBOX;
-        var GLIDERA_HOST = SANDBOX ? 'sandbox.glidera.io' : 'glidera.io';
-        var GLIDERA_URL = 'https://' + GLIDERA_HOST;
+        var GLIDERA_URL = CONFIG.GLIDERA_URL;
+        var GLIDERA_HOST = GLIDERA_URL.replace(/https?:\/\//, '');
 
         var encodeOpenURI = function(uri) {
             return uri.replace('#', '%23');
@@ -36,7 +35,9 @@ angular.module('blocktrail.wallet').factory(
                 https: true,
                 host: GLIDERA_HOST,
                 endpoint: '/api/v1',
-                params: {},
+                params: {
+                    platform: 'web'
+                },
                 headers: _.defaults({}, (options.headers || {}), headers),
                 contentMd5: false
             });
@@ -96,7 +97,7 @@ angular.module('blocktrail.wallet').factory(
 
 
                     return sdkService.sdk().then(function(sdk) {
-                        return sdk.glideraOauth(qs.code, returnuri, SANDBOX)
+                        return sdk.glideraOauth(qs.code, returnuri)
                             .then(function(result) {
                                 $log.debug('oauthtoken', JSON.stringify(result, null, 4));
 
@@ -357,7 +358,7 @@ angular.module('blocktrail.wallet').factory(
 
         var buyPrices = function(qty, fiat) {
             return sdkService.sdk().then(function(sdk) {
-                return sdk.glideraBuyPrices(qty, fiat, SANDBOX)
+                return sdk.glideraBuyPrices(qty, fiat)
                     .then(function(result) {
                         console.log('buyPrices ' + JSON.stringify(result));
 

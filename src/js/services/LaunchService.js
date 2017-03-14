@@ -20,7 +20,7 @@ angular.module('blocktrail.wallet').factory(
         };
 
         LaunchService.prototype.getWalletConfig = function() {
-            return $http.get(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?v=" + CONFIG.VERSION)
+            return $http.get(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?v=" + CONFIG.VERSION + "&platform=mobile")
                 .then(function(result) {
                     return result.data;
                 });
