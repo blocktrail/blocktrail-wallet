@@ -7,6 +7,11 @@ angular.module('blocktrail.wallet').factory(
         var GLIDERA_URL = CONFIG.GLIDERA_URL;
         var GLIDERA_HOST = GLIDERA_URL.replace(/https?:\/\//, '');
 
+        var GLIDERA_ERRORS = {
+            INVALID_ACCESS_TOKEN: 2001,
+            ACCESS_TOKEN_REVOKED: 2002
+        };
+
         var encodeOpenURI = function(uri) {
             return uri.replace('#', '%23');
         };
@@ -194,6 +199,17 @@ angular.module('blocktrail.wallet').factory(
                                     return result.userCanTransact;
                                 });
                             });
+                        }, function(err) {
+                            if (err.code === GLIDERA_ERRORS.ACCESS_TOKEN_REVOKED || err.code === GLIDERA_ERRORS.INVALID_ACCESS_TOKEN) {
+                                setDecryptedAccessToken(null);
+                                settingsService.glideraAccessToken = null;
+
+                                settingsService.$store().then(function() {
+                                    settingsService.$syncSettingsUp();
+                                });
+                            } else {
+                                throw err;
+                            }
                         })
                         ;
                 });

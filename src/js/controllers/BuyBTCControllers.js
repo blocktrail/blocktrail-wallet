@@ -161,7 +161,6 @@ angular.module('blocktrail.wallet')
                     }
                 })
             }, function(err) {
-                console.error("" + err);
                 $state.go('app.wallet.buybtc.choose');
             })
         ;
