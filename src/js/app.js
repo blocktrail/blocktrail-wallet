@@ -725,6 +725,7 @@ angular.module('blocktrail.wallet').config(
             })
             .state('app.wallet.buybtc.buy', {
                 url: "/buy?broker",
+                cache: false,
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "templates/buybtc/buybtc.buy.html",

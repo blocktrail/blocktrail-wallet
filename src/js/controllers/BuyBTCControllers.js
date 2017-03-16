@@ -228,47 +228,56 @@ angular.module('blocktrail.wallet')
                 $scope.buyInput.feeValue = null;
                 $scope.buyInput.btcPrice = null;
 
-                return glideraService.buyPrices(null, $scope.buyInput.fiatValue).then(function(result) {
-                    $timeout(function() {
-                        $scope.buyInput.btcValue = parseFloat(result.qty);
-                        $scope.buyInput.feeValue = parseFloat(result.fees);
-                        $scope.buyInput.btcPrice = parseFloat(result.total) / parseFloat(result.qty);
-                        $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
-                        $scope.fetchingInputPrice = false;
+                if ($scope.buyInput.fiatValue) {
+                    return glideraService.buyPrices(null, $scope.buyInput.fiatValue).then(function (result) {
+                        $timeout(function () {
+                            $scope.buyInput.btcValue = parseFloat(result.qty);
+                            $scope.buyInput.feeValue = parseFloat(result.fees);
+                            $scope.buyInput.btcPrice = parseFloat(result.total) / parseFloat(result.qty);
+                            $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
+                            $scope.fetchingInputPrice = false;
+                        });
                     });
-                });
+                }
             } else {
                 $scope.buyInput.fiatValue = null;
                 $scope.buyInput.feeValue = null;
                 $scope.buyInput.btcPrice = null;
 
-                return glideraService.buyPrices($scope.buyInput.btcValue, null).then(function(result) {
-                    $timeout(function() {
-                        $scope.buyInput.fiatValue = parseFloat(result.total);
-                        $scope.buyInput.feeValue = parseFloat(result.fees);
-                        $scope.buyInput.btcPrice = parseFloat(result.total) / parseFloat(result.qty);
-                        $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
-                        $scope.fetchingInputPrice = false;
+                if ($scope.buyInput.btcValue) {
+                    return glideraService.buyPrices($scope.buyInput.btcValue, null).then(function (result) {
+                        $timeout(function () {
+                            $scope.buyInput.fiatValue = parseFloat(result.total);
+                            $scope.buyInput.feeValue = parseFloat(result.fees);
+                            $scope.buyInput.btcPrice = parseFloat(result.total) / parseFloat(result.qty);
+                            $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
+                            $scope.fetchingInputPrice = false;
+                        });
                     });
-                });
+                }
             }
         };
 
+        var uninit = null;
         var init = function() {
-            // $ionicLoading.show({
-            //     template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
-            //     hideOnStateChange: true
-            // });
-
             // update every minute
-            $interval(function() {
+            var interval = $interval(function() {
                 // update input price
                 updateInputPrice();
             }, 60 * 1000);
+
+            return function() {
+                if (interval) {
+                    $interval.cancel(interval);
+                }
+            }
         };
 
         $scope.$on('$ionicView.enter', function() {
-            init();
+            uninit = init();
+        });
+        $scope.$on('$ionicView.leave', function() {
+            uninit();
         });
 
         $scope.buyBTC = function() {
@@ -320,10 +329,7 @@ angular.module('blocktrail.wallet')
 
                                         $state.go('app.wallet.summary');
                                     }, function(e) {
-                                        $log.debug(e.code);
-                                        $log.debug(e.details);
-                                        $log.debug(e.invalidParameters);
-                                        alert(e.details);
+                                        alert(e.details || ("Unknown error occurred (err: " + e.code + ")"));
                                         $ionicLoading.hide();
                                     })
                                     ;
