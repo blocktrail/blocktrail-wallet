@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget id="com.blocktrail.mywallet" version="3.1.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.blocktrail.mywallet" version="3.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="AutoHideSplashScreen" value="true" />
@@ -115,7 +115,7 @@
     <access origin="https://*.akamaihd.net" />
     <access origin="https://api.blocktrail.com" />
     <access origin="https://sandbox.glidera.io" />
-    <access origin="https://glidera.io" />
+    <access origin="https://www.glidera.io" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
     <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
