@@ -112,22 +112,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-globalization/www/GlobalizationError.js",
-        "id": "cordova-plugin-globalization.GlobalizationError",
-        "pluginId": "cordova-plugin-globalization",
-        "clobbers": [
-            "window.GlobalizationError"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-globalization/www/globalization.js",
-        "id": "cordova-plugin-globalization.globalization",
-        "pluginId": "cordova-plugin-globalization",
-        "clobbers": [
-            "navigator.globalization"
-        ]
-    },
-    {
         "file": "plugins/hu.dpal.phonegap.plugins.PinDialog/www/pin.js",
         "id": "hu.dpal.phonegap.plugins.PinDialog.PinDialog",
         "pluginId": "hu.dpal.phonegap.plugins.PinDialog",
@@ -319,20 +303,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.pushandplay.cordova.apprate/www/AppRate.js",
-        "id": "org.pushandplay.cordova.apprate.AppRate",
-        "pluginId": "org.pushandplay.cordova.apprate",
-        "clobbers": [
-            "AppRate"
-        ]
-    },
-    {
-        "file": "plugins/org.pushandplay.cordova.apprate/www/locales.js",
-        "id": "org.pushandplay.cordova.apprate.locales",
-        "pluginId": "org.pushandplay.cordova.apprate",
-        "runs": true
-    },
-    {
         "file": "plugins/nl.x-services.plugins.toast/www/Toast.js",
         "id": "nl.x-services.plugins.toast.Toast",
         "pluginId": "nl.x-services.plugins.toast",
@@ -396,22 +366,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
-        "id": "cordova-plugin-dialogs.notification",
-        "pluginId": "cordova-plugin-dialogs",
-        "merges": [
-            "navigator.notification"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
-        "id": "cordova-plugin-dialogs.notification_android",
-        "pluginId": "cordova-plugin-dialogs",
-        "merges": [
-            "navigator.notification"
-        ]
-    },
-    {
         "file": "plugins/org.apache.cordova.inappbrowser/www/inappbrowser.js",
         "id": "org.apache.cordova.inappbrowser.inappbrowser",
         "pluginId": "org.apache.cordova.inappbrowser",
@@ -470,6 +424,34 @@ module.exports = [
         "clobbers": [
             "window.plugins.tunePlugin"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-globalization/www/GlobalizationError.js",
+        "id": "cordova-plugin-globalization.GlobalizationError",
+        "clobbers": [
+            "window.GlobalizationError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-globalization/www/globalization.js",
+        "id": "cordova-plugin-globalization.globalization",
+        "clobbers": [
+            "navigator.globalization"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+        "id": "cordova-plugin-dialogs.notification",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+        "id": "cordova-plugin-dialogs.notification_android",
+        "merges": [
+            "navigator.notification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -486,13 +468,11 @@ module.exports.metadata =
     "cordova-plugin-network-information": "1.0.1",
     "com.synconset.imagepicker": "1.0.6",
     "cordova-plugin-camera": "1.2.0",
-    "cordova-plugin-globalization": "1.0.1",
     "hu.dpal.phonegap.plugins.PinDialog": "0.1.3",
     "fr.spirotron.cordova.disabledatadetectors": "0.1.0",
     "io.github.pwlin.cordova.plugins.fileopener2": "1.0.11",
     "cordova-plugin-file": "2.1.0",
     "uk.co.whiteoctober.cordova.appversion": "0.1.7",
-    "org.pushandplay.cordova.apprate": "1.1.7",
     "nl.x-services.plugins.toast": "2.1.1",
     "org.apache.cordova.statusbar": "0.1.10",
     "cordova-plugin-customurlscheme": "4.0.0",
@@ -500,13 +480,14 @@ module.exports.metadata =
     "com.cordova.plugins.sms": "0.1.5",
     "cordova-plugin-vibration": "1.2.0",
     "phonegap-plugin-barcodescanner": "4.0.2",
-    "cordova-plugin-dialogs": "1.1.2-dev",
     "org.apache.cordova.inappbrowser": "0.6.0",
     "phonegap-facebook-plugin": "0.12.0",
     "cordova-plugin-google-app-conversion-tracker": "0.0.2",
     "cordova-fabric-plugin": "1.0.8",
     "cordova-plugin-google-analytics": "1.5.6",
-    "cordova-plugin-tune": "5.0.0"
+    "cordova-plugin-tune": "5.0.0",
+    "cordova-plugin-globalization": "1.0.1",
+    "cordova-plugin-dialogs": "1.1.2-dev"
 };
 // BOTTOM OF METADATA
 });

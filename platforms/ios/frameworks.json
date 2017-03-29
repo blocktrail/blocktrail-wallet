@@ -5,7 +5,7 @@
     "ImageIO.framework": 1,
     "CoreLocation.framework": 1,
     "AVFoundation.framework": 2,
-    "StoreKit.framework": 2,
+    "StoreKit.framework": 1,
     "QuartzCore.framework": 2,
     "MessageUI.framework": 2,
     "AudioToolbox.framework": 2,
