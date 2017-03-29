@@ -452,6 +452,18 @@ module.exports = [
         "merges": [
             "navigator.notification"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-apprate/www/AppRate.js",
+        "id": "cordova-plugin-apprate.AppRate",
+        "clobbers": [
+            "AppRate"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-apprate/www/locales.js",
+        "id": "cordova-plugin-apprate.locales",
+        "runs": true
     }
 ];
 module.exports.metadata = 
@@ -487,7 +499,8 @@ module.exports.metadata =
     "cordova-plugin-google-analytics": "1.5.6",
     "cordova-plugin-tune": "5.0.0",
     "cordova-plugin-globalization": "1.0.1",
-    "cordova-plugin-dialogs": "1.1.2-dev"
+    "cordova-plugin-dialogs": "1.1.2-dev",
+    "cordova-plugin-apprate": "1.2"
 };
 // BOTTOM OF METADATA
 });

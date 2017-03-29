@@ -121,6 +121,7 @@
 		B64AEFA7115447C080E2B59B /* CDVGlobalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 716BDE3793864D889FCB80C6 /* CDVGlobalization.m */; };
 		BECC0E68120F4236813370C4 /* CDVNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A075F6BBD5467386DBC624 /* CDVNotification.m */; };
 		16A69E692DBF40A490F53BE4 /* CDVNotification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2B76071A29834A348FF0F25E /* CDVNotification.bundle */; };
+		87528DC8A8CB40BB9F56CA3A /* CDVAppRate.m in Sources */ = {isa = PBXBuildFile; fileRef = C8E442E8583E4789813150B3 /* CDVAppRate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -361,6 +362,8 @@
 		92A075F6BBD5467386DBC624 /* CDVNotification.m */ = {isa = PBXFileReference; name = "CDVNotification.m"; path = "cordova-plugin-dialogs/CDVNotification.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		BFF887F841044F318E970364 /* CDVNotification.h */ = {isa = PBXFileReference; name = "CDVNotification.h"; path = "cordova-plugin-dialogs/CDVNotification.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		2B76071A29834A348FF0F25E /* CDVNotification.bundle */ = {isa = PBXFileReference; name = "CDVNotification.bundle"; path = "CDVNotification.bundle"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.plug-in; explicitFileType = undefined; includeInIndex = 0; };
+		C8E442E8583E4789813150B3 /* CDVAppRate.m */ = {isa = PBXFileReference; name = "CDVAppRate.m"; path = "cordova-plugin-apprate/CDVAppRate.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		E749755DE9FA4CADAA99F22E /* CDVAppRate.h */ = {isa = PBXFileReference; name = "CDVAppRate.h"; path = "cordova-plugin-apprate/CDVAppRate.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -666,6 +669,8 @@
 				B939AF3323DA40C2A9334AB7 /* CDVGlobalization.h */,
 				92A075F6BBD5467386DBC624 /* CDVNotification.m */,
 				BFF887F841044F318E970364 /* CDVNotification.h */,
+				C8E442E8583E4789813150B3 /* CDVAppRate.m */,
+				E749755DE9FA4CADAA99F22E /* CDVAppRate.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -924,6 +929,7 @@
 				13CEBF250D294B31ADF77CDE /* TunePlugin.m in Sources */,
 				B64AEFA7115447C080E2B59B /* CDVGlobalization.m in Sources */,
 				BECC0E68120F4236813370C4 /* CDVNotification.m in Sources */,
+				87528DC8A8CB40BB9F56CA3A /* CDVAppRate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

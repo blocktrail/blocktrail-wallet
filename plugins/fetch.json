@@ -282,5 +282,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-apprate": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-apprate"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }
