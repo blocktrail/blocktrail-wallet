@@ -11,31 +11,33 @@
     </ion-nav-bar>
 
     <ion-content scroll="true" >
-        <div class="padding-t card">
-            <div class="list">
-                <label class="item item-input item-floating-label">
-                    <span class="input-label text-neutral">{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}</span>
-                    <input type="text" placeholder="{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}" ng-model="form.username">
-                </label>
-                <label class="item item-input item-floating-label">
-                    <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
-                    <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password" ng-enter="doLogin()">
-                </label>
-                <div ng-if="CONFIG.DEBUG" class="item item-no-border-b item-checkbox">
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="form.forceNewWallet">
+        <form ng-submit="doLogin()">
+            <div class="padding-t card">
+                <div class="list">
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label text-neutral">{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}</span>
+                        <input type="text" autocapitalize="off" placeholder="{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}" ng-model="form.username">
                     </label>
-                    <span class="sentence-case">{{ 'SETUP_FORCE_NEW_WALLET' | translate }}</span>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
+                        <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password" ng-enter="doLogin()">
+                    </label>
+                    <div ng-if="CONFIG.DEBUG" class="item item-no-border-b item-checkbox">
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="form.forceNewWallet">
+                        </label>
+                        <span class="sentence-case">{{ 'SETUP_FORCE_NEW_WALLET' | translate }}</span>
+                    </div>
+                    <div></div>
                 </div>
-                <div></div>
-            </div>
 
-            <div class="row text-center">
-                <div class="col col-offset-25 col-50 padding-bottom">
-                    <button class="button button-block" ng-click="doLogin()">{{ 'SETUP_LOGIN' | translate }}</button>
+                <div class="row text-center">
+                    <div class="col col-offset-25 col-50 padding-bottom">
+                        <button class="button button-block" type="submit" ng-click="doLogin()">{{ 'SETUP_LOGIN' | translate }}</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </ion-content>
 
 </ion-view>

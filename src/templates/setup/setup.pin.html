@@ -14,9 +14,11 @@
                 </label>
                 <label class="item item-input item-floating-label">
                     <span class="input-label text-neutral">{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}</span>
-                    <input class="password-mask" type="tel" placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}" ng-model="form.pinRepeat" ng-enter="setupWallet()">
+                    <input class="password-mask" type="tel" placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}"
+                           ng-model="form.pinRepeat"
+                           ng-enter="setupWallet()"
+                           ng-tab="setupWallet()">
                 </label>
-                <div></div>
             </div>
 
             <div class="row text-center">

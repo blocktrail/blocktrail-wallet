@@ -9,7 +9,7 @@
 
             <h2 class="">{{ 'WALLET_PIN' | translate }}</h2>
             <label class="item-input" ng-class="{error: appControl.showPinInputError}">
-                <input type="tel" ng-model="sendInput.pin" required ng-enter="send()" ng-change="appControl.showPinInputError = false" tabindex="-1">
+                <input type="tel" ng-model="sendInput.pin" required ng-enter="send()" ng-tab="send()" ng-change="appControl.showPinInputError = false" tabindex="-1">
             </label>
             <div class="pin-error">
                 <span ng-show="appControl.showPinInputError">{{ appControl.result.error | translate }}</span>
