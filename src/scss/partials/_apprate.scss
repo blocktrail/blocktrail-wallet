@@ -1,0 +1,69 @@
+.apprate {
+    background-color: $app-default-color !important;
+    color: white;
+    padding-top: 1rem;
+
+    .apprate-body {
+        padding: 2rem 2rem 1rem 2rem;
+        text-align: center;
+        font-size: 1.2rem;
+        line-height: 1.6rem;
+    }
+
+    .apprate-footer {
+        padding: 2rem;
+        text-align: center;
+        color: #dddddd;
+        font-size: 0.9rem;
+    }
+
+    .apprate-stars {
+        text-align: center;
+
+        .icon {
+            font-size: 2em;
+        }
+    }
+
+    .apprate-feedback {
+        textarea {
+            width: 100%;
+        }
+    }
+
+    .apprate-good-body {
+        padding: 2rem 2rem 1rem 2rem;
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1.4rem;
+
+        h3 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .icon-heart-filled {
+            font-size: 40px;
+            color: $pinkrose-light;
+            display: inline-block;
+        }
+    }
+
+    .apprate-buttons {
+        text-align: center;
+
+        .apprate-button {
+            margin-top: 1rem;
+            min-width: 6rem;
+            color: #fff;
+            color: rgba(0, 0, 0, 0.5);
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.4);
+
+            &.primary {
+                background-color: $good-green;
+            }
+        }
+    }
+}
