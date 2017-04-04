@@ -133,3 +133,25 @@
     -webkit-transform: $transforms;
     transform: $transforms;
 }
+
+@mixin slideIn($speed, $top) {
+    position: absolute;
+
+    &.ng-enter {
+        top: 100%;
+        transition: top $speed cubic-bezier(.4, .1, .11, .98);
+        -webkit-transition: top $speed cubic-bezier(.4, .1, .11, .98);
+    }
+    &.ng-enter-active {
+        top: $top;
+    }
+    &.ng-leave {
+        top: $top;
+        transition: top $speed cubic-bezier(.4, .1, .11, .98);
+        -webkit-transition: top $speed cubic-bezier(.4, .1, .11, .98);
+    }
+    &.ng-leave-active {
+        opacity: 1;
+        top: 100%;
+    }
+}
