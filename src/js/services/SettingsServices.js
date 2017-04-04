@@ -17,6 +17,8 @@ angular.module('blocktrail.wallet').service(
         profilePosX: 50,
         profilePosY: 50,
 
+        apprateStatus: null,
+
         showRebrandMessage: true,
 
         glideraRequest: null,
@@ -191,7 +193,8 @@ angular.module('blocktrail.wallet').service(
                     walletActivated: self.walletActivated,
                     glideraAccessToken: self.glideraAccessToken,
                     glideraTransactions: self.glideraTransactions || [],
-                    buyBTCRegion: self.buyBTCRegion
+                    buyBTCRegion: self.buyBTCRegion,
+                    apprateStatus: self.apprateStatus
                 };
 
                 return sdk.syncSettings(settingsData);

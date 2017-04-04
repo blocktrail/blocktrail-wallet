@@ -8,6 +8,13 @@
     "API_HOST": "api.blocktrail.com",
     "API_HTTPS": true,
 
+    "APPSTORE_URLS": {
+        "ANDROID": "market://details?id=com.blocktrail.mywallet",
+        "IOS": "itms-apps://itunes.apple.com/app/id/1019614423"
+    },
+
+    "APPRATE_COUNTER": 5,
+
     "EXTRA_LANGUAGES": ["es", "nl", "ru", "fr", "hi", "sw", "cn"],
     "CURRENCIES": ["USD", "EUR", "GBP", "AUD", "BTC", "CNY"],
 

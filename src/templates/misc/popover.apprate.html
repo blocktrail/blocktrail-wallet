@@ -1,0 +1,50 @@
+<ion-popover-view class="medium-popover half-size popover-slide-in apprate" ng-controller="AppRateCtrl">
+    <ion-content>
+        <div ng-if="!apprate.starClicked">
+            <div class="apprate-body">
+                <p ng-bind-html="'APPRATE_BODY' | translate | nl2br"></p>
+            </div>
+
+            <div class="apprate-stars">
+                <i ng-click="clickStar(1)" class="icon icon-star"></i>
+                <i ng-click="clickStar(2)" class="icon icon-star"></i>
+                <i ng-click="clickStar(3)" class="icon icon-star"></i>
+                <i ng-click="clickStar(4)" class="icon icon-star"></i>
+                <i ng-click="clickStar(5)" class="icon icon-star"></i>
+            </div>
+
+            <div class="apprate-footer">
+                <p ng-bind-html="'APPRATE_FOOTER' | translate | nl2br"></p>
+            </div>
+
+        </div>
+        <div ng-if="apprate.starClicked && apprate.starClicked <= 3">
+            <div class="apprate-body">
+                <p ng-bind-html="'APPRATE_BODY_BAD' | translate | nl2br"></p>
+            </div>
+
+            <div class="apprate-feedback">
+                <textarea rows="8" ng-model="apprate.feedbackMsg" placeholder="{{ 'SEND_FEEDBACK_PLACEHOLDER' | translate}}"></textarea>
+                <div class="apprate-buttons">
+                    <a href class="button button-outline apprate-button" ng-click="close()">{{ 'APPRATE_SKIP' | translate }}</a>
+                    <a href class="button button-outline apprate-button primary" ng-click="sendFeedback()">{{ 'APPRATE_FEEDBACK' | translate }}</a>
+                </div>
+            </div>
+        </div>
+        <div ng-if="apprate.starClicked && apprate.starClicked >= 4">
+            <div class="apprate-good-body">
+                <i class="icon icon-heart-filled"></i>
+                <h3>{{'APPRATE_BODY_GOOD_TITLE' | translate | nl2br }}</h3>
+                <p ng-bind-html="'APPRATE_BODY_GOOD_BODY' | translate | nl2br"></p>
+            </div>
+
+            <div class="apprate-buttons">
+                <a href class="button button-outline apprate-button" ng-click="no()">{{ 'APPRATE_NO' | translate }}</a>
+                <a href class="button button-outline apprate-button primary" ng-click="rate()">{{ 'APPRATE_RATE' | translate }}</a>
+            </div>
+            <div class="apprate-footer padding-t">
+                <a href class="button button-outline apprate-button" ng-click="doLater()">{{ 'APPRATE_LATER' | translate }}</a>
+            </div>
+        </div>
+    </ion-content>
+</ion-popover-view>

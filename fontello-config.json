@@ -31,6 +31,18 @@
       "css": "filter",
       "code": 59394,
       "src": "fontawesome"
+    },
+    {
+      "uid": "bcdc294bb787b15203b82f2be8096548",
+      "css": "star",
+      "code": 59395,
+      "src": "typicons"
+    },
+    {
+      "uid": "vyuzsm6wijlfwtjo4ifkoblfmsepk6g8",
+      "css": "star-filled",
+      "code": 59396,
+      "src": "typicons"
     }
   ]
 }
