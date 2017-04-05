@@ -510,17 +510,7 @@ public class EmailComposerImpl {
             return false;
         }
 
-        AccountManager am  = AccountManager.get(ctx);
-        int accounts;
-
-        try {
-            accounts = am.getAccounts().length;
-        } catch (Exception e) {
-            Log.e("EmailComposer", "Missing GET_ACCOUNTS permission.");
-            return true;
-        }
-
-        return accounts > 0;
+        return true;
     }
 
     /**
