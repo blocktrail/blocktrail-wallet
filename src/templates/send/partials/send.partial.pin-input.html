@@ -3,8 +3,6 @@
 
         <div class="pin-input-section" ng-if="appControl.showPinInput">
             <div class="fee-info">
-                {{ 'ESTIMATED_FEE' | translate }}: {{ fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }} 
-                <small>({{ fee | satoshiToCurrency: settings.localCurrency : bitcoinPrices }})</small>
             </div>
 
             <h2 class="">{{ 'WALLET_PIN' | translate }}</h2>
@@ -21,10 +19,6 @@
 
         <div class="sending-progress-section" ng-if="appControl.isSending">
             <div class="fee-info">
-                <span ng-if="!appControl.complete">
-                    {{ 'ESTIMATED_FEE' | translate }}: {{ fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}
-                    <small>({{ fee | satoshiToCurrency: settings.localCurrency : bitcoinPrices }})</small>
-                </span>
                 <span ng-if="appControl.complete" to-clipboard="appControl.result.txHash">{{ 'TX_INFO_HASH' | translate }}: {{ appControl.result.txHash | characters:8 }}</span>
             </div>
 

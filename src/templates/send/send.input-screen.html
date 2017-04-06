@@ -79,7 +79,7 @@
                         <input type="{{ isSamsung && 'text' || 'number' }}" step="0.0001" name="btcValue" select-on-focus
                                ng-model="sendInput.btcValue"
                                raw-model="btcValueRaw"
-                               ng-change="setFiat(); sendInputForm.fiatValue.$setDirty()"
+                               ng-change="setFiat(); sendInputForm.fiatValue.$setDirty(); fetchFee();"
                                ng-enter="blurInput($event)"
                                tabindex="{{ !fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
@@ -92,7 +92,7 @@
                         <input type="{{ isSamsung && 'text' || 'number' }}" step="0.01" name="fiatValue"
                                ng-model="sendInput.fiatValue"
                                raw-model="fiatValueRaw"
-                               ng-change="setBTC(); sendInputForm.btcValue.$setDirty()"
+                               ng-change="setBTC(); sendInputForm.btcValue.$setDirty(); fetchFee();"
                                ng-enter="blurInput($event)"
                                tabindex="{{ fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
@@ -153,6 +153,29 @@
                     </div>
                 </div>
                 <!-- /recipient options -->
+
+            </div>
+
+            <div class="recipient-input-section card">
+                <div class="list list-slim">
+                    <div class="item item-toggle">
+                        <span>{{appControl.useOptimalFee ? ('OPTIMAL_FEE' | translate): ('LOW_PRIORITY_FEE' | translate)}}</span>
+                        <span style="float:right" ng-show="appControl.displayFee && sendInput.btcValue + sendInput.fiatValue > 0">
+                            {{ fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}
+                        </span>
+                        <label class="toggle toggle-btc">
+                            <input type="checkbox" ng-model="appControl.useOptimalFee" ng-change="updateFee()">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="fee-warning">
+                    <div class="text-muted" ng-show="!appControl.useOptimalFee && sendInput.btcValue + sendInput.fiatValue > 0">{{ 'LOW_PRIORITY_NOTICE' | translate }}</div>
+                    <div class="text-muted" ng-show="appControl.useOptimalFee && sendInput.btcValue + sendInput.fiatValue > 0">{{ 'OPTIMAL_PRIORITY_NOTICE' | translate }}</div>
+                </div>
 
                 <div class="list">
                     <div class="item">

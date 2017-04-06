@@ -6,12 +6,12 @@ angular.module('blocktrail.wallet')
         $scope.sendInput = {
             btcValue: 0.00,
             fiatValue: 0.00,
-            recipientAddress: null,
+            recipientAddress: "",
             referenceMessage: "",
             pin: null,
 
             recipient: null,        //contact object when sending to contact
-            recipientDisplay: null,  //recipient as displayed on screen
+            recipientDisplay: "",  //recipient as displayed on screen
             recipientSource: null
         };
         //control status of the app (allows for child scope modification)
@@ -21,6 +21,8 @@ angular.module('blocktrail.wallet')
             showMessage: false,
             isSending: false,
             showPinInput: false,
+            useOptimalFee: true,
+            displayFee: false,
             result: {}
         };
         $scope.message = {
@@ -30,6 +32,15 @@ angular.module('blocktrail.wallet')
             body_class: ""
         };
         $scope.transactions = null;
+
+        $scope.pay = {};
+        $scope.useZeroConf = true;
+        $scope.fee = null;
+
+        $scope.fees = {
+            optimal: null,
+            lowPriority: null
+        };
 
         $scope.getTranslations = function() {
             if ($scope.translations) {
@@ -146,9 +157,53 @@ angular.module('blocktrail.wallet')
             }
         };
 
-        $scope.pay = {};
-        $scope.useZeroConf = true;
-        $scope.fee = null;
+        $scope.fetchFee = function() {
+            $scope.appControl.displayFee = false;
+
+            var localPay = {};
+            var amount = 0;
+            if($rootScope.balance < CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC")) {
+                amount = parseInt($rootScope.balance, "BTC");
+            } else {
+                amount = parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC"));
+            }
+            if($scope.sendInput.recipientAddress) {
+                localPay[$scope.sendInput.recipientAddress] = amount;
+            }
+
+            Wallet.wallet.then(function(wallet) {
+                return $q.all([
+                    wallet.coinSelection(localPay, false, $scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY)
+                        .spread(function(utxos, fee, change, feeOptions) {
+                            console.log('lowPriority fee: ', $scope.fees.lowPriority);
+
+                            return fee;
+                        }),
+                    wallet.coinSelection(localPay, false, $scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL)
+                        .spread(function(utxos, fee, change, feeOptions) {
+                            console.log('optimal fee: ', $scope.fees.optimal);
+
+                            return fee;
+                        })
+                ])
+                .then(function(res) {
+                    var lowPriorityFee = res[0];
+                    var optimalFee = res[1];
+
+                    $scope.fees.lowPriority = lowPriorityFee;
+                    $scope.fees.optimal = optimalFee;
+
+                    $scope.updateFee();
+                }, function(e) {
+                    $log.debug("fetchFee ERR " + e);
+                });
+            });
+        };
+
+        $scope.updateFee = function() {
+                $scope.fee = ($scope.appControl.useOptimalFee) ? $scope.fees.optimal : $scope.fees.lowPriority;
+                $scope.appControl.displayFee = true;
+        };
 
         $scope.confirmSend = function() {
             if ($scope.appControl.working) {
@@ -182,14 +237,6 @@ angular.module('blocktrail.wallet')
             }).then(function() {
                 $scope.pay = {};
                 $scope.pay[$scope.sendInput.recipientAddress] = parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC"));
-            }).then(function() {
-                return Wallet.wallet.then(function(wallet) {
-                    return wallet.coinSelection($scope.pay, false, $scope.useZeroConf)
-                        .spread(function(utxos, fee, change, feeOptions) {
-                            $scope.fee = fee;
-                        })
-                    ;
-                })
             }).then(function() {
                 //show the pin input screen for confirmation
                 $scope.appControl.showPinInput = true;
@@ -263,7 +310,12 @@ angular.module('blocktrail.wallet')
 
                     //attempt to make the payment
                     $log.info("wallet: paying", $scope.pay);
-                    return $q.when(wallet.pay($scope.pay, null, $scope.useZeroConf)).then(function(txHash) {
+
+                var feeStrategy = ($scope.appControl.useOptimalFee)
+                    ? blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL
+                    : blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY;
+
+                return $q.when(wallet.pay($scope.pay, null, $scope.useZeroConf, true, feeStrategy)).then(function(txHash) {
                         wallet.lock();
                         return $q.when(txHash);
                     }, function(err) {
