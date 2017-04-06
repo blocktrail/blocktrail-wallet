@@ -28,6 +28,59 @@ angular.module('blocktrail.wallet')
         /**
          * initiate change of pin
          */
+        $scope.forgotPin = function() {
+            return $cordovaDialogs.prompt(
+                $translate.instant('ENTER_CURRENT_PASSWORD'),
+                $translate.instant('SETTINGS_FORGOT_PIN'),
+                [$translate.instant('OK'), $translate.instant('CANCEL')],
+                "",
+                true   //isPassword
+            )
+                .then(function(dialogResult) {
+                    if (dialogResult.buttonIndex == 2) {
+                        return $q.reject('CANCELLED');
+                    }
+                    //decrypt password with the provided PIN
+                    $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
+
+                    return Wallet.unlockWithPassword(dialogResult.input1).then(function(wallet) {
+                        $ionicLoading.hide();
+
+                        var secret = wallet.secret;
+                        if (wallet.secret && wallet.walletVersion !== 'v2') {
+                            secret = wallet.secret.toString('hex');
+                        }
+
+                        return {secret: secret};
+                    });
+                })
+                .then(function(unlockData) {
+                    //prompt for a new PIN
+                    return $scope.promptNewPin().then(function(newPIN) {
+                        return $scope.updatePin(newPIN, unlockData);
+                    });
+                })
+                .catch(function(err) {
+                    $log.error('PIN change error: ' + err);
+
+                    $ionicLoading.hide();
+
+                    if (err instanceof blocktrail.WalletDecryptError) {
+                        //incorrect PIN...try again Mr. user
+                        $cordovaDialogs.alert($translate.instant('MSG_TRY_AGAIN'), $translate.instant('MSG_INCORRECT_PASSWORD'), $translate.instant('OK')).then(function() {
+                            $scope.forgotPin();
+                        });
+                    } else if (err === 'CANCELLED') {
+                        return false;
+                    } else {
+                        $cordovaDialogs.alert(err.toString(), $translate.instant('FAILED'), $translate.instant('OK'))
+                    }
+                });
+        };
+
+        /**
+         * initiate change of pin
+         */
         $scope.changePin = function() {
             return $cordovaDialogs.prompt(
                 $translate.instant('MSG_ENTER_PIN'),
@@ -37,57 +90,64 @@ angular.module('blocktrail.wallet')
                 true,   //isPassword
                 "tel"   //input type (uses html5 style)
             )
-            .then(function(dialogResult) {
-                if (dialogResult.buttonIndex == 2) {
-                    return $q.reject('CANCELLED');
-                }
-                //decrypt password with the provided PIN
-                $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
+                .then(function(dialogResult) {
+                    if (dialogResult.buttonIndex == 2) {
+                        return $q.reject('CANCELLED');
+                    }
+                    //decrypt password with the provided PIN
+                    $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
 
-                return Wallet.unlockData(dialogResult.input1).then(function(unlockData) {
+                    return Wallet.unlockData(dialogResult.input1).then(function(unlockData) {
+                        $ionicLoading.hide();
+
+                        return unlockData;
+                    });
+                })
+                .then(function(unlockData) {
+                    //prompt for a new PIN
+                    return $scope.promptNewPin().then(function(newPIN) {
+                        return $scope.updatePin(newPIN, unlockData);
+                    });
+                })
+                .catch(function(err) {
+                    $log.error('PIN change error: ' + err);
+
                     $ionicLoading.hide();
 
-                    return unlockData;
+                    if (err instanceof blocktrail.WalletPinError) {
+                        //incorrect PIN...try again Mr. user
+                        $cordovaDialogs.alert($translate.instant('MSG_TRY_AGAIN'), $translate.instant('MSG_BAD_PIN'), $translate.instant('OK')).then(function() {
+                            $scope.changePin();
+                        });
+                    } else if (err === 'CANCELLED') {
+                        return false;
+                    } else {
+                        $cordovaDialogs.alert(err.toString(), $translate.instant('FAILED'), $translate.instant('OK'))
+                    }
                 });
-            })
-            .then(function(unlockData) {
-                //prompt for a new PIN
-                return $scope.promptNewPin().then(function(newPIN) {
-                    return {newPIN: newPIN, unlockData: unlockData};
+        };
+
+        $scope.updatePin = function(newPIN, unlockData) {
+            return $q.when(true)
+                .then(function() {
+                    var encryptedPassword = null, encryptedSecret = null;
+
+                    console.log(unlockData);
+                    console.log(newPIN);
+
+                    // still gotta support legacy wallet where we encrypted the password isntead of secret
+                    if (unlockData.secret) {
+                        encryptedSecret = CryptoJS.AES.encrypt(unlockData.secret, newPIN).toString();
+                    } else {
+                        encryptedPassword = CryptoJS.AES.encrypt(unlockData.password, newPIN).toString();
+                    }
+
+                    return launchService.storeWalletInfo($scope.defaultWallet, encryptedPassword, encryptedSecret);
+                })
+                .then(function() {
+                    // success
+                    return $cordovaDialogs.alert($translate.instant('MSG_PIN_CHANGED'), $translate.instant('SUCCESS'), $translate.instant('OK'));
                 });
-            })
-            .then(function(result) {
-                var encryptedPassword = null, encryptedSecret = null;
-
-                // still gotta support legacy wallet where we encrypted the password isntead of secret
-                if (result.unlockData.secret) {
-                    encryptedSecret = CryptoJS.AES.encrypt(result.unlockData.secret, result.newPIN).toString();
-                } else {
-                    encryptedPassword = CryptoJS.AES.encrypt(result.unlockData.password, result.newPIN).toString();
-                }
-
-                return launchService.storeWalletInfo($scope.defaultWallet, encryptedPassword, encryptedSecret);
-            })
-            .then(function(result) {
-                //success
-                return $cordovaDialogs.alert($translate.instant('MSG_PIN_CHANGED'), $translate.instant('SUCCESS'), $translate.instant('OK'));
-            })
-            .catch(function(err) {
-                $log.error('PIN change error: ' + err);
-
-                $ionicLoading.hide();
-
-                if (err instanceof blocktrail.WalletPinError) {
-                    //incorrect PIN...try again Mr. user
-                    $cordovaDialogs.alert($translate.instant('MSG_TRY_AGAIN'), $translate.instant('MSG_BAD_PIN'), $translate.instant('OK')).then(function() {
-                        $scope.changePin();
-                    });
-                } else if (err === 'CANCELLED') {
-                    return false;
-                } else {
-                    $cordovaDialogs.alert(err.toString(), $translate.instant('FAILED'), $translate.instant('OK'))
-                }
-            });
         };
 
         $scope.apprate = function() {
