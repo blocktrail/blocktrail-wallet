@@ -5,14 +5,16 @@ angular.module('blocktrail.wallet')
             OPEN: "open",
             REGISTRATION: "registration",
             LOGIN: "login",
-            ACTIVATED: "activated"
+            ACTIVATED: "activated",
+            TELLAFRIEND: "tellafriend"
         };
 
         var ANALYTICS_META = {
             "open": {  category: 'events' },
             "registration": {  category: 'events' },
             "login": {  category: 'events' },
-            "activated": {  category: 'events' }
+            "activated": {  category: 'events' },
+            "tellafriend": {  category: 'events' }
         };
 
         var trackEvent = function(event) {

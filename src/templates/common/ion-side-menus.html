@@ -57,6 +57,10 @@
                     <i class="icon ion-card"></i>
                     <span class="">{{ 'BUYBTC' | translate }}</span>
                 </ion-item>
+                <ion-item menu-close ng-click="socialShare()" ng-href="">
+                    <i class="icon ion-ios-chatbubble-outline"></i>
+                    <span class="">{{ 'TELL_A_FRIEND' | translate }}</span> <!-- -->
+                </ion-item>
                 <ion-item menu-close ng-href="{{ $state.href('app.wallet.settings') }}">
                     <i class="icon ion-ios-gear-outline"></i>
                     <span class="">{{ 'SETTINGS' | translate }}</span>

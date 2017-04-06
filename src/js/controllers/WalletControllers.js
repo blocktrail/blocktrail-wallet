@@ -1,7 +1,8 @@
 angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
                                        Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration, Currencies,
-                                       $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService) {
+                                       $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService,
+                                       $cordovaSocialSharing) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -172,6 +173,24 @@ angular.module('blocktrail.wallet')
             });
         });
 
+        $scope.socialShare = function () {
+            trackingService.trackEvent(trackingService.EVENTS.TELLAFRIEND);
+
+            var message = $translate.instant('MSG_INVITE_CONTACT');
+            var subject = $translate.instant('APPNAME');
+            var file = null;
+            var link = null;
+
+            // Share via native share sheet
+            $cordovaSocialSharing
+                .share(message, subject, file, link)
+                .then(function(result) {
+                    $cordovaToast.showShortCenter($translate.instant('THANKS_2'));
+                    $log.debug("SocialSharing: " + result);
+                }, function(err) {
+                    $log.error("SocialSharing: " + err.message);
+                });
+        };
 
         $scope.$on('ORPHAN', function() {
             //show popup when an Orphan happens and wallet needs to resync
