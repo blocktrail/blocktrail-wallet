@@ -10,7 +10,7 @@ angular.module('blocktrail.wallet')
         var _currencies = {
             BTC: {code: "BTC", symbol: "฿"},
             GBP: {code: "GBP", symbol: "£"},
-            EUR: {code: "EUR", symbol: "£"},
+            EUR: {code: "EUR", symbol: "€"},
             USD: {code: "USD", symbol: "$"},
             CNY: {code: "CNY", symbol: "¥"},
             PAB: {code: "PAB", symbol: "B/"},
