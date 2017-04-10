@@ -420,14 +420,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/phonegap-facebook-plugin/facebookConnectPlugin.js",
-        "id": "phonegap-facebook-plugin.FacebookConnectPlugin",
-        "pluginId": "phonegap-facebook-plugin",
-        "clobbers": [
-            "facebookConnectPlugin"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-google-app-conversion-tracker/www/gapp_track.js",
         "id": "cordova-plugin-google-app-conversion-tracker.GoogleAppTracking",
         "pluginId": "cordova-plugin-google-app-conversion-tracker",
@@ -502,7 +494,6 @@ module.exports.metadata =
     "phonegap-plugin-barcodescanner": "4.0.2",
     "cordova-plugin-dialogs": "1.1.2-dev",
     "org.apache.cordova.inappbrowser": "0.6.0",
-    "phonegap-facebook-plugin": "0.12.0",
     "cordova-plugin-google-app-conversion-tracker": "0.0.2",
     "cordova-fabric-plugin": "1.0.8",
     "cordova-plugin-google-analytics": "1.5.6",

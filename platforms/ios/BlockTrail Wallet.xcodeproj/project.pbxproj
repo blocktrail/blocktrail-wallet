@@ -5,12 +5,10 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		0356A090D8464D4183F35B0A /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E0D6BBD2D07470CBAB1ACFC /* CDVInAppBrowser.m */; };
 		0686F15D09864C96946A736E /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A09A5DDB818465391DD8478 /* CDVCamera.m */; };
 		07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */; };
-		08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */; };
 		0D337A5731344DD8975DFEE8 /* Tune-4.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D29734E2B5449F1A351AE18 /* Tune-4.4.0.a */; };
 		13CEBF250D294B31ADF77CDE /* TunePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 3791B2EBF3954351BED36F34 /* TunePlugin.m */; };
 		15128D99AA95408B8154D62B /* CDVBarcodeScanner.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1DFD58CCD2D24CB4B3DC6374 /* CDVBarcodeScanner.bundle */; };
@@ -98,7 +96,6 @@
 		B7320A0AD1CA471C89683E12 /* ELCAssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5670DAA73FFF45A199B41F9A /* ELCAssetTablePicker.xib */; };
 		B8C07BD4A64240BC83F475C1 /* CDVVibration.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E0B926A1BE4838A4061D40 /* CDVVibration.m */; };
 		BA6C3231BB2E4C73AA4D7B43 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E788A3994224F8FBCF3C230 /* Toast+UIView.m */; };
-		BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */; };
 		C1B930B528D048EBA6885A81 /* libAdIdAccess.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED6C492B9DFF4F42979D4217 /* libAdIdAccess.a */; };
 		C2A161E5C0A047AFB1F117C1 /* SOSPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 708D2981FA674032A3D5B695 /* SOSPicker.m */; };
 		C6D1BAA8631A4BDAB0D596E1 /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = F6594C508F784B1ABF349C09 /* Overlay.png */; };
@@ -179,7 +176,6 @@
 		24B9FED548BC49FAAEFDB066 /* CDVContactsPhoneNumbers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVContactsPhoneNumbers.h; path = com.dbaq.cordova.contactsPhoneNumbers/CDVContactsPhoneNumbers.h; sourceTree = "<group>"; };
 		2694C894814040878D84C5F8 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = io.litehelpers.cordova.sqlite/sqlite3.h; sourceTree = "<group>"; };
 		2803DC4D555B4F7AA56DAAE6 /* ELCAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ELCAsset.h; path = com.synconset.imagepicker/ELCAsset.h; sourceTree = "<group>"; };
-		2816EAEF88F346EE9033F3EF /* FacebookConnectPlugin.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = FacebookConnectPlugin.h; path = "phonegap-facebook-plugin/FacebookConnectPlugin.h"; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29D63217AE5645DCAA93EC05 /* ZBarHelpController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarHelpController.h; path = org.cloudsky.cordovaplugins.zbar/ZBarHelpController.h; sourceTree = "<group>"; };
@@ -300,7 +296,6 @@
 		A41CC7925A7B4D098B0AC2D0 /* CDVNotification.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CDVNotification.bundle; sourceTree = "<group>"; };
 		A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = GoogleAppTracking.m; path = "cordova-plugin-google-app-conversion-tracker/GoogleAppTracking.m"; sourceTree = "<group>"; };
 		A77F326597174BA9A8011E5F /* ACTReporter.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = ACTReporter.h; path = "cordova-plugin-google-app-conversion-tracker/ACTReporter.h"; sourceTree = "<group>"; };
-		A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = FacebookConnectPlugin.m; path = "phonegap-facebook-plugin/FacebookConnectPlugin.m"; sourceTree = "<group>"; };
 		AAF18B63A514442A86409881 /* FileOpener2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOpener2.h; path = io.github.pwlin.cordova.plugins.fileopener2/FileOpener2.h; sourceTree = "<group>"; };
 		AE20FEB991E84475980FE1BA /* CDVConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVConnection.m; path = "cordova-plugin-network-information/CDVConnection.m"; sourceTree = "<group>"; };
 		AF41BE91BA6E4DADB2942ECA /* SystemConfiguration.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -331,7 +326,6 @@
 		D71F953A2A624E3FB89C66F7 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Exception.h; path = org.cloudsky.cordovaplugins.zbar/Exception.h; sourceTree = "<group>"; };
 		D72B84CE74B04538B9C9EB77 /* SQLitePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQLitePlugin.h; path = io.litehelpers.cordova.sqlite/SQLitePlugin.h; sourceTree = "<group>"; };
 		D9E4AC1674A747CF9346DBF1 /* ELCAssetTablePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ELCAssetTablePicker.m; path = com.synconset.imagepicker/ELCAssetTablePicker.m; sourceTree = "<group>"; };
-		DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = "BlockTrail Wallet/Plugins/phonegap-facebook-plugin/FacebookSDK.framework"; sourceTree = "<group>"; };
 		DC727848E2C74A03A75A239D /* TuneExperimentDetails.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TuneExperimentDetails.h; path = "cordova-plugin-tune/TuneExperimentDetails.h"; sourceTree = "<group>"; };
 		DCE1303067944CEF82B9E7E7 /* UniversalAnalyticsPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = UniversalAnalyticsPlugin.m; path = "cordova-plugin-google-analytics/UniversalAnalyticsPlugin.m"; sourceTree = "<group>"; };
 		DCE1F8EEF38C460FACE36C84 /* ZBarSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarSymbol.h; path = org.cloudsky.cordovaplugins.zbar/ZBarSymbol.h; sourceTree = "<group>"; };
@@ -393,7 +387,6 @@
 				680CAC3405E44C3782821714 /* Social.framework in Frameworks */,
 				40FA2736253B4D18B4B8DD8A /* Accounts.framework in Frameworks */,
 				B263EE20072B4DB0852D3BA0 /* Security.framework in Frameworks */,
-				08C5488D10194B5A90BEC475 /* FacebookSDK.framework in Frameworks */,
 				45B1492521844F81B1DCEB7B /* libGoogleConversionTracking.a in Frameworks */,
 				4D8B71B91A334B1BA5639CCA /* AdSupport.framework in Frameworks */,
 				5B8984565C89489682DD8B29 /* libz.dylib in Frameworks */,
@@ -509,7 +502,6 @@
 				5DA6811B7D004429BAE82184 /* Social.framework */,
 				686D574B75164D5FA8098CB1 /* Accounts.framework */,
 				DF4FDC661E7C4DFEBAC8D468 /* Security.framework */,
-				DAF82F55EA5C4B78BB74D873 /* FacebookSDK.framework */,
 				B4876E10FDD24D8E990C1CC2 /* libGoogleConversionTracking.a */,
 				7D744F8E26FA4A5D9DD98AB0 /* AdSupport.framework */,
 				85F78675D26D430C876659EF /* libz.dylib */,
@@ -644,8 +636,6 @@
 				6A876C5FB6704471AEA98A44 /* zxing-all-in-one.h */,
 				9C8E6B5B72DC4C5D8D2A4A02 /* CDVNotification.m */,
 				C8BF6E2CA19C4F05AA2AA293 /* CDVNotification.h */,
-				A8D24C2BBDE141BDBC4A11A9 /* FacebookConnectPlugin.m */,
-				2816EAEF88F346EE9033F3EF /* FacebookConnectPlugin.h */,
 				A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */,
 				A77F326597174BA9A8011E5F /* ACTReporter.h */,
 				9F923C5E7E584CAD9BBDECC9 /* GoogleAppTracking.h */,
@@ -928,7 +918,6 @@
 				79604475BE634C6EA7060075 /* CDVBarcodeScanner.mm in Sources */,
 				1E3B53CCF5254D159742E253 /* zxing-all-in-one.cpp in Sources */,
 				5FDD693A71F84919AD8AA0EB /* CDVNotification.m in Sources */,
-				BE7070CEF254464CA28D5FA1 /* FacebookConnectPlugin.m in Sources */,
 				07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */,
 				176AF960E58E41E494F86FFD /* FabricPlugin.m in Sources */,
 				D2BEE0F8AAC84FF49B65C14A /* UniversalAnalyticsPlugin.m in Sources */,
