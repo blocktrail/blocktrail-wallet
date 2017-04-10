@@ -109,30 +109,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"FacebookConnectPlugin\"><param name=\"android-package\" value=\"org.apache.cordova.facebook.ConnectPlugin\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<access origin=\"https://m.facebook.com\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<access origin=\"https://graph.facebook.com\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<access origin=\"https://api.facebook.com\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<access origin=\"https://*.fbcdn.net\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<access origin=\"https://*.akamaihd.net\" />",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"GoogleAppTracking\"><param name=\"android-package\" value=\"com.myhealthteams.plugins.GoogleAppTracking\" /></feature>",
                             "count": 1
                         },
@@ -258,14 +234,6 @@
                         }
                     ],
                     "application": [
-                        {
-                            "xml": "<meta-data android:name=\"com.facebook.sdk.ApplicationId\" android:value=\"@string/fb_app_id\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<activity android:label=\"@string/fb_app_name\" android:name=\"com.facebook.LoginActivity\" android:theme=\"@android:style/Theme.Translucent.NoTitleBar\" />",
-                            "count": 1
-                        },
                         {
                             "xml": "<meta-data android:name=\"io.fabric.ApiKey\" android:value=\"059fcf328d73ce164c3ab1c4436293db0d6718ca\" />",
                             "count": 1
@@ -757,16 +725,7 @@
             },
             "res/values/facebookconnect.xml": {
                 "parents": {
-                    "/*": [
-                        {
-                            "xml": "<string name=\"fb_app_id\">1072524012838770</string>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<string name=\"fb_app_name\">BTC.com</string>",
-                            "count": 1
-                        }
-                    ]
+                    "/*": []
                 }
             }
         }
@@ -852,11 +811,6 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "org.apache.cordova.inappbrowser": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
-        "phonegap-facebook-plugin": {
-            "APP_ID": "1072524012838770",
-            "APP_NAME": "BTC.com",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-google-app-conversion-tracker": {
@@ -1296,14 +1250,6 @@
             ]
         },
         {
-            "file": "plugins/phonegap-facebook-plugin/facebookConnectPlugin.js",
-            "id": "phonegap-facebook-plugin.FacebookConnectPlugin",
-            "pluginId": "phonegap-facebook-plugin",
-            "clobbers": [
-                "facebookConnectPlugin"
-            ]
-        },
-        {
             "file": "plugins/cordova-plugin-google-app-conversion-tracker/www/gapp_track.js",
             "id": "cordova-plugin-google-app-conversion-tracker.GoogleAppTracking",
             "pluginId": "cordova-plugin-google-app-conversion-tracker",
@@ -1376,7 +1322,6 @@
         "phonegap-plugin-barcodescanner": "4.0.2",
         "cordova-plugin-dialogs": "1.1.2-dev",
         "org.apache.cordova.inappbrowser": "0.6.0",
-        "phonegap-facebook-plugin": "0.12.0",
         "cordova-plugin-google-app-conversion-tracker": "0.0.2",
         "cordova-fabric-plugin": "1.0.8",
         "cordova-plugin-google-analytics": "1.5.6",
