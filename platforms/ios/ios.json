@@ -135,6 +135,34 @@
                         {
                             "xml": "<feature name=\"TunePlugin\"><param name=\"ios-package\" value=\"TunePlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FacebookConnectPlugin\"><param name=\"ios-package\" value=\"FacebookConnectPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<plugin name=\"FacebookConnectPlugin\" value=\"FacebookConnectPlugin\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://m.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://graph.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://api.facebook.com\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://*.fbcdn.net\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<access origin=\"https://*.akamaihd.net\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -151,13 +179,39 @@
                         {
                             "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>bitcoin</string></array></dict></array>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>fb1072524012838770</string></array></dict></array>",
+                            "count": 1
                         }
                     ],
-                    "FacebookAppID": [],
-                    "FacebookDisplayName": [],
+                    "FacebookAppID": [
+                        {
+                            "xml": "<string>1072524012838770</string>",
+                            "count": 1
+                        }
+                    ],
+                    "FacebookDisplayName": [
+                        {
+                            "xml": "<string>BTC.com</string>",
+                            "count": 1
+                        }
+                    ],
                     "Fabric": [
                         {
                             "xml": "<dict><key>APIKey</key><string>059fcf328d73ce164c3ab1c4436293db0d6718ca</string></dict>",
+                            "count": 1
+                        }
+                    ],
+                    "NSAppTransportSecurity": [
+                        {
+                            "xml": "<dict><key>NSExceptionDomains</key><dict><key>facebook.com</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict><key>fbcdn.net</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict><key>akamaihd.net</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict></dict></dict>",
+                            "count": 1
+                        }
+                    ],
+                    "LSApplicationQueriesSchemes": [
+                        {
+                            "xml": "<array><string>fbapi</string><string>fb-messenger-api</string><string>fbauth2</string><string>fbshareextension</string></array>",
                             "count": 1
                         }
                     ]
@@ -260,6 +314,11 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-tune": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-facebook4": {
+            "APP_ID": "1072524012838770",
+            "APP_NAME": "BTC.com",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -734,6 +793,14 @@
             "clobbers": [
                 "window.plugins.tunePlugin"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
+            "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
+            "pluginId": "cordova-plugin-facebook4",
+            "clobbers": [
+                "facebookConnectPlugin"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -767,6 +834,7 @@
         "cordova-plugin-google-app-conversion-tracker": "0.0.2",
         "cordova-fabric-plugin": "1.0.8",
         "cordova-plugin-google-analytics": "1.5.6",
-        "cordova-plugin-tune": "5.0.0"
+        "cordova-plugin-tune": "5.0.0",
+        "cordova-plugin-facebook4": "1.7.4"
     }
 }

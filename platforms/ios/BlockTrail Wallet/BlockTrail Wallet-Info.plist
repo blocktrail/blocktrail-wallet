@@ -68,6 +68,12 @@
           <string>bitcoin</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>fb1072524012838770</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>3.1.7</string>
@@ -79,6 +85,22 @@
       <dict>
         <key>glidera.io</key>
         <dict/>
+        <key>m.facebook.com</key>
+        <dict/>
+        <key>graph.facebook.com</key>
+        <dict/>
+        <key>api.facebook.com</key>
+        <dict/>
+        <key>fbcdn.net</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+        </dict>
+        <key>akamaihd.net</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+        </dict>
         <key>api.blocktrail.com</key>
         <dict/>
         <key>sandbox.glidera.io</key>
@@ -219,5 +241,16 @@
     </dict>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string/>
+    <key>FacebookAppID</key>
+    <string>1072524012838770</string>
+    <key>FacebookDisplayName</key>
+    <string>BTC.com</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>fbapi</string>
+      <string>fb-messenger-api</string>
+      <string>fbauth2</string>
+      <string>fbshareextension</string>
+    </array>
   </dict>
 </plist>
