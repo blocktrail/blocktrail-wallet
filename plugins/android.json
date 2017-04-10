@@ -762,6 +762,11 @@
         },
         "cordova-plugin-tune": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-facebook4": {
+            "APP_ID": "1072524012838770",
+            "APP_NAME": "BTC.com",
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {

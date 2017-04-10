@@ -469,6 +469,14 @@ module.exports = [
         "clobbers": [
             "window.plugins.tunePlugin"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
+        "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
+        "pluginId": "cordova-plugin-facebook4",
+        "clobbers": [
+            "facebookConnectPlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -504,7 +512,8 @@ module.exports.metadata =
     "cordova-plugin-google-app-conversion-tracker": "0.0.2",
     "cordova-fabric-plugin": "1.0.8",
     "cordova-plugin-google-analytics": "1.5.6",
-    "cordova-plugin-tune": "5.0.0"
+    "cordova-plugin-tune": "5.0.0",
+    "cordova-plugin-facebook4": "1.7.4"
 }
 // BOTTOM OF METADATA
 });

@@ -62,6 +62,9 @@
         </receiver>
         <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.analytics.AnalyticsService" />
         <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/fb_app_id" />
+        <meta-data android:name="com.facebook.sdk.ApplicationName" android:value="@string/fb_app_name" />
+        <activity android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/fb_app_name" android:name="com.facebook.FacebookActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
     <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="22" />
     <uses-permission android:name="android.permission.INTERNET" />
