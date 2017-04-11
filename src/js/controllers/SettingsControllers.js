@@ -7,7 +7,6 @@ angular.module('blocktrail.wallet')
             syncingAll: false,
             syncComplete: false
         };
-        $scope.translationsEnabled = true;
         $scope.$on('$ionicView.enter', function() {
             //reset app state control
             $scope.appControl = {
@@ -473,10 +472,6 @@ angular.module('blocktrail.wallet')
 
         $scope.enableDev = function() {
             $scope.devEnabled = true;
-        };
-
-        $scope.enableTranslations = function() {
-            $scope.translationsEnabled = true;
         };
 
         $scope.updateSettings = function() {
