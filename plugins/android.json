@@ -721,9 +721,6 @@
         "uk.co.whiteoctober.cordova.appversion": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "org.pushandplay.cordova.apprate": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
@@ -767,11 +764,10 @@
             "APP_ID": "1072524012838770",
             "APP_NAME": "BTC.com",
             "PACKAGE_NAME": "com.blocktrail.mywallet"
-        }
-    },
-    "dependent_plugins": {
+        },
         "org.apache.cordova.inappbrowser": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
-    }
+    },
+    "dependent_plugins": {}
 }

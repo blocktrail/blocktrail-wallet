@@ -46,9 +46,6 @@
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
-    <feature name="Globalization">
-        <param name="android-package" value="org.apache.cordova.globalization.Globalization" />
-    </feature>
     <feature name="PinDialog">
         <param name="android-package" value="hu.dpal.phonegap.plugins.PinDialog" />
     </feature>
@@ -61,9 +58,6 @@
     </feature>
     <feature name="AppVersion">
         <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
-    </feature>
-    <feature name="AppRate">
-        <param name="android-package" value="org.pushandplay.cordova.apprate.AppRate" />
     </feature>
     <feature name="Toast">
         <param name="android-package" value="nl.xservices.plugins.Toast" />
@@ -87,12 +81,6 @@
     <feature name="BarcodeScanner">
         <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
     </feature>
-    <feature name="Notification">
-        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
-    </feature>
-    <feature name="InAppBrowser">
-        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
-    </feature>
     <feature name="GoogleAppTracking">
         <param name="android-package" value="com.myhealthteams.plugins.GoogleAppTracking" />
     </feature>
@@ -109,6 +97,15 @@
     <feature name="FacebookConnectPlugin">
         <param name="android-package" value="org.apache.cordova.facebook.ConnectPlugin" />
         <param name="onload" value="true" />
+    </feature>
+    <feature name="Globalization">
+        <param name="android-package" value="org.apache.cordova.globalization.Globalization" />
+    </feature>
+    <feature name="Notification">
+        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
     <access origin="https://m.facebook.com" />
     <access origin="https://graph.facebook.com" />
