@@ -339,24 +339,12 @@ angular.module('blocktrail.wallet')
     });
 angular.module('blocktrail.wallet').config(
     function($stateProvider, $urlRouterProvider, $logProvider, $provide, CONFIG,
-             $ionicConfigProvider, $analyticsProvider, $cordovaAppRateProvider, googleAnalyticsCordovaProvider) {
+             $ionicConfigProvider, $analyticsProvider, googleAnalyticsCordovaProvider) {
 
         googleAnalyticsCordovaProvider.trackingId = CONFIG.GA_TRACKING_ID;
 
         //disable default iOS behaviour to navigate back in history via swipe (ionic history results in a lot of problems)
         $ionicConfigProvider.views.swipeBackEnabled(false);
-
-        //set up the AppRate config
-        var prefs = {
-            language: 'en',
-            appName: 'Blocktrail Bitcoin Wallet',
-            iosURL: '1019614423',
-            androidURL: 'market://details?id=com.blocktrail.mywallet'
-            //windowsURL: 'ms-windows-store:Review?name=<...>'
-        };
-        if (window.cordova) {
-            $cordovaAppRateProvider.setPreferences(prefs);
-        }
 
         if (window.device && device.platform === "amazon-fireos") {
             $stateProvider

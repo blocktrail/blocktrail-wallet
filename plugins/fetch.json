@@ -141,21 +141,12 @@
         "is_top_level": true,
         "variables": {}
     },
-    "org.pushandplay.cordova.apprate": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/pushandplay/cordova-plugin-apprate.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "org.apache.cordova.dialogs": {
         "source": {
             "type": "registry",
             "id": "org.apache.cordova.dialogs"
         },
-        "is_top_level": false,
+        "is_top_level": true,
         "variables": {}
     },
     "org.apache.cordova.globalization": {
@@ -163,7 +154,7 @@
             "type": "registry",
             "id": "org.apache.cordova.globalization"
         },
-        "is_top_level": false,
+        "is_top_level": true,
         "variables": {}
     },
     "org.apache.cordova.inappbrowser": {
@@ -238,10 +229,8 @@
     },
     "cordova-plugin-dialogs": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/blocktrail/cordova-plugin-dialogs.git",
-            "subdir": ".",
-            "ref": "blocktrail"
+            "type": "registry",
+            "id": "cordova-plugin-dialogs"
         },
         "is_top_level": true,
         "variables": {}
@@ -290,6 +279,14 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-tune"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-apprate": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-apprate"
         },
         "is_top_level": true,
         "variables": {}
