@@ -298,9 +298,6 @@
         "uk.co.whiteoctober.cordova.appversion": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "org.pushandplay.cordova.apprate": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "org.apache.cordova.inappbrowser": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },

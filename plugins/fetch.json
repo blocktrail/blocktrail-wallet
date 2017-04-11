@@ -141,15 +141,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "org.pushandplay.cordova.apprate": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/pushandplay/cordova-plugin-apprate.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "org.apache.cordova.dialogs": {
         "source": {
             "type": "registry",
@@ -169,7 +160,7 @@
     "org.apache.cordova.inappbrowser": {
         "source": {
             "type": "registry",
-            "id": "org.apache.cordova.inappbrowser"
+            "id": "cordova-plugin-inappbrowser@1.7.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -238,10 +229,8 @@
     },
     "cordova-plugin-dialogs": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/blocktrail/cordova-plugin-dialogs.git",
-            "subdir": ".",
-            "ref": "blocktrail"
+            "type": "registry",
+            "id": "cordova-plugin-dialogs"
         },
         "is_top_level": true,
         "variables": {}
