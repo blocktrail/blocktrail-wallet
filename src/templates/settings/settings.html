@@ -196,16 +196,13 @@
                     </div>
                     <!-- /polling -->
 
-                    <div class="item item-toggle">
-                        <span class="sentence-case">Vibrate on new transaction</span>
-                        <label class="toggle toggle-balanced">
-                            <input type="checkbox" ng-model="settings.vibrateOnTx" ng-change="updateSettings()">
-                            <div class="track">
-                                <div class="handle"></div>
-                            </div>
-                        </label>
+                    <div class="item item-button-right" ng-click="apprate()">
+                        <span class="sentence-case">Apprate</span>
+                        <button class="button button-clear">
+                            <i class="icon ion-chevron-right"></i>
+                        </button>
                     </div>
-                    <!-- /vibrate on new tx -->
+                    <!-- /PIN -->
 
                     <div class="item item-toggle">
                         <span class="sentence-case">Contacts web syncing</span>
@@ -229,7 +226,7 @@
                     </div>
                     <!-- /ignore phone verification -->
 
-                    <div class="item" on-hold="resetApp($event)">
+                    <div class="item">
                         Build: <small class="pull-right" on-hold="resetApp($event)">{{ CONFIG.VERSION }}</small>
                     </div>
                 </div>

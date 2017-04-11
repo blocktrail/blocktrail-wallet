@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('SettingsCtrl', function($scope, $rootScope, $q, sdkService, launchService, settingsService,
                                          Wallet, Contacts, storageService, $cordovaDialogs, $ionicLoading,
-                                         $translate, $timeout, $state, $log, $analytics, CONFIG) {
+                                         $translate, $timeout, $state, $log, $analytics, CONFIG, AppRateService) {
         $scope.appControl = {
             syncing: false,
             syncingAll: false,
@@ -129,6 +129,10 @@ angular.module('blocktrail.wallet')
                         $cordovaDialogs.alert(err.toString(), $scope.translations['FAILED'].sentenceCase(), $scope.translations['OK'])
                     }
                 });
+        };
+
+        $scope.apprate = function() {
+            AppRateService.popover();
         };
 
         /**
