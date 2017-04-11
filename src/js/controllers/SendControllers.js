@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('SendCtrl', function($scope, $analytics, $log, CurrencyConverter, Contacts, Wallet,
                                      $timeout, $ionicHistory, QR, $q, $btBackButtonDelegate, $state, settingsService,
-                                     $cordovaClipboard, $rootScope, $translate, $cordovaDialogs, $cordovaToast) {
+                                     $cordovaClipboard, $rootScope, $translate, $cordovaDialogs, $cordovaToast, AppRateService) {
         $scope.fiatFirst = false;
         $scope.sendInput = {
             btcValue: 0.00,
@@ -167,6 +167,7 @@ angular.module('blocktrail.wallet')
                 }
                 //insufficient funds
                 if (parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC")) >= ($rootScope.balance + $rootScope.uncBalance)) {
+                    $rootScope.hadErrDuringSend = true;
                     throw blocktrail.Error('MSG_INSUFFICIENT_FUNDS');
                 }
                 //no send address
@@ -197,6 +198,7 @@ angular.module('blocktrail.wallet')
                 $scope.appControl.complete = false;
                 return $state.go('app.wallet.send.confirm');
             }).catch(function(err) {
+                $rootScope.hadErrDuringSend = true;
                 $log.error(err);
                 if (err instanceof blocktrail.InvalidAddressError) {
                     $scope.message = {title: 'ERROR_TITLE_2', title_class: 'text-bad', body: 'MSG_BAD_ADDRESS'};
@@ -292,8 +294,10 @@ angular.module('blocktrail.wallet')
                     });
                     
                     Wallet.pollTransactions();
+                    AppRateService.sendCompleted();
                 })
             .catch(function(err) {
+                    $rootScope.hadErrDuringSend = true;
                     $log.error(err);
                     $scope.appControl.working = false;
                     if (err instanceof blocktrail.ContactAddressError) {

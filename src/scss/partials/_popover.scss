@@ -1,0 +1,67 @@
+.platform-cordova .popover-backdrop.active {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.platform-cordova .full-popover.popover {
+    margin-top: 0px;
+}
+
+.popover.full-popover {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+.platform-cordova .large-popover.popover {
+
+}
+
+.popover.active {
+    opacity: 1;
+}
+
+.popover.medium-popover {
+    left: 10%;
+    width: 80%;
+    top: 20%;
+    height: 60%;
+    margin: 0px;
+
+    &.half-size {
+        height: 40%;
+        top: 30%;
+
+        &.popover-slide-in {
+            @include slideIn(.8s, 30%);
+        }
+    }
+
+    &.popover-slide-in {
+        @include slideIn(.8s, 10%);
+    }
+}
+
+.popover.large-popover {
+    left: 10%;
+    width: 80%;
+    top: 10%;
+    height: 80%;
+    margin: 0px;
+
+    &.half-size {
+        height: 40%;
+        top: 30%;
+
+        &.popover-slide-in {
+            @include slideIn(.8s, 30%);
+        }
+    }
+
+    &.popover-slide-in {
+        @include slideIn(.8s, 10%);
+    }
+}

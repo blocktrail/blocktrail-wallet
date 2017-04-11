@@ -619,6 +619,11 @@ $balance-display-height: 40vw;
     }
 }
 
+@import "partials/popover";
+
+@import "partials/pin-input";
+
+@import "partials/apprate";
 
 @import "partials/sidemenu";
 
