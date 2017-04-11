@@ -459,6 +459,13 @@ angular.module('blocktrail.wallet')
             }
         };
 
+        var tapEnableDevCnt = 0;
+        $scope.tapEnableDev = function() {
+            if (tapEnableDevCnt++ > 5) {
+                $scope.enableDev();
+            }
+        };
+
         $scope.enableDev = function() {
             $scope.devEnabled = true;
             $scope.getTranslations().then(function() {
