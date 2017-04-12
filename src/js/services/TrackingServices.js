@@ -18,7 +18,9 @@ angular.module('blocktrail.wallet')
                 GLIDERA_BUY_CONFIRM: "glidera_buy_confirm",
                 GLIDERA_BUY_ERR: "glidera_buy_error",
                 GLIDERA_BUY_DONE: "glidera_buy_done"
-            }
+            },
+            APPRATE_STAR: "apprate_star",
+            APPRATE: "apprate"
         };
 
         var ANALYTICS_META = {};
@@ -27,7 +29,7 @@ angular.module('blocktrail.wallet')
             ANALYTICS_META[eventVal] = { category: "BuyBTC" };
         });
 
-        var trackEvent = function(event) {
+        var trackEvent = function(event, meta) {
             tuneTrackingService.measureEvent(event);
             $analytics.eventTrack(event, ANALYTICS_META[event] || { category: 'Events' });
         };

@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('AppRateCtrl', function($scope, $q, sdkService, settingsService, AppRateService, $rootScope, $cordovaDevice) {
+    .controller('AppRateCtrl', function($scope, $q, sdkService, trackingService, settingsService, AppRateService, $rootScope, $cordovaDevice) {
         $scope.appRateClass = "choose-stars";
         $scope.apprate = {
             feedbackMsg: "",
@@ -8,12 +8,14 @@ angular.module('blocktrail.wallet')
 
         $scope.doLater = function() {
             AppRateService.updateStatus(AppRateService.APPRATE_STATUS.REMIND);
+            trackingService.trackEvent(trackingService.EVENTS.APPRATE, {label: 'later'});
 
             $scope.close();
         };
 
         $scope.no = function() {
             AppRateService.updateStatus(AppRateService.APPRATE_STATUS.NO);
+            trackingService.trackEvent(trackingService.EVENTS.APPRATE, {label: 'no'});
 
             $scope.close();
         };
@@ -23,6 +25,8 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.sendFeedback = function() {
+            trackingService.trackEvent(trackingService.EVENTS.APPRATE, {label: 'feedback'});
+
             $q.when(sdkService.sdk())
                 .then(function(sdk) {
                     var feedback = {
@@ -43,6 +47,7 @@ angular.module('blocktrail.wallet')
 
         $scope.rate = function() {
             AppRateService.updateStatus(AppRateService.APPRATE_STATUS.DONE);
+            trackingService.trackEvent(trackingService.EVENTS.APPRATE, {label: 'rate'});
 
             $scope.close();
             AppRateService.navigateToAppStore();
@@ -52,6 +57,8 @@ angular.module('blocktrail.wallet')
             // remove the ng-enter class to prevent it being animated when resizing
             $scope.popover.modalEl.classList.remove("ng-enter", "ng-enter-active");
             $scope.apprate.starClicked = starClicked;
+
+            trackingService.trackEvent(trackingService.EVENTS.APPRATE_STAR, {label: starClicked + ' stars'});
 
             if (starClicked <= 3) {
                 $scope.appRateClass = "feedback";
