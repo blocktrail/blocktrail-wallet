@@ -2,7 +2,25 @@
     <ion-nav-title class="">{{ 'SETTINGS' | translate }}</ion-nav-title>
     <ion-content>
         <form>
-            <h3 class="group-title"{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
+            <h3 class="group-title">{{ 'SETTINGS_HELP' | translate }}</h3>
+
+            <div class="list list-inset">
+                <a class="item item-button-right" href="https://btc.com/faq" browse-to>
+                    <span class="sentence-case">{{ 'SETTINGS_FAQ' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </a>
+                <div class="item item-button-right" ui-sref="app.wallet.feedback">
+                    <span class="sentence-case">{{ 'SEND_FEEDBACK' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <h3 class="group-title">{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
+
             <div class="list list-inset">
                 <div class="item item-button-right">
                     <span class="sentence-case">{{ 'SETTINGS_PROFILE' | translate }}</span>
