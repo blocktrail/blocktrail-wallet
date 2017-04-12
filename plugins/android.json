@@ -767,6 +767,9 @@
         },
         "org.apache.cordova.inappbrowser": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {}

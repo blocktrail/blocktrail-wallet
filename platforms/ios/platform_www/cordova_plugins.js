@@ -463,6 +463,14 @@ module.exports = [
         "merges": [
             "navigator.notification"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-x-socialsharing/www/SocialSharing.js",
+        "id": "cordova-plugin-x-socialsharing.SocialSharing",
+        "pluginId": "cordova-plugin-x-socialsharing",
+        "clobbers": [
+            "window.plugins.socialsharing"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -498,7 +506,8 @@ module.exports.metadata =
     "cordova-plugin-tune": "5.0.0",
     "cordova-plugin-facebook4": "1.7.4",
     "cordova-plugin-globalization": "1.0.1",
-    "cordova-plugin-dialogs": "1.1.2-dev"
+    "cordova-plugin-dialogs": "1.1.2-dev",
+    "cordova-plugin-x-socialsharing": "5.1.7"
 }
 // BOTTOM OF METADATA
 });

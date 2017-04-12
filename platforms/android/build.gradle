@@ -247,6 +247,7 @@ dependencies {
     compile "com.google.android.gms:play-services-ads:+"
     compile "de.greenrobot:eventbus:2.4.0"
     compile "com.facebook.android:facebook-android-sdk:4.14.+"
+    compile "com.android.support:support-v4:24.1.1+"
     // SUB-PROJECT DEPENDENCIES END
 }
 

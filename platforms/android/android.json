@@ -147,6 +147,10 @@
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SocialSharing\"><param name=\"android-package\" value=\"nl.xservices.plugins.SocialSharing\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -168,7 +172,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
@@ -214,6 +218,10 @@
                         },
                         {
                             "xml": "<receiver android:exported=\"true\" android:name=\"com.tune.TuneTracker\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<provider android:authorities=\"${applicationId}.sharing.provider\" android:exported=\"false\" android:grantUriPermissions=\"true\" android:name=\"nl.xservices.plugins.FileProvider\"><meta-data android:name=\"android.support.FILE_PROVIDER_PATHS\" android:resource=\"@xml/sharing_paths\" /></provider>",
                             "count": 1
                         }
                     ],
@@ -873,6 +881,9 @@
         },
         "org.apache.cordova.inappbrowser": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {},
@@ -1327,6 +1338,13 @@
             "clobbers": [
                 "window.open"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-socialsharing/www/SocialSharing.js",
+            "id": "cordova-plugin-x-socialsharing.SocialSharing",
+            "clobbers": [
+                "window.plugins.socialsharing"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -1360,6 +1378,7 @@
         "cordova-plugin-facebook4": "1.7.4",
         "cordova-plugin-globalization": "1.0.1",
         "cordova-plugin-dialogs": "1.1.2-dev",
-        "org.apache.cordova.inappbrowser": "0.6.0"
+        "org.apache.cordova.inappbrowser": "0.6.0",
+        "cordova-plugin-x-socialsharing": "5.1.7"
     }
 }

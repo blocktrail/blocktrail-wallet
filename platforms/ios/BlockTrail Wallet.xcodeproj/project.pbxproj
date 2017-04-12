@@ -124,6 +124,8 @@
 		53FC28E43C1343E7A2FF0301 /* CDVGlobalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D5249AFF974F60BE7A80D6 /* CDVGlobalization.m */; };
 		108759A896A54E979618E463 /* CDVNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = A639F0CCFCE14D088272F9F0 /* CDVNotification.m */; };
 		755D9959484F4BA2B57EFB03 /* CDVNotification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5A46D98C43324F479E4EE223 /* CDVNotification.bundle */; };
+		882F6BAA67E84ACD972266C2 /* NSString+SSURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DF1D119C347089170EBC0 /* NSString+SSURLEncoding.m */; };
+		0925C41EEE97419B8A94B51B /* SocialSharing.m in Sources */ = {isa = PBXBuildFile; fileRef = 242716F48C1E411DB5DA0ADB /* SocialSharing.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -367,6 +369,10 @@
 		A639F0CCFCE14D088272F9F0 /* CDVNotification.m */ = {isa = PBXFileReference; name = "CDVNotification.m"; path = "cordova-plugin-dialogs/CDVNotification.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		6BA34D8B82C647B39552F0F5 /* CDVNotification.h */ = {isa = PBXFileReference; name = "CDVNotification.h"; path = "cordova-plugin-dialogs/CDVNotification.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		5A46D98C43324F479E4EE223 /* CDVNotification.bundle */ = {isa = PBXFileReference; name = "CDVNotification.bundle"; path = "CDVNotification.bundle"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.plug-in; explicitFileType = undefined; includeInIndex = 0; };
+		9A6DF1D119C347089170EBC0 /* NSString+SSURLEncoding.m */ = {isa = PBXFileReference; name = "NSString+SSURLEncoding.m"; path = "cordova-plugin-x-socialsharing/NSString+SSURLEncoding.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		242716F48C1E411DB5DA0ADB /* SocialSharing.m */ = {isa = PBXFileReference; name = "SocialSharing.m"; path = "cordova-plugin-x-socialsharing/SocialSharing.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		17E2855C4E4C406981DEE46A /* NSString+SSURLEncoding.h */ = {isa = PBXFileReference; name = "NSString+SSURLEncoding.h"; path = "cordova-plugin-x-socialsharing/NSString+SSURLEncoding.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		D1AC5C33302041218796925E /* SocialSharing.h */ = {isa = PBXFileReference; name = "SocialSharing.h"; path = "cordova-plugin-x-socialsharing/SocialSharing.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -678,6 +684,10 @@
 				BF0026514E5A47049D1C9528 /* CDVGlobalization.h */,
 				A639F0CCFCE14D088272F9F0 /* CDVNotification.m */,
 				6BA34D8B82C647B39552F0F5 /* CDVNotification.h */,
+				9A6DF1D119C347089170EBC0 /* NSString+SSURLEncoding.m */,
+				242716F48C1E411DB5DA0ADB /* SocialSharing.m */,
+				17E2855C4E4C406981DEE46A /* NSString+SSURLEncoding.h */,
+				D1AC5C33302041218796925E /* SocialSharing.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -936,6 +946,8 @@
 				05152A30FC914A74A1CE9A91 /* FacebookConnectPlugin.m in Sources */,
 				53FC28E43C1343E7A2FF0301 /* CDVGlobalization.m in Sources */,
 				108759A896A54E979618E463 /* CDVNotification.m in Sources */,
+				882F6BAA67E84ACD972266C2 /* NSString+SSURLEncoding.m in Sources */,
+				0925C41EEE97419B8A94B51B /* SocialSharing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
