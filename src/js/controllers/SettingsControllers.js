@@ -1106,11 +1106,8 @@ angular.module('blocktrail.wallet')
                 });
         };
     })
-    .controller('AboutSettingsCtrl', function($scope, settingsService, $translate, $btBackButtonDelegate, $cordovaAppRate) {
+    .controller('AboutSettingsCtrl', function($scope, settingsService, $translate, $btBackButtonDelegate, AppRateService) {
         $scope.rateApp = function() {
-            $cordovaAppRate.navigateToAppStore()
-                .then(function (result) {
-                    // success
-                });
+            AppRateService.navigateToAppStore();
         };
     });
