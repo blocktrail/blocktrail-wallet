@@ -1,5 +1,6 @@
 {
     "DEBUG": true,
     "MINIFY": false,
-    "TESTNET": true
+    "TESTNET": true,
+    "GA_TRACKING_ID": "UA-66176065-21"
 }
