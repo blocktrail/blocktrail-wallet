@@ -10,7 +10,7 @@
 
     "APPSTORE_URLS": {
         "ANDROID": "market://details?id=com.blocktrail.mywallet",
-        "IOS": "itms-apps://itunes.apple.com/app/id/1019614423"
+        "IOS": "itms-apps://itunes.apple.com/app/id1019614423"
     },
 
     "APPRATE_COUNTER": 5,
