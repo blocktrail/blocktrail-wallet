@@ -19,6 +19,7 @@ var notifier = require('node-notifier');
 var fontello = require('gulp-fontello');
 var clean = require('gulp-clean');
 var path = require('path');
+var sequence = require('run-sequence');
 
 var isWatch = false;
 var noFontello = process.argv.indexOf('--no-fontello') !== -1 || process.argv.indexOf('--nofontello') !== -1;
@@ -354,5 +355,8 @@ gulp.task('watch', function() {
 
 gulp.task('js', ['js:libs', 'js:app', 'js:ng-cordova', 'js:sdk', 'js:zxcvbn']);
 gulp.task('templates', ['templates:index', 'templates:rest']);
-gulp.task('default', ['sassfontello', 'templates', 'js', 'copyfonts']);
+gulp.task('default', function (done) {
+    sequence('fontello', 'nofontello', done);
+});
+
 gulp.task('nofontello', ['sass', 'templates', 'js', 'copyfonts']);
