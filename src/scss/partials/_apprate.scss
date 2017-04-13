@@ -3,6 +3,20 @@
     color: white;
     padding-top: 1rem;
 
+    &.medium-popover {
+        &.choose-stars {
+            height: 53%;
+        }
+
+        &.feedback {
+            height: 50%;
+        }
+
+        &.rateus {
+            height: 60%;
+        }
+    }
+
     .apprate-body {
         padding: 2rem 2rem 1rem 2rem;
         text-align: center;
