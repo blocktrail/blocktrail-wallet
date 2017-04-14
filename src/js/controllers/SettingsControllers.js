@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet')
     .controller('SettingsCtrl', function($scope, $rootScope, $q, sdkService, launchService, settingsService,
                                          Wallet, Contacts, storageService, $cordovaDialogs, $ionicLoading,
-                                         $translate, $timeout, $state, $log, $analytics, CONFIG, AppRateService) {
+                                         $translate, $timeout, $state, $log, $analytics, CONFIG, AppRateService, $cordovaToast) {
         $scope.appControl = {
             syncing: false,
             syncingAll: false,
@@ -471,7 +471,9 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.enableDev = function() {
-            $scope.devEnabled = true;
+            $cordovaToast.showShortCenter("DEV MODE");
+            $rootScope.devEnabled = true;
+            $state.reload();
         };
 
         $scope.updateSettings = function() {
