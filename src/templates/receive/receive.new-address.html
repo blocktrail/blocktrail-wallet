@@ -38,7 +38,14 @@
         <!-- /amount input -->
         <!-- /input section -->
 
+
+
         <div class="recipient-input-section padding-t card">
+
+            <div class="help-text">
+                <div class="text-muted">{{ 'ADDRESS_REUSE_NOTICE_1' | translate }}</div>
+                <div class="text-muted">{{ 'ADDRESS_REUSE_NOTICE_2' | translate }}</div>
+            </div>
 
             <div class="qrcode-display-section text-center">
                 <qr ng-if="newRequest.bitcoinUri"
