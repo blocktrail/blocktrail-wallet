@@ -157,45 +157,114 @@ angular.module('blocktrail.wallet')
             }
         };
 
+        var _maxSpendable = null;
+        var _maxSpendablePromise = null;
+        var maxSpendable = function() {
+            if (_maxSpendable !== null) {
+                return $q.when(_maxSpendable);
+            } else if (_maxSpendablePromise !== null) {
+                return _maxSpendablePromise;
+            } else {
+                _maxSpendablePromise = Wallet.wallet.then(function (wallet) {
+                    return $q.all([
+                        wallet.maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL),
+                        wallet.maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY)
+                    ]).then(function (results) {
+                        // set the local stored value
+                        _maxSpendable = {};
+                        _maxSpendable[blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL] = results[0];
+                        _maxSpendable[blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY] = results[1];
+
+                        _maxSpendablePromise = null; // unset promise, it's done
+                        return _maxSpendable;
+                    });
+                });
+
+                return _maxSpendablePromise;
+            }
+        };
+
         $scope.fetchFee = function() {
+            // reset state
+            $scope.fees.lowPriority = 0;
+            $scope.fees.optimal = 0;
             $scope.appControl.displayFee = false;
 
-            var localPay = {};
-            var amount = 0;
-            if($rootScope.balance < CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC")) {
-                amount = parseInt($rootScope.balance, "BTC");
-            } else {
-                amount = parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC"));
-            }
-            if($scope.sendInput.recipientAddress) {
-                localPay[$scope.sendInput.recipientAddress] = amount;
-            }
+            Wallet.sdk.then(function(sdk) {
+                var localPay = {};
+                var amount = 0;
 
-            Wallet.wallet.then(function(wallet) {
-                return $q.all([
-                    wallet.coinSelection(localPay, false, $scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY)
-                        .spread(function(utxos, fee, change, feeOptions) {
-                            console.log('lowPriority fee: ', $scope.fees.lowPriority);
+                // parse input
+                if ($rootScope.balance < CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC")) {
+                    amount = parseInt($rootScope.balance, "BTC");
+                } else {
+                    amount = parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC"));
+                }
 
-                            return fee;
-                        }),
-                    wallet.coinSelection(localPay, false, $scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL)
-                        .spread(function(utxos, fee, change, feeOptions) {
-                            console.log('optimal fee: ', $scope.fees.optimal);
+                // halt if input is 0
+                if (amount <= 0) {
+                    return;
+                }
 
-                            return fee;
-                        })
-                ])
-                .then(function(res) {
-                    var lowPriorityFee = res[0];
-                    var optimalFee = res[1];
+                // either use the real destination address or otherwise use a fake address
+                if ($scope.sendInput.recipientAddress) {
+                    localPay[$scope.sendInput.recipientAddress] = amount;
+                } else {
+                    var fakeP2SHScript = bitcoinjs.scripts.scriptHashOutput(new blocktrailSDK.Buffer("0000000000000000000000000000000000000000", 'hex'));
+                    var fakeAddress = bitcoinjs.Address.fromOutputScript(fakeP2SHScript, sdk.network);
+                    localPay[fakeAddress.toString()] = amount;
+                }
 
-                    $scope.fees.lowPriority = lowPriorityFee;
-                    $scope.fees.optimal = optimalFee;
+                Wallet.wallet.then(function (wallet) {
+                    return $q.all([
+                        wallet.coinSelection(localPay, false, $scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY)
+                            .spread(function (utxos, fee, change, feeOptions) {
+                                $log.debug('lowPriority fee: ' + $scope.fees.lowPriority);
 
-                    $scope.updateFee();
-                }, function(e) {
-                    $log.debug("fetchFee ERR " + e);
+                                return fee;
+                            })
+                            .catch(function(e) {
+                                // when we get a fee error we use maxspendable fee
+                                if (e instanceof blocktrail.WalletFeeError) {
+                                    return maxSpendable().then(function(maxSpendable) {
+                                        var fee = maxSpendable[blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY].fee;
+                                        $log.debug('lowPriority fee MAXSPENDABLE: ' + fee);
+                                        return fee;
+                                    })
+                                } else {
+                                    throw e;
+                                }
+                            }),
+                        wallet.coinSelection(localPay, false, $scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL)
+                            .spread(function (utxos, fee, change, feeOptions) {
+                                $log.debug('optimal fee: ' + $scope.fees.optimal);
+
+                                return fee;
+                            })
+                            .catch(function(e) {
+                                // when we get a fee error we use maxspendable fee
+                                if (e instanceof blocktrail.WalletFeeError) {
+                                    return maxSpendable().then(function(maxSpendable) {
+                                        var fee = maxSpendable[blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL].fee;
+                                        $log.debug('optiomal fee MAXSPENDABLE: ' + fee);
+                                        return fee;
+                                    })
+                                } else {
+                                    throw e;
+                                }
+                            })
+                    ])
+                        .then(function (res) {
+                            var lowPriorityFee = res[0];
+                            var optimalFee = res[1];
+
+                            $scope.fees.lowPriority = lowPriorityFee;
+                            $scope.fees.optimal = optimalFee;
+
+                            $scope.updateFee();
+                        }, function (e) {
+                            $log.debug("fetchFee ERR " + e);
+                        });
                 });
             });
         };
