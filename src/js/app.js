@@ -85,6 +85,41 @@ angular.module('blocktrail.wallet').run(
             }
         }
 
+        /*---- push notification init----*/
+        var options = {
+            android: {
+                senderID: CONFIG.GCM_PUSH_SENDER_ID,
+                icon: "notification_icon",
+                iconColor: "#3c78c2"
+            },
+            ios: {
+                alert: "true",
+                badge: "true",
+                sound: "true"
+            },
+            windows: {}
+        };
+
+        $ionicPlatform.ready(function () {
+            // initialize
+            $cordovaPushV5.initialize(options).then(function() {
+                // start listening for new notifications
+                $cordovaPushV5.onNotification();
+                // start listening for errors
+                $cordovaPushV5.onError();
+                // register to get registrationId
+                $cordovaPushV5.register().then(function(registrationId) {
+                    // save `registrationId` somewhere;
+                    console.log("regid:" + registrationId);
+
+                    gcmService.register(registrationId);
+
+                    gcmService.enableNotifications($rootScope);
+
+                })
+            });
+        });
+
         /*----iOS Keyboard fix---*/
         //fix for a quirk where the keyboard is triggered randomly without input focus (usually only happens on send screen)
         var keyboardShow = function(e) {
