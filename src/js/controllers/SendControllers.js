@@ -418,8 +418,8 @@ angular.module('blocktrail.wallet')
                     AppRateService.sendCompleted();
                 })
             .catch(function(err) {
-                    $rootScope.hadErrDuringSend = true;
                     $log.error(err);
+                    $rootScope.hadErrDuringSend = true;
                     $scope.appControl.working = false;
                     if (err instanceof blocktrail.ContactAddressError) {
                         //Error getting sending address
@@ -430,9 +430,27 @@ angular.module('blocktrail.wallet')
                         $scope.appControl.result = {message: 'ERROR_TITLE_2', error: errorDetails, pinInputError: true};
                         $scope.appControl.showPinInputError = true;
                         $scope.appControl.showPinInput = true;
-                        $timeout(function() {
+                        $timeout(function () {
                             $scope.sendInput.pin = null;
                         }, 650);
+                    } else if (err instanceof blocktrail.WalletFeeError) {
+                        var m = err.message.match('\\[([0-9]+)\\]$');
+
+                        if (!m) {
+                            //other error
+                            $scope.appControl.showPinInputError = true;
+                            $scope.appControl.result = {message: 'FAIL', error: 'MSG_SEND_FAIL_UNKNOWN', detailed: ("" + err).replace(/^Error: /, '')};
+                        } else {
+                            var requiredFee = parseInt(m[1], 10);
+
+                            //other error
+                            $scope.appControl.showPinInputError = true;
+                            $scope.appControl.result = {
+                                message: 'FAIL',
+                                error: 'MSG_SEND_FAIL_FEE',
+                                detailed: $translate.instant('MSG_SEND_FAIL_FEE_DETAILED', {fee: blocktrailSDK.toBTC(requiredFee)})
+                            };
+                        }
                     } else {
                         //other error
                         $scope.appControl.showPinInputError = true;
