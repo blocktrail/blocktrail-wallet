@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
     .controller('BuyBTCChooseCtrl', function($q, $scope, $state, $rootScope, $cordovaDialogs, settingsService, $ionicLoading,
-                                             $translate, $ionicScrollDelegate, glideraService, buyBTCService, $log) {
+                                             $translate, $ionicScrollDelegate, glideraService, buyBTCService, trackingService, $log) {
         $scope.brokers = [];
 
         // load chooseRegion from settingsService
@@ -46,6 +46,12 @@ angular.module('blocktrail.wallet')
                 $scope.brokers = brokers;
                 $scope.chooseRegion.regionOk = $scope.brokers.length;
 
+                if ($scope.chooseRegion.regionOk) {
+                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.REGION_OK);
+                } else {
+                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.REGION_NOTOK);
+                }
+
                 $ionicScrollDelegate.scrollTop();
 
                 settingsService.$isLoaded().then(function() {
@@ -65,6 +71,8 @@ angular.module('blocktrail.wallet')
                             return settingsService.$isLoaded().then(function() {
                                 // 2: Additional user verification information is required
                                 if (settingsService.glideraAccessToken.userCanTransactInfo.code == 2) {
+                                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_SETUP_UPDATE);
+
                                     return $cordovaDialogs.confirm(
                                         $translate.instant('MSG_BUYBTC_SETUP_MORE_GLIDERA_BODY', {
                                             message: settingsService.glideraAccessToken.userCanTransactInfo.message
@@ -89,6 +97,8 @@ angular.module('blocktrail.wallet')
                             });
 
                         } else {
+                            trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_SETUP_INIT);
+
                             return $cordovaDialogs.confirm(
                                 $translate.instant('MSG_BUYBTC_SETUP_GLIDERA_BODY').sentenceCase(),
                                 $translate.instant('MSG_BUYBTC_SETUP_GLIDERA_TITLE').sentenceCase(),
@@ -169,7 +179,8 @@ angular.module('blocktrail.wallet')
 
 angular.module('blocktrail.wallet')
     .controller('BuyBTCBuyCtrl', function($scope, $state, $rootScope, $ionicLoading, $cordovaDialogs, glideraService, buyBTCService,
-                                          $stateParams, $log, $timeout, $interval, $translate, $filter, CONFIG) {
+                                          $stateParams, $log, $timeout, $interval, $translate, $filter, CONFIG, trackingService) {
+        trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_OPEN);
         $scope.broker = $stateParams.broker;
 
         $scope.priceBTCCurrency = 'USD';
@@ -295,6 +306,8 @@ angular.module('blocktrail.wallet')
                     .then(function(result) {
                         $ionicLoading.hide();
 
+                        trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_BUY_CONFIRM);
+
                         return $cordovaDialogs.confirm(
                             $translate.instant('MSG_BUYBTC_CONFIRM_BODY', {
                                 qty: $filter('number')(result.qty, 6),
@@ -316,6 +329,8 @@ angular.module('blocktrail.wallet')
                                     .then(function(result) {
                                         $ionicLoading.hide();
 
+                                        trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_BUY_DONE);
+
                                         $cordovaDialogs.alert(
                                             $translate.instant('MSG_BUYBTC_BOUGHT_BODY', {
                                                 qty: $filter('number')(result.qty, 6),
@@ -329,6 +344,7 @@ angular.module('blocktrail.wallet')
 
                                         $state.go('app.wallet.summary');
                                     }, function(e) {
+                                        trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_BUY_ERR);
                                         alert(e.details || ("Unknown error occurred (err: " + e.code + ")"));
                                         $ionicLoading.hide();
                                     })
@@ -338,6 +354,7 @@ angular.module('blocktrail.wallet')
                     .then(function() {
                         // -
                     }, function(err) {
+                        $ionicLoading.hide();
                         if (err != "CANCELLED") {
                             alert(err);
                         }
