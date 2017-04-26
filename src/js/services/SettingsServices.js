@@ -53,6 +53,10 @@ angular.module('blocktrail.wallet').service(
         enablePolling: true,    //dev setting - disables auto polling for transactions
         useTestnet: false,      //dev setting - enables testnet for SDK
 
+        latestVersionMobile: null,
+        latestOutdatedNoticeVersion: null,
+        glideraActivationNoticePending: null,
+
         permissionUsageData: true,      //permission to send anonymous usage data
         permissionCamera: false,        //iOS camera access
         permissionPhotos: false,        //iOS photo access
@@ -194,7 +198,8 @@ angular.module('blocktrail.wallet').service(
                     glideraAccessToken: self.glideraAccessToken,
                     glideraTransactions: self.glideraTransactions || [],
                     buyBTCRegion: self.buyBTCRegion,
-                    apprateStatus: self.apprateStatus
+                    glideraActivationNoticePending: self.glideraActivationNoticePending,
+                    latestVersionMobile: self.latestVersionMobile
                 };
 
                 return sdk.syncSettings(settingsData);
@@ -216,6 +221,8 @@ angular.module('blocktrail.wallet').service(
                     self.glideraAccessToken = result.glideraAccessToken;
                     self.glideraTransactions = result.glideraTransactions || [];
                     self.buyBTCRegion = result.buyBTCRegion;
+                    self.glideraActivationNoticePending = result.glideraActivationNoticePending;
+                    self.latestVersionMobile = result.latestVersionMobile;
 
                     return self.$store();
                 });

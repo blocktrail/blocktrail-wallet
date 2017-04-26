@@ -1,0 +1,14 @@
+<ion-popover-view class="popover {{ popoverSizeCls }} popover-slide-in popover-simple-popover">
+    <ion-content>
+        <h3 ng-if="title" ng-bind-html="title | translate | nl2br"></h3>
+        <p ng-bind-html="body | translate | nl2br"></p>
+
+        <div class="popover-footer" ng-if="!unclosable && appstoreButton">
+            <a href class="button button-outline" ng-click="popover.remove()">{{ 'CLOSE' | translate }}</a>
+            <a href class="button button-outline" ng-click="openAppStore()">{{ 'APPSTORE' | translate }}</a>
+        </div>
+        <div class="popover-footer" ng-if="!unclosable && !appstoreButton">
+            <a href class="button button-outline" ng-click="popover.remove()">{{ 'OK' | translate }}</a>
+        </div>
+    </ion-content>
+</ion-popover-view>

@@ -8,6 +8,7 @@ var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
+var xml2js = require('xml2js');
 var sh = require('shelljs');
 var gitRev = require('git-rev');
 var template = require('gulp-template');
@@ -20,7 +21,9 @@ var fontello = require('gulp-fontello');
 var clean = require('gulp-clean');
 var path = require('path');
 var sequence = require('run-sequence');
+var semver = require('semver');
 
+var rootdir = __dirname;
 var isWatch = false;
 var noFontello = process.argv.indexOf('--no-fontello') !== -1 || process.argv.indexOf('--nofontello') !== -1;
 
@@ -44,6 +47,30 @@ var streamAsPromise = function(stream) {
     return def.promise;
 };
 
+var getAppVersion = function() {
+    var def = Q.defer();
+
+    var xmlPath = path.join(rootdir, '/config.xml');
+
+    var xmlSrc = fs.readFileSync(xmlPath);
+
+    xml2js.parseString(xmlSrc, function(err, doc) {
+        if (err) {
+            def.reject(err);
+        }
+
+        var appVersion = doc.widget.$.version;
+
+        if (!semver.valid(appVersion)) {
+            throw new Error("appversion not a valid version: " + appVersion);
+        }
+
+        def.resolve(appVersion);
+    });
+
+    return def.promise;
+}
+
 /**
  * build appconfig from .json files
  *
@@ -55,26 +82,29 @@ var buildAppConfig = function() {
 
     gitRev.branch(function(branch) {
         gitRev.short(function(rev) {
-            var config = {
-                VERSION: branch + ":" + rev
-            };
+            getAppVersion().then(function(appVersion) {
+                var config = {
+                    VERSION_REV: branch + ":" + rev,
+                    VERSION: appVersion
+                };
 
-            ['./appconfig.json', './appconfig.default.json'].forEach(function(filename) {
-                var json = fs.readFileSync(filename);
+                ['./appconfig.json', './appconfig.default.json'].forEach(function (filename) {
+                    var json = fs.readFileSync(filename);
 
-                if (json) {
-                    var data = JSON.parse(stripJsonComments(json.toString('utf8')));
-                    config = _.defaults(config, data);
+                    if (json) {
+                        var data = JSON.parse(stripJsonComments(json.toString('utf8')));
+                        config = _.defaults(config, data);
+                    }
+                });
+
+                if (typeof config.API_HTTPS !== "undefined" && config.API_HTTPS === false) {
+                    config.API_URL = "http://" + config.API_HOST;
+                } else {
+                    config.API_URL = "https://" + config.API_HOST;
                 }
+
+                def.resolve(config);
             });
-
-            if (typeof config.API_HTTPS !== "undefined" && config.API_HTTPS === false) {
-                config.API_URL = "http://" + config.API_HOST;
-            } else {
-                config.API_URL = "https://" + config.API_HOST;
-            }
-
-            def.resolve(config);
         });
     });
 

@@ -1,3 +1,40 @@
+.popover.popover-simple-popover {
+    background-color: $app-default-color !important;
+    color: white;
+    padding-top: 1rem;
+
+    p {
+        padding: 0rem 2rem 1rem 2rem;
+        text-align: center;
+        font-size: 1.1rem;
+        line-height: 1.6rem;
+    }
+
+    h3 {
+        color: inherit;
+        padding: 2rem 2rem 1rem 2rem;
+        text-align: center;
+    }
+
+    .popover-footer {
+        padding: 0rem 2rem 1rem 2rem;
+        text-align: center;
+
+        .button {
+            margin-top: 1rem;
+            min-width: 6rem;
+            color: #fff;
+            color: rgba(0, 0, 0, 0.5);
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.4);
+
+            &.primary {
+                background-color: $good-green;
+            }
+        }
+    }
+}
+
 .platform-cordova .popover-backdrop.active {
     background-color: rgba(0, 0, 0, 0.3);
 }
@@ -22,6 +59,18 @@
 
 .popover.active {
     opacity: 1;
+}
+
+.popover.small-popover {
+    left: 10%;
+    width: 80%;
+    top: 25%;
+    height: 45%;
+    margin: 0px;
+
+    &.popover-slide-in {
+        @include slideIn(.8s, 25%);
+    }
 }
 
 .popover.medium-popover {
