@@ -15,7 +15,8 @@
     "ngImgCrop": "~0.3.2",
     "intl-tel-input": "~6.0.0",
     "angulartics": "^1.1.3",
-    "zxcvbn": "^4.4.1"
+    "zxcvbn": "^4.4.1",
+    "semver": "^4.3.4"
   },
   "resolutions": {
     "angular": ">= 1.2.23"
