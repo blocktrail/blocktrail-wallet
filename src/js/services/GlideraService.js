@@ -430,7 +430,8 @@ angular.module('blocktrail.wallet').factory(
                                         qty: result.qty,
                                         price: result.price,
                                         total: result.total,
-                                        currency: result.currency
+                                        currency: result.currency,
+                                        estimatedDeliveryDate: Math.floor(Date.parse(result.estimatedDeliveryDate) / 1000)
                                     });
 
                                     return settingsService.$store().then(function() {
@@ -493,6 +494,7 @@ angular.module('blocktrail.wallet').factory(
                                             transaction.qty = newTxInfo.qty;
                                             transaction.status = newTxInfo.status;
                                             transaction.transactionHash = newTxInfo.transactionHash;
+                                            transaction.estimatedDeliveryDate = Math.floor(Date.parse(newTxInfo.estimatedDeliveryDate) / 1000);
 
                                             if (oldStatus === 'PROCESSING' && transaction.status === 'COMPLETE') {
                                                 $rootScope.$broadcast('glidera_complete', transaction);
@@ -554,7 +556,8 @@ angular.module('blocktrail.wallet').factory(
                                     status: updateTx.status,
                                     price: updateTx.price,
                                     total: updateTx.total,
-                                    currency: updateTx.currency
+                                    currency: updateTx.currency,
+                                    estimatedDeliveryDate: Math.floor(Date.parse(updateTx.estimatedDeliveryDate) / 1000)
                                 };
                             });
 

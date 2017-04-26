@@ -59,8 +59,13 @@
             </div>
 
             <div class="buy-btc-via-vendor">
-                {{ 'BUYBTC_VIA' | translate }} <span class="sentence-case">{{ broker }}</span> 
-                <a href="#" ng-click="$state.go('app.wallet.buybtc.choose')">{{ 'CHANGE' | translate }}</a>
+                <p>
+                    {{ 'BUYBTC_VIA' | translate }} <span class="sentence-case">{{ broker }}</span>
+                    <a href="#" ng-click="$state.go('app.wallet.buybtc.choose')">{{ 'CHANGE' | translate }}</a>
+                </p>
+                <p>
+                    {{ 'BUYBTC_BANK_TRANSFER_SLOW' | translate }}
+                </p>
             </div>
 
 

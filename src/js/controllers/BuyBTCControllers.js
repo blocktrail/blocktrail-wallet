@@ -336,6 +336,7 @@ angular.module('blocktrail.wallet')
                                                 qty: $filter('number')(result.qty, 6),
                                                 price: $filter('number')(result.total, 2),
                                                 fee: $filter('number')(result.fees, 2),
+                                                estimatedDate: $filter('amCalendar')(result.estimatedDeliveryDate),
                                                 currencySymbol: $filter('toCurrencySymbol')('USD')
                                             }).sentenceCase(),
                                             $translate.instant('MSG_BUYBTC_BOUGHT_TITLE').sentenceCase(),
