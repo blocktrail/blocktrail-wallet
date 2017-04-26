@@ -2,7 +2,7 @@ angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
                                        Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration, Currencies,
                                        $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService,
-                                       $cordovaSocialSharing) {
+                                       $cordovaSocialSharing, AppVersionService) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -22,6 +22,25 @@ angular.module('blocktrail.wallet')
          */
         launchService.getWalletConfig()
             .then(function(result) {
+                settingsService.$isLoaded().then(function () {
+                    AppVersionService.checkVersion(
+                        settingsService.latestVersionMobile,
+                        settingsService.latestOutdatedNoticeVersion,
+                        result.versionInfo.mobile,
+                        AppVersionService.CHECKS.LOGGEDIN
+                    );
+
+                    if (!settingsService.latestVersionMobile || semver.lt(CONFIG.VERSION, settingsService.latestVersionMobile) ||
+                        !settingsService.latestOutdatedNoticeVersion ||
+                        (result.versionInfo.mobile.latest && semver.lt(result.versionInfo.mobile.latest, settingsService.latestOutdatedNoticeVersion))) {
+                        settingsService.latestOutdatedNoticeVersion = result.versionInfo.mobile.latest;
+                        settingsService.latestVersionMobile = CONFIG.VERSION;
+                        settingsService.$store().then(function () {
+                            settingsService.$syncSettingsUp();
+                        });
+                    }
+                });
+
                 if (result.currencies) {
                     result.currencies.forEach(function (currency) {
                         Currencies.enableCurrency(currency);

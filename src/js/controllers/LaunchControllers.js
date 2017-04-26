@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http, settingsService, $ionicHistory, $ionicSideMenuDelegate) {
+    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http, settingsService, $ionicHistory) {
         $log.debug('starting');
 
         //disable animation on transition from this state

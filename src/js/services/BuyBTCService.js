@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'buyBTCService',
-    function(CONFIG, $log, $q, Wallet, $cordovaDialogs, $translate, $http, glideraService, launchService) {
+    function(CONFIG, $log, $q, Wallet, $cordovaDialogs, $translate, $rootScope, $http, glideraService, launchService) {
         var SUPPORTED_BROKERS = ['glidera'];
 
         var _regions = [
@@ -101,7 +101,9 @@ angular.module('blocktrail.wallet').factory(
                         }
                     });
                 })
-                .then(function() { return _brokers; }, function(e) { console.error('getBrokers' + (e.msg || e.message || "" + e)); return getBrokers(); })
+                .then(function() {
+                    return _brokers;
+                }, function(e) { console.error('getBrokers' + (e.msg || e.message || "" + e)); return getBrokers(); })
         };
 
         var _brokersPromise = null;

@@ -442,9 +442,16 @@ angular.module('blocktrail.wallet').config(
                      * check for extra languages to enable
                      * if new language is new preferred, set it
                      */
-                    preferredLanguage: function(CONFIG, $rootScope, settingsService, blocktrailLocalisation, launchService) {
+                    preferredLanguage: function(CONFIG, $rootScope, settingsService, blocktrailLocalisation, launchService, AppVersionService) {
                         return launchService.getWalletConfig()
                             .then(function(result) {
+                                AppVersionService.checkVersion(
+                                    null,
+                                    null,
+                                    result.versionInfo.mobile,
+                                    AppVersionService.CHECKS.SETUP
+                                );
+
                                 return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
                             })
                             .then(function(extraLanguages) {
