@@ -209,6 +209,8 @@ gulp.task('js:libs', ['appconfig'], function() {
             "./src/lib/libphonenumber/dist/libphonenumber.js",
             "./src/lib/intl-tel-input/src/js/data.js",
 
+            "./src/lib/semver/semver.browser.js",
+
             "./src/lib/moment/moment.js",
             "./src/lib/moment/locale/nl.js",
             "./src/lib/moment/locale/fr.js",

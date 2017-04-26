@@ -1,0 +1,35 @@
+{
+  "name": "semver",
+  "version": "4.3.4",
+  "homepage": "https://github.com/hippich/bower-semver",
+  "authors": [
+    "Pavel Karoukin <pavel@karoukin.us>"
+  ],
+  "description": "The semver parser - mirroring one for node (the one npm uses)",
+  "main": "semver.browser.js",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "semver"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "4.3.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v4.3.4",
+    "commit": "32d955e95c4e9f31f7aea17159965ff9a13be304"
+  },
+  "_source": "https://github.com/hippich/bower-semver.git",
+  "_target": "^4.3.4",
+  "_originalSource": "semver",
+  "_direct": true
+}
