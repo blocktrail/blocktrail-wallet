@@ -62,6 +62,10 @@
 }
 
 .popover.small-popover {
+    .popover-arrow {
+        display: none;
+    }
+
     left: 10%;
     width: 80%;
     top: 25%;
@@ -74,6 +78,10 @@
 }
 
 .popover.medium-popover {
+    .popover-arrow {
+        display: none;
+    }
+
     left: 10%;
     width: 80%;
     top: 20%;
@@ -95,6 +103,10 @@
 }
 
 .popover.large-popover {
+    .popover-arrow {
+        display: none;
+    }
+    
     left: 10%;
     width: 80%;
     top: 10%;
