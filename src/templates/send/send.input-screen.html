@@ -173,8 +173,8 @@
                 </div>
 
                 <div class="fee-warning">
-                    <div class="text-muted" ng-show="!appControl.useOptimalFee && sendInput.btcValue + sendInput.fiatValue > 0">{{ 'LOW_PRIORITY_NOTICE' | translate }}</div>
-                    <div class="text-muted" ng-show="appControl.useOptimalFee && sendInput.btcValue + sendInput.fiatValue > 0">{{ 'OPTIMAL_PRIORITY_NOTICE' | translate }}</div>
+                    <div class="text-muted" ng-if="!appControl.useOptimalFee && sendInput.btcValue + sendInput.fiatValue > 0">{{ 'LOW_PRIORITY_NOTICE' | translate }}</div>
+                    <div class="text-muted" ng-if="appControl.useOptimalFee && sendInput.btcValue + sendInput.fiatValue > 0">{{ 'OPTIMAL_PRIORITY_NOTICE' | translate }}</div>
                 </div>
 
                 <div class="list">
