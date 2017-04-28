@@ -24,11 +24,12 @@
     "node-notifier": "^4.2.1",
     "properties-parser": "^0.3.1",
     "q": "^1.4.1",
+    "run-sequence": "^1.2.2",
+    "semver": "^5.3.0",
     "shelljs": "^0.3.0",
     "strip-json-comments": "^1.0.2",
     "which": "^1.1.1",
-    "xml2js": "^0.4.17",
-    "run-sequence": "^1.2.2"
+    "xml2js": "^0.4.17"
   },
   "cordovaPlugins": [
     "org.apache.cordova.device",
