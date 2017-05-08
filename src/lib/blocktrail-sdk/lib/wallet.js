@@ -1110,7 +1110,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                                 break;
 
                                 case Wallet.FEE_STRATEGY_OPTIMAL:
-                                    if (fee > estimatedFee * 20) {
+                                    if (fee > estimatedFee * 50) {
                                         return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
                                             "seems awefully high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
                                     }
@@ -1351,13 +1351,19 @@ Wallet.sortMultiSigKeys = function(pubKeys) {
  *  this is an estimation, not a proper 100% correct calculation
  *
  * @param {bitcoin.Transaction} tx
+ * @param {int} feePerKb when not null use this feePerKb, otherwise use BASE_FEE legacy calculation
  * @returns {number}
  */
-Wallet.estimateIncompleteTxFee = function(tx) {
+Wallet.estimateIncompleteTxFee = function(tx, feePerKb) {
     var size = Wallet.estimateIncompleteTxSize(tx);
-    var sizeKB = Math.ceil(size / 1000);
+    var sizeKB = size / 1000;
+    var sizeKBCeil = Math.ceil(size / 1000);
 
-    return sizeKB * blocktrail.BASE_FEE;
+    if (feePerKb) {
+        return parseInt(sizeKB * feePerKb, 10);
+    } else {
+        return parseInt(sizeKBCeil * blocktrail.BASE_FEE, 10);
+    }
 };
 
 /**

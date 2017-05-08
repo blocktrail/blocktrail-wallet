@@ -74,7 +74,53 @@ InsightBitcoinService.prototype.batchAddressHasTransactions = function(addresses
         .then(function(results) {
             return results.items.length > 0;
         })
+        ;
+};
+
+/**
+ * get estimated fee/kb
+ *
+ * @returns {q.Promise}
+ */
+InsightBitcoinService.prototype.estimateFee = function() {
+    var self = this;
+
+    var nBlocks = "2";
+
+    return self.getRequest("https://" + (self.settings.testnet ? 'test-' : '') + 'insight.bitpay.com/api/utils/estimatefee?nbBlocks=' + nBlocks)
+        .then(function(results) {
+            return parseInt(results[nBlocks] * 1e8, 10);
+        })
     ;
+};
+
+InsightBitcoinService.prototype.getRequest = function(url) {
+    var deferred = q.defer();
+    request
+        .get(url)
+        .end(function(error, res) {
+            if (error) {
+                deferred.reject(error);
+                return;
+            }
+            if (res.ok) {
+                if (res.headers['content-type'].indexOf('application/json') >= 0) {
+                    try {
+                        var body = JSON.parse(res.text);
+                        return deferred.resolve(body);
+
+                    } catch (e) {
+                        return deferred.reject(error);
+                    }
+                } else {
+                    return deferred.resolve(res.body);
+                }
+            } else {
+                return deferred.reject(res.text);
+            }
+        });
+
+    return deferred.promise;
 };
 
 InsightBitcoinService.prototype.postRequest = function(url, data) {

@@ -52,6 +52,14 @@ BlocktrailBitcoinService.prototype.setPaginationLimit = function(limit) {
     this.settings.paginationLimit = limit;
 };
 
+BlocktrailBitcoinService.prototype.estimateFee = function() {
+    var self = this;
+
+    return self.client.feePerKB().then(function(r) {
+        return r['optimal'];
+    });
+};
+
 /**
  * gets unspent outputs for a batch of addresses, returning an array of outputs with hash, index,
  * value, and script pub hex mapped to each corresponding address

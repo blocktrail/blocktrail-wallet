@@ -24,9 +24,11 @@ var RestClient = function(options) {
     self.port = options.port;
     self.endpoint = options.endpoint;
 
-    self.defaultParams = {
-        'api_key': self.apiKey
-    };
+    self.defaultParams = {};
+
+    if (self.apiKey) {
+        self.defaultParams['api_key'] = self.apiKey;
+    }
 
     self.defaultHeaders = {
         'X-SDK-Version': 'blocktrail-sdk-nodejs/3.0.x'

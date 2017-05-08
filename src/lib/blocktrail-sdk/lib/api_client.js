@@ -1331,6 +1331,21 @@ APIClient.prototype._createNewWalletV3 = function(options) {
     return deferred.promise;
 };
 
+function verifyPublicBip32Key(bip32Key) {
+    var hk = bitcoin.HDNode.fromBase58(bip32Key[0]);
+    if (hk.privKey) {
+        throw new Error('BIP32Key contained private key material - abort');
+    }
+
+    if (bip32Key[1].slice(0, 1) !== "M") {
+        throw new Error("BIP32Key contained non-public path - abort");
+    }
+}
+
+function verifyPublicOnly(walletData) {
+    verifyPublicBip32Key(walletData.primary_public_key);
+    verifyPublicBip32Key(walletData.backup_public_key);
+}
 
 /**
  * create wallet using the API
@@ -1356,6 +1371,8 @@ APIClient.prototype.storeNewWalletV1 = function(identifier, primaryPublicKey, ba
         checksum: checksum,
         key_index: keyIndex
     };
+
+    verifyPublicOnly(postData);
 
     return self.client.post("/wallet", null, postData, cb);
 };
@@ -1390,6 +1407,8 @@ APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, ba
         key_index: keyIndex
     };
 
+    verifyPublicOnly(postData);
+
     return self.client.post("/wallet", null, postData, cb);
 };
 
@@ -1422,6 +1441,8 @@ APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, ba
         checksum: checksum,
         key_index: keyIndex
     };
+
+    verifyPublicOnly(postData);
 
     return self.client.post("/wallet", null, postData, cb);
 };

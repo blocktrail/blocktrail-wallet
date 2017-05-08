@@ -1,13 +1,22 @@
 <html>
 <body>
-    <input id="walletIdentfier" type="text" placeholder="identifier" required="true" />
-    <input id="walletPassword" type="password" placeholder="password" required="true" />
+    <input id="walletIdentfier" type="text" placeholder="identifier" value="" required="true" />
+    <input id="walletPassword" type="password" placeholder="password" value="" required="true" />
     <select id="walletVersion">
         <option value="v1">V1</option>
         <option value="v2">V2</option>
         <option value="v3" selected>V3</option>
     </select>
     <button onclick="createWallet()">create wallet</button>
+    <button onclick="initWallet()">init wallet</button>
+
+    <div id="address" style="display: none;"></div>
+
+    <div id="send" style="display: none;">
+        <input id="sendAddress" type="text" placeholder="address" value="" required="true" />
+        <input id="sendAmount" type="text" placeholder="amount" value="" required="true" />
+        <button onclick="send()">send</button>
+    </div>
 
     <script src="../build/blocktrail-sdk-full.min.js"></script>
     <script>
@@ -19,6 +28,17 @@
             apiSecret : "MY_APISECRET",
             testnet : true
         });
+
+        var wallet;
+
+        function displaySend() {
+            document.getElementById('send').style.display = 'block';
+        }
+
+        function displayAddress(address) {
+            document.getElementById('address').style.display = 'block';
+            document.getElementById('address').innerHTML = address;
+        }
 
         function createWallet() {
             var identifier = document.getElementById('walletIdentfier').value;
@@ -40,14 +60,77 @@
                 passphrase: password,
                 keyIndex: 9999,
                 walletVersion: version
-            }, function(err, wallet, primaryMnemonic, backupMnemonic, blocktrailPubKeys) {
+            }, function(err, _wallet, backupInfo) {
                 if (err) {
                     return console.log("createNewWallet ERR", err);
                 }
 
-                console.log('primary mnemonic', primaryMnemonic);
-                console.log('backup mnemonic', backupMnemonic);
-                console.log('blocktrail pubkeys', blocktrailPubKeys);
+                console.log('backupInfo', backupInfo);
+
+                wallet = _wallet;
+                displaySend();
+
+                wallet.getNewAddress(function(err, address) {
+                    displayAddress(address);
+                });
+            });
+        }
+
+        function initWallet() {
+            var identifier = document.getElementById('walletIdentfier').value;
+            var password = document.getElementById('walletPassword').value;
+            var version = document.getElementById('walletVersion').value;
+
+            if (!identifier) {
+                alert("Missing identifier");
+                return;
+            }
+
+            if (!password) {
+                alert("Missing password");
+                return;
+            }
+
+            client.initWallet({
+                identifier: identifier,
+                passphrase: password
+            }, function(err, _wallet) {
+                if (err) {
+                    return console.log("initWallet ERR", err);
+                }
+
+                wallet = _wallet;
+                displaySend();
+
+                wallet.getNewAddress(function(err, address) {
+                    displayAddress(address);
+                });
+            });
+        }
+
+        function send() {
+            var address = document.getElementById('sendAddress').value;
+            var amount = document.getElementById('sendAmount').value;
+
+            if (!address) {
+                alert("Missing address");
+                return;
+            }
+
+            if (!amount) {
+                alert("Missing amount");
+                return;
+            }
+
+            var pay = {};
+            pay[address] = blocktrail.toSatoshi(amount);
+
+            wallet.pay(pay, null, true, function(err, txId) {
+                if (err) {
+                    return console.log("send ERR", err);
+                }
+
+                console.log(txId);
             });
         }
     </script>
