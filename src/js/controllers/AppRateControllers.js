@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('AppRateCtrl', function($scope, $q, sdkService, settingsService, AppRateService) {
+    .controller('AppRateCtrl', function($scope, $q, sdkService, settingsService, AppRateService, $rootScope, $cordovaDevice) {
         $scope.appRateClass = "choose-stars";
         $scope.apprate = {
             feedbackMsg: "",
@@ -25,7 +25,16 @@ angular.module('blocktrail.wallet')
         $scope.sendFeedback = function() {
             $q.when(sdkService.sdk())
                 .then(function(sdk) {
-                    return sdk.sendFeedback($scope.apprate.feedbackMsg);
+                    var feedback = {
+                        msg: $scope.apprate.feedbackMsg,
+                        email: null,
+                        platform: $rootScope.isIOS && "iOS" || "Android",
+                        app_version: $rootScope.appVersion,
+                        os_version: $cordovaDevice.getVersion(),
+                        phone_model: $cordovaDevice.getModel()
+                    };
+
+                    return sdk.sendFeedback(feedback);
                 })
                 .finally(function() {
                     $scope.close();
