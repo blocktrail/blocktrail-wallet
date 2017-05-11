@@ -1,0 +1,20 @@
+<ion-popover-view class="popover {{ popoverSizeCls }} popover-slide-in popover-simple-popover">
+    <ion-content>
+        <h3>{{ 'BUYBTC_PENDING_ORDER_FROM' | translate: {order: order} }}</h3>
+        <p>
+            <b>{{ order.qty | satoshiToCurrency: 'BTC' : bitcoinPrices : 6 }}</b><br />
+            <br />
+
+            <b>{{ 'PURCHASED_AT' | translate }}</b> <br />
+            {{ 'BUYBTC_PENDING_ORDER_PRICE' | translate: {order: order} }} <br />
+            <br />
+
+            <b>{{ 'EST_DELIVERY' | translate }}</b> <br />
+            {{ (order.estimatedDeliveryDate * 1000) | amCalendar }}
+        </p>
+
+        <div class="popover-footer">
+            <a href class="button button-outline" ng-click="popover.remove()">{{ 'OK' | translate }}</a>
+        </div>
+    </ion-content>
+</ion-popover-view>
