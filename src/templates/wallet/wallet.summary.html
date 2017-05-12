@@ -20,12 +20,40 @@
         <ion-list>
             <div id="hero-anchor"></div>
             <div class="item item-{{$index}}"
-             collection-repeat="transaction in transactionList track by $index"
-             item-width="100%" item-height="transaction.isHeader && '40px' || '65px'"
-             ng-class="{'item-divider': transaction.isHeader, 'item-complex': !transaction.isHeader}">
-                <span class="date-group" ng-if="transaction.isHeader">
+                 collection-repeat="transaction in transactionList track by $index"
+                 item-width="100%" item-height="transaction.isHeader && '40px' || '65px'"
+                 ng-class="{'item-divider': transaction.isHeader, 'item-complex': !transaction.isHeader}">
+                <span class="date-group" ng-if="transaction.isHeader && !transaction.isBuyBtcPendingOrder">
                     {{ transaction.date | amCalendar }}
                 </span>
+                <span class="date-group" ng-if="transaction.isHeader && transaction.isBuyBtcPendingOrder">
+                    {{ 'BUYBTC_PENDING_ORDERS' | translate }}
+                </span>
+
+                <a class="item-content" ng-if="transaction.isBuyBtcPendingOrder" ng-click="showBuyBtcPendingOrder(transaction)">
+                    <div class="row row-no-padding">
+                        <div class="transaction-info col col-50">
+                            <div class="display-token contact-token">
+                                <span class="avatar" style="background-image: url('data:image/jpeg;base64, {{ transaction.avatarUrl }}');"></span>
+                            </div>
+
+                            <div class="pending">
+                                <i class="icon ion-clock"></i>
+                            </div>
+
+                            <div class="tx-type">
+                                <span class="tx-display-name">{{ transaction.displayName }}</span>
+                                <div class="tx-time">{{ 'BUYBTC_PENDING_ORDER' | translate }}</div>
+                            </div>
+                        </div>
+                        <div class="col col-50">
+                            <div class="btc-value received" style="float: right;">
+                                {{ (transaction.qty | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : htmlMarkup=false : hideDisp=true) }}
+                                <span class="disp">BTC</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
 
                 <a class="item-content" ng-if="transaction.hash" ng-click="showTransaction(transaction)">
                     <div class="row row-no-padding">
@@ -37,8 +65,8 @@
                             <div ng-if="!transaction.contact"
                                  class="display-token anon-token"
                                  ng-class="{received: transaction.wallet_value_change > 0, sent: transaction.wallet_value_change <= 0}">
-                                    <i ng-if="transaction.wallet_value_change <= 0" class="icon ion-ios-redo-outline"></i>
-                                    <i ng-if="transaction.wallet_value_change > 0" class="icon ion-ios-undo-outline"></i>
+                                <i ng-if="transaction.wallet_value_change <= 0" class="icon ion-ios-redo-outline"></i>
+                                <i ng-if="transaction.wallet_value_change > 0" class="icon ion-ios-undo-outline"></i>
                             </div>
                             <div class="pending" ng-if="!transaction.block_height">
                                 <i class="icon ion-clock"></i>

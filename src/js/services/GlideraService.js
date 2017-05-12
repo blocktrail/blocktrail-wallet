@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet').factory(
     'glideraService',
     function(CONFIG, $log, $q, Wallet, $cordovaDialogs, $translate, sdkService,
-             $http, $timeout, $ionicLoading, settingsService, launchService, $rootScope, trackingService) {
+             $http, $timeout, $ionicLoading, settingsService, launchService, $rootScope, trackingService, CurrencyConverter) {
         var clientId;
         var returnuri = "btccomwallet://glideraCallback/oauth2";
         var GLIDERA_URL = CONFIG.GLIDERA_URL;
@@ -424,6 +424,8 @@ angular.module('blocktrail.wallet').factory(
                                     $log.debug('buy', JSON.stringify(result, null, 4));
 
                                     settingsService.glideraTransactions.push({
+                                        address: address,
+                                        time: Math.floor((new Date()).getTime() / 1000),
                                         transactionUuid: result.transactionUuid,
                                         transactionHash: result.transactionHash || null,
                                         status: result.status,
@@ -548,16 +550,24 @@ angular.module('blocktrail.wallet').factory(
                             });
                         })
                         .then(function() {
+                            var oldTxMap = {};
+                            settingsService.glideraTransactions.forEach(function(tx) {
+                                oldTxMap[tx.transactionUuid] = tx;
+                            });
+
                             settingsService.glideraTransactions = updateTxs.map(function(updateTx) {
+                                var tx = oldTxMap[updateTx.transactionUuid] || {};
+
                                 return {
+                                    address: tx.address || null,
+                                    time: tx.time || null,
                                     transactionUuid: updateTx.transactionUuid,
-                                    transactionHash: updateTx.transactionHash,
+                                    transactionHash: updateTx.transactionHash || tx.transactionHash || null,
                                     qty: updateTx.qty,
                                     status: updateTx.status,
                                     price: updateTx.price,
                                     total: updateTx.total,
-                                    currency: updateTx.currency,
-                                    estimatedDeliveryDate: Math.floor(Date.parse(updateTx.estimatedDeliveryDate) / 1000)
+                                    currency: updateTx.currency
                                 };
                             });
 
@@ -604,7 +614,15 @@ angular.module('blocktrail.wallet').factory(
         Wallet.addTransactionMetaResolver(function(transaction) {
             return $updateStatus.promise.then(function() {
                 settingsService.glideraTransactions.forEach(function(glideraTxInfo) {
-                    if (glideraTxInfo.transactionHash === transaction.hash) {
+                    var isTxhash = false && glideraTxInfo.transactionHash === transaction.hash;
+                    var isAddr = glideraTxInfo.address && transaction.self_addresses.indexOf(glideraTxInfo.address) !== -1;
+
+                    if (!isTxhash && isAddr) {
+                        glideraTxInfo.transactionHash = transaction.hash;
+                        isTxhash = true;
+                    }
+
+                    if (isTxhash || isAddr) {
                         transaction.buybtc = {
                             broker: 'glidera',
                             qty: glideraTxInfo.qty,
