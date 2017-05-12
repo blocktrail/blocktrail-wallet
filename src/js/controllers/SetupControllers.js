@@ -138,17 +138,22 @@ angular.module('blocktrail.wallet')
             var twoFactorCode = $scope.twoFactorCode;
 
             $scope.twoFactorCode = null; // consumed
-            $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "t" : "") + ($rootScope.NETWORK) + "/mywallet/enable", {
-                login: $scope.form.username,
-                password: CryptoJS.SHA512($scope.form.password).toString(),
-                platform: $rootScope.isIOS && "iOS" || "Android",
-                version: $rootScope.appVersion,
-                two_factor_token: twoFactorCode,
-                device_uuid: device.uuid,
-                device_name: ([device.platform, device.model].clean().join(" / ")) || 'Unknown Device',
-                skip_two_factor: true // will make the resulting API key not require 2FA in the future
-            })
-                .then(function(result) {
+
+            trackingService.getBrowserFingerprint().then(function (result) {
+
+                return $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "t" : "") + ($rootScope.NETWORK) + "/mywallet/enable", {
+                    login: $scope.form.username,
+                    password: CryptoJS.SHA512($scope.form.password).toString(),
+                    platform: $rootScope.isIOS && "iOS" || "Android",
+                    version: $rootScope.appVersion,
+                    two_factor_token: twoFactorCode,
+                    device_uuid: device.uuid,
+                    device_name: ([device.platform, device.model].clean().join(" / ")) || 'Unknown Device',
+                    skip_two_factor: true, // will make the resulting API key not require 2FA in the future
+                    browser_fingerprint: result.hash
+                });
+            }).then(function(result) {
+
                     trackingService.trackEvent(trackingService.EVENTS.LOGIN);
 
                     var newSecret = false;
@@ -193,8 +198,8 @@ angular.module('blocktrail.wallet')
                         })
                         .then(function(secretData) {
                             return launchService.storeAccountInfo(_.merge({}, {
-                                secret: secretData.secret, 
-                                encrypted_secret: secretData.encrypted_secret, 
+                                secret: secretData.secret,
+                                encrypted_secret: secretData.encrypted_secret,
                                 new_secret: newSecret
                             }, result.data)).then(function() {
                                 $log.debug('existing_wallet', result.data.existing_wallet);
@@ -434,68 +439,73 @@ angular.module('blocktrail.wallet')
             var secret = randomBytes(32).toString('base64');
             var encryptedSecret = CryptoJS.AES.encrypt(secret, $scope.form.password).toString();
 
-            var postData = {
-                username: $scope.form.username,
-                email: $scope.form.email,
-                password: CryptoJS.SHA512($scope.form.password).toString(),
-                password_score: $scope.form.passwordCheck && $scope.form.passwordCheck.score || 0,
-                platform: $rootScope.isIOS && "iOS" || "Android",
-                version: $rootScope.appVersion,
-                encrypted_secret: encryptedSecret,
-                device_uuid: device.uuid,
-                device_name: ([device.platform, device.model].clean().join(" / ")) || 'Unknown Device',
-                skip_two_factor: true // will make the resulting API key not require 2FA in the future
-            };
-            $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "t" : "") + ($rootScope.NETWORK) + "/mywallet/register", postData)
-                .then(function(result) {
-                    trackingService.trackEvent(trackingService.EVENTS.REGISTRATION);
-                    return launchService.storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
-                        $scope.setupInfo.password = $scope.form.password;
+            trackingService.getBrowserFingerprint()
+                .then(function (result) {
+                    var postData = {
+                        username: $scope.form.username,
+                        email: $scope.form.email,
+                        password: CryptoJS.SHA512($scope.form.password).toString(),
+                        password_score: $scope.form.passwordCheck && $scope.form.passwordCheck.score || 0,
+                        platform: $rootScope.isIOS && "iOS" || "Android",
+                        version: $rootScope.appVersion,
+                        encrypted_secret: encryptedSecret,
+                        device_uuid: device.uuid,
+                        device_name: ([device.platform, device.model].clean().join(" / ")) || 'Unknown Device',
+                        skip_two_factor: true, // will make the resulting API key not require 2FA in the future
+                        browser_fingerprint: result.hash
+                    };
+                    $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "t" : "") + ($rootScope.NETWORK) + "/mywallet/register", postData)
+                        .then(function(result) {
+                                trackingService.trackEvent(trackingService.EVENTS.REGISTRATION);
+                                return launchService.storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
+                                    $scope.setupInfo.password = $scope.form.password;
 
-                        $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: ''};
-                        $scope.appControl.working = false;
+                                    $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: ''};
+                                    $scope.appControl.working = false;
 
-                        //save the default user settings
-                        settingsService.accountCreated = parseInt(((new Date).getTime() / 1000).toFixed(0), 10);
-                        settingsService.username = $scope.form.username;
-                        settingsService.displayName = $scope.form.username; //@TODO maybe try and determine a display name from their email
-                        settingsService.enableContacts = false;
-                        settingsService.email = $scope.form.email;
-                        settingsService.$store().then(function() {
-                            $scope.dismissMessage();
-                            $timeout(function() {
-                                $state.go('app.setup.pin');
-                            }, 300);
-                        });
-                    });
-                },
-                function(error) {
-                    $log.error(error);
-                    if (error.data.msg.toLowerCase().match(/username exists/)) {
-                        $scope.message = {title: 'ERROR_TITLE_1', title_class: 'text-bad', body: 'MSG_USERNAME_TAKEN'};
-                        $scope.appControl.working = false;
-                    } else if (error.data.msg.toLowerCase().match(/already in use/)) {
-                        $scope.message = {title: 'ERROR_TITLE_1', title_class: 'text-bad', body: 'MSG_EMAIL_TAKEN'};
-                        $scope.appControl.working = false;
-                    } else {
-                        $log.error(error);
-                        $scope.message = {title: 'ERROR_TITLE_1', title_class: 'text-bad', body: error.data.msg};
-                        $scope.appControl.working = false;
-                    }
+                                    //save the default user settings
+                                    settingsService.accountCreated = parseInt(((new Date).getTime() / 1000).toFixed(0), 10);
+                                    settingsService.username = $scope.form.username;
+                                    settingsService.displayName = $scope.form.username; //@TODO maybe try and determine a display name from their email
+                                    settingsService.enableContacts = false;
+                                    settingsService.email = $scope.form.email;
+                                    settingsService.$store().then(function() {
+                                        $scope.dismissMessage();
+                                        $timeout(function() {
+                                            $state.go('app.setup.pin');
+                                        }, 300);
+                                    });
+                                });
+                            },
+                            function(error) {
+                                $log.error(error);
+                                if (error.data.msg.toLowerCase().match(/username exists/)) {
+                                    $scope.message = {title: 'ERROR_TITLE_1', title_class: 'text-bad', body: 'MSG_USERNAME_TAKEN'};
+                                    $scope.appControl.working = false;
+                                } else if (error.data.msg.toLowerCase().match(/already in use/)) {
+                                    $scope.message = {title: 'ERROR_TITLE_1', title_class: 'text-bad', body: 'MSG_EMAIL_TAKEN'};
+                                    $scope.appControl.working = false;
+                                } else {
+                                    $log.error(error);
+                                    $scope.message = {title: 'ERROR_TITLE_1', title_class: 'text-bad', body: error.data.msg};
+                                    $scope.appControl.working = false;
+                                }
 
-                    //set the back button
-                    $btBackButtonDelegate.setBackButton(function() {
-                        $timeout(function() {
-                            $scope.dismissMessage();
-                        });
-                    }, true);
-                    $btBackButtonDelegate.setHardwareBackButton(function() {
-                        $timeout(function() {
-                            $scope.dismissMessage();
-                        });
-                    }, true);
+                                //set the back button
+                                $btBackButtonDelegate.setBackButton(function() {
+                                    $timeout(function() {
+                                        $scope.dismissMessage();
+                                    });
+                                }, true);
+                                $btBackButtonDelegate.setHardwareBackButton(function() {
+                                    $timeout(function() {
+                                        $scope.dismissMessage();
+                                    });
+                                }, true);
 
+                            });
                 });
+
         };
     })
     .controller('SetupWalletPinCtrl', function($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
