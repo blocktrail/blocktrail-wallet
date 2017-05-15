@@ -122,4 +122,5 @@
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
     <string name="wifi_ssid_label">Network Name</string>
     <string name="wifi_type_label">Type</string>
+    <string name="google_app_id">780109741424</string>
 </resources>

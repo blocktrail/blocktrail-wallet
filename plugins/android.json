@@ -770,6 +770,10 @@
         },
         "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "780109741424",
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {}

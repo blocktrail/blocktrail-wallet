@@ -87,6 +87,7 @@ ext {
 
 // PLUGIN GRADLE EXTENSIONS START
 apply from: "cordova-fabric-plugin/mywallet-build-extras.gradle"
+apply from: "phonegap-plugin-push/mywallet-push.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
@@ -248,6 +249,9 @@ dependencies {
     compile "de.greenrobot:eventbus:2.4.0"
     compile "com.facebook.android:facebook-android-sdk:4.14.+"
     compile "com.android.support:support-v4:24.1.1+"
+    compile "com.android.support:support-v13:23+"
+    compile "com.google.android.gms:play-services-gcm:9.0.2+"
+    compile "me.leolin:ShortcutBadger:1.1.4@aar"
     // SUB-PROJECT DEPENDENCIES END
 }
 

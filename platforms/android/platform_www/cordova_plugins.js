@@ -457,6 +457,13 @@ module.exports = [
         "clobbers": [
             "window.plugins.socialsharing"
         ]
+    },
+    {
+        "file": "plugins/phonegap-plugin-push/www/push.js",
+        "id": "phonegap-plugin-push.PushNotification",
+        "clobbers": [
+            "PushNotification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -493,7 +500,8 @@ module.exports.metadata =
     "cordova-plugin-globalization": "1.0.1",
     "cordova-plugin-dialogs": "1.1.2-dev",
     "org.apache.cordova.inappbrowser": "0.6.0",
-    "cordova-plugin-x-socialsharing": "5.1.7"
+    "cordova-plugin-x-socialsharing": "5.1.7",
+    "phonegap-plugin-push": "1.8.0"
 };
 // BOTTOM OF METADATA
 });
