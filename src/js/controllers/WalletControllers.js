@@ -30,9 +30,9 @@ angular.module('blocktrail.wallet')
                         AppVersionService.CHECKS.LOGGEDIN
                     );
 
-                    if (!settingsService.latestVersionMobile || semver.lt(CONFIG.VERSION, settingsService.latestVersionMobile) ||
+                    if (!settingsService.latestVersionMobile || semver.gt(CONFIG.VERSION, settingsService.latestVersionMobile) ||
                         !settingsService.latestOutdatedNoticeVersion ||
-                        (result.versionInfo.mobile.latest && semver.lt(result.versionInfo.mobile.latest, settingsService.latestOutdatedNoticeVersion))) {
+                        (result.versionInfo.mobile.latest && semver.gt(result.versionInfo.mobile.latest, settingsService.latestOutdatedNoticeVersion))) {
                         settingsService.latestOutdatedNoticeVersion = result.versionInfo.mobile.latest;
                         settingsService.latestVersionMobile = CONFIG.VERSION;
                         settingsService.$store().then(function () {
