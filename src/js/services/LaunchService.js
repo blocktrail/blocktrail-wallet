@@ -20,17 +20,43 @@ angular.module('blocktrail.wallet').factory(
         };
 
         LaunchService.prototype.getWalletConfig = function() {
-            return $http.get(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?v=" + CONFIG.VERSION + "&platform=mobile")
-                .then(function(result) {
-                    return result.data;
-                });
+            var self = this;
+
+            if (!self._walletConfig || (self._walletConfig.ts > (new Date()).getTime() + (600 * 1000))) {
+                self._walletConfig = self.getAccountInfo()
+                    .catch(function() {
+                        return {};
+                    })
+                    .then(function(accountInfo) {
+                        var url = CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/config?";
+                        var params = [
+                            "v=" + (CONFIG.VERSION || ""),
+                            "platform=web"
+                        ];
+
+                        if (accountInfo && accountInfo.api_key) {
+                            params.push("api_key=" + accountInfo.api_key);
+                        }
+
+                        return $http.get(url + params.join("&"))
+                            .then(function(result) {
+                                return result.data;
+                            });
+                    });
+
+                self._walletConfig.ts = (new Date()).getTime();
+            }
+
+            return self._walletConfig;
         };
 
         LaunchService.prototype.getAccountInfo = function() {
             var self = this;
 
             return self.storage.get('account_info')
-                .then(function(doc) { return doc; });
+                .then(function(doc) {
+                    return doc;
+                });
         };
 
         LaunchService.prototype.storeAccountInfo = function(accountInfo) {

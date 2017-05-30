@@ -71,7 +71,6 @@ angular.module('blocktrail.wallet')
     .controller('ResetCtrl', function($state, storageService) {
         storageService.resetAll().then(
             function() {
-                alert('reset!');
                 window.location.replace('');
             }
         );

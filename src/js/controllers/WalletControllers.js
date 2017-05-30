@@ -2,7 +2,7 @@ angular.module('blocktrail.wallet')
     .controller('WalletCtrl', function($q, $log, $scope, $rootScope, $interval, storageService, sdkService, $translate,
                                        Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration, Currencies,
                                        $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService,
-                                       $cordovaSocialSharing, AppVersionService) {
+                                       $cordovaSocialSharing, AppVersionService, $state) {
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         $timeout(function() {
@@ -22,6 +22,17 @@ angular.module('blocktrail.wallet')
          */
         launchService.getWalletConfig()
             .then(function(result) {
+                if (result.api_key && (result.api_key !== 'ok')) {
+                    // alert user session is invalid
+                    return $cordovaDialogs.alert(
+                        $translate.instant('INVALID_SESSION_LOGOUT_NOW'),
+                        $translate.instant('INVALID_SESSION'),
+                        $translate.instant('OK'))
+                        .finally(function() {
+                            return $state.go('app.reset');
+                        });
+                }
+
                 settingsService.$isLoaded().then(function () {
                     AppVersionService.checkVersion(
                         settingsService.latestVersionMobile,
