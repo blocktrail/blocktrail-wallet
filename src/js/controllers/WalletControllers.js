@@ -379,7 +379,7 @@ angular.module('blocktrail.wallet')
 
                 console.log("transactionList", $scope.transactionList);
             })
-                .catch(function(e) { alert(e); })
+                .catch(function(e) { console.log('getTransactions ERR', e); })
         };
 
         $scope.loadMoreTransactions = function() {

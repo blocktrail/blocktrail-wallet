@@ -457,10 +457,7 @@ angular.module('blocktrail.wallet').factory(
         };
 
         var pollPendingTransactions = true;
-        var $updateStatus;
         var updatePendingTransactions = function() {
-            $updateStatus = $q.defer();
-
             var _update = function() {
                 pollPendingTransactions = false;
                 var delay = 10000;
@@ -520,8 +517,6 @@ angular.module('blocktrail.wallet').factory(
                     })
                     .then(function() {
                         if (delay) {
-                            $updateStatus.resolve();
-
                             if (pollPendingTransactions) {
                                 $timeout(updatePendingTransactions, delay);
                             }
@@ -536,8 +531,6 @@ angular.module('blocktrail.wallet').factory(
             _update();
         };
         var updateAllTransactions = function(initLoop) {
-            $updateStatus = $q.defer();
-
             return $q.when(decryptedAccessToken).then(function(accessToken) {
                 if (accessToken) {
                     var updateTxs = [];
@@ -584,8 +577,6 @@ angular.module('blocktrail.wallet').factory(
             })
                 .then(function(r) { return r; }, function(e) { $log.error('updateAllTransactions ' + e); })
                 .then(function(r) {
-                    $updateStatus.resolve();
-
                     if (initLoop) {
                         if (r) {
                             $timeout(updatePendingTransactions, 10000);
@@ -597,7 +588,7 @@ angular.module('blocktrail.wallet').factory(
                 ;
         };
 
-        $q.when(launchService.getWalletSecret())
+        var firstUpdate = $q.when(launchService.getWalletSecret())
             .then(function(walletSecret) {
                 if (!walletSecret) {
                     return;
@@ -605,14 +596,14 @@ angular.module('blocktrail.wallet').factory(
                 var walletSecretBuf = new blocktrailSDK.Buffer(walletSecret, 'hex');
 
                 return decryptAccessToken(walletSecretBuf);
-            }, function(e) { console.log('initDecryptAccessToken ERR ' + e)})
+            })
             .then(function() {
-                // updateAllTransactions(); // @TODO: DEBUG
-                updatePendingTransactions();
-            });
+                // return updateAllTransactions(); // @TODO: DEBUG
+                return updatePendingTransactions();
+            }, function(e) { console.log('initDecryptAccessToken ERR ' + e)});
 
         Wallet.addTransactionMetaResolver(function(transaction) {
-            return $updateStatus.promise.then(function() {
+            return firstUpdate.then(function() {
                 settingsService.glideraTransactions.forEach(function(glideraTxInfo) {
                     var isTxhash = false && glideraTxInfo.transactionHash === transaction.hash;
                     var isAddr = glideraTxInfo.address && transaction.self_addresses.indexOf(glideraTxInfo.address) !== -1;
@@ -637,9 +628,6 @@ angular.module('blocktrail.wallet').factory(
         });
 
         return {
-            $updateStatus: function() {
-                return $updateStatus.promise;
-            },
             setClientId: setClientId,
             createRequest: createRequest,
             oauth2: oauth2,
