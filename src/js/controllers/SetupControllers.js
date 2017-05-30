@@ -70,8 +70,8 @@ angular.module('blocktrail.wallet')
         $scope.retry = 0;
 
         $scope.form = {
-            username: "",
-            password: "",
+            username: CONFIG.SETUP_PREFILL_USERNAME || "",
+            password: CONFIG.SETUP_PREFILL_PASSWORD || "",
             forceNewWallet: false
         };
 
@@ -484,8 +484,8 @@ angular.module('blocktrail.wallet')
                                                sdkService, $cordovaDialogs, $ionicLoading, $rootScope, $log, $translate, $timeout, settingsService, CONFIG) {
         $scope.retry = 0;
         $scope.form = {
-            pin: "",
-            pinRepeat: "",
+            pin: CONFIG.SETUP_PREFILL_PIN || "",
+            pinRepeat: CONFIG.SETUP_PREFILL_PIN || "",
             identifier: $scope.setupInfo.identifier,
             password: $scope.setupInfo.password
         };
