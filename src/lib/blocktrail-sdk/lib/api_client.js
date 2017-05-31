@@ -1611,7 +1611,7 @@ APIClient.prototype.coinSelection = function(identifier, pay, lockUTXO, allowZer
     deferred.resolve(
         self.client.post("/wallet/" + identifier + "/coin-selection", params, pay).then(
             function(result) {
-                return [result.utxos, result.fee, result.change];
+                return [result.utxos, result.fee, result.change, result];
             },
             function(err) {
                 if (err.message.match(/too low to pay the fee/)) {
@@ -1649,21 +1649,27 @@ APIClient.prototype.feePerKB = function(cb) {
  * @param paths             array       list of paths used in inputs which should be cosigned by the API
  * @param checkFee          bool        when TRUE the API will verify if the fee is 100% correct and otherwise throw an exception
  * @param [twoFactorToken]  string      2FA token
+ * @param [prioboost]       bool
  * @param [cb]              function    callback(err, txHash)
  * @returns {q.Promise}
  */
-APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFee, twoFactorToken, cb) {
+APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFee, twoFactorToken, prioboost, cb) {
     var self = this;
 
     if (typeof twoFactorToken === "function") {
         cb = twoFactorToken;
         twoFactorToken = null;
+        prioboost = false;
+    } else if (typeof prioboost === "function") {
+        cb = prioboost;
+        prioboost = false;
     }
 
     return self.client.post(
         "/wallet/" + identifier + "/send",
         {
-            check_fee: checkFee ? 1 : 0
+            check_fee: checkFee ? 1 : 0,
+            prioboost: prioboost ? 1 : 0
         },
         {
             raw_transaction: txHex,

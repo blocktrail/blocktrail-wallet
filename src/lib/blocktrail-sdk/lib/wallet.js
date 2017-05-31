@@ -105,6 +105,7 @@ Wallet.FEE_STRATEGY_FORCE_FEE = blocktrail.FEE_STRATEGY_FORCE_FEE;
 Wallet.FEE_STRATEGY_BASE_FEE = blocktrail.FEE_STRATEGY_BASE_FEE;
 Wallet.FEE_STRATEGY_OPTIMAL = blocktrail.FEE_STRATEGY_OPTIMAL;
 Wallet.FEE_STRATEGY_LOW_PRIORITY = blocktrail.FEE_STRATEGY_LOW_PRIORITY;
+Wallet.FEE_STRATEGY_MIN_RELAY_FEE = blocktrail.FEE_STRATEGY_MIN_RELAY_FEE;
 
 Wallet.prototype.unlock = function(options, cb) {
     var self = this;
@@ -821,7 +822,7 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
             function(tx, utxos) {
                 deferred.notify(Wallet.PAY_PROGRESS_SEND);
 
-                return self.sendTransaction(tx.toHex(), utxos.map(function(utxo) { return utxo['path']; }), checkFee, twoFactorToken)
+                return self.sendTransaction(tx.toHex(), utxos.map(function(utxo) { return utxo['path']; }), checkFee, twoFactorToken, options.prioboost)
                     .then(function(result) {
                         deferred.notify(Wallet.PAY_PROGRESS_DONE);
 
@@ -1179,21 +1180,26 @@ Wallet.prototype.coinSelection = function(pay, lockUTXO, allowZeroConf, feeStrat
  * @param paths             array       list of paths used in inputs which should be cosigned by the API
  * @param checkFee          bool        when TRUE the API will verify if the fee is 100% correct and otherwise throw an exception
  * @param [twoFactorToken]  string      2FA token
+ * @param prioboost         bool
  * @param [cb]              function    callback(err, txHash)
  * @returns {q.Promise}
  */
-Wallet.prototype.sendTransaction = function(txHex, paths, checkFee, twoFactorToken, cb) {
+Wallet.prototype.sendTransaction = function(txHex, paths, checkFee, twoFactorToken, prioboost, cb) {
     var self = this;
 
     if (typeof twoFactorToken === "function") {
         cb = twoFactorToken;
         twoFactorToken = null;
+        prioboost = false;
+    } else if (typeof prioboost === "function") {
+        cb = twoFactorToken;
+        prioboost = false;
     }
 
     var deferred = q.defer();
     deferred.promise.nodeify(cb);
 
-    self.sdk.sendTransaction(self.identifier, txHex, paths, checkFee, twoFactorToken)
+    self.sdk.sendTransaction(self.identifier, txHex, paths, checkFee, twoFactorToken, prioboost)
         .then(
             function(result) {
                 deferred.resolve(result);

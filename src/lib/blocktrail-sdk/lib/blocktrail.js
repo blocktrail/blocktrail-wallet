@@ -206,6 +206,7 @@ blocktrail.FEE_STRATEGY_FORCE_FEE = 'force_fee';
 blocktrail.FEE_STRATEGY_BASE_FEE = 'base_fee';
 blocktrail.FEE_STRATEGY_OPTIMAL = 'optimal';
 blocktrail.FEE_STRATEGY_LOW_PRIORITY = 'low_priority';
+blocktrail.FEE_STRATEGY_MIN_RELAY_FEE = 'min_relay_fee';
 
 // apply patch to Q to add spreadNodeify for all dependants of this module
 blocktrail.patchQ(require('q'));
