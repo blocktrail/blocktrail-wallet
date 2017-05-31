@@ -43,6 +43,24 @@
       "css": "star-filled",
       "code": 59396,
       "src": "typicons"
+    },
+    {
+      "uid": "53c977df16b09e3f7700a27ec90c43dc",
+      "css": "stopwatch",
+      "code": 59397,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "41087bc74d4b20b55059c60a33bf4008",
+      "css": "edit",
+      "code": 59398,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "pgdm1vsngqxmheo5xkjpbm5o8k81pawd",
+      "css": "flash",
+      "code": 59399,
+      "src": "typicons"
     }
   ]
 }

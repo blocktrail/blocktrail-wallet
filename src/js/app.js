@@ -789,6 +789,18 @@ angular.module('blocktrail.wallet').config(
                     }
                 }
             })
+            .state('app.wallet.send.fee-choice', {
+                url: "/fee-choice",
+                data: {
+                    clearHistory: false,
+                    excludeFromHistory: true
+                },
+                views: {
+                    "overlayView": {
+                        templateUrl: "templates/send/partials/send.partial.fee-choice.html"
+                    }
+                }
+            })
             .state('app.wallet.send.confirm', {
                 url: "/confirm",
                 data: {

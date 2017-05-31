@@ -13,6 +13,33 @@
         @import "_user-balance-display";
         @import "_amount-input";
 
+        .fee-warning {
+            padding: 0px 20px;
+        }
+
+        .fee-choices {
+            .fee-choice {
+                margin-bottom: 5px;
+
+                .fee-choice-title {
+                    font-weight: bold;
+                }
+
+                .fee-choice-fee {
+                    float: right;
+                    font-size: 1.1em;
+
+                    &.fee-choice-fee-err {
+                        color: $bad-red;
+                    }
+                }
+            }
+
+            .fee-choice-notice {
+
+            }
+        }
+
         .recipient-input-section {
             margin-top: 1rem;
             .options {
@@ -62,10 +89,6 @@
             .toggle.toggle-btc input:checked + .track {
                 border-color: rgba(255, 255, 255, 0.4);
                 background-color: #3c78c2;
-            }
-
-            .fee-warning {
-                padding: 0px 20px;
             }
 
             .help-text {

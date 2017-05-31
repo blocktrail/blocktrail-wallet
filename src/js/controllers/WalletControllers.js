@@ -33,6 +33,8 @@ angular.module('blocktrail.wallet')
                         });
                 }
 
+                $rootScope.PRIOBOOST_ENABLED = CONFIG.PRIOBOOST || result.prioboost;
+
                 settingsService.$isLoaded().then(function () {
                     AppVersionService.checkVersion(
                         settingsService.latestVersionMobile,
