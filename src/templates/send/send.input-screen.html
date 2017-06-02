@@ -157,15 +157,15 @@
             </div>
 
             <div class="card">
-                <div class="list" style="margin-bottom: 0px;">
-                    <div class="item item">
+                <div class="list fee-choice-selected" style="margin-bottom: 0px;">
+                    <div class="item">
                         <span ng-if="sendInput.feeChoice === OPTIMAL_FEE">{{ 'OPTIMAL_FEE_LONG' | translate }}</span>
                         <span ng-if="sendInput.feeChoice === LOW_PRIORITY_FEE">{{ 'LOW_PRIORITY_FEE_LONG' | translate }}</span>
                         <span ng-if="sendInput.feeChoice === PRIOBOOST">{{ 'PRIOBOOST_LONG' | translate }}</span>
-                        <span style="float: right; margin-left: 20px;" ui-sref="app.wallet.send.fee-choice">
-                            <i style="font-size: 28px;" class="icon icon-edit"></i>
+                        <span class="fee-choice-selected-edit" ui-sref="app.wallet.send.fee-choice">
+                            <i class="icon icon-edit"></i>
                         </span>
-                        <span style="float: right;" ng-show="appControl.displayFee && sendInput.btcValue + sendInput.fiatValue > 0">
+                        <span class="fee-choice-selected-fee"  ng-show="appControl.displayFee && sendInput.btcValue + sendInput.fiatValue > 0">
                             {{ fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}
                         </span>
                     </div>

@@ -17,6 +17,30 @@
             padding: 0px 20px;
         }
 
+        .fee-choice-selected {
+            .item {
+                line-height: 23px;
+
+                .platform-ios & {
+                    line-height: 22px;
+                    font-size: 96%;
+                }
+            }
+
+            .fee-choice-selected-edit {
+                float: right;
+                margin-left: 20px;
+
+                .icon {
+                    font-size: 170%;
+                }
+            }
+
+            .fee-choice-selected-fee {
+                float: right;
+            }
+        }
+
         .fee-choices {
             .fee-choice {
                 margin-bottom: 5px;
