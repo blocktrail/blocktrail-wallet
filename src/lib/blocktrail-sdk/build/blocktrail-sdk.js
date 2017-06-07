@@ -1169,7 +1169,8 @@ APIClient.prototype._createNewWalletV2 = function(options) {
                 options.storeDataOnServer ? options.encryptedSecret : false,
                 options.storeDataOnServer ? options.recoverySecret : false,
                 checksum,
-                keyIndex
+                keyIndex,
+                options.support_secret || null
             )
                 .then(
                 function(result) {
@@ -1276,7 +1277,8 @@ APIClient.prototype._createNewWalletV3 = function(options) {
                 options.storeDataOnServer ? options.encryptedSecret : false,
                 options.storeDataOnServer ? options.recoverySecret : false,
                 checksum,
-                keyIndex
+                keyIndex,
+                options.support_secret || null
             )
                 .then(
                     // result, deferred, self(apiclient)
@@ -1390,11 +1392,12 @@ APIClient.prototype.storeNewWalletV1 = function(identifier, primaryPublicKey, ba
  * @param recoverySecret        string      openssl format
  * @param checksum              string      checksum to store
  * @param keyIndex              int         keyIndex that was used to create wallet
+ * @param supportSecret         string
  * @param [cb]                  function    callback(err, result)
  * @returns {q.Promise}
  */
 APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, backupPublicKey, encryptedPrimarySeed, encryptedSecret,
-                                                recoverySecret, checksum, keyIndex, cb) {
+                                                recoverySecret, checksum, keyIndex, supportSecret, cb) {
     var self = this;
 
     var postData = {
@@ -1406,7 +1409,8 @@ APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, ba
         encrypted_secret: encryptedSecret,
         recovery_secret: recoverySecret,
         checksum: checksum,
-        key_index: keyIndex
+        key_index: keyIndex,
+        support_secret: supportSecret || null
     };
 
     verifyPublicOnly(postData);
@@ -1425,11 +1429,12 @@ APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, ba
  * @param recoverySecret        Buffer      buffer of recovery secret
  * @param checksum              string      checksum to store
  * @param keyIndex              int         keyIndex that was used to create wallet
+ * @param supportSecret         string
  * @param [cb]                  function    callback(err, result)
  * @returns {q.Promise}
  */
 APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, backupPublicKey, encryptedPrimarySeed, encryptedSecret,
-                                                recoverySecret, checksum, keyIndex, cb) {
+                                                recoverySecret, checksum, keyIndex, supportSecret, cb) {
     var self = this;
 
     var postData = {
@@ -1441,7 +1446,8 @@ APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, ba
         encrypted_secret: encryptedSecret.toString('base64'),
         recovery_secret: recoverySecret.toString('hex'),
         checksum: checksum,
-        key_index: keyIndex
+        key_index: keyIndex,
+        support_secret: supportSecret || null
     };
 
     verifyPublicOnly(postData);
@@ -1749,6 +1755,19 @@ APIClient.prototype.walletAddresses = function(identifier, params, cb) {
     return self.client.get("/wallet/" + identifier + "/addresses", params, true, cb);
 };
 
+/**
+ * @param identifier    string      wallet identifier
+ * @param address       string      the address to label
+ * @param label         string      the label
+ * @param [cb]          function    callback(err, res)
+ * @return q.Promise
+ */
+APIClient.prototype.labelWalletAddress = function(identifier, address, label, cb) {
+    var self = this;
+
+    return self.client.post("/wallet/" + identifier + "/address/" + address + "/label", null, {label: label}, cb);
+};
+
 APIClient.prototype.walletMaxSpendable = function(identifier, allowZeroConf, feeStrategy, options, cb) {
     var self = this;
 
@@ -2001,7 +2020,7 @@ BackupGenerator.prototype.generateHTML = function(cb) {
         //load and compile the html
         var compiledHtml;
         try {
-            compiledHtml = _.template("<style>\n    html, body {\n        font-size: 100%;\n        background: #FFF;\n        margin: 0;\n        padding: 0;\n    }\n\n    @media screen {\n        html {\n            padding: 40px 20px 20px 20px;\n            width: 800px;\n        }\n        header {\n            display: block !important;\n        }\n    }\n\n    body {\n        font-family: 'Open Sans', Helvetica, sans-serif;\n        font-weight: 100;\n    }\n\n    h1, h2, h3 {\n        font-weight: 100;\n    }\n\n    h3 {\n        color: #333;\n    }\n\n    p {\n        margin: 0.5em 0;\n        line-height: 1em;\n    }\n\n    code {\n        font-family: Consolas, monospace;\n    }\n\n    figure {\n        display: inline-block;\n        margin: 1em;\n    }\n\n    figcaption {\n        font-size: 0.8em;\n        text-align: center;\n    }\n\n    header {\n        display: none;\n        position: fixed;\n        top: 0;\n        left: 20px;\n        width: 100%;\n        background: #FFF;\n        background: rgba(255, 255, 255, 0.85);\n        border-bottom: 1px solid #fff;\n    }\n\n    .logo-blocktrail-square {\n        display: block;\n        width: 200px;\n    }\n\n    .logo-blocktrail-square img {\n        width: 100%;\n        height: auto;\n    }\n\n    .intro h1 {\n        margin: 0;\n        padding: 0;\n    }\n\n    .backup-info {\n        padding-bottom: 1em;\n        margin-bottom: 1em;\n    }\n\n    .backup-info small {\n        display: block;\n        color: #666;\n        font-size: 0.75em;\n    }\n\n    .backup-info figcaption span:first-child {\n        margin-right: 1em;\n    }\n\n    section h2 {\n        padding-bottom: 0.2em;\n        margin-bottom: 0.2em;\n        border-bottom: 1px solid #CCC;\n    }\n</style>\n\n<header>\n    <a class='logo-blocktrail-square' href='https://btc.com/'>\n        <img src='data:image/jpeg;base64,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'\n             alt='BTC.com' />\n    </a>\n</header>\n\n<% if (options.page1) { %>\n    <section class='intro'>\n        <h1>Wallet Recovery Data Sheet!</h1>\n        <p>\n            This document holds the information and instructions required for you to recover your BTC Wallet should anything happen. <br>\n            Print it out and keep it in a safe location; if you lose these details you will never be able to recover your wallet.\n        </p>\n    </section>\n\n    <section>\n        <h2>Wallet Identifier (<%= backupInfo.walletVersion %>)</h2>\n        <div class='identifier'><h3><%= identifier %></h3></div>\n    </section>\n\n    <section class='backup-info'>\n        <h2>Backup Info</h2>\n        <% if (backupInfo.primaryMnemonic) { %>\n            <div><h3>Primary Mnemonic</h3><code> <%= backupInfo.primaryMnemonic %> </code></div>\n        <% } %>\n\n        <% if (backupInfo.backupMnemonic) { %>\n        <div><h3>Backup Mnemonic</h3><code> <%= backupInfo.backupMnemonic %> </code></div>\n        <% } %>\n\n        <% if (backupInfo.encryptedPrimarySeed) { %>\n        <div><h3>Encrypted Primary Seed</h3><code> <%= backupInfo.encryptedPrimarySeed %> </code></div>\n        <% } %>\n\n        <% if (backupInfo.backupSeed) { %>\n        <div><h3>Backup Seed</h3><code> <%= backupInfo.backupSeed %> </code></div>\n        <% } %>\n\n        <% if (backupInfo.recoveryEncryptedSecret) { %>\n        <div><h3>Encrypted Recovery Secret</h3><code> <%= backupInfo.recoveryEncryptedSecret %> </code></div>\n        <% } %>\n\n        <div style=\"page-break-before: always;\"></div>\n\n        <div class='blocktrail-pubkeys'><h3>BTC Wallet Public Keys <small> <%= totalPubKeys  %> in total</small></h3>\n            <%= pubKeysHtml %>\n        </div>\n\n        <% if (extraInfo) { %>\n            <h2>Extra Info</h2>\n            <% for (idx in extraInfo) { %>\n                <div><h3><%= extraInfo[idx].title %></h3><code> <%= extraInfo[idx].value %> </code></div>\n            <% } %>\n        <% } %>\n    </section>\n<% } %>\n\n<% if (backupInfo.encryptedSecret && options.page2) { %>\n    <% if (options.page1) { %>\n        <div style=\"page-break-before: always;\"></div>\n    <% } %>\n\n    <section>\n        <div>\n            <h2>Backup Info - part 2</h2>\n            <p>This page needs to be replaced / updated when wallet password is changed!</p>\n            <div><h3>Password Encrypted Secret</h3><code> <%= backupInfo.encryptedSecret %> </code></div>\n        </div>\n    </section>\n<% } %>\n\n<% if (options.page3) { %>\n    <!-- save some paper ... <div style=\"page-break-before: always;\"></div> -->\n\n    <section class='backup-instructions'>\n        <div>\n            <h2>Wallet Recovery Instructions</h2>\n            <p>You can recover the bitcoins in your wallet on https://recovery.blocktrail.com using this backup sheet.</p>\n            <p>For a more technical aproach on how to recover your wallet yourself,\n                see the 'wallet_recovery_example.php' script in the examples folder of the Blocktrail SDK.</p>\n        </div>\n    </section>\n<% } %>\n");
+            compiledHtml = _.template("<style>\n    html, body {\n        font-size: 100%;\n        background: #FFF;\n        margin: 0;\n        padding: 0;\n    }\n\n    @media screen {\n        html {\n            padding: 40px 20px 20px 20px;\n            width: 800px;\n        }\n        header {\n            display: block !important;\n        }\n    }\n\n    body {\n        font-family: 'Open Sans', Helvetica, sans-serif;\n        font-weight: 100;\n    }\n\n    h1, h2, h3 {\n        font-weight: 100;\n    }\n\n    h3 {\n        color: #333;\n    }\n\n    p {\n        margin: 0.5em 0;\n        line-height: 1em;\n    }\n\n    code {\n        font-family: Consolas, monospace;\n    }\n\n    figure {\n        display: inline-block;\n        margin: 1em;\n    }\n\n    figcaption {\n        font-size: 0.8em;\n        text-align: center;\n    }\n\n    header {\n        display: none;\n        position: fixed;\n        top: 0;\n        left: 20px;\n        width: 100%;\n        background: #FFF;\n        background: rgba(255, 255, 255, 0.85);\n        border-bottom: 1px solid #fff;\n    }\n\n    .logo-blocktrail-square {\n        display: block;\n        width: 200px;\n    }\n\n    .logo-blocktrail-square img {\n        width: 100%;\n        height: auto;\n    }\n\n    .intro h1 {\n        margin: 0;\n        padding: 0;\n    }\n\n    .backup-info {\n        padding-bottom: 1em;\n        margin-bottom: 1em;\n    }\n\n    .backup-info small {\n        display: block;\n        color: #666;\n        font-size: 0.75em;\n    }\n\n    .backup-info figcaption span:first-child {\n        margin-right: 1em;\n    }\n\n    section h2 {\n        padding-bottom: 0.2em;\n        margin-bottom: 0.2em;\n        border-bottom: 1px solid #CCC;\n    }\n</style>\n\n<header>\n    <a class='logo-blocktrail-square' href='https://btc.com/'>\n        <img src='data:image/jpeg;base64,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'\n             alt='BTC.com' />\n    </a>\n</header>\n\n<% if (options.page1) { %>\n    <section class='intro'>\n        <h1>Wallet Recovery Data Sheet!</h1>\n        <p>\n            This document holds the information and instructions required for you to recover your BTC Wallet should anything happen. <br>\n            Print it out and keep it in a safe location; if you lose these details you will never be able to recover your wallet.\n        </p>\n    </section>\n\n    <section>\n        <h2>Wallet Identifier (<%= backupInfo.walletVersion %>)</h2>\n        <div class='identifier'><h3><%= identifier %></h3></div>\n    </section>\n\n    <section class='backup-info'>\n        <h2>Backup Info</h2>\n        <% if (backupInfo.primaryMnemonic) { %>\n            <div><h3>Primary Mnemonic</h3><code> <%= backupInfo.primaryMnemonic %> </code></div>\n        <% } %>\n\n        <% if (backupInfo.backupMnemonic) { %>\n        <div><h3>Backup Mnemonic</h3><code> <%= backupInfo.backupMnemonic %> </code></div>\n        <% } %>\n\n        <% if (backupInfo.encryptedPrimarySeed) { %>\n        <div><h3>Encrypted Primary Seed</h3><code> <%= backupInfo.encryptedPrimarySeed %> </code></div>\n        <% } %>\n\n        <% if (backupInfo.backupSeed) { %>\n        <div><h3>Backup Seed</h3><code> <%= backupInfo.backupSeed %> </code></div>\n        <% } %>\n\n        <% if (backupInfo.recoveryEncryptedSecret) { %>\n        <div><h3>Encrypted Recovery Secret</h3><code> <%= backupInfo.recoveryEncryptedSecret %> </code></div>\n        <% } %>\n\n        <div style=\"page-break-before: always;\"></div>\n\n        <div class='blocktrail-pubkeys'><h3>BTC Wallet Public Keys <small> <%= totalPubKeys  %> in total</small></h3>\n            <%= pubKeysHtml %>\n        </div>\n\n        <% if (extraInfo) { %>\n            <h2>Extra Info</h2>\n            <% for (idx in extraInfo) { %>\n                <div>\n                    <h3><%= extraInfo[idx].title %> <small><%= extraInfo[idx].subtitle %></small></h3>\n                    <code> <%= extraInfo[idx].value %> </code>\n                </div>\n            <% } %>\n        <% } %>\n    </section>\n<% } %>\n\n<% if (backupInfo.encryptedSecret && options.page2) { %>\n    <% if (options.page1) { %>\n        <div style=\"page-break-before: always;\"></div>\n    <% } %>\n\n    <section>\n        <div>\n            <h2>Backup Info - part 2</h2>\n            <p>This page needs to be replaced / updated when wallet password is changed!</p>\n            <div><h3>Password Encrypted Secret</h3><code> <%= backupInfo.encryptedSecret %> </code></div>\n        </div>\n    </section>\n<% } %>\n\n<% if (options.page3) { %>\n    <!-- save some paper ... <div style=\"page-break-before: always;\"></div> -->\n\n    <section class='backup-instructions'>\n        <div>\n            <h2>Wallet Recovery Instructions</h2>\n            <p>You can recover the bitcoins in your wallet on https://recovery.blocktrail.com using this backup sheet.</p>\n            <p>For a more technical aproach on how to recover your wallet yourself,\n                see the 'wallet_recovery_example.php' script in the examples folder of the Blocktrail SDK.</p>\n        </div>\n    </section>\n<% } %>\n");
         } catch (e) {
             return cb(e);
         }
@@ -2178,9 +2197,11 @@ BackupGenerator.prototype.generatePDF = function(callback) {
                         if (self.extraInfo) {
                             _.each(self.extraInfo, function(value, key) {
                                 var title;
+                                var subtitle;
 
                                 if (typeof value !== "string") {
                                     title = value.title;
+                                    subtitle = value.subtitle;
                                     value = value.value;
                                 } else {
                                     title = key;
@@ -2191,7 +2212,14 @@ BackupGenerator.prototype.generatePDF = function(callback) {
                                     pdf.TEXT_COLOR_GREY(function() {
                                         pdf.TEXT(title);
                                     });
-                                    pdf.YAXIS(5);
+                                    if (subtitle) {
+                                        pdf.FONT_SIZE_SMALL(function() {
+                                            pdf.TEXT_COLOR_LIGHT_GREY(function() {
+                                                pdf.TEXT(subtitle);
+                                            });
+                                        });
+                                    }
+                                    pdf.YAXIS(3);
                                     pdf.FONT_SIZE_NORMAL(function() {
                                         pdf.TEXT(value);
                                     });
@@ -2862,6 +2890,7 @@ PdfWriter.prototype.FONT_SIZE_NORMAL = function(cb) { this.setFontSize(13, [2, 2
 PdfWriter.prototype.FONT_SIZE_SMALL = function(cb) { this.setFontSize(10, [2, 2], cb); };
 
 PdfWriter.prototype.TEXT_COLOR_BLACK = function(cb) { this.setTextColor([0, 0, 0], cb); };
+PdfWriter.prototype.TEXT_COLOR_LIGHT_GREY = function(cb) { this.setTextColor([150, 150, 150], cb); };
 PdfWriter.prototype.TEXT_COLOR_GREY = function(cb) { this.setTextColor([51, 51, 51], cb); };
 PdfWriter.prototype.TEXT_COLOR_RED = function(cb) { this.setTextColor([255, 0, 0], cb); };
 
@@ -3404,6 +3433,9 @@ var request = require('superagent');
 var _ = require('lodash');
 var q = require('q');
 
+var InsightEndpointMainnet = 'https://insight.bitpay.com/api';
+var InsightEndpointTestnet = 'https://test-insight.bitpay.com/api';
+
 /**
  *
  * @param options
@@ -3411,12 +3443,22 @@ var q = require('q');
  */
 var InsightBitcoinService = function(options) {
     this.defaultSettings = {
-        testnet:    false,
+        host: InsightEndpointMainnet,
+        testnet: false,
 
         retryLimit: 5,
-        retryDelay:  20
+        retryDelay: 20
     };
+
+    // Backwards compatibility: change default host to bitpay
+    // if host not set but testnet requested.
+    if (typeof options.host === 'undefined' && options.testnet) {
+        this.defaultSettings.host = InsightEndpointTestnet;
+    }
+
     this.settings = _.merge({}, this.defaultSettings, options);
+    this.DEFAULT_ENDPOINT_MAINNET = InsightEndpointMainnet;
+    this.DEFAULT_ENDPOINT_TESTNET = InsightEndpointTestnet;
 };
 
 /**
@@ -3433,7 +3475,7 @@ InsightBitcoinService.prototype.getBatchUnspentOutputs = function(addresses) {
 
     //get unspent outputs for the chunk of addresses - required data: hash, index, value, and script hex,
     var data = {"addrs": addresses.join(',')};
-    self.postRequest("https://" + (self.settings.testnet ? 'test-' : '') + 'insight.bitpay.com/api/addrs/utxo', data).then(function(results) {
+    self.postEndpoint('addrs/utxo', data).then(function(results) {
         var batchResults = {};  //utxos mapped to addresses
 
         //reduce the returned data into the values we're interested in, and map to the relevant addresses
@@ -3471,7 +3513,7 @@ InsightBitcoinService.prototype.batchAddressHasTransactions = function(addresses
     var self = this;
 
     var data = {"addrs": addresses.join(',')};
-    return self.postRequest("https://" + (self.settings.testnet ? 'test-' : '') + 'insight.bitpay.com/api/addrs/txs', data)
+    return self.postEndpoint('addrs/txs', data)
         .then(function(results) {
             return results.items.length > 0;
         })
@@ -3488,13 +3530,46 @@ InsightBitcoinService.prototype.estimateFee = function() {
 
     var nBlocks = "2";
 
-    return self.getRequest("https://" + (self.settings.testnet ? 'test-' : '') + 'insight.bitpay.com/api/utils/estimatefee?nbBlocks=' + nBlocks)
+    return self.getEndpoint('utils/estimatefee?nbBlocks=' + nBlocks)
         .then(function(results) {
             return parseInt(results[nBlocks] * 1e8, 10);
         })
     ;
 };
 
+/**
+ * Submit a raw transaction hex to the tx/send endpoint
+ * @param hex
+ * @returns {*}
+ */
+InsightBitcoinService.prototype.sendTx = function(hex) {
+    return this.postEndpoint('tx/send', {rawtx: hex});
+};
+
+/**
+ * Makes a URL from the endpoint and issues a GET request.
+ * @param endpoint
+ */
+InsightBitcoinService.prototype.getEndpoint = function(endpoint) {
+    return this.getRequest(this.settings.host + '/' + endpoint);
+};
+
+/**
+ * Makes URL from endpoint and issues a POST request.
+ *
+ * @param endpoint
+ * @param data
+ * @returns {promise|Function|*}
+ */
+InsightBitcoinService.prototype.postEndpoint = function(endpoint, data) {
+    return this.postRequest(this.settings.host + '/' + endpoint, data);
+};
+
+/**
+ * Makes a GET request to url
+ * @param url
+ * @returns {promise|Function|*}
+ */
 InsightBitcoinService.prototype.getRequest = function(url) {
     var deferred = q.defer();
     request
@@ -3524,8 +3599,16 @@ InsightBitcoinService.prototype.getRequest = function(url) {
     return deferred.promise;
 };
 
+/**
+ * Makes a POST request given the url and data
+ *
+ * @param url
+ * @param data
+ * @returns {promise|Function|*}
+ */
 InsightBitcoinService.prototype.postRequest = function(url, data) {
     var deferred = q.defer();
+
     request
         .post(url)
         .send(data)
@@ -4970,6 +5053,18 @@ Wallet.prototype.addresses = function(params, cb) {
 };
 
 /**
+ * @param address   string      the address to label
+ * @param label     string      the label
+ * @param [cb]      function    callback(err, res)
+ * @returns {q.Promise}
+ */
+Wallet.prototype.labelAddress = function(address, label, cb) {
+    var self = this;
+
+    return self.sdk.labelWalletAddress(self.identifier, address, label, cb);
+};
+
+/**
  * get all UTXOs for the wallet (paginated)
  *
  * @param [params]  array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
@@ -5215,7 +5310,9 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
     this.sweepData = null;
 
     // set the bitcoinlib network
-    this.network = this.getBitcoinNetwork(this.settings.network, this.settings.testnet);
+    if (typeof options.recoveryNetwork === "object") {
+        this.recoveryNetwork = options.recoveryNetwork;
+    }
 
     backupData.walletVersion = backupData.walletVersion || 2;   //default to version 2 wallets
 
@@ -5460,7 +5557,12 @@ WalletSweeper.prototype.createAddress = function(path) {
     ]);
     var redeemScript = bitcoin.scripts.multisigOutput(2, multisigKeys);
     var scriptPubKey = bitcoin.scripts.scriptHashOutput(redeemScript.getHash());
-    var address = bitcoin.Address.fromOutputScript(scriptPubKey, this.network);
+
+    var network = this.network;
+    if (typeof this.recoveryNetwork !== "undefined") {
+        network = this.recoveryNetwork;
+    }
+    var address = bitcoin.Address.fromOutputScript(scriptPubKey, network);
 
     //@todo return as buffers
     return {address: address.toString(), redeem: redeemScript};

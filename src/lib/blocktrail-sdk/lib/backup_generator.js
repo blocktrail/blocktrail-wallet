@@ -62,7 +62,8 @@ BackupGenerator.prototype.generateHTML = function(cb) {
             } else {
                 return {
                     title: key,
-                    value: value
+                    value: value,
+                    subtitle: null
                 };
             }
         }),

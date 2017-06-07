@@ -3,6 +3,9 @@ var request = require('superagent');
 var _ = require('lodash');
 var q = require('q');
 
+var InsightEndpointMainnet = 'https://insight.bitpay.com/api';
+var InsightEndpointTestnet = 'https://test-insight.bitpay.com/api';
+
 /**
  *
  * @param options
@@ -10,12 +13,22 @@ var q = require('q');
  */
 var InsightBitcoinService = function(options) {
     this.defaultSettings = {
-        testnet:    false,
+        host: InsightEndpointMainnet,
+        testnet: false,
 
         retryLimit: 5,
-        retryDelay:  20
+        retryDelay: 20
     };
+
+    // Backwards compatibility: change default host to bitpay
+    // if host not set but testnet requested.
+    if (typeof options.host === 'undefined' && options.testnet) {
+        this.defaultSettings.host = InsightEndpointTestnet;
+    }
+
     this.settings = _.merge({}, this.defaultSettings, options);
+    this.DEFAULT_ENDPOINT_MAINNET = InsightEndpointMainnet;
+    this.DEFAULT_ENDPOINT_TESTNET = InsightEndpointTestnet;
 };
 
 /**
@@ -32,7 +45,7 @@ InsightBitcoinService.prototype.getBatchUnspentOutputs = function(addresses) {
 
     //get unspent outputs for the chunk of addresses - required data: hash, index, value, and script hex,
     var data = {"addrs": addresses.join(',')};
-    self.postRequest("https://" + (self.settings.testnet ? 'test-' : '') + 'insight.bitpay.com/api/addrs/utxo', data).then(function(results) {
+    self.postEndpoint('addrs/utxo', data).then(function(results) {
         var batchResults = {};  //utxos mapped to addresses
 
         //reduce the returned data into the values we're interested in, and map to the relevant addresses
@@ -70,7 +83,7 @@ InsightBitcoinService.prototype.batchAddressHasTransactions = function(addresses
     var self = this;
 
     var data = {"addrs": addresses.join(',')};
-    return self.postRequest("https://" + (self.settings.testnet ? 'test-' : '') + 'insight.bitpay.com/api/addrs/txs', data)
+    return self.postEndpoint('addrs/txs', data)
         .then(function(results) {
             return results.items.length > 0;
         })
@@ -87,13 +100,46 @@ InsightBitcoinService.prototype.estimateFee = function() {
 
     var nBlocks = "2";
 
-    return self.getRequest("https://" + (self.settings.testnet ? 'test-' : '') + 'insight.bitpay.com/api/utils/estimatefee?nbBlocks=' + nBlocks)
+    return self.getEndpoint('utils/estimatefee?nbBlocks=' + nBlocks)
         .then(function(results) {
             return parseInt(results[nBlocks] * 1e8, 10);
         })
     ;
 };
 
+/**
+ * Submit a raw transaction hex to the tx/send endpoint
+ * @param hex
+ * @returns {*}
+ */
+InsightBitcoinService.prototype.sendTx = function(hex) {
+    return this.postEndpoint('tx/send', {rawtx: hex});
+};
+
+/**
+ * Makes a URL from the endpoint and issues a GET request.
+ * @param endpoint
+ */
+InsightBitcoinService.prototype.getEndpoint = function(endpoint) {
+    return this.getRequest(this.settings.host + '/' + endpoint);
+};
+
+/**
+ * Makes URL from endpoint and issues a POST request.
+ *
+ * @param endpoint
+ * @param data
+ * @returns {promise|Function|*}
+ */
+InsightBitcoinService.prototype.postEndpoint = function(endpoint, data) {
+    return this.postRequest(this.settings.host + '/' + endpoint, data);
+};
+
+/**
+ * Makes a GET request to url
+ * @param url
+ * @returns {promise|Function|*}
+ */
 InsightBitcoinService.prototype.getRequest = function(url) {
     var deferred = q.defer();
     request
@@ -123,8 +169,16 @@ InsightBitcoinService.prototype.getRequest = function(url) {
     return deferred.promise;
 };
 
+/**
+ * Makes a POST request given the url and data
+ *
+ * @param url
+ * @param data
+ * @returns {promise|Function|*}
+ */
 InsightBitcoinService.prototype.postRequest = function(url, data) {
     var deferred = q.defer();
+
     request
         .post(url)
         .send(data)

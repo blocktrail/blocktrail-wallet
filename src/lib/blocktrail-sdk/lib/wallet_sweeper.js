@@ -32,7 +32,9 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
     this.sweepData = null;
 
     // set the bitcoinlib network
-    this.network = this.getBitcoinNetwork(this.settings.network, this.settings.testnet);
+    if (typeof options.recoveryNetwork === "object") {
+        this.recoveryNetwork = options.recoveryNetwork;
+    }
 
     backupData.walletVersion = backupData.walletVersion || 2;   //default to version 2 wallets
 
@@ -277,7 +279,12 @@ WalletSweeper.prototype.createAddress = function(path) {
     ]);
     var redeemScript = bitcoin.scripts.multisigOutput(2, multisigKeys);
     var scriptPubKey = bitcoin.scripts.scriptHashOutput(redeemScript.getHash());
-    var address = bitcoin.Address.fromOutputScript(scriptPubKey, this.network);
+
+    var network = this.network;
+    if (typeof this.recoveryNetwork !== "undefined") {
+        network = this.recoveryNetwork;
+    }
+    var address = bitcoin.Address.fromOutputScript(scriptPubKey, network);
 
     //@todo return as buffers
     return {address: address.toString(), redeem: redeemScript};

@@ -1323,6 +1323,18 @@ Wallet.prototype.addresses = function(params, cb) {
 };
 
 /**
+ * @param address   string      the address to label
+ * @param label     string      the label
+ * @param [cb]      function    callback(err, res)
+ * @returns {q.Promise}
+ */
+Wallet.prototype.labelAddress = function(address, label, cb) {
+    var self = this;
+
+    return self.sdk.labelWalletAddress(self.identifier, address, label, cb);
+};
+
+/**
  * get all UTXOs for the wallet (paginated)
  *
  * @param [params]  array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}

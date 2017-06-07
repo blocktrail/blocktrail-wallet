@@ -148,7 +148,10 @@
         <% if (extraInfo) { %>
             <h2>Extra Info</h2>
             <% for (idx in extraInfo) { %>
-                <div><h3><%= extraInfo[idx].title %></h3><code> <%= extraInfo[idx].value %> </code></div>
+                <div>
+                    <h3><%= extraInfo[idx].title %> <small><%= extraInfo[idx].subtitle %></small></h3>
+                    <code> <%= extraInfo[idx].value %> </code>
+                </div>
             <% } %>
         <% } %>
     </section>

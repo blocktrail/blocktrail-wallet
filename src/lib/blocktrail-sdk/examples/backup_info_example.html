@@ -32,10 +32,11 @@
                 encryptedSecret: encryptedSecret,
                 blocktrailPublicKeys: blocktrailPublicKeys
             },
-            {
-                username: 'testing123',
-                'note to self': 'buy pizza'
-            }
+            [
+                {title: "username", value: 'testing123'},
+                {title: "note to self", value: 'buy pizza'},
+                {title: "Support Secret", subtitle: "this can be shared with helpdesk staff to proof ownership of backup document", value: '010101'}
+            ]
         );
 
         document.getElementById('userAgent').innerHTML = navigator.userAgent;

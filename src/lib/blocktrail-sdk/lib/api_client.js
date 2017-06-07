@@ -1167,7 +1167,8 @@ APIClient.prototype._createNewWalletV2 = function(options) {
                 options.storeDataOnServer ? options.encryptedSecret : false,
                 options.storeDataOnServer ? options.recoverySecret : false,
                 checksum,
-                keyIndex
+                keyIndex,
+                options.support_secret || null
             )
                 .then(
                 function(result) {
@@ -1274,7 +1275,8 @@ APIClient.prototype._createNewWalletV3 = function(options) {
                 options.storeDataOnServer ? options.encryptedSecret : false,
                 options.storeDataOnServer ? options.recoverySecret : false,
                 checksum,
-                keyIndex
+                keyIndex,
+                options.support_secret || null
             )
                 .then(
                     // result, deferred, self(apiclient)
@@ -1388,11 +1390,12 @@ APIClient.prototype.storeNewWalletV1 = function(identifier, primaryPublicKey, ba
  * @param recoverySecret        string      openssl format
  * @param checksum              string      checksum to store
  * @param keyIndex              int         keyIndex that was used to create wallet
+ * @param supportSecret         string
  * @param [cb]                  function    callback(err, result)
  * @returns {q.Promise}
  */
 APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, backupPublicKey, encryptedPrimarySeed, encryptedSecret,
-                                                recoverySecret, checksum, keyIndex, cb) {
+                                                recoverySecret, checksum, keyIndex, supportSecret, cb) {
     var self = this;
 
     var postData = {
@@ -1404,7 +1407,8 @@ APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, ba
         encrypted_secret: encryptedSecret,
         recovery_secret: recoverySecret,
         checksum: checksum,
-        key_index: keyIndex
+        key_index: keyIndex,
+        support_secret: supportSecret || null
     };
 
     verifyPublicOnly(postData);
@@ -1423,11 +1427,12 @@ APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, ba
  * @param recoverySecret        Buffer      buffer of recovery secret
  * @param checksum              string      checksum to store
  * @param keyIndex              int         keyIndex that was used to create wallet
+ * @param supportSecret         string
  * @param [cb]                  function    callback(err, result)
  * @returns {q.Promise}
  */
 APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, backupPublicKey, encryptedPrimarySeed, encryptedSecret,
-                                                recoverySecret, checksum, keyIndex, cb) {
+                                                recoverySecret, checksum, keyIndex, supportSecret, cb) {
     var self = this;
 
     var postData = {
@@ -1439,7 +1444,8 @@ APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, ba
         encrypted_secret: encryptedSecret.toString('base64'),
         recovery_secret: recoverySecret.toString('hex'),
         checksum: checksum,
-        key_index: keyIndex
+        key_index: keyIndex,
+        support_secret: supportSecret || null
     };
 
     verifyPublicOnly(postData);
@@ -1745,6 +1751,19 @@ APIClient.prototype.walletAddresses = function(identifier, params, cb) {
     }
 
     return self.client.get("/wallet/" + identifier + "/addresses", params, true, cb);
+};
+
+/**
+ * @param identifier    string      wallet identifier
+ * @param address       string      the address to label
+ * @param label         string      the label
+ * @param [cb]          function    callback(err, res)
+ * @return q.Promise
+ */
+APIClient.prototype.labelWalletAddress = function(identifier, address, label, cb) {
+    var self = this;
+
+    return self.client.post("/wallet/" + identifier + "/address/" + address + "/label", null, {label: label}, cb);
 };
 
 APIClient.prototype.walletMaxSpendable = function(identifier, allowZeroConf, feeStrategy, options, cb) {

@@ -291,9 +291,11 @@ BackupGenerator.prototype.generatePDF = function(callback) {
                         if (self.extraInfo) {
                             _.each(self.extraInfo, function(value, key) {
                                 var title;
+                                var subtitle;
 
                                 if (typeof value !== "string") {
                                     title = value.title;
+                                    subtitle = value.subtitle;
                                     value = value.value;
                                 } else {
                                     title = key;
@@ -304,7 +306,14 @@ BackupGenerator.prototype.generatePDF = function(callback) {
                                     pdf.TEXT_COLOR_GREY(function() {
                                         pdf.TEXT(title);
                                     });
-                                    pdf.YAXIS(5);
+                                    if (subtitle) {
+                                        pdf.FONT_SIZE_SMALL(function() {
+                                            pdf.TEXT_COLOR_LIGHT_GREY(function() {
+                                                pdf.TEXT(subtitle);
+                                            });
+                                        });
+                                    }
+                                    pdf.YAXIS(3);
                                     pdf.FONT_SIZE_NORMAL(function() {
                                         pdf.TEXT(value);
                                     });
