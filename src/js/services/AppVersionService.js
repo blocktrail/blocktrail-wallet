@@ -4,7 +4,7 @@ angular.module('blocktrail.wallet').factory(
         var _CHECKS = AppVersionBaseService.CHECKS;
         var isCheck = AppVersionBaseService.isCheck;
 
-        var GLIDERA_VERSION = 'v3.3.0';
+        var GLIDERA_VERSION = 'v3.4.8';
 
         // priority order, first one met is used (allows older version update messages to be prioritized)
         var UPDATE_MESSAGES = [
@@ -66,7 +66,7 @@ angular.module('blocktrail.wallet').factory(
         var checkVersion = function(latestVersion, latestOutdatedNoticeVersion, versionInfo, checks) {
             // if this version of the app supports glidera and it's new we glideraActivationNoticePending=true so that when glidera is activated we can display update notice
             //  this is a special case because glidera is pending server activation
-            if (latestVersion && isCheck(checks, _CHECKS.UPDATED) && $state.includes('app.wallet') && semver.lt(latestVersion, GLIDERA_VERSION) && semver.gt(CONFIG.VERSION, GLIDERA_VERSION)) {
+            if (latestVersion && isCheck(checks, _CHECKS.UPDATED) && $state.includes('app.wallet') && semver.lt(latestVersion, GLIDERA_VERSION) && semver.gte(CONFIG.VERSION, GLIDERA_VERSION)) {
                 settingsService.$isLoaded().then(function() {
                     if (settingsService.glideraActivationNoticePending === null) {
                         settingsService.glideraActivationNoticePending = true;
