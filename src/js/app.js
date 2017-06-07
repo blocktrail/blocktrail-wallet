@@ -1156,3 +1156,20 @@ window.Qwaterfall = function(fns, arg) {
 
     return p;
 };
+
+function randNumber() {
+    do {
+        var rand = parseInt(blocktrailSDK.randomBytes(1).toString('hex').substr(0, 1), 16);
+    } while (rand > 9);
+
+    return rand;
+}
+
+function randDigits(digits) {
+    var res = [];
+    for (var i = 0; i < digits; i++) {
+        res.push(randNumber());
+    }
+
+    return res.join("");
+}

@@ -139,6 +139,7 @@ angular.module('blocktrail.wallet').factory(
                     doc.encryptedSecret = walletInfo.encryptedSecret;
                     doc.recoveryEncryptedSecret = walletInfo.recoveryEncryptedSecret;
                     doc.blocktrailPublicKeys = walletInfo.blocktrailPublicKeys;
+                    doc.supportSecret = walletInfo.supportSecret;
 
                     return self.storage.put(doc).then(function() {
                         return doc;

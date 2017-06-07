@@ -604,10 +604,16 @@ angular.module('blocktrail.wallet')
                         $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'PLEASE_WAIT'};
                         var t = (new Date).getTime();
                         $analytics.eventTrack('createNewWallet', {category: 'Events'});
+
+
+                        // generate support secret, 6 random digits
+                        var supportSecret = randDigits(6);
+
                         return $scope.sdk.createNewWallet({
                             identifier: $scope.setupInfo.identifier,
                             password: $scope.setupInfo.password,
-                            walletVersion: CONFIG.WALLET_DEFAULT_VERSION
+                            walletVersion: CONFIG.WALLET_DEFAULT_VERSION,
+                            support_secret: supportSecret
                         })
                             .progress(function(progress) {
                                 /*
@@ -648,6 +654,7 @@ angular.module('blocktrail.wallet')
                             .spread(function(wallet, backupInfo, more) {
                                 $log.debug('new wallet created in [' + ((new Date).getTime() - t) + 'ms]');
                                 $scope.setupInfo.backupInfo = backupInfo;
+                                $scope.setupInfo.backupInfo.supportSecret = supportSecret;
 
                                 return $q.when(wallet);
                             })
@@ -729,7 +736,8 @@ angular.module('blocktrail.wallet')
                             encryptedSecret: $scope.setupInfo.backupInfo.encryptedSecret,
                             backupSeed: $scope.setupInfo.backupInfo.backupSeed,
                             recoveryEncryptedSecret: $scope.setupInfo.backupInfo.recoveryEncryptedSecret,
-                            blocktrailPublicKeys: pubKeys
+                            blocktrailPublicKeys: pubKeys,
+                            supportSecret: $scope.setupInfo.backupInfo.supportSecret
                         });
                     } else {
                         return;
@@ -837,7 +845,8 @@ angular.module('blocktrail.wallet')
             encryptedPrimarySeed: backupInfo.encryptedPrimarySeed,
             encryptedSecret: backupInfo.encryptedSecret,
             backupSeed: backupInfo.backupSeed,
-            recoveryEncryptedSecret: backupInfo.recoveryEncryptedSecret
+            recoveryEncryptedSecret: backupInfo.recoveryEncryptedSecret,
+            supportSecret: backupInfo.supportSecret
         };
 
         // hacky, we asume that user won't click generate backup before this promise is finished
@@ -898,6 +907,9 @@ angular.module('blocktrail.wallet')
                                 }
                                 if (settingsService.email) {
                                     extraInfo.push({title: 'Email', value: settingsService.email});
+                                }
+                                if ($scope.setupInfo.backupInfo.supportSecret) {
+                                    extraInfo.push({title: 'Support Secret', subtitle: 'this can be shared with helpdesk to proof ownership of backup document', value: $scope.setupInfo.backupInfo.supportSecret});
                                 }
 
                                 var backup = new sdkService.BackupGenerator(
