@@ -11,14 +11,14 @@
     </small>
     <ion-content class="">
         <div class="amount" ng-class="{received: data.wallet_value_change > 0, sent: data.wallet_value_change <= 0}">
-            <canvas-display text="(data.amount | mathAbs | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 )" width="100%"
+            <canvas-display text="(data.wallet_value_change | mathAbs | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 )" width="100%"
                             height="40"></canvas-display>
             <div class="fiat text-ellipsis" ng-if="data.price">
-                <span class="value">{{ data.amount | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  data.price }}</span>
+                <span class="value">{{ data.wallet_value_change | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  data.price }}</span>
                 <span class="label">{{ 'TX_INFO_TIME_SUBTITLE' | translate }}</span>
             </div>
             <div class="fiat text-ellipsis opacity-50" ng-if="data.price">
-                <span class="value">{{ data.amount | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  bitcoinPrices }}</span>
+                <span class="value">{{ data.wallet_value_change | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  bitcoinPrices }}</span>
                 <span class="label">{{ 'TX_INFO_TIME_SUBTITLE_2' | translate }}</span>
             </div>
         </div>
@@ -28,10 +28,7 @@
                 {{ 'TX_INFO_FEE' | translate }}
             </div>
             <div class="value">
-                {{ data.fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8}}
-                <span class="fiat opacity-50">
-                     {{ data.fee | mathAbs | satoshiToCurrency: $root.settings.localCurrency :  data.price }}
-                 </span>
+                {{ data.fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}
             </div>
         </div>
 
@@ -67,6 +64,7 @@
                 <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_SENT_TO' | translate }}</span>
                 <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED_FROM' | translate }}</span>
             </div>
+            <div class="value text-ellipsis">{{ data.contact && data.contact.displayName || data.altDisplay }}</div>
         </div>
 
         <div class="more-info padding-b">
