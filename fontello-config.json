@@ -61,6 +61,12 @@
       "css": "flash",
       "code": 59399,
       "src": "typicons"
+    },
+    {
+      "uid": "bbfb51903f40597f0b70fd75bc7b5cac",
+      "css": "trash",
+      "code": 61944,
+      "src": "fontawesome"
     }
   ]
 }

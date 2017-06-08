@@ -827,6 +827,21 @@ angular.module('blocktrail.wallet').config(
                 }
             })
 
+            /*--- Address lookup ---*/
+            .state('app.wallet.receive.address-lookup', {
+                url: "/receive/address-lookup",
+                cache: false,
+                data: {
+                    clearHistory: true //always clear history when entering this state
+                },
+                views: {
+                    "mainView@app.wallet": {
+                        templateUrl: "templates/receive/receive.address-lookup.html",
+                        controller: 'AddressLookupCtrl'
+                    }
+                }
+            })
+
             /*--- Promo Codes ---*/
             .state('app.wallet.promo', {
                 url: "/promo",

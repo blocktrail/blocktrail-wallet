@@ -1,0 +1,22 @@
+<ion-popover-view class="medium-popover popover-slide-in state-address-lookup">
+    <div class="background-blue">
+        <ion-content>
+            <div class="modal-items">
+
+                <div class="addlabel-info-text">
+                    <p>{{'ENTER_NEW_LABEL' | translate }}</p>
+                </div>
+
+                <input
+                        autofocus
+                        type="text"
+                        ng-model="labelEdit.labelInput"
+                        maxlength="100"
+                        placeholder="{{ 'ADDRESS_LABEL' | translate}}"
+                >
+                <a href class="button button-outline label-button" ng-click="removePopover()">{{ 'CANCEL' | translate }}</a>
+                <a href class="button button-outline label-button primary" ng-click="alterLabel()">{{ 'CONFIRM' | translate }}</a>
+            </div>
+        </ion-content>
+    </div>
+</ion-popover-view>

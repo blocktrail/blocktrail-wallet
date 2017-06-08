@@ -1,6 +1,13 @@
 <ion-view view-title="Receive" class="state-receive">
     <ion-nav-title class="">{{ 'RECEIVE' | translate }}</ion-nav-title>
 
+    <ion-nav-buttons side="right">
+        <button class="button button-outline"
+                style="color: #fff;"
+                nav-direction="forward"
+                ui-sref="app.wallet.receive.address-lookup">{{ 'MY_ADDRESSES' | translate }}</button>
+    </ion-nav-buttons>
+
     <ion-content scroll="true" has-bouncing="true">
         <div class="card">
             <form name="newRequestForm"  class="amount-input-section" ng-class="{'btc-first': !fiatFirst, 'fiat-first': fiatFirst}">

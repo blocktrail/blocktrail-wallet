@@ -1,0 +1,78 @@
+<ion-view view-title="Receive" class="state-address-lookup">
+    <ion-nav-title class="">{{ 'ADDRESS_LOOKUP' | translate }}</ion-nav-title>
+
+    <ion-content>
+
+        <div class="searchBox">
+            <input type="text" ng-model="search.searchText" maxlength="100" placeholder="{{ 'ADDRESS_LOOKUP_SEARCH_PLACEHOLDER' | translate}}">
+        </div>
+
+        <div class="toggle-container">
+            <label class="toggle-btc">
+                <div class="toggle">
+                    <input type="checkbox" ng-model="search.checkOnlyUsed">
+                    <div class="track">
+                        <div class="handle"></div>
+                    </div>
+                </div>
+                <span>{{ 'ADDRESS_LOOKUP_CHECKONLY_USAGE_MOBILE' | translate }}</span>
+            </label>
+
+            <label class="toggle-btc">
+                <div class="toggle">
+                    <input type="checkbox" ng-model="search.checkOnlyLabeled">
+                    <div class="track">
+                        <div class="handle"></div>
+                    </div>
+                </div>
+                <span>{{ 'ADDRESS_LOOKUP_CHECKONLY_LABELED_MOBILE' | translate }}</span>
+            </label>
+        </div>
+
+        <div class="text-center"><ion-spinner ng-if="isLoading"></ion-spinner></div>
+        <ion-refresher
+                pulling-text="{{ 'ION_REFRESHER' | translate }}"
+                on-refresh="refreshResults()">
+        </ion-refresher>
+
+        <ion-list>
+            <ion-item ng-repeat="item in items track by $index"
+                      item-width="100%"
+                      item-height="120px"
+                      ng-class="{'item-divider': true}"
+                      ng-click="showAddressOptions(item)">
+
+                <div class="row-no-padding">
+
+                    <div class="col">
+                        <div class="multi-line-elem">
+                        <span class="address">{{ item.address }}</span>
+
+                            <div class="label margin-top" ng-if="item.label"> {{ item.label }} </div>
+
+                            <div class="same-line-texts">
+                                <p class="margin-top" style="float:left">
+                                    {{ item.tx_cnt }}
+
+                                    <span ng-if="item.tx_cnt == 1">{{ ('TRANSACTION' | translate).toLowerCase() }} </span>
+                                    <span ng-if="item.tx_cnt != 1">{{ ('TRANSACTIONS' | translate).toLowerCase() }} </span>
+                                </p>
+                                <p class="margin-top" ng-class="{ 'positive-balance' : item.balance > 0 }"
+                                   style="float: right">{{ item.balance | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : false : false }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <ion-infinite-scroll
+                ng-if="currentPage < pagesCount"
+                on-infinite="loadAddresses(false)"
+                immediate-check="true"
+                distance="30%">
+        </ion-infinite-scroll>
+        <div class="text-center opacity-50" style="margin-top: 1rem;" ng-if="currentPage >= pagesCount">
+            <span class="sentence-case">{{ 'NO_MORE_ADDRESSES' | translate }}</span>
+        </div>
+    </ion-content>
+</ion-view>

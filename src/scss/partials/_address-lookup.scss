@@ -1,0 +1,166 @@
+
+$balance-display-height:    38vw !default;
+$display-token-size:        50px !default;
+
+//--- Address lookup screen ---
+.state-address-lookup {
+
+    .toggle-container {
+        padding-left: 2em;
+        margin-bottom: 0.5em;
+    }
+
+    .toggle-btc {
+        vertical-align: middle;
+        line-height: 26px;
+        display: inline-block;
+        margin-right: 1em;
+
+        .toggle {
+            line-height: 26px;
+            position: relative;
+            top: 6px;
+
+            input:checked + .track {
+                border-color: rgba(255, 255, 255, 0.4);
+                background-color: #3c78c2;
+
+                .handle {
+                    transform: translate3d(14px, 0, 0);
+                }
+            }
+
+            .track {
+                width: 32px;
+                height: 21px;
+
+                .handle {
+                    top: 8px;
+                    left: 7px;
+                    width: 14px;
+                    height: 15px;
+                    border-radius: 25px;
+                }
+            }
+        }
+    }
+
+    .searchBox {
+        input[type="text"] {
+            padding: 10px;
+            border: solid 1px #dcdcdc;
+            transition: box-shadow 0.3s, border 0.3s;
+            margin-left: 5%;
+            width: 90%;
+            height: 40px;
+        }
+
+        input[type="text"]:focus,
+        input[type="text"].focus {
+            border: solid 1px #707070;
+            box-shadow: 0 0 5px 1px #969696;
+        }
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        .searchCheckbox {
+            margin-left: 15px;
+            margin-top: 10px;
+        }
+    }
+
+    .item.item-checkbox {
+        padding: 0px 0px 0px 50px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-style: none;
+    }
+
+    ion-list {
+
+        .list-elem {
+            position: relative;
+            display: inline-block;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .multi-line-elem {
+            max-width: 100%;
+            text-overflow: ellipsis;
+            line-height: 1em;
+        }
+
+        .same-line-texts {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .smaller-text {
+            font-size: 0.7em;
+        }
+
+        .positive-balance {
+            color: $dark-green;
+        }
+
+        .address {
+            font-size: 4vw;
+            font-weight: normal;
+        }
+
+        .label {
+            color: $app-default-color;
+            overflow: visible;
+            white-space: normal;
+            word-break: normal !important;
+            word-wrap: break-word !important;
+            font-size: smaller;
+        }
+
+        .margin-top {
+            margin-top: 0.6em;
+        }
+
+        .icon-hide {
+            color: transparent;
+        }
+    }
+
+    .modal-items {
+        text-align: center;
+
+        .addlabel-info-text {
+            padding: 2rem 2rem 1rem 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1rem;
+        }
+
+        input[type=text] {
+            text-align: center;
+            margin:auto;
+        }
+
+        .label-field {
+            text-align: center;
+        }
+
+        .label-button {
+            text-align: center;
+            margin-top: 1rem;
+            min-width: 6rem;
+            color: #fff;
+            color: rgba(0, 0, 0, 0.5);
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.4);
+
+            &.primary {
+                text-align: center;
+                background-color: $good-green;
+            }
+        }
+    }
+}
+
+//--- /address lookup ---
