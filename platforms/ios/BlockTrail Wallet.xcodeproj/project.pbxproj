@@ -9,8 +9,6 @@
 		0356A090D8464D4183F35B0A /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E0D6BBD2D07470CBAB1ACFC /* CDVInAppBrowser.m */; };
 		0686F15D09864C96946A736E /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A09A5DDB818465391DD8478 /* CDVCamera.m */; };
 		07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = A6043BC32A9C4C7A850C27D0 /* GoogleAppTracking.m */; };
-		0D337A5731344DD8975DFEE8 /* Tune-4.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D29734E2B5449F1A351AE18 /* Tune-4.4.0.a */; };
-		13CEBF250D294B31ADF77CDE /* TunePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 3791B2EBF3954351BED36F34 /* TunePlugin.m */; };
 		15128D99AA95408B8154D62B /* CDVBarcodeScanner.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1DFD58CCD2D24CB4B3DC6374 /* CDVBarcodeScanner.bundle */; };
 		176AF960E58E41E494F86FFD /* FabricPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4D927F1F0345DCB6D77E52 /* FabricPlugin.m */; };
 		182B6783E93B4615AA96D881 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6834E27B73ED4ACF911DA5BC /* AVFoundation.framework */; };
@@ -152,14 +150,11 @@
 		0475A594CA70424CB9C7E99C /* CDVPinDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVPinDialog.h; path = hu.dpal.phonegap.plugins.PinDialog/CDVPinDialog.h; sourceTree = "<group>"; };
 		0762821D666443A08F2110A1 /* APPEmailComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APPEmailComposer.h; path = "de.appplant.cordova.plugin.email-composer/APPEmailComposer.h"; sourceTree = "<group>"; };
 		095447E34E4140E4AEF89265 /* CDVDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVDevice.m; path = org.apache.cordova.device/CDVDevice.m; sourceTree = "<group>"; };
-		0AF8BC5200954BEAA4E9993B /* TunePushInfo.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TunePushInfo.h; path = "cordova-plugin-tune/TunePushInfo.h"; sourceTree = "<group>"; };
 		0AFAAFD7DAA74EE6B8727F12 /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceProduct.h; path = "cordova-plugin-google-analytics/GAIEcommerceProduct.h"; sourceTree = "<group>"; };
 		0B3E14015CEB408C868DA74B /* GAITracker.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAITracker.h; path = "cordova-plugin-google-analytics/GAITracker.h"; sourceTree = "<group>"; };
 		0B705457D37541B69B37ED56 /* Processor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Processor.h; path = org.cloudsky.cordovaplugins.zbar/Processor.h; sourceTree = "<group>"; };
-		0CE3AE05AC4C4398BFF8BBDF /* TuneEventItem.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TuneEventItem.h; path = "cordova-plugin-tune/TuneEventItem.h"; sourceTree = "<group>"; };
 		0CE78CD42A9B48DEB250F030 /* AddressBookUI.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		0D07FB8E90244BBA946B47C1 /* CDVContactsPhoneNumbers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVContactsPhoneNumbers.m; path = com.dbaq.cordova.contactsPhoneNumbers/CDVContactsPhoneNumbers.m; sourceTree = "<group>"; };
-		13BC0C041A6F4D76A7C4DEFE /* TuneEvent.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TuneEvent.h; path = "cordova-plugin-tune/TuneEvent.h"; sourceTree = "<group>"; };
 		140783A558074966A26F4E5B /* iAd.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		18C8942023604034BA2EA4AC /* Fabric.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = "BlockTrail Wallet/Plugins/cordova-fabric-plugin/Fabric.framework"; sourceTree = "<group>"; };
 		1A0801FDB814453CBE40BEBA /* CDVDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVDevice.h; path = org.apache.cordova.device/CDVDevice.h; sourceTree = "<group>"; };
@@ -214,7 +209,6 @@
 		33EFBFEED51142F99179A218 /* ELCAlbumPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ELCAlbumPickerController.h; path = com.synconset.imagepicker/ELCAlbumPickerController.h; sourceTree = "<group>"; };
 		3570B1C656D34C4AA5EE99CE /* zbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zbar.h; path = org.cloudsky.cordovaplugins.zbar/zbar.h; sourceTree = "<group>"; };
 		3570FA3052B6442EA77A23F0 /* Overlay@2x.png */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = unknown; path = "Overlay@2x.png"; sourceTree = "<group>"; };
-		3791B2EBF3954351BED36F34 /* TunePlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = TunePlugin.m; path = "cordova-plugin-tune/TunePlugin.m"; sourceTree = "<group>"; };
 		37D65B64953A4547B71F8342 /* UIImage+CropScaleOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+CropScaleOrientation.m"; path = "cordova-plugin-camera/UIImage+CropScaleOrientation.m"; sourceTree = "<group>"; };
 		38F5C9D4E2B24FB4BDF66350 /* ZBarSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarSDK.h; path = org.cloudsky.cordovaplugins.zbar/ZBarSDK.h; sourceTree = "<group>"; };
 		3A8D6CBBBE88456997ECDA06 /* CDVFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVFile.m; path = "cordova-plugin-file/CDVFile.m"; sourceTree = "<group>"; };
@@ -226,7 +220,6 @@
 		454B2A591C3C443CA2FA6D35 /* ZBarImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarImage.h; path = org.cloudsky.cordovaplugins.zbar/ZBarImage.h; sourceTree = "<group>"; };
 		45CE7791BAAA4F0583D5A083 /* GAITrackedViewController.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAITrackedViewController.h; path = "cordova-plugin-google-analytics/GAITrackedViewController.h"; sourceTree = "<group>"; };
 		47C2A969243D4F3F8DDB600B /* APPEmailComposerImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APPEmailComposerImpl.h; path = "de.appplant.cordova.plugin.email-composer/APPEmailComposerImpl.h"; sourceTree = "<group>"; };
-		49EAC8977DA54A23967FF615 /* TuneConstants.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TuneConstants.h; path = "cordova-plugin-tune/TuneConstants.h"; sourceTree = "<group>"; };
 		4A09A5DDB818465391DD8478 /* CDVCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVCamera.m; path = "cordova-plugin-camera/CDVCamera.m"; sourceTree = "<group>"; };
 		4B2A918D354A4922987AA063 /* ZBarCameraSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarCameraSimulator.h; path = org.cloudsky.cordovaplugins.zbar/ZBarCameraSimulator.h; sourceTree = "<group>"; };
 		4CA573136799498B9A3EBBF2 /* GAI.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAI.h; path = "cordova-plugin-google-analytics/GAI.h"; sourceTree = "<group>"; };
@@ -240,7 +233,6 @@
 		5670DAA73FFF45A199B41F9A /* ELCAssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetTablePicker.xib; sourceTree = "<group>"; };
 		576BC20B556B480483B38BF6 /* GAILogger.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAILogger.h; path = "cordova-plugin-google-analytics/GAILogger.h"; sourceTree = "<group>"; };
 		586A3F72F7E849DC860689F3 /* Sms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sms.h; path = com.cordova.plugins.sms/Sms.h; sourceTree = "<group>"; };
-		58E2E0808FDA4F9D8BACEC70 /* Tune.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = Tune.h; path = "cordova-plugin-tune/Tune.h"; sourceTree = "<group>"; };
 		5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		5D9F9479706F4BB0A1D38D2E /* DisableDataDetectors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DisableDataDetectors.m; path = fr.spirotron.cordova.disabledatadetectors/DisableDataDetectors.m; sourceTree = "<group>"; };
 		5DA6811B7D004429BAE82184 /* Social.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -253,7 +245,6 @@
 		6B224A9A8EF74FD997D06A97 /* ZBarReaderController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarReaderController.h; path = org.cloudsky.cordovaplugins.zbar/ZBarReaderController.h; sourceTree = "<group>"; };
 		6C61900FE7224F62AFF33B1F /* UIImage+CropScaleOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+CropScaleOrientation.h"; path = "cordova-plugin-camera/UIImage+CropScaleOrientation.h"; sourceTree = "<group>"; };
 		6C7F0BD4C55D4BFB89E58B14 /* CoreImage.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
-		6D29734E2B5449F1A351AE18 /* Tune-4.4.0.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = "Tune-4.4.0.a"; path = "BlockTrail Wallet/Plugins/cordova-plugin-tune/Tune-4.4.0.a"; sourceTree = "<group>"; };
 		708D2981FA674032A3D5B695 /* SOSPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOSPicker.m; path = com.synconset.imagepicker/SOSPicker.m; sourceTree = "<group>"; };
 		71EDEF9AC7E04FF3B9519455 /* Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Toast.h; path = "nl.x-services.plugins.toast/Toast.h"; sourceTree = "<group>"; };
 		75FF479FC9124E8EA3C983EF /* Sms.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Sms.m; path = com.cordova.plugins.sms/Sms.m; sourceTree = "<group>"; };
@@ -286,7 +277,6 @@
 		907D5F0504D141B8A5D89C39 /* libsqlite3.dylib */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		92D3672998AB44B095F27583 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGoogleAnalyticsServices.a; path = "BlockTrail Wallet/Plugins/cordova-plugin-google-analytics/libGoogleAnalyticsServices.a"; sourceTree = "<group>"; };
 		9AD2965675AF45E0BA2C0614 /* QuartzCore.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		9C3F94611B214EF9B2EC3C86 /* TunePreloadData.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TunePreloadData.h; path = "cordova-plugin-tune/TunePreloadData.h"; sourceTree = "<group>"; };
 		9D4C4EC9B41C4FCB9DD6C643 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceFields.h; path = "cordova-plugin-google-analytics/GAIEcommerceFields.h"; sourceTree = "<group>"; };
 		9E0D6BBD2D07470CBAB1ACFC /* CDVInAppBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVInAppBrowser.m; path = org.apache.cordova.inappbrowser/CDVInAppBrowser.m; sourceTree = "<group>"; };
 		9F923C5E7E584CAD9BBDECC9 /* GoogleAppTracking.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GoogleAppTracking.h; path = "cordova-plugin-google-app-conversion-tracker/GoogleAppTracking.h"; sourceTree = "<group>"; };
@@ -324,15 +314,12 @@
 		D71F953A2A624E3FB89C66F7 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Exception.h; path = org.cloudsky.cordovaplugins.zbar/Exception.h; sourceTree = "<group>"; };
 		D72B84CE74B04538B9C9EB77 /* SQLitePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQLitePlugin.h; path = io.litehelpers.cordova.sqlite/SQLitePlugin.h; sourceTree = "<group>"; };
 		D9E4AC1674A747CF9346DBF1 /* ELCAssetTablePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ELCAssetTablePicker.m; path = com.synconset.imagepicker/ELCAssetTablePicker.m; sourceTree = "<group>"; };
-		DC727848E2C74A03A75A239D /* TuneExperimentDetails.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TuneExperimentDetails.h; path = "cordova-plugin-tune/TuneExperimentDetails.h"; sourceTree = "<group>"; };
 		DCE1303067944CEF82B9E7E7 /* UniversalAnalyticsPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = UniversalAnalyticsPlugin.m; path = "cordova-plugin-google-analytics/UniversalAnalyticsPlugin.m"; sourceTree = "<group>"; };
 		DCE1F8EEF38C460FACE36C84 /* ZBarSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarSymbol.h; path = org.cloudsky.cordovaplugins.zbar/ZBarSymbol.h; sourceTree = "<group>"; };
-		DF1DB9563F7D4F15B20719D4 /* TuneInAppMessageExperimentDetails.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TuneInAppMessageExperimentDetails.h; path = "cordova-plugin-tune/TuneInAppMessageExperimentDetails.h"; sourceTree = "<group>"; };
 		DF4FDC661E7C4DFEBAC8D468 /* Security.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E0C91972FD3847BCA97FFAC1 /* CDVClipboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVClipboard.h; path = com.verso.cordova.clipboard/CDVClipboard.h; sourceTree = "<group>"; };
 		E29DCEC3455C45EBAAC77DCC /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scanner.h; path = org.cloudsky.cordovaplugins.zbar/Scanner.h; sourceTree = "<group>"; };
 		E3BC39FAD2104476B22E2FC4 /* CDVExif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVExif.h; path = "cordova-plugin-camera/CDVExif.h"; sourceTree = "<group>"; };
-		E4043779F3A1408BAF0AFA08 /* TunePowerHookExperimentDetails.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TunePowerHookExperimentDetails.h; path = "cordova-plugin-tune/TunePowerHookExperimentDetails.h"; sourceTree = "<group>"; };
 		E9A7EA9740DC4D71A24473CD /* CoreSpotlight.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = System/Library/Frameworks/CoreSpotlight.framework; sourceTree = SDKROOT; };
 		EA36DF73ABE740BCB372AA11 /* MessageUI.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		EA386092E2F64224A5C8CA7B /* AddressBook.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -347,7 +334,6 @@
 		F0ABB27241E84CB3ABE21353 /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAIEcommercePromotion.h; path = "cordova-plugin-google-analytics/GAIEcommercePromotion.h"; sourceTree = "<group>"; };
 		F2411F7B1BCBFF750066F3E1 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		F443CBC77A41404CB0CEA3A3 /* AlmaZBarReaderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlmaZBarReaderViewController.m; path = org.cloudsky.cordovaplugins.zbar/AlmaZBarReaderViewController.m; sourceTree = "<group>"; };
-		F4A56375B5AC41F882B6D522 /* TunePlugin.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TunePlugin.h; path = "cordova-plugin-tune/TunePlugin.h"; sourceTree = "<group>"; };
 		F6594C508F784B1ABF349C09 /* Overlay.png */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = unknown; path = Overlay.png; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "BlockTrail Wallet/config.xml"; sourceTree = "<group>"; };
 		F8C0AC7F268B474CA8A61715 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceProductAction.h; path = "cordova-plugin-google-analytics/GAIEcommerceProductAction.h"; sourceTree = "<group>"; };
@@ -355,7 +341,6 @@
 		FAE1838993D041D6A705B3CA /* CDVStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVStatusBar.h; path = org.apache.cordova.statusbar/CDVStatusBar.h; sourceTree = "<group>"; };
 		FAE67A032F2D4CBB843C496B /* ELCAssetSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ELCAssetSelectionDelegate.h; path = com.synconset.imagepicker/ELCAssetSelectionDelegate.h; sourceTree = "<group>"; };
 		FB92BAE23A234F94871B16A8 /* AppVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppVersion.m; path = uk.co.whiteoctober.cordova.appversion/AppVersion.m; sourceTree = "<group>"; };
-		FBEEF878547F49348952A771 /* TuneLocation.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = TuneLocation.h; path = "cordova-plugin-tune/TuneLocation.h"; sourceTree = "<group>"; };
 		FC0810698B854367AA189532 /* CoreMedia.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		FF78D9D50653435192A65928 /* ZBarReaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarReaderViewController.h; path = org.cloudsky.cordovaplugins.zbar/ZBarReaderViewController.h; sourceTree = "<group>"; };
 		A8B30BF658584769821E4D45 /* FacebookConnectPlugin.m */ = {isa = PBXFileReference; name = "FacebookConnectPlugin.m"; path = "cordova-plugin-facebook4/FacebookConnectPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
@@ -409,7 +394,6 @@
 				E6492ECD09BE41AC8D087951 /* libGoogleAnalyticsServices.a in Frameworks */,
 				C1B930B528D048EBA6885A81 /* libAdIdAccess.a in Frameworks */,
 				7AEAE379D0134561B8E46D86 /* CoreData.framework in Frameworks */,
-				0D337A5731344DD8975DFEE8 /* Tune-4.4.0.a in Frameworks */,
 				DCBA73E28AD14E1EAEDE8811 /* CoreSpotlight.framework in Frameworks */,
 				7AC60B782278488AAEE6BFD9 /* CoreTelephony.framework in Frameworks */,
 				E573ED15D6AA451EBCEF1072 /* iAd.framework in Frameworks */,
@@ -527,7 +511,6 @@
 				92D3672998AB44B095F27583 /* libGoogleAnalyticsServices.a */,
 				ED6C492B9DFF4F42979D4217 /* libAdIdAccess.a */,
 				42D848EC0A324E5499C23A69 /* CoreData.framework */,
-				6D29734E2B5449F1A351AE18 /* Tune-4.4.0.a */,
 				E9A7EA9740DC4D71A24473CD /* CoreSpotlight.framework */,
 				7B550826D0AD471BA37EE857 /* CoreTelephony.framework */,
 				140783A558074966A26F4E5B /* iAd.framework */,
@@ -666,18 +649,6 @@
 				0AFAAFD7DAA74EE6B8727F12 /* GAIEcommerceProduct.h */,
 				F8C0AC7F268B474CA8A61715 /* GAIEcommerceProductAction.h */,
 				F0ABB27241E84CB3ABE21353 /* GAIEcommercePromotion.h */,
-				3791B2EBF3954351BED36F34 /* TunePlugin.m */,
-				F4A56375B5AC41F882B6D522 /* TunePlugin.h */,
-				58E2E0808FDA4F9D8BACEC70 /* Tune.h */,
-				49EAC8977DA54A23967FF615 /* TuneConstants.h */,
-				13BC0C041A6F4D76A7C4DEFE /* TuneEvent.h */,
-				0CE3AE05AC4C4398BFF8BBDF /* TuneEventItem.h */,
-				DC727848E2C74A03A75A239D /* TuneExperimentDetails.h */,
-				DF1DB9563F7D4F15B20719D4 /* TuneInAppMessageExperimentDetails.h */,
-				FBEEF878547F49348952A771 /* TuneLocation.h */,
-				E4043779F3A1408BAF0AFA08 /* TunePowerHookExperimentDetails.h */,
-				9C3F94611B214EF9B2EC3C86 /* TunePreloadData.h */,
-				0AF8BC5200954BEAA4E9993B /* TunePushInfo.h */,
 				A8B30BF658584769821E4D45 /* FacebookConnectPlugin.m */,
 				F477D4D97966402FBE133E09 /* FacebookConnectPlugin.h */,
 				30D5249AFF974F60BE7A80D6 /* CDVGlobalization.m */,
@@ -942,7 +913,6 @@
 				07A07F067B9E41AFB5E44E1F /* GoogleAppTracking.m in Sources */,
 				176AF960E58E41E494F86FFD /* FabricPlugin.m in Sources */,
 				D2BEE0F8AAC84FF49B65C14A /* UniversalAnalyticsPlugin.m in Sources */,
-				13CEBF250D294B31ADF77CDE /* TunePlugin.m in Sources */,
 				05152A30FC914A74A1CE9A91 /* FacebookConnectPlugin.m in Sources */,
 				53FC28E43C1343E7A2FF0301 /* CDVGlobalization.m in Sources */,
 				108759A896A54E979618E463 /* CDVNotification.m in Sources */,
@@ -1002,7 +972,6 @@
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
-					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-tune\"",
 				);
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -1060,7 +1029,6 @@
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
-					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-tune\"",
 				);
 				OTHER_LDFLAGS = (
 					"-weak_framework",

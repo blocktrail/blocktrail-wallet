@@ -105,10 +105,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"TunePlugin\"><param name=\"android-package\" value=\"com.tune.TunePlugin\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"FacebookConnectPlugin\"><param name=\"android-package\" value=\"org.apache.cordova.facebook.ConnectPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
@@ -217,10 +213,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<receiver android:exported=\"true\" android:name=\"com.tune.TuneTracker\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<provider android:authorities=\"${applicationId}.sharing.provider\" android:exported=\"false\" android:grantUriPermissions=\"true\" android:name=\"nl.xservices.plugins.FileProvider\"><meta-data android:name=\"android.support.FILE_PROVIDER_PATHS\" android:resource=\"@xml/sharing_paths\" /></provider>",
                             "count": 1
                         }
@@ -248,14 +240,6 @@
                         },
                         {
                             "xml": "<uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
                             "count": 1
                         }
                     ],
@@ -865,9 +849,6 @@
         "cordova-plugin-google-analytics": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "cordova-plugin-tune": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "cordova-plugin-facebook4": {
             "APP_ID": "1072524012838770",
             "APP_NAME": "BTC.com",
@@ -1291,13 +1272,6 @@
             ]
         },
         {
-            "file": "plugins/cordova-plugin-tune/www/TunePlugin.js",
-            "id": "cordova-plugin-tune.TunePlugin",
-            "clobbers": [
-                "window.plugins.tunePlugin"
-            ]
-        },
-        {
             "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
             "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
             "clobbers": [
@@ -1374,7 +1348,6 @@
         "cordova-plugin-google-app-conversion-tracker": "0.0.2",
         "cordova-fabric-plugin": "1.0.8",
         "cordova-plugin-google-analytics": "1.5.6",
-        "cordova-plugin-tune": "5.0.0",
         "cordova-plugin-facebook4": "1.7.4",
         "cordova-plugin-globalization": "1.0.1",
         "cordova-plugin-dialogs": "1.1.2-dev",

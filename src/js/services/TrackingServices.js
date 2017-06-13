@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .factory('trackingService', function(tuneTrackingService, $analytics) {
+    .factory('trackingService', function($analytics) {
 
         var EVENTS = {
             OPEN: "open",
@@ -30,7 +30,6 @@ angular.module('blocktrail.wallet')
         });
 
         var trackEvent = function(event, meta) {
-            tuneTrackingService.measureEvent(event);
             $analytics.eventTrack(event, ANALYTICS_META[event] || { category: 'Events' });
         };
 

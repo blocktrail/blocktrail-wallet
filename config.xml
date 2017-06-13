@@ -11,10 +11,6 @@
   <access origin="https://api.blocktrail.com"/>
   <access origin="https://sandbox.glidera.io"/>
   <access origin="https://www.glidera.io"/>
-  <access origin="http://172.18.0.1" dev="true"/>
-  <access origin="http://172.17.0.1" dev="true"/>
-  <access origin="http://10.4.86.199" dev="true"/>
-  <access origin="http://127.0.0.1" dev="true"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

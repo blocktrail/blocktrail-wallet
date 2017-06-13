@@ -91,9 +91,6 @@
     <feature name="UniversalAnalytics">
         <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
     </feature>
-    <feature name="TunePlugin">
-        <param name="android-package" value="com.tune.TunePlugin" />
-    </feature>
     <feature name="FacebookConnectPlugin">
         <param name="android-package" value="org.apache.cordova.facebook.ConnectPlugin" />
         <param name="onload" value="true" />
@@ -118,10 +115,6 @@
     <access origin="https://api.blocktrail.com" />
     <access origin="https://sandbox.glidera.io" />
     <access origin="https://www.glidera.io" />
-    <access dev="true" origin="http://172.18.0.1" />
-    <access dev="true" origin="http://172.17.0.1" />
-    <access dev="true" origin="http://10.4.86.199" />
-    <access dev="true" origin="http://127.0.0.1" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
     <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
@@ -139,6 +132,6 @@
     <author email="support@btc.com" href="https://www.btc.com/">
     BTC.com Team
     </author>
-    <content original-src="index.html" src="http://10.4.86.199:8100" />
+    <content src="index.html" />
     <allow-navigation href="http://10.4.86.199:8100" />
 </widget>

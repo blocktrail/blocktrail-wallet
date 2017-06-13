@@ -403,13 +403,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-tune/www/TunePlugin.js",
-        "id": "cordova-plugin-tune.TunePlugin",
-        "clobbers": [
-            "window.plugins.tunePlugin"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
         "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
         "clobbers": [
@@ -488,7 +481,6 @@ module.exports.metadata =
     "cordova-plugin-google-app-conversion-tracker": "0.0.2",
     "cordova-fabric-plugin": "1.0.8",
     "cordova-plugin-google-analytics": "1.5.6",
-    "cordova-plugin-tune": "5.0.0",
     "cordova-plugin-facebook4": "1.7.4",
     "cordova-plugin-globalization": "1.0.1",
     "cordova-plugin-dialogs": "1.1.2-dev",

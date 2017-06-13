@@ -83,10 +83,6 @@
     <feature name="UniversalAnalytics">
         <param name="ios-package" value="UniversalAnalyticsPlugin" />
     </feature>
-    <feature name="TunePlugin">
-        <param name="ios-package" value="TunePlugin" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="FacebookConnectPlugin">
         <param name="ios-package" value="FacebookConnectPlugin" />
         <param name="onload" value="true" />
@@ -119,6 +115,7 @@
     <access origin="https://sandbox.glidera.io" />
     <access origin="https://www.glidera.io" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <allow-navigation href="http://10.4.86.199:8100" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
     <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
     <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
