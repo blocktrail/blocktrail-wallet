@@ -10,7 +10,7 @@ angular.module('blocktrail.wallet')
         $scope.fiatFirst = false;
         $scope.prioboost = {
             discountP: null,
-            credits: null,
+            credits: 2,
             possible: null,
             estSize: null,
             tooLarge: false,
