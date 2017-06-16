@@ -71,6 +71,12 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>btccomwallet</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
           <string>fb1072524012838770</string>
         </array>
       </dict>
