@@ -97,9 +97,20 @@
                 <h3 class="group-title"
                     translate="BUYBTC_PROVIDERS"
                     translate-value-region="{{ chooseRegion.name | translate }}"></h3>
-                <div class="list list-inset">
-                    <div ng-if="brokers.indexOf('glidera') !== -1" class="item item-button-right" ng-click="goGlideraBrowser()">
-                        <span class="sentence-case">Glidera</span>
+                <div class="list list-inset"
+                     ng-if="brokers.indexOf('glidera') !== -1">
+                    <div class="item item-button-right" ng-click="goGlideraBrowser()">
+                        <img class="logo-glidera" src="img/glidera-bright.png">
+                        <button class="button button-clear">
+                            <i class="icon ion-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="list list-inset"
+                     ng-if="brokers.indexOf('bitonic') !== -1">
+                    <div class="item item-button-right" ng-click="goBuyBTCState('bitonic')">
+                        <img class="logo-bitonic" src="img/bitonic-logo.png">
                         <button class="button button-clear">
                             <i class="icon ion-chevron-right"></i>
                         </button>

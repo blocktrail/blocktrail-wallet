@@ -716,12 +716,15 @@ angular.module('blocktrail.wallet').config(
                 }
             })
             .state('app.wallet.buybtc.buy', {
-                url: "/buy?broker",
+                url: "/broker/:broker",
+                data: {
+                    clearHistory: true  //always clear history when entering this state
+                },
                 cache: false,
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "templates/buybtc/buybtc.buy.html",
-                        controller: 'BuyBTCBuyCtrl'
+                        controller: 'BuyBTCBrokerCtrl'
                     }
                 }
             })
