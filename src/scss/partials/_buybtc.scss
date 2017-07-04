@@ -36,14 +36,27 @@
         line-height: 50px;
         color: $bluejeans-light;
         font-size: 0.8rem;
-        font-weight:400;
+        font-weight: 400;
     }
 
     .buy-btc-via-vendor {
         padding:0px 40px;
         text-align: center;
         font-size: 0.8rem;
-        color:#999;
+        color: #999;
     }
 
+    .logo-bitonic {
+        width: 180px;
+        height: auto;
+        max-height: 26px;
+        margin: -8px 0px -7px 0px;
+    }
+
+    .logo-glidera {
+        width: 180px;
+        height: auto;
+        max-height: 26px;
+        margin: -8px 0px -7px 0px;
+    }
 }

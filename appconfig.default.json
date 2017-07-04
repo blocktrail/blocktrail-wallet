@@ -18,10 +18,12 @@
     "EXTRA_LANGUAGES": ["es", "nl", "ru", "fr", "hi", "sw", "cn"],
     "CURRENCIES": ["USD", "EUR", "GBP", "AUD", "BTC", "CNY"],
 
-    "CSP": ["https://api.blocktrail.com", "https://www.glidera.io", "https://sandbox.glidera.io"],
+    "CSP": ["https://api.blocktrail.com", "https://www.glidera.io", "https://sandbox.glidera.io", "https://bitonic.nl", "https://staging.bitonic.nl"],
 
     "BUYBTC": false,
     "GLIDERA_URL": "https://www.glidera.io",
+    "BITONIC_STAGING_URL": "https://staging.bitonic.nl",
+    "BITONIC_URL": "https://bitonic.nl",
 
     "GAPPTRACK_ID": null,
     "GAPPTRACK_ACTIVATE_LABELS": {"iOS": null, "android": null},
