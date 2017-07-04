@@ -16,10 +16,16 @@
             </div>
 
             <div class="list list-inset address-input">
-                <label class="item item-input item-floating-label">
+                <div class="item item-input item-floating-label">
                     <span class="input-label">{{ 'PROMO_CODE_PLACEHOLDER' | translate }}</span>
-                    <input type="text" ng-model="promoCodeInput.code" ng-enter="confirmInput()" ng-change="resetMessage()" tabindex="-1" placeholder="{{ 'PROMO_CODE_PLACEHOLDER' | translate }}...">
-                </label>
+                    <div style="position: relative;">
+                        <i ng-click="scanQr()"
+                           style="font-size: 1.2em; position: absolute; z-index: 5; right: 5px; top: 5px;" class="icon icon-qrcode"></i>
+                        <input type="text" tabindex="-1" placeholder="{{ 'PROMO_CODE_PLACEHOLDER' | translate }}..."
+                               style="margin-right: 44px;"
+                               ng-model="promoCodeInput.code" ng-enter="confirmInput()" ng-change="resetMessage()" />
+                    </div>
+                </div>
             </div>
 
             <div class="list">

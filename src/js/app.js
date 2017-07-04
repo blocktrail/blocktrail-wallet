@@ -844,7 +844,7 @@ angular.module('blocktrail.wallet').config(
 
             /*--- Promo Codes ---*/
             .state('app.wallet.promo', {
-                url: "/promo",
+                url: "/promo?code",
                 cache: false,
                 data: {
                     clearHistory: true  //always clear history when entering this state

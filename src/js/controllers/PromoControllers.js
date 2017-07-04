@@ -1,11 +1,12 @@
 angular.module('blocktrail.wallet')
-    .controller('PromoCodeRedeemCtrl', function($scope, $rootScope, sdkService, $btBackButtonDelegate, $q, $timeout, Wallet) {
+    .controller('PromoCodeRedeemCtrl', function($scope, $rootScope, $stateParams, sdkService, $btBackButtonDelegate, $q,
+                                                $log, $cordovaToast, $ionicLoading, QR, $timeout, Wallet) {
         $scope.appControl = {
             working: false,
             showMessage: false
         };
         $scope.promoCodeInput = {
-            code: null,             //promo code
+            code: $stateParams.code || null,             //promo code
             address: null,          //redemption address
             uuid: device.uuid,      //unique device id     //nocommit
             platform: $rootScope.isIOS && "iOS" || "Android",
@@ -16,6 +17,41 @@ angular.module('blocktrail.wallet')
             title_class: "",
             body: "",
             body_class: ""
+        };
+
+        $scope.scanQr = function() {
+            $ionicLoading.show({template: "<div>{{ 'LOADING' | translate }}...", hideOnStateChange: true});
+
+            // wait for transition, then open the scanner and begin scanning
+            $timeout(function() {
+                QR.scan(
+                    function(result) {
+                        $log.debug('scan done', result);
+                        $ionicLoading.hide();
+
+                        // parse result for address and value
+                        var elm = angular.element('<a>').attr('href', result )[0];
+
+                        $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
+
+                        if (result.toLowerCase() === "cancelled") {
+                            // -
+                        }
+                        else if (elm.protocol === 'btccomwallet:') {
+                            var reg = new RegExp(/btccomwallet:\/\/promocode\?code=(.+)/);
+                            var res = result.match(reg);
+
+                            $scope.promoCodeInput.code = res[1];
+                        }
+                    },
+                    function(error) {
+                        $log.error(error);
+                        $log.error("Scanning failed: " + error);
+                        $ionicLoading.hide();
+                        $cordovaToast.showLongTop("Scanning failed: " + error);
+                    }
+                );
+            }, 350);
         };
 
         $scope.showMessage = function() {

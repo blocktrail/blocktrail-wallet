@@ -682,6 +682,13 @@ angular.module('blocktrail.wallet')
                         //go back
                         $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                     }
+                    else if (elm.protocol == 'btccomwallet:') {
+                        var reg = new RegExp(/btccomwallet:\/\/promocode\?code=(.+)/);
+                        var res = result.match(reg);
+
+                        $state.go('app.wallet.promo', {code: res[1]})
+
+                    }
                     else if (elm.protocol == 'bitcoin:') {
                         $scope.clearRecipient();
                         $scope.sendInput.recipientAddress = elm.pathname;
