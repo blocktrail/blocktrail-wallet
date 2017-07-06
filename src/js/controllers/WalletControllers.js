@@ -32,7 +32,7 @@ angular.module('blocktrail.wallet')
                             return $state.go('app.reset');
                         });
                 }
-
+                $rootScope.PROMOCODE_IN_MENU = CONFIG.PROMOCODE_IN_MENU || result.promocodeInMenu;
                 $rootScope.PRIOBOOST_ENABLED = CONFIG.PRIOBOOST || result.prioboost;
 
                 settingsService.$isLoaded().then(function () {

@@ -65,7 +65,7 @@
                     <i class="icon ion-ios-gear-outline"></i>
                     <span class="">{{ 'SETTINGS' | translate }}</span>
                 </ion-item>
-                <ion-item menu-close ng-href="{{ $state.href('app.wallet.promo') }}">
+                <ion-item menu-close ng-if="PROMOCODE_IN_MENU" ng-href="{{ $state.href('app.wallet.promo') }}">
                     <i class="icon ion-ios-heart-outline"></i>
                     <span class="">{{ 'PROMO_CODES' | translate }}</span>
                 </ion-item>
