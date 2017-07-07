@@ -103,10 +103,10 @@ angular.module('blocktrail.wallet').factory(
             return self.client.post("/mywallet/main", null, {identifier: identifier}, cb);
         };
 
-        blocktrailSDK.prototype.getSignedBitonicUrl = function (params) {
+        blocktrailSDK.prototype.getSignedBitonicUrl = function (identifier, params) {
             var self = this;
 
-            return self.client.post("/mywallet/bitonic/oauth", null, params);
+            return self.client.post("/mywallet/" + identifier + "/bitonic/oauth", null, params);
         };
 
         blocktrailSDK.prototype.redeemPromoCode = function (data, cb) {
