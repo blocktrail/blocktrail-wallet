@@ -886,7 +886,8 @@ angular.module('blocktrail.wallet')
             ];
             if (ionic.Platform.isIOS()) {
                 optionButtons = [
-                    { text: $translate.instant('BACKUP_EMAIL_PDF') }
+                    { text: $translate.instant('BACKUP_EMAIL_PDF') },
+                    { text: 'Backup to iCloud' }
                 ];
             }
 
@@ -944,71 +945,78 @@ angular.module('blocktrail.wallet')
 
                                 //save file temporarily
                                 $log.debug('writing to ' + $scope.backupSettings.path + $scope.backupSettings.filename);
-                                return $cordovaFile.writeFile($scope.backupSettings.path, $scope.backupSettings.filename, buffer, $scope.backupSettings.replace);
-                            })
-                            .then(function(result) {
-                                if (index == 0) {
-                                    //email the backup pdf
-                                    var options = {
-                                        to: '',
-                                        attachments: [
-                                            $scope.backupSettings.path + $scope.backupSettings.filename
-                                        ],
-                                        subject: $translate.instant('MSG_BACKUP_EMAIL_SUBJECT_1'),
-                                        body: $translate.instant('MSG_BACKUP_EMAIL_BODY_1'),
-                                        isHtml: true
-                                    };
-                                    var deferred = $q.defer();
+                                $cordovaFile.writeFile($scope.backupSettings.path, $scope.backupSettings.filename, buffer, $scope.backupSettings.replace)
+                                    .then(function (result) {
+                                        if (index == 0) {
+                                            //email the backup pdf
+                                            var options = {
+                                                to: '',
+                                                attachments: [
+                                                    $scope.backupSettings.path + $scope.backupSettings.filename
+                                                ],
+                                                subject: $translate.instant('MSG_BACKUP_EMAIL_SUBJECT_1'),
+                                                body: $translate.instant('MSG_BACKUP_EMAIL_BODY_1'),
+                                                isHtml: true
+                                            };
+                                            var deferred = $q.defer();
 
-                                    //check that emails can be sent (try with normal mail, can't do attachments with gmail)
-                                    cordova.plugins.email.isAvailable(function(isAvailable) {
-                                        $log.debug('is email supported? ' + isAvailable);
-                                        if (isAvailable) {
-                                            $scope.appControl.saveButtonClicked = true;
-                                            cordova.plugins.email.open(options, function(result) {
-                                                deferred.resolve(result);
+                                            //check that emails can be sent (try with normal mail, can't do attachments with gmail)
+                                            cordova.plugins.email.isAvailable(function (isAvailable) {
+                                                $log.debug('is email supported? ' + isAvailable);
+                                                if (isAvailable) {
+                                                    $scope.appControl.saveButtonClicked = true;
+                                                    cordova.plugins.email.open(options, function (result) {
+                                                        deferred.resolve(result);
+                                                    });
+                                                } else {
+                                                    //no mail support...sad times :(
+                                                    $cordovaDialogs.alert(
+                                                        $translate.instant('MSG_EMAIL_NOT_SETUP'),
+                                                        $translate.instant('SORRY'),
+                                                        $translate.instant('OK')
+                                                    ).then(function () {
+                                                        deferred.reject('NO_EMAIL');
+                                                    });
+                                                }
                                             });
-                                        } else {
-                                            //no mail support...sad times :(
-                                            $cordovaDialogs.alert(
-                                                $translate.instant('MSG_EMAIL_NOT_SETUP'),
-                                                $translate.instant('SORRY'),
-                                                $translate.instant('OK')
-                                            ).then(function() {
-                                                deferred.reject('NO_EMAIL');
-                                            });
+
+                                            return deferred.promise;
+
+                                        } else if (index == 1) {
+                                            if (ionic.Platform.isIOS()) {
+                                                // syncedDataDirectory
+                                                var fileName = 'wallet-backup-' + settingsService.email.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf';
+                                                $cordovaFile.writeFile(cordova.file.documentsDirectory, fileName, buffer, true);
+
+                                            } else if (ionic.Platform.isAndroid()) {
+                                                //export the backup to PDF for user to handle
+                                                //call an intent or similar service to allow user decide what to do with PDF
+                                                $log.debug('opening file ' + $scope.backupSettings.path + $scope.backupSettings.filename);
+                                                $scope.appControl.saveButtonClicked = true;
+                                                return $cordovaFileOpener2.open($scope.backupSettings.path + $scope.backupSettings.filename, 'application/pdf');
+                                            }
+
                                         }
-                                    });
-
-                                    return deferred.promise;
-
-                                } else if (index == 1) {
-                                    //export the backup to PDF for user to handle
-                                    //call an intent or similar service to allow user decide what to do with PDF
-                                    $log.debug('opening file ' + $scope.backupSettings.path + $scope.backupSettings.filename);
-                                    $scope.appControl.saveButtonClicked = true;
-                                    return $cordovaFileOpener2.open($scope.backupSettings.path + $scope.backupSettings.filename, 'application/pdf');
-                                }
-                            })
-                            .then(function() {
-                                // backup export successful
-                                $log.debug("backup export complete");
-                                $scope.hideExportOptions();
-                            })
-                            .catch(function(err) {
-                                $log.error(err);
-                                if (err) {
-                                    if (err.status && err.status == 9) {
-                                        $cordovaDialogs.alert($translate.instant('MSG_CANT_OPEN_PDF'), $translate.instant('ERROR'), $translate.instant('OK'));
-                                    } else {
-                                        $cordovaDialogs.alert(err, $translate.instant('ERROR'), $translate.instant('OK'));
-                                    }
-                                } else {
-                                    //some of the above plugins reject the promise even on success...
-                                    $scope.hideExportOptions();
-                                }
-                            })
-                        ;
+                                    })
+                                    .then(function () {
+                                        // backup export successful
+                                        $log.debug("backup export complete");
+                                        $scope.hideExportOptions();
+                                    })
+                                    .catch(function (err) {
+                                        $log.error(err);
+                                        if (err) {
+                                            if (err.status && err.status == 9) {
+                                                $cordovaDialogs.alert($translate.instant('MSG_CANT_OPEN_PDF'), $translate.instant('ERROR'), $translate.instant('OK'));
+                                            } else {
+                                                $cordovaDialogs.alert(err, $translate.instant('ERROR'), $translate.instant('OK'));
+                                            }
+                                        } else {
+                                            //some of the above plugins reject the promise even on success...
+                                            $scope.hideExportOptions();
+                                        }
+                                    })
+                            });
                     });
                 }
             });
