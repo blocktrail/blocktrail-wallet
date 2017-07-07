@@ -51,7 +51,8 @@ angular.module('blocktrail.wallet').factory(
                     }
 
                     return sdkService.sdk().then(function (sdk) {
-                        sdk.getSignedBitonicUrl(params).then(function (result) {
+
+                        sdk.getSignedBitonicUrl(wallet.identifier, params).then(function (result) {
 
                             return $cordovaDialogs.confirm(
                                 $translate.instant('MSG_BUYBTC_FORWARD_TO_BROKER', {
