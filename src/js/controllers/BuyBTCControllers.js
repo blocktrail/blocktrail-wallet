@@ -208,7 +208,7 @@ angular.module('blocktrail.wallet')
             recipientSource: null
         };
 
-        var doneTypingInterval = 1000;
+        var doneTypingInterval = 500;
         var typingTimer = null;
 
         var lastPriceResponse = null;
@@ -304,10 +304,9 @@ angular.module('blocktrail.wallet')
                     function () {
                         $scope.fetchingInputPrice = false;
                         $ionicLoading.hide();
-                    }
-                ).catch(function () {
-                    $scope.fetchingInputPrice = false;
-                    $ionicLoading.hide();
+                    }).catch(function () {
+                        $scope.fetchingInputPrice = false;
+                        $ionicLoading.hide();
                 });
             }, doneTypingInterval);
         };
@@ -338,7 +337,6 @@ angular.module('blocktrail.wallet')
                     $scope.altCurrency = {};
 
                     if (!$scope.buyInput.btcValue) {
-                        $scope.fetchingInputPrice = false;
                         return new Promise(function (resolve, reject) {
                             resolve();
                         });
@@ -361,8 +359,6 @@ angular.module('blocktrail.wallet')
                             };
 
                             $scope.fetchingInputPrice = false;
-                    }).catch(function(err) {
-                        $log.error(err);
                     });
                 } else {
 
@@ -372,7 +368,6 @@ angular.module('blocktrail.wallet')
                     $scope.altCurrency = {};
 
                     if (!$scope.buyInput.fiatValue) {
-                        $scope.fetchingInputPrice = false;
                         return new Promise(function (resolve, reject) {
                             resolve();
                         });
@@ -395,8 +390,6 @@ angular.module('blocktrail.wallet')
                             };
 
                             $scope.fetchingInputPrice = false;
-                    }).catch(function(err) {
-                        $log.error(err);
                     });
                 }// else
         };
