@@ -9,6 +9,11 @@ var Encryption = require('./encryption');
 var EncryptionMnemonic = require('./encryption_mnemonic');
 var bip39 = require('bip39');
 
+var SignMode = {
+    SIGN: "sign",
+    DONT_SIGN: "dont_sign"
+};
+
 /**
  *
  * @param sdk                   APIClient       SDK instance used to do requests
@@ -396,6 +401,7 @@ Wallet.prototype._upgradeV1ToV3 = function(passphrase, notify) {
                     self.recoveryEncryptedSecret = options.recoveryEncryptedSecret;
 
                     return self.sdk.updateWallet(self.identifier, {
+                        primary_mnemonic: '',
                         encrypted_primary_seed: options.encryptedPrimarySeed.toString('base64'),
                         encrypted_secret: options.encryptedSecret.toString('base64'),
                         recovery_secret: options.recoverySecret.toString('hex'),
@@ -771,6 +777,7 @@ Wallet.prototype.deleteWallet = function(force, cb) {
  * @returns {q.Promise}
  */
 Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChangeIdx, feeStrategy, twoFactorToken, options, cb) {
+
     /* jshint -W071 */
     var self = this;
 
@@ -820,6 +827,7 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
         )
             .spread(
             function(tx, utxos) {
+
                 deferred.notify(Wallet.PAY_PROGRESS_SEND);
 
                 return self.sendTransaction(tx.toHex(), utxos.map(function(utxo) { return utxo['path']; }), checkFee, twoFactorToken, options.prioboost)
@@ -1075,19 +1083,26 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                             deferred.notify(Wallet.PAY_PROGRESS_SIGN);
 
                             for (i = 0; i < utxos.length; i++) {
-                                path = utxos[i]['path'].replace("M", "m");
-
-                                if (self.primaryPrivateKey) {
-                                    privKey = Wallet.deriveByPath(self.primaryPrivateKey, path, "m").privKey;
-                                } else if (self.backupPrivateKey) {
-                                    privKey = Wallet.deriveByPath(self.backupPrivateKey, path.replace(/^m\/(\d+)\'/, 'm/$1'), "m").privKey;
-                                } else {
-                                    throw new Error("No master privateKey present");
+                                var mode = SignMode.SIGN;
+                                if (utxos[i].sign_mode) {
+                                    mode = utxos[i].sign_mode;
                                 }
 
-                                var redeemScript = bitcoin.Script.fromHex(utxos[i]['redeem_script']);
+                                if (mode === SignMode.SIGN) {
+                                    path = utxos[i]['path'].replace("M", "m");
 
-                                txb.sign(i, privKey, redeemScript);
+                                    if (self.primaryPrivateKey) {
+                                        privKey = Wallet.deriveByPath(self.primaryPrivateKey, path, "m").privKey;
+                                    } else if (self.backupPrivateKey) {
+                                        privKey = Wallet.deriveByPath(self.backupPrivateKey, path.replace(/^m\/(\d+)\'/, 'm/$1'), "m").privKey;
+                                    } else {
+                                        throw new Error("No master privateKey present");
+                                    }
+
+                                    var redeemScript = bitcoin.Script.fromHex(utxos[i]['redeem_script']);
+
+                                    txb.sign(i, privKey, redeemScript);
+                                }
                             }
 
                             tx = txb.buildIncomplete();
@@ -1145,7 +1160,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
  * @param [lockUTXO]        bool        lock UTXOs for a few seconds to allow for transaction to be created
  * @param [allowZeroConf]   bool        allow zero confirmation unspent outputs to be used in coin selection
  * @param [feeStrategy]     string      defaults to FEE_STRATEGY_OPTIMAL
- * @param [options]         array
+ * @param [options]         object
  * @param [cb]              function    callback(err, utxos, fee, change)
  * @returns {q.Promise}
  */
@@ -1263,7 +1278,7 @@ Wallet.prototype.deleteWebhook = function(identifier, cb) {
 /**
  * get all transactions for the wallet (paginated)
  *
- * @param [params]  array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]  object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]      function    callback(err, transactions)
  * @returns {q.Promise}
  */
@@ -1312,7 +1327,7 @@ Wallet.prototype.maxSpendable = function(allowZeroConf, feeStrategy, options, cb
 /**
  * get all addresses for the wallet (paginated)
  *
- * @param [params]  array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]  object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]      function    callback(err, addresses)
  * @returns {q.Promise}
  */
@@ -1337,7 +1352,7 @@ Wallet.prototype.labelAddress = function(address, label, cb) {
 /**
  * get all UTXOs for the wallet (paginated)
  *
- * @param [params]  array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]  object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]      function    callback(err, addresses)
  * @returns {q.Promise}
  */

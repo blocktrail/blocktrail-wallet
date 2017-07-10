@@ -15,7 +15,7 @@ var qrCode = function(text, size, typeNumber, errorCorrectLevel) {
 
 /**
  * @param identifier            string          identifier
- * @param backupInfo            array
+ * @param backupInfo            object
  * @param extraInfo             array
  * @param options
  * @constructor

@@ -7,7 +7,7 @@ var bowser = require('bowser');
 
 /**
  * @param identifier            string          identifier
- * @param backupInfo            array
+ * @param backupInfo            object
  * @param extraInfo             array
  * @param options
  * @constructor

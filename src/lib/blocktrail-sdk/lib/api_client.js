@@ -429,7 +429,7 @@ APIClient.prototype.addresses = function(addresses, cb) {
  * get all transactions for an address (paginated)
  *
  * @param address       string      address hash
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
@@ -448,7 +448,7 @@ APIClient.prototype.addressTransactions = function(address, params, cb) {
  * get all transactions for a batch of addresses (paginated)
  *
  * @param addresses     array       address hashes
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
@@ -467,7 +467,7 @@ APIClient.prototype.batchAddressHasTransactions = function(addresses, params, cb
  * get all unconfirmed transactions for an address (paginated)
  *
  * @param address       string      address hash
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
@@ -486,7 +486,7 @@ APIClient.prototype.addressUnconfirmedTransactions = function(address, params, c
  * get all unspent outputs for an address (paginated)
  *
  * @param address       string      address hash
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
@@ -505,7 +505,7 @@ APIClient.prototype.addressUnspentOutputs = function(address, params, cb) {
  * get all unspent outputs for a batch of addresses (paginated)
  *
  * @param addresses     array       address hashes
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
@@ -537,7 +537,7 @@ APIClient.prototype.verifyAddress = function(address, signature, cb) {
 /**
  * get all blocks (paginated)
  *
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
@@ -1719,7 +1719,7 @@ APIClient.prototype.deleteWalletWebhook = function(identifier, webhookIdentifier
  * get all transactions for an wallet (paginated)
  *
  * @param identifier    string      wallet identifier
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
@@ -1738,7 +1738,7 @@ APIClient.prototype.walletTransactions = function(identifier, params, cb) {
  * get all addresses for an wallet (paginated)
  *
  * @param identifier    string      wallet identifier
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
@@ -1798,7 +1798,7 @@ APIClient.prototype.walletMaxSpendable = function(identifier, allowZeroConf, fee
  * get all UTXOs for an wallet (paginated)
  *
  * @param identifier    string      wallet identifier
- * @param [params]      array       pagination: {page: 1, limit: 20, sort_dir: 'asc'}
+ * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
