@@ -45,6 +45,12 @@
         <div class="buy-btc-via-vendor">
             {{ 'BUYBTC_VIA' | translate }} <span class="sentence-case"></span> 
             <a href="#">{{ 'CHANGE' | translate }}</a>
+
+            <span class="sentence-case"
+                  translate="BUYBTC_VIA"
+                  translate-value-broker="{{ broker }}">
+            </span>
+            <a href="#">{{ 'CHANGE' | translate }}</a>
         </div>
 
     </form>

@@ -150,6 +150,9 @@ gulp.task('templates:index', ['appconfig'], function() {
             './src/translations/translations/swahili.json',
             './src/translations/translations/arabic.json',
             './src/translations/translations/hindi.json',
+            './src/translations/translations/korean.json',
+            './src/translations/translations/german.json',
+            './src/translations/translations/japanese.json',
 
             './src/translations/translations/mobile/english.json',
             './src/translations/translations/mobile/americanEnglish.json',
@@ -160,7 +163,10 @@ gulp.task('templates:index', ['appconfig'], function() {
             './src/translations/translations/mobile/russian.json',
             './src/translations/translations/mobile/swahili.json',
             './src/translations/translations/mobile/arabic.json',
-            './src/translations/translations/mobile/hindi.json'
+            './src/translations/translations/mobile/hindi.json',
+            './src/translations/translations/mobile/korean.json',
+            './src/translations/translations/mobile/german.json',
+            './src/translations/translations/mobile/japanese.json'
         ], function(filename) {
             var language = path.basename(filename, '.json');
             var isMobile = filename.indexOf('mobile/') !== -1;

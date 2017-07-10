@@ -66,7 +66,10 @@
 
             <div class="buy-btc-via-vendor">
                 <p>
-                    {{ 'BUYBTC_VIA' | translate }} <span class="sentence-case">{{ broker }}</span>
+                    <span class="sentence-case"
+                          translate="BUYBTC_VIA"
+                          translate-value-broker="{{ broker }}">
+                        </span>
                     <a href="#" ng-click="$state.go('app.wallet.buybtc.choose')">{{ 'CHANGE' | translate }}</a>
                 </p>
                 <p ng-if="broker === 'glidera'">
