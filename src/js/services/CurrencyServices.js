@@ -24,7 +24,8 @@ angular.module('blocktrail.wallet')
             CRC: {code: "CRC", symbol: "₡"},
             MXN: {code: "MXN", symbol: "$"},
             NGN: {code: "NGN", symbol: "₦"},
-            INR: {code: "INR", symbol: "₹"}
+            INR: {code: "INR", symbol: "₹"},
+            RUB: {code: "RUB", symbol: "₽"}
         };
 
         self.currencies = {};
