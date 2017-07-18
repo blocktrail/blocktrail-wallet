@@ -124,7 +124,7 @@ angular.module('blocktrail.wallet')
                     if (elm.search) {
                         var reg = new RegExp(/amount=([0-9]*\.?[0-9]*)/);
                         var amount = elm.search.match(reg);
-                        if (amount[1]) {
+                        if (amount && amount[1]) {
                             return {address: elm.pathname, amount: amount[1]}
                         } else {
                             return {address: elm.pathname};
@@ -698,7 +698,7 @@ angular.module('blocktrail.wallet')
                         if (elm.search) {
                             var reg = new RegExp(/amount=([0-9]*.[0-9]*)/);
                             var amount = elm.search.match(reg);
-                            if (amount[1]) {
+                            if (amount && amount[1]) {
                                 $scope.sendInput.btcValue = parseFloat(amount[1]);
                                 $scope.setFiat();
                             }
