@@ -28,10 +28,9 @@ angular.module('blocktrail.wallet')
                 });
                 $scope.chooseState.gettingStarted = !$scope.chooseRegion.code;
 
-                return buyBTCService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
+                buyBTCService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
                     $scope.brokers = brokers;
                     $scope.chooseRegion.regionOk = $scope.brokers.length;
-
                     $ionicLoading.hide();
                 });
             });
