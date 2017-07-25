@@ -330,7 +330,8 @@ angular.module('blocktrail.wallet')
                 $scope.fetchingInputPrice = true;
 
                 if (!$scope.fiatFirst) {
-                    $scope.buyInput.btcValue = parseFloat($scope.buyInput.btcValue || 0) || null;
+
+                    $scope.buyInput.btcValue = parseFloat($scope.buyInput.btcValue);
                     $scope.buyInput.fiatValue = null;
                     $scope.buyInput.feeValue = null;
                     $scope.altCurrency = {};
@@ -361,7 +362,7 @@ angular.module('blocktrail.wallet')
                     });
                 } else {
 
-                    $scope.buyInput.fiatValue = parseFloat($scope.buyInput.fiatValue || 0) || null;
+                    $scope.buyInput.fiatValue = parseFloat($scope.buyInput.fiatValue);
                     $scope.buyInput.btcValue = null;
                     $scope.buyInput.feeValue = null;
                     $scope.altCurrency = {};
