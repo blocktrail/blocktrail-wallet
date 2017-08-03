@@ -34,7 +34,7 @@ angular.module('blocktrail.wallet')
         });
 
         var trackEvent = function(event, meta) {
-            $analytics.eventTrack(event, ANALYTICS_META[event] || { category: 'Events' });
+            $analytics.eventTrack(event, angular.extend({}, ANALYTICS_META[event] || { category: 'Events' }, meta));
         };
 
         return {
