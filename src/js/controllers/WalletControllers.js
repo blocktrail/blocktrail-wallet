@@ -281,7 +281,7 @@ angular.module('blocktrail.wallet')
 angular.module('blocktrail.wallet')
     .controller('WalletSummaryCtrl', function($scope, $rootScope, $state, $log, $ionicScrollDelegate, $filter, $http, $q,
                                               $timeout, Wallet, $translate, $stateParams, AppRateService, CurrencyConverter,
-                                              settingsService, buyBTCService, $ionicPopover) {
+                                              settingsService, buyBTCService, $ionicPopover, CONFIG) {
         AppRateService.init();
 
         // update balance from cache
@@ -437,13 +437,13 @@ angular.module('blocktrail.wallet')
                         }
                     } else if (transaction.wallet_value_change > 0) {
                         // received from anonymous
-                        transaction.altDisplay = $translate.instant('TX_INFO_RECEIVED');
+                        transaction.altDisplay = $translate.instant('TX_INFO_RECEIVED', {network: CONFIG.NETWORK_LONG});
                     } else if (transaction.is_internal) {
                         // sent to self
                         transaction.altDisplay = $translate.instant('INTERNAL_TRANSACTION_TITLE');
                     } else {
                         // sent to anonymous
-                        transaction.altDisplay = $translate.instant('TX_INFO_SENT');
+                        transaction.altDisplay = $translate.instant('TX_INFO_SENT', {network: CONFIG.NETWORK_LONG});
                     }
 
                     groupedList.push(transaction);
