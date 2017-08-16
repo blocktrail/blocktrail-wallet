@@ -65,15 +65,24 @@ angular.module('blocktrail.wallet')
             $state.go('app.setup.login');
         };
     })
-    .controller('SetupLoginCtrl', function($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG,
+    .controller('SetupLoginCtrl', function($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, sdkService,
                                            settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, trackingService) {
         $scope.retry = 0;
 
         $scope.form = {
             username: CONFIG.SETUP_PREFILL_USERNAME || "",
             password: CONFIG.SETUP_PREFILL_PASSWORD || "",
+            network: $rootScope.NETWORK,
             forceNewWallet: false
         };
+
+        $scope.$watch('form.network', function(newNetwork, oldNetwork) {
+            if (newNetwork !== oldNetwork) {
+                $rootScope.switchNetwork(newNetwork);
+                launchService.storeNetwork(newNetwork);
+                sdkService.refreshNetwork();
+            }
+        });
 
         $scope.doLogin = function() {
             if ($scope.appControl.working) {
@@ -129,7 +138,7 @@ angular.module('blocktrail.wallet')
             var twoFactorCode = $scope.twoFactorCode;
 
             $scope.twoFactorCode = null; // consumed
-            $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/enable", {
+            $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "t" : "") + ($rootScope.NETWORK) + "/mywallet/enable", {
                 login: $scope.form.username,
                 password: CryptoJS.SHA512($scope.form.password).toString(),
                 platform: $rootScope.isIOS && "iOS" || "Android",
@@ -282,9 +291,18 @@ angular.module('blocktrail.wallet')
             username: null,
             email: null,
             password: null,
+            network: $rootScope.NETWORK,
             registerWithEmail: 1, //can't use bool, must be number equivalent
             passwordCheck: null
         };
+
+        $scope.$watch('form.network', function(newNetwork, oldNetwork) {
+            if (newNetwork !== oldNetwork) {
+                $rootScope.switchNetwork(newNetwork);
+                launchService.storeNetwork(newNetwork);
+                sdkService.refreshNetwork();
+            }
+        });
 
         var passwordCheckingId = 0;
 
@@ -428,7 +446,7 @@ angular.module('blocktrail.wallet')
                 device_name: ([device.platform, device.model].clean().join(" / ")) || 'Unknown Device',
                 skip_two_factor: true // will make the resulting API key not require 2FA in the future
             };
-            $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/register", postData)
+            $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "t" : "") + ($rootScope.NETWORK) + "/mywallet/register", postData)
                 .then(function(result) {
                     trackingService.trackEvent(trackingService.EVENTS.REGISTRATION);
                     return launchService.storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
@@ -480,7 +498,7 @@ angular.module('blocktrail.wallet')
                 });
         };
     })
-    .controller('SetupWalletPinCtrl', function($q, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
+    .controller('SetupWalletPinCtrl', function($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
                                                sdkService, $cordovaDialogs, $ionicLoading, $rootScope, $log, $translate, $timeout, settingsService, CONFIG) {
         $scope.retry = 0;
         $scope.form = {
@@ -835,7 +853,7 @@ angular.module('blocktrail.wallet')
             });
         };
     })
-    .controller('SetupWalletBackupCtrl', function($scope, backupInfo, $state, $q, $btBackButtonDelegate, $translate, $cordovaDialogs,
+    .controller('SetupWalletBackupCtrl', function($scope, $rootScope, backupInfo, $state, $q, $btBackButtonDelegate, $translate, $cordovaDialogs,
                                                   $ionicActionSheet, $log, $cordovaFileOpener2, $cordovaFile, sdkService, $cordovaEmailComposer,
                                                   launchService, settingsService, $timeout) {
 

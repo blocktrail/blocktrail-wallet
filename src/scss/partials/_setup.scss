@@ -139,6 +139,19 @@
             background: #EBECEF;
         }
     }
+
+    .currency-select {
+        .input-label {
+            font-size: 90%;
+        }
+
+        select {
+            font-size: 110%;
+            width: 60%;
+            direction: ltr;
+        }
+    }
+
     .item-input {
     }
     .input-label {

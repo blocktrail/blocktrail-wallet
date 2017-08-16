@@ -15,6 +15,7 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
+$app-default-color: #3c78c2;
 
 // custom function to create a -light version of a color
 @function lightencolor($color) {
@@ -75,11 +76,10 @@ $bt-neon:               #EBE70D;
 $good-green:            $bt-green;
 $dark-green:            #08A635;
 $bad-red:               #d47e7e;
-$app-default-color:     #3c78c2;
 $app-default-shadow:    0 1px 4px rgba(0,0,0,0.15);
 
 $energized: $app-default-color;
-// $balanced:  $mediumgray-dark;
+$positive: $app-default-color;
 
 
 // Base
@@ -177,6 +177,35 @@ $ionicons-font-path: "../fonts" !default;
 //import our theme
 @import "theme";
 
+.network-bcc {
+  $app-default-color: #fe5e00;
+  $energized: $app-default-color;
+  $positive: $app-default-color;
+
+  $bar-energized-bg:                  rgba($app-default-color, $bar-transparency);
+  $bar-energized-text:                #fff;
+  $bar-energized-border:              #fff;
+  $bar-energized-active-bg:           darken($app-default-color, 20%);
+  $bar-energized-active-border:       darken(#fff, 10%);
+
+  $button-energized-bg:             $energized;
+  $button-energized-text:           #fff;
+  $button-energized-border:         darken($energized, 5%);
+  $button-energized-active-bg:      darken($energized, 5%);
+  $button-energized-active-border:  darken($energized, 5%);
+
+  $button-positive-bg:             $positive;
+  $button-positive-text:           #fff;
+  $button-positive-border:         darken($positive, 5%);
+  $button-positive-active-bg:      darken($positive, 5%);
+  $button-positive-active-border:  darken($positive, 5%);
+
+  // Include all of Ionic
+  @import "../lib/ionic/scss/ionic";
+
+  //import our theme
+  @import "theme";
+}
 
 
 

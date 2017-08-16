@@ -12,7 +12,7 @@
                 <div class="col">
                     <div class="balance-label" ng-if="balance !== null">
                         <canvas-display
-                                text="$translate.instant('WALLET_YOUR_BITCOINS')"
+                                text="$translate.instant('WALLET_YOUR_BITCOINS', {ticker: TICKER_LONG})"
                                 width="100%"
                                 height="20"
                                 font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
@@ -37,7 +37,7 @@
                 </div>
                 <div class="col col-20">
                         <canvas-display
-                                text="'BTC'"
+                                text="TICKER"
                                 width="100%"
                                 height="20"
                                 font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "

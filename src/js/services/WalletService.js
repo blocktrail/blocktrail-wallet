@@ -58,7 +58,7 @@ angular.module('blocktrail.wallet').factory(
             return self.sdk.then(function(sdk) {
                 var addr, err;
                 try {
-                    addr = bitcoinjs.Address.fromBase58Check(address);
+                    addr = bitcoinjs.address.fromBase58Check(address);
                     if (addr.version !== sdk.network.pubKeyHash && addr.version !== sdk.network.scriptHash) {
                         err = new blocktrail.InvalidAddressError("Invalid network");
                     }

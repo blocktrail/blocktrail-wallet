@@ -11,7 +11,7 @@
             window.NG_CORDOVA_MOCKS = <%= NG_CORDOVA_MOCKS %>;
         </script>
 
-        <link href="css/ionic.app.css" rel="stylesheet">
+        <link id="css-ionic-app" href="css/ionic.app.css" rel="stylesheet">
 
         <script src="js/libs.js"></script>
         <script src="js/sdk.js"></script>
@@ -34,7 +34,7 @@
         </script>
     </head>
 
-    <body class="platform-cordova">
+    <body class="platform-cordova" ng-class="bodyClassStr">
         <ion-nav-view>
             <div class="loading-screen" ng-hide="hideLoadingScreen"
                  style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #35B89c; background: #fff; text-align: center; color: #fff;">

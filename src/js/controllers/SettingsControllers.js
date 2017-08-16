@@ -861,7 +861,7 @@ angular.module('blocktrail.wallet')
         //...
         $cordovaVibration.vibrate(150);
     })
-    .controller('SettingsWalletBackupCtrl', function($scope, backupInfo, $state, $q, $btBackButtonDelegate, $translate, $cordovaDialogs,
+    .controller('SettingsWalletBackupCtrl', function($rootScope, $scope, backupInfo, $state, $q, $btBackButtonDelegate, $translate, $cordovaDialogs,
                                                   $ionicActionSheet, $log, $cordovaFileOpener2, $cordovaFile, sdkService, $cordovaEmailComposer,
                                                   launchService, settingsService, $timeout) {
         if (!backupInfo) {

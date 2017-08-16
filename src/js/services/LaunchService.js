@@ -50,6 +50,31 @@ angular.module('blocktrail.wallet').factory(
             return self._walletConfig;
         };
 
+        LaunchService.prototype.getNetwork = function() {
+            var self = this;
+
+            return self.storage.get('network')
+                .then(function(doc) {
+                    return doc.network;
+                }, function() {
+                    return null;
+                });
+        };
+
+        LaunchService.prototype.storeNetwork = function(network) {
+            var self = this;
+
+            return self.storage.get('network')
+                .then(function(doc) { return doc; }, function() { return {_id: "network"}; })
+                .then(function(doc) {
+                    doc.network = network;
+
+                    return self.storage.put(doc).then(function() {
+                        return doc;
+                    });
+                });
+        };
+
         LaunchService.prototype.getAccountInfo = function() {
             var self = this;
 
@@ -65,21 +90,21 @@ angular.module('blocktrail.wallet').factory(
             return self.storage.get('account_info')
                 .then(function(doc) { return doc; }, function() { return {_id: "account_info"}; })
                 .then(function(doc) {
-                    doc.username = accountInfo.username;
-                    doc.email = accountInfo.email;
-                    doc.api_key = accountInfo.api_key;
-                    doc.api_secret = accountInfo.api_secret;
-                    doc.testnet = accountInfo.testnet;
-                    doc.secret = accountInfo.secret;
-                    doc.encrypted_secret = accountInfo.encrypted_secret;
-                    doc.new_secret = accountInfo.new_secret;
+                        doc.username = accountInfo.username;
+                        doc.email = accountInfo.email;
+                        doc.api_key = accountInfo.api_key;
+                        doc.api_secret = accountInfo.api_secret;
+                        doc.testnet = accountInfo.testnet;
+                        doc.secret = accountInfo.secret;
+                        doc.encrypted_secret = accountInfo.encrypted_secret;
+                        doc.new_secret = accountInfo.new_secret;
 
 
-                    return self.storage.put(doc).then(function() {
-                        return doc;
-                    });
-                }
-            );
+                        return self.storage.put(doc).then(function() {
+                            return doc;
+                        });
+                    }
+                );
         };
 
         LaunchService.prototype.updateAccountInfo = function(updateAccountInfo) {

@@ -49,7 +49,7 @@
                         <div class="col col-50">
                             <div class="btc-value received" style="float: right;">
                                 {{ (transaction.qty | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : htmlMarkup=false : hideDisp=true) }}
-                                <span class="disp">BTC</span>
+                                <span class="disp">{{ TICKER }}</span>
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                             <div class="btc-value" style="float: right;"
                                  ng-class="{received: transaction.wallet_value_change > 0, sent: transaction.wallet_value_change <= 0}">
                                 {{ (transaction.wallet_value_change | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : htmlMarkup=false : hideDisp=true) }}
-                                <span class="disp">BTC</span>
+                                <span class="disp">{{ TICKER }}</span>
                             </div>
                         </div>
                     </div>

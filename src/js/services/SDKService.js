@@ -151,6 +151,23 @@ angular.module('blocktrail.wallet').factory(
             return self.client.post("/mywallet/feedback", null, data, cb);
         };
 
+        var _network = null;
+        var network = function() {
+            if (!_network) {
+                _network = launchService.getNetwork().then(
+                    function(network) {
+                        return network;
+                    },
+                    function(e) {
+                        _network = null;
+                        throw e;
+                    }
+                );
+            }
+
+            return _network;
+        };
+
         var _accountInfo = null;
         var accountInfo = function() {
             if (!_accountInfo) {
@@ -171,35 +188,41 @@ angular.module('blocktrail.wallet').factory(
         var _sdk = null;
         var sdk = function() {
             if (!_sdk) {
-                _sdk = accountInfo()
-                    .then(function(accountInfo) {
+                _sdk = network().then(function(network) {
+                    return accountInfo().then(function (accountInfo) {
                         return new blocktrailSDK({
                             apiKey: accountInfo.api_key,
                             apiSecret: accountInfo.api_secret,
-                            // apiKey: CONFIG.API_KEY,
-                            // apiSecret: CONFIG.API_SECRET,
+                            network: network,
                             testnet: CONFIG.TESTNET || accountInfo.testnet,
                             host: CONFIG.API_HOST || null,
                             https: typeof CONFIG.API_HTTPS !== "undefined" ? CONFIG.API_HTTPS : true
                         });
-                    }, function(e) {
+                    }, function (e) {
                         $log.error('Missing account info for SDK');
                         $state.go('app.reset');
                         throw e;
                     })
-                    .then(function(sdk) {
+                    .then(function (sdk) {
                         return sdk;
-                    }, function(e) {
+                    }, function (e) {
                         _sdk = null;
                         throw e;
                     });
+                });
             }
 
             return _sdk;
         };
 
+        var refreshNetwork = function() {
+            _network = null;
+            _sdk = null;
+        };
+
         return {
             sdk : sdk,
+            refreshNetwork : refreshNetwork,
             BackupGenerator: blocktrailSDK.BackupGenerator
         };
     }

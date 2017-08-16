@@ -22,6 +22,13 @@
                         <span class="input-label text-neutral">{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}</span>
                         <input type="password" placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}" ng-model="form.password" ng-enter="doLogin()">
                     </label>
+                    <label class="item item-select currency-select">
+                        <span class="input-label">{{ 'SETUP_NETWORK_CHOICE' | translate }}</span>
+                        <select ng-model="form.network">
+                            <option value="BTC">Bitcoin</option>
+                            <option value="BCC">BitcoinCash</option>
+                        </select>
+                    </label>
                     <div ng-if="CONFIG.DEBUG" class="item item-no-border-b item-checkbox">
                         <label class="checkbox">
                             <input type="checkbox" ng-model="form.forceNewWallet">

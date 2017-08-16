@@ -1,52 +1,86 @@
 angular.module('blocktrail.wallet')
-    .filter('satoshiToCurrency', function($rootScope, Currencies) {
+    .filter('satoshiToCurrency', function satoshiToCurrency($rootScope, Currencies, CONFIG) {
         var coin = 100000000;
         var precision = 8;
 
-        return function(input, currency, currencyRates, fractionSize, useMarkup, hideCurrencyDisplay) {
+        var CURRENCY_DISPLAY_MODE = {
+            SHORT: 'short',
+            HIDE: 'hide',
+            LONG: 'long'
+        };
+
+        return function(input, currency, currencyRates, fractionSize, useMarkup, currencyDisplayMode) {
             // normalize
+
+            if (typeof currencyDisplayMode === "undefined" || currencyDisplayMode === false) {
+                currencyDisplayMode = CURRENCY_DISPLAY_MODE.SHORT;
+            } else if (currencyDisplayMode === true) {
+                currencyDisplayMode = CURRENCY_DISPLAY_MODE.HIDE;
+            }
+
             currency = currency.toUpperCase();
 
             var btc = parseFloat((input/ coin).toFixed(precision));
+            var localValue;
+            var symbol, long;
+            var currencyDisplay;
 
-            if (typeof(fractionSize) == "undefined") {
+            if (typeof fractionSize === "undefined") {
                 fractionSize = 2;
             } else {
                 fractionSize = parseInt(fractionSize);
             }
 
             // use global prices
-            if (typeof(currencyRates) == "undefined") {
+            if (typeof currencyRates === "undefined") {
                 currencyRates = $rootScope.bitcoinPrices;
             }
 
-            var localValue;
             if (typeof currencyRates[currency] !== "undefined") {
                 localValue = (btc * currencyRates[currency]).toFixed(fractionSize);
             } else {
                 localValue = (0).toFixed(fractionSize);
             }
 
-            var symbol;
-            if (typeof Currencies.currencies[currency] === "undefined") {
+            if (currency === 'BTC') {
+                symbol = $rootScope.TICKER;
+                long = $rootScope.TICKER_LONG;
+            } else if (typeof Currencies.currencies[currency] === "undefined") {
                 symbol = input;
+                long = input;
             } else {
                 symbol = Currencies.currencies[currency].symbol || currency;
+                long = Currencies.currencies[currency].code || currency;
             }
 
-            var currencyDisplay;
+            currencyDisplay = currencyDisplayMode === CURRENCY_DISPLAY_MODE.LONG ? long : symbol;
+            currencyDisplay = useMarkup ? ('<span class="disp">' + (currencyDisplay) + '</span>') : (" " + currencyDisplay);
+
             if (currency === "BTC") {
-                currencyDisplay = useMarkup ? (' <span class="disp">BTC</span>') : " BTC";
-                return hideCurrencyDisplay ? btc.toFixed(fractionSize) : btc.toFixed(fractionSize) + currencyDisplay;
+                return currencyDisplayMode === CURRENCY_DISPLAY_MODE.HIDE ? btc.toFixed(fractionSize) : btc.toFixed(fractionSize) + currencyDisplay;
             } else {
-                currencyDisplay = useMarkup ? ('<span class="disp">' + symbol + '</span>') : symbol;
-                return hideCurrencyDisplay ? localValue : currencyDisplay + localValue;
+                return currencyDisplayMode === CURRENCY_DISPLAY_MODE.HIDE ? localValue : currencyDisplay + localValue;
+            }
+        };
+    })
+    .filter('toCurrencyTicker', function($rootScope, Currencies) {
+        return function(input) {
+            if (typeof Currencies.currencies[input] === "undefined") {
+                if (input === 'BTC') {
+                    return $rootScope.TICKER;
+                }
+                return input;
+            } else {
+                return Currencies.currencies[input].ticker || Currencies.currencies[input].code || input;
             }
         };
     })
     .filter('toCurrencySymbol', function($rootScope, Currencies) {
         return function(input) {
             if (typeof Currencies.currencies[input] === "undefined") {
+                if (input === 'BTC') {
+                    return '฿';
+                }
                 return input;
             } else {
                 return Currencies.currencies[input].symbol || input;

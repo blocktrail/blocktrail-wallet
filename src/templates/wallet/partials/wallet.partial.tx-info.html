@@ -1,7 +1,7 @@
 <div ng-if="data && data.hash">
     <h3 class="title" ng-class="{received: data.wallet_value_change > 0, sent: data.wallet_value_change <= 0}">
-        <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_SENT' | translate : {network: CONFIG.NETWORK_LONG} }}</span>
-        <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED' | translate : {network: CONFIG.NETWORK_LONG} }}</span>
+        <span ng-if="data.wallet_value_change <= 0">{{ 'TX_INFO_SENT' | translate : {network: NETWORK_LONG} }}</span>
+        <span ng-if="data.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED' | translate : {network: NETWORK_LONG} }}</span>
     </h3>
     <small class="tx-hash text-ellipsis" to-clipboard="data.hash">
         <span class="value">{{ data.hash }}</span>

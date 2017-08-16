@@ -32,8 +32,8 @@ angular.module('blocktrail.wallet')
                             return $state.go('app.reset');
                         });
                 }
-                $rootScope.PROMOCODE_IN_MENU = CONFIG.PROMOCODE_IN_MENU || result.promocodeInMenu;
-                $rootScope.PRIOBOOST_ENABLED = CONFIG.PRIOBOOST || result.prioboost;
+                $rootScope.PROMOCODE_IN_MENU = $rootScope.PROMOCODE_SUPPORTED && (CONFIG.PROMOCODE_IN_MENU || result.promocodeInMenu);
+                $rootScope.PRIOBOOST_ENABLED = $rootScope.PRIOBOOST_SUPPORTED && (CONFIG.PRIOBOOST || result.prioboost);
 
                 settingsService.$isLoaded().then(function () {
                     AppVersionService.checkVersion(
@@ -368,6 +368,12 @@ angular.module('blocktrail.wallet')
             return Wallet.transactions(from, limit).then(function(result) {
                 console.log('getTransactions.result', result);
 
+                if ($rootScope.TX_FILTER_MIN_BLOCK_HEIGHT) {
+                    result = result.filter(function (tx) {
+                        return tx.block_height === null || tx.block_height >= $rootScope.TX_FILTER_MIN_BLOCK_HEIGHT;
+                    });
+                }
+
                 if (reset) {
                     $scope.lastDateHeader = 0;
                     $scope.transactionsData = [];
@@ -437,13 +443,13 @@ angular.module('blocktrail.wallet')
                         }
                     } else if (transaction.wallet_value_change > 0) {
                         // received from anonymous
-                        transaction.altDisplay = $translate.instant('TX_INFO_RECEIVED', {network: CONFIG.NETWORK_LONG});
+                        transaction.altDisplay = $translate.instant('TX_INFO_RECEIVED', {network: $rootScope.NETWORK_LONG});
                     } else if (transaction.is_internal) {
                         // sent to self
                         transaction.altDisplay = $translate.instant('INTERNAL_TRANSACTION_TITLE');
                     } else {
                         // sent to anonymous
-                        transaction.altDisplay = $translate.instant('TX_INFO_SENT', {network: CONFIG.NETWORK_LONG});
+                        transaction.altDisplay = $translate.instant('TX_INFO_SENT', {network: $rootScope.NETWORK_LONG});
                     }
 
                     groupedList.push(transaction);

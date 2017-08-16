@@ -3,12 +3,11 @@ angular.module('blocktrail.wallet')
         var self = this;
 
         self.cache = storageService.db('currency-rates-cache');
-        self.sdk = sdkService.sdk();
 
         // currencies that the app supports and their symbols
         //  this list shouldn't be used directly `self.currencies` contains the enabled currencies
         var _currencies = {
-            BTC: {code: "BTC", symbol: "฿"},
+            BTC: {code: "BTC", ticker: $rootScope.TICKER, symbol: "฿"},
             GBP: {code: "GBP", symbol: "£"},
             EUR: {code: "EUR", symbol: "€"},
             USD: {code: "USD", symbol: "$"},
@@ -90,7 +89,7 @@ angular.module('blocktrail.wallet')
                     })
                     .then(function(pricesDoc) {
                         if (forceFetch) {
-                            return self.sdk.then(function(sdk) {
+                            return sdkService.sdk().then(function(sdk) {
                                 return sdk.price().then(function(result) {
                                     angular.extend(pricesDoc, result);
 

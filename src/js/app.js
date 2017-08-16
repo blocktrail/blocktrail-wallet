@@ -58,7 +58,7 @@ angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $q, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
-             amMoment, trackingService, blocktrailLocalisation) {
+             amMoment, trackingService, blocktrailLocalisation, launchService) {
         $rootScope.CONFIG = CONFIG || {};
         $rootScope.$state = $state;
         $rootScope.$translate = $translate;
@@ -68,6 +68,56 @@ angular.module('blocktrail.wallet').run(
         $rootScope.appVersion = CONFIG.VERSION;
         $rootScope.isAndroid = ionic.Platform.isAndroid();
         $rootScope.isIOS = ionic.Platform.isIOS();
+
+        $rootScope.bodyClass = [];
+        $rootScope.$watch('bodyClass', function() {
+            $rootScope.bodyClassStr = $rootScope.bodyClass.join(" ");
+        }, true);
+
+        $rootScope.switchNetwork = function(network) {
+            $rootScope.NETWORK = network;
+
+            switch ($rootScope.NETWORK) {
+                case 'BTC':
+                    $rootScope.NETWORK_LONG = 'Bitcoin';
+                    $rootScope.TICKER = 'BTC';
+                    $rootScope.TICKER_LONG = 'Bitcoin';
+                    $rootScope.PRIOBOOST_SUPPORTED = true;
+                    $rootScope.PROMOCODE_SUPPORTED = true;
+                    $rootScope.TX_FILTER_MIN_BLOCK_HEIGHT = 0;
+
+                    var bccClsIdx = $rootScope.bodyClass.indexOf('network-bcc');
+                    if (bccClsIdx !== -1) {
+                        $rootScope.bodyClass.splice(bccClsIdx);
+                    }
+                    $rootScope.bodyClass.push('network-btc');
+
+                    break;
+                case 'BCC':
+                    $rootScope.NETWORK_LONG = 'BitcoinCash';
+                    $rootScope.TICKER = 'BCC';
+                    $rootScope.TICKER_LONG = 'BitcoinCash';
+                    $rootScope.PRIOBOOST_SUPPORTED = false;
+                    $rootScope.PROMOCODE_SUPPORTED = false;
+                    $rootScope.TX_FILTER_MIN_BLOCK_HEIGHT = 478559;
+
+                    var btcClsIdx = $rootScope.bodyClass.indexOf('network-btc');
+                    if (btcClsIdx !== -1) {
+                        $rootScope.bodyClass.splice(btcClsIdx);
+                    }
+                    $rootScope.bodyClass.push('network-bcc');
+
+                    break;
+            }
+        };
+
+        $rootScope.switchNetwork("BTC");
+        launchService.getNetwork().then(function(network) {
+            if (network) {
+                $rootScope.switchNetwork(network);
+            }
+        });
+
 
         if (CONFIG.DEBUGLIBS) {
             blocktrailSDK.debug.enable('*,-pouchdb:*');
@@ -642,7 +692,7 @@ angular.module('blocktrail.wallet').config(
                     brokers: function($rootScope, buyBTCService, CONFIG) {
                         return buyBTCService.enabled()
                             .then(function(enabled) {
-                                $rootScope.BUYBTC_ENABLED = CONFIG.BUYBTC || enabled;
+                                $rootScope.BUYBTC_ENABLED = (CONFIG.BUYBTC || enabled) && $rootScope.NETWORK === "BTC";
                             });
                     },
                     loadingDone: function(Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state) {

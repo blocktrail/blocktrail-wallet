@@ -58,6 +58,15 @@
                         </div>
                     </label>
                     <!-- /password -->
+
+                    <label class="item item-select currency-select">
+                        <span class="input-label">{{ 'SETUP_NETWORK_CHOICE' | translate }}</span>
+                        <select ng-model="form.network">
+                            <option value="BTC">Bitcoin</option>
+                            <option value="BCC">BitcoinCash</option>
+                        </select>
+                    </label>
+
                     <div></div>
                 </div>
 
