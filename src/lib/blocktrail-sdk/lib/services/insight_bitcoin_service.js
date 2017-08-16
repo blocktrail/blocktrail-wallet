@@ -98,10 +98,14 @@ InsightBitcoinService.prototype.batchAddressHasTransactions = function(addresses
 InsightBitcoinService.prototype.estimateFee = function() {
     var self = this;
 
-    var nBlocks = "2";
+    var nBlocks = "4";
 
     return self.getEndpoint('utils/estimatefee?nbBlocks=' + nBlocks)
         .then(function(results) {
+            if (results[nBlocks] === -1) {
+                return 100000;
+            }
+
             return parseInt(results[nBlocks] * 1e8, 10);
         })
     ;

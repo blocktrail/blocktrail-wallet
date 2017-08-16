@@ -2,7 +2,7 @@
   "name": "blocktrail-wallet",
   "private": "true",
   "dependencies": {
-    "blocktrail-sdk": "git@github.com:blocktrail/blocktrail-sdk-nodejs.git#17bc5d0435d952d7af830f0297fa12d4f367f7cd",
+    "blocktrail-sdk": "3.3.4",
     "ionic": "1.0.1",
     "pouchdb": "git@github.com:blocktrail/pouchdb.git#blocktrail",
     "q": "1.2.0",

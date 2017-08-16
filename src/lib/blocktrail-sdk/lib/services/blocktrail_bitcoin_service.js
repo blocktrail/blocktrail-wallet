@@ -43,6 +43,15 @@ BlocktrailBitcoinService.prototype.normaliseNetwork =  function(network, testnet
         case 'tbtc':
         case 'bitcoin-testnet':
             return {network: "BTC", testnet: true};
+        case 'bcc':
+            if (testnet) {
+                return {network: "BCC", testnet: true};
+            } else {
+                return {network: "BCC", testnet: false};
+            }
+        break;
+        case 'tbcc':
+            return {network: "BCC", testnet: true};
         default:
             throw new Error("Unknown network " + network);
     }

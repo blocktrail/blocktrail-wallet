@@ -1,6 +1,8 @@
 var _ = require('lodash'),
     q = require('q'),
     bitcoin = require('bitcoinjs-lib'),
+    bitcoinMessage = require('bitcoinjs-message'),
+
     bip39 = require("bip39"),
     Wallet = require('./wallet'),
     RestClient = require('./rest_client'),
@@ -66,6 +68,8 @@ var APIClient = function(options) {
     } else {
         self.network = bitcoin.networks.bitcoin;
     }
+
+    self.bitcoinCash = options.network && options.network === "BCC";
 
     if (!options.endpoint) {
         options.endpoint = "/" + (options.apiVersion || "v1") + "/" + (self.testnet ? "t" : "") + (options.network || 'BTC').toUpperCase();
@@ -899,6 +903,7 @@ APIClient.prototype.initWallet = function(options, cb) {
             backupPublicKey,
             blocktrailPublicKeys,
             keyIndex,
+            result.chain || 0,
             self.testnet,
             result.checksum,
             result.upgrade_key_index,
@@ -1048,7 +1053,7 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                         deferred.notify(APIClient.CREATE_WALLET_PROGRESS_SUBMIT);
 
                         // create a checksum of our private key which we'll later use to verify we used the right password
-                        var checksum = options.primaryPrivateKey.getAddress().toBase58Check();
+                        var checksum = options.primaryPrivateKey.getAddress();
                         var keyIndex = options.keyIndex;
 
                         var primaryPublicKey = options.primaryPrivateKey.deriveHardened(keyIndex).neutered();
@@ -1081,6 +1086,7 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                                     options.backupPublicKey,
                                     blocktrailPublicKeys,
                                     keyIndex,
+                                    result.chain || 0,
                                     self.testnet,
                                     checksum,
                                     result.upgrade_key_index,
@@ -1155,7 +1161,7 @@ APIClient.prototype._createNewWalletV2 = function(options) {
         })
         .then(function(options) {
             // create a checksum of our private key which we'll later use to verify we used the right password
-            var checksum = options.primaryPrivateKey.getAddress().toBase58Check();
+            var checksum = options.primaryPrivateKey.getAddress();
             var keyIndex = options.keyIndex;
 
             // send the public keys and encrypted data to server
@@ -1189,6 +1195,7 @@ APIClient.prototype._createNewWalletV2 = function(options) {
                         options.backupPublicKey,
                         blocktrailPublicKeys,
                         keyIndex,
+                        result.chain || 0,
                         self.testnet,
                         checksum,
                         result.upgrade_key_index,
@@ -1263,7 +1270,7 @@ APIClient.prototype._createNewWalletV3 = function(options) {
         .then(function(options) {
 
             // create a checksum of our private key which we'll later use to verify we used the right password
-            var checksum = options.primaryPrivateKey.getAddress().toBase58Check();
+            var checksum = options.primaryPrivateKey.getAddress();
             var keyIndex = options.keyIndex;
 
             // send the public keys and encrypted data to server
@@ -1298,6 +1305,7 @@ APIClient.prototype._createNewWalletV3 = function(options) {
                             options.backupPublicKey,
                             blocktrailPublicKeys,
                             keyIndex,
+                            result.chain || 0,
                             self.testnet,
                             checksum,
                             result.upgrade_key_index,
@@ -1333,9 +1341,9 @@ APIClient.prototype._createNewWalletV3 = function(options) {
     return deferred.promise;
 };
 
-function verifyPublicBip32Key(bip32Key) {
-    var hk = bitcoin.HDNode.fromBase58(bip32Key[0]);
-    if (hk.privKey) {
+function verifyPublicBip32Key(bip32Key, network) {
+    var hk = bitcoin.HDNode.fromBase58(bip32Key[0], network);
+    if (typeof hk.keyPair.d !== "undefined") {
         throw new Error('BIP32Key contained private key material - abort');
     }
 
@@ -1344,9 +1352,9 @@ function verifyPublicBip32Key(bip32Key) {
     }
 }
 
-function verifyPublicOnly(walletData) {
-    verifyPublicBip32Key(walletData.primary_public_key);
-    verifyPublicBip32Key(walletData.backup_public_key);
+function verifyPublicOnly(walletData, network) {
+    verifyPublicBip32Key(walletData.primary_public_key, network);
+    verifyPublicBip32Key(walletData.backup_public_key, network);
 }
 
 /**
@@ -1374,7 +1382,7 @@ APIClient.prototype.storeNewWalletV1 = function(identifier, primaryPublicKey, ba
         key_index: keyIndex
     };
 
-    verifyPublicOnly(postData);
+    verifyPublicOnly(postData, self.network);
 
     return self.client.post("/wallet", null, postData, cb);
 };
@@ -1411,7 +1419,7 @@ APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, ba
         support_secret: supportSecret || null
     };
 
-    verifyPublicOnly(postData);
+    verifyPublicOnly(postData, self.network);
 
     return self.client.post("/wallet", null, postData, cb);
 };
@@ -1448,7 +1456,7 @@ APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, ba
         support_secret: supportSecret || null
     };
 
-    verifyPublicOnly(postData);
+    verifyPublicOnly(postData, self.network);
 
     return self.client.post("/wallet", null, postData, cb);
 };
@@ -1848,9 +1856,8 @@ APIClient.prototype.verifyMessage = function(message, address, signature, cb) {
 
     var deferred = q.defer();
     deferred.promise.nodeify(cb);
-
     try {
-        var result = bitcoin.Message.verify(address, signature, message, self.network);
+        var result = bitcoinMessage.verify(address, self.network.messagePrefix, message, new Buffer(signature, 'base64'));
         deferred.resolve(result);
     } catch (e) {
         deferred.reject(e);

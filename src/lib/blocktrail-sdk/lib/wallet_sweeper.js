@@ -24,6 +24,7 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
         network: 'btc',
         testnet: false,
         logging: false,
+        bitcoinCash: false,
         sweepBatchSize: 200
     };
     this.settings = _.merge({}, this.defaultSettings, options);
@@ -32,8 +33,10 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
     this.sweepData = null;
 
     // set the bitcoinlib network
-    if (typeof options.recoveryNetwork === "object") {
-        this.recoveryNetwork = options.recoveryNetwork;
+    if (typeof options.network === "object") {
+        this.network = options.network;
+    } else {
+        this.network = this.getBitcoinNetwork(this.settings.network, this.settings.testnet);
     }
 
     backupData.walletVersion = backupData.walletVersion || 2;   //default to version 2 wallets
@@ -73,7 +76,7 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
             if (typeof backupData.encryptedPrimaryMnemonic === "undefined" || !backupData.encryptedPrimaryMnemonic) {
                 throw new Error('missing encrypted primary seed for version 2 wallet');
             }
-            if (typeof backupData.backupMnemonic === "undefined" || !backupData.backupMnemonic) {
+            if (typeof backupData.backupMnemonic === "undefined" || (!backupData.backupMnemonic && backupData.backupMnemonic !== false)) {
                 throw new Error('missing backup seed for version 2 wallet');
             }
             //can either recover with password and password encrypted secret, or with encrypted recovery secret and a decryption key
@@ -99,7 +102,7 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
                 .replace(new RegExp("\r\n", 'g'), " ")
                 .replace(new RegExp("\n", 'g'), " ")
                 .replace(/\s+/g, " ");
-            backupData.backupMnemonic = backupData.backupMnemonic.trim()
+            backupData.backupMnemonic = (backupData.backupMnemonic || "").trim()
                 .replace(new RegExp("\r\n", 'g'), " ")
                 .replace(new RegExp("\n", 'g'), " ")
                 .replace(/\s+/g, " ");
@@ -162,7 +165,10 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
 
             // now finally decrypt the primary seed and convert to buffer (along with backup seed)
             primarySeed = new Buffer(CryptoJS.AES.decrypt(backupData.encryptedPrimaryMnemonic, secret).toString(CryptoJS.enc.Utf8), 'base64');
-            backupSeed = new Buffer(bip39.mnemonicToEntropy(backupData.backupMnemonic), 'hex');
+
+            if (backupData.backupMnemonic) {
+                backupSeed = new Buffer(bip39.mnemonicToEntropy(backupData.backupMnemonic), 'hex');
+            }
 
         break;
 
@@ -188,8 +194,9 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
 
             // now finally decrypt the primary seed and convert to buffer (along with backup seed)
             primarySeed = Encryption.decrypt(backupData.encryptedPrimaryMnemonic, secret);
-            backupSeed = new Buffer(bip39.mnemonicToEntropy(backupData.backupMnemonic), 'hex');
-            // backupSeed = Mnemonic.decode(backupData.backupMnemonic);
+            if (backupData.backupMnemonic) {
+                backupSeed = new Buffer(bip39.mnemonicToEntropy(backupData.backupMnemonic), 'hex');
+            }
 
         break;
 
@@ -199,14 +206,21 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
 
     // convert the primary and backup seeds to private keys (using BIP32)
     this.primaryPrivateKey = bitcoin.HDNode.fromSeedBuffer(primarySeed, this.network);
-    this.backupPrivateKey = bitcoin.HDNode.fromSeedBuffer(backupSeed, this.network);
+
+    if (backupSeed) {
+        this.backupPrivateKey = bitcoin.HDNode.fromSeedBuffer(backupSeed, this.network);
+        this.backupPublicKey = this.backupPrivateKey.neutered();
+    } else {
+        this.backupPrivateKey = false;
+        this.backupPublicKey = bitcoin.HDNode.fromBase58(backupData.backupPublicKey, this.network);
+    }
 
     if (this.settings.logging) {
         console.log('using password method: ' + usePassword);
         console.log("Primary Prv Key: " + this.primaryPrivateKey.toBase58());
         console.log("Primary Pub Key: " + this.primaryPrivateKey.neutered().toBase58());
-        console.log("Backup Prv Key: " + this.backupPrivateKey.toBase58());
-        console.log("Backup Pub Key: " + this.backupPrivateKey.neutered().toBase58());
+        console.log("Backup Prv Key: " + (this.backupPrivateKey ? this.backupPrivateKey.toBase58() : null));
+        console.log("Backup Pub Key: " + this.backupPublicKey.toBase58());
     }
 };
 
@@ -267,24 +281,25 @@ WalletSweeper.prototype.createAddress = function(path) {
     //derive the primary pub key directly from the primary priv key
     var primaryPubKey = walletSDK.deriveByPath(this.primaryPrivateKey, path, "m");
     //derive the backup pub key directly from the backup priv key (unharden path)
-    var backupPubKey = walletSDK.deriveByPath(this.backupPrivateKey, path.replace("'", ""), "m");
+    var backupPubKey = walletSDK.deriveByPath(this.backupPublicKey, path.replace("'", ""), "M");
     //derive a pub key for this path from the blocktrail pub key
     var blocktrailPubKey = walletSDK.deriveByPath(this.getBlocktrailPublicKey(path), path, "M/" + keyIndex + "'");
 
     //sort the keys and generate a multisig redeem script and address
     var multisigKeys = walletSDK.sortMultiSigKeys([
-        primaryPubKey.pubKey,
-        backupPubKey.pubKey,
-        blocktrailPubKey.pubKey
+        primaryPubKey.keyPair.getPublicKeyBuffer(),
+        backupPubKey.keyPair.getPublicKeyBuffer(),
+        blocktrailPubKey.keyPair.getPublicKeyBuffer()
     ]);
-    var redeemScript = bitcoin.scripts.multisigOutput(2, multisigKeys);
-    var scriptPubKey = bitcoin.scripts.scriptHashOutput(redeemScript.getHash());
+    var redeemScript = bitcoin.script.multisig.output.encode(2, multisigKeys);
+    var scriptHash = bitcoin.crypto.hash160(redeemScript);
+    var scriptPubKey = bitcoin.script.scriptHash.output.encode(scriptHash);
 
     var network = this.network;
-    if (typeof this.recoveryNetwork !== "undefined") {
-        network = this.recoveryNetwork;
+    if (typeof this.network !== "undefined") {
+        network = this.network;
     }
-    var address = bitcoin.Address.fromOutputScript(scriptPubKey, network);
+    var address = bitcoin.address.fromOutputScript(scriptPubKey, network);
 
     //@todo return as buffers
     return {address: address.toString(), redeem: redeemScript};
@@ -296,12 +311,12 @@ WalletSweeper.prototype.createAddress = function(path) {
  * @param start
  * @param count
  * @param keyIndex
+ * @param chain
  * @returns {{}}
  */
-WalletSweeper.prototype.createBatchAddresses = function(start, count, keyIndex) {
+WalletSweeper.prototype.createBatchAddresses = function(start, count, keyIndex, chain) {
     var self = this;
     var addresses = {};
-    var chain = 0;
 
     return q.all(_.range(0, count).map(function(i) {
         //create a path subsequent address
@@ -332,128 +347,132 @@ WalletSweeper.prototype.discoverWalletFunds = function(increment, cb) {
     async.nextTick(function() {
         //for each blocktrail pub key, do fund discovery on batches of addresses
         async.eachSeries(Object.keys(self.blocktrailPublicKeys), function(keyIndex, done) {
-            var i = 0;
-            var hasTransactions = false;
+            async.eachSeries([0, 1], function(chain, done) {
+                var i = 0;
+                var hasTransactions = false;
 
-            async.doWhilst(function(done) {
-                //do
-                if (self.settings.logging) {
-                    console.log("generating addresses " + i + " -> " + (i + increment) + " using blocktrail key index " + keyIndex);
-                }
-                deferred.notify({
-                    message: "generating addresses " + i + " -> " + (i + increment) + "",
-                    increment: increment,
-                    btPubKeyIndex: keyIndex,
-                    //addresses: [],
-                    totalAddresses: totalAddressesGenerated,
-                    addressUTXOs: addressUTXOs,
-                    totalUTXOs: totalUTXOs,
-                    totalBalance: totalBalance
-                });
-
-                async.nextTick(function() {
-                    self.createBatchAddresses(i, increment, keyIndex)
-                        .then(function(batch) {
-                            totalAddressesGenerated += Object.keys(batch).length;
-
-                            if (self.settings.logging) {
-                                console.log("starting fund discovery for " + increment + " addresses...");
-                            }
-
-                            deferred.notify({
-                                message: "starting fund discovery for " + increment + " addresses",
-                                increment: increment,
-                                btPubKeyIndex: keyIndex,
-                                //addresses: addresses,
-                                totalAddresses: totalAddressesGenerated,
-                                addressUTXOs: addressUTXOs,
-                                totalUTXOs: totalUTXOs,
-                                totalBalance: totalBalance
-                            });
-
-                            //get the unspent outputs for this batch of addresses
-                            return self.bitcoinDataClient.batchAddressHasTransactions(_.keys(batch)).then(function(_hasTransactions) {
-                                hasTransactions = _hasTransactions;
-                                if (self.settings.logging) {
-                                    console.log("batch " + (hasTransactions ? "has" : "does not have") + " transactions...");
-                                }
-
-                                return q.when(hasTransactions)
-                                    .then(function(hasTransactions) {
-                                        if (!hasTransactions) {
-                                            return;
-                                        }
-
-                                        //get the unspent outputs for this batch of addresses
-                                        return self.utxoFinder.getUTXOs(_.keys(batch)).then(function(utxos) {
-                                            // save the address utxos, along with relevant path and redeem script
-                                            _.each(utxos, function(outputs, address) {
-                                                addressUTXOs[address] = {
-                                                    path: batch[address]['path'],
-                                                    redeem: batch[address]['redeem'],
-                                                    utxos: outputs
-                                                };
-                                                totalUTXOs += outputs.length;
-
-                                                //add up the total utxo value for all addresses
-                                                totalBalance = _.reduce(outputs, function(carry, output) {
-                                                    return carry + output['value'];
-                                                }, totalBalance);
-
-                                                if (self.settings.logging) {
-                                                    console.log("found " + outputs.length + " unspent outputs for address: " + address);
-                                                }
-                                            });
-
-                                            deferred.notify({
-                                                message: "discovering funds",
-                                                increment: increment,
-                                                btPubKeyIndex: keyIndex,
-                                                totalAddresses: totalAddressesGenerated,
-                                                addressUTXOs: addressUTXOs,
-                                                totalUTXOs: totalUTXOs,
-                                                totalBalance: totalBalance
-                                            });
-                                        });
-                                    })
-                                ;
-                            });
-                        })
-                        .then(
-                            function() {
-                                //ready for the next batch
-                                i += increment;
-                                async.nextTick(done);
-                            },
-                            function(err) {
-                                done(err);
-                            }
-                        )
-                    ;
-                });
-            }, function() {
-                //while
-                return hasTransactions;
-            }, function(err) {
-                //all done
-                if (err) {
-                    console.log("batch complete, but with errors", err.message);
-
+                async.doWhilst(function(done) {
+                    //do
+                    if (self.settings.logging) {
+                        console.log("generating addresses " + i + " -> " + (i + increment) + " using blocktrail key index: " + keyIndex + ", chain: " + chain);
+                    }
                     deferred.notify({
-                        message: "batch complete, but with errors: " + err.message,
-                        error: err,
+                        message: "generating addresses " + i + " -> " + (i + increment) + "",
                         increment: increment,
                         btPubKeyIndex: keyIndex,
+                        chain: chain,
+                        //addresses: [],
                         totalAddresses: totalAddressesGenerated,
                         addressUTXOs: addressUTXOs,
                         totalUTXOs: totalUTXOs,
                         totalBalance: totalBalance
                     });
-                }
-                //ready for next Blocktrail pub key
-                async.nextTick(done);
-            });
 
+                    async.nextTick(function() {
+                        self.createBatchAddresses(i, increment, keyIndex, chain)
+                            .then(function(batch) {
+                                totalAddressesGenerated += Object.keys(batch).length;
+
+                                if (self.settings.logging) {
+                                    console.log("starting fund discovery for " + increment + " addresses...");
+                                }
+
+                                deferred.notify({
+                                    message: "starting fund discovery for " + increment + " addresses",
+                                    increment: increment,
+                                    btPubKeyIndex: keyIndex,
+                                    //addresses: addresses,
+                                    totalAddresses: totalAddressesGenerated,
+                                    addressUTXOs: addressUTXOs,
+                                    totalUTXOs: totalUTXOs,
+                                    totalBalance: totalBalance
+                                });
+
+                                //get the unspent outputs for this batch of addresses
+                                return self.bitcoinDataClient.batchAddressHasTransactions(_.keys(batch)).then(function(_hasTransactions) {
+                                    hasTransactions = _hasTransactions;
+                                    if (self.settings.logging) {
+                                        console.log("batch " + (hasTransactions ? "has" : "does not have") + " transactions...");
+                                    }
+
+                                    return q.when(hasTransactions)
+                                        .then(function(hasTransactions) {
+                                            if (!hasTransactions) {
+                                                return;
+                                            }
+
+                                            //get the unspent outputs for this batch of addresses
+                                            return self.utxoFinder.getUTXOs(_.keys(batch)).then(function(utxos) {
+                                                // save the address utxos, along with relevant path and redeem script
+                                                _.each(utxos, function(outputs, address) {
+                                                    addressUTXOs[address] = {
+                                                        path: batch[address]['path'],
+                                                        redeem: batch[address]['redeem'],
+                                                        utxos: outputs
+                                                    };
+                                                    totalUTXOs += outputs.length;
+
+                                                    //add up the total utxo value for all addresses
+                                                    totalBalance = _.reduce(outputs, function(carry, output) {
+                                                        return carry + output['value'];
+                                                    }, totalBalance);
+
+                                                    if (self.settings.logging) {
+                                                        console.log("found " + outputs.length + " unspent outputs for address: " + address);
+                                                    }
+                                                });
+
+                                                deferred.notify({
+                                                    message: "discovering funds",
+                                                    increment: increment,
+                                                    btPubKeyIndex: keyIndex,
+                                                    totalAddresses: totalAddressesGenerated,
+                                                    addressUTXOs: addressUTXOs,
+                                                    totalUTXOs: totalUTXOs,
+                                                    totalBalance: totalBalance
+                                                });
+                                            });
+                                        })
+                                        ;
+                                });
+                            })
+                            .then(
+                                function() {
+                                    //ready for the next batch
+                                    i += increment;
+                                    async.nextTick(done);
+                                },
+                                function(err) {
+                                    done(err);
+                                }
+                            )
+                        ;
+                    });
+                }, function() {
+                    //while
+                    return hasTransactions;
+                }, function(err) {
+                    //all done
+                    if (err) {
+                        console.log("batch complete, but with errors", err.message);
+
+                        deferred.notify({
+                            message: "batch complete, but with errors: " + err.message,
+                            error: err,
+                            increment: increment,
+                            btPubKeyIndex: keyIndex,
+                            totalAddresses: totalAddressesGenerated,
+                            addressUTXOs: addressUTXOs,
+                            totalUTXOs: totalUTXOs,
+                            totalBalance: totalBalance
+                        });
+                    }
+                    //ready for next Blocktrail pub key
+                    async.nextTick(done);
+                });
+            }, function(err) {
+                done(err);
+            });
         }, function(err) {
             //callback
             if (err) {
@@ -543,7 +562,10 @@ WalletSweeper.prototype.createTransaction = function(destinationAddress, fee, fe
     }
 
     // create raw transaction
-    var rawTransaction = new bitcoin.TransactionBuilder();
+    var rawTransaction = new bitcoin.TransactionBuilder(this.network);
+    if (this.settings.bitcoinCash) {
+        rawTransaction.enableBitcoinCash();
+    }
     var inputs = [];
     _.each(this.sweepData['utxos'], function(data, address) {
         _.each(data.utxos, function(utxo) {
@@ -592,17 +614,28 @@ WalletSweeper.prototype.signTransaction = function(rawTransaction, inputs) {
         console.log("Signing transaction");
     }
 
+    var sigHash = bitcoin.Transaction.SIGHASH_ALL;
+    if (this.settings.bitcoinCash) {
+        sigHash |= bitcoin.Transaction.SIGHASH_BITCOINCASHBIP143;
+    }
+
     //sign the transaction with the private key for each input
     _.each(inputs, function(input, index) {
         //create private keys for signing
-        var primaryPrivKey =  walletSDK.deriveByPath(self.primaryPrivateKey, input['path'].replace("M", "m"), "m").privKey;
-        var backupPrivKey =  walletSDK.deriveByPath(self.backupPrivateKey, input['path'].replace("'", "").replace("M", "m"), "m").privKey;
+        var primaryPrivKey =  walletSDK.deriveByPath(self.primaryPrivateKey, input['path'].replace("M", "m"), "m").keyPair;
+        rawTransaction.sign(index, primaryPrivKey, input['redeemScript'], sigHash, input['value']);
 
-        rawTransaction.sign(index, primaryPrivKey, input['redeemScript']);
-        rawTransaction.sign(index, backupPrivKey, input['redeemScript']);
+        if (self.backupPrivateKey) {
+            var backupPrivKey = walletSDK.deriveByPath(self.backupPrivateKey, input['path'].replace("'", "").replace("M", "m"), "m").keyPair;
+            rawTransaction.sign(index, backupPrivKey, input['redeemScript'], sigHash, input['value']);
+        }
     });
 
-    return rawTransaction.build().toHex();
+    if (self.backupPrivateKey) {
+        return rawTransaction.build().toHex();
+    } else {
+        return rawTransaction.buildIncomplete().toHex();
+    }
 };
 
 module.exports = WalletSweeper;

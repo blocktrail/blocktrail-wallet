@@ -56,6 +56,7 @@ BackupGenerator.prototype.generateHTML = function(cb) {
         backupInfo: self.backupInfo,
         totalPubKeys: self.blocktrailPublicKeys.length,
         pubKeysHtml: "",
+        network: self.network,
         extraInfo: _.map(self.extraInfo, function(value, key) {
             if (typeof value !== "string") {
                 return value;

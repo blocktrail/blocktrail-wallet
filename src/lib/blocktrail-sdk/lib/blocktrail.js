@@ -176,7 +176,18 @@ Error.extend = function(subTypeName, errorCode /*optional*/) {
     return SubType;
 };
 
+if (typeof Uint8Array.prototype.reverse !== 'function') {
+    Buffer.prototype.reverse = function reverse() {
+        var c;
+        for (var i = 0, j = this.length - 1; i <= j; ++i, --j) {
+            c = this[i];
+            this[i] = this[j];
+            this[j] = c;
+        }
 
+        return this;
+    };
+}
 
 //Wallet Errors
 blocktrail.WalletInitError = Error.extend("WalletInitError", 400);

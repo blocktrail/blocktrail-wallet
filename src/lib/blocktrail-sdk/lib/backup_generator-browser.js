@@ -17,10 +17,12 @@ var BackupGenerator = function(identifier, backupInfo, extraInfo, options) {
 
     backupInfo = backupInfo || {};
     extraInfo = extraInfo || {};
+    options = options || {};
 
     self.identifier = identifier;
     self.backupInfo = backupInfo;
     self.extraInfo = extraInfo;
+    self.network = options.network || "Bitcoin";
     self.options = _.merge({page1: true, page2: true, page3: true}, options);
     self.blocktrailPublicKeys = [];
 
@@ -154,7 +156,7 @@ BackupGenerator.prototype.generatePDF = function(callback) {
             function(callback) {
                 if (self.options.page1) {
                     pdf.FONT_SIZE_HEADER(function() {
-                        pdf.TEXT("Wallet Recovery Data Sheet");
+                        pdf.TEXT(self.network + " Wallet Recovery Data Sheet");
                     });
 
                     pdf.TEXT(

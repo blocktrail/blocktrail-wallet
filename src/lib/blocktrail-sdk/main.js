@@ -33,6 +33,7 @@ APIClient.lodash = require('lodash');
 APIClient.CryptoJS = require('crypto-js');
 APIClient.debug = require('debug');
 APIClient.bip39 = require('bip39');
+APIClient.bip39wordlist = require('bip39/wordlists/en.json');
 APIClient.bitcoin = require('bitcoinjs-lib');
 APIClient.superagent = require('superagent');
 APIClient.Buffer = Buffer;
