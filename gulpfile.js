@@ -327,7 +327,7 @@ gulp.task('js:zxcvbn', ['appconfig'], function() {
 
 var sassTask = function() {
     return appConfig.then(function(APPCONFIG) {
-        return streamAsPromise(gulp.src(['./src/scss/ionic.app.scss'])
+        return streamAsPromise(gulp.src(['./src/scss/ionic.*-app.scss'])
             .pipe(sass({errLogToConsole: true}))
             .pipe(gulp.dest('./www/css/'))
             .pipe(gulpif(APPCONFIG.MINIFY, minifyCss({keepSpecialComments: 0})))

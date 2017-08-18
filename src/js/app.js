@@ -77,6 +77,8 @@ angular.module('blocktrail.wallet').run(
         $rootScope.switchNetwork = function(network) {
             $rootScope.NETWORK = network;
 
+            var cssEl = document.getElementById('css-ionic-app');
+
             switch ($rootScope.NETWORK) {
                 case 'BTC':
                     $rootScope.NETWORK_LONG = 'Bitcoin';
@@ -92,6 +94,8 @@ angular.module('blocktrail.wallet').run(
                     }
                     $rootScope.bodyClass.push('network-btc');
 
+                    cssEl.href = cssEl.href.replace("bcc-", "btc-");
+
                     break;
                 case 'BCC':
                     $rootScope.NETWORK_LONG = 'BitcoinCash';
@@ -106,6 +110,8 @@ angular.module('blocktrail.wallet').run(
                         $rootScope.bodyClass.splice(btcClsIdx);
                     }
                     $rootScope.bodyClass.push('network-bcc');
+
+                    cssEl.href = cssEl.href.replace("btc-", "bcc-");
 
                     break;
             }
