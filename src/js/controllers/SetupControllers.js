@@ -623,6 +623,8 @@ angular.module('blocktrail.wallet')
                         var t = (new Date).getTime();
                         $analytics.eventTrack('createNewWallet', {category: 'Events'});
 
+                        // new identifier
+                        $scope.setupInfo.identifer = CONFIG.DEFAULT_IDENTIFIER + "-" + randomBytes(8).toString('hex');
 
                         // generate support secret, 6 random digits
                         var supportSecret = randDigits(6);
