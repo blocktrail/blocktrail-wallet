@@ -119,7 +119,7 @@ angular.module('blocktrail.wallet')
                 var elm = angular.element('<a>').attr('href', input)[0];
                 $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
 
-                if (elm.protocol == 'bitcoin:') {
+                if (elm.protocol === 'bitcoin:' || elm.protocol === 'bitcoincash:') {
                     //check for bitcoin amount in qsa
                     if (elm.search) {
                         var reg = new RegExp(/amount=([0-9]*\.?[0-9]*)/);
@@ -132,8 +132,7 @@ angular.module('blocktrail.wallet')
                     } else {
                         return {address: elm.pathname};
                     }
-                }
-                else {
+                } else {
                     //no bitcoin protocol, check all text for possible address
                     var regex = new RegExp(/([\s|\W]+|^)([123mn][a-km-zA-HJ-NP-Z0-9]{25,34})([\s|\W]+|$)/);
                     var matches = input.match(regex);
@@ -681,15 +680,15 @@ angular.module('blocktrail.wallet')
                     if (result.toLowerCase() == "cancelled") {
                         //go back
                         $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
-                    }
-                    else if (elm.protocol == 'btccomwallet:') {
+                    } else if (elm.protocol == 'btccomwallet:') {
                         var reg = new RegExp(/btccomwallet:\/\/promocode\?code=(.+)/);
                         var res = result.match(reg);
 
                         $state.go('app.wallet.promo', {code: res[1]})
 
-                    }
-                    else if (elm.protocol == 'bitcoin:') {
+                    } else if (elm.protocol == 'bitcoincash:' && $rootScope.NETWORK === "BTC") {
+                        throw new Error("Can't send to Bitcoin Cash address with BTC wallet");
+                    } else if (elm.protocol == 'bitcoin:' || elm.protocol == 'bitcoincash:') {
                         $scope.clearRecipient();
                         $scope.sendInput.recipientAddress = elm.pathname;
                         $scope.sendInput.recipientDisplay = elm.pathname;
