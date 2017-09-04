@@ -333,37 +333,44 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.refreshBuybtcPendingOrders = function() {
-            return settingsService.$isLoaded().then(function() {
-                $scope.buybtcPendingOrders = [];
+            Wallet.wallet().then(function(wallet) {
+                return settingsService.$isLoaded().then(function () {
+                    $scope.buybtcPendingOrders = [];
 
-                settingsService.glideraTransactions.forEach(function(glideraTxInfo) {
-                    if (glideraTxInfo.transactionHash || glideraTxInfo.status === "COMPLETE") {
-                        return;
+                    settingsService.glideraTransactions.forEach(function (glideraTxInfo) {
+                        if (glideraTxInfo.transactionHash || glideraTxInfo.status === "COMPLETE") {
+                            return;
+                        }
+
+                        // only display TXs that are related to this wallet
+                        if (glideraTxInfo.walletIdentifier !== wallet.identifier) {
+                            return;
+                        }
+
+                        var order = {
+                            isBuyBtcPendingOrder: true,
+                            qty: CurrencyConverter.toSatoshi(glideraTxInfo.qty, 'BTC'),
+                            qtyBTC: glideraTxInfo.qty,
+                            currency: glideraTxInfo.currency,
+                            price: glideraTxInfo.price,
+                            total: (glideraTxInfo.price * glideraTxInfo.qty).toFixed(2),
+                            time: glideraTxInfo.time,
+                            avatarUrl: buyBTCService.BROKERS.glidera.avatarUrl,
+                            displayName: buyBTCService.BROKERS.glidera.displayName,
+                            estimatedDeliveryDate: glideraTxInfo.estimatedDeliveryDate
+                        };
+
+                        $scope.buybtcPendingOrders.push(order);
+                    });
+
+                    if ($scope.buybtcPendingOrders.length > 0) {
+                        // add header row
+                        $scope.buybtcPendingOrders.push({isBuyBtcPendingOrder: true, isHeader: true});
+
+                        // latest first
+                        $scope.buybtcPendingOrders.reverse();
                     }
-
-                    var order = {
-                        isBuyBtcPendingOrder: true,
-                        qty: CurrencyConverter.toSatoshi(glideraTxInfo.qty, 'BTC'),
-                        qtyBTC: glideraTxInfo.qty,
-                        currency: glideraTxInfo.currency,
-                        price: glideraTxInfo.price,
-                        total: (glideraTxInfo.price * glideraTxInfo.qty).toFixed(2),
-                        time: glideraTxInfo.time,
-                        avatarUrl: buyBTCService.BROKERS.glidera.avatarUrl,
-                        displayName: buyBTCService.BROKERS.glidera.displayName,
-                        estimatedDeliveryDate: glideraTxInfo.estimatedDeliveryDate
-                    };
-
-                    $scope.buybtcPendingOrders.push(order);
                 });
-
-                if ($scope.buybtcPendingOrders.length > 0) {
-                    // add header row
-                    $scope.buybtcPendingOrders.push({isBuyBtcPendingOrder: true, isHeader: true});
-
-                    // latest first
-                    $scope.buybtcPendingOrders.reverse();
-                }
             });
         };
 

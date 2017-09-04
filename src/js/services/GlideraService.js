@@ -404,47 +404,50 @@ angular.module('blocktrail.wallet').factory(
 
                 return accessToken().then(function(accessToken) {
 
-                    return Wallet.getNewAddress().then(function(address) {
+                    return Wallet.wallet().then(function(wallet) {
 
-                        return twoFactor().then(function(twoFactor) {
-                            var r = createRequest(null, accessToken, twoFactor);
-                            $log.debug('buy', JSON.stringify({
-                                destinationAddress: address,
-                                qty: qty,
-                                priceUuid: priceUuid,
-                                useCurrentPrice: false
-                            }, null, 4));
-                            return r.request('POST', '/buy', {}, {
-                                destinationAddress: address,
-                                qty: qty,
-                                priceUuid: priceUuid,
-                                useCurrentPrice: false
-                            })
-                                .then(function(result) {
-                                    $log.debug('buy', JSON.stringify(result, null, 4));
+                        return Wallet.getNewAddress().then(function (address) {
 
-                                    settingsService.glideraTransactions.push({
-                                        address: address,
-                                        time: Math.floor((new Date()).getTime() / 1000),
-                                        transactionUuid: result.transactionUuid,
-                                        transactionHash: result.transactionHash || null,
-                                        status: result.status,
-                                        qty: result.qty,
-                                        price: result.price,
-                                        total: result.total,
-                                        currency: result.currency,
-                                        estimatedDeliveryDate: Math.floor(Date.parse(result.estimatedDeliveryDate) / 1000)
-                                    });
+                            return twoFactor().then(function (twoFactor) {
+                                var r = createRequest(null, accessToken, twoFactor);
+                                $log.debug('buy', JSON.stringify({
+                                    destinationAddress: address,
+                                    qty: qty,
+                                    priceUuid: priceUuid,
+                                    useCurrentPrice: false
+                                }, null, 4));
+                                return r.request('POST', '/buy', {}, {
+                                    destinationAddress: address,
+                                    qty: qty,
+                                    priceUuid: priceUuid,
+                                    useCurrentPrice: false
+                                })
+                                    .then(function (result) {
+                                        $log.debug('buy', JSON.stringify(result, null, 4));
 
-                                    return settingsService.$store().then(function() {
-                                        return settingsService.$syncSettingsUp().then(function() {
-                                            updatePendingTransactions();
+                                        settingsService.glideraTransactions.push({
+                                            address: address,
+                                            time: Math.floor((new Date()).getTime() / 1000),
+                                            transactionUuid: result.transactionUuid,
+                                            transactionHash: result.transactionHash || null,
+                                            status: result.status,
+                                            qty: result.qty,
+                                            price: result.price,
+                                            total: result.total,
+                                            currency: result.currency,
+                                            estimatedDeliveryDate: Math.floor(Date.parse(result.estimatedDeliveryDate) / 1000),
+                                            walletIdentifier: wallet.identifier
+                                        });
 
-                                            return result;
+                                        return settingsService.$store().then(function () {
+                                            return settingsService.$syncSettingsUp().then(function () {
+                                                updatePendingTransactions();
+
+                                                return result;
+                                            });
                                         });
                                     });
-                                })
-                            ;
+                            });
                         });
                     });
                 });
@@ -560,7 +563,8 @@ angular.module('blocktrail.wallet').factory(
                                     status: updateTx.status,
                                     price: updateTx.price,
                                     total: updateTx.total,
-                                    currency: updateTx.currency
+                                    currency: updateTx.currency,
+                                    walletIdentifier: null
                                 };
                             });
 
