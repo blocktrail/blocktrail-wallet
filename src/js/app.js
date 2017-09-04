@@ -102,7 +102,7 @@ angular.module('blocktrail.wallet').run(
                     $rootScope.TICKER = 'BCC';
                     $rootScope.TICKER_LONG = 'BitcoinCash';
                     $rootScope.PRIOBOOST_SUPPORTED = false;
-                    $rootScope.PROMOCODE_SUPPORTED = false;
+                    $rootScope.PROMOCODE_SUPPORTED = true;
                     $rootScope.TX_FILTER_MIN_BLOCK_HEIGHT = 478559;
 
                     var btcClsIdx = $rootScope.bodyClass.indexOf('network-btc');
