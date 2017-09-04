@@ -20,8 +20,13 @@ angular.module('blocktrail.wallet')
          * check for extra languages to enable
          *  if one is preferred, prompt user to switch
          */
+        $rootScope.PROMOCODE_IN_MENU = false;
+        $rootScope.PRIOBOOST_ENABLED = false;
         launchService.getWalletConfig()
             .then(function(result) {
+                // merge network specific config over the default config
+                result = angular.extend({}, result, result[$rootScope.NETWORK]);
+
                 if (result.api_key && (result.api_key !== 'ok')) {
                     // alert user session is invalid
                     return $cordovaDialogs.alert(
