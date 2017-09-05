@@ -333,7 +333,7 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.refreshBuybtcPendingOrders = function() {
-            Wallet.wallet().then(function(wallet) {
+            Wallet.wallet.then(function(wallet) {
                 return settingsService.$isLoaded().then(function () {
                     $scope.buybtcPendingOrders = [];
 

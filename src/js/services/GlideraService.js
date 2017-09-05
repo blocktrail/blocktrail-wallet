@@ -404,7 +404,7 @@ angular.module('blocktrail.wallet').factory(
 
                 return accessToken().then(function(accessToken) {
 
-                    return Wallet.wallet().then(function(wallet) {
+                    return Wallet.wallet.then(function(wallet) {
 
                         return Wallet.getNewAddress().then(function (address) {
 
