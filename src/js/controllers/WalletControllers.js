@@ -25,7 +25,7 @@ angular.module('blocktrail.wallet')
         launchService.getWalletConfig()
             .then(function(result) {
                 // merge network specific config over the default config
-                result = angular.extend({}, result, result[$rootScope.NETWORK]);
+                result = angular.extend({}, result, result.networks[$rootScope.NETWORK]);
 
                 if (result.api_key && (result.api_key !== 'ok')) {
                     // alert user session is invalid
