@@ -463,6 +463,14 @@ module.exports = [
         "clobbers": [
             "window.plugins.socialsharing"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-firebase/www/firebase.js",
+        "id": "cordova-plugin-firebase.FirebasePlugin",
+        "pluginId": "cordova-plugin-firebase",
+        "clobbers": [
+            "FirebasePlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -498,7 +506,8 @@ module.exports.metadata =
     "cordova-plugin-facebook4": "1.7.4",
     "cordova-plugin-globalization": "1.0.1",
     "cordova-plugin-dialogs": "1.1.2-dev",
-    "cordova-plugin-x-socialsharing": "5.1.7"
+    "cordova-plugin-x-socialsharing": "5.1.7",
+    "cordova-plugin-firebase": "0.1.24"
 }
 // BOTTOM OF METADATA
 });

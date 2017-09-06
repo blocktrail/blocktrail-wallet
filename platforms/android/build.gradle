@@ -87,6 +87,7 @@ ext {
 
 // PLUGIN GRADLE EXTENSIONS START
 apply from: "cordova-fabric-plugin/mywallet-build-extras.gradle"
+apply from: "cordova-plugin-firebase/mywallet-build.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
@@ -245,6 +246,12 @@ dependencies {
     compile "com.google.android.gms:play-services-analytics:+"
     compile "com.facebook.android:facebook-android-sdk:4.14.+"
     compile "com.android.support:support-v4:24.1.1+"
+    compile "com.google.gms:google-services:+"
+    compile "com.google.android.gms:play-services-tagmanager:+"
+    compile "com.google.firebase:firebase-core:+"
+    compile "com.google.firebase:firebase-messaging:+"
+    compile "com.google.firebase:firebase-crash:+"
+    compile "com.google.firebase:firebase-config:+"
     // SUB-PROJECT DEPENDENCIES END
 }
 

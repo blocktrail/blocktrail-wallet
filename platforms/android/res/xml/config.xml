@@ -107,6 +107,10 @@
     <feature name="SocialSharing">
         <param name="android-package" value="nl.xservices.plugins.SocialSharing" />
     </feature>
+    <feature name="FirebasePlugin">
+        <param name="android-package" value="org.apache.cordova.firebase.FirebasePlugin" />
+        <param name="onload" value="true" />
+    </feature>
     <access origin="https://m.facebook.com" />
     <access origin="https://graph.facebook.com" />
     <access origin="https://api.facebook.com" />
@@ -136,4 +140,5 @@
     </author>
     <content src="index.html" />
     <allow-navigation href="http://10.4.86.199:8100" />
+    <allow-navigation href="http://10.4.86.157:8100" />
 </widget>

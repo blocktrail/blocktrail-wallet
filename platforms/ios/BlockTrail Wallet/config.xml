@@ -103,6 +103,10 @@
         <param name="ios-package" value="SocialSharing" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="FirebasePlugin">
+        <param name="ios-package" value="FirebasePlugin" />
+        <param name="onload" value="true" />
+    </feature>
     <name>BlockTrail Wallet</name>
     <description>
         Your personal Bitcoin wallet, powered by BTC.com
@@ -118,6 +122,7 @@
     <access origin="https://staging.bitonic.nl" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-navigation href="http://10.4.86.199:8100" />
+    <allow-navigation href="http://10.4.86.157:8100" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
     <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
     <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />

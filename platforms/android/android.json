@@ -147,6 +147,10 @@
                         {
                             "xml": "<feature name=\"SocialSharing\"><param name=\"android-package\" value=\"nl.xservices.plugins.SocialSharing\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FirebasePlugin\"><param name=\"android-package\" value=\"org.apache.cordova.firebase.FirebasePlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -160,7 +164,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 3
+                            "count": 4
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
@@ -172,7 +176,11 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-                            "count": 3
+                            "count": 4
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
+                            "count": 1
                         }
                     ],
                     "/manifest/application": [
@@ -214,6 +222,22 @@
                         },
                         {
                             "xml": "<provider android:authorities=\"${applicationId}.sharing.provider\" android:exported=\"false\" android:grantUriPermissions=\"true\" android:name=\"nl.xservices.plugins.FileProvider\"><meta-data android:name=\"android.support.FILE_PROVIDER_PATHS\" android:resource=\"@xml/sharing_paths\" /></provider>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:enabled=\"true\" android:exported=\"false\" android:name=\"com.google.android.gms.measurement.AppMeasurementService\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:name=\"org.apache.cordova.firebase.FirebasePluginMessagingService\"><intent-filter><action android:name=\"com.google.firebase.MESSAGING_EVENT\" /></intent-filter></service>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:name=\"org.apache.cordova.firebase.FirebasePluginInstanceIDService\"><intent-filter><action android:name=\"com.google.firebase.INSTANCE_ID_EVENT\" /></intent-filter></service>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:name=\"org.apache.cordova.firebase.OnNotificationOpenReceiver\" />",
                             "count": 1
                         }
                     ],
@@ -747,6 +771,14 @@
                         {
                             "xml": "<string name=\"wifi_type_label\">Type</string>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<string name=\"google_app_id\">@string/google_app_id</string>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<string name=\"google_api_key\">@string/google_api_key</string>",
+                            "count": 1
                         }
                     ]
                 }
@@ -864,6 +896,9 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-firebase": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -1319,6 +1354,13 @@
             "clobbers": [
                 "window.plugins.socialsharing"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-firebase/www/firebase.js",
+            "id": "cordova-plugin-firebase.FirebasePlugin",
+            "clobbers": [
+                "FirebasePlugin"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -1352,6 +1394,7 @@
         "cordova-plugin-globalization": "1.0.1",
         "cordova-plugin-dialogs": "1.1.2-dev",
         "org.apache.cordova.inappbrowser": "0.6.0",
-        "cordova-plugin-x-socialsharing": "5.1.7"
+        "cordova-plugin-x-socialsharing": "5.1.7",
+        "cordova-plugin-firebase": "0.1.24"
     }
 }

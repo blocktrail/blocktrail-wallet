@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "647858814792",
+    "firebase_url": "https://btc-wallet-android.firebaseio.com",
+    "project_id": "btc-wallet-android",
+    "storage_bucket": "btc-wallet-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647858814792:android:af0575aabe6811ca",
+        "android_client_info": {
+          "package_name": "com.blocktrail.mywallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647858814792-8u2l8tc2nvnbrkic4a4f5t698oqoooil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQtYkg0yzLNBpCqrbB6JCQqXQqli6uW-s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
