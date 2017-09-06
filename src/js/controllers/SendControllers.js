@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('SendCtrl', function($scope, $analytics, $log, CurrencyConverter, Contacts, Wallet,
+    .controller('SendCtrl', function($scope, trackingService, $log, CurrencyConverter, Contacts, Wallet,
                                      $timeout, $ionicHistory, QR, $q, $btBackButtonDelegate, $state, settingsService,
                                      $cordovaClipboard, $rootScope, $translate, $cordovaDialogs, $cordovaToast, AppRateService) {
         $scope.OPTIMAL_FEE = 'optimal';
@@ -433,6 +433,9 @@ angular.module('blocktrail.wallet')
                 $btBackButtonDelegate.toggleBackButton(false);
             });
 
+            // ceil value to make it a bit more anonymous
+            var trackingBtcValue = blocktrailSDK.toBTC(Math.ceil($scope.sendInput.btcValue / 1000000) * 1000000);
+
             //get an address for the contact
             $scope.getSendingAddress()
             .then(function() {
@@ -446,9 +449,9 @@ angular.module('blocktrail.wallet')
                     $scope.appControl.isSending = true;
                     $scope.appControl.result = {message: 'MSG_SENDING'};
 
-                    $analytics.eventTrack('pre-pay', {
-                        category: 'Events',
-                        label: $scope.sendInput.btcValue + " " + ($scope.sendInput.recipientSource || 'NaN')
+                    trackingService.trackEvent(trackingService.EVENTS.PRE_PAY, {
+                        value: trackingBtcValue,
+                        label: trackingBtcValue + " BTC " + ($scope.sendInput.recipientSource || 'NaN')
                     });
 
                     //attempt to make the payment
@@ -465,9 +468,9 @@ angular.module('blocktrail.wallet')
                     });
                 })
             .then(function(txHash) {
-                    $analytics.eventTrack('pay', {
-                        category: 'Events',
-                        label: $scope.sendInput.btcValue + " " + ($scope.sendInput.recipientSource || 'NaN')
+                    trackingService.trackEvent(trackingService.EVENTS.PAY, {
+                        value: trackingBtcValue,
+                        label: trackingBtcValue + " BTC " + ($scope.sendInput.recipientSource || 'NaN')
                     });
 
                     $log.info("wallet: paid", txHash);

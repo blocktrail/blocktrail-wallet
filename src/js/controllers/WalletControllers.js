@@ -130,6 +130,7 @@ angular.module('blocktrail.wallet')
             }));
         };
 
+        var hasBalance = null;
         $rootScope.getBalance = function() {
             //get a live balance update
             return $q.when(Wallet.balance(false).then(function(balanceData) {
@@ -137,6 +138,13 @@ angular.module('blocktrail.wallet')
                 $rootScope.uncBalance = balanceData.uncBalance;
 
                 settingsService.$isLoaded().then(function() {
+                    var _hasBalance = ($rootScope.balance + $rootScope.uncBalance) > 0;
+                    if (hasBalance !== _hasBalance) {
+                        hasBalance = _hasBalance;
+                        trackingService.setUserNetworkProperty(trackingService.USER_NETWORK_PROPERTIES.HAS_BALANCE, hasBalance);
+                        trackingService.setUserNetworkProperty(trackingService.USER_NETWORK_PROPERTIES.ACTIVATED, settingsService.walletActivated || hasBalance);
+                    }
+
                     // track activation when balance > 0 and we haven't tracked it yet
                     if (!settingsService.walletActivated && ($rootScope.balance + $rootScope.uncBalance) > 0) {
                         settingsService.walletActivated = true;
