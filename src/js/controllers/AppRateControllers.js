@@ -58,7 +58,7 @@ angular.module('blocktrail.wallet')
             $scope.popover.modalEl.classList.remove("ng-enter", "ng-enter-active");
             $scope.apprate.starClicked = starClicked;
 
-            trackingService.trackEvent(trackingService.EVENTS.APPRATE_STAR, {label: starClicked + ' stars'});
+            trackingService.trackEvent(trackingService.EVENTS.APPRATE_STAR, {label: starClicked + ' stars', value: starClicked});
 
             if (starClicked <= 3) {
                 $scope.appRateClass = "feedback";

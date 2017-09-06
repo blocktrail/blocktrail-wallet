@@ -212,7 +212,7 @@ angular.module('blocktrail.wallet').run(
         $rootScope.STATE = {
             ACTIVE: true
         };
-        trackingService.trackEvent(trackingService.EVENTS.OPEN);
+        trackingService.trackEvent(trackingService.EVENTS.APP_OPEN);
         $ionicPlatform.on('pause', function() {
             $log.debug('PAUSE');
             $rootScope.STATE.ACTIVE = false;
@@ -223,7 +223,7 @@ angular.module('blocktrail.wallet').run(
             $rootScope.STATE.ACTIVE = true;
             $rootScope.$broadcast('appResume');
             facebookConnectPlugin.activateApp();
-            trackingService.trackEvent(trackingService.EVENTS.OPEN);
+            trackingService.trackEvent(trackingService.EVENTS.APP_OPEN);
         });
 
         //indicate when keyboard is displayed

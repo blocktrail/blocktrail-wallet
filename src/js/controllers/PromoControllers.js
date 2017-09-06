@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
     .controller('PromoCodeRedeemCtrl', function($scope, $rootScope, $stateParams, sdkService, $btBackButtonDelegate, $q,
-                                                $log, $cordovaToast, $ionicLoading, QR, $timeout, Wallet) {
+                                                $log, $cordovaToast, $ionicLoading, QR, $timeout, Wallet, trackingService) {
         $scope.appControl = {
             working: false,
             showMessage: false
@@ -107,9 +107,11 @@ angular.module('blocktrail.wallet')
                     return $q.when(sdkService.sdk());
                 })
                 .then(function(sdk) {
+                    trackingService.trackEvent(trackingService.EVENTS.PROMO_ATTEMPT);
                     return sdk.redeemPromoCode($scope.promoCodeInput);
                 })
                 .then(function(result) {
+                    trackingService.trackEvent(trackingService.EVENTS.PROMO_REDEEM);
                     $timeout(function(){
                         $scope.dismissMessage();
 

@@ -630,11 +630,14 @@ angular.module('blocktrail.wallet')
             settingsService.$store();
         };
     })
-    .controller('CurrencySettingsCtrl', function($scope, settingsService, $btBackButtonDelegate, $translate, Currencies) {
+    .controller('CurrencySettingsCtrl', function($scope, settingsService, $btBackButtonDelegate, $translate, Currencies,
+                                                 trackingService) {
         $scope.currencies = Currencies.getFiatCurrencies();
         $scope.form = {selected: ''};
 
         $scope.updateSettings = function(){
+            trackingService.setUserProperty(trackingService.USER_PROPERTIES.FIAT_CURRENCY, settingsService.localCurrency);
+
             settingsService.$store().then(function() {
                 settingsService.$syncSettingsUp();
                 $btBackButtonDelegate.goBack();

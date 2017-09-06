@@ -149,6 +149,7 @@ angular.module('blocktrail.wallet')
                 skip_two_factor: true // will make the resulting API key not require 2FA in the future
             })
                 .then(function(result) {
+                    trackingService.setUserTrackingId(result.tracking_id);
                     trackingService.trackEvent(trackingService.EVENTS.LOGIN);
 
                     var newSecret = false;
@@ -448,7 +449,9 @@ angular.module('blocktrail.wallet')
             };
             $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "t" : "") + ($rootScope.NETWORK) + "/mywallet/register", postData)
                 .then(function(result) {
-                    trackingService.trackEvent(trackingService.EVENTS.REGISTRATION);
+                    trackingService.setUserTrackingId(result.tracking_id);
+                    trackingService.trackEvent(trackingService.EVENTS.SIGN_UP);
+
                     return launchService.storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
                         $scope.setupInfo.password = $scope.form.password;
 
@@ -461,6 +464,7 @@ angular.module('blocktrail.wallet')
                         settingsService.displayName = $scope.form.username; //@TODO maybe try and determine a display name from their email
                         settingsService.enableContacts = false;
                         settingsService.email = $scope.form.email;
+
                         settingsService.$store().then(function() {
                             $scope.dismissMessage();
                             $timeout(function() {
