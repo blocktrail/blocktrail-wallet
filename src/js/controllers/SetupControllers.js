@@ -733,7 +733,7 @@ angular.module('blocktrail.wallet')
                 .then(function() {
                     if ($scope.setupInfo.backupInfo) {
                         window.fabric.Answers.sendSignUp("App", true);
-                        facebookConnectPlugin.logEvent("CompleteRegistration");
+                        facebookConnectPlugin.logEvent("fb_mobile_complete_registration");
                         if (CONFIG.GAPPTRACK_ID) {
                             if ($rootScope.isIOS && CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS) {
                                 GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS, "1.00", false);

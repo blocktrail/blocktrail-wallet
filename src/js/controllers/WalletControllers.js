@@ -152,6 +152,7 @@ angular.module('blocktrail.wallet')
                         // only track it for wallets newer than DEFAULT_ACCOUNT_CREATED
                         if (settingsService.accountCreated >= settingsService.DEFAULT_ACCOUNT_CREATED) {
                             trackingService.trackEvent(trackingService.EVENTS.ACTIVATED);
+                            facebookConnectPlugin.logEvent("fb_mobile_tutorial_completion");
                         }
 
                         return settingsService.$store().then(function() {
