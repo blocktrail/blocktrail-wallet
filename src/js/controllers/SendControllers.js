@@ -210,7 +210,7 @@ angular.module('blocktrail.wallet')
             $scope.fees.lowPriority = null;
             $scope.fees.optimal = null;
             $scope.fees.minRelayFee = null;
-            $scope.displayFee = false;
+            $scope.appControl.displayFee = false;
             $scope.prioboost.possible = null;
             $scope.prioboost.estSize = null;
             $scope.prioboost.zeroConf = null;
@@ -336,7 +336,7 @@ angular.module('blocktrail.wallet')
                 throw new Error("Invalid");
             }
 
-            $scope.appControl.displayFee = true;
+            $scope.appControl.displayFee = !!$scope.fee;
         };
 
         $scope.confirmSend = function() {

@@ -165,7 +165,7 @@
                         <span class="fee-choice-selected-edit" ui-sref="app.wallet.send.fee-choice">
                             <i class="icon icon-edit"></i>
                         </span>
-                        <span class="fee-choice-selected-fee"  ng-show="appControl.displayFee && sendInput.btcValue + sendInput.fiatValue > 0">
+                        <span class="fee-choice-selected-fee"  ng-if="appControl.displayFee && sendInput.btcValue + sendInput.fiatValue > 0">
                             {{ fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}
                         </span>
                     </div>
