@@ -59,11 +59,18 @@ angular.module('blocktrail.wallet').service(
         latestOutdatedNoticeVersion: null,
         glideraActivationNoticePending: null,
 
+
         permissionUsageData: true,      //permission to send anonymous usage data
         permissionCamera: false,        //iOS camera access
         permissionPhotos: false,        //iOS photo access
         permissionContacts: false,      //iOS contacts access
-        permissionNotifications: false  //push notification allowed
+        permissionNotifications: false, //push notification allowed
+
+        /* PIN lock */
+        pinOnOpen: true,            // ask for pin on each wallet open
+        pinFailureCount: 0,         // counter of pin input failures
+        pinLastFailure: null,       // last pin input failure
+        pinLocktimeSeconds: 5 * 60  // locktime of pin input
     };
     angular.extend(this, defaults);
 

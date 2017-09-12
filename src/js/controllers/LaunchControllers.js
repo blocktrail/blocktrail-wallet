@@ -30,6 +30,8 @@ angular.module('blocktrail.wallet')
                     return;
                 }
 
+                var nextState = null;
+
                 //setup has been started: resume from the relevant step
                 if (settingsService.setupComplete) {
                     if ($rootScope.handleOpenURL) {
@@ -39,19 +41,22 @@ angular.module('blocktrail.wallet')
 
                         if ($rootScope.handleOpenURL.startsWith("bitcoin")) {
                             $rootScope.bitcoinuri = $rootScope.handleOpenURL;
-                            $state.go('app.wallet.send');
+                            nextState = 'app.wallet.send';
                             $ionicSideMenuDelegate.toggleLeft(false);
                         } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/oauth2")) {
                             $rootScope.glideraCallback = $rootScope.handleOpenURL;
-                            $state.go('app.wallet.buybtc.glidera_oauth2_callback');
+                            nextState = 'app.wallet.buybtc.glidera_oauth2_callback';
                             $ionicSideMenuDelegate.toggleLeft(false);
                         } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
-                            $state.go('app.wallet.buybtc.choose');
+                            nextState = 'app.wallet.buybtc.choose';
                             $ionicSideMenuDelegate.toggleLeft(false);
                         }
                     } else {
-                        $state.go('app.wallet.summary');
+                        nextState = 'app.wallet.summary';
                     }
+
+                    $state.go(nextState);
+
                 } else if(!settingsService.backupSaved && !settingsService.backupSkipped) {
                     //backup saving
                     $state.go('app.setup.backup');
@@ -66,6 +71,101 @@ angular.module('blocktrail.wallet')
                     $state.go('app.setup.profile');
                 }
         });
+    });
+
+angular.module('blocktrail.wallet')
+    .controller('OpenWalletPinCtrl', function ($scope, $rootScope, $state, $stateParams, $log, launchService, Wallet,
+                                               settingsService, $timeout, $interval, CONFIG) {
+        var DEFAULT_PIN = CONFIG.SETUP_PREFILL_PIN || "";
+        $scope.appControl = {
+            showPinInput: false,
+            showPinInputError: false,
+            pin: DEFAULT_PIN,
+            result: {
+                error: null
+            },
+            locked: false,
+            lockTimer: null
+        };
+
+        var lockInterval = null;
+
+        $rootScope.hideLoadingScreen = true;
+        $scope.appControl.showPinInput = true;
+
+        $rootScope.STATE.PENDING_PIN_REQUEST = true;
+
+        function evaluateLock() {
+            // Lock on restart
+            settingsService.$isLoaded().then(function () {
+                if (settingsService.pinFailureCount > 4) {
+                    $scope.appControl.locked = true;
+
+                    lockInterval = $interval(function () {
+                        var lockTime = (((new Date()).getTime() - settingsService.pinLastFailure) / 1000).toFixed(0);
+                        $scope.appControl.lockTimer = settingsService.pinLocktimeSeconds - lockTime;
+
+                        if ($scope.appControl.lockTimer <= 0) {
+                            $scope.appControl.locked = false;
+                            // Reset failure counter
+                            settingsService.pinFailureCount = 0;
+                            settingsService.pinLastFailure = null;
+                            settingsService.$store().then(function () {
+                                $log.debug('PIN entry possible again.');
+                                $interval.cancel(lockInterval);
+                            });
+                        }
+                    }, 300);
+                }
+            });
+        }
+        
+        evaluateLock();
+
+        $scope.proceed = function () {
+            if($scope.appControl.showPinInputError) {
+                return;
+            }
+
+            if($scope.appControl.locked) {
+                return;
+            }
+
+            settingsService.$isLoaded().then(function () {
+                // Attempt to unlock wallet with PIN
+                Wallet.unlockData($scope.appControl.pin, true).then(function() {
+                    console.log('PIN OK', $stateParams.nextState);
+
+                    // Vibrate, reset pin, go to next state
+                    navigator.vibrate(100);
+                    $scope.appControl.pin = DEFAULT_PIN;
+                    $rootScope.STATE.INITIAL_PIN_DONE = true;
+                    $state.go($stateParams.nextState);
+
+                }).catch(function () {
+                    // On error, vibrate and show error message for a short while
+                    $scope.appControl.showPinInputError = true;
+                    $scope.appControl.result.error = "MSG_BAD_PIN";
+                    $log.log('PIN is wrong');
+                    navigator.vibrate(300);
+
+                    // Set failure counter
+                    settingsService.pinLastFailure = (new Date()).getTime();
+                    settingsService.pinFailureCount += 1;
+                    settingsService.$store().then(function () {
+                        evaluateLock();
+                    });
+
+                    // double timeout to allow for nice animations
+                    $timeout(function () {
+                        $timeout(function() {
+                            $scope.appControl.showPinInputError = false;
+                        }, 1000);
+                        $scope.appControl.pin = DEFAULT_PIN;
+                    }, 700);
+                });
+            });
+        }
     });
 
 angular.module('blocktrail.wallet')
