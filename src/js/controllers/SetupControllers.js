@@ -1151,7 +1151,7 @@ angular.module('blocktrail.wallet')
         /*-- Profile setup uses ProfileSettingsCtrl in SettingsControllers, this controller just modifies some things --*/
         $btBackButtonDelegate.rootState = null;
     })
-    .controller('SetupCompleteCtrl', function($scope, settingsService, $btBackButtonDelegate, $state, $injector, $ionicLoading, $log) {
+    .controller('SetupCompleteCtrl', function($scope, $rootScope, settingsService, $btBackButtonDelegate, $state, $injector, $ionicLoading, $log) {
         //reset the backbutton rootstate (for android hardware back)
         $btBackButtonDelegate.rootState = "app.wallet.summary";
         settingsService.$isLoaded().then(function() {
@@ -1164,6 +1164,9 @@ angular.module('blocktrail.wallet')
          * init the wallet, poll for transactions, show spinner
          */
         $scope.continue = function() {
+            // prevent PIN dialog
+            $rootScope.STATE.INITIAL_PIN_DONE = true;
+
             $ionicLoading.show({template: "<div>{{ 'LOADING_WALLET' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
 
             var Wallet = $injector.get('Wallet');

@@ -186,6 +186,15 @@
                         </div>
                     </label>
                 </div>
+                <div class="item item-toggle">
+                    <span class="sentence-case">{{ 'SETTINGS_PIN_ON_OPEN' | translate }}</span>
+                    <label class="toggle toggle-balanced">
+                        <input type="checkbox" ng-model="settings.pinOnOpen" ng-change="updateSettingsPinOnOpen()">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
             </div>
 
 

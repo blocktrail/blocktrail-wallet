@@ -210,12 +210,15 @@ angular.module('blocktrail.wallet').run(
         // track state on rootScope using $ionicPlatform event
         //NB: remember to unbind from $ionicPlatform  on $destroy if binding in $scopes
         $rootScope.STATE = {
-            ACTIVE: true
+            ACTIVE: true,
+            LAST_ACTIVE: (new Date()).getTime(),
+            INITIAL_PIN_DONE: false
         };
         trackingService.trackEvent(trackingService.EVENTS.APP_OPEN);
         $ionicPlatform.on('pause', function() {
             $log.debug('PAUSE');
             $rootScope.STATE.ACTIVE = false;
+            $rootScope.STATE.LAST_ACTIVE = (new Date()).getTime();
             $rootScope.$broadcast('appPause');
         });
         $ionicPlatform.on('resume', function() {
@@ -224,6 +227,18 @@ angular.module('blocktrail.wallet').run(
             $rootScope.$broadcast('appResume');
             facebookConnectPlugin.activateApp();
             trackingService.trackEvent(trackingService.EVENTS.APP_OPEN);
+
+            if ($state.includes('app.wallet')) {
+                settingsService.$isLoaded().then(function () {
+                    var PIN_LAST_ACTIVE_DELAY = 5 * 60 * 1000; // 5 minutes
+                    // if pinOnOpen is required and last time we asked for it was more than 5min ago
+                    if (settingsService.pinOnOpen && ($rootScope.STATE.PENDING_PIN_REQUEST || ($rootScope.STATE.LAST_ACTIVE < (new Date()).getTime() - PIN_LAST_ACTIVE_DELAY))) {
+                        $rootScope.STATE.PENDING_PIN_REQUEST = true;
+
+                        $state.go('app.pin', {nextState: $state.$current.name});
+                    }
+                });
+            }
         });
 
         //indicate when keyboard is displayed
@@ -483,6 +498,19 @@ angular.module('blocktrail.wallet').config(
                 templateUrl: "templates/rebrand.html",
                 controller: "RebrandCtrl"
             })
+            .state('app.pin', {
+                url: "/pin",
+                data: {
+                    clearHistory: false,
+                    excludeFromHistory: true
+                },
+                templateUrl: "templates/wallet/partials/wallet.init.pin-input.html",
+                controller: 'OpenWalletPinCtrl',
+                params: {
+                    nextState: 'app.wallet.summary'
+                }
+            })
+
 
             /*---Setup---*/
             .state('app.setup', {
@@ -685,9 +713,9 @@ angular.module('blocktrail.wallet').config(
                 controller: "WalletCtrl",
                 templateUrl: "templates/common/ion-side-menus.html",
                 resolve: {
-                    settings: function(settingsService, $rootScope, $translate) {
+                    settings: function (settingsService, $rootScope) {
                         //do an initial load of the user's settings
-                        return settingsService.$isLoaded().then(function(data){
+                        return settingsService.$isLoaded().then(function (data) {
                             $rootScope.settings = settingsService;
                             //set the preferred language
                             $rootScope.changeLanguage(settingsService.language);
@@ -695,19 +723,32 @@ angular.module('blocktrail.wallet').config(
                             return data;
                         });
                     },
-                    brokers: function($rootScope, buyBTCService, CONFIG) {
+                    pinOnOpen: function(settingsService, $state, $rootScope, /* dependancies= */settings) {
+                        return settingsService.$isLoaded().then(function() {
+                            // if pinOnOpen is required and last time we asked for it was more than 5min ago
+                            if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE) {
+                                $rootScope.STATE.PENDING_PIN_REQUEST = true;
+
+                                $state.go('app.pin', {nextState: $state.$current.name});
+
+                                // throw error to prevent controller from loading or any other resolves to continue
+                                throw new Error("PIN_REQUIRED");
+                            }
+                        });
+                    },
+                    brokers: function ($rootScope, buyBTCService, CONFIG, /* dependancies= */pinOnOpen) {
                         return buyBTCService.enabled()
-                            .then(function(enabled) {
+                            .then(function (enabled) {
                                 $rootScope.BUYBTC_ENABLED = (CONFIG.BUYBTC || enabled) && $rootScope.NETWORK === "BTC";
                             });
                     },
-                    loadingDone: function(Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state) {
+                    loadingDone: function (Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state, /* dependancies= */pinOnOpen) {
                         //do an initial load of cached user data
                         return $q.all([
                             Wallet.balance(true),
                             Currencies.updatePrices(true),
                             Wallet.blockHeight(true)
-                        ]).then(function(data) {
+                        ]).then(function (data) {
                             $log.debug('initial load complete');
                             $rootScope.balance = data[0].balance;
                             $rootScope.uncBalance = data[0].uncBalance;
@@ -715,14 +756,14 @@ angular.module('blocktrail.wallet').config(
                             $rootScope.bitcoinPrices = data[1];
                             $rootScope.blockHeight = data[2].height;
                             return true;
-                        }).catch(function(error) {
+                        }).catch(function (error) {
                             if (error.message && error.message == "missing") {
                                 //missing account info, go to reset state to force user to log in again
                                 $cordovaDialogs.alert(
                                     $translate.instant('MSG_CORRUPT_DATA').sentenceCase(),
                                     $translate.instant('ERROR_TITLE_3').sentenceCase(),
                                     $translate.instant('OK')
-                                ).then(function() {
+                                ).then(function () {
                                     $state.go('app.reset');
                                 });
                             }

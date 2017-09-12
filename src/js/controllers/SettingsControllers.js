@@ -19,7 +19,6 @@ angular.module('blocktrail.wallet')
             launchService.getWalletInfo()
         ]).then(function(data){
             $log.debug('data loaded', data);
-            //$scope.settings = data[0];
             $scope.defaultWallet = data[0].identifier;
             return data;
         });
@@ -461,6 +460,13 @@ angular.module('blocktrail.wallet')
             if (!settingsService.permissionUsageData) {
                 $analytics.eventTrack('DisableUsageData', {category: 'Events'});
             }
+        };
+
+        /**
+         * enable/disable PIN on wallet open
+         */
+        $scope.updateSettingsPinOnOpen = function() {
+            $scope.updateSettings();
         };
 
         var tapEnableDevCnt = 0;

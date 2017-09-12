@@ -57,6 +57,8 @@ angular.module('blocktrail.wallet').service(
         latestOutdatedNoticeVersion: null,
         glideraActivationNoticePending: null,
 
+        pinOnOpen: true, // ask for pin on each wallet open
+
         permissionUsageData: true,      //permission to send anonymous usage data
         permissionCamera: false,        //iOS camera access
         permissionPhotos: false,        //iOS photo access

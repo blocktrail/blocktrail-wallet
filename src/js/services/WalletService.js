@@ -74,7 +74,7 @@ angular.module('blocktrail.wallet').factory(
             });
         };
 
-        Wallet.prototype.unlockData = function(pin) {
+        Wallet.prototype.unlockData = function (pin) {
             var self = this;
 
             return launchService.getWalletInfo().then(function(walletInfo) {

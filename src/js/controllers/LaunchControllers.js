@@ -30,6 +30,8 @@ angular.module('blocktrail.wallet')
                     return;
                 }
 
+                var nextState = null;
+
                 //setup has been started: resume from the relevant step
                 if (settingsService.setupComplete) {
                     if ($rootScope.handleOpenURL) {
@@ -38,19 +40,22 @@ angular.module('blocktrail.wallet')
                         $log.log("glidera? " + $rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback"));
                         if ($rootScope.handleOpenURL.startsWith("bitcoin")) {
                             $rootScope.bitcoinuri = $rootScope.handleOpenURL;
-                            $state.go('app.wallet.send');
+                            nextState = 'app.wallet.send';
                             $ionicSideMenuDelegate.toggleLeft(false);
                         } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/oauth2")) {
                             $rootScope.glideraCallback = $rootScope.handleOpenURL;
-                            $state.go('app.wallet.buybtc.glidera_oauth2_callback');
+                            nextState = 'app.wallet.buybtc.glidera_oauth2_callback';
                             $ionicSideMenuDelegate.toggleLeft(false);
                         } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
-                            $state.go('app.wallet.buybtc.choose');
+                            nextState = 'app.wallet.buybtc.choose';
                             $ionicSideMenuDelegate.toggleLeft(false);
                         }
                     } else {
-                        $state.go('app.wallet.summary');
+                        nextState = 'app.wallet.summary';
                     }
+
+                    $state.go(nextState);
+
                 } else if(!settingsService.backupSaved && !settingsService.backupSkipped) {
                     //backup saving
                     $state.go('app.setup.backup');
@@ -65,6 +70,56 @@ angular.module('blocktrail.wallet')
                     $state.go('app.setup.profile');
                 }
         });
+    });
+
+angular.module('blocktrail.wallet')
+    .controller('OpenWalletPinCtrl', function ($scope, $rootScope, $state, $stateParams, $log, launchService, Wallet,
+                                               settingsService, $timeout, CONFIG) {
+        var DEFAULT_PIN = CONFIG.SETUP_PREFILL_PIN || "";
+        $scope.appControl = {
+            showPinInput: false,
+            showPinInputError: false,
+            pin: DEFAULT_PIN,
+            result: {
+                error: null
+            }
+        };
+
+        $rootScope.hideLoadingScreen = true;
+        $scope.appControl.showPinInput = true;
+
+        $scope.proceed = function () {
+            if($scope.appControl.showPinInputError) {
+                return;
+            }
+
+            // Attempt to unlock wallet with PIN
+            Wallet.unlockData($scope.appControl.pin, true).then(function() {
+                console.log('PIN OK', $stateParams.nextState);
+
+                // Vibrate, reset pin, go to next state
+                navigator.vibrate(100);
+                $scope.appControl.pin = DEFAULT_PIN;
+
+                $rootScope.STATE.INITIAL_PIN_DONE = true;
+
+                $state.go($stateParams.nextState);
+            }).catch(function () {
+                // On error, vibrate and show error message for a short while
+                $scope.appControl.showPinInputError = true;
+                $scope.appControl.result.error = "MSG_BAD_PIN";
+                $log.log('PIN is wrong');
+                navigator.vibrate(300);
+
+                // double timeout to allow for nice animations
+                $timeout(function () {
+                    $timeout(function() {
+                        $scope.appControl.showPinInputError = false;
+                    }, 1000);
+                    $scope.appControl.pin = DEFAULT_PIN;
+                }, 700);
+            });
+        }
     });
 
 angular.module('blocktrail.wallet')
