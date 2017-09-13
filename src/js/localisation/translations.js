@@ -113,7 +113,7 @@ angular.module('blocktrail.localisation', [
             'nl-*': 'nl',
             'es-*': 'es',
             'ru-*': 'ru',
-            'cn-*': 'cn',
+            'zh-cn': 'cn',
             'sw-*': 'sw',
             'ar-*': 'ar',
             'hi-*': 'hi',
