@@ -11,6 +11,7 @@ angular.module('blocktrail.wallet')
             GBP: {code: "GBP", symbol: "£"},
             EUR: {code: "EUR", symbol: "€"},
             USD: {code: "USD", symbol: "$"},
+            CAD: {code: "CAD", symbol: "$"},
             CNY: {code: "CNY", symbol: "¥"},
             PAB: {code: "PAB", symbol: "B/"},
             ARS: {code: "ARS", symbol: "$"},
@@ -33,7 +34,9 @@ angular.module('blocktrail.wallet')
             JPY: {code: "JPY", symbol: "¥"},
             KRW: {code: "KRW", symbol: "₩"},
             COP: {code: "COP", symbol: "$"},
-            GHS: {code: "GHS", symbol: "GH¢"}
+            GHS: {code: "GHS", symbol: "GH¢"},
+            PLN: {code: "PLN", symbol: "zł"},
+            PHP: {code: "PHP", symbol: "₱"}
         };
 
         self.currencies = {};
