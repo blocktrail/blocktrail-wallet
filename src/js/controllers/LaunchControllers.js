@@ -36,6 +36,7 @@ angular.module('blocktrail.wallet')
                         $log.log("launching app with uri: " + $rootScope.handleOpenURL);
                         $log.log("bitcoin? " + $rootScope.handleOpenURL.startsWith("bitcoin"));
                         $log.log("glidera? " + $rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback"));
+
                         if ($rootScope.handleOpenURL.startsWith("bitcoin")) {
                             $rootScope.bitcoinuri = $rootScope.handleOpenURL;
                             $state.go('app.wallet.send');
