@@ -183,7 +183,7 @@ angular.module('blocktrail.wallet')
 
 angular.module('blocktrail.wallet')
     .controller('BuyBTCBrokerCtrl', function($scope, $state, $rootScope, $ionicLoading, $cordovaDialogs, glideraService, buyBTCService,
-                                          bitonicService, $stateParams, $log, $timeout, $interval, $translate, $filter, CONFIG, trackingService) {
+                                          bitonicService, $stateParams, $log, $timeout, $interval, $translate, $filter, CONFIG, trackingService, $q) {
         trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_OPEN);
         $scope.broker = $stateParams.broker;
 
@@ -253,9 +253,6 @@ angular.module('blocktrail.wallet')
             // These are Bitonic-specific - 'success' key in result object
             if ("success" in result) {
                 if (!result.success && result.error.indexOf('Invalid value') !== -1) {
-
-                    console.log(result.error);
-
                     return $cordovaDialogs.confirm(
                         $translate.instant('MSG_BUYBTC_ERROR_INVALID_AMOUNT'),
                         $translate.instant('MSG_INVALID_AMOUNT'),
@@ -272,7 +269,7 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.swapInputs = function() {
-            if (!$scope.fiatFirst && $scope.settings.localCurrency != $scope.buyInput.currencyType) {
+            if (!$scope.fiatFirst && $scope.settings.localCurrency !== $scope.buyInput.currencyType) {
                 return $cordovaDialogs.confirm(
                     $translate.instant('MSG_BUYBTC_FIAT_USD_ONLY', {
                         currency: $scope.currencies[0].code,
@@ -282,7 +279,7 @@ angular.module('blocktrail.wallet')
                     [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
                 )
                     .then(function(dialogResult) {
-                        if (dialogResult == 2) {
+                        if (dialogResult === 2) {
                             return;
                         }
 
@@ -295,26 +292,27 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.triggerUpdate = function () {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(function () {
+            $timeout.cancel(typingTimer);
+            typingTimer = $timeout(function () {
                 $scope.fetchingInputPrice = true;
                 $ionicLoading.show();
 
-                $scope.updateInputPrice().then(
-                    function () {
+                $scope.updateInputPrice()
+                    .then(function() {
                         $scope.fetchingInputPrice = false;
                         $ionicLoading.hide();
-                    }).catch(function () {
+                    })
+                    .catch(function () {
                         $scope.fetchingInputPrice = false;
                         $ionicLoading.hide();
-                });
+                    });
             }, doneTypingInterval);
         };
 
         var updateMainPrice = function() {
             $scope.fetchingMainPrice = true;
 
-            if (fetchBrokerService() == null) {
+            if (fetchBrokerService() === null) {
                 $scope.brokerNotExistent = true;
                 $scope.fetchingMainPrice = false;
                 return null;
@@ -327,71 +325,84 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.updateInputPrice = function() {
-
+            return $q.when().then(function() {
                 $scope.fetchingInputPrice = true;
 
                 if (!$scope.fiatFirst) {
-                    $scope.buyInput.btcValue = parseFloat($scope.buyInput.btcValue || 0) || null;
+                    // reset fields that we're about to set
                     $scope.buyInput.fiatValue = null;
                     $scope.buyInput.feeValue = null;
                     $scope.altCurrency = {};
 
+                    // when the field is blank
                     if (!$scope.buyInput.btcValue) {
-                        return new Promise(function (resolve, reject) {
-                            resolve();
-                        });
+                        return false;
                     }
 
-                    return fetchBrokerService().buyPrices($scope.buyInput.btcValue, null).then(function(result) {
-                            lastPriceResponse = result;
+                    // parse float
+                    $scope.buyInput.btcValue = parseFloat($scope.buyInput.btcValue) || 0.0;
 
-                            if(lastPriceResponse.error) {
-                                throw new Error(lastPriceResponse.error);
-                            }
+                    // when the field is 0
+                    if ($scope.buyInput.btcValue === 0.0) {
+                        return false;
+                    }
 
-                            $scope.buyInput.fiatValue = parseFloat(result.total);
-                            if (result.fees) $scope.buyInput.feeValue = parseFloat(result.fees);
-                            if (result.fees) $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
+                    return fetchBrokerService().buyPrices($scope.buyInput.btcValue, null).then(function (result) {
+                        lastPriceResponse = result;
 
-                            $scope.altCurrency = {
-                                code: $scope.buyInput.fiatCurrency,
-                                amount: $scope.buyInput.fiatValue
-                            };
+                        if (lastPriceResponse.error) {
+                            throw new Error(lastPriceResponse.error);
+                        }
 
-                            $scope.fetchingInputPrice = false;
+                        $scope.buyInput.fiatValue = parseFloat(result.total);
+                        if (result.fees) $scope.buyInput.feeValue = parseFloat(result.fees);
+                        if (result.fees) $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
+
+                        $scope.altCurrency = {
+                            code: $scope.buyInput.fiatCurrency,
+                            amount: $scope.buyInput.fiatValue
+                        };
+
+                        $scope.fetchingInputPrice = false;
                     });
                 } else {
-
-                    $scope.buyInput.fiatValue = parseFloat($scope.buyInput.fiatValue || 0) || null;
                     $scope.buyInput.btcValue = null;
                     $scope.buyInput.feeValue = null;
                     $scope.altCurrency = {};
 
+                    // when the field is blank
                     if (!$scope.buyInput.fiatValue) {
-                        return new Promise(function (resolve, reject) {
-                            resolve();
-                        });
+                        return false;
                     }
 
-                    return fetchBrokerService().buyPrices(null, $scope.buyInput.fiatValue).then(function(result) {
-                            lastPriceResponse = result;
+                    // parse float
+                    $scope.buyInput.fiatValue = parseFloat($scope.buyInput.fiatValue) || 0.0;
 
-                            if(lastPriceResponse.error) {
-                                throw new Error(lastPriceResponse.error);
-                            }
+                    // when the field is 0
+                    if ($scope.buyInput.fiatValue === 0.0) {
+                        return false;
+                    }
 
-                            $scope.buyInput.btcValue = parseFloat(result.qty);
-                            if (result.fees) $scope.buyInput.feeValue = parseFloat(result.fees);
-                            if (result.fees) $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
+                    return fetchBrokerService().buyPrices(null, $scope.buyInput.fiatValue).then(function (result) {
+                        lastPriceResponse = result;
 
-                            $scope.altCurrency = {
-                                code: 'BTC',
-                                amount: $scope.buyInput.btcValue
-                            };
+                        if (lastPriceResponse.error) {
+                            throw new Error(lastPriceResponse.error);
+                        }
 
-                            $scope.fetchingInputPrice = false;
+                        $scope.buyInput.btcValue = parseFloat(result.qty);
+                        if (result.fees) $scope.buyInput.feeValue = parseFloat(result.fees);
+                        if (result.fees) $scope.buyInput.feePercentage = ($scope.buyInput.feeValue / $scope.buyInput.fiatValue) * 100;
+
+                        $scope.altCurrency = {
+                            code: 'BTC',
+                            amount: $scope.buyInput.btcValue
+                        };
+
+                        $scope.fetchingInputPrice = false;
                     });
-                }// else
+                }
+            });
         };
 
         $scope.updateCurrentType = function(currencyType) {
@@ -473,39 +484,44 @@ angular.module('blocktrail.wallet')
                                 [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
                             )
                                 .then(function (dialogResult) {
-                                    if (dialogResult == 2) {
+                                    if (dialogResult === 2) {
                                         $ionicLoading.hide();
                                         return;
                                     }
+
                                     $ionicLoading.show();
 
-                                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_BUY_DONE);
+                                    return glideraService.buy(result.qty, result.priceUuid)
+                                        .then(function (result) {
+                                            $ionicLoading.hide();
+                                            trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_BUY_DONE);
 
-                                    $cordovaDialogs.alert(
-                                        $translate.instant('MSG_BUYBTC_BOUGHT_BODY', {
-                                            qty: $filter('number')(result.qty, 6),
-                                            price: $filter('number')(result.total, 2),
-                                            fee: $filter('number')(result.fees, 2),
-                                            estimatedDate: $filter('amCalendar')(result.estimatedDeliveryDate),
-                                            currencySymbol: $filter('toCurrencySymbol')('USD')
-                                        }).sentenceCase(),
-                                        $translate.instant('MSG_BUYBTC_BOUGHT_TITLE').sentenceCase(),
-                                        $translate.instant('OK')
-                                    );
-                                    $ionicLoading.hide();
+                                            $cordovaDialogs.alert(
+                                                $translate.instant('MSG_BUYBTC_BOUGHT_BODY', {
+                                                    qty: $filter('number')(result.qty, 6),
+                                                    price: $filter('number')(result.total, 2),
+                                                    fee: $filter('number')(result.fees, 2),
+                                                    estimatedDate: $filter('amCalendar')(result.estimatedDeliveryDate),
+                                                    currencySymbol: $filter('toCurrencySymbol')('USD')
+                                                }).sentenceCase(),
+                                                $translate.instant('MSG_BUYBTC_BOUGHT_TITLE').sentenceCase(),
+                                                $translate.instant('OK')
+                                            );
+                                            $ionicLoading.hide();
 
-                                    $state.go('app.wallet.summary');
-                                }, function (e) {
-                                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_BUY_ERR);
-                                    alert(e.details || ("Unknown error occurred (err: " + e.code + ")"));
-                                    $ionicLoading.hide();
+                                            $state.go('app.wallet.summary');
+                                        }, function (e) {
+                                            trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_BUY_ERR);
+                                            alert(e.details || ("Unknown error occurred (err: " + e.code + ")"));
+                                            $ionicLoading.hide();
+                                        });
                                 });
                         })
                         .then(function () {
                             // -
                         }, function (err) {
                             $ionicLoading.hide();
-                            if (err != "CANCELLED") {
+                            if (err !== "CANCELLED") {
                                 // TODO: Alert on mobile?
                             }
                         });
@@ -523,7 +539,7 @@ angular.module('blocktrail.wallet')
                             $translate.instant('MSG_BUYBTC_CONFIRM_TITLE').sentenceCase(),
                             [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
                         ).then(function (dialogResult) {
-                            if (dialogResult == 2) {
+                            if (dialogResult === 2) {
                                 $ionicLoading.hide();
                                 return;
                             }
