@@ -347,7 +347,14 @@
         },
         "cordova-plugin-firebase": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-open": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        }
+    }
 }

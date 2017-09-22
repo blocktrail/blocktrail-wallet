@@ -140,6 +140,10 @@
 		F55E606FD9EF4C7BAA056477 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F0BD4C55D4BFB89E58B14 /* CoreImage.framework */; };
 		FB51793894F04B5DAEE729B3 /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1A3CE087D0641C59D128308 /* ELCAlbumPickerController.m */; };
 		FC948E6E370A4F58B2DD9AFD /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C6AA61312E043F1B437FAA8 /* GoogleToolboxForMac.framework */; };
+		3FB2D441436144479FE0C10F /* CDVFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = C056C8A5A3034B9892529E9C /* CDVFileTransfer.m */; };
+		F0EF6366A72B414889231534 /* Open.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E23C8ED4E1445E4B1BF4E72 /* Open.m */; };
+		D40D723564F844E9B8B95382 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46CEB26CE3264F42BF895DD5 /* QuickLook.framework */; };
+		BF3EBF610E09448E898D64B8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AF5D7B19B2D4AC1890DC91C /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -392,6 +396,12 @@
 		FC0810698B854367AA189532 /* CoreMedia.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		FC7F7D49E4CF4AF6A6AA093A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "BlockTrail Wallet/Plugins/cordova-plugin-facebook4/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		FF78D9D50653435192A65928 /* ZBarReaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarReaderViewController.h; path = org.cloudsky.cordovaplugins.zbar/ZBarReaderViewController.h; sourceTree = "<group>"; };
+		C056C8A5A3034B9892529E9C /* CDVFileTransfer.m */ = {isa = PBXFileReference; name = "CDVFileTransfer.m"; path = "cordova-plugin-file-transfer/CDVFileTransfer.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		88636E1B819D4895AE0A319A /* CDVFileTransfer.h */ = {isa = PBXFileReference; name = "CDVFileTransfer.h"; path = "cordova-plugin-file-transfer/CDVFileTransfer.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		8E23C8ED4E1445E4B1BF4E72 /* Open.m */ = {isa = PBXFileReference; name = "Open.m"; path = "cordova-open/Open.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		C13173C0E41648F1962B40EC /* Open.h */ = {isa = PBXFileReference; name = "Open.h"; path = "cordova-open/Open.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		46CEB26CE3264F42BF895DD5 /* QuickLook.framework */ = {isa = PBXFileReference; name = "QuickLook.framework"; path = "System/Library/Frameworks/QuickLook.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		3AF5D7B19B2D4AC1890DC91C /* Foundation.framework */ = {isa = PBXFileReference; name = "Foundation.framework"; path = "System/Library/Frameworks/Foundation.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -447,6 +457,8 @@
 				B35C2649D4AC444594DF5714 /* FirebaseRemoteConfig.framework in Frameworks */,
 				B4184C414BD2451FA09525D7 /* FirebaseAuth.framework in Frameworks */,
 				01446B622BD044DF80E3C5C2 /* GTMSessionFetcher.framework in Frameworks */,
+				D40D723564F844E9B8B95382 /* QuickLook.framework in Frameworks */,
+				BF3EBF610E09448E898D64B8 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +589,8 @@
 				F85D653EFEF04564BD6A5460 /* FirebaseRemoteConfig.framework */,
 				9E12F76787D843FAB766D1E0 /* FirebaseAuth.framework */,
 				87F93417B68945F789A387CD /* GTMSessionFetcher.framework */,
+				46CEB26CE3264F42BF895DD5 /* QuickLook.framework */,
+				3AF5D7B19B2D4AC1890DC91C /* Foundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -723,6 +737,10 @@
 				2DA90D35E60A48D9BCC195C6 /* AppDelegate+FirebasePlugin.h */,
 				12E0427144F842E99B7A47AE /* FirebasePlugin.h */,
 				D719FE121D2F43699D9D6815 /* Firebase.h */,
+				C056C8A5A3034B9892529E9C /* CDVFileTransfer.m */,
+				88636E1B819D4895AE0A319A /* CDVFileTransfer.h */,
+				8E23C8ED4E1445E4B1BF4E72 /* Open.m */,
+				C13173C0E41648F1962B40EC /* Open.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -985,6 +1003,8 @@
 				0925C41EEE97419B8A94B51B /* SocialSharing.m in Sources */,
 				1DD43ACAAD7447C3B9219274 /* AppDelegate+FirebasePlugin.m in Sources */,
 				6D561C8AA9E74CAFAB2616F5 /* FirebasePlugin.m in Sources */,
+				3FB2D441436144479FE0C10F /* CDVFileTransfer.m in Sources */,
+				F0EF6366A72B414889231534 /* Open.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

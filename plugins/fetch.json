@@ -291,5 +291,21 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-open": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-open"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-file-transfer": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-file-transfer"
+        },
+        "is_top_level": false,
+        "variables": {}
     }
 }

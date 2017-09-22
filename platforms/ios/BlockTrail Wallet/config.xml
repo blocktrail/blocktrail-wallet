@@ -107,6 +107,12 @@
         <param name="ios-package" value="FirebasePlugin" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="FileTransfer">
+        <param name="ios-package" value="CDVFileTransfer" />
+    </feature>
+    <feature name="Open">
+        <param name="ios-package" value="Open" />
+    </feature>
     <name>BlockTrail Wallet</name>
     <description>
         Your personal Bitcoin wallet, powered by BTC.com

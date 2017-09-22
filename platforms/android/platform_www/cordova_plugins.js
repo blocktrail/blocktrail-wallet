@@ -457,6 +457,27 @@ module.exports = [
         "clobbers": [
             "FirebasePlugin"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-file-transfer/www/FileTransferError.js",
+        "id": "cordova-plugin-file-transfer.FileTransferError",
+        "clobbers": [
+            "window.FileTransferError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-file-transfer/www/FileTransfer.js",
+        "id": "cordova-plugin-file-transfer.FileTransfer",
+        "clobbers": [
+            "window.FileTransfer"
+        ]
+    },
+    {
+        "file": "plugins/cordova-open/www/disusered.open.js",
+        "id": "cordova-open.Open",
+        "merges": [
+            "cordova.plugins.disusered"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -493,7 +514,9 @@ module.exports.metadata =
     "cordova-plugin-dialogs": "1.1.2-dev",
     "org.apache.cordova.inappbrowser": "0.6.0",
     "cordova-plugin-x-socialsharing": "5.1.7",
-    "cordova-plugin-firebase": "0.1.24"
+    "cordova-plugin-firebase": "0.1.24",
+    "cordova-plugin-file-transfer": "1.6.3",
+    "cordova-open": "1.0.12"
 };
 // BOTTOM OF METADATA
 });
