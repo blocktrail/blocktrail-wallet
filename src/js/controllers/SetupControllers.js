@@ -893,8 +893,8 @@ angular.module('blocktrail.wallet')
         };
         $scope.backupSettings = {
             //NB: on android fileOpener2 only works with SD storage (i.e. non-private storage)
-            path: window.cordova ? (ionic.Platform.isAndroid() ? cordova.file.externalDataDirectory : cordova.file.dataDirectory) : null,
-            filename: 'btc-wallet-backup.pdf',
+            path: window.cordova ? (ionic.Platform.isAndroid() ? cordova.file.externalDataDirectory : cordova.file.documentsDirectory) : null,
+            filename: 'btc-wallet-backup-' + backupInfo.identifier + '.pdf',
             replace: true
         };
 
@@ -903,16 +903,10 @@ angular.module('blocktrail.wallet')
         $btBackButtonDelegate.setHardwareBackButton(angular.noop);
 
         $scope.showExportOptions = function() {
-            //Temporary handling of a bug in iOS with the $cordovaFileOpener2
             var optionButtons = [
                 { text: $translate.instant('BACKUP_EMAIL_PDF') },
-                { text: $translate.instant('BACKUP_CREATE_PDF') }
+                { text: $translate.instant('BACKUP_OPEN_PDF') }
             ];
-            if (ionic.Platform.isIOS()) {
-                optionButtons = [
-                    { text: $translate.instant('BACKUP_EMAIL_PDF') }
-                ];
-            }
 
             $scope.hideExportOptions = $ionicActionSheet.show({
                 buttons: optionButtons,
@@ -968,71 +962,94 @@ angular.module('blocktrail.wallet')
 
                                 //save file temporarily
                                 $log.debug('writing to ' + $scope.backupSettings.path + $scope.backupSettings.filename);
-                                return $cordovaFile.writeFile($scope.backupSettings.path, $scope.backupSettings.filename, buffer, $scope.backupSettings.replace);
-                            })
-                            .then(function(result) {
-                                if (index == 0) {
-                                    //email the backup pdf
-                                    var options = {
-                                        to: '',
-                                        attachments: [
-                                            $scope.backupSettings.path + $scope.backupSettings.filename
-                                        ],
-                                        subject: $translate.instant('MSG_BACKUP_EMAIL_SUBJECT_1'),
-                                        body: $translate.instant('MSG_BACKUP_EMAIL_BODY_1'),
-                                        isHtml: true
-                                    };
-                                    var deferred = $q.defer();
+                                return $cordovaFile.writeFile(
+                                    $scope.backupSettings.path,
+                                    $scope.backupSettings.filename,
+                                    buffer,
+                                    $scope.backupSettings.replace
+                                ).then(function (result) {
+                                    // Options for saving
+                                    if (index == 0) {
+                                        //email the backup pdf
+                                        var options = {
+                                            to: '',
+                                            attachments: [
+                                                $scope.backupSettings.path + $scope.backupSettings.filename
+                                            ],
+                                            subject: $translate.instant('MSG_BACKUP_EMAIL_SUBJECT_1'),
+                                            body: $translate.instant('MSG_BACKUP_EMAIL_BODY_1'),
+                                            isHtml: true
+                                        };
+                                        var deferred = $q.defer();
 
-                                    //check that emails can be sent (try with normal mail, can't do attachments with gmail)
-                                    cordova.plugins.email.isAvailable(function(isAvailable) {
-                                        $log.debug('is email supported? ' + isAvailable);
-                                        if (isAvailable) {
-                                            $scope.appControl.saveButtonClicked = true;
-                                            cordova.plugins.email.open(options, function(result) {
-                                                deferred.resolve(result);
-                                            });
-                                        } else {
-                                            //no mail support...sad times :(
-                                            $cordovaDialogs.alert(
-                                                $translate.instant('MSG_EMAIL_NOT_SETUP'),
-                                                $translate.instant('SORRY'),
-                                                $translate.instant('OK')
-                                            ).then(function() {
-                                                deferred.reject('NO_EMAIL');
-                                            });
+                                        //check that emails can be sent (try with normal mail, can't do attachments with gmail)
+                                        cordova.plugins.email.isAvailable(function (isAvailable) {
+                                            $log.debug('is email supported? ' + isAvailable);
+                                            if (isAvailable) {
+                                                $scope.appControl.saveButtonClicked = true;
+                                                cordova.plugins.email.open(options, function (result) {
+                                                    deferred.resolve(result);
+                                                });
+                                            } else {
+                                                //no mail support...sad times :(
+                                                $cordovaDialogs.alert(
+                                                    $translate.instant('MSG_EMAIL_NOT_SETUP'),
+                                                    $translate.instant('SORRY'),
+                                                    $translate.instant('OK')
+                                                );
+                                            }
+                                        });
+
+                                        return deferred.promise;
+
+                                    } else if (index == 1) {
+                                        var msg = 'BACKUP_EXPORT_PDF_ANDROID_INFO';
+                                        if (ionic.Platform.isIOS()) {
+                                            msg = 'BACKUP_EXPORT_PDF_IOS_INFO';
                                         }
-                                    });
 
-                                    return deferred.promise;
+                                        return $cordovaDialogs.alert(
+                                            $translate.instant(msg),
+                                            $translate.instant('IMPORTANT'),
+                                            $translate.instant('OK')
+                                        ).then(function () {
+                                            $log.debug('opening file ' + $scope.backupSettings.path + $scope.backupSettings.filename);
 
-                                } else if (index == 1) {
-                                    //export the backup to PDF for user to handle
-                                    //call an intent or similar service to allow user decide what to do with PDF
-                                    $log.debug('opening file ' + $scope.backupSettings.path + $scope.backupSettings.filename);
-                                    $scope.appControl.saveButtonClicked = true;
-                                    return $cordovaFileOpener2.open($scope.backupSettings.path + $scope.backupSettings.filename, 'application/pdf');
-                                }
-                            })
-                            .then(function() {
-                                // backup export successful
-                                $log.debug("backup export complete");
-                                $scope.hideExportOptions();
-                            })
-                            .catch(function(err) {
-                                $log.error(err);
-                                if (err) {
-                                    if (err.status && err.status == 9) {
-                                        $cordovaDialogs.alert($translate.instant('MSG_CANT_OPEN_PDF'), $translate.instant('ERROR'), $translate.instant('OK'));
-                                    } else {
-                                        $cordovaDialogs.alert(err, $translate.instant('ERROR'), $translate.instant('OK'));
+                                            if (ionic.Platform.isIOS()) {
+                                                cordova.plugins.disusered.open($scope.backupSettings.path + $scope.backupSettings.filename,
+                                                    function () {
+                                                        $scope.appControl.saveButtonClicked = true;
+                                                    },
+                                                    function (err) {
+                                                        console.log(err.message, err);
+                                                    }
+                                                );
+                                            } else {
+                                                $scope.appControl.saveButtonClicked = true;
+                                                return $cordovaFileOpener2.open($scope.backupSettings.path + $scope.backupSettings.filename, 'application/pdf');
+                                            }
+                                        });
                                     }
-                                } else {
-                                    //some of the above plugins reject the promise even on success...
-                                    $scope.hideExportOptions();
-                                }
-                            })
-                        ;
+                                    })
+                                    .then(function () {
+                                        // backup export successful
+                                        $log.debug("backup export complete");
+                                        $scope.hideExportOptions();
+                                    })
+                                    .catch(function (err) {
+                                        $log.error(err);
+                                        if (err) {
+                                            if (err.status && err.status == 9) {
+                                                $cordovaDialogs.alert($translate.instant('MSG_CANT_OPEN_PDF'), $translate.instant('ERROR'), $translate.instant('OK'));
+                                            } else {
+                                                $cordovaDialogs.alert(err, $translate.instant('ERROR'), $translate.instant('OK'));
+                                            }
+                                        } else {
+                                            //some of the above plugins reject the promise even on success...
+                                            $scope.hideExportOptions();
+                                        }
+                                    })
+                            });
                     });
                 }
             });
@@ -1053,16 +1070,28 @@ angular.module('blocktrail.wallet')
                             settingsService.$store();
                         });
 
-                        //delete the temporary backup file if created
-                        $cordovaFile.removeFile($scope.backupSettings.path, $scope.backupSettings.filename)
-                            .then(function() {
-                                $log.debug('deleted file ' + $scope.backupSettings.path + $scope.backupSettings.filename);
-                            }, function(err) {
-                                $log.debug('unable to delete temp wallet backup file' + err);
-                            });
+                        $cordovaDialogs.confirm(
+                            $translate.instant("BACKUP_OPTION_KEEP_ON_PHONE"),
+                            $translate.instant("IMPORTANT"),
+                            [
+                                $translate.instant("YES"),
+                                $translate.instant("NO")
+                            ])
+                        .then(function (dialogResult) {
 
-                        //onwards to phone number and contacts setup
-                        $state.go('app.setup.phone');
+                            if (dialogResult == 1) {
+                                settingsService.backupSavedPersistent = true;
+                                console.log('keeping backup');
+                                $scope.backupSettings.keepBackup = true;
+                                return settingsService.$store();
+                            } else {
+                                console.log('not keeping backup');
+                                //delete the temporary backup file if created
+                                return $cordovaFile.removeFile($scope.backupSettings.path, $scope.backupSettings.filename);
+                            }
+                        }).then(function () {
+                            $state.go('app.setup.phone');
+                        });
                     })
                     .catch(function(err) {
                         console.error(err);
@@ -1083,6 +1112,7 @@ angular.module('blocktrail.wallet')
                     if (dialogResult == 1) {
                         settingsService.$isLoaded().then(function() {
                             settingsService.backupSkipped = true;
+                            settingsService.backupSavedPersistent = true;
                             settingsService.$store();
                         });
 

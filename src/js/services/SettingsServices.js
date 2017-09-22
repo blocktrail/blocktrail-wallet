@@ -40,6 +40,8 @@ angular.module('blocktrail.wallet').service(
         //  so that we can use this to check for activation of new stuff etc
         accountCreated: DEFAULT_ACCOUNT_CREATED,
         backupSaved: false,
+        backupNotifyTimestamp: 0,// notification if backup PDF is not yet saved
+        backupSavedPersistent: false,
         backupSkipped: false,
         setupStarted: false,
         setupComplete: false,

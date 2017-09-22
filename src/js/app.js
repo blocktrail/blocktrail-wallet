@@ -124,7 +124,6 @@ angular.module('blocktrail.wallet').run(
             }
         });
 
-
         if (CONFIG.DEBUGLIBS) {
             blocktrailSDK.debug.enable('*,-pouchdb:*');
         } else {

@@ -172,4 +172,5 @@
     <preference name="orientation" value="portrait" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="iosPersistentFileLocation" value="Compatibility" />
 </widget>

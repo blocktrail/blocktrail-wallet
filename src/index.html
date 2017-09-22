@@ -27,9 +27,9 @@
         </script>
 
         <script>
-            ionic.Platform.ready(function() {
-                console.log('Ionic Platform ready');
-                angular.bootstrap(document.body, ["blocktrail.wallet"]);
+            document.addEventListener("deviceready", function() {
+                console.log('deviceready');
+                angular.bootstrap(document.getElementById("bootstrapper"), ["blocktrail.wallet-bootstrapper"]);
             }, false);
         </script>
     </head>
@@ -44,6 +44,8 @@
                 </div>
             </div>
         </ion-nav-view>
+
+        <div id="bootstrapper"></div>
     </body>
 
     <script>

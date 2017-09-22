@@ -295,8 +295,9 @@ angular.module('blocktrail.wallet')
 angular.module('blocktrail.wallet')
     .controller('WalletSummaryCtrl', function($scope, $rootScope, $state, $log, $ionicScrollDelegate, $filter, $http, $q,
                                               $timeout, Wallet, $translate, $stateParams, AppRateService, CurrencyConverter,
-                                              settingsService, buyBTCService, $ionicPopover, CONFIG) {
+                                              settingsService, buyBTCService, $ionicPopover, notificationService, CONFIG) {
         AppRateService.init();
+        notificationService.backupNotification();
 
         // update balance from cache
         $scope.transactionsData = [];   //original list of transactions

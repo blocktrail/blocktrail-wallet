@@ -29,6 +29,7 @@
   <platform name="ios">
     <preference name="AutoHideSplashScreen" value="false"/>
     <preference name="ShowSplashScreenSpinner" value="false"/>
+    <preference name="iosPersistentFileLocation" value="Compatibility"/>
   </platform>
   <platform name="browser">
     <preference name="SplashScreen" value="resources/android/splash/drawable-port-xhdpi-screen.png"/>
