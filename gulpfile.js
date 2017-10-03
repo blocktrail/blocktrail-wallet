@@ -22,6 +22,7 @@ var clean = require('gulp-clean');
 var path = require('path');
 var sequence = require('run-sequence');
 var semver = require('semver');
+var html2js = require('gulp-html2js');
 
 var rootdir = __dirname;
 var isWatch = false;
@@ -199,8 +200,16 @@ gulp.task('templates:index', ['appconfig'], function() {
 gulp.task('templates:rest', ['appconfig'], function() {
 
     return appConfig.then(function(APPCONFIG) {
-        return streamAsPromise(gulp.src(["./src/templates/*", "./src/templates/**/*"])
-            .pipe(gulp.dest("./www/templates"))
+        return streamAsPromise(gulp.src([
+                "./src/js/modules/**/*.html",
+                "./src/templates/**/*.html"
+            ])
+                .pipe(html2js('templates.js', {
+                    adapter: 'angular',
+                    base: './src/',
+                    name: 'blocktrail.templates'
+                }))
+                .pipe(gulp.dest("./www/js/"))
         );
     });
 });
