@@ -175,20 +175,3 @@ $ionicons-font-path: "../fonts" !default;
 
 //import our theme
 @import "theme";
-
-
-//NOTE - watch out when using .ion class anywhere, sass will do some crazy stuff when extending and in certain situations can really mess everything up (uncomment snippet below to see
-//problem caused by @extend .ion in _ionicon-icons.scss, read more: http://csswizardry.com/2014/01/extending-silent-classes-in-sass/
-/*
-.state-send {
-    .two {
-        .three {
-            .four {
-                i.ion {
-                    display: none;
-                }
-            }
-        }
-    }
-}
-*/

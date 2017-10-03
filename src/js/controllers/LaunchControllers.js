@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http, settingsService, $ionicHistory) {
+    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http, settingsService, $ionicHistory, $ionicSideMenuDelegate) {
         $log.debug('starting');
 
         //disable animation on transition from this state
@@ -77,9 +77,11 @@ angular.module('blocktrail.wallet')
     });
 
 angular.module('blocktrail.wallet')
-    .controller('OpenWalletPinCtrl', function ($scope, $rootScope, $state, $stateParams, $log, launchService, Wallet,
-                                               settingsService, $timeout, $interval, CONFIG) {
+    .controller('OpenWalletPinCtrl', function ($scope, $rootScope, $state, $stateParams, $log, launchService,
+                                               settingsService, walletsManagerService, $timeout, $interval, CONFIG) {
+
         var DEFAULT_PIN = CONFIG.SETUP_PREFILL_PIN || "";
+
         $scope.appControl = {
             showPinInput: false,
             showPinInputError: false,
@@ -135,8 +137,34 @@ angular.module('blocktrail.wallet')
             }
 
             settingsService.$isLoaded().then(function () {
-                // Attempt to unlock wallet with PIN
-                Wallet.unlockData($scope.appControl.pin, true).then(function() {
+                launchService.getWalletInfo().then(function(walletInfo) {
+                    var password, secret;
+
+                    try {
+                        // legacy; storing encrypted password instead of secret
+                        if (walletInfo.encryptedSecret) {
+                            secret = CryptoJS.AES.decrypt(walletInfo.encryptedSecret, $scope.appControl.pin).toString(CryptoJS.enc.Utf8);
+                        } else {
+                            password = CryptoJS.AES.decrypt(walletInfo.encryptedPassword, $scope.appControl.pin).toString(CryptoJS.enc.Utf8);
+                        }
+                    } catch (e) {
+                        throw new blocktrail.WalletPinError(e.message);
+                    }
+
+                    if (!password && !secret) {
+                        throw new blocktrail.WalletPinError("Bad PIN");
+                    }
+
+                    var unlockData = {};
+
+                    if (password) {
+                        unlockData.password = password;
+                    } else {
+                        unlockData.secret = secret;
+                    }
+
+                    return unlockData;
+                }).then(function() {
                     console.log('PIN OK', $stateParams.nextState);
 
                     // Vibrate, reset pin, go to next state

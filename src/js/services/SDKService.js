@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet').factory(
-    'sdkService',
+    'sdkServiceIamOldKillMePLease',
     function($state, launchService, CONFIG, $log) {
 
         blocktrailSDK.prototype.updateMetadata = function (data, cb) {

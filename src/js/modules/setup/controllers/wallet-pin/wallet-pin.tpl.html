@@ -1,0 +1,51 @@
+<ion-view class="state-setup state-pin">
+    <ion-nav-title class="">{{ 'WALLET_PIN' | translate }}</ion-nav-title>
+
+    <ion-content scroll="true">
+        <form
+            class="form-create-new-account"
+            name="pinForm"
+            novalidate
+        >
+            <div class="card">
+                <ion-item class="item-text-wrap">
+                    <p>{{ 'SETUP_PIN_DESC_TITLE' | translate }}</p>
+                    <p>
+                        <small>{{ 'SETUP_PIN_DESC_SUBTITLE' | translate }}</small>
+                    </p>
+                </ion-item>
+
+                <!-- Pin -->
+                <ion-item>
+                    <input
+                        class="password-mask"
+                        type="tel"
+                        pattern="[0-9]*"
+                        placeholder="{{ 'SETUP_PIN_PLACEHOLDER' | translate }}"
+                        name="pin"
+                        ng-model="form.pin"
+                        auto-focus
+                    >
+                </ion-item>
+
+                <!-- Pin repeat -->
+                <ion-item>
+                    <input
+                        class="password-mask"
+                        type="tel"
+                        pattern="[0-9]*"
+                        placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}"
+                        name=""
+                        ng-model="form.pinRepeat"
+                    >
+                </ion-item>
+
+                <!-- Submit button -->
+                <ion-item>
+                    <button type="submit" class="button button-block" ng-click="onSubmitFormPin(form.pin, form.pinRepeat)">{{ 'CONTINUE' | translate }}</button>
+                </ion-item>
+            </div>
+        </form>
+    </ion-content>
+
+</ion-view>

@@ -1,0 +1,14 @@
+<div>
+    <h2>
+        <span ng-if="transaction.contact && displayName" class="sentence-case">
+            <span ng-if="transaction.buybtc">{{ 'TX_INFO_BUYBTC_FROM' | translate }}</span>
+            <span ng-if="!transaction.buybtc && !isReceived">{{ 'TX_INFO_SENT_TO' | translate }}</span>
+            <span ng-if="!transaction.buybtc && isReceived">{{ 'TX_INFO_RECEIVED_FROM' | translate }}</span>
+            <span>{{ displayName }}</span>
+        </span>
+        <span ng-if="!transaction.contact || !displayName" class="sentence-case">{{ altDisplay | translate }}</span>
+    </h2>
+    <h4 class="timestamp">
+        {{ transaction.time | amDateFormat: 'h:mm a' : 'unix' }}
+    </h4>
+</div>

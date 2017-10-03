@@ -1,0 +1,261 @@
+<ion-view class="state-settings">
+    <ion-nav-title class="">{{ 'SETTINGS' | translate }}</ion-nav-title>
+    <ion-content>
+        <form>
+            <h3 class="group-title">{{ 'SETTINGS_HELP' | translate }}</h3>
+
+            <div class="list list-inset">
+                <a class="item item-button-right" href="https://btc.com/faq" browse-to>
+                    <span class="sentence-case">{{ 'SETTINGS_FAQ' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </a>
+                <div class="item item-button-right" ui-sref="app.wallet.feedback">
+                    <span class="sentence-case">{{ 'SEND_FEEDBACK' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <h3 class="group-title">{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
+
+            <div class="list list-inset">
+                <div class="item item-button-right">
+                    <span class="sentence-case">{{ 'SETTINGS_PROFILE' | translate }}</span>
+                    <button class="button button-clear" ui-sref=".profile">
+                        <div class="display-token contact-token">
+                            {{ settings.displayName | contactInitials }}
+                            <span class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: {{ settings.profilePosX }}%; background-position-y: {{ settings.profilePosY }}%;"></span>
+                        </div>
+
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+                <!-- /profile -->
+
+                <div class="item item-button-right" ui-sref=".currency">
+                    <span class="sentence-case">{{ 'SETTINGS_CURRENCY' | translate }}</span>
+                    <button class="button button-clear">
+                        {{ settings.localCurrency }}
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+                <!-- /currency -->
+
+                <div class="item item-button-right" ui-sref=".language">
+                    <span class="sentence-case">{{ 'SETTINGS_LANGUAGE' | translate }}</span>
+                    <button class="button button-clear">
+                        {{ settings.language | languageName | translate }}
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+                <!-- /language -->
+            </div>
+
+
+            <h3 class="group-title">{{ 'SETTINGS_PHONE' | translate }}</h3>
+            <div class="list card list-inset">
+                <div class="item item-button-right" ui-sref=".phone">
+                    <span class="sentence-case">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</span>
+                    <button class="button button-clear">
+                        <small ng-if="settings.phoneNumber">{{ settings.phoneNumber }}</small>
+                        {{ !settings.phoneNumber && ('NONE' | translate) || '' }}
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                    <label class="phone-status" ng-if="settings.phoneNumber">
+                        <span class="">{{ 'STATUS' | translate }}: </span>
+                        <span ng-class="{'text-good': settings.phoneVerified, 'text-bad': !settings.phoneVerified}">{{ settings.phoneVerified && ('SETTINGS_PHONE_VERIFIED' | translate) || ('SETTINGS_PHONE_UNVERIFIED' | translate) }}</span>
+                    </label>
+                </div>
+                <!-- /phone -->
+
+                <div class="item">
+                    <span class="sentence-case">{{ 'CONTACTS' | translate }}</span>
+                    <button class="button button-small button-neutral pull-right no-animate"
+                            ng-class="{'button-neutral': !appControl.syncing, 'button-positive': appControl.syncing}"
+                            ng-if="!appControl.syncComplete"
+                            ng-click="settings.enableContacts ? disableContacts() : enableContacts()">
+                        <span ng-if="!settings.enableContacts && !appControl.syncing">{{ 'ENABLE' | translate }}</span>
+                        <span ng-if="settings.enableContacts && !appControl.syncing">{{ 'DISABLE' | translate }}</span>
+                        <span ng-if="appControl.syncing && !appControl.syncingAll">{{ 'SYNCING' | translate }}</span>
+                        <span ng-if="appControl.syncing && appControl.syncingAll">{{ 'SYNCING_ALL' | translate }}</span>
+                        <span ng-if="appControl.syncing" ng-class="{'spin-me': appControl.syncing}"><i class="icon ion-refresh"></i></span>
+                    </button>
+                    <button class="button button-small button-balanced pull-right no-animate" ng-if="appControl.syncComplete">
+                        {{ 'COMPLETE' | translate }}
+                    </button>
+                    <label class="phone-status">
+                        <span class="">{{ 'STATUS' | translate }}: </span>
+                        <span ng-class="{'text-good': (settings.contactsLastSync && settings.enableContacts), 'text-bad': (!settings.contactsLastSync || !settings.enableContacts) }">
+                            <span ng-if="settings.enableContacts && settings.contactsLastSync">{{ 'SETTINGS_CONTACTS_SYNCED' | translate }}</span>
+                            <span ng-if="settings.enableContacts && !settings.contactsLastSync">{{ 'SETTINGS_CONTACTS_UNSYNCED' | translate }}</span>
+                            <span ng-if="!settings.enableContacts">{{ 'DISABLED' | translate }}</span>
+                            <small class="text-neutral opacity-50" ng-if="settings.enableContacts && settings.contactsLastSync && !appControl.syncing">
+                                ({{ settings.contactsLastSync | amDateFormat:'Do MMM YYYY' }})
+                            </small>
+                        </span>
+                    </label>
+                </div>
+                <!-- /contacts -->
+            </div>
+
+
+
+            <h3 class="group-title">{{ 'SETTINGS_DISPLAY' | translate }}</h3>
+            <div class="list list-inset">
+
+                <div class="item ">
+                    <span class="sentence-case">{{ 'SETTINGS_BTC_DECIMALS' | translate }}</span>
+                    <br>
+                    <div class="range range-positive">
+                        <input type="range" name="volume" step="1" min="0" max="8" ng-model="settings.btcPrecision" ng-change="updateSettings()">
+                        {{settings.btcPrecision}}
+                    </div>
+                    <div class="text-center">
+                        <small>{{ (balance != null && balance+uncBalance || 0) | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : false }}</small>
+                    </div>
+                </div>
+                <!-- /btc fraction display -->
+            </div>
+
+
+
+            <h3 class="group-title">{{ 'SETTINGS_WALLET' | translate }}</h3>
+            <div class="list list-inset">
+                <div class="item item-button-right">
+                    <span class="sentence-case">{{ 'SETTINGS_CURRENT_WALLET' | translate }}</span>
+                    <button class="button button-clear">
+                        {{ defaultWallet | characters: 17}}
+                        <ion-spinner icon="dots" ng-if="!defaultWallet"></ion-spinner>
+                        <i class="icon ion-chevron-right" ng-if="false"></i>
+                    </button>
+                </div>
+                <!-- /default wallet -->
+
+                <div class="item item-button-right" ng-click="walletBackup()">
+                    <span class="sentence-case">{{ 'SETTINGS_WALLET_BACKUP' | translate }}</span>
+                    <label class="phone-status">
+                        <span ng-class="{'text-good': settings.backupSaved, 'text-bad': !settings.backupSaved}">
+                            {{ settings.backupSaved && ('SETTINGS_BACKUP_COMPLETE' | translate) || ('SETTINGS_BACKUP_INCOMPLETE' | translate) }}
+                        </span>
+                    </label>
+
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+                <!-- /wallet backup -->
+
+                <div class="item item-button-right" ng-click="changePin()">
+                    <span class="sentence-case">{{ 'SETTINGS_CHANGE_PIN' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+                <!-- /PIN -->
+
+                <div class="item item-button-right" ng-click="forgotPin()">
+                    <span class="sentence-case">{{ 'SETTINGS_FORGOT_PIN' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+                <!-- /PIN -->
+
+                <div class="item ">
+                    <button class="button button-block button-assertive" ng-click="resetWallet()">
+                        {{ 'LOGOUT' | translate }}
+                    </button>
+                </div>
+                <!-- /reset wallet -->
+            </div>
+
+
+
+
+            <h3 class="group-title">{{ 'SETTINGS_PRIVACY' | translate }}</h3>
+            <div class="list list-inset">
+                <div class="item item-toggle">
+                    <span class="sentence-case">{{ 'SETTINGS_USAGE_DATA' | translate }}</span>
+                    <label class="toggle toggle-balanced">
+                        <input type="checkbox" ng-model="settings.permissionUsageData" ng-change="updateSettingsPrivacy()">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
+                <div class="item item-toggle">
+                    <span class="sentence-case">{{ 'SETTINGS_PIN_ON_OPEN' | translate }}</span>
+                    <label class="toggle toggle-balanced">
+                        <input type="checkbox" ng-model="settings.pinOnOpen" ng-change="updateSettingsPinOnOpen()">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+
+            <h3 class="group-title">{{ 'SETTINGS_INFO' | translate }}</h3>
+            <div class="list list-inset">
+                <div class="item item-button-right" ui-sref=".about">
+                    <span class="sentence-case">{{ 'SETTINGS_ABOUT' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
+                <!-- about -->
+
+                <div class="item" on-hold="enableDev()" ng-click="tapEnableDev()">
+                    <span class="sentence-case">{{ 'SETTINGS_VERSION' | translate }}: </span>
+                    <small class="pull-right">{{ appVersion }}</small>
+                </div>
+                <!-- version -->
+            </div>
+
+
+            <div ng-if="devEnabled">
+                <h3 class="group-title">{{ 'SETTINGS_DEVELOPMENT' | translate }}</h3>
+                <div class="list list-inset">
+
+                    <div class="item item-button-right" ng-click="apprate()">
+                        <span class="sentence-case">Apprate</span>
+                        <button class="button button-clear">
+                            <i class="icon ion-chevron-right"></i>
+                        </button>
+                    </div>
+                    <!-- /PIN -->
+
+                    <div class="item item-toggle">
+                        <span class="sentence-case">Contacts web syncing</span>
+                        <label class="toggle toggle-balanced">
+                            <input type="checkbox" ng-model="settings.contactsWebSync" ng-change="updateSettings()">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <!-- /contact syncing to web -->
+
+                    <div class="item item-toggle">
+                        <span class="sentence-case">Ignore phone verification</span>
+                        <label class="toggle toggle-balanced">
+                            <input type="checkbox" ng-model="settings.phoneVerified">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <!-- /ignore phone verification -->
+
+                    <div class="item">
+                        Build: <small class="pull-right" on-hold="resetApp($event)">{{ CONFIG.VERSION }}</small>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </ion-content>
+</ion-view>

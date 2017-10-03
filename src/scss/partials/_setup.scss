@@ -1,137 +1,6 @@
 
 //--- Startup screen and launch ---
-.launch-screen {
-    .start-options {
-        position: absolute;
-        bottom: 60px;
-        width: 100%;
 
-        a {
-            display: block;
-            width: 100%;
-            height: 2rem;
-            line-height: 2rem;
-            color: #fff;
-        }
-
-
-        .button {
-            @include squareButton(#fff, #444);
-            //color: #fff;
-            background: rgba(0,0,0,0.10);
-            transition: none;
-            -webkit-transition: none;
-            border-width: 1px;
-            min-height: 3rem;
-            font-weight: 200;
-            text-shadow: 0 0 5px rgba(0,0,0,0.05);
-            text-decoration: dotted;
-
-            font-size: 1.8rem;
-            width: auto;
-            padding: 20px;
-        }
-    }
-    .temp {
-        //@TODO splash screens
-        position: absolute;
-        top: 0;
-        width: 100%;
-    }
-    .slider-backgrounds {
-        position: absolute;
-        background: #000;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-
-        .slide-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-position: 50% 0%;
-            background-size: cover;
-
-            opacity: 0;
-            -webkit-filter: blur(3px);
-            -moz-filter: blur(3px);
-            filter: blur(3px);
-            transition: filter 1.8s linear, opacity 1s cubic-bezier(.13,.87,.42,.96);
-            -webkit-transition: -webkit-filter 1.8s linear, opacity 1s cubic-bezier(.13,.87,.42,.96);
-
-            //transition-delay: 10.8s, 10s;
-            -webkit-transition-delay: 1.8s, 0.2s;
-
-            &.displayed {
-                opacity: 1;
-                -webkit-filter: none;
-                -moz-filter: none;
-                filter: none;
-                transition: filter 1.48s linear, opacity 0.8s cubic-bezier(.4,.1,.11,.98);
-                -webkit-transition: -webkit-filter 1.48s linear, opacity 0.8s cubic-bezier(.4,.1,.11,.98);
-
-                transition-delay: 0.2s, 0.1s;
-                -webkit-transition-delay: 0.2s, 0.1s;
-            }
-
-            &.slide-1 {
-                background-color: $app-default-color;
-            }
-            &.slide-2 {
-                background-color: $bluejeans-light;
-            }
-            &.slide-3 {
-                background-color: $grass-dark;
-            }
-            &.slide-4 {
-                background-color: $lavender-dark;
-            }
-            &.slide-5 {
-                background-color: $grapefruit-light;
-            }
-        }
-    }
-    .slider {
-        height: 100%;
-        background-color: rgba(0,0,0,0.25);
-        .box {
-            height: 100%;
-            color: #fff;
-            padding-top: 30%;
-            text-align: center;
-            h1, h2, h3, p {color: #fff;}
-        }
-
-        .slide-1 {
-            .title-block {
-                margin: 4rem 0;
-            }
-        }
-    }
-    .slider-pager .slider-pager-page {
-        color: #fff;
-    }
-    /*
-    .slide-1 {
-        background: $app-default-color;
-        .title-block {
-            margin: 4rem 0;
-        }
-    }
-    .slide-2 {
-        background: $bluejeans-light;
-    }
-    .slide-3 {
-        background: $grass-dark;
-    }
-    .slide-4 {
-        background: $lavender-dark;
-    }
-    .slide-5 {
-        background: $grapefruit-light;
-    }
-    */
-}
 .state-login {
     background: $lightgray-dark;
     .signup-type-select {
@@ -256,6 +125,7 @@
         .scroll-content {
             background: $lightgray-dark;
         }
+
         .profile-image {
             float: none !important;
             width: 150px !important;

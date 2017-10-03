@@ -1,0 +1,29 @@
+<ion-view class="state-setup state-complete">
+    <ion-nav-buttons side="left">
+        <button ng-click="$btBackButtonDelegate.goBack($event)"
+                class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
+                ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content scroll="true">
+        <div class="card">
+            <div class="list-header text-center">
+                <h1 class="text-neutral text-center">{{ 'SETUP_COMPLETE_TITLE' | translate }}</h1>
+            </div>
+
+            <ion-item class="item-borderless item-text-wrap text-center">
+                <p>{{ 'SETUP_COMPLETE_SUBTITLE' | translate }}</p>
+                <p>{{ 'SETUP_COMPLETE_SUBTITLE_2' | translate }}</p>
+            </ion-item>
+
+            <ion-item class="item-borderless item-text-wrap">
+                <a
+                    class="button button-block button-positive"
+                    ui-sref="app.wallet.summary"
+                >{{ 'SETUP_COMPLETE' | translate }}</a>
+            </ion-item>
+        </div>
+    </ion-content>
+
+</ion-view>

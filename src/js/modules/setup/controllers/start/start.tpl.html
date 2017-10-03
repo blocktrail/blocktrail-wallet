@@ -1,0 +1,55 @@
+<ion-view class="launch-screen" hide-nav-bar="true">
+    <ion-content scroll="false">
+        <div class="slider-backgrounds">
+            <div class="slide-bg slide-1" ng-class="{displayed: slider.displayed+1 == 1}" style="background-image: url('img/slide-1.jpg')"></div>
+            <div class="slide-bg slide-2" ng-class="{displayed: slider.displayed+1 == 2}" style="background-image: url('img/slide-2.jpg')"></div>
+            <div class="slide-bg slide-3" ng-class="{displayed: slider.displayed+1 == 3}" style="background-image: url('img/slide-3.jpg')"></div>
+            <div class="slide-bg slide-4" ng-class="{displayed: slider.displayed+1 == 4}" style="background-image: url('img/slide-4.jpg')"></div>
+            <div class="slide-bg slide-5" ng-class="{displayed: slider.displayed+1 == 5}" style="background-image: url('img/slide-5.jpg')"></div>
+        </div>
+        <ion-slide-box does-continue="true" auto-play="true" slide-interval="4800" active-slide="slider.displayed" show-pager="false">
+            <ion-slide>
+                <div class="box slide-1">
+                    <div class="loading-screen hide" style="">
+                        <div class="title-block">
+                            <span class="title">Wallet
+                                <span class="subtitle">BY BTC.COM</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide>
+                <div class="box slide-2"><h2 class="uppercase hide">Enjoy Financial Freedom</h2></div>
+            </ion-slide>
+            <ion-slide>
+                <div class="box slide-3"><h2 class="uppercase hide">MUCH BITCOIN!</h2></div>
+            </ion-slide>
+            <ion-slide>
+                <div class="box slide-4"><h2 class="uppercase hide">VERY CURRENCY!</h2></div>
+            </ion-slide>
+            <ion-slide>
+                <div class="box slide-5"><h2 class="uppercase hide">BUY BUY BUY BUY BUY!</h2></div>
+            </ion-slide>
+        </ion-slide-box>
+
+        <div class="temp">
+            <div class="loading-screen" style="">
+                <div class="title-block">
+                            <span class="title">Wallet
+                                <span class="subtitle">BY BTC.COM</span>
+                            </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="start-options text-center">
+            <div>
+                <a class="button create-new" ng-click="newAccount()">{{ 'LAUNCH_NEW_ACCOUNT' | translate }}</a>
+            </div>
+            <div>
+                <a class="sign-in" ui-sref="app.setup.login">{{ 'LAUNCH_EXISTING_ACCOUNT' | translate }}...</a>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

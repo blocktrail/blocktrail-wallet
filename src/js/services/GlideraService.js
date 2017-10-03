@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'glideraService',
-    function(CONFIG, $log, $q, Wallet, $cordovaDialogs, $translate, sdkService,
+    function(CONFIG, $log, $q, Wallet, $cordovaDialogs, $translate, sdkServiceIamOldKillMePLease,
              $http, $timeout, $ionicLoading, settingsService, launchService, $rootScope, trackingService, CurrencyConverter) {
         var clientId;
         var returnuri = "btccomwallet://glideraCallback/oauth2";
@@ -101,7 +101,7 @@ angular.module('blocktrail.wallet').factory(
                     }
 
 
-                    return sdkService.sdk().then(function(sdk) {
+                    return sdkServiceIamOldKillMePLease.sdk().then(function(sdk) {
                         return sdk.glideraOauth(qs.code, returnuri)
                             .then(function(result) {
                                 $log.debug('oauthtoken', JSON.stringify(result, null, 4));
@@ -132,6 +132,7 @@ angular.module('blocktrail.wallet').factory(
                                             hideOnStateChange: true
                                         });
 
+                                        // TODO use activeWallet.unlockWithPin
                                         return Wallet.unlock(dialogResult.input1).then(function(wallet) {
                                             var secretBuf = wallet.secret;
                                             if (wallet.walletVersion === 'v2') {
@@ -374,7 +375,7 @@ angular.module('blocktrail.wallet').factory(
         };
 
         var buyPrices = function(qty, fiat) {
-            return sdkService.sdk().then(function(sdk) {
+            return sdkServiceIamOldKillMePLease.sdk().then(function(sdk) {
                 return sdk.glideraBuyPrices(qty, fiat)
                     .then(function(result) {
                         console.log('buyPrices ' + JSON.stringify(result));

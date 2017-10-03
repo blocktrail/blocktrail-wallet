@@ -22,6 +22,7 @@ var clean = require('gulp-clean');
 var path = require('path');
 var sequence = require('run-sequence');
 var semver = require('semver');
+var html2js = require('gulp-html2js');
 
 var rootdir = __dirname;
 var isWatch = false;
@@ -199,8 +200,16 @@ gulp.task('templates:index', ['appconfig'], function() {
 gulp.task('templates:rest', ['appconfig'], function() {
 
     return appConfig.then(function(APPCONFIG) {
-        return streamAsPromise(gulp.src(["./src/templates/*", "./src/templates/**/*"])
-            .pipe(gulp.dest("./www/templates"))
+        return streamAsPromise(gulp.src([
+                "./src/js/modules/**/*.html",
+                "./src/templates/**/*.html"
+            ])
+                .pipe(html2js('templates.js', {
+                    adapter: 'angular',
+                    base: './src/',
+                    name: 'blocktrail.templates'
+                }))
+                .pipe(gulp.dest("./www/js/"))
         );
     });
 });
@@ -389,7 +398,7 @@ gulp.task('watch', function() {
     gulp.watch(['./src/js/**/*.js'], ['js:app']);
     gulp.watch(['./src/lib/**/*.js', '!./src/lib/blocktrail-sdk/**'], ['js:libs', 'js:ng-cordova']);
     gulp.watch(['./src/lib/blocktrail-sdk/build/blocktrail-sdk-full.js'], ['js:sdk']);
-    gulp.watch(['./src/templates/**/*', './src/translations/translations/*', './src/translations/translations/mobile/*', './src/index.html'], ['templates']);
+    gulp.watch(['./src/templates/**/*', './src/js/**/*.tpl.html', './src/translations/translations/*', './src/translations/translations/mobile/*', './src/index.html'], ['templates']);
     gulp.watch(['./appconfig.json', './appconfig.default.json'], ['default']);
 });
 

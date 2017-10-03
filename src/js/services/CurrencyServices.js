@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .service( 'Currencies', function($rootScope, storageService, $log, sdkService, CONFIG) {
+    .service( 'Currencies', function($rootScope, storageService, $log, sdkServiceIamOldKillMePLease, CONFIG) {
         var self = this;
 
         self.cache = storageService.db('currency-rates-cache');
@@ -98,7 +98,7 @@ angular.module('blocktrail.wallet')
                     })
                     .then(function(pricesDoc) {
                         if (forceFetch) {
-                            return sdkService.sdk().then(function(sdk) {
+                            return sdkServiceIamOldKillMePLease.sdk().then(function(sdk) {
                                 return sdk.price().then(function(result) {
                                     angular.extend(pricesDoc, result);
 
