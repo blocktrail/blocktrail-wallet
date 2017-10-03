@@ -19,6 +19,7 @@ var blocktrail = angular.module('blocktrail.wallet', [
 
     'blocktrail.config',
     "blocktrail.setup",
+    "blocktrail.templates",
 
     'ngIOS9UIWebViewPatch'
 ].filter(function filterNull(r) { return !!r; }));
