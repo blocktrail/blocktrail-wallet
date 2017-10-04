@@ -139,6 +139,7 @@ angular.module('blocktrail.wallet')
                     // Vibrate, reset pin, go to next state
                     navigator.vibrate(100);
                     $scope.appControl.pin = DEFAULT_PIN;
+                    $rootScope.STATE.PENDING_PIN_REQUEST = false;
                     $rootScope.STATE.INITIAL_PIN_DONE = true;
                     $state.go($stateParams.nextState);
 
