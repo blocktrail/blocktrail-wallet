@@ -50,6 +50,8 @@ angular.module('blocktrail.wallet')
                         } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
                             nextState = 'app.wallet.buybtc.choose';
                             $ionicSideMenuDelegate.toggleLeft(false);
+                        } else {
+                            nextState = 'app.wallet.summary';
                         }
                     } else {
                         nextState = 'app.wallet.summary';
