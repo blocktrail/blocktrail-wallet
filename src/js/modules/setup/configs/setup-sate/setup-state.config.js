@@ -147,7 +147,7 @@
             .state("app.setup.phone-verify", {
                 url: "/phone?goBackTo",
                 templateUrl: "templates/settings/settings.phone.html",
-                controller: "PhoneSettingsCtrl",
+                controller: "SettingsPhoneCtrl",
                 resolve: {
                     settings: function(settingsService, $rootScope, $translate) {
                         //do an initial load of the user's settings
@@ -183,7 +183,7 @@
             // TODO review profile for wallet & setup !!! to complex logic
             .state("app.setup.profile", {
                 url: "/profile",
-                controller: "ProfileSettingsCtrl", // This controller from the wallet module
+                controller: "SettingsProfileCtrl", // This controller from the wallet module
                 templateUrl: "js/modules/setup/controllers/profile/profile.tpl.html",
                 resolve: {
                     walletInfo: function($state, launchService) {
@@ -204,5 +204,4 @@
                 templateUrl: "js/modules/setup/controllers/complete.tpl.html"
             });
     }
-
 })();

@@ -472,6 +472,8 @@ angular.module('blocktrail.wallet').config(
                 }
             })
 
+
+            // TODO Discuss lunch states, may be better to move them to setup module
             /*---Launch---*/
             .state('app.launch', {
                 url: "/launch",
@@ -511,6 +513,8 @@ angular.module('blocktrail.wallet').config(
                     nextState: 'app.wallet.summary'
                 }
             })
+
+
 
             /*---Wallet Home---*/
             .state('app.wallet', {
@@ -773,7 +777,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.html",
+                        templateUrl: "js/modules/wallet/controllers/settings/settings.tpl.html",
                         controller: 'SettingsCtrl'
                     }
                 }
@@ -785,8 +789,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.profile.html",
-                        controller: 'ProfileSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-profile/settings-profile.tpl.html",
+                        controller: 'SettingsProfileCtrl'
                     }
                 }
             })
@@ -797,8 +801,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.phone.html",
-                        controller: 'PhoneSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-phone/settings-phone.tpl.html",
+                        controller: 'SettingsPhoneCtrl'
                     }
                 }
             })
@@ -809,8 +813,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.currency.html",
-                        controller: 'CurrencySettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-currency/settings-currency.tpl.html",
+                        controller: 'SettingsCurrencyCtrl'
                     }
                 }
             })
@@ -821,8 +825,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.language.html",
-                        controller: 'LanguageSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-language/settings-language.tpl.html",
+                        controller: 'SettingsLanguageCtrl'
                     }
                 }
             })
@@ -833,11 +837,12 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.wallet.html",
-                        controller: 'WalletSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-wallet/settings-wallet.tpl.html",
+                        controller: 'SettingsWalletCtrl'
                     }
                 }
             })
+            // TODO move to setup module
             .state('app.wallet.settings.backup', {
                 url: "/wallet-backup",
                 data: {
@@ -845,7 +850,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/setup/setup.wallet-backup.html",
+                        templateUrl: "js/modules/wallet/controllers/settings-wallet-backup/settings-wallet-backup.tpl.html",
                         controller: 'SettingsWalletBackupCtrl'
                     }
                 },
@@ -870,8 +875,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.about.html",
-                        controller: 'AboutSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-about/settings-about.tpl.html",
+                        controller: 'SettingsAboutCtrl'
                     }
                 }
             })

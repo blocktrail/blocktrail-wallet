@@ -5,7 +5,7 @@
         .controller("SetupProfileCtrl", SetupProfileCtrl);
 
     function SetupProfileCtrl($btBackButtonDelegate) {
-        /*-- Profile setup uses ProfileSettingsCtrl in SettingsControllers, this controller just modifies some things --*/
+        /*-- Profile setup uses SettingsProfileCtrl in SettingsControllers, this controller just modifies some things --*/
         $btBackButtonDelegate.rootState = null;
     }
 })();
