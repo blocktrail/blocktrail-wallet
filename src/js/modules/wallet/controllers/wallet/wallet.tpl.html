@@ -3,13 +3,13 @@
 
         <ion-nav-bar id="appTopBar" class="bar-energized" ng-class="{'darken-overlay': showOverlay}">
             <ion-nav-buttons side="left">
-                <button 
-                    menu-toggle="left" 
+                <button
+                    menu-toggle="left"
                     class="button button-icon icon ion-navicon menu-button {{ ($btBackButtonDelegate.isDisplayed || !$btBackButtonDelegate.enableMenuButton) && 'hide' || '' }}">
                 </button>
-                <button ng-click="$btBackButtonDelegate.goBack($event)" 
-                    class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
-                    ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+                <button ng-click="$btBackButtonDelegate.goBack($event)"
+                        class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
+                        ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
                 </button>
             </ion-nav-buttons>
         </ion-nav-bar>
