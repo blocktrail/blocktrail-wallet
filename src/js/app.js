@@ -521,7 +521,7 @@ angular.module('blocktrail.wallet').config(
                 abstract: true,
                 url: "/wallet",
                 controller: "WalletCtrl",
-                templateUrl: "templates/common/ion-side-menus.html",
+                templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
                     settings: function (settingsService, $rootScope) {
                         //do an initial load of the user's settings
@@ -581,7 +581,6 @@ angular.module('blocktrail.wallet').config(
                     }
                 }
             })
-
             .state('app.wallet.summary', {
                 url: "?refresh",
                 data: {
@@ -589,11 +588,15 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/wallet/wallet.summary.html",
+                        templateUrl: "js/modules/wallet/controllers/wallet-summary/wallet-summary.tpl.html",
                         controller: 'WalletSummaryCtrl'
                     }
                 }
             })
+
+
+
+
 
             .state('app.wallet.buybtc', {
                 url: "/buy",
