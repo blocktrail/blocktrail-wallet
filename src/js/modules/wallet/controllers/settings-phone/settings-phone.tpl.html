@@ -2,9 +2,9 @@
     <ion-nav-title class="">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</ion-nav-title>
     <ion-nav-buttons side="right">
         <div class="button hide"
-            nav-direction="back" 
-            ng-class="{'hide': !isIOS || !appControl.showCountrySelect}" 
-            ng-click="$btBackButtonDelegate.goBack()">{{ 'CANCEL' | translate }}
+             nav-direction="back"
+             ng-class="{'hide': !isIOS || !appControl.showCountrySelect}"
+             ng-click="$btBackButtonDelegate.goBack()">{{ 'CANCEL' | translate }}
         </div>
     </ion-nav-buttons>
     <ion-nav-buttons side="left">
@@ -13,7 +13,6 @@
                 ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
         </button>
     </ion-nav-buttons>
-
 
     <ion-content ng-class="{'blur-me': appControl.showMessage}">
         <div class="list card">
@@ -74,9 +73,6 @@
         </div>
         <!-- /verification code input-->
     </ion-content>
-
-
-
 
     <div class="message-display country-select-screen" ng-class="{displayed: appControl.showCountrySelect}">
         <div class="filter-input item-input item-input-inset">
