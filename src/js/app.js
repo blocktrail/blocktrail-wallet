@@ -514,8 +514,6 @@ angular.module('blocktrail.wallet').config(
                 }
             })
 
-
-
             /*---Wallet Home---*/
             .state('app.wallet', {
                 abstract: true,
@@ -648,7 +646,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/send/send.input-screen.html",
+                        templateUrl: "js/modules/wallet/controllers/send/send.tpl.html",
                         controller: 'SendCtrl'
                     }
                 }
@@ -669,7 +667,7 @@ angular.module('blocktrail.wallet').config(
                                  return '';
                              }
                         },
-                         controller: 'ScanQRCtrl'
+                         controller: 'SendScanQRCtrl'
                      }
                 }
             })
@@ -681,7 +679,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "overlayView": {
-                        templateUrl: "templates/send/partials/send.partial.contacts-list.html",
+                        templateUrl: "js/modules/wallet/controllers/contact-list/contact-list.tpl.html",
                         controller: 'ContactsListCtrl'
                     }
                 }
@@ -694,8 +692,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "overlayView": {
-                        templateUrl: "templates/send/partials/send.partial.address-input.html",
-                        controller: 'AddressInputCtrl'
+                        templateUrl: "js/modules/wallet/controllers/send-address-input/send-address-input.tpl.html",
+                        controller: 'SendAddressInputCtrl'
                     }
                 }
             })
@@ -707,7 +705,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "overlayView": {
-                        templateUrl: "templates/send/partials/send.partial.fee-choice.html"
+                        templateUrl: "js/modules/wallet/controllers/fee-choice/fee-choice.tpl.html"
                     }
                 }
             })
@@ -719,8 +717,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "overlayView": {
-                        templateUrl: "templates/send/partials/send.partial.pin-input.html",
-                        controller: 'ConfirmSendCtrl'
+                        templateUrl: "js/modules/wallet/controllers/send-confirm/send-confirm.tpl.html",
+                        controller: 'SendConfirmCtrl'
                     }
                 }
             })
