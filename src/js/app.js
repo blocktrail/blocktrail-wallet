@@ -734,7 +734,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/receive/receive.new-address.html",
+                        templateUrl: "js/modules/wallet/controllers/receive/receive.tpl.html",
                         controller: 'ReceiveCtrl'
                     }
                 }
@@ -749,7 +749,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/receive/receive.address-lookup.html",
+                        templateUrl: "js/modules/wallet/controllers/address-lookup/address-lookup.tpl.html",
                         controller: 'AddressLookupCtrl'
                     }
                 }
