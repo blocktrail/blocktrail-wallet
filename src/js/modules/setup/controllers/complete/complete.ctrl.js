@@ -2,9 +2,9 @@
     "use strict";
 
     angular.module("blocktrail.setup")
-        .controller("CompleteCtrl", CompleteCtrl);
+        .controller("SetupCompleteCtrl", SetupCompleteCtrl);
 
-    function CompleteCtrl($scope, $rootScope, settingsService, $btBackButtonDelegate, $state, $injector, $ionicLoading, $log) {
+    function SetupCompleteCtrl($scope, $rootScope, settingsService, $btBackButtonDelegate, $state, $injector, $ionicLoading, $log) {
         //reset the back button root state (for android hardware back)
         $btBackButtonDelegate.rootState = "app.wallet.summary";
 

@@ -4,7 +4,7 @@
     </ion-nav-title>
 
     <ion-content>
-        <div ng-if="chooseState.gettingStarted">            
+        <div ng-if="chooseState.gettingStarted">
             <div class="item item-text-wrap">
                 <h2 class="text-neutral">{{ 'BUYBTC_GETSTARTED_HEAD' | translate }}</h2>
                 <p class="padding-t" ng-bind-html="'BUYBTC_GETSTARTED_BODY' | translate | nl2br"></p>
@@ -12,7 +12,7 @@
                     {{ 'BUYBTC_GETSTARTED_BUTTON' | translate }}
                 </button>
             </div>
-            <div ng-include="'templates/buybtc/buybtc.teaser.html'"></div>
+            <div ng-include="'js/modules/wallet/controllers/buy-btc-choose/buy-btc-teaser.tpl.html'"></div>
         </div>
 
         <div ng-if="!chooseState.gettingStarted && chooseRegion">
