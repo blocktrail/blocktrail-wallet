@@ -608,7 +608,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/buybtc/buybtc.choose.html",
+                        templateUrl: "js/modules/wallet/controllers/buy-btc-choose/buy-btc-choose.tpl.html",
                         controller: 'BuyBTCChooseCtrl'
                     }
                 }
@@ -618,11 +618,12 @@ angular.module('blocktrail.wallet').config(
                 url: "/glidera/oaoth2/callback",
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/buybtc/buybtc.glidera_callback.html",
+                        templateUrl: "js/modules/wallet/controllers/buy-btc-glidera-oauth-callback/buy-btc-glidera-oauth-callback.tpl.html",
                         controller: 'BuyBTCGlideraOauthCallbackCtrl'
                     }
                 }
             })
+
             .state('app.wallet.buybtc.buy', {
                 url: "/broker/:broker",
                 data: {
@@ -631,7 +632,7 @@ angular.module('blocktrail.wallet').config(
                 cache: false,
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/buybtc/buybtc.buy.html",
+                        templateUrl: "js/modules/wallet/controllers/buy-btc-broker/buy-btc-broker.tpl.html",
                         controller: 'BuyBTCBrokerCtrl'
                     }
                 }

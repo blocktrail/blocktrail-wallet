@@ -38,7 +38,7 @@
                                 {{ fiatValueRaw }}
                             </span>
                         </div>
-                        
+
                     </div>
                     <div class="input-swapping-overlay" ng-click="swapInputs()">
                         <i class="swap-icon ion-arrow-swap"></i>
@@ -46,14 +46,14 @@
                     <span class="buy-rate-percoin" ng-if="buyInput.btcPrice">
                        {{ buyInput.btcPrice | number:2 }} {{ priceBTCCurrency | toCurrencySymbol }}/B
                     </span>
-                </div>         
-                
+                </div>
+
             </div>
 
             <div class="card" ng-if="buyInput.displayFee && (buyInput.btcValue || buyInput.fiatValue)">
-                    <!-- for debug //-->
-                   {{ 'BUYBTC_INCL_FEE' | translate }} ({{ buyInput.feePercentage | number:1 }}%) <->
-                   {{ priceBTCCurrency | toCurrencySymbol }}{{ buyInput.feeValue | number:2 }}
+                <!-- for debug //-->
+                {{ 'BUYBTC_INCL_FEE' | translate }} ({{ buyInput.feePercentage | number:1 }}%) <->
+                {{ priceBTCCurrency | toCurrencySymbol }}{{ buyInput.feeValue | number:2 }}
             </div>
 
             <div class="recipient-input-section padding-t card">
