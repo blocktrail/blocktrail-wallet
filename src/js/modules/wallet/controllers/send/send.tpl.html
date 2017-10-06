@@ -8,7 +8,7 @@
     <ion-nav-buttons side="right">
         <div class="button button-clear button-filtercontacts {{ !($state.current.name == 'app.wallet.send.contacts') && 'hide' || '' }}"
              ng-click="showFilterOptions();"
-            ><i class="icon-filter"></i>
+        ><i class="icon-filter"></i>
         </div>
     </ion-nav-buttons>
 
@@ -19,12 +19,12 @@
                 <div class="col">
                     <div class="balance-label" ng-if="balance !== null">
                         <canvas-display
-                                text="$translate.instant('AVAILABLE_BALANCE')"
-                                width="100%"
-                                height="19"
-                                font="17px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
-                                text-baseline="bottom"
-                                color="#FFFFFF">
+                            text="$translate.instant('AVAILABLE_BALANCE')"
+                            width="100%"
+                            height="19"
+                            font="17px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                            text-baseline="bottom"
+                            color="#FFFFFF">
                         </canvas-display>
                     </div>
                 </div>
@@ -33,23 +33,23 @@
                         <div class="col">
                             <div class="btc-value" ng-if="balance !== null">
                                 <canvas-display
-                                        text="(balance+uncBalance | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : htmlMarkup=false : hideDisp=true)"
-                                        width="100%"
-                                        height="26"
-                                        font="26px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
-                                        text-baseline="bottom"
-                                        color="#FFFFFF">
+                                    text="(balance+uncBalance | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : htmlMarkup=false : hideDisp=true)"
+                                    width="100%"
+                                    height="26"
+                                    font="26px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                    text-baseline="bottom"
+                                    color="#FFFFFF">
                                 </canvas-display>
                             </div>
                         </div>
                         <div class="col col-20 no-padding">
                             <canvas-display
-                                    text="TICKER"
-                                    width="100%"
-                                    height="18"
-                                    font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
-                                    text-baseline="top"
-                                    color="#FFFFFF">
+                                text="TICKER"
+                                width="100%"
+                                height="18"
+                                font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                text-baseline="top"
+                                color="#FFFFFF">
                             </canvas-display>
                         </div>
                     </div>
@@ -57,12 +57,12 @@
                         <div class="col col-80">
                             <div class="fiat-value" ng-if="balance !== null">
                                 <canvas-display
-                                        text="(balance+uncBalance) | satoshiToCurrency: settings.localCurrency :  bitcoinPrices : 2 : htmlMarkup=false"
-                                        width="100%"
-                                        height="18"
-                                        font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
-                                        text-baseline="bottom"
-                                        color="#FFFFFF">
+                                    text="(balance+uncBalance) | satoshiToCurrency: settings.localCurrency :  bitcoinPrices : 2 : htmlMarkup=false"
+                                    width="100%"
+                                    height="18"
+                                    font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                    text-baseline="bottom"
+                                    color="#FFFFFF">
                                 </canvas-display>
                             </div>
                         </div>

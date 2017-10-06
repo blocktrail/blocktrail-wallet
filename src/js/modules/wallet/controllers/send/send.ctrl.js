@@ -1,7 +1,12 @@
-angular.module('blocktrail.wallet')
-    .controller('SendCtrl', function($scope, trackingService, $log, CurrencyConverter, Contacts, Wallet,
-                                     $timeout, $ionicHistory, QR, $q, $btBackButtonDelegate, $state, settingsService,
-                                     $cordovaClipboard, $rootScope, $translate, $cordovaDialogs, $cordovaToast, AppRateService) {
+(function() {
+    "use strict";
+
+    angular.module("blocktrail.wallet")
+        .controller("SendCtrl", SendCtrl);
+
+    function SendCtrl($scope, trackingService, $log, CurrencyConverter, Contacts, Wallet,
+                         $timeout, $q, $btBackButtonDelegate, $state, settingsService,
+                         $rootScope, $translate, $cordovaDialogs, AppRateService) {
         $scope.OPTIMAL_FEE = 'optimal';
         $scope.LOW_PRIORITY_FEE = 'low_priority';
         $scope.PRIOBOOST = 'prioboost';
@@ -146,7 +151,7 @@ angular.module('blocktrail.wallet')
                         return {address: null};
                     }
                 }
-            }); 
+            });
         };
 
         $scope.selectContact = function() {
@@ -441,11 +446,11 @@ angular.module('blocktrail.wallet')
 
             //get an address for the contact
             $scope.getSendingAddress()
-            .then(function() {
+                .then(function() {
                     $scope.appControl.result = {working: true, message: 'MSG_INIT_WALLET'};
                     return $q.when(Wallet.unlock($scope.sendInput.pin));
                 })
-            .then(function(wallet) {
+                .then(function(wallet) {
                     $log.info("wallet: unlocked");
                     $scope.sendInput.pin = null;
                     $scope.appControl.showPinInput = false;
@@ -460,9 +465,9 @@ angular.module('blocktrail.wallet')
                     //attempt to make the payment
                     $log.info("wallet: paying", $scope.pay);
 
-                var feeStrategy = $scope.sendInput.feeChoice === 'prioboost' ? blocktrailSDK.Wallet.FEE_STRATEGY_MIN_RELAY_FEE : $scope.sendInput.feeChoice;
+                    var feeStrategy = $scope.sendInput.feeChoice === 'prioboost' ? blocktrailSDK.Wallet.FEE_STRATEGY_MIN_RELAY_FEE : $scope.sendInput.feeChoice;
 
-                return $q.when(wallet.pay($scope.pay, null, $scope.useZeroConf, true, feeStrategy, null, {prioboost: $scope.sendInput.feeChoice === $scope.PRIOBOOST})).then(function(txHash) {
+                    return $q.when(wallet.pay($scope.pay, null, $scope.useZeroConf, true, feeStrategy, null, {prioboost: $scope.sendInput.feeChoice === $scope.PRIOBOOST})).then(function(txHash) {
                         wallet.lock();
                         return $q.when(txHash);
                     }, function(err) {
@@ -470,7 +475,7 @@ angular.module('blocktrail.wallet')
                         return $q.reject(err);
                     });
                 })
-            .then(function(txHash) {
+                .then(function(txHash) {
                     trackingService.trackEvent(trackingService.EVENTS.PAY, {
                         value: trackingBtcValue,
                         label: trackingBtcValue + " BTC " + ($scope.sendInput.recipientSource || 'NaN')
@@ -491,11 +496,11 @@ angular.module('blocktrail.wallet')
                         $btBackButtonDelegate.toggleMenuButton(true);
                         $btBackButtonDelegate.toggleBackButton(true);
                     });
-                    
+
                     Wallet.pollTransactions();
                     AppRateService.sendCompleted();
                 })
-            .catch(function(err) {
+                .catch(function(err) {
                     $log.error(err);
                     $rootScope.hadErrDuringSend = true;
                     $scope.appControl.working = false;
@@ -559,9 +564,9 @@ angular.module('blocktrail.wallet')
                             }
                         });
                     }).catch(function(err) {
-                        //not a valid bitcoin link
-                        console.error(err);
-                    });
+                    //not a valid bitcoin link
+                    console.error(err);
+                });
                 $rootScope.bitcoinuri = null;
             }
         };
@@ -576,341 +581,5 @@ angular.module('blocktrail.wallet')
             //update balance now
             $rootScope.getBalance();
         });
-    })
-    .controller('ConfirmSendCtrl', function($scope) {
-        $scope.appControl.showPinInput = true;
-
-        /*-- simply a nested state for template control --*/
-    })
-    .controller('AddressInputCtrl', function($scope, $state, $log, $btBackButtonDelegate, $timeout, $cordovaClipboard, $q, Wallet) {
-        $scope.addressInput = null;
-        $scope.addressAmount = null;
-
-        $scope.message = {
-            title: "",
-            title_class: "",
-            body: "",
-            body_class: ""
-        };
-
-        $scope.confirmInput = function(address) {
-            $scope.message = {title: '', body: ''};
-            $scope.addressInput = address;
-            return $q.when().then(
-                function() {
-                    return Wallet.validateAddress($scope.addressInput);
-                })
-                .then(function(result) {
-                    //address is valid, assign to parent scope
-                    $scope.sendInput.recipientDisplay = $scope.addressInput;
-                    $scope.sendInput.recipientAddress = $scope.addressInput;
-                    $scope.sendInput.recipientSource = 'AddressInput';
-                    if ($scope.addressAmount && !$scope.sendInput.btcValue) {
-                        //set the amount if not already set
-                        $scope.sendInput.btcValue = parseFloat($scope.addressAmount);
-                    }
-
-                    $timeout(function() {
-                        $state.go('^');
-                    }, 300);
-                })
-                .catch(function(err) {
-                    console.error(err);
-                    $scope.message = {title: 'ERROR_TITLE_1', title_class: 'text-bad', body: 'MSG_BAD_ADDRESS_2'};
-                });
-        };
-
-        $scope.fromClipboard = function(silentErrors) {
-            if(!window.cordova) {
-                return $q.reject('No cordova plugin');
-            }
-            return $q.when($cordovaClipboard.paste())
-                .then(function(result) {
-                    return $scope.parseForAddress(result);
-                })
-                .then(function(result) {
-                    return Wallet.validateAddress(result.address).then(function() {
-                        $scope.addressInput = result.address;
-                        if (result.amount) {
-                            $scope.addressAmount = result.amount;
-                        }
-
-                        return result;
-                    });
-                })
-                .catch(function(err) {
-                    $log.error(err);
-                    if (!silentErrors) {
-                        $scope.message = {title: 'ERROR_TITLE_2', body: 'MSG_BAD_CLIPBOARD'};
-                    }
-                    return $q.reject(err);
-                });
-        };
-
-
-        $scope.$on('appResume', function() {
-            $timeout(function() {
-                $scope.fromClipboard(true).then(function(result) {
-                    $scope.message = {title: 'SEND_ADDRESS_FOUND', body: 'MSG_CLIPBOARD_ADDRESS'};
-                });
-            }, 600);
-        });
-
-        $timeout(function() {
-            $scope.fromClipboard(true).then(function(result) {
-                $scope.message = {title: 'SEND_ADDRESS_FOUND', body: 'MSG_CLIPBOARD_ADDRESS'};
-            });
-        }, 600);
-
-    })
-    .controller('ScanQRCtrl', function($scope, $rootScope, $state, QR, $log, $btBackButtonDelegate, $timeout, $ionicHistory, $cordovaToast, $ionicLoading) {
-        //remove animation for next state - looks kinda buggy
-        $ionicHistory.nextViewOptions({
-            disableAnimate: true
-        });
-
-        $ionicLoading.show({template: "<div>{{ 'LOADING' | translate }}...", hideOnStateChange: true});
-
-        //wait for transition, then open the scanner and begin scanning
-        $timeout(function() {
-            QR.scan(
-                function(result) {
-                    $log.debug('scan done', result);
-                    // bitcoin cash ppl care so little for standards or consensus that we actually need to do this ...
-                    result = result.replace(/^bitcoin cash:/, 'bitcoincash:');
-
-                    $log.debug('scan done', result);
-                    $ionicLoading.hide();
-
-                    //parse result for address and value
-                    var elm = angular.element('<a>').attr('href', result )[0];
-
-                    $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
-
-                    if (result.toLowerCase() === "cancelled") {
-                        //go back
-                        $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
-                    } else if (elm.protocol === 'btccomwallet:') {
-                        var reg = new RegExp(/btccomwallet:\/\/promocode\?code=(.+)/);
-                        var res = result.match(reg);
-
-                        $state.go('app.wallet.promo', {code: res[1]})
-
-                    } else if (elm.protocol === 'bitcoincash:' && $rootScope.NETWORK === "BTC") {
-                        throw new Error("Can't send to Bitcoin Cash address with BTC wallet");
-                    } else if (elm.protocol === 'bitcoin:' || elm.protocol === 'bitcoincash:') {
-                        $scope.clearRecipient();
-                        $scope.sendInput.recipientAddress = elm.pathname;
-                        $scope.sendInput.recipientDisplay = elm.pathname;
-                        $scope.sendInput.recipientSource = 'ScanQR';
-                        //check for bitcoin amount in qsa
-                        if (elm.search) {
-                            var reg = new RegExp(/amount=([0-9]*.[0-9]*)/);
-                            var amount = elm.search.match(reg);
-                            if (amount && amount[1]) {
-                                $scope.sendInput.btcValue = parseFloat(amount[1]);
-                                $scope.setFiat();
-                            }
-                        }
-
-                        //go to parent "send qr" state to continue with send process
-                        $state.go('^');
-                    }
-                    else {
-                        //no bitcoin protocol, set address as full string
-                        $scope.clearRecipient();
-                        $scope.sendInput.recipientAddress = result;
-                        $scope.sendInput.recipientDisplay = result;
-                        $scope.sendInput.recipientSource = 'ScanQR';
-                        $state.go('^');
-                    }
-                },
-                function(error) {
-                    $log.error(error);
-                    $log.error("Scanning failed: " + error);
-
-                    $ionicLoading.hide();
-                    $cordovaToast.showLongTop("Scanning failed: " + error);
-                    $scope.appControl.isScanning = false;
-
-                    $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
-                }
-            );
-        }, 350);
-    })
-    .controller('ContactsListCtrl', function($scope, $state, $q, Contacts, $timeout, $translate, $btBackButtonDelegate,
-                                             $ionicScrollDelegate, $ionicActionSheet, $ionicLoading, $cordovaDialogs,
-                                             $log, settingsService, $cordovaSms, $q) {
-        $scope.contactsFilter = {};
-        $scope.contactsWithWalletOnly = true;
-        $scope.contactsWithPhoneOnly = true;
-        $scope.contactsWithEmailOnly = false;
-        $scope.translations = null;
-        $scope.smsOptions = {
-            replaceLineBreaks: false, // true to replace \n by a new line, false by default
-            android: {
-                intent: 'INTENT'  // send SMS with the native android SMS messaging
-                //intent: '' // send SMS without open any other app
-            }
-        };
-
-        $scope.getTranslations = function() {
-            if ($scope.translations) {
-                return $q.when($scope.translations);
-            } else {
-                var requiredTranslations = [
-                    'OK',
-                    'CANCEL',
-                    'ERROR',
-                    'CONTACTS_FILTER_TITLE',
-                    'CONTACTS_SHOW_ALL',
-                    'CONTACTS_WALLETS_ONLY',
-                    'CONTACTS_RESYNC',
-                    'MSG_CONTACTS_PERMISSIONS',
-                    'PERMISSION_REQUIRED_CONTACTS',
-                    'MSG_INVITE_CONTACT'
-                ];
-                return $translate(requiredTranslations).then(function(translations) {
-                    $scope.translations = translations;
-                    return $q.when(translations);
-                });
-            }
-        };
-
-        //NB: navbar button has to be declared in parent, so parent scope function is bound
-        $scope.$parent.showFilterOptions = function() {
-            $scope.getTranslations().then(function(transactions) {
-                $scope.hideFilterOptions = $ionicActionSheet.show({
-                    buttons: [
-                        { text: transactions['CONTACTS_SHOW_ALL'].sentenceCase() },
-                        { text: transactions['CONTACTS_WALLETS_ONLY'].sentenceCase() }
-                    ],
-                    cancelText: transactions['CANCEL'].sentenceCase(),
-                    titleText: transactions['CONTACTS_FILTER_TITLE'].sentenceCase(),
-                    destructiveText: transactions['CONTACTS_RESYNC'].sentenceCase(),
-                    cancel: function() {},
-                    buttonClicked: function(index) {
-                        if (index == 0) {
-                            $scope.contactsWithWalletOnly = false;
-                            $scope.contactsWithPhoneOnly = true;
-                            //$scope.contactsWithEmailOnly = false;
-                        }
-                        else if (index == 1) {
-                            $scope.contactsWithWalletOnly = true;
-                            $scope.contactsWithPhoneOnly = true;
-                            //$scope.contactsWithEmailOnly = false;
-                        }
-                        $scope.getContacts();
-                        return true;
-                    },
-                    destructiveButtonClicked: function() {
-                        $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
-                        $scope.reloadContacts()
-                            .then(function() {
-                                $ionicLoading.hide();
-                            }, function(err) {
-                                $ionicLoading.hide();
-                                return $cordovaDialogs.alert(err.toString(), $scope.translations['ERROR'].sentenceCase(), $scope.translations['OK']);
-                            });
-                        return true;
-                    }
-                });
-            });
-        };
-
-        $scope.getContacts = function(forceRebuild) {
-            //if user manages to get here (i.e. after verifying phone) automatically enable contacts and force a first sync
-            if (!settingsService.enableContacts) {
-                settingsService.enableContacts = true;
-                settingsService.contactsWebSync = true;
-                return $scope.reloadContacts();
-            }
-
-            return $scope.getTranslations()
-                .then(function() {
-                    return $q.when(Contacts.list(forceRebuild));
-                })
-                .then(function(list) {
-                    settingsService.permissionContacts = true;      //ensure iOS permissions are up to date
-                    settingsService.$store();
-
-                    $scope.contacts = list.contacts.filter(function(contact) {
-                        var walletOnlyFilter = ($scope.contactsWithWalletOnly && contact.matches.length || !$scope.contactsWithWalletOnly); //apply the walletOnly filter if enabled
-                        var phoneOnlyFilter = ($scope.contactsWithPhoneOnly && contact.phoneNumbers || !$scope.contactsWithPhoneOnly);      //apply the phoneOnly filter if enabled
-                        return walletOnlyFilter && phoneOnlyFilter;
-                    });
-                    return $q.when($scope.contacts);
-                })
-                .catch(function(err) {
-                    $log.error(err);
-                    if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.permissionContacts = false;      //ensure iOS permissions are up to date
-                        settingsService.enableContacts = false;
-                        settingsService.$store();
-                        $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].sentenceCase(), $scope.translations['OK'])
-                    }
-
-                    return $q.reject(err);
-                });
-        };
-
-        $scope.toggleWalletContacts = function(state) {
-            $scope.contactsWithWalletOnly = (typeof state == "undefined") ? !$scope.contactsWithWalletOnly : !!state;
-            $scope.getContacts().then(function() {
-                $ionicScrollDelegate.scrollTop();
-            });
-        };
-
-        $scope.reloadContacts = function() {
-            //resync and rebuild the contacts list
-            return Contacts.sync(true)
-                .then(function() {
-                    return $scope.getContacts(true);
-                }).then(function() {
-                    settingsService.permissionContacts = true;      //ensure iOS permissions are up to date
-                    settingsService.contactsLastSync = new Date().valueOf();
-                    settingsService.$store();
-                    return $q.when($scope.$broadcast('scroll.refreshComplete'));
-                })
-                .catch(function(err) {
-                    $log.error(err);
-                    if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.enableContacts = false;
-                        settingsService.permissionContacts = false; //ensure iOS permissions are up to date
-                        settingsService.$store();
-                        $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].sentenceCase(), $scope.translations['OK'])
-                    }
-                    return $q.when($scope.$broadcast('scroll.refreshComplete'));
-                });
-        };
-        
-        $scope.selectContact = function(contact) {
-            //if the contact has a wallet, select them
-            $log.debug(contact);
-            if (contact.matches.length > 0) {
-                $scope.sendInput.recipient = contact;
-                $scope.sendInput.recipientDisplay = contact.displayName;
-                $scope.sendInput.recipientSource = 'Contacts';
-
-                $timeout(function() {
-                    $state.go('^');
-                }, 300);
-            } else {
-                //otherwise invite them
-                $scope.getTranslations()
-                    .then(function() {
-                        return $cordovaSms.send(contact.phoneNumbers[0].number, $scope.translations['MSG_INVITE_CONTACT'], $scope.smsOptions);
-                    })
-                    .catch(function(err) {
-                        // An error occurred
-                        $log.error(err);
-                    });
-            }
-        };
-
-        //init controller
-        $timeout(function() {
-            $scope.getContacts();
-        });
-
-    });
+    }
+})();
