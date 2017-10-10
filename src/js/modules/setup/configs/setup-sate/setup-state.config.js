@@ -201,7 +201,7 @@
             .state("app.setup.complete", {
                 url: "/complete",
                 controller: "SetupCompleteCtrl",
-                templateUrl: "js/modules/setup/controllers/complete.tpl.html"
+                templateUrl: "js/modules/setup/controllers/complete/complete.tpl.html"
             });
     }
 })();
