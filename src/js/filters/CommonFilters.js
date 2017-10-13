@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .filter('satoshiToCurrency', function satoshiToCurrency($rootScope, Currencies, CONFIG) {
+    /*.filter('satoshiToCurrency', function satoshiToCurrency($rootScope, Currencies, CONFIG) {
         var coin = 100000000;
         var precision = 8;
 
@@ -62,7 +62,7 @@ angular.module('blocktrail.wallet')
                 return currencyDisplayMode === CURRENCY_DISPLAY_MODE.HIDE ? localValue : currencyDisplay + localValue;
             }
         };
-    })
+    })*/
     .filter('toCurrencyTicker', function($rootScope, Currencies) {
         return function(input) {
             if (typeof Currencies.currencies[input] === "undefined") {

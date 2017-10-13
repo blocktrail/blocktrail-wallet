@@ -4,11 +4,13 @@
     angular.module("blocktrail.wallet")
         .controller("SettingsProfileCtrl", SettingsProfileCtrl);
 
+    // TODO Review Controller, showPhotoCrop move to modal service
     function SettingsProfileCtrl($scope, settingsService, $btBackButtonDelegate, $ionicActionSheet,
                           $translate, $cordovaImagePicker, $cordovaCamera, $timeout, $log) {
         $scope.appControl = {
             showImageCrop: false
         };
+
         $scope.photoSelectOptions = {
             maximumImagesCount: 1,
             width: 800,

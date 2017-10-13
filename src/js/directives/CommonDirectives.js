@@ -259,7 +259,7 @@ angular.module('blocktrail.wallet')
             }
         }
     })
-    .directive('browseTo', function ($ionicGesture) {
+    .directive('browseTo', function () {
         return {
             restrict: 'A',
             link: function ($scope, $element, $attrs) {
@@ -270,6 +270,25 @@ angular.module('blocktrail.wallet')
                 };
                 var handler = $element.on('click', handleTap);
                 $scope.$on('$destroy', function () {
+                    // Clean up - unbind drag gesture handler
+                    $element.off('click', handleTap);
+                });
+            }
+        }
+    })
+    .directive('browseToChildren', function () {
+        return {
+            restrict: 'A',
+            link: function ($scope, $element, $attrs) {
+                var handleTap = function (e) {
+                    if (e.srcElement.href) {
+                        window.open(encodeURI(e.srcElement.href), '_system');
+                        e.preventDefault();
+                        return false;
+                    }
+                };
+                var handler = $element.on('click', handleTap);
+                $scope.$on('$destroy', function ($event) {
                     // Clean up - unbind drag gesture handler
                     $element.off('click', handleTap);
                 });

@@ -1,0 +1,41 @@
+<div class="modal dialog-message">
+    <div class="va">
+        <div class="va-holder">
+            <div class="va-content">
+                <form
+                    class="card card-modal card-sm"
+                    name="confirmPasswordForm"
+                >
+                    <ion-item
+                        class="item-text-wrap item-borderless item-modal-prompt-content"
+                        ng-if="title || body">
+                        <h2 ng-if="title" class="title" ng-class="titleClass">{{ title | translate }}</h2>
+                        <p ng-if="body" class="body" ng-class="bodyClass">{{ body | translate }}</p>
+                    </ion-item>
+
+                    <ion-item>
+                        <input
+                            class="form-control"
+                            type="password"
+                            placeholder="{{ placeholder | translate }}"
+                            name="password"
+                            ng-model="form.confirmPassword"
+                            auto-focus
+                        >
+                    </ion-item>
+
+                    <div class="row">
+                        <div class="col">
+                            <button class="button button-block" ng-click="confirm()">{{ buttonConfirm | translate }}
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button class="button button-block" ng-click="cancel()">{{ buttonCancel | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

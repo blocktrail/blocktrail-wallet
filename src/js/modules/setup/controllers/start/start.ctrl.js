@@ -12,6 +12,7 @@
         $scope.newAccount = function() {
             $state.go('app.setup.register');
         };
+
         $scope.toLogin = function() {
             $state.go('app.setup.login');
         };

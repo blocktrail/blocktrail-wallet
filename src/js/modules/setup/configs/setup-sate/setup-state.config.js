@@ -17,7 +17,8 @@
                      * if new language is new preferred, set it
                      */
                     preferredLanguage: function(CONFIG, $rootScope, settingsService, blocktrailLocalisation, launchService, AppVersionService) {
-                        return launchService.getWalletConfig()
+                        return launchService
+                            .getWalletConfig()
                             .then(function(result) {
                                 AppVersionService.checkVersion(
                                     null,
@@ -52,14 +53,14 @@
                                     return settingsService.$store();
                                 });
                             })
-                            .then(function() {
-                            }, function(e) {
+                            .catch(function() {
                                 console.error(e);
                             });
                     },
                     settings: function(settingsService, $rootScope) {
                         //do an initial load of the user's settings (will return defaults if none have been saved yet)
-                        return settingsService.$isLoaded().then(function() {
+                        return settingsService
+                            .$isLoaded().then(function() {
                             $rootScope.settings = settingsService;
                             return settingsService;
                         });
@@ -84,8 +85,8 @@
             .state("app.setup.register", {
                 url: "/register",
                 cache: false,
-                controller: "SetupRegisterCtrl",
-                templateUrl: "js/modules/setup/controllers/register/register.tpl.html"
+                controller: "SetupNewAccountCtrl",
+                templateUrl: "js/modules/setup/controllers/new-account/new-account.tpl.html"
             })
             .state("app.setup.pin", {
                 url: "/pin",
@@ -93,16 +94,7 @@
                 controller: "SetupWalletPinCtrl",
                 templateUrl: "js/modules/setup/controllers/wallet-pin/wallet-pin.tpl.html",
                 resolve: {
-                    accountInfo: function($state, launchService) {
-                        return launchService.getAccountInfo().then(
-                            function(accountInfo) {
-                                return accountInfo;
-                            },
-                            function() {
-                                return $state.go("app.setup.start");
-                            }
-                        );
-                    }
+                    accountInfo: getAccountInfo
                 }
             })
             .state("app.setup.backup", {
@@ -111,16 +103,7 @@
                 controller: "SetupWalletBackupCtrl",
                 templateUrl: "js/modules/setup/controllers/wallet-backup/wallet-backup.tpl.html",
                 resolve: {
-                    backupInfo: function($state, launchService) {
-                        return launchService.getBackupInfo().then(
-                            function(backupInfo) {
-                                return backupInfo;
-                            },
-                            function() {
-                                return $state.go("app.setup.start");
-                            }
-                        );
-                    }
+                    backupInfo: getBackupInfo
                 }
             })
             .state("app.setup.phone", {
@@ -131,33 +114,27 @@
                     clearHistory: true  //clear any previous history
                 },
                 resolve: {
-                    walletInfo: function($state, launchService) {
-                        return launchService.getWalletInfo().then(
-                            function(walletInfo) {
-                                return walletInfo;
-                            },
-                            function() {
-                                return $state.go("app.setup.start");
-                            }
-                        );
-                    }
+                    walletInfo: getWalletInfo
                 }
             })
-            //NB: create a copy of the app.wallet.settings.phone to bypass the WalletController which inits the wallet and starts polling
+            // NB: create a copy of the app.wallet.settings.phone to bypass the WalletController which inits the wallet and starts polling
             .state("app.setup.phone-verify", {
                 url: "/phone?goBackTo",
                 templateUrl: "templates/settings/settings.phone.html",
                 controller: "SettingsPhoneCtrl",
                 resolve: {
-                    settings: function(settingsService, $rootScope, $translate) {
-                        //do an initial load of the user's settings
-                        return settingsService.$isLoaded().then(function(data) {
-                            $rootScope.settings = settingsService;
-                            //set the preferred language
-                            $rootScope.changeLanguage(settingsService.language);
+                    settings: function(settingsService, $rootScope) {
+                        // do an initial load of the user's settings
+                        return settingsService
+                            .$isLoaded()
+                            .then(
+                                function(data) {
+                                    $rootScope.settings = settingsService;
+                                    //set the preferred language
+                                    $rootScope.changeLanguage(settingsService.language);
 
-                            return data;
-                        });
+                                    return data;
+                                });
                     }
                 }
             })
@@ -166,17 +143,10 @@
                 controller: "SetupContactsCtrl",
                 templateUrl: "js/modules/setup/controllers/contacts/contacts.tpl.html",
                 resolve: {
-                    walletInfo: function($state, launchService) {
-                        return launchService
-                            .getWalletInfo()
-                            .then(
-                                function(walletInfo) {
-                                    return walletInfo;
-                                },
-                                function() {
-                                    return $state.go("app.setup.start");
-                                }
-                            );
+                    walletInfo: getWalletInfo,
+
+                    resolveTest: function() {
+                        debugger;
                     }
                 }
             })
@@ -186,16 +156,7 @@
                 controller: "SettingsProfileCtrl", // This controller from the wallet module
                 templateUrl: "js/modules/setup/controllers/profile/profile.tpl.html",
                 resolve: {
-                    walletInfo: function($state, launchService) {
-                        return launchService.getWalletInfo().then(
-                            function(walletInfo) {
-                                return walletInfo;
-                            },
-                            function() {
-                                return $state.go("app.setup.start");
-                            }
-                        );
-                    }
+                    walletInfo: getWalletInfo
                 }
             })
             .state("app.setup.complete", {
@@ -203,5 +164,31 @@
                 controller: "SetupCompleteCtrl",
                 templateUrl: "js/modules/setup/controllers/complete/complete.tpl.html"
             });
+    }
+    
+    function getAccountInfo($state, launchService) {
+        return launchService
+            .getAccountInfo()
+            .then(returnData, toAppSetupState.bind(this, $state));
+    }
+
+    function getBackupInfo($state, launchService) {
+        return launchService
+            .getBackupInfo()
+            .then(returnData, toAppSetupState.bind(this, $state));
+    }
+    
+    function getWalletInfo($state, launchService) {
+        return launchService
+            .getWalletInfo()
+            .then(returnData, toAppSetupState.bind(this, $state));
+    }
+
+    function returnData(data) {
+        return data;
+    }
+
+    function toAppSetupState($state) {
+        return $state.go("app.setup.start");
     }
 })();

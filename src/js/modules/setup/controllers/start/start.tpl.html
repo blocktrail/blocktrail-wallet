@@ -33,7 +33,6 @@
             </ion-slide>
         </ion-slide-box>
 
-
         <div class="temp">
             <div class="loading-screen" style="">
                 <div class="title-block">
@@ -45,11 +44,11 @@
         </div>
 
         <div class="start-options text-center">
-            <div class="padding-bottom">
-                <button class="button" ng-click="newAccount()">{{ 'LAUNCH_NEW_ACCOUNT' | translate }}</button>
+            <div>
+                <a class="button create-new" ng-click="newAccount()">{{ 'LAUNCH_NEW_ACCOUNT' | translate }}</a>
             </div>
-            <div class="padding-top">
-                <a class="" ng-click="toLogin()">{{ 'LAUNCH_EXISTING_ACCOUNT' | translate }}...</a>
+            <div>
+                <a class="sign-in" ui-sref="app.setup.login">{{ 'LAUNCH_EXISTING_ACCOUNT' | translate }}...</a>
             </div>
         </div>
     </ion-content>

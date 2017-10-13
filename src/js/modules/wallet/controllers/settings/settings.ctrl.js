@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("SettingsCtrl", SettingsCtrl);
 
-    function SettingsCtrl($scope, $rootScope, $q, sdkService, launchService, settingsService,
+    function SettingsCtrl($scope, $rootScope, $q, sdkServiceIamOldKillMePLease, launchService, settingsService,
                             Wallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
                             $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast) {
         $scope.appControl = {
@@ -270,7 +270,7 @@
                     }
 
                     $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
-                    return $q.when(sdkService.sdk());
+                    return $q.when(sdkServiceIamOldKillMePLease.sdk());
                 })
                 .then(function(sdk) {
                     //delete contacts from server

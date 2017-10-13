@@ -1,29 +1,13 @@
-<ion-view class="state-setup state-profile state-settings" ng-class="{'blur-me': appControl.showMessage}">
-    <div ng-controller="SetupProfileCtrl">
-        <!-- Bind separate controller specifically to change $btBackButtonDelegate -->
-    </div>
+<ion-view class="state-setup state-profile">
     <ion-nav-title class="">{{ 'SETTINGS_PROFILE' | translate }}</ion-nav-title>
-    <ion-nav-buttons side="right">
-        <div class="button hide"
-             nav-direction="back"
-             ng-class="{'hide': !isIOS || !appControl.showImageCrop}"
-             ng-click="$btBackButtonDelegate.goBack()">{{ 'CANCEL' | translate }}
-        </div>
-    </ion-nav-buttons>
-    <ion-nav-buttons side="left">
-        <button ng-click="$btBackButtonDelegate.goBack($event)"
-                class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
-                ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
-        </button>
-    </ion-nav-buttons>
 
-    <ion-content>
+    <ion-content scroll="true">
         <div class="card">
-            <div class="item item-text-wrap">
-                <p class="padding-t">{{ 'SETTINGS_PROFILE_DESCRIPTION' | translate }}</p>
+            <div class="list-header">
+                <p>{{ 'SETTINGS_PROFILE_DESCRIPTION' | translate }}</p>
             </div>
 
-            <div class="item item-borderless text-center">
+            <ion-item class="item-borderless item-text-wrap text-center">
                 <div class="display-token contact-token profile-image" ng-click="updatePicture()">
                     <div class="initials"><i class="ion-person"></i></div>
                     <span class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: {{ settings.profilePosX }}%; background-position-y: {{ settings.profilePosY }}%;"></span>
@@ -31,25 +15,32 @@
                 <div ng-if="settings.profilePic">
                     <a class="" ng-click="updatePicture()">{{ 'SETTINGS_UPDATE_PHOTO' | translate }}</a>
                 </div>
-            </div>
+            </ion-item>
 
-            <div class="item item-borderless" ng-if="!settings.profilePic">
+            <ion-item class="item-borderless item-text-wrap" ng-if="!settings.profilePic">
                 <button class="button button-block button-positive"
                         ng-click="updatePicture()">{{ 'SETUP_PROFILE_PIC' | translate }}
                 </button>
-                <div class="padding-t">
-                    <a class="margin-t pull-right button button-small button-neutral sentence-case" ui-sref="app.setup.complete">{{ 'SKIP_STEP' | translate }}</a>
-                </div>
-            </div>
-            <div class="item item-borderless" ng-if="settings.profilePic">
-                <button class="button button-block button-positive"
-                        ui-sref="app.setup.complete">{{ 'CONTINUE' | translate }}
-                </button>
-            </div>
+            </ion-item>
+
+            <ion-item ng-if="!settings.profilePic">
+                <a
+                    class="pull-right button button-small button-neutral sentence-case"
+                    ui-sref="app.setup.complete"
+
+                >{{ 'SETUP_SKIP_BACKUP' | translate }}...</a>
+            </ion-item>
+
+            <ion-item ng-if="settings.profilePic">
+                <a class="button button-block button-positive"
+                   ui-sref="app.setup.complete">{{ 'CONTINUE' | translate }}
+                </a>
+            </ion-item>
         </div>
     </ion-content>
 
-    <div class="photo-crop-screen" ng-class="{displayed: appControl.showImageCrop}">
+    <!-- TODO Move to modal -->
+    <div class="photo-crop-screen" ng-class="{ displayed: appControl.showImageCrop }">
         <img-crop image="newProfileImage"
                   result-image="croppedProfileImage"
                   area-type="circle"
@@ -65,7 +56,7 @@
 
         <button class="button button-outline confirm-button" ng-click="assignProfileImage(croppedProfileImage)">{{ 'APPLY' | translate }}</button>
     </div>
-    <!-- /photo crop screen -->
+    <!-- photo crop screen -->
 
 </ion-view>
 
