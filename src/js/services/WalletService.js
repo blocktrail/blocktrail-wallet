@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'Wallet',
-    function($rootScope, $state, $interval, $q, $log, sdkService, launchService, storageService, Contacts, CONFIG, $timeout) {
+    function($rootScope, $state, $interval, $q, $log, sdkServiceIamOldKillMePLease, launchService, storageService, Contacts, CONFIG, $timeout) {
         var Wallet = function() {
             var self = this;
 
@@ -13,7 +13,7 @@ angular.module('blocktrail.wallet').factory(
             self.addressRefillPromise = null;
             self.transsactionMetaResolvers = [];
 
-            self.sdk = sdkService.sdk();
+            self.sdk = sdkServiceIamOldKillMePLease.sdk();
 
             self.wallet = self.sdk.then(function(sdk) {
                 return launchService.getWalletInfo().then(

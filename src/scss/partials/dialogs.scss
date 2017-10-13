@@ -1,0 +1,34 @@
+.modal-backdrop-bg {
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+.modal {
+    .card {
+        margin: 0 auto;
+
+        &.card-sm {
+            max-width: 400px;
+        }
+    }
+
+    .item {
+        input {
+            width: 100%;
+        }
+    }
+
+    &.dialog-alert {
+        text-align: center;
+        background: transparent;
+        position: absolute;
+        top: 5%;
+        right: 5%;
+        bottom: 5%;
+        left: 5%;
+        overflow: hidden;
+        width: 90%;
+        height: 90%;
+        min-height: 90%;
+        max-height: 90%;
+    }
+}

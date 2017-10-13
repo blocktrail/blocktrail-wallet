@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("SettingsPhoneCtrl", SettingsPhoneCtrl);
 
-    function SettingsPhoneCtrl($scope, $stateParams, settingsService, $btBackButtonDelegate, sdkService,
+    function SettingsPhoneCtrl($scope, $stateParams, settingsService, $btBackButtonDelegate, sdkServiceIamOldKillMePLease,
                           $q, $log, $timeout, $filter, $cordovaGlobalization) {
         $scope.allCountries = allCountries;
         $scope.formInput = {
@@ -106,7 +106,7 @@
             $scope.message = {title: 'WORKING', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
-            $q.when(sdkService.sdk())
+            $q.when(sdkServiceIamOldKillMePLease.sdk())
                 .then(function(sdk) {
                     return sdk.updatePhone({phone_number: $scope.formInput.newPhoneNumber, 'country_code': $scope.formInput.selectedCountry.dialCode});
                 })
@@ -144,7 +144,7 @@
             $scope.message = {title: 'WORKING', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
-            $q.when(sdkService.sdk())
+            $q.when(sdkServiceIamOldKillMePLease.sdk())
                 .then(function(sdk) {
                     return sdk.removePhone();
                 })
@@ -176,7 +176,7 @@
             $scope.message = {title: 'VERIFYING', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
-            $q.when(sdkService.sdk())
+            $q.when(sdkServiceIamOldKillMePLease.sdk())
                 .then(function(sdk) {
                     return sdk.verifyPhone($scope.formInput.verifyToken);
                 })

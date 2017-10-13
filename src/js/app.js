@@ -17,7 +17,8 @@ var blocktrail = angular.module('blocktrail.wallet', [
     'angulartics',
     'angulartics.google.analytics.cordova',
 
-    'blocktrail.config',
+    "blocktrail.config",
+    "blocktrail.core",
     "blocktrail.setup",
     "blocktrail.templates",
 
@@ -72,6 +73,7 @@ angular.module('blocktrail.wallet').run(
         $rootScope.isIOS = ionic.Platform.isIOS();
 
         $rootScope.bodyClass = [];
+
         $rootScope.$watch('bodyClass', function() {
             $rootScope.bodyClassStr = $rootScope.bodyClass.join(" ");
         }, true);
@@ -120,6 +122,7 @@ angular.module('blocktrail.wallet').run(
         };
 
         $rootScope.switchNetwork("BTC");
+
         launchService.getNetwork().then(function(network) {
             if (network) {
                 $rootScope.switchNetwork(network);
@@ -157,6 +160,7 @@ angular.module('blocktrail.wallet').run(
         var keyboardHide = function(e) {
             $log.debug('keyboard is closing', e);
         };
+
         window.addEventListener('native.keyboardshow', keyboardShow);
         window.addEventListener('native.keyboardhide', keyboardHide);
 
@@ -215,13 +219,16 @@ angular.module('blocktrail.wallet').run(
             LAST_ACTIVE: (new Date()).getTime(),
             INITIAL_PIN_DONE: false
         };
+
         trackingService.trackEvent(trackingService.EVENTS.APP_OPEN);
+
         $ionicPlatform.on('pause', function() {
             $log.debug('PAUSE');
             $rootScope.STATE.ACTIVE = false;
             $rootScope.STATE.LAST_ACTIVE = (new Date()).getTime();
             $rootScope.$broadcast('appPause');
         });
+
         $ionicPlatform.on('resume', function() {
             $log.debug('RESUME');
             $rootScope.STATE.ACTIVE = true;
@@ -244,6 +251,7 @@ angular.module('blocktrail.wallet').run(
 
         //indicate when keyboard is displayed
         $rootScope.isKeyboardShown = false;
+
         window.addEventListener('native.keyboardshow', function(e) {
             $timeout(function() {
                 $rootScope.isKeyboardShown = true;
@@ -463,11 +471,14 @@ angular.module('blocktrail.wallet').config(
                      * load extra languages we are aware of
                      */
                     extraLanguages: function(settingsService, blocktrailLocalisation) {
-                        return settingsService.$isLoaded().then(function() {
-                            _.each(settingsService.extraLanguages, function(extraLanguage) {
-                                blocktrailLocalisation.enableLanguage(extraLanguage);
-                            });
-                        });
+                        return settingsService
+                            .$isLoaded()
+                            .then(
+                                function() {
+                                    _.each(settingsService.extraLanguages, function(extraLanguage) {
+                                        blocktrailLocalisation.enableLanguage(extraLanguage);
+                                    });
+                                });
                     }
                 }
             })
@@ -521,15 +532,20 @@ angular.module('blocktrail.wallet').config(
                 controller: "WalletCtrl",
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
-                    settings: function (settingsService, $rootScope) {
+                    settings: function (settingsService, $rootScope, $state) {
+
+
+
+
+
                         //do an initial load of the user's settings
-                        return settingsService.$isLoaded().then(function (data) {
+                        /*return settingsService.$isLoaded().then(function (data) {
                             $rootScope.settings = settingsService;
                             //set the preferred language
                             $rootScope.changeLanguage(settingsService.language);
 
                             return data;
-                        });
+                        });*/
                     },
                     pinOnOpen: function(settingsService, $q, $state, $rootScope, /* dependancies= */settings) {
                         return settingsService.$isLoaded().then(function() {
@@ -550,19 +566,17 @@ angular.module('blocktrail.wallet').config(
                                 $rootScope.BUYBTC_ENABLED = (CONFIG.BUYBTC || enabled) && $rootScope.NETWORK === "BTC";
                             });
                     },
+                    // TODO Continue here
+                    // activeWallet: getActiveWallet,
                     loadingDone: function (Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state, /* dependancies= */pinOnOpen) {
                         //do an initial load of cached user data
                         return $q.all([
-                            Wallet.balance(true),
-                            Currencies.updatePrices(true),
-                            Wallet.blockHeight(true)
+                            Currencies.updatePrices(true)
                         ]).then(function (data) {
                             $log.debug('initial load complete');
-                            $rootScope.balance = data[0].balance;
-                            $rootScope.uncBalance = data[0].uncBalance;
 
                             $rootScope.bitcoinPrices = data[1];
-                            $rootScope.blockHeight = data[2].height;
+
                             return true;
                         }).catch(function (error) {
                             if (error.message && error.message == "missing") {
@@ -591,11 +605,6 @@ angular.module('blocktrail.wallet').config(
                     }
                 }
             })
-
-
-
-
-
             .state('app.wallet.buybtc', {
                 url: "/buy",
                 abstract: true,
@@ -623,7 +632,6 @@ angular.module('blocktrail.wallet').config(
                     }
                 }
             })
-
             .state('app.wallet.buybtc.buy', {
                 url: "/broker/:broker",
                 data: {
@@ -769,7 +777,6 @@ angular.module('blocktrail.wallet').config(
                 }
             })
 
-
             /*--- Settings ---*/
             .state('app.wallet.settings', {
                 url: "/settings",
@@ -883,7 +890,6 @@ angular.module('blocktrail.wallet').config(
                 }
             })
 
-
             /*--- Feedback ---*/
             .state('app.wallet.feedback', {
                 url: "/feedback",
@@ -917,13 +923,66 @@ angular.module('blocktrail.wallet').config(
                         historyRoot: true
                     });
                 }
-            })
-        ;
+            });
+
+        /**
+         * Get the active wallet
+         * @param $state
+         * @param $q
+         * @param launchService
+         * @param sdkService
+         * @param walletsManagerService
+         */
+        function getActiveWallet($state, $q, launchService, sdkService, walletsManagerService) {
+            return $q.all([launchService.getAccountInfo(), launchService.getWalletInfo()])
+                .then(function(data) {
+                    var accountInfo = data[0];
+                    var walletInfo = data[1];
+
+                    debugger;
+
+                    if (!sdkService.getNetworkType() || !walletInfo.identifier) {
+                        // TODO !!!
+                        $state.go("app.reset");
+                        throw new Error("Missing networkType or identifier");
+                    }
+
+                    sdkService.setAccountInfo(accountInfo);
+                    sdkService.setNetworkType(walletInfo.networkType);
+
+                    return walletsManagerService.fetchWalletsList()
+                        .then(function() {
+                            var activeWallet = walletsManagerService.getActiveWallet();
+
+                            // active wallet is null when we load first time
+                            if (!activeWallet) {
+                                activeWallet = walletsManagerService.setActiveWalletByNetworkTypeAndIdentifier(walletInfo.networkType, walletInfo.identifier);
+                            } else {
+                                sdkService.setNetworkType(activeWallet.getReadOnlyWalletData().networkType);
+                            }
+
+                            return activeWallet;
+                        });
+                })
+                .then(function(activeWallet) {
+                    var walletData = activeWallet.getReadOnlyWalletData();
+
+                    return launchService.storeWalletInfo(walletData.identifier, walletData.networkType)
+                        .then(function() {
+                            return activeWallet;
+                        });
+                });
+        }
+
+
 
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('launch');
         //$urlRouterProvider.otherwise('blank');            //for promo-shots, to allow photoshopping
     }
+
+
+
 );
 
 String.prototype.sentenceCase = function() {

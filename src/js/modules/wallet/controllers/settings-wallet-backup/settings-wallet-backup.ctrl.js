@@ -5,7 +5,7 @@
         .controller("SettingsWalletBackupCtrl", SettingsWalletBackupCtrl);
 
     function SettingsWalletBackupCtrl($scope, backupInfo, $q, $btBackButtonDelegate, $translate, $cordovaDialogs,
-                                $ionicActionSheet, $log, $cordovaFileOpener2, $cordovaFile, sdkService,
+                                $ionicActionSheet, $log, $cordovaFileOpener2, $cordovaFile, sdkServiceIamOldKillMePLease,
                                 launchService, settingsService, $timeout) {
         if (!backupInfo) {
             settingsService.$isLoaded().then(function() {
@@ -48,7 +48,7 @@
 
         // hacky, we asume that user won't click generate backup before this promise is finished
         if (!$scope.setupInfo.backupInfo.blocktrailPublicKeys) {
-            sdkService.sdk().then(function(sdk) {
+            sdkServiceIamOldKillMePLease.sdk().then(function(sdk) {
                 $scope.setupInfo.backupInfo.blocktrailPublicKeys = {};
                 angular.forEach(backupInfo.blocktrailPublicKeys, function(pubkey, key) {
                     $scope.setupInfo.backupInfo.blocktrailPublicKeys[pubkey.keyIndex] = bitcoinjs.HDNode.fromBase58(pubkey.pubKey, sdk.network);
@@ -97,7 +97,7 @@
                                     extraInfo.push({title: 'Email', value: settingsService.email});
                                 }
 
-                                var backup = new sdkService.BackupGenerator(
+                                var backup = new sdkServiceIamOldKillMePLease.BackupGenerator(
                                     $scope.setupInfo.identifier,
                                     $scope.setupInfo.backupInfo,
                                     extraInfo

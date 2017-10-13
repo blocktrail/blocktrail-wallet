@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('FeedbackCtrl', function($scope, sdkService, $btBackButtonDelegate, $q, $rootScope, $cordovaDevice) {
+    .controller('FeedbackCtrl', function($scope, sdkServiceIamOldKillMePLease, $btBackButtonDelegate, $q, $rootScope, $cordovaDevice) {
         $scope.appControl = {
             working: false,
             showMessage: false
@@ -57,7 +57,7 @@ angular.module('blocktrail.wallet')
             $scope.message = {title: 'SENDING', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
-            $q.when(sdkService.sdk())
+            $q.when(sdkServiceIamOldKillMePLease.sdk())
                 .then(function(sdk) {
                     return sdk.sendFeedback($scope.feedbackInput);
                 })

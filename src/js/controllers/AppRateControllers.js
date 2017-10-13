@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('AppRateCtrl', function($scope, $q, sdkService, trackingService, settingsService, AppRateService, $rootScope, $cordovaDevice) {
+    .controller('AppRateCtrl', function($scope, $q, sdkServiceIamOldKillMePLease, trackingService, settingsService, AppRateService, $rootScope, $cordovaDevice) {
         $scope.appRateClass = "choose-stars";
         $scope.apprate = {
             feedbackMsg: "",
@@ -27,7 +27,7 @@ angular.module('blocktrail.wallet')
         $scope.sendFeedback = function() {
             trackingService.trackEvent(trackingService.EVENTS.APPRATE, {label: 'feedback'});
 
-            $q.when(sdkService.sdk())
+            $q.when(sdkServiceIamOldKillMePLease.sdk())
                 .then(function(sdk) {
                     var feedback = {
                         msg: $scope.apprate.feedbackMsg,

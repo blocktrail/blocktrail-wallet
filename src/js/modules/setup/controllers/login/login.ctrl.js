@@ -4,7 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupLoginCtrl", SetupLoginCtrl);
 
-    function SetupLoginCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, sdkService,
+    function SetupLoginCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, sdkServiceIamOldKillMePLease,
                             settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, trackingService) {
         $scope.retry = 0;
 
@@ -19,7 +19,7 @@
             if (newNetwork !== oldNetwork) {
                 $rootScope.switchNetwork(newNetwork);
                 launchService.storeNetwork(newNetwork);
-                sdkService.refreshNetwork();
+                sdkServiceIamOldKillMePLease.refreshNetwork();
             }
         });
 
@@ -49,6 +49,7 @@
         };
 
         $scope.twoFactorCode = null;
+
         $scope.login = function() {
             if (!$cordovaNetwork.isOnline()) {
                 $scope.retry++;

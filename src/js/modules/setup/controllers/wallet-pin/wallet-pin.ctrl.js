@@ -5,7 +5,7 @@
         .controller("SetupWalletPinCtrl", SetupWalletPinCtrl);
 
     function SetupWalletPinCtrl($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
-                                   sdkService, $cordovaDialogs, $ionicLoading, $log, $translate, $timeout, settingsService, CONFIG) {
+                                   sdkServiceIamOldKillMePLease, $cordovaDialogs, $ionicLoading, $log, $translate, $timeout, settingsService, CONFIG) {
         $scope.retry = 0;
         $scope.form = {
             pin: CONFIG.SETUP_PREFILL_PIN || "",
@@ -13,6 +13,9 @@
             identifier: $scope.setupInfo.identifier,
             password: $scope.setupInfo.password
         };
+
+        // TODO Continue here Create Spinner
+        $scope.isLoading = true;
 
         //disable back button
         $btBackButtonDelegate.setBackButton(angular.noop);
@@ -72,10 +75,11 @@
                     return;
                 }
             }
+
             $scope.retry = 0;
 
 
-            return $q.when(sdkService.sdk())
+            return $q.when(sdkServiceIamOldKillMePLease.sdk())
                 .then(function(sdk) {
                     $scope.sdk = sdk;
                     $log.debug('initialising wallet: ' + $scope.setupInfo.identifier, $scope.sdk);

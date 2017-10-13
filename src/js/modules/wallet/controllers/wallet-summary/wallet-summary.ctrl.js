@@ -7,7 +7,18 @@
     function WalletSummaryCtrl($scope, $rootScope, $log, $ionicScrollDelegate, $q,
                                $timeout, Wallet, $translate, $stateParams, AppRateService, CurrencyConverter,
                                settingsService, buyBTCService, $ionicPopover, notificationService) {
-        AppRateService.init();
+
+
+
+        $scope.logToConsole = function() {
+            console.log("OLOLO");
+        }
+
+        // $scope.transactionInfo = null;
+
+        // $scope.txInfoTemplate = "templates/wallet/partials/wallet.partial.tx-info.html";
+
+        /*AppRateService.init();
         notificationService.backupNotification();
 
         // update balance from cache
@@ -316,7 +327,7 @@
 
         $scope.$on('scroll.refreshComplete', function() {
             $scope.displaySpinner = false;
-        });
+        });*/
 
     }
 })();

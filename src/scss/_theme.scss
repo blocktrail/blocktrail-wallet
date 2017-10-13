@@ -645,6 +645,15 @@ $balance-display-height: 40vw;
 
 @import "partials/address-lookup";
 
+@import "partials/vertical-alignment";
+
+@import "partials/dialogs";
+
+@import "controllers/setup/start";
+@import "controllers/setup/create-new-accout";
+
+
+
 /*
 .bar {
     border-style: solid;    //nocommit, handled by some funky ass crap by ionic that isn't visible in the browser

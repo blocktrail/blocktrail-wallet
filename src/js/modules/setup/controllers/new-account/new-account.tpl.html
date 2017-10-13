@@ -1,0 +1,72 @@
+<ion-view class="state-setup state-create-new-accout" ng-class="{'blur-me': appControl.showMessage}">
+    <ion-nav-title class="">{{ 'SETUP_REGISTER' | translate }}</ion-nav-title>
+
+    <ion-nav-buttons side="left">
+        <button ng-click="$btBackButtonDelegate.goBack($event)"
+                class="button button-clear icon bt-back-button"
+                ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content scroll="true">
+        <form
+            class="form-create-new-account"
+            name="registerForm"
+            novalidate
+        >
+            <div class="card">
+                <!-- Email -->
+                <ion-item>
+                    <input
+                        type="email"
+                        placeholder="{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}"
+                        name="email"
+                        ng-model="form.email"
+                        required
+                    >
+                </ion-item>
+
+                <!-- Password -->
+                <ion-item>
+                    <input
+                        class="form-control"
+                        type="password"
+                        placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}"
+                        name="password"
+                        ng-model="form.password"
+                        required
+                    >
+
+                    <div class="password-check-icon">
+                        <i class="icon ion-close-circled text-bad" ng-if="form.passwordCheck && form.passwordCheck.score < 2"></i>
+                        <i class="icon ion-close-circled text-warning" ng-if="form.passwordCheck && form.passwordCheck.score == 2"></i>
+                        <i class="icon ion-checkmark-circled text-good" ng-if="form.passwordCheck && form.passwordCheck.score >= 3"></i>
+                    </div>
+
+                    <div class="password-check-message" ng-class="'password-checker-score-' + form.passwordCheck.score" ng-if="form.passwordCheck">
+                        <span ng-if="form.passwordCheck.score == 0">{{ 'PASSWORD_SUPER_WEAK' | translate }} </span>
+                        <span ng-if="form.passwordCheck.score == 1">{{ 'PASSWORD_WEAK' | translate }} </span>
+                        <span ng-if="form.passwordCheck.score == 2">{{ 'PASSWORD_MEDIOCRE' | translate }} </span>
+                        <span ng-if="form.passwordCheck.score == 3">{{ 'PASSWORD_STRONG' | translate }} </span>
+                        <span ng-if="form.passwordCheck.score >= 4">{{ 'PASSWORD_SUPER_STRONG' | translate }} </span>
+                        <span ng-bind-html="'PASSWORD_TIME_TO_CRACK' | translate:form.passwordCheck"></span>
+                    </div>
+
+                </ion-item>
+
+                <!-- Terms of service -->
+                <ion-item>
+                    <ion-checkbox ng-model="form.termsOfService" name="termsOfService" required="true">
+                        {{ SETUP_TERMS_OF_SERVICE_TEXT | translate }}
+                    </ion-checkbox>
+                </ion-item>
+
+                <!-- Submit button -->
+                <ion-item class="item-borderless">
+                    <button class="button button-block" ng-click="onSubmitFormRegister(registerForm)">{{ 'SETUP_REGISTER' | translate }}</button>
+                </ion-item>
+            </div>
+        </form>
+    </ion-content>
+
+</ion-view>

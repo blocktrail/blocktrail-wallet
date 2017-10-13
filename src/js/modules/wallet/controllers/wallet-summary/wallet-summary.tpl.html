@@ -1,14 +1,47 @@
 <div class="state-wallet state-summary">
-    <ion-view ng-class="{'blur-me': appControl.showTransactionInfo}">
+
+    <ion-view>
         <ion-nav-title class="">{{ 'MY_WALLET' | translate }}</ion-nav-title>
+
+        <ion-nav-buttons side="right">
+            <div class="button button-clear button-quickscan" nav-direction="forward" ui-sref="app.wallet.send.qrcode({backdrop: true})"><i class="icon-qrcode"></i></div>
+        </ion-nav-buttons>
+
+
+        <!-- TODO review this -->
+        <!-- <user-balance-display ng-class="'maximise'"></user-balance-display> -->
+
+
+
+        <ion-content delegate-handle="txScroll" on-scroll="onScroll(val)">
+            <div class="text-center">
+                <ion-spinner ng-if="true"></ion-spinner>
+            </div>
+
+
+            <h1>SUMMERY1234</h1>
+
+
+            <p ng-click="logToConsole()">TEST link</a>
+        </ion-content>
+    </ion-view>
+
+    <!--<overlay-screen
+                    template="txInfoTemplate"
+                    data="transactionInfo">
+    </overlay-screen>&ndash;&gt;-->
+
+
+    <!--<ion-view ng-class="{'blur-me': appControl.showTransactionInfo}">
+        <ion-nav-title class="">{{ 'MY_WALLET' | translate }}</ion-nav-title>
+
         <ion-nav-buttons side="right">
             <div class="button button-clear button-quickscan" nav-direction="forward" ui-sref="app.wallet.send.qrcode({backdrop: true})"><i class="icon-qrcode"></i></div>
         </ion-nav-buttons>
 
         <user-balance-display ng-class="'maximise'">
-            <!-- /-->
+            &lt;!&ndash; /&ndash;&gt;
         </user-balance-display>
-
 
         <ion-content delegate-handle="txScroll" on-scroll="onScroll(val)">
             <div class="text-center"><ion-spinner ng-if="displaySpinner"></ion-spinner></div>
@@ -74,7 +107,7 @@
                                 <div class="tx-type">
                                     <span class="tx-display-name">{{ transaction.contact && transaction.contact.displayName || transaction.altDisplay }}</span>
                                     <div class="tx-time">{{ transaction.time | amDateFormat : 'h:mm a' : 'unix' }}</div>
-                                    <!--<canvas-display text="(transaction.contact && transaction.contact.displayName || transaction.altDisplay)" width="100%" height="40"></canvas-display>-->
+                                    &lt;!&ndash;<canvas-display text="(transaction.contact && transaction.contact.displayName || transaction.altDisplay)" width="100%" height="40"></canvas-display>&ndash;&gt;
                                 </div>
                             </div>
                             <div class="col col-50">
@@ -88,15 +121,18 @@
                     </a>
                 </div>
             </ion-list>
+
             <ion-infinite-scroll
                 ng-if="canLoadMoreTransactions"
                 on-infinite="loadMoreTransactions()"
                 immediate-check="false"
                 distance="30%">
             </ion-infinite-scroll>
+
             <div class="text-center opacity-50" style="margin-top: 1rem;" ng-if="!canLoadMoreTransactions">
                 <span class="sentence-case">{{ transactionList.length == 0 && ('WALLET_NO_TXS' | translate ) || ('WALLET_NO_MORE_TXS' | translate ) }}</span>
             </div>
+
         </ion-content>
 
     </ion-view>
@@ -108,5 +144,5 @@
                     swipe-left-close="true"
                     on-close="onHideTransaction()"
                     data="transactionInfo">
-    </overlay-screen>
+    </overlay-screen>-->
 </div>

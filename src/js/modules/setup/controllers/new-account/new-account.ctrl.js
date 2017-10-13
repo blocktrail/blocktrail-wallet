@@ -2,13 +2,157 @@
     "use strict";
 
     angular.module("blocktrail.setup")
-        .controller("SetupRegisterCtrl", SetupRegisterCtrl);
+        .controller("SetupNewAccountCtrl", SetupNewAccountCtrl);
 
-    function SetupRegisterCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, $log,
-                                 launchService, CONFIG, settingsService, $btBackButtonDelegate,
-                                 $cordovaDialogs, $translate, trackingService, PasswordStrength, $filter) {
-        $scope.retry = 0;
+    function SetupNewAccountCtrl($scope, $state, $q, CONFIG, $filter, formHelperService, sdkService,
+                                 modalService, passwordStrengthService, newAccountFormService) {
+
+        var listenerForm;
+        var listenerFormPassword;
+
+        // TODO Loading Spinner
+        $scope.isLoading = false;
+
+        $scope.form = {
+            // username: null,
+            email: null,
+            password: null,
+            passwordCheck: null,
+            networkType: sdkService.getNetworkType(),
+            termsOfService: false
+        };
+
+        // Listeners
+        listenerForm = $scope.$watch("form", onFormChange, true);
+        listenerFormPassword = $scope.$watch("form.password", onFormPasswordChange, true);
+
+        $scope.$on("$destroy", onScopeDestroy);
+
+        // Methods
+        $scope.onSubmitFormRegister = onSubmitFormRegister;
+
+        /**
+         * On form change handler
+         * @param newValue
+         * @param oldValue
+         */
+        function onFormChange(newValue, oldValue) {
+            if(newValue.networkType !== oldValue.networkType) {
+                sdkService.setNetworkType(newValue.networkType);
+            }
+        }
+
+        /**
+         * On form password change handler
+         * @param newValue
+         */
+        function onFormPasswordChange(newValue) {
+            if (!newValue) {
+                $scope.form.passwordCheck = null;
+                return $q.when(false);
+            }
+
+            return passwordStrengthService
+                .checkPassword($scope.form.password, [$scope.form.username, $scope.form.email, "BTC.com", "wallet"])
+                .then(function(result) {
+                    result.duration = $filter("duration")(result.crack_times_seconds.online_no_throttling_10_per_second * 1000);
+                    $scope.form.passwordCheck = result;
+                    return result;
+                });
+        }
+
+        /**
+         * On submit the form register handler
+         * @param registerForm
+         * @return { boolean | promise }
+         */
+        function onSubmitFormRegister(registerForm) {
+            formHelperService.setAllDirty(registerForm);
+
+            if (registerForm.email.$invalid) {
+                modalService.alert({
+                    body: 'MSG_BAD_EMAIL'
+                });
+                return false;
+            }
+
+            if (registerForm.password.$invalid || $scope.form.passwordCheck.score < CONFIG.REQUIRED_PASSWORD_STRENGTH) {
+                modalService.alert({
+                    body: 'MSG_WEAK_PASSWORD'
+                });
+                return false;
+            }
+
+            if (!$scope.form.termsOfService) {
+                modalService.alert({
+                    body: 'MSG_BAD_LEGAL'
+                });
+                return false;
+            }
+
+            return modalService.confirmPassword()
+                .then(function(dialogResult) {
+                    if(dialogResult !== null) {
+                        if ($scope.form.password === dialogResult.trim()) {
+                            // $scope.isLoading = true;
+
+                            register();
+                        } else {
+                            modalService.alert({
+                                body: 'MSG_BAD_PASSWORD_REPEAT'
+                            });
+                        }
+                    }
+                });
+        }
+
+        /**
+         * Register
+         * @return { promise }
+         */
+        function register() {
+            return newAccountFormService
+                .register($scope.form)
+                .then(registerFormSuccessHandler, registerFormErrorHandler);
+        }
+
+        /**
+         * Register form success handler
+         */
+        function registerFormSuccessHandler() {
+            $scope.setupInfo.password = $scope.form.password;
+
+            $scope.isLoading = false;
+
+            $state.go('app.setup.pin');
+            // $state.go('app.setup.wallet');
+        }
+
+        /**
+         * Register form error handler
+         */
+        function registerFormErrorHandler(error) {
+            $scope.errMsg = error;
+            $scope.isLoading = false;
+        }
+
+        /**
+         * On the scope destroy handler
+         */
+        function onScopeDestroy() {
+            if(listenerForm) {
+                listenerForm();
+            }
+
+            if(listenerFormPassword) {
+                listenerFormPassword();
+            }
+        }
+
+        // TODO OLD Remove
+        /*$scope.retry = 0;
         $scope.usernameTaken = null;
+
         $scope.form = {
             username: null,
             email: null,
@@ -22,7 +166,7 @@
             if (newNetwork !== oldNetwork) {
                 $rootScope.switchNetwork(newNetwork);
                 launchService.storeNetwork(newNetwork);
-                sdkService.refreshNetwork();
+                sdkServiceIamOldKillMePLease.refreshNetwork();
             }
         });
 
@@ -74,15 +218,11 @@
                 return false;
             }
 
-            //validate
-            if (!$scope.form.registerWithEmail && (!$scope.form.username || $scope.form.username.trim().length < 4)) {
-                $scope.message = {title: 'FAIL', title_class: 'text-bad', body: 'MSG_BAD_USERNAME'};
-                $scope.showMessage();
-                return false;
-            }
             if ($scope.form.registerWithEmail && !$scope.form.email) {
                 $scope.message = {title: 'FAIL', title_class: 'text-bad', body: 'MSG_BAD_EMAIL'};
-                $scope.showMessage();
+                modalService.alert({
+                    body: 'MSG_BAD_EMAIL'
+                });
                 return false;
             }
             if (!$scope.form.password) {
@@ -105,7 +245,7 @@
                         $translate.instant('SETUP_PASSWORD_REPEAT_PLACEHOLDER'),
                         [$translate.instant('OK'), $translate.instant('CANCEL')],
                         "",
-                        /* isPassword= */true
+                        /!* isPassword= *!/true
                     )
                         .then(function (dialogResult) {
                             if (dialogResult.buttonIndex == 1) {
@@ -125,7 +265,7 @@
                             }
                         });
                 });
-        };
+        };*/
 
 
         $scope.register = function() {
@@ -168,12 +308,14 @@
                 device_name: ([device.platform, device.model].clean().join(" / ")) || 'Unknown Device',
                 skip_two_factor: true // will make the resulting API key not require 2FA in the future
             };
+
             $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "t" : "") + ($rootScope.NETWORK) + "/mywallet/register", postData)
                 .then(function(result) {
                         trackingService.setUserTrackingId(result.tracking_id);
                         trackingService.trackEvent(trackingService.EVENTS.SIGN_UP);
 
-                        return launchService.storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
+                        return launchService
+                            .storeAccountInfo(_.merge({}, {secret: secret, encrypted_secret: encryptedSecret}, result.data)).then(function() {
                             $scope.setupInfo.password = $scope.form.password;
 
                             $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: ''};

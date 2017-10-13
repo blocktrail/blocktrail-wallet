@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').service(
     'settingsService',
-    function($q, storageService, sdkService, $log, $window) {
+    function($q, storageService, sdkServiceIamOldKillMePLease, $log, $window) {
 
     var DEFAULT_ACCOUNT_CREATED = 1478097190;
 
@@ -146,7 +146,7 @@ angular.module('blocktrail.wallet').service(
      */
     this.$syncProfileUp = function() {
         var self = this;
-        return $q.when(sdkService.sdk())
+        return $q.when(sdkServiceIamOldKillMePLease.sdk())
             .then(function(sdk) {
                 var profileData = {
                     profilePic: self.profilePic
@@ -177,7 +177,7 @@ angular.module('blocktrail.wallet').service(
      */
     this.$syncProfileDown = function() {
         var self = this;
-        return $q.when(sdkService.sdk())
+        return $q.when(sdkServiceIamOldKillMePLease.sdk())
             .then(function(sdk) {
                 return sdk.getProfile();
             })
@@ -197,7 +197,7 @@ angular.module('blocktrail.wallet').service(
     this.$syncSettingsUp = function() {
         var self = this;
 
-        return $q.when(sdkService.sdk())
+        return $q.when(sdkServiceIamOldKillMePLease.sdk())
             .then(function(sdk) {
                 var settingsData = {
                     localCurrency: self.localCurrency,
@@ -217,7 +217,7 @@ angular.module('blocktrail.wallet').service(
 
     this.$syncSettingsDown = function() {
         var self = this;
-        return $q.when(sdkService.sdk())
+        return $q.when(sdkServiceIamOldKillMePLease.sdk())
             .then(function(sdk) {
                 return sdk.getSettings();
             })

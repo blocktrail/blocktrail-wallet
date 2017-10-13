@@ -60,5 +60,55 @@
 
     "DEFAULT_IDENTIFIER": "mywallet",
     
-    "NULL": null // just here so we can have a trailing , on every line
+    "NULL": null, // just here so we can have a trailing , on every line
+
+    // TODO remove unused properties
+    "NETWORKS_ENABLED": ["tBTC", "tBCC"],
+
+    "NETWORKS": {
+        "BTC": {
+            "NETWORK": "BTC",
+            "NETWORK_LONG": "Bitcoin",
+            "TICKER": "BTC",
+            "TICKER_LONG": "Bitcoin",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
+            "BUYBTC": true,
+            "PRIOBOOST": true,
+            "EXPLORER_ADDRESS_URL": "https://btc.com",
+            "EXPLORER_TX_URL": "https://btc.com"
+        },
+        "BCC": {
+            "NETWORK": "BCC",
+            "NETWORK_LONG": "BitcoinCash",
+            "TICKER": "BCC",
+            "TICKER_LONG": "BitcoinCash",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": 478559,
+            "BUYBTC": false,
+            "PRIOBOOST": false,
+            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/BCC/address",
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/BCC/tx"
+        },
+        "tBTC": {
+            "NETWORK": "tBTC",
+            "NETWORK_LONG": "Bitcoin TESTNET",
+            "TICKER": "tBTC",
+            "TICKER_LONG": "Bitcoin TESTNET",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
+            "BUYBTC": true,
+            "PRIOBOOST": false,
+            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBTC/address",
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBTC/tx"
+        },
+        "tBCC": {
+            "NETWORK": "tBCC",
+            "NETWORK_LONG": "BitcoinCash TESTNET",
+            "TICKER": "tBCC",
+            "TICKER_LONG": "BitcoinCash TESTNET",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
+            "BUYBTC": false,
+            "PRIOBOOST": false,
+            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBCC/address",
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx"
+        }
+    }
 }
