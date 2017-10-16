@@ -96,6 +96,8 @@
                 });
         }
 
+        // TODO Clean the current data and CHECK the SPINNER
+
         function sdkInitWallet(sdkObject) {
             sdk = sdkObject;
             sdkReadOnlyObject = sdkService.getReadOnlySdkData();

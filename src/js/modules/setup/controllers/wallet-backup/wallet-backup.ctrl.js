@@ -8,7 +8,7 @@
                                    $ionicActionSheet, $log, $cordovaFileOpener2, $cordovaFile, sdkServiceIamOldKillMePLease,
                                    launchService, settingsService, $timeout) {
 
-        $scope.setupInfo.identifier = backupInfo.identifier;
+        /*$scope.setupInfo.identifier = backupInfo.identifier;
         $scope.setupInfo.backupInfo = {
             walletVersion: backupInfo.walletVersion,
             encryptedPrimarySeed: backupInfo.encryptedPrimarySeed,
@@ -45,7 +45,7 @@
 
         //disable back button
         $btBackButtonDelegate.setBackButton(angular.noop);
-        $btBackButtonDelegate.setHardwareBackButton(angular.noop);
+        $btBackButtonDelegate.setHardwareBackButton(angular.noop);*/
 
         $scope.showExportOptions = function() {
             var optionButtons = [
@@ -56,7 +56,7 @@
             $scope.hideExportOptions = $ionicActionSheet.show({
                 buttons: optionButtons,
                 cancelText: $translate.instant('CANCEL'),
-                cancel: function() {},
+                cancel: "",
                 buttonClicked: function(index) {
                     $timeout(function() {
                         $q.when(true)

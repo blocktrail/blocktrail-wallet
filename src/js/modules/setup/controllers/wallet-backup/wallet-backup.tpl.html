@@ -1,19 +1,25 @@
-<ion-view class="state-setup state-backup" ng-class="{'blur-me': appControl.showMessage}">
+<ion-view class="state-setup state-backup">
     <ion-nav-title class="">{{ 'SETUP_WALLET_BACKUP' | translate }}</ion-nav-title>
 
     <ion-content>
-        <div class="backup-info padding-t card">
-            <div class="item item-text-wrap">
-                {{ 'MSG_BACKUP_DESCRIPTION' | translate }}
+        <div class="card">
+            <div class="list-header">
+                <p>{{ 'MSG_BACKUP_DESCRIPTION' | translate }}</p>
             </div>
-            <div class="list">
-                <div class="item no-padding-b">
-                    <button class="button send-button button-block button-energized" ng-click="showExportOptions()">{{ 'SAVE' | translate }}</button>
-                </div>
-                <div class="item item-borderless">
-                    <a ng-click="skipBackup()" class="pull-right button button-small button-neutral sentence-case">{{ 'SETUP_SKIP_BACKUP' | translate }}...</a>
-                </div>
-            </div>
+
+            <ion-item>
+                <button
+                    class="button send-button button-block button-energized"
+                    ng-click="showExportOptions()"
+                >{{ 'SAVE' | translate }}</button>
+            </ion-item>
+
+            <ion-item>
+                <button
+                    class="pull-right button button-small button-neutral sentence-case"
+                    ng-click="skipBackup()"
+                >{{ 'SETUP_SKIP_BACKUP' | translate }}...</button>
+            </ion-item>
         </div>
 
         <div class="card" ng-show="appControl.saveButtonClicked">
