@@ -14,7 +14,6 @@
         $scope.isLoading = false;
 
         $scope.form = {
-            // username: null,
             email: null,
             password: null,
             passwordCheck: null,
@@ -94,8 +93,6 @@
                 .then(function(dialogResult) {
                     if(dialogResult !== null) {
                         if ($scope.form.password === dialogResult.trim()) {
-                            // $scope.isLoading = true;
-
                             register();
                         } else {
                             modalService.alert({
@@ -111,6 +108,8 @@
          * @return { promise }
          */
         function register() {
+            modalService.showSpinner();
+
             return newAccountFormService
                 .register($scope.form)
                 .then(registerFormSuccessHandler, registerFormErrorHandler);
@@ -121,19 +120,18 @@
          */
         function registerFormSuccessHandler() {
             $scope.setupInfo.password = $scope.form.password;
-
-            $scope.isLoading = false;
-
+            modalService.hideSpinner();
             $state.go('app.setup.pin');
-            // $state.go('app.setup.wallet');
         }
 
         /**
          * Register form error handler
          */
         function registerFormErrorHandler(error) {
-            $scope.errMsg = error;
-            $scope.isLoading = false;
+            modalService.hideSpinner();
+            modalService.alert({
+                body: error
+            });
         }
 
         /**
@@ -267,8 +265,7 @@
                 });
         };*/
 
-
-        $scope.register = function() {
+        /*$scope.register = function() {
             if (!$cordovaNetwork.isOnline()) {
                 $scope.retry++;
 
@@ -363,6 +360,6 @@
                         }, true);
 
                     });
-        };
+        };*/
     }
 })();

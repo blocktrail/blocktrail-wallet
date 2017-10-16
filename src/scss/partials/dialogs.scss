@@ -31,4 +31,11 @@
         min-height: 90%;
         max-height: 90%;
     }
+
+    &.dialog-alert,
+    &.dialog-spinner {
+        h1, h2, h3, h4, p {
+            white-space: normal;
+        }
+    }
 }

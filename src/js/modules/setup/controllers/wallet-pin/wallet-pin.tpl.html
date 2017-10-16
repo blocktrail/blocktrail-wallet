@@ -1,10 +1,7 @@
 <ion-view class="state-setup state-pin" ng-class="{'blur-me': appControl.showMessage}">
     <ion-nav-title class="">{{ 'WALLET_PIN' | translate }}</ion-nav-title>
 
-    <ion-content
-        ng-class="{'has-loading': isLoading}"
-        scroll="true"
-    >
+    <ion-content scroll="true">
         <form
             class="form-create-new-account"
             name="registerForm"
@@ -38,41 +35,11 @@
 
                 <!-- Submit button -->
                 <ion-item>
-                    <button class="button button-block" ng-click="setupWallet()">{{ 'CONTINUE' | translate }}</button>
+                    <button class="button button-block" ng-click="onSubmitFormPin()">{{ 'CONTINUE' | translate }}</button>
                 </ion-item>
 
-                <!--<div class="list">-->
-                <!--<label class="item item-input item-floating-label">-->
-                <!--<span class="input-label text-neutral">{{ 'SETUP_PIN_PLACEHOLDER' | translate }}</span>-->
-
-                <!--</label>-->
-                <!--<label class="item item-input item-floating-label">-->
-                <!--<span class="input-label text-neutral">{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}</span>-->
-                <!--<input class="password-mask" type="tel" placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}"-->
-                <!--ng-model="form.pinRepeat"-->
-                <!--ng-enter="setupWallet()"-->
-                <!--ng-tab="setupWallet()">-->
-                <!--</label>-->
-                <!--</div>-->
-
-                <!--<div class="row text-center">
-                    <div class="col col-offset-25 col-50 padding-bottom">
-                        <button class="button button-block" ng-click="setupWallet()">{{ 'CONTINUE' | translate }}</button>
-                    </div>
-                </div>-->
             </div>
         </form>
     </ion-content>
 
-    <div class="bar bar-loading bar-assertive" ng-if="isLoading">
-        Loading...
-    </div>
-
 </ion-view>
-
-<!--<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
-    <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
-    <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
-    <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
-</div>-->

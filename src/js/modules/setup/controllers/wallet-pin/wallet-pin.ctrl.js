@@ -4,18 +4,342 @@
     angular.module("blocktrail.setup")
         .controller("SetupWalletPinCtrl", SetupWalletPinCtrl);
 
-    function SetupWalletPinCtrl($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate,
-                                   sdkServiceIamOldKillMePLease, $cordovaDialogs, $ionicLoading, $log, $translate, $timeout, settingsService, CONFIG) {
-        $scope.retry = 0;
+    function SetupWalletPinCtrl($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, launchService, $btBackButtonDelegate, modalService, blocktrailSDK,
+                                sdkService, $cordovaDialogs, $ionicLoading, $log, $translate, $timeout, settingsService, CONFIG) {
+        var retry = 0;
+        var sdk = null;
+        var sdkReadOnlyObject = null;
+
         $scope.form = {
-            pin: CONFIG.SETUP_PREFILL_PIN || "",
-            pinRepeat: CONFIG.SETUP_PREFILL_PIN || "",
+            pin: "",
+            pinRepeat: "",
             identifier: $scope.setupInfo.identifier,
             password: $scope.setupInfo.password
         };
 
+        // Methods
+        $scope.onSubmitFormPin = onSubmitFormPin;
+
+        function onSubmitFormPin() {
+            if ($scope.form.pin.trim().length < 4) {
+                modalService.alert({
+                    body: 'MSG_BAD_PIN_LENGTH'
+                });
+                return false;
+            }
+
+            if ($scope.form.pin.trim() !== $scope.form.pinRepeat.trim()) {
+                modalService.alert({
+                    body: 'MSG_BAD_PIN_REPEAT'
+                });
+                return false;
+            }
+
+            createWallet();
+        }
+        
+        function createWallet() {
+            modalService.showSpinner({
+                title: "",
+                body: 'CREATING_INIT_WALLET'
+            });
+
+            isOnline();
+        }
+
+        function isOnline() {
+            if (!$cordovaNetwork.isOnline()) {
+                retry++;
+
+                if (retry <= 5) {
+                    $timeout(function() {
+                        isOnline();
+                    }, 300);
+                } else {
+                    retry = 0;
+                    modalService.hideSpinner();
+                    modalService.alert({
+                        body: 'MSG_BAD_NETWORK'
+                    });
+                }
+            } else {
+                retry = 0;
+                initWallet();
+            }
+        }
+
+        function initWallet() {
+            return $q.when(launchService.getAccountInfo())
+                .then(function(accountInfo) {
+                    sdkService.setAccountInfo(accountInfo);
+                    return sdkService.getSdkByActiveNetwork();
+                })
+                .then(sdkInitWallet)
+                .then(initWalletSuccessHandler, initWalletErrorHandler)
+                .then(setSdkMainMobileWallet)
+                .then(storeIdentityAndEncryptedPassword)
+                .then(stashWalletSecret)
+                .then(storeBackupInfo)
+                .then(hallelujah)
+                .catch(function(e) {
+                    $log.error("Wallet pin: Error: ", e.toString());
+                    modalService.hideSpinner();
+
+                    if (e == 'CANCELLED') {
+                        // user canceled action
+                        return false;
+                    } else {
+                        modalService.alert({
+                            body: e.toString()
+                        });
+                    }
+                });
+        }
+
+        function sdkInitWallet(sdkObject) {
+            sdk = sdkObject;
+            sdkReadOnlyObject = sdkService.getReadOnlySdkData();
+            $log.debug("Initialising wallet: " + $scope.setupInfo.identifier, sdk);
+
+            return sdk.initWallet({
+                identifier: $scope.setupInfo.identifier,
+                password: $scope.setupInfo.password
+            });
+        }
+
+        function initWalletSuccessHandler(wallet) {
+            $analytics.eventTrack('initWallet', { category: 'Events' });
+
+            // time to upgrade to V3 ppl!
+            if (wallet.walletVersion != blocktrailSDK.Wallet.WALLET_VERSION_V3) {
+                modalService.updateSpinner({
+                    title: "UPGRADING_WALLET",
+                    body: 'UPGRADING_WALLET_BODY'
+                });
+
+                return wallet.upgradeToV3($scope.setupInfo.password)
+                    .progress(function(progress) {
+                        /*
+                         * per step we increment the progress bar and display some new progress text
+                         * some of the text doesn't really match what is being done,
+                         * but we just want the user to feel like something is happening.
+                         */
+                        switch (progress) {
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_START:
+                                modalService.updateSpinner({title: "UPGRADING_WALLET", body: 'UPGRADING_WALLET_BODY'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_SECRET:
+                                modalService.updateSpinner({title: "UPGRADING_WALLET", body: 'CREATING_GENERATE_PRIMARYKEY'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_PRIMARY:
+                                modalService.updateSpinner({title: "UPGRADING_WALLET", body: 'CREATING_GENERATE_BACKUPKEY'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_RECOVERY:
+                                modalService.updateSpinner({title: "UPGRADING_WALLET", body: 'CREATING_GENERATE_RECOVERY'});
+                                break;
+                        }
+
+                    })
+                    .then(function() {
+                        modalService.updateSpinner({title: "UPGRADING_WALLET", body: 'UPGRADING_WALLET_BODY'});
+
+                        return wallet;
+                    });
+
+            } else {
+                return wallet;
+            }
+
+        }
+
+        function initWalletErrorHandler(error) {
+            if (error.message && (error.message.match(/not found/) || error.message.match(/couldn't be found/))) {
+                modalService.updateSpinner({title: "CREATING_WALLET", body: 'PLEASE_WAIT'});
+
+                var timestamp = (new Date).getTime();
+                $analytics.eventTrack('createNewWallet', { category: 'Events' });
+
+                // new identifier
+                $scope.setupInfo.identifer = CONFIG.DEFAULT_IDENTIFIER + "-" + randomBytes(8).toString('hex');
+
+                // generate support secret, 6 random digits
+                var supportSecret = randDigits(6);
+
+                return sdk.createNewWallet({
+                        identifier: $scope.setupInfo.identifier,
+                        password: $scope.setupInfo.password,
+                        walletVersion: CONFIG.WALLET_DEFAULT_VERSION,
+                        support_secret: supportSecret
+                    })
+                    .progress(function(progress) {
+                        /*
+                         * per step we increment the progress bar and display some new progress text
+                         * some of the text doesn't really match what is being done,
+                         * but we just want the user to feel like something is happening.
+                         */
+                        switch (progress) {
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_START:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'PLEASE_WAIT'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_SECRET:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'CREATING_GENERATE_PRIMARYKEY'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_PRIMARY:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'CREATING_GENERATE_BACKUPKEY'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_ENCRYPT_RECOVERY:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'CREATING_GENERATE_RECOVERY'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_PRIMARY:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'CREATING_INIT_KEYS'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_BACKUP:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'CREATING_INIT_KEYS'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_SUBMIT:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'CREATING_SUBMIT_WALLET'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_INIT:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'CREATING_INIT_WALLET'});
+                                break;
+                            case blocktrailSDK.CREATE_WALLET_PROGRESS_DONE:
+                                modalService.updateSpinner({title: "CREATING_WALLET", body: 'CREATING_DONE'});
+                                break;
+                        }
+                    })
+                    .spread(function(wallet, backupInfo) {
+                        $log.debug('New wallet created in [' + ((new Date).getTime() - timestamp) + 'ms]');
+                        $scope.setupInfo.backupInfo = backupInfo;
+                        $scope.setupInfo.backupInfo.supportSecret = supportSecret;
+
+                        return $q.when(wallet);
+                    });
+                // TODO Review this logic with Ruben !!!
+            } else if (error.message && (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError)) {
+                // wallet exists but with different password
+                $log.debug("Wallet with identifier [" + $scope.setupInfo.identifier + "] already exists, prompting for old password");
+
+                return $cordovaDialogs.alert($translate.instant('MSG_WALLET_PASSWORD_MISMATCH'), $translate.instant('SETUP_EXISTING_WALLET'), $translate.instant('OK'))
+                    .then(function() {
+                        //prompt for old wallet password
+                        $scope.message = {title: 'LOADING_WALLET', title_class: 'text-neutral', body: ''};
+                        return $scope.promptWalletPassword();
+                    });
+            } else {
+                $log.error('error encountered', error);
+                return $q.reject(error);
+            }
+        }
+
+        function setSdkMainMobileWallet(wallet) {
+            // set the wallet as the main wallet
+            $log.debug('setting wallet as main wallet');
+            modalService.updateSpinner({title: "", body: 'SAVING_WALLET'});
+            return sdk.setMainMobileWallet($scope.setupInfo.identifier).then(function() { return wallet; });
+        }
+        
+        function storeIdentityAndEncryptedPassword(wallet) {
+            // store the identity and encrypted password
+            var encryptedPassword = null;
+            var encryptedSecret = null;
+
+            // legacy wallets use password instead of secret,
+            // using secret is a lot better since someone cracking a PIN won't get your much reused password xD
+            if (wallet.secret) {
+                encryptedSecret = CryptoJS.AES.encrypt(wallet.secret.toString('hex'), $scope.form.pin).toString();
+            } else {
+                encryptedPassword = CryptoJS.AES.encrypt($scope.setupInfo.password, $scope.form.pin).toString();
+            }
+
+            $log.debug('Saving wallet info', $scope.setupInfo.identifier, encryptedPassword, encryptedSecret);
+
+            return launchService.storeWalletInfo($scope.setupInfo.identifier, encryptedPassword, encryptedSecret)
+                .then(function() {
+                    return wallet;
+                });
+        }
+        
+        function stashWalletSecret(wallet) {
+            var walletSecret = wallet.secret;
+
+            if (wallet.walletVersion !== 'v2') {
+                walletSecret = walletSecret.toString('hex');
+            }
+            // while logging in we stash the secret so we can decrypt the glidera access token
+            launchService.stashWalletSecret(walletSecret);
+
+            wallet.lock();
+        }
+
+        function storeBackupInfo() {
+            if ($scope.setupInfo.backupInfo) {
+                // TODO What is it !!!
+                window.fabric.Answers.sendSignUp("App", true);
+                facebookConnectPlugin.logEvent("fb_mobile_complete_registration");
+
+                if (CONFIG.GAPPTRACK_ID) {
+                    if ($rootScope.isIOS && CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS) {
+                        GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_SIGNUP_LABELS.iOS, "1.00", false);
+                    }
+                    if ($rootScope.isAndroid && CONFIG.GAPPTRACK_ACTIVATE_LABELS.android) {
+                        GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_SIGNUP_LABELS.android, "1.00", false);
+                    }
+                }
+
+                //store the backup info temporarily
+                $log.debug('saving backup info');
+                var pubKeys = [];
+
+                angular.forEach($scope.setupInfo.backupInfo.blocktrailPublicKeys, function(pubKey, keyIndex) {
+                    pubKeys.push({
+                        keyIndex: keyIndex,
+                        pubKey: pubKey.toBase58()
+                    });
+                });
+
+                return launchService.storeBackupInfo({
+                    identifier: $scope.setupInfo.identifier,
+                    walletVersion: $scope.setupInfo.backupInfo.walletVersion,
+                    encryptedPrimarySeed: $scope.setupInfo.backupInfo.encryptedPrimarySeed,
+                    encryptedSecret: $scope.setupInfo.backupInfo.encryptedSecret,
+                    backupSeed: $scope.setupInfo.backupInfo.backupSeed,
+                    recoveryEncryptedSecret: $scope.setupInfo.backupInfo.recoveryEncryptedSecret,
+                    blocktrailPublicKeys: pubKeys,
+                    supportSecret: $scope.setupInfo.backupInfo.supportSecret
+                });
+            }
+
+            return null;
+        }
+
+        function hallelujah() {
+            $log.debug('All done. Onwards to victory!');
+
+            modalService.hideSpinner();
+
+            // save in settings that the user has started the setup process
+            settingsService.$isLoaded()
+                .then(function() {
+                    settingsService.setupStarted = true;
+                    settingsService.$store();
+                });
+
+            if ($scope.setupInfo.backupInfo) {
+                // if a new wallet has been created, go to the wallet backup page
+                $state.go('app.setup.backup');
+            } else {
+                // else continue to profile, phone, etc setup (mark backup as saved)
+                settingsService.$isLoaded()
+                    .then(function() {
+                        settingsService.backupSaved = true;
+                        settingsService.$store();
+                    });
+                $state.go('app.setup.phone');
+            }
+        }
+
         // TODO Continue here Create Spinner
-        $scope.isLoading = true;
+        /*$scope.isLoading = true;
 
         //disable back button
         $btBackButtonDelegate.setBackButton(angular.noop);
@@ -78,7 +402,6 @@
 
             $scope.retry = 0;
 
-
             return $q.when(sdkServiceIamOldKillMePLease.sdk())
                 .then(function(sdk) {
                     $scope.sdk = sdk;
@@ -94,11 +417,11 @@
 
                         return wallet.upgradeToV3($scope.setupInfo.password)
                             .progress(function(progress) {
-                                /*
+                                /!*
                                  * per step we increment the progress bar and display some new progress text
                                  * some of the text doesn't really match what is being done,
                                  * but we just want the user to feel like something is happening.
-                                 */
+                                 *!/
                                 switch (progress) {
                                     case blocktrailSDK.CREATE_WALLET_PROGRESS_START:
                                         $scope.message = {title: 'UPGRADING_WALLET', title_class: 'text-neutral', body: 'UPGRADING_WALLET_BODY'};
@@ -146,11 +469,11 @@
                             support_secret: supportSecret
                         })
                             .progress(function(progress) {
-                                /*
+                                /!*
                                  * per step we increment the progress bar and display some new progress text
                                  * some of the text doesn't really match what is being done,
                                  * but we just want the user to feel like something is happening.
-                                 */
+                                 *!/
                                 switch (progress) {
                                     case blocktrailSDK.CREATE_WALLET_PROGRESS_START:
                                         $scope.message = {title: 'CREATING_WALLET', title_class: 'text-neutral', body: 'PLEASE_WAIT'};
@@ -190,7 +513,7 @@
                             })
                             ;
                     } else if (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError) {
-                        //wallet exists but with different password
+                        // wallet exists but with different password
                         $log.debug("wallet with identifier [" + $scope.setupInfo.identifier + "] already exists, prompting for old password");
                         return $cordovaDialogs.alert($translate.instant('MSG_WALLET_PASSWORD_MISMATCH'), $translate.instant('SETUP_EXISTING_WALLET'), $translate.instant('OK'))
                             .then(function() {
@@ -204,19 +527,19 @@
                     }
                 })
                 .then(function(wallet) {
-                    //set the wallet as the main wallet
+                    // set the wallet as the main wallet
                     $log.debug('setting wallet as main wallet');
                     $scope.message = {title: 'SAVING_WALLET', title_class: 'text-neutral', body: ''};
                     return $scope.sdk.setMainMobileWallet($scope.setupInfo.identifier).then(function() { return wallet; });
                 })
                 .then(function(wallet) {
-                    //store the identity and encrypted password
+                    // store the identity and encrypted password
                     $scope.message = {title: 'SAVING_WALLET', title_class: 'text-neutral', body: ''};
 
                     var encryptedPassword = null, encryptedSecret = null;
 
                     // legacy wallets use password instead of secret,
-                    //  using secret is a lot better since someone cracking a PIN won't get your much reused password xD
+                    // using secret is a lot better since someone cracking a PIN won't get your much reused password xD
                     if (wallet.secret) {
                         encryptedSecret = CryptoJS.AES.encrypt(wallet.secret.toString('hex'), $scope.form.pin).toString();
                     } else {
@@ -225,7 +548,10 @@
 
                     $log.debug('saving wallet info', $scope.setupInfo.identifier, encryptedPassword, encryptedSecret);
 
-                    return launchService.storeWalletInfo($scope.setupInfo.identifier, encryptedPassword, encryptedSecret).then(function() { return wallet; });
+                    return launchService.storeWalletInfo($scope.setupInfo.identifier, encryptedPassword, encryptedSecret)
+                        .then(function() {
+                            return wallet;
+                        });
                 })
                 .then(function(wallet) {
                     var walletSecret = wallet.secret;
@@ -300,14 +626,14 @@
                     $scope.appControl.working = false;
 
                     if (e == 'CANCELLED') {
-                        //user canceled action
+                        // user canceled action
                         return false;
                     } else {
                         $scope.message = {title: 'FAIL', title_class: 'text-bad', body: e.toString()};
                         $scope.showMessage();
                     }
                 });
-        };
+        };*/
 
         /**
          * prompt for a correct wallet password - repeats on bad password

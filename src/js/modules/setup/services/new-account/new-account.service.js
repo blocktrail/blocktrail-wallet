@@ -45,9 +45,7 @@
 
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/register";
 
-        debugger;
-
-        // TODO add it later
+        // TODO add this later
         /*self._trackingService.getBrowserFingerprint()
             .then(function(fingerprint) {
                 postData.browser_fingerprint = fingerprint.hash;
@@ -70,9 +68,6 @@
      */
     NewAccountFormService.prototype._storeAccountInfo = function(response) {
         var self = this;
-
-        debugger
-
         var accountInfo = self._lodash.merge({}, response.data);
 
         return self._launchService.storeAccountInfo(accountInfo)
