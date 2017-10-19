@@ -2,19 +2,19 @@
     "use strict";
 
     angular.module("blocktrail.core")
-        .controller("DialogConfirmPasswordCtrl", DialogAlertModalCtrl);
+        .controller("ModalConfirmPasswordCtrl", ModalConfirmPasswordCtrl);
 
-    function DialogAlertModalCtrl($scope) {
+    function ModalConfirmPasswordCtrl($scope) {
         $scope.form = {
             confirmPassword: ""
         };
 
-        $scope.cancel = function() {
-            $scope.closeModal(null);
-        };
-
         $scope.confirm = function() {
             $scope.closeModal($scope.form.confirmPassword);
+        };
+
+        $scope.cancel = function() {
+            $scope.closeModal(null);
         };
     }
 })();

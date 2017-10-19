@@ -1,0 +1,15 @@
+<div class="modal dialog-message">
+    <div class="va">
+        <div class="va-holder">
+            <div class="va-content">
+                <div class="card card-sm">
+                    <ion-item class="item-text-wrap">
+                        <h2 ng-if="title" class="title" ng-class="titleClass">{{ title | translate }}</h2>
+                        <p ng-if="body" class="body" ng-class="bodyClass">{{ body | translate }}</p>
+                        <button class="button button-block" ng-click="cancel()">{{ button | translate }}</button>
+                    </ion-item>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

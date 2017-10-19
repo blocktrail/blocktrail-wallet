@@ -124,7 +124,7 @@
                 controller: "SettingsPhoneCtrl",
                 resolve: {
                     settings: function(settingsService, $rootScope) {
-                        //do an initial load of the user's settings
+                        // do an initial load of the user's settings
                         return settingsService
                             .$isLoaded()
                             .then(

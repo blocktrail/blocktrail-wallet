@@ -73,7 +73,6 @@
         return self._readonlyDoc;
     };
 
-
     SdkService.prototype.getSdkByActiveNetwork = function() {
         var self = this;
 
@@ -104,6 +103,17 @@
         self._accountInfo = accountInfo;
 
         self._initSdkList();
+    };
+
+    SdkService.prototype.getBackupGenerator = function(identifier, backupInfo, extraInfo) {
+        var self = this;
+
+        return new self._blocktrailSDK.BackupGenerator(
+            identifier,
+            backupInfo,
+            extraInfo,
+            { network: self._CONFIG.NETWORKS[self.getNetworkType()].NETWORK_LONG }
+        );
     };
 
     SdkService.prototype._initSdkList = function() {

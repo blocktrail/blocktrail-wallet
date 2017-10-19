@@ -10,13 +10,16 @@
             <div class="card">
                 <div class="list-header">
                     <p>{{ 'SETUP_PIN_DESC_TITLE' | translate }}</p>
-                    <p><small>{{ 'SETUP_PIN_DESC_SUBTITLE' | translate }}</small></p>
+                    <p>
+                        <small>{{ 'SETUP_PIN_DESC_SUBTITLE' | translate }}</small>
+                    </p>
                 </div>
 
                 <!-- Pin -->
                 <ion-item>
                     <input
                         type="tel"
+                        pattern="[0-9]*"
                         placeholder="{{ 'SETUP_PIN_PLACEHOLDER' | translate }}"
                         name="pin"
                         ng-model="form.pin"
@@ -27,6 +30,7 @@
                 <ion-item>
                     <input
                         type="tel"
+                        pattern="[0-9]*"
                         placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}"
                         name=""
                         ng-model="form.pinRepeat"
@@ -35,7 +39,8 @@
 
                 <!-- Submit button -->
                 <ion-item>
-                    <button class="button button-block" ng-click="onSubmitFormPin()">{{ 'CONTINUE' | translate }}</button>
+                    <button class="button button-block" ng-click="onSubmitFormPin()">{{ 'CONTINUE' | translate }}
+                    </button>
                 </ion-item>
 
             </div>

@@ -17,7 +17,7 @@
         }
     }
 
-    &.dialog-alert {
+    &.dialog-message {
         text-align: center;
         background: transparent;
         position: absolute;
@@ -32,10 +32,7 @@
         max-height: 90%;
     }
 
-    &.dialog-alert,
     &.dialog-spinner {
-        h1, h2, h3, h4, p {
-            white-space: normal;
-        }
+        opacity: .8;
     }
 }

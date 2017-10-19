@@ -93,16 +93,66 @@
         return deferred.promise;
     };
 
+    ModalService.prototype.message = function(parameters) {
+        var self = this;
+
+        // Check on undefined
+        parameters = parameters ? parameters : {};
+
+        // Set default values for undefined properties
+        parameters = {
+            title: (typeof parameters.title === "string") ? parameters.title : "WARNING",
+            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "",
+            body: (typeof parameters.body === "string") ? parameters.body : "",
+            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
+            button: (typeof parameters.button === "string") ? parameters.button : "OK"
+        };
+
+        return self.show("js/modules/core/controllers/modal-message/modal-message.tpl.html", "ModalMessageCtrl", parameters);
+    };
+
     ModalService.prototype.alert = function(parameters) {
         var self = this;
 
-        return self.show("js/modules/core/dialog/alert/alert.tpl.html", "DialogAlertCtrl", parameters || {});
+        // Check on undefined
+        parameters = parameters ? parameters : {};
+
+        // Set default values for undefined properties
+        parameters = {
+            title: (typeof parameters.title === "string") ? parameters.title : "FAIL",
+            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "text-bad",
+            body: (typeof parameters.body === "string") ? parameters.body : "",
+            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
+            button: (typeof parameters.button === "string") ? parameters.button : "OK"
+        };
+
+        return self.message(parameters);
     };
+
+    ModalService.prototype.confirm = function(parameters) {
+        var self = this;
+
+        // Check on undefined
+        parameters = parameters ? parameters : {};
+
+        // Set default values for undefined properties
+        parameters = {
+            title: (typeof parameters.title === "string") ? parameters.title : "WARNING",
+            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "",
+            body: (typeof parameters.body === "string") ? parameters.body : "",
+            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
+            buttonConfirm: (typeof parameters.buttonConfirm === "string") ? parameters.buttonConfirm : "CONFIRM",
+            buttonCancel: (typeof parameters.buttonCancel === "string") ? parameters.buttonCancel : "CANCEL"
+        };
+
+        return self.show("js/modules/core/controllers/modal-confirm/modal-confirm.tpl.html", "ModalConfirmCtrl", parameters);
+    };
+
 
     ModalService.prototype.confirmPassword = function(parameters) {
         var self = this;
 
-        return self.show("js/modules/core/dialog/confirm-password/confirm-password.tpl.html", "DialogConfirmPasswordCtrl", parameters || {});
+        return self.show("js/modules/core/controllers/modal-confirm-password/modal-confirm-password.tpl.html", "ModalConfirmPasswordCtrl", parameters);
     };
 
     ModalService.prototype.showSpinner = function(parameters) {
@@ -116,7 +166,18 @@
             self._spinnerModal = modal;
         }
 
-        self.show("js/modules/core/dialog/spinner/spinner.tpl.html", "DialogSpinnerCtrl", parameters || {}, {
+        // Check on undefined
+        parameters = parameters ? parameters : {};
+
+        // Set default values for undefined properties
+        parameters = {
+            title: (typeof parameters.title === "string") ? parameters.title : "LOADING",
+            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "",
+            body: (typeof parameters.body === "string") ? parameters.body : "",
+            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : ""
+        };
+
+        self.show("js/modules/core/controllers/modal-spinner/modal-spinner.tpl.html", "ModalSpinnerCtrl", parameters, {
             modalCallback: spinnerModal
         });
 
@@ -138,6 +199,17 @@
         var self = this;
 
         if(self._spinnerModal) {
+            // Check on undefined
+            parameters = parameters ? parameters : {};
+
+            // Set default values for undefined properties
+            parameters = {
+                title: (typeof parameters.title === "string") ? parameters.title : "LOADING",
+                titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "",
+                body: (typeof parameters.body === "string") ? parameters.body : "",
+                bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : ""
+            };
+
             self._spinnerModal.scope.updateData(parameters);
         } else {
             self.show(parameters);

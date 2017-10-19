@@ -10,9 +10,6 @@
         var listenerForm;
         var listenerFormPassword;
 
-        // TODO Loading Spinner
-        $scope.isLoading = false;
-
         $scope.form = {
             email: null,
             password: null,

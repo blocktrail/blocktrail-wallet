@@ -9,40 +9,40 @@
 
             <ion-item>
                 <button
-                    class="button send-button button-block button-energized"
-                    ng-click="showExportOptions()"
-                >{{ 'SAVE' | translate }}</button>
+                    class="button button-block button-positive"
+                    ng-click="onShowExportOptions()"
+                >{{ 'SAVE' | translate }}
+                </button>
             </ion-item>
 
             <ion-item>
                 <button
                     class="pull-right button button-small button-neutral sentence-case"
-                    ng-click="skipBackup()"
-                >{{ 'SETUP_SKIP_BACKUP' | translate }}...</button>
+                    ng-disabled="isSaveButtonClicked"
+                    ng-click="onSkipBackup()"
+                >{{ 'SETUP_SKIP_BACKUP' | translate }}...
+                </button>
             </ion-item>
         </div>
 
-        <div class="card" ng-show="appControl.saveButtonClicked">
-            <div class="item item-no-border-b item-checkbox">
-                <label class="checkbox">
-                    <input type="checkbox" ng-model="appControl.backupSaved">
-                </label>
-                <span class="sentence-case">{{ 'SETUP_WALLET_BACKUP_CONFIRM' | translate }}</span>
-            </div>
-            <div class="item item-borderless">
-                <button class="button button-block"
-                        ng-class="{'button-neutral': !appControl.backupSaved, 'button-positive': appControl.backupSaved}"
-                        ng-click="continue()">{{ 'CONTINUE' | translate }}
-                </button>
-            </div>
+        <div class="card" ng-show="isSaveButtonClicked">
+            <form>
+                <ion-item>
+                    <ion-checkbox ng-model="form.isBackupSaved">
+                        {{ 'SETUP_WALLET_BACKUP_CONFIRM' | translate }}
+                    </ion-checkbox>
+                </ion-item>
+
+                <ion-item class="item-borderless">
+                    <button class="button button-block button-positive"
+                            ng-disabled="!form.isBackupSaved"
+
+                            ng-click="clearBackupInfoAndContinue()">{{ 'CONTINUE' | translate }}
+                    </button>
+                </ion-item>
+
+            </form>
         </div>
     </ion-content>
 
 </ion-view>
-
-<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
-    <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
-    <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
-    <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
-</div>
