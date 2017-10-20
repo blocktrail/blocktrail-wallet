@@ -1,4 +1,4 @@
-<ion-view class="state-setup state-complete" ng-class="{'blur-me': appControl.showMessage}">
+<ion-view class="state-setup state-complete">
     <ion-nav-buttons side="left">
         <button ng-click="$btBackButtonDelegate.goBack($event)"
                 class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
@@ -6,33 +6,24 @@
         </button>
     </ion-nav-buttons>
 
-    <ion-content>
-        <div class="info-section">
-            <div class="card">
-                <div class="item item-text-wrap">
-                    <h1 class="text-neutral text-center">{{ 'SETUP_COMPLETE_TITLE' | translate }}</h1>
-                    <p class="padding-t text-center">
-                        {{ 'SETUP_COMPLETE_SUBTITLE' | translate }}
-                        <br/>
-                    </p>
-                    <p class="padding-t text-center">
-                        {{ 'SETUP_COMPLETE_SUBTITLE_2' | translate }}
-                    </p>
-                </div>
-
-                <div class="item item-borderless">
-                    <button class="button button-block button-positive" ng-click="continue()">{{ 'SETUP_COMPLETE' | translate }}
-                    </button>
-                </div>
+    <ion-content scroll="true">
+        <div class="card">
+            <div class="list-header text-center">
+                <h1 class="text-neutral text-center">{{ 'SETUP_COMPLETE_TITLE' | translate }}</h1>
             </div>
+
+            <ion-item class="item-borderless item-text-wrap text-center">
+                <p>{{ 'SETUP_COMPLETE_SUBTITLE' | translate }}</p>
+                <p>{{ 'SETUP_COMPLETE_SUBTITLE_2' | translate }}</p>
+            </ion-item>
+
+            <ion-item class="item-borderless item-text-wrap">
+                <a
+                    class="button button-block button-positive"
+                    ui-sref="app.setup.summary"
+                >{{ 'SETUP_COMPLETE' | translate }}</a>
+            </ion-item>
         </div>
     </ion-content>
 
 </ion-view>
-
-<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
-    <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
-    <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
-    <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
-</div>

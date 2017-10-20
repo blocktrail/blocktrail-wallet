@@ -1,10 +1,10 @@
 <ion-view class="state-setup state-phone">
     <ion-nav-title class="">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</ion-nav-title>
 
-    <ion-content>
+    <ion-content scroll="true">
         <div class="card">
             <div class="list-header">
-                <h4 class="padding-t">{{ 'SETUP_PHONE_DESC_TITLE' | translate }}</h4>
+                <p>{{ 'SETUP_PHONE_DESC_TITLE' | translate }}</p>
             </div>
 
             <ion-item class="item-borderless item-text-wrap">
@@ -20,17 +20,17 @@
             </ion-item>
 
             <ion-item>
-                <button
+                <a
                     class="pull-right button button-small button-neutral sentence-case"
-                    ng-click="onSkipPhoneVerification()"
-                >{{ 'SETUP_SKIP_BACKUP' | translate }}...</button>
+                    ui-sref="app.setup.profile"
+                >{{ 'SETUP_SKIP_BACKUP' | translate }}...</a>
             </ion-item>
 
             <ion-item class="item-text-wrap" ng-if="settings.phoneVerified">
                 <p>{{ 'SETUP_PHONE_LINKED' | translate }}: {{ settings.phoneNumber }}</p>
-                <button class="button button-block button-positive"
-                        ui-sref="app.setup.contacts">{{ 'CONTINUE' | translate }}
-                </button>
+                <a class="button button-block button-positive"
+                   ui-sref="app.setup.contacts">{{ 'CONTINUE' | translate }}
+                </a>
             </ion-item>
         </div>
     </ion-content>

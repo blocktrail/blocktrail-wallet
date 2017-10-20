@@ -137,8 +137,7 @@
 /*--- Framework Hacks & Fixes ---*/
 //fix the issue with the title for odd bar padding
 .bar .title {
-    //padding: $bar-padding-portrait;
-    //line-height: $bar-height/2;
+    margin: 0 15px;
 }
 .bar .title + .buttons {
     top: initial;

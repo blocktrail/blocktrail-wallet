@@ -83,6 +83,7 @@
                     $scope.dismissCountrySelect();
                 });
             }, true);
+
             $btBackButtonDelegate.setHardwareBackButton(function() {
                 $timeout(function() {
                     $scope.dismissCountrySelect();
