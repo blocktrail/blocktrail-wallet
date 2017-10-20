@@ -2,9 +2,9 @@
     "use strict";
 
     angular.module('blocktrail.setup')
-        .factory('loginFormService', function($http, $q, _, cryptoJS, navigator, CONFIG, launchService, setupService, sdkServiceIamOldKillMePLease, trackingService) {
+        .factory('loginFormService', function($http, $q, _, cryptoJS, device, CONFIG, launchService, setupService, trackingService) {
 
-            return new LoginFormService($http, $q, _, cryptoJS, navigator, CONFIG, launchService, setupService, sdkServiceIamOldKillMePLease, trackingService);
+            return new LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, setupService, trackingService);
         }
     );
 
@@ -12,18 +12,17 @@
      * TODO here
      * @constructor
      */
-    function LoginFormService($http, $q, _, cryptoJS, navigator, CONFIG, launchService, setupService, sdkServiceIamOldKillMePLease, trackingService) {
+    function LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, setupService, trackingService) {
         var self = this;
 
         self._$http = $http;
         self._$q = $q;
         self._lodash = _;
         self._cryptoJS = cryptoJS;
-        self._navigator = navigator;
+        self._device = device || {};
         self._CONFIG = CONFIG;
         self._launchService = launchService;
         self._setupService = setupService;
-        self._sdkServiceIamOldKillMePLease = sdkServiceIamOldKillMePLease;
         self._trackingService = trackingService;
     }
 
@@ -38,26 +37,18 @@
         var postData = {
             login: data.login,
             password: self._cryptoJS.SHA512(data.password).toString(),
-            platform: "Web",
+            platform: ionic.Platform.isIOS() ? "iOS" : "Android",
             version: self._CONFIG.VERSION || self._CONFIG.VERSION_REV,
             two_factor_token: data.twoFactorToken,
-            device_name: self._navigator.userAgent || "Unknown Browser",
+            device_uuid: self._device.uuid,
+            device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : 'Unknown Device',
+            super_secret: self._CONFIG.SUPER_SECRET || null,
             browser_fingerprint: null
         };
 
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/enable";
 
         return self._$q.when(postData)
-            .then(function(postData) {
-                return self._trackingService.getBrowserFingerprint()
-                    .then(function(fingerprint) {
-                        postData.browser_fingerprint = fingerprint.hash;
-                        return postData;
-                    }, function() {
-                        // if fingerprint fails we just leave it NULL
-                        return postData;
-                    })
-            })
             .then(function(postData) {
                 return self._$http.post(url, postData)
                     .then(self._decryptSecret.bind(self, data.password))

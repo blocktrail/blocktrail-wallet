@@ -1,9 +1,9 @@
-<ion-view class="state-setup state-create-new-accout">
+<ion-view class="state-setup state-create-new-account">
     <ion-nav-title class="">{{ 'SETUP_REGISTER' | translate }}</ion-nav-title>
 
     <ion-nav-buttons side="left">
         <button ng-click="$btBackButtonDelegate.goBack($event)"
-                class="button button-clear icon bt-back-button"
+                class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
                 ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
         </button>
     </ion-nav-buttons>

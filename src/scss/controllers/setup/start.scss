@@ -4,6 +4,12 @@
         bottom: 60px;
         width: 100%;
 
+        a {
+            font-size: 1.2rem;
+            text-decoration: none;
+            font-weight: 300;
+        }
+
         .create-new {
             @include squareButton(#fff, #444);
             background: rgba(0,0,0,0.10);

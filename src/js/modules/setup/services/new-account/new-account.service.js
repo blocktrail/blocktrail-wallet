@@ -1,13 +1,13 @@
-(function () {
+(function() {
     "use strict";
 
-    angular.module('blocktrail.setup')
-        .factory('newAccountFormService', function($http, $q, _, cryptoJS, device, CONFIG, launchService, sdkService, trackingService) {
-            return new NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, sdkService, trackingService);
-        }
-    );
+    angular.module("blocktrail.setup")
+        .factory("newAccountFormService", function($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
+                return new NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService);
+            }
+        );
 
-    function NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, sdkService, trackingService) {
+    function NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
         var self = this;
 
         self._$http = $http;
@@ -17,7 +17,6 @@
         self._device = device || {};
         self._CONFIG = CONFIG;
         self._launchService = launchService;
-        self._sdkService = sdkService;
         self._trackingService = trackingService;
     }
 
@@ -37,7 +36,7 @@
             platform: "Web",
             version: self._CONFIG.VERSION || self._CONFIG.VERSION_REV,
             device_uuid: self._device.uuid,
-            device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : 'Unknown Device',
+            device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : "Unknown Device",
             super_secret: self._CONFIG.SUPER_SECRET || null,
             powtcha: null,
             browser_fingerprint: null
@@ -47,13 +46,13 @@
 
         // TODO add this later
         /*self._trackingService.getBrowserFingerprint()
-            .then(function(fingerprint) {
-                postData.browser_fingerprint = fingerprint.hash;
-                return postData;
-            }, function() {
-                // if fingerprint fails we just leave it NULL
-                return postData;
-            })*/
+         .then(function(fingerprint) {
+         postData.browser_fingerprint = fingerprint.hash;
+         return postData;
+         }, function() {
+         // if fingerprint fails we just leave it NULL
+         return postData;
+         })*/
 
         return self._$http.post(url, postData)
             .then(self._storeAccountInfo.bind(self))
@@ -73,7 +72,7 @@
         return self._launchService.storeAccountInfo(accountInfo)
             .then(function() {
                 return response.data;
-            })
+            });
     };
 
     /**

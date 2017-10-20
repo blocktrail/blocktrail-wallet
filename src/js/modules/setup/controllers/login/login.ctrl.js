@@ -4,25 +4,104 @@
     angular.module("blocktrail.setup")
         .controller("SetupLoginCtrl", SetupLoginCtrl);
 
-    function SetupLoginCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, sdkServiceIamOldKillMePLease,
-                            settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, trackingService) {
-        $scope.retry = 0;
+    function SetupLoginCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, loginFormService,
+                            settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, trackingService, sdkService, formHelperService) {
+        var twoFactorToken = null;
 
         $scope.form = {
-            username: CONFIG.SETUP_PREFILL_USERNAME || "",
-            password: CONFIG.SETUP_PREFILL_PASSWORD || "",
-            network: $rootScope.NETWORK,
-            forceNewWallet: false
+            email: "",
+            password: "",
+            networkType: sdkService.getNetworkType(),
         };
 
-        $scope.$watch('form.network', function(newNetwork, oldNetwork) {
-            if (newNetwork !== oldNetwork) {
-                $rootScope.switchNetwork(newNetwork);
-                launchService.storeNetwork(newNetwork);
-                sdkServiceIamOldKillMePLease.refreshNetwork();
-            }
-        });
+        // ionic.Platform.isAndroid()
 
+        // Methods
+        $scope.onSubmitFormLogin = onSubmitFormRegister;
+
+        /**
+         * On submit the form login handler
+         * @param loginForm
+         * @return { boolean | promise }
+         */
+        function onSubmitFormRegister(loginForm) {
+            formHelperService.setAllDirty(loginForm);
+
+            if (loginForm.email.$invalid) {
+                modalService.alert({
+                    body: 'MSG_BAD_EMAIL'
+                });
+                return false;
+            }
+
+            if (loginForm.password.$invalid) {
+                modalService.alert({
+                    body: 'MSG_MISSING_LOGIN'
+                });
+                return false;
+            }
+
+            twoFactorToken = null;
+
+            login();
+        }
+
+        /**
+         * Login
+         * @return { promise }
+         */
+        function login() {
+            var data = {
+                login: $scope.form.username,
+                password: $scope.form.password,
+                twoFactorToken: twoFactorToken,
+                networkType: $scope.form.networkType
+            };
+
+            return loginFormService.login(data)
+                .then(loginFormSuccessHandler, loginFormErrorHandler);
+        }
+
+        // TODO Continue HERE !!!
+
+        /**
+         * Login success handle
+         * @param data
+         */
+        function loginFormSuccessHandler(data) {
+            debugger;
+        }
+
+        /**
+         * Login error handle
+         * @param error
+         */
+        function loginFormErrorHandler(error) {
+            debugger;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         $scope.doLogin = function() {
             if ($scope.appControl.working) {
                 return false;
