@@ -9,8 +9,11 @@
                           $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService,
                           $cordovaSocialSharing, AppVersionService, $state) {
 
+
+        debugger;
+
         // wait 200ms timeout to allow view to render before hiding loadingscreen
-        $timeout(function() {
+        /*$timeout(function() {
             $rootScope.hideLoadingScreen = true;
 
             // allow for one more digest loop
@@ -21,10 +24,10 @@
             });
         }, 400);
 
-        /*
+        /!*
          * check for extra languages to enable
          *  if one is preferred, prompt user to switch
-         */
+         *!/
         $rootScope.PROMOCODE_IN_MENU = false;
         $rootScope.PRIOBOOST_ENABLED = false;
         launchService.getWalletConfig()
@@ -293,6 +296,6 @@
                     $rootScope.syncProfile();
                 }
             }, CONFIG.POLL_INTERVAL_PROFILE);
-        }
+        }*/
     }
 })();

@@ -149,10 +149,24 @@
     };
 
 
-    ModalService.prototype.confirmPassword = function(parameters) {
+    ModalService.prototype.prompt = function(parameters) {
         var self = this;
 
-        return self.show("js/modules/core/controllers/modal-confirm-password/modal-confirm-password.tpl.html", "ModalConfirmPasswordCtrl", parameters);
+        // Check on undefined
+        parameters = parameters ? parameters : {};
+
+        // Set default values for undefined properties
+        parameters = {
+            title: (typeof parameters.title === "string") ? parameters.title : "",
+            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "",
+            body: (typeof parameters.body === "string") ? parameters.body : "",
+            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
+            placeholder: (typeof parameters.placeholder === "string") ? parameters.placeholder : "",
+            buttonConfirm: (typeof parameters.buttonConfirm === "string") ? parameters.buttonConfirm : "CONFIRM",
+            buttonCancel: (typeof parameters.buttonCancel === "string") ? parameters.buttonCancel : "CANCEL"
+        };
+
+        return self.show("js/modules/core/controllers/modal-prompt/modal-prompt.tpl.html", "ModalPromptCtrl", parameters);
     };
 
     ModalService.prototype.showSpinner = function(parameters) {

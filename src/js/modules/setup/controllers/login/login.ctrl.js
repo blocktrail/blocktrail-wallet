@@ -4,14 +4,13 @@
     angular.module("blocktrail.setup")
         .controller("SetupLoginCtrl", SetupLoginCtrl);
 
-    function SetupLoginCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, loginFormService,
+    function SetupLoginCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, loginFormService, modalService,
                             settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, trackingService, sdkService, formHelperService) {
-        var twoFactorToken = null;
-
         $scope.form = {
             email: "",
             password: "",
             networkType: sdkService.getNetworkType(),
+            twoFactorToken: null
         };
 
         // ionic.Platform.isAndroid()
@@ -41,7 +40,7 @@
                 return false;
             }
 
-            twoFactorToken = null;
+            $scope.form.twoFactorToken = null;
 
             login();
         }
@@ -52,24 +51,33 @@
          */
         function login() {
             var data = {
-                login: $scope.form.username,
+                login: $scope.form.email,
                 password: $scope.form.password,
-                twoFactorToken: twoFactorToken,
+                twoFactorToken: $scope.form.twoFactorToken,
                 networkType: $scope.form.networkType
             };
+
+            modalService.showSpinner();
 
             return loginFormService.login(data)
                 .then(loginFormSuccessHandler, loginFormErrorHandler);
         }
-
-        // TODO Continue HERE !!!
 
         /**
          * Login success handle
          * @param data
          */
         function loginFormSuccessHandler(data) {
-            debugger;
+            modalService.hideSpinner();
+
+            if (!$scope.form.forceNewWallet) {
+                $scope.setupInfo.identifier = data.existing_wallet || $scope.setupInfo.identifier;
+            }
+
+            $scope.setupInfo.password = $scope.form.password;
+            $scope.setupInfo.network = $scope.form.network;
+
+            $state.go('app.setup.pin');
         }
 
         /**
@@ -77,7 +85,65 @@
          * @param error
          */
         function loginFormErrorHandler(error) {
-            debugger;
+            modalService.hideSpinner();
+
+            switch (error.type) {
+                case "BANNED_IP":
+                    // TODO do we have this state
+                    $state.go("app.bannedip", { bannedIp: error.data });
+
+                    break;
+
+                case "SHA_512":
+
+                    // TODO Check this case !!!
+                    return modalService.alert({
+                        title: $translate.instant("SETUP_LOGIN_FAILED"),
+                        bodyHtml: $sce.trustAsHtml($translate.instant("MSG_UPGRADE_REQUIRED"))
+                    });
+
+                    break;
+
+                case "2FA_MISSING":
+                    modalService.prompt({
+                            placeholder: "MSG_MISSING_TWO_FACTOR_TOKEN"
+                        })
+                        .then(function(dialogResult) {
+                            if (dialogResult !== null) {
+                                $scope.form.twoFactorToken = dialogResult;
+                                login();
+                            }
+                        });
+
+                    break;
+
+                case "2FA_INVALID":
+                    modalService.prompt({
+                            placeholder: "MSG_INCORRECT_TWO_FACTOR_TOKEN"
+                        })
+                        .then(function(dialogResult) {
+                            if (dialogResult !== null) {
+                                $scope.form.twoFactorToken = dialogResult;
+                                login();
+                            }
+                        });
+
+                    break;
+
+                case "MSG_BAD_LOGIN":
+                    modalService.alert({
+                        body: "MSG_BAD_LOGIN"
+                    });
+
+                    break;
+
+                case "MSG_BAD_LOGIN_UNKNOWN":
+                    modalService.alert({
+                        body: "MSG_BAD_LOGIN_UNKNOWN"
+                    });
+
+                    break;
+            }
         }
 
 

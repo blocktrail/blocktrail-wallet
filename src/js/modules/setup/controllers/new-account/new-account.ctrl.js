@@ -86,7 +86,9 @@
                 return false;
             }
 
-            return modalService.confirmPassword()
+            return modalService.prompt({
+                    placeholder: "SETUP_PASSWORD_REPEAT_PLACEHOLDER"
+                })
                 .then(function(dialogResult) {
                     if (dialogResult !== null) {
                         if ($scope.form.password === dialogResult.trim()) {

@@ -2,9 +2,9 @@
     "use strict";
 
     angular.module('blocktrail.setup')
-        .factory('loginFormService', function($http, $q, _, cryptoJS, device, CONFIG, launchService, setupService, trackingService) {
+        .factory('loginFormService', function($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
 
-            return new LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, setupService, trackingService);
+            return new LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService);
         }
     );
 
@@ -12,7 +12,7 @@
      * TODO here
      * @constructor
      */
-    function LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, setupService, trackingService) {
+    function LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
         var self = this;
 
         self._$http = $http;
@@ -22,7 +22,7 @@
         self._device = device || {};
         self._CONFIG = CONFIG;
         self._launchService = launchService;
-        self._setupService = setupService;
+        self._settingsService = settingsService;
         self._trackingService = trackingService;
     }
 
@@ -33,6 +33,8 @@
      */
     LoginFormService.prototype.login = function(data) {
         var self = this;
+
+        console.log("Login data:", data);
 
         var postData = {
             login: data.login,
@@ -87,6 +89,7 @@
         };
     };
 
+
     /**
      * Store the account info
      * @param data
@@ -100,11 +103,20 @@
 
         return self._launchService.storeAccountInfo(accountInfo)
             .then(function() {
-                return self._setupService.setUserInfo({
-                    username: data.responseData.username,
-                    displayName: data.responseData.username,
-                    email: data.responseData.email
-                });
+                //save the default settings and do a profile sync
+                self._settingsService.username = data.responseData.username;
+                self._settingsService.displayName = data.responseData.username;
+                self._settingsService.enableContacts = false;
+                self._settingsService.accountCreated = data.responseData.timestamp_registered;
+                self._settingsService.email = data.responseData.email;
+
+                return self._settingsService.$store()
+                    .then(function() {
+                        return self._settingsService.$syncSettingsDown();
+                    })
+                    .then(function() {
+                        self._settingsService.$syncProfileDown();
+                    });
             })
             .then(function() {
                 return data.responseData;
@@ -125,6 +137,7 @@
         if (response.data) {
             var blocktrailSDKError = blocktrailSDK.Request.handleFailure(response.data);
 
+            // TODO Do we have BANNED_IP on mobile
             if (blocktrailSDKError.is_banned) {
                 error.type = "BANNED_IP";
                 error.data = error.is_banned;

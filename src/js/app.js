@@ -533,11 +533,6 @@ angular.module('blocktrail.wallet').config(
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
                     settings: function (settingsService, $rootScope, $state) {
-
-
-
-
-
                         //do an initial load of the user's settings
                         /*return settingsService.$isLoaded().then(function (data) {
                             $rootScope.settings = settingsService;
