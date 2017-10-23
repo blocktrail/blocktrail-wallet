@@ -119,6 +119,8 @@
          */
         function registerFormSuccessHandler() {
             $scope.setupInfo.password = $scope.form.password;
+            $scope.setupInfo.networkType = $scope.form.networkType;
+
             modalService.hideSpinner();
             $state.go("app.setup.pin");
         }

@@ -4,10 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("WalletCtrl", WalletCtrl);
 
-    function WalletCtrl($q, $log, $scope, $rootScope, $interval, storageService, sdkServiceIamOldKillMePLease, $translate,
-                          Wallet, Contacts, CONFIG, settingsService, $timeout, $analytics, $cordovaVibration, Currencies,
-                          $cordovaToast, trackingService, $http, $cordovaDialogs, blocktrailLocalisation, launchService,
-                          $cordovaSocialSharing, AppVersionService, $state) {
+    function WalletCtrl() {
 
 
         debugger;

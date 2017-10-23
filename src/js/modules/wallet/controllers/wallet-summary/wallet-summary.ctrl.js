@@ -4,9 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("WalletSummaryCtrl", WalletSummaryCtrl);
 
-    function WalletSummaryCtrl($scope, $rootScope, $log, $ionicScrollDelegate, $q,
-                               $timeout, Wallet, $translate, $stateParams, AppRateService, CurrencyConverter,
-                               settingsService, buyBTCService, $ionicPopover, notificationService) {
+    function WalletSummaryCtrl($scope) {
 
 
 

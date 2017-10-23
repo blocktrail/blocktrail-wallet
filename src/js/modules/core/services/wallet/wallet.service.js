@@ -3,11 +3,10 @@
 
     var POUCHDB_ERR_CONFLICT = 409;
 
-    // TODO Add later
-    /*angular.module("blocktrail.core")
+    angular.module("blocktrail.core")
         .factory("walletService", function($q, $timeout, bitcoinJS, sdkService, storageService, settingsService, Contacts, CONFIG) {
             return new WalletService($q, $timeout, bitcoinJS, sdkService, storageService, settingsService, Contacts, CONFIG);
-        });*/
+        });
 
     function WalletService($q, $timeout, bitcoinJS, sdkService, storageService, settingsService, Contacts, CONFIG) {
         var self = this;

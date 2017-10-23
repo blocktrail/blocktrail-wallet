@@ -2,10 +2,10 @@
     "use strict";
 
     // TODO Add later
-    /*angular.module("blocktrail.core")
+    angular.module("blocktrail.core")
         .factory("walletsManagerService", function($q, CONFIG, sdkService, walletService) {
             return new WalletsManagerService($q, CONFIG, sdkService, walletService);
-        });*/
+        });
 
     function WalletsManagerService($q, CONFIG, sdkService, walletService) {
         var self = this;

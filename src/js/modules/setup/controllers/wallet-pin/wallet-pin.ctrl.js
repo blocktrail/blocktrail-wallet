@@ -15,7 +15,8 @@
             pin: "",
             pinRepeat: "",
             identifier: $scope.setupInfo.identifier,
-            password: $scope.setupInfo.password
+            password: $scope.setupInfo.password,
+            networkType: $scope.setupInfo.networkType
         };
 
         // Methods
@@ -89,9 +90,9 @@
                 })
                 .then(sdkInitWallet)
                 .then(initWalletSuccessHandler, initWalletErrorHandler)
-                .then(setSdkMainMobileWallet)
-                .then(storeIdentityAndEncryptedPassword)
                 .then(stashWalletSecret)
+                .then(setSdkMainMobileWallet)
+                .then(storeWalletInfoAndEncryptedPassword)
                 .then(storeBackupInfo)
                 .then(hallelujah)
                 .catch(function(e) {
@@ -108,8 +109,6 @@
                     }
                 });
         }
-
-        // TODO Clean the current data and CHECK the SPINNER
 
         /**
          * SDK initialize wallet
@@ -207,11 +206,11 @@
                 var supportSecret = randDigits(6);
 
                 return sdk.createNewWallet({
-                    identifier: $scope.setupInfo.identifier,
-                    password: $scope.setupInfo.password,
-                    walletVersion: CONFIG.WALLET_DEFAULT_VERSION,
-                    support_secret: supportSecret
-                })
+                        identifier: $scope.setupInfo.identifier,
+                        password: $scope.setupInfo.password,
+                        walletVersion: CONFIG.WALLET_DEFAULT_VERSION,
+                        support_secret: supportSecret
+                    })
                     .progress(function(progress) {
                         /*
                          * per step we increment the progress bar and display some new progress text
@@ -255,6 +254,16 @@
                         $scope.setupInfo.backupInfo.supportSecret = supportSecret;
 
                         return $q.when(wallet);
+                    })
+                    .catch(function(e) {
+                        modalService.hideSpinner();
+
+                        return modalService.alert({
+                                body: e.toString()
+                            })
+                            .then(function() {
+                                $state.go("app.reset");
+                            });
                     });
                 // TODO Review this logic with Ruben !!!
             } else if (error.message && (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError)) {
@@ -274,26 +283,42 @@
         }
 
         /**
-         * Set to SDK main mobile wallet
+         * Stash the wallet secret
          * @param wallet
          */
-        function setSdkMainMobileWallet(wallet) {
-            // set the wallet as the main wallet
-            $log.debug("setting wallet as main wallet");
-            modalService.updateSpinner({title: "", body: "SAVING_WALLET"});
-            return sdk.setMainMobileWallet($scope.setupInfo.identifier).then(function() {
-                return wallet;
-            });
+        function stashWalletSecret(wallet) {
+            var secretHex = null;
+
+            if (wallet.walletVersion === "v2") {
+                secretHex = wallet.secret;
+            } else {
+                secretHex = wallet.secret.toString("hex");
+            }
+
+            // while logging in we stash the secret so we can decrypt the glidera accesstoken
+            launchService.stashWalletSecret(secretHex);
+
+            wallet.lock();
         }
 
         /**
-         * Store the identifier and encrypted password
+         * Set to SDK main mobile wallet
          * @param wallet
          */
-        function storeIdentityAndEncryptedPassword(wallet) {
+        function setSdkMainMobileWallet() {
+            // set the wallet as the main wallet
+            $log.debug("setting wallet as main wallet");
+            modalService.updateSpinner({title: "", body: "SAVING_WALLET"});
+            return sdk.setMainMobileWallet($scope.setupInfo.identifier);
+        }
+
+        /**
+         * Store wallet info
+         */
+        function storeWalletInfoAndEncryptedPassword(wallet) {
             // store the identity and encrypted password
-            var encryptedPassword = null;
             var encryptedSecret = null;
+            var encryptedPassword = null;
 
             // legacy wallets use password instead of secret,
             // using secret is a lot better since someone cracking a PIN won't get your much reused password xD
@@ -303,28 +328,8 @@
                 encryptedPassword = CryptoJS.AES.encrypt($scope.setupInfo.password, $scope.form.pin).toString();
             }
 
-            $log.debug("Saving wallet info", $scope.setupInfo.identifier, encryptedPassword, encryptedSecret);
-
-            return launchService.storeWalletInfo($scope.setupInfo.identifier, encryptedPassword, encryptedSecret)
-                .then(function() {
-                    return wallet;
-                });
-        }
-
-        /**
-         * Stash the wallet secret
-         * @param wallet
-         */
-        function stashWalletSecret(wallet) {
-            var walletSecret = wallet.secret;
-
-            if (wallet.walletVersion !== "v2") {
-                walletSecret = walletSecret.toString("hex");
-            }
-            // while logging in we stash the secret so we can decrypt the glidera access token
-            launchService.stashWalletSecret(walletSecret);
-
-            wallet.lock();
+            $log.debug("Saving wallet info", $scope.setupInfo.identifier, $scope.setupInfo.identifier);
+            return launchService.storeWalletInfo($scope.setupInfo.identifier, $scope.setupInfo.networkType, encryptedSecret, encryptedPassword);
         }
 
         /**
@@ -380,25 +385,29 @@
 
             modalService.hideSpinner();
 
+            // Reset password
+            $scope.setupInfo.password = null;
+
             // save in settings that the user has started the setup process
             settingsService.$isLoaded()
                 .then(function() {
                     settingsService.setupStarted = true;
                     settingsService.$store();
+                })
+                .then(function() {
+                    if ($scope.setupInfo.backupInfo) {
+                        // if a new wallet has been created, go to the wallet backup page
+                        $state.go("app.setup.backup");
+                    } else {
+                        // else continue to profile, phone, etc setup (mark backup as saved)
+                        settingsService.$isLoaded()
+                            .then(function() {
+                                settingsService.backupSaved = true;
+                                settingsService.$store();
+                            });
+                        $state.go("app.setup.phone");
+                    }
                 });
-
-            if ($scope.setupInfo.backupInfo) {
-                // if a new wallet has been created, go to the wallet backup page
-                $state.go("app.setup.backup");
-            } else {
-                // else continue to profile, phone, etc setup (mark backup as saved)
-                settingsService.$isLoaded()
-                    .then(function() {
-                        settingsService.backupSaved = true;
-                        settingsService.$store();
-                    });
-                $state.go("app.setup.phone");
-            }
         }
 
         /**

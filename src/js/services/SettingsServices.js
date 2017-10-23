@@ -5,6 +5,7 @@ angular.module('blocktrail.wallet').service(
     var DEFAULT_ACCOUNT_CREATED = 1478097190;
 
     var defaultBtcPrecision = $window.innerWidth <= 375 ? 4 : 8;
+
     var defaults = {
         displayName:  null,
         username:  '',
@@ -94,6 +95,10 @@ angular.module('blocktrail.wallet').service(
         }
 
         return this._$isLoaded;
+    };
+
+    this.getSettings = function() {
+        return this.$load();
     };
 
     /**

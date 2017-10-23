@@ -532,17 +532,23 @@ angular.module('blocktrail.wallet').config(
                 controller: "WalletCtrl",
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
-                    settings: function (settingsService, $rootScope, $state) {
+                    activeWallet: getActiveWallet,
+                    loadingData: loadingData
+
+                    /*settings: function (settingsService, $rootScope, $state) {
+
+
+
                         //do an initial load of the user's settings
-                        /*return settingsService.$isLoaded().then(function (data) {
+                        return settingsService.$isLoaded().then(function (data) {
                             $rootScope.settings = settingsService;
                             //set the preferred language
                             $rootScope.changeLanguage(settingsService.language);
 
                             return data;
-                        });*/
+                        });
                     },
-                    pinOnOpen: function(settingsService, $q, $state, $rootScope, /* dependancies= */settings) {
+                    pinOnOpen: function(settingsService, $q, $state, $rootScope, /!* dependancies= *!/settings) {
                         return settingsService.$isLoaded().then(function() {
                             // if pinOnOpen is required and last time we asked for it was more than 5min ago
                             if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE) {
@@ -555,7 +561,7 @@ angular.module('blocktrail.wallet').config(
                             }
                         });
                     },
-                    brokers: function ($rootScope, buyBTCService, CONFIG, /* dependancies= */pinOnOpen) {
+                    brokers: function ($rootScope, buyBTCService, CONFIG, /!* dependancies= *!/pinOnOpen) {
                         return buyBTCService.enabled()
                             .then(function (enabled) {
                                 $rootScope.BUYBTC_ENABLED = (CONFIG.BUYBTC || enabled) && $rootScope.NETWORK === "BTC";
@@ -563,7 +569,7 @@ angular.module('blocktrail.wallet').config(
                     },
                     // TODO Continue here
                     // activeWallet: getActiveWallet,
-                    loadingDone: function (Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state, /* dependancies= */pinOnOpen) {
+                    loadingDone: function (Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state, /!* dependancies= *!/pinOnOpen) {
                         //do an initial load of cached user data
                         return $q.all([
                             Currencies.updatePrices(true)
@@ -585,7 +591,7 @@ angular.module('blocktrail.wallet').config(
                                 });
                             }
                         });
-                    }
+                    }*/
                 }
             })
             .state('app.wallet.summary', {
@@ -920,6 +926,8 @@ angular.module('blocktrail.wallet').config(
                 }
             });
 
+
+
         /**
          * Get the active wallet
          * @param $state
@@ -937,7 +945,6 @@ angular.module('blocktrail.wallet').config(
                     debugger;
 
                     if (!sdkService.getNetworkType() || !walletInfo.identifier) {
-                        // TODO !!!
                         $state.go("app.reset");
                         throw new Error("Missing networkType or identifier");
                     }
@@ -967,6 +974,34 @@ angular.module('blocktrail.wallet').config(
                             return activeWallet;
                         });
                 });
+        }
+
+        /**
+         * Loading data
+         * @param settingsService
+         * @param $q
+         * @param $rootScope
+         * @param $log
+         * @param Currencies
+         */
+        /**
+         * !! activeWallet and handleSetupState should stay in here even when not used
+         * !! to make sure the resolves happen in the correct order
+         * TODO Review
+         */
+        function loadingData(settingsService, $q, $rootScope, $log, Currencies) {
+            // Do an initial load of cached user data
+
+            debugger;
+            return $q.all([
+                Currencies.updatePrices(true),
+                settingsService.getSettings()
+            ]).then(function(results) {
+                $log.debug("Initial load complete");
+                $rootScope.bitcoinPrices = results[0];
+                $rootScope.changeLanguage(results[1].language);
+                return true;
+            });
         }
 
 

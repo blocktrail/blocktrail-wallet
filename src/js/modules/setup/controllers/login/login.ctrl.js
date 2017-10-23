@@ -75,7 +75,7 @@
             }
 
             $scope.setupInfo.password = $scope.form.password;
-            $scope.setupInfo.network = $scope.form.network;
+            $scope.setupInfo.networkType = $scope.form.networkType;
 
             $state.go('app.setup.pin');
         }
