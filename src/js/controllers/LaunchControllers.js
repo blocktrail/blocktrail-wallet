@@ -37,9 +37,10 @@ angular.module('blocktrail.wallet')
                     if ($rootScope.handleOpenURL) {
                         $log.log("launching app with uri: " + $rootScope.handleOpenURL);
                         $log.log("bitcoin? " + $rootScope.handleOpenURL.startsWith("bitcoin"));
+                        $log.log("bitcoincash? " + ($rootScope.handleOpenURL.startsWith("bitcoincash") || $rootScope.handleOpenURL.startsWith("bitcoin cash")));
                         $log.log("glidera? " + $rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback"));
 
-                        if ($rootScope.handleOpenURL.startsWith("bitcoin")) {
+                        if ($rootScope.handleOpenURL.startsWith("bitcoin") || $rootScope.handleOpenURL.startsWith("bitcoincash") || $rootScope.handleOpenURL.startsWith("bitcoin cash")) {
                             $rootScope.bitcoinuri = $rootScope.handleOpenURL;
                             nextState = 'app.wallet.send';
                             $ionicSideMenuDelegate.toggleLeft(false);
