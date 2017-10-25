@@ -4,10 +4,74 @@
     angular.module("blocktrail.wallet")
         .controller("WalletCtrl", WalletCtrl);
 
-    function WalletCtrl() {
+    function WalletCtrl($rootScope, $scope, $state, CONFIG, settingsData, activeWallet, Currencies) {
+        $rootScope.hideLoadingScreen = true;
+
+        $scope.settings = settingsData;
+        $scope.walletData = activeWallet.getReadOnlyWalletData();
+
+        $scope.sideNavList = [
+            {
+                stateHref: $state.href("app.wallet.summary"),
+                activeStateName: "app.wallet.summary",
+                linkText: "MY_WALLET",
+                linkIcon: "icon-blocktrail-wallet",
+                isHidden: false
+            },
+            {
+                stateHref: $state.href("app.wallet.send"),
+                activeStateName: "app.wallet.send",
+                linkText: "SEND",
+                linkIcon: "ion-ios-redo-outline",
+                isHidden: false
+            },
+            {
+                stateHref: $state.href("app.wallet.receive"),
+                activeStateName: "app.wallet.receive",
+                linkText: "RECEIVE",
+                linkIcon: "ion-ios-undo-outline",
+                isHidden: false
+            },
+            {
+                stateHref: $state.href("app.wallet.buybtc.choose"),
+                activeStateName: "app.wallet.buybtc",
+                linkText: "BUYBTC_NAVTITLE",
+                linkIcon: "ion-card",
+                isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].BUYBTC
+            },
+            // TODO Add handler
+            {
+                stateHref: "",
+                activeStateName: "",
+                linkText: "TELL_A_FRIEND",
+                linkIcon: "ion-ios-chatbubble-outline",
+                isHidden: false
+            },
+            {
+                stateHref: $state.href("app.wallet.settings"),
+                activeStateName: "app.wallet.settings",
+                linkText: "SETTINGS",
+                linkIcon: "ion-ios-gear-outline",
+                isHidden: false
+            },
+            // TODO Check on promocede
+            {
+                stateHref: $state.href("app.wallet.promo"),
+                activeStateName: "app.wallet.promo",
+                linkText: "PROMO_CODES",
+                linkIcon: "ion-ios-heart-outline",
+                isHidden: false
+            }
+        ];
 
 
-        debugger;
+        $rootScope.getPrice = function() {
+            return Currencies.updatePrices(false)
+                .then(function(prices) {
+                    $rootScope.bitcoinPrices = prices;
+                });
+        };
+
 
         // wait 200ms timeout to allow view to render before hiding loadingscreen
         /*$timeout(function() {
@@ -27,6 +91,7 @@
          *!/
         $rootScope.PROMOCODE_IN_MENU = false;
         $rootScope.PRIOBOOST_ENABLED = false;
+
         launchService.getWalletConfig()
             .then(function(result) {
                 // merge network specific config over the default config

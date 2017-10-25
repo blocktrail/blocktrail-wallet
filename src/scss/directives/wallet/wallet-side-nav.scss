@@ -1,0 +1,55 @@
+$sidemenu-body-bg:          $menu-bg;
+$sidemenu-font-color:       #465a5a !default;
+$sidemenu-option-spacing:   34px !default;
+$sidemenu-option-fontsize:  22px !default;
+
+.wallet-side-nav {
+    border: none;
+    background: none;
+    font-size: $sidemenu-option-fontsize;
+    color: $sidemenu-font-color;
+    font-weight: 200;
+
+    .item {
+        border: none;
+        background: none;
+        padding: 10px 16px;
+
+        &:first-child {
+            padding-top: 20px;
+        }
+    }
+
+    .item-content {
+        padding: $sidemenu-option-spacing/2 25px;
+        background: none;
+
+        &.activated {
+            color: lighten($sidemenu-body-bg, 40%);
+            background: darken($sidemenu-body-bg, 40%);
+        }
+    }
+
+    a {
+        display: block;
+        font-size: $sidemenu-option-fontsize;
+        color: $sidemenu-font-color;
+        text-decoration: none;
+    }
+
+    .icon {
+        margin-right: 16px;
+        font-size: 160%;
+        vertical-align: middle;
+
+        &.icon-blocktrail-wallet:before {
+            margin-left: -5px;
+            top: -10px;
+            position:relative;
+        }
+
+        &.icon-blocktrail-wallet {
+            margin-right: 4px;
+        }
+    }
+}

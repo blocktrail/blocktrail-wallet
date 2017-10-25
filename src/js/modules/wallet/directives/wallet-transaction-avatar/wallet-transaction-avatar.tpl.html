@@ -1,0 +1,19 @@
+<div
+        class="item-image display-token"
+        ng-class="{'received': isReceived, 'sent': !isReceived, 'contact-token': !isAnonymous, 'anon-token': isAnonymous}"
+>
+    <!-- Display contact initials, default is empty string  -->
+    <div class="token-text">
+        {{ contactInitials }}
+    </div>
+
+    <!-- Display avatar -->
+    <span
+        ng-if="!isAnonymous"
+        class="avatar"
+        ng-style="{'background-image':'url({{ avatarUrl }})'}"
+    ></span>
+
+    <i ng-if="isAnonymous && !isReceived" class="icon ion-ios-redo-outline"></i>
+    <i ng-if="isAnonymous && isReceived" class="icon ion-ios-undo-outline"></i>
+</div>

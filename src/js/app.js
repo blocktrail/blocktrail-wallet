@@ -532,6 +532,7 @@ angular.module('blocktrail.wallet').config(
                 controller: "WalletCtrl",
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
+                    settingsData: getSettingsData,
                     activeWallet: getActiveWallet,
                     loadingData: loadingData
 
@@ -927,6 +928,10 @@ angular.module('blocktrail.wallet').config(
             });
 
 
+        function getSettingsData(settingsService) {
+            return settingsService.getSettings();
+        }
+
 
         /**
          * Get the active wallet
@@ -941,8 +946,6 @@ angular.module('blocktrail.wallet').config(
                 .then(function(data) {
                     var accountInfo = data[0];
                     var walletInfo = data[1];
-
-                    debugger;
 
                     if (!sdkService.getNetworkType() || !walletInfo.identifier) {
                         $state.go("app.reset");
@@ -991,8 +994,6 @@ angular.module('blocktrail.wallet').config(
          */
         function loadingData(settingsService, $q, $rootScope, $log, Currencies) {
             // Do an initial load of cached user data
-
-            debugger;
             return $q.all([
                 Currencies.updatePrices(true),
                 settingsService.getSettings()

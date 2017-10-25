@@ -1,0 +1,28 @@
+<div class="item item-avatar item-transaction" ng-click="onShowTransaction(transaction)">
+    <!-- Transaction avatar -->
+    <wallet-transaction-avatar
+        transaction="transaction"
+    ></wallet-transaction-avatar>
+
+    <!-- Transaction description -->
+    <wallet-transaction-description
+        transaction="transaction"
+    ></wallet-transaction-description>
+
+    <!-- Is pending transaction -->
+    <div class="pending" ng-if="!transaction.block_height">
+        <i class="icon ion-clock"></i>
+    </div>
+
+    <!-- Value -->
+    <div
+        class="value"
+        ng-class="isReceived ? 'received' : 'sent'"
+        ng-bind-html="value"
+    ></div>
+</div>
+
+
+
+
+

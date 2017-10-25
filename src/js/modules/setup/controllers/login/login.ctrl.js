@@ -13,8 +13,6 @@
             twoFactorToken: null
         };
 
-        // ionic.Platform.isAndroid()
-
         // Methods
         $scope.onSubmitFormLogin = onSubmitFormRegister;
 

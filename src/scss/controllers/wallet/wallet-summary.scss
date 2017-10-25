@@ -1,10 +1,8 @@
-
 $balance-display-height:    38vw !default;
 $display-token-size:        50px !default;
+$divider-height: 35px;
 
-
-//--- Wallet summary screen ---
-.state-wallet.state-summary {
+.state-summary {
     .user-balance-display {
         position: absolute;
         top: 0;
@@ -61,12 +59,12 @@ $display-token-size:        50px !default;
     }
 
     .scroll-content {
-        padding-top: $balance-display-height;
+        // padding-top: $balance-display-height;
 
         //--- wallet transaction list ---
-        $divider-height: 35px;
 
-        .item {
+
+        /*.item {
             border: none;
             .row {
                 position: relative;
@@ -143,14 +141,70 @@ $display-token-size:        50px !default;
                     border-radius: 100%;
                 }
             }
+        }*/
+
+        .item-transaction {
+            padding-right: 124px;
+
+            .item-image {
+                i {
+                    display: block;
+                    font-size: 28px;
+                    line-height: 40px;
+                }
+            }
+
+            h2 {
+                font-weight: 300;
+                color: $darkgray-dark;
+            }
         }
+
+        .timestamp {
+            color: $darkgray-light;
+        }
+
+        .pending {
+            position: absolute;
+            top: 26px;
+            right: 100px;
+            font-size: 16px;
+            color: $darkgray-light;
+        }
+
+        .value {
+            position: absolute;
+            top: 26px;
+            right: 8px;
+            font-size: 16px;
+
+            .disp {
+                position: relative;
+                top: -6px;
+                font-size: 10px;
+                padding: 0 0 0 4px;
+            }
+
+            &.received {
+                color: $bt-green;
+                .disp {
+                    color: $darkgray-light;
+                }
+            }
+            &.sent {
+                color: $bad-red;
+                .disp {
+                    color: $darkgray-light;
+                }
+            }
+        }
+
         .item-divider {
             padding: 0;
             background: #fff;
 
             .date-group {
                 display: block;
-                width: 100%;
                 background: #f2f2f2;
                 padding: 0 0 0 15px;
                 height: $divider-height;
@@ -159,6 +213,7 @@ $display-token-size:        50px !default;
                 color: #828180;
             }
         }
+
         .collection-repeat-after-container .sentence-case {
             width: 100%;
         }
@@ -278,6 +333,7 @@ $display-token-size:        50px !default;
         }
     }
 }
+
 .platform-ios {
     .state-wallet .user-balance-display {
         transform: translate(0, $bar-height + $ios-statusbar-height);

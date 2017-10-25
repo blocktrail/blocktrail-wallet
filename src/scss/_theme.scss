@@ -628,8 +628,6 @@ $balance-display-height: 40vw;
 
 @import "partials/setup";
 
-@import "partials/wallet-summary";
-
 @import "partials/send-receive";
 
 @import "partials/pin-entry";
@@ -648,9 +646,19 @@ $balance-display-height: 40vw;
 
 @import "partials/dialogs";
 
+@import "directives/wallet/wallet-no-more-transactions";
+@import "directives/wallet/wallet-side-header";
+@import "directives/wallet/wallet-side-nav";
+
 @import "controllers/setup/start";
 @import "controllers/setup/create-new-accout";
 @import "controllers/setup/login";
+
+
+@import "controllers/wallet/wallet-summary";
+
+
+
 
 
 

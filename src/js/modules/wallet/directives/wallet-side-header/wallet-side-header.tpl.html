@@ -1,0 +1,12 @@
+<ion-header-bar class="wallet-side-header">
+    <a menu-close ng-href="{{ $state.href('app.wallet.settings.profile') }}" class="display-token">
+        <img class="avatar" ng-if="settings.profilePic" ng-src="{{ settings.profilePic }}" alt=""/>
+    </a>
+
+    <ion-item>
+        <a menu-close ng-href="{{ $state.href('app.wallet.settings.profile') }}">
+            <h2>{{ settings.displayName && settings.displayName || settings.username }}</h2>
+            <p>{{ settings.email }}</p>
+        </a>
+    </ion-item>
+</ion-header-bar>
