@@ -7,19 +7,76 @@
 
 
     <!-- TODO review this -->
-    <!-- <user-balance-display ng-class="'maximise'"></user-balance-display> -->
+     <!--<user-balance-display ng-class="'maximise'"></user-balance-display>-->
 
-    <!--delegate-handle="txScroll" on-scroll="onScroll(val)"-->
+    <!--<ion-card>
+        <ion-item>
+            <ion-avatar item-start>
+                <img src="img/marty-avatar.png">
+            </ion-avatar>
+            <h2>Marty McFly</h2>
+            <p>November 5, 1955</p>
+        </ion-item>
+    </ion-card>-->
 
-    <ion-content delegate-handle="txScroll" on-scroll="onScroll(val)">
-        <ion-list>
+    <div class="bar bar-subheader wallet-info">
+        <div class="col col-33 no-padding user-avatar-col">
+            <div class="display-token">
+                <div class="initials"><i class="ion-person"></i></div>
+                <img class="avatar" ng-if="settings.profilePic" ng-src="{{ settings.profilePic }}" alt=""/>
+            </div>
+
+        </div>
+    </div>
+
+
+    <ion-content>
+        <ion-list class="transactions-list">
+            <div ng-if="buyBtcPendingOrders.length > 0">
+                <!-- Show header -->
+                <div>
+                    <div class="item-divider">
+                        <div class="date-group">
+                            {{ 'BUYBTC_PENDING_ORDERS' | translate }}
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-repeat="buyBtcPendingOrder in buyBtcPendingOrders track by $index">
+                    <div class="item item-avatar item-transaction" ng-click="onShowTransaction(transaction)">
+                        <!-- Transaction avatar -->
+                        <div class="item-image display-token received">
+                            <!-- Display avatar -->
+                            <span
+                                class="avatar"
+                                ng-style="{'background-image':'url(data:image/jpeg;base64,{{ buyBtcPendingOrder.avatarUrl }})'}"
+                            ></span>
+                        </div>
+
+                        <!-- Transaction description -->
+                        <div>
+                            <h2>{{ 'BUYBTC_PENDING_ORDER_FROM' | translate: { order: buyBtcPendingOrder } }}</h2>
+                            <h4 class="timestamp">
+                                {{ buyBtcPendingOrder.time | amDateFormat: 'h:mm a' : 'unix' }} | {{ 'BUYBTC_PENDING_ORDER_SUBTITLE' | translate: {order: buyBtcPendingOrder} }}
+                            </h4>
+                        </div>
+
+                        <!-- Is pending transaction -->
+                        <div class="pending">
+                            <i class="icon ion-clock"></i>
+                        </div>
+
+                        <!-- Value -->
+                        <div class="value received">{{ buyBtcPendingOrder.qty | satoshiToCoin : walletData.networkType : 4 }}</div>
+                    </div>
+                </div>
+            </div>
+
+
             <!-- Transactions -->
             <div ng-repeat="transaction in walletData.transactions | limitTo : transactionsListLimit : 0 track by transaction.hash">
                 <!-- Show date header -->
-                <div
-                    ng-if="isHeader(transaction)"
-                    ng-class="{ 'isFirst': $first }"
-                >
+                <div ng-if="isHeader(transaction)">
                     <div class="item-divider">
                         <div class="date-group">
                             {{ getTransactionHeader() | amCalendar }}
@@ -52,13 +109,6 @@
             immediate-check="false"
             distance="25%">
         </ion-infinite-scroll>
-
-
-
-        <!-- Wallet no transactions message -->
-        <!--<wallet-no-transactions ng-show="!isLoading && !walletData.transactions.length"></wallet-no-transactions>-->
-        <!-- Wallet no more transaction message -->
-        <!--<wallet-no-more-transactions ng-class="{ active: isShowNoMoreTransactions }"></wallet-no-more-transactions>-->
 
     </ion-content>
 </ion-view>

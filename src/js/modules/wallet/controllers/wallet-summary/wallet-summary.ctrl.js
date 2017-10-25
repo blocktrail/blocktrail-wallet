@@ -17,7 +17,7 @@
         $scope.isTwoFactorWarning = false; // display 2FA warning once every day when it's not enabled
         $scope.showBCCSweepWarning = false;
         $scope.lastDateHeader = lastDateHeader;
-        $scope.buybtcPendingOrders = []; // Glidera transactions
+        $scope.buyBtcPendingOrders = []; // Glidera transactions
         $scope.transactionsListLimit = transactionsListLimitStep;
 
         $scope.isHeader = isHeader;
@@ -91,7 +91,7 @@
         function getGlideraTransactions() {
             return settingsService.getSettings()
                 .then(function(settings) {
-                    $scope.buybtcPendingOrders = [];
+                    $scope.buyBtcPendingOrders = [];
 
                     settings.glideraTransactions.forEach(function(glideraTxInfo) {
                         // don't display completed TXs, they will be part of our normal transaction history
@@ -115,11 +115,11 @@
                             displayName: buyBTCService.BROKERS.glidera.displayName
                         };
 
-                        $scope.buybtcPendingOrders.push(order);
+                        $scope.buyBtcPendingOrders.push(order);
                     });
 
                     // latest first
-                    $scope.buybtcPendingOrders.reverse();
+                    $scope.buyBtcPendingOrders.reverse();
                 });
         }
 
@@ -221,7 +221,7 @@
         // update balance from cache
         $scope.transactionsData = [];   //original list of transactions
         $scope.transactionList = [];    //transactions with "date headers" inserted
-        $scope.buybtcPendingOrders = [];
+        $scope.buyBtcPendingOrders = [];
         $scope.transactionInfo = null;
         $scope.canLoadMoreTransactions = true;
         $scope.isActive = true;
@@ -264,7 +264,7 @@
         $scope.refreshBuybtcPendingOrders = function() {
             Wallet.wallet.then(function(wallet) {
                 return settingsService.$isLoaded().then(function () {
-                    $scope.buybtcPendingOrders = [];
+                    $scope.buyBtcPendingOrders = [];
 
                     settingsService.glideraTransactions.forEach(function (glideraTxInfo) {
                         if (glideraTxInfo.transactionHash || glideraTxInfo.status === "COMPLETE") {
@@ -289,15 +289,15 @@
                             estimatedDeliveryDate: glideraTxInfo.estimatedDeliveryDate
                         };
 
-                        $scope.buybtcPendingOrders.push(order);
+                        $scope.buyBtcPendingOrders.push(order);
                     });
 
-                    if ($scope.buybtcPendingOrders.length > 0) {
+                    if ($scope.buyBtcPendingOrders.length > 0) {
                         // add header row
-                        $scope.buybtcPendingOrders.push({isBuyBtcPendingOrder: true, isHeader: true});
+                        $scope.buyBtcPendingOrders.push({isBuyBtcPendingOrder: true, isHeader: true});
 
                         // latest first
-                        $scope.buybtcPendingOrders.reverse();
+                        $scope.buyBtcPendingOrders.reverse();
                     }
                 });
             });
@@ -323,7 +323,7 @@
 
 
                 $scope.transactionsData = $scope.transactionsData.concat(result);
-                $scope.transactionList = $scope.buybtcPendingOrders.concat($scope.groupTransactions($scope.transactionsData));
+                $scope.transactionList = $scope.buyBtcPendingOrders.concat($scope.groupTransactions($scope.transactionsData));
                 $scope.paginationOptions.from += result.length;
                 $scope.canLoadMoreTransactions = result.length >= limit;
 
