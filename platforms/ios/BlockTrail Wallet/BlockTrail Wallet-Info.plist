@@ -43,12 +43,6 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>bitcoin cash</string>
-        </array>
-      </dict>
-      <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
           <string>btccomwallet</string>
         </array>
       </dict>
