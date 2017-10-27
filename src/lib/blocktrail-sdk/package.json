@@ -13,7 +13,7 @@
     "multi-signature",
     "transaction"
   ],
-  "version": "3.3.4",
+  "version": "3.4.0",
   "homepage": "https://www.blocktrail.com/api/docs/lang/nodejs",
   "license": "MIT",
   "repository": {
@@ -35,7 +35,7 @@
     "assert-plus": "0.1.5",
     "async": "0.9.0",
     "bip39": "git://github.com/blocktrail/bip39.git#sjcl-browser-bip39",
-    "bitcoinjs-lib": "git://github.com/blocktrail/bitcoinjs-lib.git#374d5897b296630ae2f81a5df2b46eb367e4e99b",
+    "bitcoinjs-lib": "git://github.com/blocktrail/bitcoinjs-lib.git#ce1c5e9e684b77b015f82f698e8d726ebe9f0a15",
     "bitcoinjs-message": "^1.0.1",
     "bops": "0.0.6",
     "bowser": "^0.7.2",
@@ -44,12 +44,9 @@
     "create-hmac": "^1.1.3",
     "crypto-js": "^3.1.5",
     "debug": "0.8.1",
-    "html-pdf": "1.0.*",
     "lodash": "~4.17.2",
     "promise": "^6.1.0",
     "q": "1.0.1",
-    "qrcode-canvas": "~0.0.1",
-    "qrcode-js": "git://github.com/blocktrail/qrcode-js.git#master",
     "randombytes": "^2.0.1",
     "sjcl": "git://github.com/blocktrail/sjcl.git#minify-library",
     "superagent": "^0.21.0",
@@ -71,8 +68,10 @@
     }
   ],
   "devDependencies": {
+    "blocktrail-sdk-backup-generator": "0.1.0",
     "brfs": "*",
     "browserify": "*",
+    "coveralls": "^2.13.1",
     "grunt": "~0.4.2",
     "grunt-browserify": "git://github.com/jmreidy/grunt-browserify.git#4f96beb75d27fdebc4359e08e7db4c514f6265a8",
     "grunt-contrib-concat": "~0.5.1",
@@ -86,11 +85,14 @@
     "jscs": "~3.0.7",
     "jshint": "~2.9.1",
     "mocha": "*",
+    "nyc": "^11.2.1",
     "watchify": "*"
   },
   "scripts": {
     "test": "mocha",
+    "coverage-test": "nyc --reporter=html --reporter=text mocha",
     "browserify": "grunt build",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "./node_modules/jscs/bin/jscs main.js lib/ test/ && ./node_modules/jscs/bin/jscs main.js main.js lib/ test/"
   }
 }

@@ -904,6 +904,7 @@ APIClient.prototype.initWallet = function(options, cb) {
             blocktrailPublicKeys,
             keyIndex,
             result.chain || 0,
+            result.segwit || 0,
             self.testnet,
             result.checksum,
             result.upgrade_key_index,
@@ -1087,6 +1088,7 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                                     blocktrailPublicKeys,
                                     keyIndex,
                                     result.chain || 0,
+                                    result.segwit || 0,
                                     self.testnet,
                                     checksum,
                                     result.upgrade_key_index,
@@ -1196,6 +1198,7 @@ APIClient.prototype._createNewWalletV2 = function(options) {
                         blocktrailPublicKeys,
                         keyIndex,
                         result.chain || 0,
+                        result.segwit || 0,
                         self.testnet,
                         checksum,
                         result.upgrade_key_index,
@@ -1306,6 +1309,7 @@ APIClient.prototype._createNewWalletV3 = function(options) {
                             blocktrailPublicKeys,
                             keyIndex,
                             result.chain || 0,
+                            result.segwit || 0,
                             self.testnet,
                             checksum,
                             result.upgrade_key_index,
@@ -1679,17 +1683,25 @@ APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFe
         prioboost = false;
     }
 
+    var data = {
+        paths: paths,
+        two_factor_token: twoFactorToken
+    };
+    if (typeof txHex === "string") {
+        data.raw_transaction = txHex;
+    } else if (typeof txHex === "object") {
+        Object.keys(txHex).map(function(key) {
+            data[key] = txHex[key];
+        });
+    }
+
     return self.client.post(
         "/wallet/" + identifier + "/send",
         {
             check_fee: checkFee ? 1 : 0,
             prioboost: prioboost ? 1 : 0
         },
-        {
-            raw_transaction: txHex,
-            paths: paths,
-            two_factor_token: twoFactorToken
-        },
+        data,
         cb
     );
 };

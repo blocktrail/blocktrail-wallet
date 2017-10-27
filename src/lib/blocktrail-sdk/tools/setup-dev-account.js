@@ -29,7 +29,7 @@ var _createTestWallet = function(identifier, passphrase, primaryMnemonic, backup
     var backupPrivateKey = bitcoin.HDNode.fromSeedBuffer(backupSeed, network);
     var backupPublicKey = backupPrivateKey.neutered();
 
-    var checksum = primaryPrivateKey.getAddress().toBase58Check();
+    var checksum = primaryPrivateKey.getAddress();
     var primaryPublicKey = primaryPrivateKey.deriveHardened(keyIndex).neutered();
 
     client.storeNewWalletV1(
@@ -59,6 +59,7 @@ var _createTestWallet = function(identifier, passphrase, primaryMnemonic, backup
                 backupPublicKey,
                 blocktrailPublicKeys,
                 keyIndex,
+                0,
                 client.testnet,
                 checksum
             );
