@@ -5,27 +5,15 @@
         <div class="button button-clear button-quickscan" nav-direction="forward" ui-sref="app.wallet.send.qrcode({backdrop: true})"><i class="icon-qrcode"></i></div>
     </ion-nav-buttons>
 
-
-    <!-- TODO review this -->
-     <!--<user-balance-display ng-class="'maximise'"></user-balance-display>-->
-
-    <!--<ion-card>
-        <ion-item>
-            <ion-avatar item-start>
-                <img src="img/marty-avatar.png">
-            </ion-avatar>
-            <h2>Marty McFly</h2>
-            <p>November 5, 1955</p>
-        </ion-item>
-    </ion-card>-->
-
     <div class="bar bar-subheader wallet-info">
-        <div class="col col-33 no-padding user-avatar-col">
+        <div class="wallet-info-avatar">
             <div class="display-token">
-                <div class="initials"><i class="ion-person"></i></div>
                 <img class="avatar" ng-if="settings.profilePic" ng-src="{{ settings.profilePic }}" alt=""/>
             </div>
-
+        </div>
+        <div class="wallet-info-description">
+            <h1 ng-bind-html="((walletData.balance + walletData.uncBalance) | satoshiToCoin : walletData.networkType : 4 : true : 'short')">{{ (walletData.balance + walletData.uncBalance) | satoshiToCoin : walletData.networkType : 4 : false : 'short' }}</h1>
+            <p>{{ (walletData.balance + walletData.uncBalance) | satoshiToCurrency : settings.localCurrency : bitcoinPrices }}</p>
         </div>
     </div>
 

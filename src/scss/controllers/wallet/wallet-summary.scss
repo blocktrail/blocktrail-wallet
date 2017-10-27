@@ -1,11 +1,54 @@
 $balance-display-height:    38vw !default;
 $display-token-size:        50px !default;
 $divider-height: 35px;
-$wallet-info-height: 130px;
+$wallet-info-height: 90px;
 
 .state-summary {
     .wallet-info {
         height: $wallet-info-height;
+        background: $app-default-color;
+
+        .wallet-info-avatar {
+            float: left;
+            width: 60px;
+            height: 60px;
+
+            .display-token {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        .wallet-info-description {
+            margin: 0 0 0 80px;
+
+            h1, p {
+                color: #f2f2f2;
+                text-align: right;
+                margin: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            h1 {
+                font-size: 30px;
+                line-height: 36px;
+
+                span {
+                    font-size: 16px;
+                    position: relative;
+                    top: -12px;
+                    padding: 0 0 0 4px;
+                }
+            }
+
+            p {
+                font-size: 14px;
+                line-height: 16px;
+            }
+
+        }
     }
 
     .transactions-list {

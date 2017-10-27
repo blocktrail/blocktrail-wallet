@@ -10,10 +10,14 @@ $sidemenu-option-fontsize:  22px !default;
     color: $sidemenu-font-color;
     font-weight: 200;
 
+    .list {
+        padding-top: 160px;
+    }
+
     .item {
         border: none;
         background: none;
-        padding: 10px 16px;
+        padding: 8px 16px 8px 24px;
 
         &:first-child {
             padding-top: 20px;
@@ -43,7 +47,7 @@ $sidemenu-option-fontsize:  22px !default;
         vertical-align: middle;
 
         &.icon-blocktrail-wallet:before {
-            margin-left: -5px;
+            margin-left: -2px;
             top: -10px;
             position:relative;
         }

@@ -11,6 +11,7 @@ $sidemenu-header-height:    110px !default;
 .wallet-side-header {
     background: none;
     padding-left: 70px;
+    background: $sidemenu-header-bg;
 
     .display-token {
         position: absolute;

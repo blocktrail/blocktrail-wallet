@@ -148,7 +148,6 @@
         return self.show("js/modules/core/controllers/modal-confirm/modal-confirm.tpl.html", "ModalConfirmCtrl", parameters);
     };
 
-
     ModalService.prototype.prompt = function(parameters) {
         var self = this;
 
@@ -173,7 +172,7 @@
         var self = this;
 
         if (self._spinnerModal) {
-            self.closeSpinner();
+            self.hideSpinner();
         }
         
         function spinnerModal(modal) {

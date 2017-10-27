@@ -1,6 +1,5 @@
-<ion-side-menus enable-menu-with-back-views="true">
+<ion-side-menus enable-menu-with-back-views="false">
     <ion-side-menu-content>
-
         <ion-nav-bar class="bar-energized">
             <ion-nav-buttons side="left">
                 <button
@@ -22,6 +21,17 @@
     <ion-side-menu side="left">
         <wallet-side-header settings="settings"></wallet-side-header>
 
+        <div class="bar bar-subheader wallet-side-subheader">
+            <div
+                class="item item-icon-right button-switch-wallet"
+                ng-click="onClickSetActiveWallet()"
+            >
+                {{ walletData.networkType }}: {{ walletData.identifier }}
+                <i class="icon ion-chevron-down" ng-class="item.linkIcon"></i>
+            </div>
+        </div>
+
+        <!-- Nav list -->
         <ion-content>
             <wallet-side-nav list="sideNavList"></wallet-side-nav>
         </ion-content>

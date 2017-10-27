@@ -1,0 +1,21 @@
+.wallet-side-subheader {
+    height: 90px;
+    background: $sidemenu-header-bg;
+    z-index: 15;
+
+    .button-switch-wallet {
+        margin: 5px 0;
+        height: 50px;
+        text-align: left;
+        background-color: #666;
+        color: #f2f2f2;
+        font-size: 16px;
+        font-weight: 300;
+        border-color: #777;
+
+        .icon {
+            color: #999;
+            font-size: 20px;
+        }
+    }
+}

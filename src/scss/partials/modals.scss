@@ -1,14 +1,35 @@
+$item-modal-content-height: 460px;
+$item-modal-prompt-content-height: $item-modal-content-height - 68px;
+
+
 .modal-backdrop-bg {
     background-color: rgba(0, 0, 0, 0.35);
 }
 
 .modal {
-    .card {
+    .card-modal {
         margin: 0 auto;
 
         &.card-sm {
             max-width: 400px;
         }
+    }
+
+
+
+    .item-modal-content,
+    .item-modal-prompt-content {
+        position: relative;
+        max-height: $item-modal-content-height;
+        overflow-y: auto;
+    }
+
+    .item-no-bottom-indent {
+        padding-bottom: 0;
+    }
+
+    .item-modal-prompt-content {
+        max-height: $item-modal-prompt-content-height;
     }
 
     .item {

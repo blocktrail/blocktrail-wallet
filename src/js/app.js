@@ -61,7 +61,10 @@ angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $q, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
-             amMoment, trackingService, blocktrailLocalisation, launchService) {
+             amMoment, trackingService, blocktrailLocalisation, sdkService) {
+        $rootScope.sdkReadOnlySdkData = sdkService.getReadOnlySdkData();
+        $rootScope.networkClassType = "";
+
         $rootScope.CONFIG = CONFIG || {};
         $rootScope.$state = $state;
         $rootScope.$translate = $translate;
@@ -72,13 +75,30 @@ angular.module('blocktrail.wallet').run(
         $rootScope.isAndroid = ionic.Platform.isAndroid();
         $rootScope.isIOS = ionic.Platform.isIOS();
 
-        $rootScope.bodyClass = [];
+        $rootScope.$watch("sdkReadOnlySdkData.networkType", function(newValue, oldValue) {
+            if (newValue !== oldValue) {
+                var network = CONFIG.NETWORKS[newValue].NETWORK;
+                if (network.substr(0, 1) === "t") {
+                    network = network.substr(1);
+                }
 
-        $rootScope.$watch('bodyClass', function() {
-            $rootScope.bodyClassStr = $rootScope.bodyClass.join(" ");
-        }, true);
+                $rootScope.networkClassType = newValue ? ("network-" + network).toLowerCase() : "";
 
-        $rootScope.switchNetwork = function(network) {
+                var cssEl = document.getElementById('css-ionic-app');
+
+                switch (network) {
+                    case 'BTC':
+                        cssEl.href = cssEl.href.replace("bcc-", "btc-");
+                        break;
+                    case 'BCC':
+                        cssEl.href = cssEl.href.replace("btc-", "bcc-");
+                        break;
+                }
+            }
+        });
+
+        // TODO Remove it
+        /*$rootScope.switchNetwork = function(network) {
             $rootScope.NETWORK = network;
 
             var cssEl = document.getElementById('css-ionic-app');
@@ -121,13 +141,13 @@ angular.module('blocktrail.wallet').run(
             }
         };
 
-        $rootScope.switchNetwork("BTC");
+        $rootScope.switchNetwork("BTC");*/
 
-        launchService.getNetwork().then(function(network) {
+        /*launchService.getNetwork().then(function(network) {
             if (network) {
                 $rootScope.switchNetwork(network);
             }
-        });
+        });*/
 
         if (CONFIG.DEBUGLIBS) {
             blocktrailSDK.debug.enable('*,-pouchdb:*');
@@ -293,15 +313,15 @@ angular.module('blocktrail.wallet').run(
 
         //--- Debugging info ---
         $log.debug("Plugins; ", Object.keys(navigator));
-        $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on("$stateChangeStart", function(event, toState, toParams) {
             $log.debug("$stateChangeStart", toState.name, Object.keys(toParams).map(function(k) { return k + ":" + toParams[k]; }));
         });
 
-        $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams) {
             $log.debug("$stateChangeSuccess", toState.name, Object.keys(toParams).map(function(k) { return k + ":" + toParams[k]; }));
         });
 
-        $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on("$stateChangeError", function(event, toState, toParams) {
             $log.debug("$stateChangeError", toState.name, Object.keys(toParams).map(function(k) { return k + ":" + toParams[k]; }));
         });
 
@@ -465,7 +485,7 @@ angular.module('blocktrail.wallet').config(
         $stateProvider
             .state('app', {
                 abstract: true,
-                template: "<ion-nav-view />",
+                template: "<ion-nav-view cache-view='false'></ion-nav-view>",
                 resolve: {
                     /**
                      * load extra languages we are aware of
@@ -535,64 +555,6 @@ angular.module('blocktrail.wallet').config(
                     settingsData: getSettingsData,
                     activeWallet: getActiveWallet,
                     loadingData: loadingData
-
-                    /*settings: function (settingsService, $rootScope, $state) {
-
-
-
-                        //do an initial load of the user's settings
-                        return settingsService.$isLoaded().then(function (data) {
-                            $rootScope.settings = settingsService;
-                            //set the preferred language
-                            $rootScope.changeLanguage(settingsService.language);
-
-                            return data;
-                        });
-                    },
-                    pinOnOpen: function(settingsService, $q, $state, $rootScope, /!* dependancies= *!/settings) {
-                        return settingsService.$isLoaded().then(function() {
-                            // if pinOnOpen is required and last time we asked for it was more than 5min ago
-                            if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE) {
-                                $rootScope.STATE.PENDING_PIN_REQUEST = true;
-
-                                $state.go('app.pin', {nextState: $state.$current.name});
-
-                                // throw error to prevent controller from loading or any other resolves to continue
-                                return $q.reject(new Error("PIN_REQUIRED"));
-                            }
-                        });
-                    },
-                    brokers: function ($rootScope, buyBTCService, CONFIG, /!* dependancies= *!/pinOnOpen) {
-                        return buyBTCService.enabled()
-                            .then(function (enabled) {
-                                $rootScope.BUYBTC_ENABLED = (CONFIG.BUYBTC || enabled) && $rootScope.NETWORK === "BTC";
-                            });
-                    },
-                    // TODO Continue here
-                    // activeWallet: getActiveWallet,
-                    loadingDone: function (Wallet, Currencies, $q, $rootScope, $log, $cordovaDialogs, $translate, $state, /!* dependancies= *!/pinOnOpen) {
-                        //do an initial load of cached user data
-                        return $q.all([
-                            Currencies.updatePrices(true)
-                        ]).then(function (data) {
-                            $log.debug('initial load complete');
-
-                            $rootScope.bitcoinPrices = data[1];
-
-                            return true;
-                        }).catch(function (error) {
-                            if (error.message && error.message == "missing") {
-                                //missing account info, go to reset state to force user to log in again
-                                $cordovaDialogs.alert(
-                                    $translate.instant('MSG_CORRUPT_DATA').sentenceCase(),
-                                    $translate.instant('ERROR_TITLE_3').sentenceCase(),
-                                    $translate.instant('OK')
-                                ).then(function () {
-                                    $state.go('app.reset');
-                                });
-                            }
-                        });
-                    }*/
                 }
             })
             .state('app.wallet.summary', {
@@ -653,7 +615,7 @@ angular.module('blocktrail.wallet').config(
                 url: "/send",
                 cache: false,
                 data: {
-                    clearHistory: true  //always clear history when entering this state
+                    clearHistory: true  // always clear history when entering this state
                 },
                 views: {
                     "mainView@app.wallet": {

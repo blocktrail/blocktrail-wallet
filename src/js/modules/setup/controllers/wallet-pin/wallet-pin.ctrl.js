@@ -27,16 +27,27 @@
          * @return {boolean}
          */
         function onSubmitFormPin() {
-            if ($scope.form.pin.trim().length < 4) {
+            var pin = parseInt($scope.form.pin);
+            var pinRepeat = parseInt($scope.form.pinRepeat);
+
+            // Check on numbers
+            if (!pin) {
+                modalService.alert({
+                    body: "MSG_BAD_ONLY_NUMBERS"
+                });
+                return false;
+            }
+
+            // Check on length
+            if (pin.toString().length < 4) {
                 modalService.alert({
                     body: "MSG_BAD_PIN_LENGTH"
                 });
                 return false;
             }
 
-            // TODO Check on digits only !!!
-
-            if ($scope.form.pin.trim() !== $scope.form.pinRepeat.trim()) {
+            // Check on match
+            if (pin !== pinRepeat) {
                 modalService.alert({
                     body: "MSG_BAD_PIN_REPEAT"
                 });

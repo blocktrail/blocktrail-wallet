@@ -3,10 +3,12 @@
         <div class="va-holder">
             <div class="va-content">
                 <form
-                    class="card card-sm"
+                    class="card card-modal card-sm"
                     name="confirmPasswordForm"
                 >
-                    <ion-item ng-if="title || body">
+                    <ion-item
+                        class="item-text-wrap item-borderless item-modal-prompt-content"
+                        ng-if="title || body">
                         <h2 ng-if="title" class="title" ng-class="titleClass">{{ title | translate }}</h2>
                         <p ng-if="body" class="body" ng-class="bodyClass">{{ body | translate }}</p>
                     </ion-item>
