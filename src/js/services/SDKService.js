@@ -196,7 +196,10 @@ angular.module('blocktrail.wallet').factory(
                             network: network,
                             testnet: CONFIG.TESTNET || accountInfo.testnet,
                             host: CONFIG.API_HOST || null,
-                            https: typeof CONFIG.API_HTTPS !== "undefined" ? CONFIG.API_HTTPS : true
+                            https: typeof CONFIG.API_HTTPS !== "undefined" ? CONFIG.API_HTTPS : true,
+                            defaultHeaders: {
+                                'X-BT-Platform': 'mobile'
+                            }
                         });
                     }, function (e) {
                         $log.error('Missing account info for SDK');
