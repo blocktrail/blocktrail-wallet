@@ -18,6 +18,8 @@ var blocktrail = angular.module('blocktrail.wallet', [
     'angulartics.google.analytics.cordova',
 
     'blocktrail.config',
+    "blocktrail.setup",
+    "blocktrail.templates",
 
     'ngIOS9UIWebViewPatch'
 ].filter(function filterNull(r) { return !!r; }));
@@ -470,6 +472,8 @@ angular.module('blocktrail.wallet').config(
                 }
             })
 
+
+            // TODO Discuss lunch states, may be better to move them to setup module
             /*---Launch---*/
             .state('app.launch', {
                 url: "/launch",
@@ -510,207 +514,12 @@ angular.module('blocktrail.wallet').config(
                 }
             })
 
-
-            /*---Setup---*/
-            .state('app.setup', {
-                url: "/setup",
-                abstract: true,
-                controller: "SetupCtrl",
-                templateUrl: "templates/setup/setup.html",
-                resolve: {
-                    /**
-                     * check for extra languages to enable
-                     * if new language is new preferred, set it
-                     */
-                    preferredLanguage: function(CONFIG, $rootScope, settingsService, blocktrailLocalisation, launchService, AppVersionService) {
-                        return launchService.getWalletConfig()
-                            .then(function(result) {
-                                AppVersionService.checkVersion(
-                                    null,
-                                    null,
-                                    result.versionInfo.mobile,
-                                    AppVersionService.CHECKS.SETUP
-                                );
-
-                                return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
-                            })
-                            .then(function(extraLanguages) {
-                                return settingsService.$isLoaded().then(function() {
-                                    // parse extra languages to determine if there's any new
-                                    var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
-                                    var preferredLanguage;
-
-                                    // if there's any new we should store those
-                                    if (r) {
-                                        var newLanguages = r[0];
-                                        preferredLanguage = r[1];
-                                        settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
-                                    } else {
-                                        preferredLanguage = blocktrailLocalisation.setupPreferredLanguage();
-                                    }
-
-                                    // activate preferred language
-                                    $rootScope.changeLanguage(preferredLanguage);
-
-                                    // store preferred language
-                                    settingsService.language = preferredLanguage;
-
-                                    return settingsService.$store();
-                                });
-                            })
-                            .then(function() {}, function(e) { console.error(e); });
-                    },
-                    settings: function(settingsService, $rootScope) {
-                        //do an initial load of the user's settings (will return defaults if none have been saved yet)
-                        return settingsService.$isLoaded().then(function() {
-                            $rootScope.settings = settingsService;
-                            return settingsService;
-                        });
-                    }
-                }
-            })
-            .state('app.setup.start', {
-                url: "/start",
-                cache: false,
-                controller: "SetupStartCtrl",
-                templateUrl: "templates/setup/setup.start.html",
-                data: {
-                    clearHistory: true
-                }
-            })
-            .state('app.setup.login', {
-                url: "/login",
-                cache: false,
-                controller: "SetupLoginCtrl",
-                templateUrl: "templates/setup/setup.login.html"
-            })
-            .state('app.setup.register', {
-                url: "/register",
-                cache: false,
-                controller: "SetupNewAccountCtrl",
-                templateUrl: "templates/setup/setup.register.html"
-            })
-            .state('app.setup.pin', {
-                url: "/pin",
-                cache: false,
-                controller: "SetupWalletPinCtrl",
-                templateUrl: "templates/setup/setup.pin.html",
-                resolve: {
-                    accountInfo: function($state, launchService) {
-                        return launchService.getAccountInfo().then(
-                            function(accountInfo) {
-                                return accountInfo;
-                            },
-                            function() {
-                                return $state.go('app.setup.start');
-                            }
-                        );
-                    }
-                }
-            })
-            .state('app.setup.backup', {
-                url: "/wallet-backup",
-                cache: false,
-                controller: "SetupWalletBackupCtrl",
-                templateUrl: "templates/setup/setup.wallet-backup.html",
-                resolve: {
-                    backupInfo: function($state, launchService) {
-                        return launchService.getBackupInfo().then(
-                            function(backupInfo) {
-                                return backupInfo;
-                            },
-                            function() {
-                                return $state.go('app.setup.start');
-                            }
-                        );
-                    }
-                }
-            })
-            .state('app.setup.phone', {
-                url: "/phone",
-                controller: "SetupPhoneCtrl",
-                templateUrl: "templates/setup/setup.phone.html",
-                data: {
-                    clearHistory: true  //clear any previous history
-                },
-                resolve: {
-                    walletInfo: function($state, launchService) {
-                        return launchService.getWalletInfo().then(
-                            function(walletInfo) {
-                                return walletInfo;
-                            },
-                            function() {
-                                return $state.go('app.setup.start');
-                            }
-                        );
-                    }
-                }
-            })
-            //NB: create a copy of the app.wallet.settings.phone to bypass the WalletController which inits the wallet and starts polling
-            .state('app.setup.phone-verify', {
-                url: "/phone?goBackTo",
-                templateUrl: "templates/settings/settings.phone.html",
-                controller: 'PhoneSettingsCtrl',
-                resolve: {
-                    settings: function(settingsService, $rootScope, $translate) {
-                        //do an initial load of the user's settings
-                        return settingsService.$isLoaded().then(function(data) {
-                            $rootScope.settings = settingsService;
-                            //set the preferred language
-                            $rootScope.changeLanguage(settingsService.language);
-
-                            return data;
-                        });
-                    }
-                }
-            })
-            .state('app.setup.contacts', {
-                url: "/contacts",
-                controller: "SetupContactsCtrl",
-                templateUrl: "templates/setup/setup.contacts.html",
-                resolve: {
-                    walletInfo: function($state, launchService) {
-                        return launchService.getWalletInfo().then(
-                            function(walletInfo) {
-                                return walletInfo;
-                            },
-                            function() {
-                                return $state.go('app.setup.start');
-                            }
-                        );
-                    }
-                }
-            })
-            .state('app.setup.profile', {
-                url: "/profile",
-                controller: "ProfileSettingsCtrl",
-                templateUrl: "templates/setup/setup.profile.html",
-                resolve: {
-                    walletInfo: function($state, launchService) {
-                        return launchService.getWalletInfo().then(
-                            function(walletInfo) {
-                                return walletInfo;
-                            },
-                            function() {
-                                return $state.go('app.setup.start');
-                            }
-                        );
-                    }
-                }
-            })
-            .state('app.setup.complete', {
-                url: "/complete",
-                controller: "SetupCompleteCtrl",
-                templateUrl: "templates/setup/setup.complete.html"
-            })
-
-
             /*---Wallet Home---*/
             .state('app.wallet', {
                 abstract: true,
                 url: "/wallet",
                 controller: "WalletCtrl",
-                templateUrl: "templates/common/ion-side-menus.html",
+                templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
                     settings: function (settingsService, $rootScope) {
                         //do an initial load of the user's settings
@@ -770,7 +579,6 @@ angular.module('blocktrail.wallet').config(
                     }
                 }
             })
-
             .state('app.wallet.summary', {
                 url: "?refresh",
                 data: {
@@ -778,11 +586,15 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/wallet/wallet.summary.html",
+                        templateUrl: "js/modules/wallet/controllers/wallet-summary/wallet-summary.tpl.html",
                         controller: 'WalletSummaryCtrl'
                     }
                 }
             })
+
+
+
+
 
             .state('app.wallet.buybtc', {
                 url: "/buy",
@@ -796,7 +608,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/buybtc/buybtc.choose.html",
+                        templateUrl: "js/modules/wallet/controllers/buy-btc-choose/buy-btc-choose.tpl.html",
                         controller: 'BuyBTCChooseCtrl'
                     }
                 }
@@ -806,11 +618,12 @@ angular.module('blocktrail.wallet').config(
                 url: "/glidera/oaoth2/callback",
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/buybtc/buybtc.glidera_callback.html",
+                        templateUrl: "js/modules/wallet/controllers/buy-btc-glidera-oauth-callback/buy-btc-glidera-oauth-callback.tpl.html",
                         controller: 'BuyBTCGlideraOauthCallbackCtrl'
                     }
                 }
             })
+
             .state('app.wallet.buybtc.buy', {
                 url: "/broker/:broker",
                 data: {
@@ -819,7 +632,7 @@ angular.module('blocktrail.wallet').config(
                 cache: false,
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/buybtc/buybtc.buy.html",
+                        templateUrl: "js/modules/wallet/controllers/buy-btc-broker/buy-btc-broker.tpl.html",
                         controller: 'BuyBTCBrokerCtrl'
                     }
                 }
@@ -834,7 +647,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/send/send.input-screen.html",
+                        templateUrl: "js/modules/wallet/controllers/send/send.tpl.html",
                         controller: 'SendCtrl'
                     }
                 }
@@ -855,7 +668,7 @@ angular.module('blocktrail.wallet').config(
                                  return '';
                              }
                         },
-                         controller: 'ScanQRCtrl'
+                         controller: 'SendScanQRCtrl'
                      }
                 }
             })
@@ -867,7 +680,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "overlayView": {
-                        templateUrl: "templates/send/partials/send.partial.contacts-list.html",
+                        templateUrl: "js/modules/wallet/controllers/contact-list/contact-list.tpl.html",
                         controller: 'ContactsListCtrl'
                     }
                 }
@@ -880,8 +693,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "overlayView": {
-                        templateUrl: "templates/send/partials/send.partial.address-input.html",
-                        controller: 'AddressInputCtrl'
+                        templateUrl: "js/modules/wallet/controllers/send-address-input/send-address-input.tpl.html",
+                        controller: 'SendAddressInputCtrl'
                     }
                 }
             })
@@ -893,7 +706,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "overlayView": {
-                        templateUrl: "templates/send/partials/send.partial.fee-choice.html"
+                        templateUrl: "js/modules/wallet/controllers/fee-choice/fee-choice.tpl.html"
                     }
                 }
             })
@@ -905,8 +718,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "overlayView": {
-                        templateUrl: "templates/send/partials/send.partial.pin-input.html",
-                        controller: 'ConfirmSendCtrl'
+                        templateUrl: "js/modules/wallet/controllers/send-confirm/send-confirm.tpl.html",
+                        controller: 'SendConfirmCtrl'
                     }
                 }
             })
@@ -920,7 +733,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/receive/receive.new-address.html",
+                        templateUrl: "js/modules/wallet/controllers/receive/receive.tpl.html",
                         controller: 'ReceiveCtrl'
                     }
                 }
@@ -935,7 +748,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/receive/receive.address-lookup.html",
+                        templateUrl: "js/modules/wallet/controllers/address-lookup/address-lookup.tpl.html",
                         controller: 'AddressLookupCtrl'
                     }
                 }
@@ -966,7 +779,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.html",
+                        templateUrl: "js/modules/wallet/controllers/settings/settings.tpl.html",
                         controller: 'SettingsCtrl'
                     }
                 }
@@ -978,8 +791,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.profile.html",
-                        controller: 'ProfileSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-profile/settings-profile.tpl.html",
+                        controller: 'SettingsProfileCtrl'
                     }
                 }
             })
@@ -990,8 +803,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.phone.html",
-                        controller: 'PhoneSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-phone/settings-phone.tpl.html",
+                        controller: 'SettingsPhoneCtrl'
                     }
                 }
             })
@@ -1002,8 +815,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.currency.html",
-                        controller: 'CurrencySettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-currency/settings-currency.tpl.html",
+                        controller: 'SettingsCurrencyCtrl'
                     }
                 }
             })
@@ -1014,8 +827,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.language.html",
-                        controller: 'LanguageSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-language/settings-language.tpl.html",
+                        controller: 'SettingsLanguageCtrl'
                     }
                 }
             })
@@ -1026,11 +839,12 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.wallet.html",
-                        controller: 'WalletSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-wallet/settings-wallet.tpl.html",
+                        controller: 'SettingsWalletCtrl'
                     }
                 }
             })
+            // TODO move to setup module
             .state('app.wallet.settings.backup', {
                 url: "/wallet-backup",
                 data: {
@@ -1038,7 +852,7 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/setup/setup.wallet-backup.html",
+                        templateUrl: "js/modules/wallet/controllers/settings-wallet-backup/settings-wallet-backup.tpl.html",
                         controller: 'SettingsWalletBackupCtrl'
                     }
                 },
@@ -1063,8 +877,8 @@ angular.module('blocktrail.wallet').config(
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/settings/settings.about.html",
-                        controller: 'AboutSettingsCtrl'
+                        templateUrl: "js/modules/wallet/controllers/settings-about/settings-about.tpl.html",
+                        controller: 'SettingsAboutCtrl'
                     }
                 }
             })
