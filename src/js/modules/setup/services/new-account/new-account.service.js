@@ -2,12 +2,12 @@
     "use strict";
 
     angular.module("blocktrail.setup")
-        .factory("newAccountFormService", function($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
-                return new NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService);
+        .factory("newAccountFormService", function($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
+                return new NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService);
             }
         );
 
-    function NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
+    function NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
         var self = this;
 
         self._$http = $http;
@@ -17,6 +17,7 @@
         self._device = device || {};
         self._CONFIG = CONFIG;
         self._launchService = launchService;
+        self._settingsService = settingsService;
         self._trackingService = trackingService;
     }
 
@@ -44,16 +45,6 @@
 
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/register";
 
-        // TODO add this later
-        /*self._trackingService.getBrowserFingerprint()
-         .then(function(fingerprint) {
-         postData.browser_fingerprint = fingerprint.hash;
-         return postData;
-         }, function() {
-         // if fingerprint fails we just leave it NULL
-         return postData;
-         })*/
-
         return self._$http.post(url, postData)
             .then(self._storeAccountInfo.bind(self))
             .catch(self._errorHandler.bind(self));
@@ -67,9 +58,25 @@
      */
     NewAccountFormService.prototype._storeAccountInfo = function(response) {
         var self = this;
+
         var accountInfo = self._lodash.merge({}, response.data);
 
         return self._launchService.storeAccountInfo(accountInfo)
+            .then(function() {
+                //save the default settings and do a profile sync
+                self._settingsService.username = "";
+                self._settingsService.displayName = "";
+                self._settingsService.enableContacts = false;
+                self._settingsService.email = response.data.email;
+
+                return self._settingsService.$store()
+                    .then(function() {
+                        return self._settingsService.$syncSettingsDown();
+                    })
+                    .then(function() {
+                        self._settingsService.$syncProfileDown();
+                    });
+            })
             .then(function() {
                 return response.data;
             });
@@ -83,12 +90,12 @@
     NewAccountFormService.prototype._errorHandler = function(response) {
         var error;
 
-        if (response.data.msg.toLowerCase().match(/username exists/)) {
+        if (response && response.data && response.data.msg.toLowerCase().match(/username exists/)) {
             error = "MSG_USERNAME_TAKEN";
-        } else if (response.data.msg.toLowerCase().match(/already in use/)) {
+        } else if (response && response.data && response.data.msg.toLowerCase().match(/already in use/)) {
             error = "MSG_EMAIL_TAKEN";
-        } else {
-            error = response.data.msg;
+        } else if (!!response) {
+            error = "" + (response.message || response.msg || response);
         }
 
         return this._$q.reject(error);

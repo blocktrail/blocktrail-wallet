@@ -47,10 +47,9 @@
          * @return { boolean }
          */
         function onActionSheetButtonClickHandler(index) {
-            // TODO Add "Generate PDF" to dictionary
             modalService.showSpinner({
                 title: "",
-                body: "Generate PDF"
+                body: "GENERATE_PDF_FILE"
             });
 
             switch (index) {
@@ -150,10 +149,9 @@
 
             var deferred = $q.defer();
 
-            // TODO Add "Send PDF" to dictionary
             modalService.updateSpinner({
                 title: "",
-                body: "Send PDF"
+                body: "SEND_PDF_FILE"
             });
 
             // check that emails can be sent (try with normal mail, can't do attachments with gmail)

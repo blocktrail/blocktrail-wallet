@@ -504,7 +504,7 @@
         $scope.$on('$ionicView.enter', function() {
             // force refresh with spinner, only if scope has been initialised and cached already
             if ($stateParams.refresh && !$scope.isActive) {
-                $scope.refreshTransactions();
+                $scope.7();
 
                 $scope.displaySpinner = true;
             } else {

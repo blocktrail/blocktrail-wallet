@@ -23,6 +23,7 @@
                         name="email"
                         ng-model="form.email"
                         required
+                        auto-focus
                     >
                 </ion-item>
 
@@ -57,13 +58,13 @@
                 <!-- Terms of service -->
                 <ion-item>
                     <ion-checkbox ng-model="form.termsOfService" name="termsOfService" required="true">
-                        <span translate="SETUP_TERMS_OF_SERVICE_TEXT"></span>
+                        <span>{{ 'SETUP_TERMS_OF_SERVICE_TEXT_MOBILE' | translate }}</span>
                     </ion-checkbox>
                 </ion-item>
 
                 <!-- Submit button -->
                 <ion-item class="item-borderless">
-                    <button class="button button-block" ng-click="onSubmitFormRegister(registerForm)">{{ 'SETUP_REGISTER' | translate }}</button>
+                    <button type="submit" class="button button-block" ng-click="onSubmitFormRegister(registerForm)">{{ 'SETUP_REGISTER' | translate }}</button>
                 </ion-item>
             </div>
         </form>

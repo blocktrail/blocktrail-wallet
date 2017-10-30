@@ -930,14 +930,6 @@ angular.module('blocktrail.wallet').config(
 
                             return activeWallet;
                         });
-                })
-                .then(function(activeWallet) {
-                    var walletData = activeWallet.getReadOnlyWalletData();
-
-                    return launchService.storeWalletInfo(walletData.identifier, walletData.networkType)
-                        .then(function() {
-                            return activeWallet;
-                        });
                 });
         }
 

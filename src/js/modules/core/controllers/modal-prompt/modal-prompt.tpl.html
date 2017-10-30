@@ -13,7 +13,6 @@
                         <p ng-if="body" class="body" ng-class="bodyClass">{{ body | translate }}</p>
                     </ion-item>
 
-
                     <ion-item>
                         <input
                             class="form-control"
@@ -21,13 +20,13 @@
                             placeholder="{{ placeholder | translate }}"
                             name="password"
                             ng-model="form.confirmPassword"
+                            auto-focus
                         >
                     </ion-item>
 
                     <div class="row">
                         <div class="col">
-                            <button class="button button-block" ng-click="confirm()">{{ buttonConfirm | translate
-                                }}
+                            <button class="button button-block" ng-click="confirm()">{{ buttonConfirm | translate }}
                             </button>
                         </div>
                         <div class="col">

@@ -117,7 +117,7 @@
                     walletInfo: getWalletInfo
                 }
             })
-            //NB: create a copy of the app.wallet.settings.phone to bypass the WalletController which inits the wallet and starts polling
+            // NB: create a copy of the app.wallet.settings.phone to bypass the WalletController which inits the wallet and starts polling
             .state("app.setup.phone-verify", {
                 url: "/phone?goBackTo",
                 templateUrl: "templates/settings/settings.phone.html",

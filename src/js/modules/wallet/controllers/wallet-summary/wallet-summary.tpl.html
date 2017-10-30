@@ -9,6 +9,7 @@
         <div class="wallet-info-avatar">
             <div class="display-token">
                 <img class="avatar" ng-if="settings.profilePic" ng-src="{{ settings.profilePic }}" alt=""/>
+                <i class="icon ion-person" ng-if="!settings.profilePic"></i>
             </div>
         </div>
         <div class="wallet-info-description">
@@ -16,7 +17,6 @@
             <p>{{ (walletData.balance + walletData.uncBalance) | satoshiToCurrency : settings.localCurrency : bitcoinPrices }}</p>
         </div>
     </div>
-
 
     <ion-content>
         <ion-list class="transactions-list">

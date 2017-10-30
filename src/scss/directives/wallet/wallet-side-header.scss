@@ -12,11 +12,22 @@ $sidemenu-header-height:    110px !default;
     background: none;
     padding-left: 70px;
     background: $sidemenu-header-bg;
+    border-bottom: 1px solid $mediumgray-dark;
 
     .display-token {
         position: absolute;
         top: 10px;
         left: 14px;
+        text-align: center;
+
+        i {
+            &.icon {
+                width: 45px;
+                height: 45px;
+                font-size: 54px;
+                color: #999;
+            }
+        }
     }
 
     .item {
@@ -31,5 +42,9 @@ $sidemenu-header-height:    110px !default;
 
     h2, p {
         color: $sidemenu-font-color;
+    }
+
+    p {
+        line-height: 16px;
     }
 }

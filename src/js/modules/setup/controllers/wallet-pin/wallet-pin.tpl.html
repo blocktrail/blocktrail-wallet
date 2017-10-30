@@ -4,32 +4,35 @@
     <ion-content scroll="true">
         <form
             class="form-create-new-account"
-            name="registerForm"
+            name="pinForm"
             novalidate
         >
             <div class="card">
-                <div class="list-header">
+                <ion-item class="item-text-wrap">
                     <p>{{ 'SETUP_PIN_DESC_TITLE' | translate }}</p>
                     <p>
                         <small>{{ 'SETUP_PIN_DESC_SUBTITLE' | translate }}</small>
                     </p>
-                </div>
+                </ion-item>
 
                 <!-- Pin -->
                 <ion-item>
                     <input
-                        type="password"
+                        class="password-mask"
+                        type="tel"
                         pattern="[0-9]*"
                         placeholder="{{ 'SETUP_PIN_PLACEHOLDER' | translate }}"
                         name="pin"
                         ng-model="form.pin"
+                        auto-focus
                     >
                 </ion-item>
 
                 <!-- Pin repeat -->
                 <ion-item>
                     <input
-                        type="password"
+                        class="password-mask"
+                        type="tel"
                         pattern="[0-9]*"
                         placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}"
                         name=""
@@ -39,10 +42,8 @@
 
                 <!-- Submit button -->
                 <ion-item>
-                    <button class="button button-block" ng-click="onSubmitFormPin()">{{ 'CONTINUE' | translate }}
-                    </button>
+                    <button type="submit" class="button button-block" ng-click="onSubmitFormPin(form.pin, form.pinRepeat)">{{ 'CONTINUE' | translate }}</button>
                 </ion-item>
-
             </div>
         </form>
     </ion-content>

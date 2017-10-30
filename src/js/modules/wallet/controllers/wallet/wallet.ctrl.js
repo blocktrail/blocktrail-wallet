@@ -4,11 +4,11 @@
     angular.module("blocktrail.wallet")
         .controller("WalletCtrl", WalletCtrl);
 
-    function WalletCtrl($rootScope, $scope, $state, $ionicNavBarDelegate, CONFIG, modalService, settingsData,
-                        activeWallet, walletsManagerService, Currencies) {
+    function WalletCtrl($rootScope, $timeout, $scope, $state, $ionicNavBarDelegate, CONFIG, modalService, settingsData, settingsService,
+                        activeWallet, walletsManagerService, Currencies, Contacts) {
         var walletData = activeWallet.getReadOnlyWalletData();
 
-        $scope.$on('$ionicView.enter', function(e) {
+        $scope.$on('$ionicView.enter', function() {
             $ionicNavBarDelegate.showBar(true);
         });
 
@@ -16,7 +16,6 @@
 
         $scope.settings = settingsData;
         $scope.walletData = walletData;
-
         $scope.sideNavList = [
             {
                 stateHref: $state.href("app.wallet.summary"),
@@ -116,16 +115,19 @@
 
             modalService.showSpinner();
 
-            walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
-                .then(function() {
-                    modalService.hideSpinner();
-                    // $state.reload();
-                    // window.location.reload();
-                    $state.transitionTo("app.wallet.summary", null, { reload: true, inherit: false });
+            $timeout(function() {
+                walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
+                    .then(function() {
+                        // $state.reload();
+                        // window.location.reload();
+                        $state.transitionTo("app.wallet.summary", null, {reload: true, inherit: false});
 
-                });
-        };
-
+                        $timeout(function() {
+                            modalService.hideSpinner();
+                        }, 500);
+                    });
+            });
+        }
 
         $rootScope.getPrice = function() {
             return Currencies.updatePrices(false)
@@ -133,5 +135,94 @@
                     $rootScope.bitcoinPrices = prices;
                 });
         };
+
+        $rootScope.syncProfile = function() {
+            // sync profile if a pending update is present, else check for upstream changes
+            if (!settingsService.profileSynced) {
+                settingsService.$syncProfileUp();
+            } else {
+                settingsService.$syncProfileDown();
+            }
+        };
+
+        $rootScope.syncContacts = function() {
+            //sync any changes to contacts, if syncing enabled
+            if (settingsService.enableContacts) {
+                Contacts.sync()
+                    .then(function() {
+                        //rebuild the cached contacts list
+                        return Contacts.list(true);
+                    })
+                    .then(function() {
+                        settingsService.contactsLastSync = new Date().valueOf();
+                        settingsService.permissionContacts = true;
+                        return settingsService.$store();
+                    })
+                    .catch(function(err) {
+                        //check if permission related error happened and update settings accordingly
+                        if (err instanceof blocktrail.ContactsPermissionError) {
+                            settingsService.permissionContacts = false;
+                            settingsService.enableContacts = false;
+                            settingsService.$store();
+
+                            //alert user that contact syncing is disabled
+                        } else {
+                            $log.error(err);
+                        }
+                    });
+            }
+        };
+
+        // TODO Add call back to nav
+        /*$scope.socialShare = function () {
+            trackingService.trackEvent(trackingService.EVENTS.TELLAFRIEND);
+
+            var message = $translate.instant('MSG_INVITE_CONTACT');
+            var subject = $translate.instant('APPNAME');
+            var file = null;
+            var link = null;
+
+            // Share via native share sheet
+            $cordovaSocialSharing
+                .share(message, subject, file, link)
+                .then(function(result) {
+                    $cordovaToast.showShortCenter($translate.instant('THANKS_2'));
+                    $log.debug("SocialSharing: " + result);
+                }, function(err) {
+                    $log.error("SocialSharing: " + err.message);
+                });
+        };*/
+
+        $timeout(function() { $rootScope.getPrice(); }, 1000);
+        $timeout(function() { $rootScope.syncProfile(); }, 2000);
+        $timeout(function() { $rootScope.syncContacts(); }, 4000);
+        // TODO Apply to new wallet
+        // $timeout(function() { Wallet.refillOfflineAddresses(1); }, 6000);
+        $timeout(function() { settingsService.$syncSettingsDown(); }, 500);
+
+
+        /*if (CONFIG.POLL_INTERVAL_PRICE) {
+            var pricePolling = $interval(function() {
+                if ($rootScope.STATE.ACTIVE) {
+                    $rootScope.getPrice();
+                }
+            }, CONFIG.POLL_INTERVAL_PRICE);
+        }
+
+        if (CONFIG.POLL_INTERVAL_CONTACTS) {
+            var contactSyncPolling = $interval(function() {
+                if ($rootScope.STATE.ACTIVE) {
+                    $rootScope.syncContacts();
+                }
+            }, CONFIG.POLL_INTERVAL_CONTACTS);
+        }
+
+        if (CONFIG.POLL_INTERVAL_PROFILE) {
+            var profileSyncPolling = $interval(function() {
+                if ($rootScope.STATE.ACTIVE) {
+                    $rootScope.syncProfile();
+                }
+            }, CONFIG.POLL_INTERVAL_PROFILE);
+        }*/
     }
 })();

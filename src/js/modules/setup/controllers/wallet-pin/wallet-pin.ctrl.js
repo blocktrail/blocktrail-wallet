@@ -26,11 +26,8 @@
          * On submit the form
          * @return {boolean}
          */
-        function onSubmitFormPin() {
-            var pin = parseInt($scope.form.pin);
-            var pinRepeat = parseInt($scope.form.pinRepeat);
-
-            // Check on numbers
+        function onSubmitFormPin(pin, pinRepeat) {
+            // Check on numbers, pattern="[0-9]*" is in html
             if (!pin) {
                 modalService.alert({
                     body: "MSG_BAD_ONLY_NUMBERS"
@@ -259,7 +256,6 @@
                         }
                     })
                     .spread(function(wallet, backupInfo) {
-                        // TODO Store this data in the storage !!! Problems in wallet-backup if we reload the page
                         $log.debug("New wallet created in [" + ((new Date).getTime() - timestamp) + "ms]");
                         $scope.setupInfo.backupInfo = backupInfo;
                         $scope.setupInfo.backupInfo.supportSecret = supportSecret;
@@ -275,15 +271,16 @@
                             .then(function() {
                                 $state.go("app.reset");
                             });
-                    });
+                    })
                 // TODO Review this logic with Ruben !!!
+                // TODO Change the password on blocktrail.com
             } else if (error.message && (error.message.match(/password/) || error instanceof blocktrailSDK.WalletDecryptError)) {
                 // wallet exists but with different password
                 $log.debug("Wallet with identifier [" + $scope.setupInfo.identifier + "] already exists, prompting for old password");
 
                 return $cordovaDialogs.alert($translate.instant("MSG_WALLET_PASSWORD_MISMATCH"), $translate.instant("SETUP_EXISTING_WALLET"), $translate.instant("OK"))
                     .then(function() {
-                        //prompt for old wallet password
+                        // prompt for old wallet password
                         $scope.message = {title_class: "text-neutral", body: "LOADING_WALLET"};
                         return $scope.promptWalletPassword();
                     });
@@ -349,7 +346,6 @@
          */
         function storeBackupInfo() {
             if ($scope.setupInfo.backupInfo) {
-                // TODO What is it !!!
                 window.fabric.Answers.sendSignUp("App", true);
                 facebookConnectPlugin.logEvent("fb_mobile_complete_registration");
 
@@ -426,6 +422,7 @@
          * @param wallet
          * @returns {*}
          */
+        // TODO CONTINUE HERE
         // TODO Review this part !!!
         // TODO remove $cordovaDialogs
         $scope.promptWalletPassword = function(wallet) {
@@ -455,7 +452,7 @@
                             });
                     }
 
-                    //try the new password
+                    // try the new password
                     $log.debug("re-initialising wallet with new password: " + $scope.setupInfo.identifier);
                     $ionicLoading.show({
                         template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",

@@ -86,18 +86,19 @@
             modalService.hideSpinner();
 
             switch (error.type) {
+                // TODO Add state later
                 case "BANNED_IP":
-                    // TODO do we have this state
-                    $state.go("app.bannedip", { bannedIp: error.data });
+                    return modalService.alert({
+                        title: "BANNED_IP_TITLE",
+                        body: "BANNED_IP_BODY"
+                    });
 
                     break;
 
                 case "SHA_512":
-
-                    // TODO Check this case !!!
                     return modalService.alert({
-                        title: $translate.instant("SETUP_LOGIN_FAILED"),
-                        bodyHtml: $sce.trustAsHtml($translate.instant("MSG_UPGRADE_REQUIRED"))
+                        title: "SETUP_LOGIN_FAILED",
+                        body: "MSG_UPGRADE_REQUIRED"
                     });
 
                     break;
@@ -240,7 +241,7 @@
                         var secret = randomBytes(32).toString('base64');
                         var encryptedSecret = CryptoJS.AES.encrypt(secret, $scope.form.password).toString();
 
-                        //@TODO put in sdk service
+                        // @TODO put in sdk service
                         return $http.post(CONFIG.API_URL + "/v1/" + (CONFIG.TESTNET ? "tBTC" : "BTC") + "/mywallet/secret?api_key=" + result.data.api_key, {
                             encrypted_secret: encryptedSecret
                         }).then(function() {

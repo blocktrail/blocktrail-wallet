@@ -16,6 +16,16 @@ $wallet-info-height: 90px;
             .display-token {
                 width: 60px;
                 height: 60px;
+                text-align: center;
+            }
+
+            i {
+                &.icon {
+                    width: 60px;
+                    height: 60px;
+                    font-size: 74px;
+                    color: #999;
+                }
             }
         }
 
