@@ -11,7 +11,7 @@
                      ng-click="sendInput.feeChoice = OPTIMAL_FEE; $state.go('^');">
                     <div class="fee-choice">
                         <b class="fee-choice-title">{{ 'OPTIMAL_FEE' | translate }}</b>
-                        <span ng-if="fees.optimal" class="fee-choice-fee">{{ fees.optimal | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}</span>
+                        <span ng-if="fees.optimal" class="fee-choice-fee">{{ fees.optimal | satoshiToCoin: 'BTC' : 8 : false: 'hide' }}</span>
                     </div>
                     <div class="fee-choice-notice">
                         {{ 'OPTIMAL_PRIORITY_NOTICE' | translate }}
@@ -22,7 +22,7 @@
                      ng-click="sendInput.feeChoice = LOW_PRIORITY_FEE; $state.go('^');">
                     <div class="fee-choice">
                         <b>{{ 'LOW_PRIORITY_FEE' | translate }}</b>
-                        <span ng-if="fees.lowPriority" class="fee-choice-fee">{{ fees.lowPriority | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}</span>
+                        <span ng-if="fees.lowPriority" class="fee-choice-fee">{{ fees.lowPriority | satoshiToCoin: 'BTC' : 8 : false: 'hide' }}</span>
                     </div>
                     <div class="fee-choice-notice">
                         {{ 'LOW_PRIORITY_NOTICE' | translate }}
@@ -35,7 +35,7 @@
                     <div class="fee-choice">
                         <b>{{ 'PRIOBOOST' | translate }}</b>
                         <span class="fee-choice-fee"
-                              ng-if="fees.minRelayFee && (prioboost.possible)">{{ fees.minRelayFee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}</span>
+                              ng-if="fees.minRelayFee && (prioboost.possible)">{{ fees.minRelayFee | satoshiToCoin: 'BTC' : 8 : false: 'hide' }}</span>
                         <span class="fee-choice-fee fee-choice-fee-err"
                               ng-if="prioboost.credits > 0 && (prioboost.tooLarge || prioboost.zeroConf)">{{ 'PRIOBOOST_NOT_POSSIBLE' | translate }}</span>
                         <span class="fee-choice-fee fee-choice-fee-err"
