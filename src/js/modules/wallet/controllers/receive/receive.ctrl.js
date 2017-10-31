@@ -4,12 +4,14 @@
     angular.module("blocktrail.wallet")
         .controller("ReceiveCtrl", ReceiveCtrl);
 
-    function ReceiveCtrl($scope, $rootScope, Wallet, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
+    function ReceiveCtrl($scope, activeWallet, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
                           $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast) {
+
         $scope.address = null;
         $scope.path = null;
         $scope.bitcoinUri = null;
         $scope.qrcode = null;
+
         $scope.newRequest = {
             address: null,
             path: null,
@@ -24,7 +26,9 @@
             showMessage: false,
             showRequestOptions: false
         };
+
         $scope.message = {};
+
         $scope.qrSettings = {
             correctionLevel: 7,
             SIZE: 225,
@@ -38,7 +42,6 @@
                 //intent: '' // send SMS without open any other app
             }
         };
-
 
         $scope.swapInputs = function() {
             $scope.fiatFirst = !$scope.fiatFirst;
@@ -55,7 +58,7 @@
             //$scope.newRequest.btcValue.$setDirty();    //ideally set the other input to dirty as well
         };
         $scope.newAddress = function() {
-            $q.when(Wallet.getNewAddress()).then(function(address) {
+            $q.when(activeWallet.getNewAddress()).then(function(address) {
                 $scope.newRequest.address = address;
             });
         };
@@ -133,12 +136,13 @@
         $scope.toEmail = function() {
             //get the QRCode
             var qrcode = document.querySelector('qr img');
+
             var params = {
                 address: $scope.newRequest.address,
                 addressURI: $scope.newRequest.bitcoinUri,
                 btcValue: $scope.newRequest.btcValue,
                 fiatValue: $scope.newRequest.fiatValue,
-                localCurrency: $rootScope.settings.localCurrency,
+                localCurrency: $scope.settings.localCurrency,
                 qrcode: qrcode.src
             };
 
@@ -169,10 +173,11 @@
                 address: $scope.newRequest.address,
                 btcValue: $scope.newRequest.btcValue,
                 fiatValue: $scope.newRequest.fiatValue,
-                localCurrency: $rootScope.settings.localCurrency
+                localCurrency: $scope.settings.localCurrency
             };
 
             var smsMessage = $scope.newRequest.btcValue ? $translate.instant('MSG_REQUEST_SMS_2', params) : $translate.instant('MSG_REQUEST_SMS_1', params);
+
             return $cordovaSms.send('', smsMessage, $scope.smsOptions)
                 .then(function() {
                     $scope.hideExportOptions();
@@ -183,7 +188,7 @@
                 });
         };
 
-        //update the URI and QR code when address or value change
+        // update the URI and QR code when address or value change
         $scope.$watchGroup(['newRequest.btcValue', 'newRequest.address'], function(newValues, oldValues) {
             if (oldValues != newValues) {
                 //ignore call from scope initialisation
@@ -191,7 +196,7 @@
             }
         });
 
-        //generate the first address
+        // generate the first address
         $scope.newAddress();
     }
 })();

@@ -8,7 +8,7 @@
             <i class="icon" ng-class="item.linkIcon"></i>
             <span>{{ item.linkText | translate }}</span>
         </a>
-        <a ng-if="!item.stateHref" ng-click="item.handler()">
+        <a ng-if="!item.stateHref" ng-click="handler(item)">
             <i class="icon" ng-class="item.linkIcon"></i>
             <span>{{ item.linkText | translate }}</span>
         </a>

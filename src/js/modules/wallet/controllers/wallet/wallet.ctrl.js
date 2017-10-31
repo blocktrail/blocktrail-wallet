@@ -4,8 +4,8 @@
     angular.module("blocktrail.wallet")
         .controller("WalletCtrl", WalletCtrl);
 
-    function WalletCtrl($rootScope, $timeout, $scope, $state, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast, CONFIG,
-                        modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts) {
+    function WalletCtrl($rootScope, $timeout, $scope, $state, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast, CONFIG,
+                        modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, trackingService) {
         var walletData = activeWallet.getReadOnlyWalletData();
 
         $rootScope.hideLoadingScreen = true;
@@ -41,13 +41,11 @@
                 linkIcon: "ion-card",
                 isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].BUYBTC
             },
-            // TODO Add handler
             {
                 stateHref: null,
                 activeStateName: "",
                 linkText: "TELL_A_FRIEND",
                 linkIcon: "ion-ios-chatbubble-outline",
-                handler: socialShare,
                 isHidden: false
             },
             {
@@ -57,16 +55,13 @@
                 linkIcon: "ion-ios-gear-outline",
                 isHidden: false
             },
-            // TODO Check on promocede
             {
                 stateHref: $state.href("app.wallet.promo"),
                 activeStateName: "app.wallet.promo",
                 linkText: "PROMO_CODES",
                 linkIcon: "ion-ios-heart-outline",
-                isHidden: false
+                isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].PROMOCODE
             }
-
-            // PROMOCODE_IN_MENU
         ];
 
         $scope.$on('$ionicView.enter', function() {
@@ -78,6 +73,7 @@
         $rootScope.syncProfile = syncProfile;
         $rootScope.syncContacts = syncContacts;
         $scope.onClickSetActiveWallet = onClickSetActiveWallet;
+        $scope.navHandler = navHandler;
 
         function onClickSetActiveWallet() {
             modalService.show("js/modules/wallet/controllers/modal-select-wallet/modal-select-wallet.tpl.html", "ModalSelectWalletCtrl", {
@@ -134,8 +130,6 @@
             $timeout(function() {
                 walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
                     .then(function() {
-                        // $state.reload();
-                        // window.location.reload();
                         $state.transitionTo("app.wallet.summary", null, {reload: true, inherit: false});
 
                         $timeout(function() {
@@ -200,9 +194,9 @@
         }
 
         /**
-         * Social share
+         * Nav handler, social share
          */
-        function socialShare() {
+        function navHandler() {
             trackingService.trackEvent(trackingService.EVENTS.TELLAFRIEND);
 
             var message = $translate.instant('MSG_INVITE_CONTACT');

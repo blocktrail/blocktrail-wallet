@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("AddressLookupCtrl", AddressLookupCtrl);
 
-    function AddressLookupCtrl($scope, Wallet, $q, $timeout, $cacheFactory, $log,
+    function AddressLookupCtrl($scope, activeWallet, $q, $timeout, $cacheFactory, $log,
                                $ionicPopover, $translate, $cordovaClipboard, $cordovaToast, $ionicActionSheet) {
 
         var $cache = $cacheFactory.get('address-lookup') || $cacheFactory('address-lookup', {capacity: 10});
@@ -14,6 +14,7 @@
         $scope.totalItems = null;
         $scope.itemsPerPage = 15;
         $scope.currentPage = 1;
+        $scope.walletData = activeWallet.getReadOnlyWalletData();
 
         // Search related
         $scope.search = {
@@ -62,25 +63,25 @@
                     if (cached) {
                         return cached;
                     } else {
-                        return Wallet.wallet.then(function (wallet) {
-                            var options = {
-                                page: page,
-                                limit: limit,
-                                sort_dir: sort_dir,
-                                hide_unused: hideUnused,
-                                hide_unlabeled: hideUnlabeled
-                            };
+                        var options = {
+                            page: page,
+                            limit: limit,
+                            sort_dir: sort_dir,
+                            hide_unused: hideUnused,
+                            hide_unlabeled: hideUnlabeled
+                        };
 
-                            if (searchText.length > 0) {
-                                options.search = searchText;
-                                options.search_label = searchText;
-                            }
+                        if (searchText.length > 0) {
+                            options.search = searchText;
+                            options.search_label = searchText;
+                        }
 
-                            return wallet.addresses(options).then(function (addrs) {
+                        return activeWallet.getSdkWallet()
+                            .addresses(options)
+                            .then(function (addrs) {
                                 $cache.put(cacheKey, addrs);
                                 return $q.when(addrs);
                             });
-                        });
                     }
                 }).finally(function() {
                     // Just show a little loading, even from cache
@@ -95,7 +96,6 @@
          * @param addrItem
          */
         $scope.showAddressOptions = function(addrItem) {
-
             var optionLabels = [];
             optionLabels.push({ text: $translate.instant('EDIT_LABEL') });
             if(addrItem.label) optionLabels.push({ 'text': $translate.instant('DELETE_LABEL') });
@@ -137,7 +137,6 @@
          * @param addrItem Selected Item from ion-list
          */
         var showAddLabelPopover = function (addrItem) {
-
             $ionicPopover.fromTemplateUrl('templates/misc/popover.editlabel.html', {
                 hardwareBackButtonClose: true,
                 scope: $scope
@@ -179,14 +178,12 @@
             var idx = $scope.items.indexOf($scope.labelEdit.selectedAddress);
             var label = $scope.labelEdit.labelInput;
 
-            return Wallet.wallet.then(function (wallet) {
-                return wallet.labelAddress($scope.items[idx].address, label).then(function () {
+            return activeWallet.getSdkWallet()
+                .labelAddress($scope.items[idx].address, label)
+                .then(function () {
                     $scope.items[idx].label = label;
                     $cache.removeAll(); // flush cache
                 });
-            }).catch(function(err) {
-                $log.log("Labeling address failed", err);
-            });
         };
 
         $scope.refreshResults = function () {

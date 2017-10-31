@@ -9,6 +9,7 @@
             restrict: "E",
             replace: true,
             scope: {
+                handler: "&handler",
                 list: '='
             },
             templateUrl: "js/modules/wallet/directives/wallet-side-nav/wallet-side-nav.tpl.html"
@@ -16,3 +17,4 @@
     }
 
 })();
+
