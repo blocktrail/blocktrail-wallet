@@ -34,8 +34,6 @@
     LoginFormService.prototype.login = function(data) {
         var self = this;
 
-        console.log("Login data:", data);
-
         var postData = {
             login: data.login,
             password: self._cryptoJS.SHA512(data.password).toString(),

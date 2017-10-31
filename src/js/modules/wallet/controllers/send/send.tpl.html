@@ -17,7 +17,7 @@
 
             <section class="user-balance-display row" ng-class="'minimise'">
                 <div class="col">
-                    <div class="balance-label" ng-if="balance !== null">
+                    <div class="balance-label" ng-if="walletData.balance !== null">
                         <canvas-display
                             text="$translate.instant('AVAILABLE_BALANCE')"
                             width="100%"
@@ -31,9 +31,9 @@
                 <div class="col no-padding user-balance-col">
                     <div class="row no-padding btc-display">
                         <div class="col">
-                            <div class="btc-value" ng-if="balance !== null">
+                            <div class="btc-value" ng-if="walletData.balance !== null">
                                 <canvas-display
-                                    text="(balance+uncBalance | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : htmlMarkup=false : hideDisp=true)"
+                                    text="(walletData.balance+walletData.uncBalance | satoshiToCoin: walletData.networkType : settings.btcPrecision : false : 'hide')"
                                     width="100%"
                                     height="26"
                                     font="26px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
@@ -44,7 +44,7 @@
                         </div>
                         <div class="col col-20 no-padding">
                             <canvas-display
-                                text="TICKER"
+                                text="walletData.networkType"
                                 width="100%"
                                 height="18"
                                 font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
@@ -55,9 +55,9 @@
                     </div>
                     <div class="row no-padding fiat-display">
                         <div class="col col-80">
-                            <div class="fiat-value" ng-if="balance !== null">
+                            <div class="fiat-value" ng-if="walletData.balance !== null">
                                 <canvas-display
-                                    text="(balance+uncBalance) | satoshiToCurrency: settings.localCurrency :  bitcoinPrices : 2 : htmlMarkup=false"
+                                    text="(walletData.balance+walletData.uncBalance) | satoshiToCurrency: settings.localCurrency :  bitcoinPrices : 2 : htmlMarkup=false"
                                     width="100%"
                                     height="18"
                                     font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
@@ -85,7 +85,7 @@
                         <div class="label-group">
                             <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                             <span class="spacer">{{ btcValueRaw }}</span>
-                            <span class="label" ng-class="{'opacity-30': sendInputForm.btcValue.$invalid}">{{ TICKER }}</span>
+                            <span class="label" ng-class="{'opacity-30': sendInputForm.btcValue.$invalid}">{{ walletData.networkType }}</span>
                         </div>
                     </div>
                     <div class="input-group fiat-input" ng-class="{'position-first': fiatFirst, 'position-last': !fiatFirst}">
@@ -122,7 +122,8 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="recipient-display-name">
+                        <!-- TODO: Maybe we add this to the CSS so that we always display the full address? -->
+                        <div class="recipient-display-name" style="font-size:calc(10px + 1vw);">
                             {{ sendInput.recipientDisplay }}
                         </div>
                         <a class="clear-input" ng-if="sendInput.recipientDisplay" ng-click="clearRecipient()">
@@ -166,7 +167,7 @@
                             <i class="icon icon-edit"></i>
                         </span>
                         <span class="fee-choice-selected-fee"  ng-show="appControl.displayFee && sendInput.btcValue + sendInput.fiatValue > 0">
-                            {{ fee | satoshiToCurrency: 'BTC' : bitcoinPrices : 8 }}
+                            {{ fee | satoshiToCoin : walletData.networkType : 8 : false : 'hide' }}
                         </span>
                     </div>
                 </div>
