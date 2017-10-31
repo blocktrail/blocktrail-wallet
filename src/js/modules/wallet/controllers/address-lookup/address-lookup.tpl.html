@@ -58,7 +58,7 @@
                                     <span ng-if="item.tx_cnt != 1">{{ ('TRANSACTIONS' | translate).toLowerCase() }} </span>
                                 </p>
                                 <p class="margin-top" ng-class="{ 'positive-balance' : item.balance > 0 }"
-                                   style="float: right">{{ item.balance | satoshiToCurrency: 'BTC' : bitcoinPrices : settings.btcPrecision : false : false }}</p>
+                                   style="float: right">{{ (item.balance + item.unc_balance) | satoshiToCoin : walletData.networkType : 8 }}</p>
                             </div>
                         </div>
                     </div>

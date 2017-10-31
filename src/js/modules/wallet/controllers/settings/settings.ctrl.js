@@ -4,8 +4,8 @@
     angular.module("blocktrail.wallet")
         .controller("SettingsCtrl", SettingsCtrl);
 
-    function SettingsCtrl($scope, $rootScope, $q, sdkServiceIamOldKillMePLease, launchService, settingsService,
-                            Wallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
+    function SettingsCtrl($scope, $rootScope, $q, launchService, settingsService,
+                            activeWallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
                             $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast) {
         $scope.appControl = {
             syncing: false,
@@ -46,7 +46,7 @@
                     //decrypt password with the provided PIN
                     $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
 
-                    return Wallet.unlockWithPassword(dialogResult.input1).then(function(wallet) {
+                    return activeWallet.unlockWithPassword(dialogResult.input1).then(function(wallet) {
                         $ionicLoading.hide();
 
                         var secret = wallet.secret;
@@ -100,7 +100,10 @@
                     //decrypt password with the provided PIN
                     $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
 
-                    return Wallet.unlockData(dialogResult.input1).then(function(unlockData) {
+
+                    // TODO Ask Ruben !!!
+                    // TODO Continue HERE
+                    return activeWallet.unlockData(dialogResult.input1).then(function(unlockData) {
                         $ionicLoading.hide();
 
                         return unlockData;
@@ -270,7 +273,7 @@
                     }
 
                     $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
-                    return $q.when(sdkServiceIamOldKillMePLease.sdk());
+                    return $q.when(activeWallet.getSdkWallet());
                 })
                 .then(function(sdk) {
                     //delete contacts from server
@@ -368,7 +371,8 @@
                         // decrypt password with the provided PIN
                         $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
 
-                        return Wallet.unlockData(dialogResult.input1).then(function() {
+                        // TODO Here unlockData !!!
+                        return activeWallet.unlockData(dialogResult.input1).then(function() {
                             $ionicLoading.hide();
                             return true;
                         });
@@ -515,15 +519,6 @@
 
         $scope.updateSettings = function() {
             settingsService.$store();
-        };
-
-        $scope.toggleWalletPolling = function(enable) {
-            if (enable) {
-                Wallet.enablePolling();
-            } else {
-                Wallet.disablePolling();
-            }
-            $scope.updateSettings();
         };
 
         $scope.resetApp = function($event) {
