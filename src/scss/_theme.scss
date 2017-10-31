@@ -647,6 +647,7 @@ $balance-display-height: 40vw;
 @import "directives/wallet/wallet-side-header";
 @import "directives/wallet/wallet-side-subheader.scss";
 @import "directives/wallet/wallet-side-nav";
+@import "directives/wallet/dialog-wallet-transaction";
 
 @import "controllers/setup/start";
 @import "controllers/setup/create-new-accout";

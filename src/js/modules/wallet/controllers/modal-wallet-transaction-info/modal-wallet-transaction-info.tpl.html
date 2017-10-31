@@ -1,0 +1,154 @@
+<div class="modal dialog-message dialog-wallet-transaction">
+    <div class="va">
+        <div class="va-holder">
+            <div class="va-content">
+                <div class="card card-modal card-sm">
+                    <div class="list">
+                        <div class="item">
+                            <table class="transaction-header">
+                                <tr>
+                                    <td class="text-left">
+                                        <h3 class="title" ng-class="{ received: transaction.wallet_value_change > 0, sent: transaction.wallet_value_change <= 0 }">
+                                            <span ng-if="transaction.wallet_value_change <= 0">{{ 'TX_INFO_SENT' | translate }}: </span>
+                                            <span ng-if="transaction.wallet_value_change > 0">{{ 'TX_INFO_RECEIVED' | translate }}: </span>
+                                        </h3>
+                                    </td>
+                                    <td class="text-right">
+                                        <canvas-display
+                                            font="24px 'Helvetica Neue', 'Roboto', 'Segoe UI', sans-serif"
+                                            text="canvasDisplayText"
+                                            height="30"
+                                            width="80%"
+                                        >
+                                        </canvas-display>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Price -->
+                        <div ng-if="transaction.price" class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p><strong>{{ 'TX_INFO_TIME_SUBTITLE' | translate }}:</strong></p>
+                                </div>
+                                <div class="col text-right">
+                                    <p>{{ transaction.wallet_value_change | mathAbs | satoshiToCurrency : localCurrency :  transaction.price }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price 2 -->
+                        <div ng-if="transaction.price" class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p><strong>{{ 'TX_INFO_TIME_SUBTITLE_2' | translate }}:</strong></p>
+                                </div>
+                                <div class="col text-right">
+                                    <p>{{ transaction.wallet_value_change | mathAbs | satoshiToCurrency : localCurrency :  bitcoinPrices }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hash -->
+                        <div ng-if="transaction.price" class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p><strong>{{ 'TX_INFO_HASH' | translate }}:</strong></p>
+                                </div>
+                                <div class="col text-right text-ellipsis">
+                                    <p>{{ transaction.hash }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fee -->
+                        <div ng-if="data.wallet_value_change <= 0" class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p><strong>{{ 'TX_INFO_FEE' | translate }}:</strong></p>
+                                </div>
+                                <div class="col text-right">
+                                    <p>{{ transaction.fee | satoshiToCoin : walletData.networkType : 8 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buy -->
+                        <div ng-if="transaction.buybtc" class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p><strong>{{ 'TX_INFO_BUYBTC' | translate }}:</strong></p>
+                                </div>
+                                <div class="col text-right">
+                                    <p>{{ 'TX_INFO_BUYBTC_DETAILS' | translate : transaction.buybtc }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date -->
+                        <div class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p ng-if="transaction.wallet_value_change <= 0"><strong>{{ 'TX_INFO_DATE_SENT' | translate }}:</strong></p>
+                                    <p ng-if="transaction.wallet_value_change > 0"><strong>{{ 'TX_INFO_DATE_RECEIVED' | translate }}:</strong></p>
+                                </div>
+                                <div class="col text-right">
+                                    <p>{{ transaction.time | amDateFormat : 'Do MMMM YYYY, h:mm:ss a' : 'unix' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Confirmation -->
+                        <div class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p><strong>{{ 'TX_INFO_CONFIRMATIONS_TITLE' | translate }}:</strong></p>
+                                </div>
+                                <div class="col text-right">
+                                    <p>
+                                        <span ng-if="transaction.block_height">{{ transaction.block_height }}</span>
+                                        <span ng-if="transaction.block_height == null">{{ 'TX_INFO_PENDING' | translate }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Send to -->
+                        <div ng-if="!transaction.buybtc && (transaction.contact && transaction.contact.displayName || (transaction.altDisplay && transaction.wallet_value_change <= 0))" class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p ng-if="transaction.wallet_value_change <= 0"><strong>{{ 'TX_INFO_SENT_TO' | translate }}:</strong></p>
+                                    <p ng-if="transaction.wallet_value_change > 0"><strong>{{ 'TX_INFO_RECEIVED_FROM' | translate }}:</strong></p>
+                                </div>
+                                <div class="col text-right">
+                                    <p>{{ transaction.contact && transaction.contact.displayName || transaction.altDisplay }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- More -->
+                        <div class="item transaction-info-item">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p><strong>{{ 'TX_INFO_MORE_TITLE' | translate }} <i class="ion-android-open"></i>:</strong></p>
+                                </div>
+                                <div class="col text-right">
+                                    <p><a href="https://btc.com/{{ data.hash }}" browse-to>{{ 'TX_INFO_MORE_LINK' | translate }}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="row">
+                            <div class="col">
+                                <button class="button button-block" ng-click="cancel()">{{ "OK" | translate }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

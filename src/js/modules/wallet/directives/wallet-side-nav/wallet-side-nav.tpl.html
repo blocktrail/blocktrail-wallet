@@ -4,7 +4,11 @@
         ng-repeat="item in list"
         ng-hide="item.isHidden"
     >
-        <a ng-href="{{ item.stateHref }}">
+        <a ng-if="item.stateHref" ng-href="{{ item.stateHref }}">
+            <i class="icon" ng-class="item.linkIcon"></i>
+            <span>{{ item.linkText | translate }}</span>
+        </a>
+        <a ng-if="!item.stateHref" ng-click="item.handler()">
             <i class="icon" ng-class="item.linkIcon"></i>
             <span>{{ item.linkText | translate }}</span>
         </a>

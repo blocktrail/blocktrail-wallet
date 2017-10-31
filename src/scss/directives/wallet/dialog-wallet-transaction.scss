@@ -1,0 +1,40 @@
+.dialog-wallet-transaction {
+    a {
+        color: $bt-grey;
+    }
+    
+    .transaction-header {
+        width: 100%;
+
+        tr,
+        td {
+            vertical-align: top;
+        }
+
+        canvas {
+            float: right;
+        }
+    }
+
+    .title {
+        font-size: 20px;
+        line-height: 30px;
+        margin: 0;
+    }
+
+    .list {
+        margin: 0;
+    }
+
+    .transaction-info-item {
+        padding: 0;
+    }
+
+    .received {
+        color: $bt-green;
+    }
+
+    .sent {
+        color: $bad-red;
+    }
+}
