@@ -396,7 +396,13 @@
             $scope.setupInfo.password = null;
 
             // save in settings that the user has started the setup process
-            settingsService.$isLoaded()
+            settingsService.$store()
+                .then(function() {
+                    return settingsService.$syncSettingsDown();
+                })
+                .then(function() {
+                    return settingsService.$syncProfileDown();
+                })
                 .then(function() {
                     settingsService.setupStarted = true;
                     settingsService.$store();

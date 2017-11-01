@@ -107,14 +107,6 @@
                 self._settingsService.enableContacts = false;
                 self._settingsService.accountCreated = data.responseData.timestamp_registered;
                 self._settingsService.email = data.responseData.email;
-
-                return self._settingsService.$store()
-                    .then(function() {
-                        return self._settingsService.$syncSettingsDown();
-                    })
-                    .then(function() {
-                        self._settingsService.$syncProfileDown();
-                    });
             })
             .then(function() {
                 return data.responseData;
