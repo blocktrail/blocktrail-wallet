@@ -5,7 +5,7 @@
         .controller("BuyBTCChooseCtrl", BuyBTCChooseCtrl);
 
     function BuyBTCChooseCtrl($q, $scope, $state, $cordovaDialogs, settingsService, $ionicLoading,
-                      $translate, $ionicScrollDelegate, glideraService, buyBTCService, trackingService, $log) {
+                      $translate, $timeout, $ionicScrollDelegate, glideraService, buyBTCService, trackingService, $log) {
         $scope.brokers = [];
 
         // load chooseRegion from settingsService
@@ -18,6 +18,7 @@
             template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
             hideOnStateChange: true
         });
+
         settingsService.$isLoaded().then(function() {
             $q.all([
                 buyBTCService.regions().then(function(regions) {
@@ -37,7 +38,9 @@
                     $scope.brokers = brokers;
                     $scope.chooseRegion.regionOk = $scope.brokers.length;
 
-                    $ionicLoading.hide();
+                    $timeout(function() {
+                        $ionicLoading.hide();
+                    });
                 });
             });
         });
