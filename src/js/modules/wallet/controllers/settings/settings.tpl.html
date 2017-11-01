@@ -114,7 +114,7 @@
                         {{settings.btcPrecision}}
                     </div>
                     <div class="text-center">
-                        <small>{{ (balance != null && balance+uncBalance || 0) | satoshiToCoin : walletData.networkType : settings.btcPrecision : false }}</small>
+                        <small>{{ (walletData.balance != null && walletData.balance + walletData.uncBalance || 0) | satoshiToCoin: walletData.networkType : settings.btcPrecision : false : 'hide' }}</small>
                     </div>
                 </div>
                 <!-- /btc fraction display -->

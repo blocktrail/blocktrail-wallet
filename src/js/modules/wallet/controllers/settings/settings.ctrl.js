@@ -7,6 +7,9 @@
     function SettingsCtrl($scope, $rootScope, $q, launchService, settingsService,
                             activeWallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
                             $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast) {
+
+        $scope.walletData = activeWallet.getReadOnlyWalletData();
+
         $scope.appControl = {
             syncing: false,
             syncingAll: false,
