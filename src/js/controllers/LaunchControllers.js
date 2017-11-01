@@ -80,7 +80,7 @@ angular.module('blocktrail.wallet')
     .controller('OpenWalletPinCtrl', function ($scope, $rootScope, $state, $stateParams, $log, launchService,
                                                settingsService, walletsManagerService, $timeout, $interval, CONFIG) {
 
-        var DEFAULT_PIN = CONFIG.SETUP_PREFILL_PIN || "";
+        var DEFAULT_PIN = CONFIG.DEBUG_PIN_PREFILL || "";
 
         $scope.appControl = {
             showPinInput: false,
