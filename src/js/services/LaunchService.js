@@ -81,6 +81,8 @@ angular.module('blocktrail.wallet').factory(
             return self.storage.get('account_info')
                 .then(function(doc) {
                     return doc;
+                }, function() {
+                    self._accountInfo = null;
                 });
         };
 

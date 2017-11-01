@@ -66,9 +66,10 @@
                         });
                     },
                     sdkSetAccountInfo: function(launchService, sdkService) {
-                        return launchService.getAccountInfo().then(function(accountInfo) {
-                            return sdkService.setAccountInfo(accountInfo);
-                        });
+                        return launchService.getAccountInfo()
+                            .then(function(accountInfo) {
+                                return sdkService.setAccountInfo(accountInfo);
+                            });
                     }
                 }
             })
