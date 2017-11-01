@@ -228,7 +228,9 @@ angular.module('blocktrail.wallet').factory(
                         }).sentenceCase(),
                         $translate.instant('MSG_BUYBTC_GLIDERA_2FA_TITLE').sentenceCase(),
                         [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()],
-                        ""
+                        "",
+                        false,  // isPassword
+                        "tel"   // input type (uses html5 style)
                     )
                     .then(function(dialogResult) {
                         if (dialogResult.buttonIndex == 2) {
