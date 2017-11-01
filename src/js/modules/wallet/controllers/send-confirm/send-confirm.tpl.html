@@ -1,21 +1,42 @@
 <div class="pin-input-screen">
     <ion-content>
 
-        <div class="pin-input-section" ng-if="appControl.showPinInput">
-            <div class="fee-info">
+        <div class="pin-input-section" ng-if="appControl.showUnlockInput">
+            <div class="fee-info"></div>
+
+            <div ng-if="!appControl.working && appControl.unlockType === 'PIN'">
+                <h2 class="">{{ 'WALLET_PIN' | translate }}</h2>
+                <label class="item-input" ng-class="{error: appControl.showPinInputError}">
+                    <input type="tel" required tabindex="-1"
+                           ng-model="sendInput.pin"
+                           ng-enter="send()" ng-tab="send()" ng-change="appControl.showPinInputError = false">
+                </label>
+                <div class="pin-error">
+                    <span ng-show="appControl.showPinInputError">{{ appControl.result.error | translate }}</span>
+                </div>
+            </div>
+            <div ng-if="!appControl.working && appControl.unlockType === 'PASSWORD'">
+                <h2 class="">{{ 'WALLET_PASSWORD' | translate }}</h2>
+                <label class="item-input" ng-class="{error: appControl.showPasswordInputError}">
+                    <input type="password" required tabindex="-1"
+                           ng-model="sendInput.password"
+                           ng-enter="send()" ng-tab="send()" ng-change="appControl.showPasswordInputError = false">
+                </label>
+                <div class="pin-error">
+                    <span ng-show="appControl.showPasswordInputError">{{ appControl.result.error | translate }}</span>
+                </div>
             </div>
 
-            <h2 class="">{{ 'WALLET_PIN' | translate }}</h2>
-            <label class="item-input" ng-class="{error: appControl.showPinInputError}">
-                <input type="tel" ng-model="sendInput.pin" required ng-enter="send()" ng-tab="send()" ng-change="appControl.showPinInputError = false" tabindex="-1">
-            </label>
-            <div class="pin-error">
-                <span ng-show="appControl.showPinInputError">{{ appControl.result.error | translate }}</span>
+            <div ng-if="appControl.working">
+                <h3 class="progress-message">{{ appControl.result.message | translate }}</h3>
+                <ion-spinner icon="dots" class="spinner-stable"></ion-spinner>
             </div>
 
-            <a class="button button-outline confirm-button" ng-click="send()">{{ 'CONFIRM' | translate }}</a>
+            <div ng-if="!appControl.working">
+                <a class="button button-outline confirm-button" ng-disabled="appControl.working" ng-click="send()">{{ 'CONFIRM' | translate }}</a>
+            </div>
         </div>
-        <!-- /password confirmation -->
+        <!-- /PIN or PASSWORD input -->
 
         <div class="sending-progress-section" ng-if="appControl.isSending">
             <div class="fee-info">
