@@ -5,13 +5,18 @@
         .controller("WalletCtrl", WalletCtrl);
 
     function WalletCtrl($rootScope, $timeout, $scope, $state, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast, CONFIG,
-                        modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, trackingService) {
+                        modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService, trackingService) {
         var walletData = activeWallet.getReadOnlyWalletData();
 
         $rootScope.hideLoadingScreen = true;
 
         $scope.settings = settingsData;
         $scope.walletData = walletData;
+
+        $scope.$watch('walletData.networkType', function() {
+            glideraService.init();
+        });
+
         $scope.sideNavList = [
             {
                 stateHref: $state.href("app.wallet.summary"),
