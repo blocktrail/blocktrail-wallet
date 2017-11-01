@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet').factory(
     'glideraService',
-    function(CONFIG, $log, $q, walletsManagerService, $cordovaDialogs, $translate, sdkServiceIamOldKillMePLease,
-             $http, $timeout, $ionicLoading, settingsService, launchService, $rootScope, trackingService, CurrencyConverter) {
+    function(CONFIG, $log, $q, walletsManagerService, $cordovaDialogs, $translate,
+             $http, $timeout, $ionicLoading, settingsService, launchService, $rootScope, trackingService) {
         var clientId;
         var returnuri = "btccomwallet://glideraCallback/oauth2";
         var GLIDERA_URL = CONFIG.GLIDERA_URL;

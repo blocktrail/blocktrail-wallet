@@ -4,7 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupCompleteCtrl", SetupCompleteCtrl);
 
-    function SetupCompleteCtrl(settingsService, modalService) {
+    function SetupCompleteCtrl($scope, settingsService, modalService) {
         modalService.showSpinner();
 
         settingsService
@@ -15,5 +15,13 @@
                 settingsService.$store();
                 modalService.hideSpinner();
             });
+
+        $scope.showSpinner = function() {
+            modalService.showSpinner();
+        };
+
+        $scope.$on('$destroy', function () {
+            modalService.hideSpinner();
+        });
     }
 })();
