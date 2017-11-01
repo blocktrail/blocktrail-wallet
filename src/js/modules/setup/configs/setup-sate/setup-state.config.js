@@ -64,6 +64,11 @@
                             $rootScope.settings = settingsService;
                             return settingsService;
                         });
+                    },
+                    sdkSetAccountInfo: function(launchService, sdkService) {
+                        return launchService.getAccountInfo().then(function(accountInfo) {
+                            return sdkService.setAccountInfo(accountInfo);
+                        });
                     }
                 }
             })
@@ -143,11 +148,7 @@
                 controller: "SetupContactsCtrl",
                 templateUrl: "js/modules/setup/controllers/contacts/contacts.tpl.html",
                 resolve: {
-                    walletInfo: getWalletInfo,
-
-                    resolveTest: function() {
-                        debugger;
-                    }
+                    walletInfo: getWalletInfo
                 }
             })
             // TODO review profile for wallet & setup !!! to complex logic

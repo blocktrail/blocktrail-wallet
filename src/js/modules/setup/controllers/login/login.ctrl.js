@@ -4,8 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupLoginCtrl", SetupLoginCtrl);
 
-    function SetupLoginCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, loginFormService, modalService,
-                            settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, trackingService, sdkService, formHelperService) {
+    function SetupLoginCtrl($scope, $state, CONFIG, loginFormService, modalService, sdkService, formHelperService) {
         $scope.form = {
             email: CONFIG.DEBUG_EMAIL_PREFILL || "",
             password: CONFIG.DEBUG_PASSWORD_PREFILL || "",
