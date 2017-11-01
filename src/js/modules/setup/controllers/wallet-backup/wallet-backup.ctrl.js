@@ -207,9 +207,14 @@
          */
         function backupPdfErrorHandler(e) {
             modalService.hideSpinner();
-            modalService.alert({
-                body: e.message ? e.message : e.toString()
-            });
+            var alert = {};
+            if (e.status === 9 && e.message.startsWith("Activity not found: No Activity found to")) {
+                alert = { body: $translate.instant('BACKUP_CANT_OPEN') }
+            } else {
+                alert = { body: e.message ? e.message : e.toString() };
+            }
+
+            modalService.alert(alert);
         }
 
         /**
