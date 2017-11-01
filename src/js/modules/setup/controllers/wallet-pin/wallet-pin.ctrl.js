@@ -12,8 +12,8 @@
         var sdkReadOnlyObject = null;
 
         $scope.form = {
-            pin: "",
-            pinRepeat: "",
+            pin: CONFIG.DEBUG_PIN_PREFILL || "",
+            pinRepeat: CONFIG.DEBUG_PIN_PREFILL || "",
             identifier: $scope.setupInfo.identifier,
             password: $scope.setupInfo.password,
             networkType: $scope.setupInfo.networkType
