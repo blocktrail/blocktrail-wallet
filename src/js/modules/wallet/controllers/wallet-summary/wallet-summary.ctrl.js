@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("WalletSummaryCtrl", WalletSummaryCtrl);
 
-    function WalletSummaryCtrl($rootScope, $scope, $q, $timeout, settingsData, activeWallet, launchService, settingsService,
+    function WalletSummaryCtrl($rootScope, $scope, $q, settingsData, activeWallet, launchService, settingsService,
                                buyBTCService, CurrencyConverter, modalService) {
 
         var walletData = activeWallet.getReadOnlyWalletData();
