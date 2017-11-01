@@ -7,8 +7,8 @@
     function SetupLoginCtrl($scope, $rootScope, $state, $q, $http, $timeout, $cordovaNetwork, launchService, CONFIG, loginFormService, modalService,
                             settingsService, $btBackButtonDelegate, $log, $cordovaDialogs, $translate, trackingService, sdkService, formHelperService) {
         $scope.form = {
-            email: "",
-            password: "",
+            email: CONFIG.DEBUG_EMAIL_PREFILL || "",
+            password: CONFIG.DEBUG_PASSWORD_PREFILL || "",
             networkType: sdkService.getNetworkType(),
             twoFactorToken: null
         };
