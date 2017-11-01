@@ -1,10 +1,11 @@
-<ion-side-menus enable-menu-with-back-views="false">
+<ion-side-menus enable-menu-with-back-views="true">
     <ion-side-menu-content>
         <ion-nav-bar class="bar-energized">
             <ion-nav-buttons side="left">
                 <button
                     menu-toggle="left"
-                    class="button button-icon icon ion-navicon menu-button {{ ($btBackButtonDelegate.isDisplayed || !$btBackButtonDelegate.enableMenuButton) && 'hide' || '' }}">
+                    class="button button-icon icon ion-navicon menu-button"
+                    ng-class="{'hide': ($btBackButtonDelegate.isDisplayed || !$btBackButtonDelegate.enableMenuButton)}">
                 </button>
                 <button ng-click="$btBackButtonDelegate.goBack($event)"
                         class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
