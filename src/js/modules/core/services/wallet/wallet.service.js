@@ -4,18 +4,23 @@
     var POUCHDB_ERR_CONFLICT = 409;
 
     angular.module("blocktrail.core")
-        .factory("walletService", function($q, $timeout, bitcoinJS, sdkService, storageService, settingsService, Contacts, CONFIG) {
-            return new WalletService($q, $timeout, bitcoinJS, sdkService, storageService, settingsService, Contacts, CONFIG);
+        .factory("walletService", function($q, $timeout, bitcoinJS, sdkService, storageService, launchService,
+                                           settingsService, Contacts, cryptoJS, CONFIG) {
+            return new WalletService($q, $timeout, bitcoinJS, sdkService, storageService, launchService,
+                settingsService, Contacts, cryptoJS, CONFIG);
         });
 
-    function WalletService($q, $timeout, bitcoinJS, sdkService, storageService, settingsService, Contacts, CONFIG) {
+    function WalletService($q, $timeout, bitcoinJS, sdkService, storageService, launchService,
+                           settingsService, Contacts, cryptoJS, CONFIG) {
         var self = this;
 
         self._$q = $q;
         self._$timeout = $timeout;
         self._bitcoinJS = bitcoinJS;
+        self._cryptoJS = cryptoJS;
         self._sdkService = sdkService;
         self._storageService = storageService;
+        self._launchService = launchService;
         self._settingsService = settingsService;
         self._contactsService = Contacts;
         self._CONFIG = CONFIG;
@@ -39,7 +44,9 @@
 
     WalletService.prototype._initWallet = function(networkType, uniqueIdentifier, sdkWallet) {
         var self = this;
-        var wallet = new Wallet(sdkWallet, networkType, uniqueIdentifier, self._CONFIG.NETWORKS[networkType].TX_FILTER_MIN_BLOCK_HEIGHT, self._$q, self._$timeout, self._bitcoinJS, self._storageService, self._settingsService, self._contactsService);
+        var wallet = new Wallet(sdkWallet, networkType, uniqueIdentifier, self._CONFIG.NETWORKS[networkType].TX_FILTER_MIN_BLOCK_HEIGHT,
+            self._$q, self._$timeout, self._bitcoinJS, self._cryptoJS, self._launchService, self._storageService, self._settingsService,
+            self._contactsService);
 
         return wallet.isReady;
     };
@@ -56,7 +63,8 @@
     // TODO Remove glidera transactions form the settings service and remove 'settingsService' from wallet
     // TODO Create a method for updating contacts and and remove 'contactsService' from wallet
     // TODO Or try to handle this in the avatar directive
-    function Wallet(sdkWallet, networkType, uniqueIdentifier, TX_FILTER_MIN_BLOCK_HEIGHT, $q, $timeout, bitcoinJS, storageService, settingsService, contactsService) {
+    function Wallet(sdkWallet, networkType, uniqueIdentifier, TX_FILTER_MIN_BLOCK_HEIGHT, $q, $timeout, bitcoinJS, cryptoJS, launchService,
+                    storageService, settingsService, contactsService) {
         var self = this;
 
         console.log("new Wallet", sdkWallet.identifier);
@@ -64,6 +72,8 @@
         self._$q = $q;
         self._$timeout = $timeout;
         self._bitcoinJS = bitcoinJS;
+        self._cryptoJS = cryptoJS;
+        self._launchService = launchService;
         self._contactsService = contactsService;
         self._settingsService = settingsService;
         self._TX_FILTER_MIN_BLOCK_HEIGHT = TX_FILTER_MIN_BLOCK_HEIGHT;
@@ -1121,6 +1131,79 @@
 
                 return address;
             });
+    };
+
+    Wallet.prototype.unlockDataWithPin = function(pin) {
+        var self = this;
+
+        return self._launchService.getWalletInfo()
+            .then(function(walletInfo) {
+                var password, secret;
+
+                try {
+                    // legacy; storing encrypted password instead of secret
+                    if (walletInfo.encryptedSecret) {
+                        secret = self._cryptoJS.AES.decrypt(walletInfo.encryptedSecret, pin).toString(self._cryptoJS.enc.Utf8);
+                    } else {
+                        password = self._cryptoJS.AES.decrypt(walletInfo.encryptedPassword, pin).toString(self._cryptoJS.enc.Utf8);
+                    }
+                } catch (e) {
+                    throw new blocktrail.WalletPinError(e.message);
+                }
+
+                if (!password && !secret) {
+                    throw new blocktrail.WalletPinError("Bad PIN");
+                }
+
+                var unlockData = {
+                    identifier: walletInfo.identifier,
+                    networkType: walletInfo.networkType
+                };
+
+                if (password) {
+                    unlockData.password = password;
+                } else {
+                    unlockData.secret = secret;
+                }
+
+                return unlockData;
+            });
+    };
+
+    Wallet.prototype.unlockWithPin = function(pin) {
+        var self = this;
+
+        return self._$q.when(self._sdkWallet)
+            .then(function(wallet) {
+                return self.unlockDataWithPin(pin)
+                    .then(function(unlock) {
+                        // if unlock.secret is set we need to switch it to a buffer for v3+ wallets
+                        if (unlock.secret && wallet.walletVersion !== 'v2') {
+                            unlock.secret = new blocktrailSDK.Buffer(unlock.secret, 'hex');
+                        }
+
+                        return wallet.unlock(unlock).then(function() {
+                            // if we were still storing encrypted password we want to swtich to storing encrypted secret
+                            if (!unlock.secret) {
+                                var secretHex = null;
+
+                                if (wallet.walletVersion === 'v2') {
+                                    secretHex = wallet.secret;
+                                } else {
+                                    secretHex = wallet.secret.toString('hex');
+                                }
+
+                                // store encrypted secret
+                                return self._launchService.storeWalletInfo(wallet.identifier, self._walletData.networkType, self._cryptoJS.AES.encrypt(secretHex, pin).toString())
+                                    .then(function () {
+                                        return self._sdkWallet;
+                                    });
+                            } else {
+                                return self._sdkWallet;
+                            }
+                        });
+                });
+        });
     };
 
     Wallet.prototype.unlockWithPassword = function(password) {

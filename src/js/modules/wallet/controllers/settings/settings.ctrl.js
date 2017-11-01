@@ -100,10 +100,7 @@
                     //decrypt password with the provided PIN
                     $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
 
-
-                    // TODO Ask Ruben !!!
-                    // TODO Continue HERE
-                    return activeWallet.unlockData(dialogResult.input1).then(function(unlockData) {
+                    return activeWallet.unlockDataWithPin(dialogResult.input1).then(function(unlockData) {
                         $ionicLoading.hide();
 
                         return unlockData;
@@ -371,8 +368,7 @@
                         // decrypt password with the provided PIN
                         $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
 
-                        // TODO Here unlockData !!!
-                        return activeWallet.unlockData(dialogResult.input1).then(function() {
+                        return activeWallet.unlockDataWithPin(dialogResult.input1).then(function() {
                             $ionicLoading.hide();
                             return true;
                         });

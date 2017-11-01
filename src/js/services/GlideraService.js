@@ -132,6 +132,7 @@ angular.module('blocktrail.wallet').factory(
                                             hideOnStateChange: true
                                         });
 
+                                        // TODO use activeWallet.unlockWithPin
                                         return Wallet.unlock(dialogResult.input1).then(function(wallet) {
                                             var secretBuf = wallet.secret;
                                             if (wallet.walletVersion === 'v2') {
