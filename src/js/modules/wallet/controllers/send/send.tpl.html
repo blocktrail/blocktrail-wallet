@@ -85,7 +85,11 @@
                         <div class="label-group">
                             <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
                             <span class="spacer">{{ btcValueRaw }}</span>
-                            <span class="label" ng-class="{'opacity-30': sendInputForm.btcValue.$invalid}">{{ walletData.networkType }}</span>
+                            <span class="label" ng-class="{'opacity-30': sendInputForm.btcValue.$invalid}"
+                            >
+                                {{ CONFIG.NETWORKS[walletData.networkType].TICKER }}
+                            </span>
+
                         </div>
                     </div>
                     <div class="input-group fiat-input" ng-class="{'position-first': fiatFirst, 'position-last': !fiatFirst}">
