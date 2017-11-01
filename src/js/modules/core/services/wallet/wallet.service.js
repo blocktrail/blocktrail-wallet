@@ -1006,7 +1006,9 @@
 
                     // trigger update if we modified data
                     if (updateGlideraTransactions) {
-                        return self._settingsService.updateGlideraTransactions(settings.glideraTransactions);
+                        self._settingsService.$store().then(function() {
+                            return self._settingsService.$syncSettingsUp();
+                        });
                     }
                 });
 
