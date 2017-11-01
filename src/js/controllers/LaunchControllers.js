@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http, settingsService, $ionicHistory) {
+    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http, settingsService, $ionicHistory, $ionicSideMenuDelegate) {
         $log.debug('starting');
 
         //disable animation on transition from this state
@@ -77,7 +77,7 @@ angular.module('blocktrail.wallet')
     .controller('OpenWalletPinCtrl', function ($scope, $rootScope, $state, $stateParams, $log, launchService,
                                                settingsService, walletsManagerService, $timeout, $interval, CONFIG) {
 
-        var DEFAULT_PIN = CONFIG.SETUP_PREFILL_PIN || "";
+        var DEFAULT_PIN = CONFIG.DEBUG_PIN_PREFILL || "";
 
         $scope.appControl = {
             showPinInput: false,
