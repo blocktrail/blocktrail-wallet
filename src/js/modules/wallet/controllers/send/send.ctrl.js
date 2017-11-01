@@ -448,6 +448,7 @@
             $scope.getSendingAddress()
                 .then(function() {
                     $scope.appControl.result = {working: true, message: 'MSG_INIT_WALLET'};
+                    // TODO use activeWallet.unlockWithPin
                     return $q.when(Wallet.unlock($scope.sendInput.pin));
                 })
                 .then(function(wallet) {

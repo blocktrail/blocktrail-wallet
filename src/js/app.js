@@ -974,12 +974,6 @@ String.prototype.sentenceCase = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-String.prototype.capitalize = function() {
-    return this.replace(/\w\S*/g, function(txt) {
-        return txt.sentenceCase();
-    });
-};
-
 if (!String.prototype.startsWith) {
     String.prototype.startsWith = function(s) {
         return this.substr(0, s.length) === s;
