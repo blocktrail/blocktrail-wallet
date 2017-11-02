@@ -13,6 +13,15 @@
   <access origin="https://www.glidera.io"/>
   <access origin="https://bitonic.nl"/>
   <access origin="https://staging.bitonic.nl"/>
+  <access origin="http://172.21.0.1" dev="true"/>
+  <access origin="http://172.20.0.1" dev="true"/>
+  <access origin="http://172.19.0.1" dev="true"/>
+  <access origin="http://172.18.0.1" dev="true"/>
+  <access origin="http://172.22.0.1" dev="true"/>
+  <access origin="http://172.17.0.1" dev="true"/>
+  <access origin="http://192.168.2.17" dev="true"/>
+  <access origin="http://127.0.0.1" dev="true"/>
+  <access origin="http://10.4.86.190" dev="true"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
@@ -80,4 +89,5 @@
   </feature>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
   <allow-navigation href="http://10.4.86.199:8100"/>
+  <allow-navigation href="http://10.4.86.190:8100"/>
 </widget>
