@@ -1,11 +1,8 @@
 angular.module('blocktrail.wallet').factory(
     'AppVersionService',
-    function(AppVersionBaseService, settingsService, $state, $translate, CONFIG, $ionicPopover, $rootScope, AppRateService) {
+    function(AppVersionBaseService, settingsService, $state, $translate, CONFIG, $ionicPopover, $rootScope, AppRateService, sdkService) {
         var _CHECKS = AppVersionBaseService.CHECKS;
         var isCheck = AppVersionBaseService.isCheck;
-        var activeWallet = walletsManagerService.getActiveWallet();
-        var walletData = activeWallet.getReadOnlyWalletData();
-
         var GLIDERA_VERSION = 'v3.4.8';
 
         // priority order, first one met is used (allows older version update messages to be prioritized)
@@ -14,7 +11,7 @@ angular.module('blocktrail.wallet').factory(
         ];
 
         var checkGlideraActivated = function() {
-            if (CONFIG.NETWORKS[walletData.networkType].BUYBTC && $state.includes('app.wallet')) {
+            if (CONFIG.NETWORKS[sdkService.getNetworkType()].BUYBTC && $state.includes('app.wallet')) {
                 return settingsService.$isLoaded().then(function () {
                     var p;
 
