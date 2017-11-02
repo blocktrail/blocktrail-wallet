@@ -10,6 +10,10 @@
         }
     }
 
+    .item-checkbox {
+        border: none;
+    }
+
     .password-check-icon {
         position: absolute;
         right: 12px;
@@ -36,6 +40,15 @@
         &.password-checker-score-3,
         &.password-checker-score-4 {
             color: $bt-green;
+        }
+    }
+
+    .terms-of-service {
+        font-size: 12px;
+        line-height: 14px;
+
+        a {
+            color: #666;
         }
     }
 }
