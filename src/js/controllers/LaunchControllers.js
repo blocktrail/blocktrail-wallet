@@ -49,6 +49,10 @@ angular.module('blocktrail.wallet')
                 return settingsService.$isLoaded();
             })
             .then(function() {
+                if (navigator.splashscreen) {
+                    navigator.splashscreen.hide();
+                }
+
                 //setup not started yet
                 if (!settingsService.setupStarted) {
                     // never show rebrand to user who just got started
@@ -59,10 +63,6 @@ angular.module('blocktrail.wallet')
                     });
 
                     return;
-                }
-
-                if (navigator.splashscreen) {
-                    navigator.splashscreen.hide();
                 }
 
                 if (settingsService.showRebrandMessage) {
