@@ -11,6 +11,7 @@
             scope: {
                 transaction: "=",
                 walletData: "=",
+                btcPrecision: "=",
                 onShowTransaction: "&"
             },
             templateUrl: "js/modules/wallet/directives/wallet-transaction/wallet-transaction.tpl.html",
@@ -20,7 +21,7 @@
 
     function wTransactionCtrl($scope, $filter) {
         $scope.isReceived = $scope.transaction["wallet_value_change"] > 0;
-        $scope.value =  $filter("satoshiToCoin")($scope.transaction['wallet_value_change'], $scope.walletData.networkType, 4, true);
+        $scope.value =  $filter("satoshiToCoin")($scope.transaction['wallet_value_change'], $scope.walletData.networkType, $scope.btcPrecision, true);
     }
 
 })();
