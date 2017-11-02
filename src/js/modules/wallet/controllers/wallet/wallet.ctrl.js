@@ -8,8 +8,15 @@
                         modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
                         trackingService, AppVersionService, blocktrailLocalisation, $cordovaDialogs, launchService) {
         var walletData = activeWallet.getReadOnlyWalletData();
-
-        $rootScope.hideLoadingScreen = true;
+        
+        $timeout(function() {
+            $rootScope.hideLoadingScreen = true;
+            $timeout(function() {
+                if (navigator.splashscreen) {
+                    navigator.splashscreen.hide();
+                }
+            });
+        });
 
         $scope.settings = settingsData;
         $scope.walletData = walletData;
