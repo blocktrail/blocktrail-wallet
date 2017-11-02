@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("SendAddressInputCtrl", SendAddressInputCtrl);
 
-    function SendAddressInputCtrl($scope, $state, $log, $timeout, $cordovaClipboard, $q, activeWallet) {
+    function SendAddressInputCtrl($scope, $state, $log, $timeout, $cordovaClipboard, CONFIG, $q, activeWallet) {
         var walletData = activeWallet.getReadOnlyWalletData();
 
         $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
