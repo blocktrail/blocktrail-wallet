@@ -5,7 +5,8 @@
         .controller("WalletCtrl", WalletCtrl);
 
     function WalletCtrl($rootScope, $timeout, $scope, $state, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast, CONFIG,
-                        modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService, trackingService) {
+                        modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
+                        trackingService, AppVersionService, blocktrailLocalisation, $cordovaDialogs, launchService) {
         var walletData = activeWallet.getReadOnlyWalletData();
 
         $rootScope.hideLoadingScreen = true;
@@ -218,7 +219,94 @@
                 }, function(err) {
                     $log.error("SocialSharing: " + err.message);
                 });
-        };
+        }
+
+        // @TODO: review & bring back network specfic config values
+        (function initWalletConfig() {
+            launchService.getWalletConfig()
+                .then(function(result) {
+                    if (result.api_key && (result.api_key !== 'ok')) {
+                        // alert user session is invalid
+                        return $cordovaDialogs.alert(
+                            $translate.instant('INVALID_SESSION_LOGOUT_NOW'),
+                            $translate.instant('INVALID_SESSION'),
+                            $translate.instant('OK'))
+                            .finally(function() {
+                                return $state.go('app.reset');
+                            });
+                    }
+
+                    settingsService.$isLoaded().then(function () {
+                        AppVersionService.checkVersion(
+                            settingsService.latestVersionMobile,
+                            settingsService.latestOutdatedNoticeVersion,
+                            result.versionInfo.mobile,
+                            AppVersionService.CHECKS.LOGGEDIN
+                        );
+
+                        if (!settingsService.latestVersionMobile || semver.gt(CONFIG.VERSION, settingsService.latestVersionMobile) ||
+                            !settingsService.latestOutdatedNoticeVersion ||
+                            (result.versionInfo.mobile.latest && semver.gt(result.versionInfo.mobile.latest, settingsService.latestOutdatedNoticeVersion))) {
+                            settingsService.latestOutdatedNoticeVersion = result.versionInfo.mobile.latest;
+                            settingsService.latestVersionMobile = CONFIG.VERSION;
+                            settingsService.$store().then(function () {
+                                settingsService.$syncSettingsUp();
+                            });
+                        }
+                    });
+
+                    if (result.currencies) {
+                        result.currencies.forEach(function (currency) {
+                            Currencies.enableCurrency(currency);
+                        });
+                    }
+
+                    return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
+                })
+                .then(function(extraLanguages) {
+                    return settingsService.$isLoaded().then(function() {
+                        // determine (new) preferred language
+                        var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
+                        if (r) {
+                            var newLanguages = r[0];
+                            var preferredLanguage = r[1];
+
+                            // store extra languages
+                            settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
+                            return settingsService.$store()
+                                .then(function () {
+                                    // check if we have a new preferred language
+                                    if (preferredLanguage !== settingsService.language && newLanguages.indexOf(preferredLanguage) !== -1) {
+                                        // prompt to enable
+                                        return $cordovaDialogs.confirm(
+                                            $translate.instant('MSG_BETTER_LANGUAGE', {
+                                                oldLanguage: $translate.instant(blocktrailLocalisation.languageName(settingsService.language)),
+                                                newLanguage: $translate.instant(blocktrailLocalisation.languageName(preferredLanguage))
+                                            }).sentenceCase(),
+                                            $translate.instant('MSG_BETTER_LANGUAGE_TITLE').sentenceCase(),
+                                            [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
+                                        )
+                                            .then(function (dialogResult) {
+                                                if (dialogResult === 2) {
+                                                    return;
+                                                }
+
+                                                // enable new language
+                                                settingsService.language = preferredLanguage;
+                                                $rootScope.changeLanguage(preferredLanguage);
+
+                                                return settingsService.$store()
+                                                    .then(function() {
+                                                        settingsService.$syncSettingsUp();
+                                                    });
+                                            });
+                                    }
+                                });
+                        }
+                    });
+                })
+                .then(function() {}, function(e) { console.error('extraLanguages', e && (e.msg || e.message || "" + e)); });
+        })();
 
         $timeout(function() { $rootScope.getPrice(); }, 1000);
         $timeout(function() { $rootScope.syncProfile(); }, 2000);
