@@ -5,12 +5,16 @@
         .controller("ReceiveCtrl", ReceiveCtrl);
 
     function ReceiveCtrl($scope, activeWallet, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
-                          $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast) {
+                          $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast, CONFIG) {
+        var walletData = activeWallet.getReadOnlyWalletData();
 
+        $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
         $scope.address = null;
         $scope.path = null;
         $scope.bitcoinUri = null;
         $scope.qrcode = null;
+
+
 
         $scope.newRequest = {
             address: null,

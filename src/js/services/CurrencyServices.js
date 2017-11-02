@@ -7,7 +7,7 @@ angular.module('blocktrail.wallet')
         // currencies that the app supports and their symbols
         //  this list shouldn't be used directly `self.currencies` contains the enabled currencies
         var _currencies = {
-            BTC: {code: "BTC", ticker: $rootScope.TICKER, symbol: "฿"},
+            BTC: {code: "BTC", ticker: "BTC", symbol: "฿"},
             GBP: {code: "GBP", symbol: "£"},
             EUR: {code: "EUR", symbol: "€"},
             USD: {code: "USD", symbol: "$"},
