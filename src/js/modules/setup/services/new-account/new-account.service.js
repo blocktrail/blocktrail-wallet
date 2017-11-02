@@ -63,19 +63,11 @@
 
         return self._launchService.storeAccountInfo(accountInfo)
             .then(function() {
-                //save the default settings and do a profile sync
+                // save the default settings and do a profile sync
                 self._settingsService.username = "";
                 self._settingsService.displayName = "";
                 self._settingsService.enableContacts = false;
                 self._settingsService.email = response.data.email;
-
-                return self._settingsService.$store()
-                    .then(function() {
-                        return self._settingsService.$syncSettingsDown();
-                    })
-                    .then(function() {
-                        self._settingsService.$syncProfileDown();
-                    });
             })
             .then(function() {
                 return response.data;
