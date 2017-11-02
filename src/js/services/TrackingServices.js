@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .factory('trackingService', function($analytics, $rootScope, CONFIG) {
+    .factory('trackingService', function($analytics, $rootScope, CONFIG, sdkService) {
         var FirebasePlugin = window.FirebasePlugin;
 
         var EVENTS = {
@@ -54,7 +54,7 @@ angular.module('blocktrail.wallet')
 
         var trackAnalyticsEvent = function(event, meta) {
             var analyticsMeta = angular.extend({}, ANALYTICS_META[event] || {}, meta);
-            analyticsMeta.network = CONFIG.NETWORK;
+            analyticsMeta.network = sdkService.getNetworkType();
 
             $analytics.eventTrack(event, analyticsMeta);
         };
@@ -62,7 +62,7 @@ angular.module('blocktrail.wallet')
         var trackFirebaseEvent = function(event, meta) {
             var firebaseMeta = angular.extend({}, ANALYTICS_META[event] || {}, meta);
             delete firebaseMeta.category;
-            firebaseMeta.network = CONFIG.NETWORK;
+            firebaseMeta.network = sdkService.getNetworkType();
 
             FirebasePlugin.logEvent(event, firebaseMeta);
         };

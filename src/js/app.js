@@ -97,58 +97,6 @@ angular.module('blocktrail.wallet').run(
             }
         });
 
-        // TODO Remove it
-        /*$rootScope.switchNetwork = function(network) {
-            $rootScope.NETWORK = network;
-
-            var cssEl = document.getElementById('css-ionic-app');
-
-            switch ($rootScope.NETWORK) {
-                case 'BTC':
-                    $rootScope.NETWORK_LONG = 'Bitcoin';
-                    $rootScope.TICKER = 'BTC';
-                    $rootScope.TICKER_LONG = 'Bitcoin';
-                    $rootScope.PRIOBOOST_SUPPORTED = true;
-                    $rootScope.PROMOCODE_SUPPORTED = true;
-                    $rootScope.TX_FILTER_MIN_BLOCK_HEIGHT = 0;
-
-                    var bccClsIdx = $rootScope.bodyClass.indexOf('network-bcc');
-                    if (bccClsIdx !== -1) {
-                        $rootScope.bodyClass.splice(bccClsIdx);
-                    }
-                    $rootScope.bodyClass.push('network-btc');
-
-                    cssEl.href = cssEl.href.replace("bcc-", "btc-");
-
-                    break;
-                case 'BCC':
-                    $rootScope.NETWORK_LONG = 'BitcoinCash';
-                    $rootScope.TICKER = 'BCC';
-                    $rootScope.TICKER_LONG = 'BitcoinCash';
-                    $rootScope.PRIOBOOST_SUPPORTED = false;
-                    $rootScope.PROMOCODE_SUPPORTED = true;
-                    $rootScope.TX_FILTER_MIN_BLOCK_HEIGHT = 478559;
-
-                    var btcClsIdx = $rootScope.bodyClass.indexOf('network-btc');
-                    if (btcClsIdx !== -1) {
-                        $rootScope.bodyClass.splice(btcClsIdx);
-                    }
-                    $rootScope.bodyClass.push('network-bcc');
-
-                    cssEl.href = cssEl.href.replace("btc-", "bcc-");
-
-                    break;
-            }
-        };
-
-        $rootScope.switchNetwork("BTC");*/
-
-        /*launchService.getNetwork().then(function(network) {
-            if (network) {
-                $rootScope.switchNetwork(network);
-            }
-        });*/
-
         if (CONFIG.DEBUGLIBS) {
             blocktrailSDK.debug.enable('*,-pouchdb:*');
         } else {

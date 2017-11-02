@@ -3,6 +3,8 @@ angular.module('blocktrail.wallet').factory(
     function(AppVersionBaseService, settingsService, $state, $translate, CONFIG, $ionicPopover, $rootScope, AppRateService) {
         var _CHECKS = AppVersionBaseService.CHECKS;
         var isCheck = AppVersionBaseService.isCheck;
+        var activeWallet = walletsManagerService.getActiveWallet();
+        var walletData = activeWallet.getReadOnlyWalletData();
 
         var GLIDERA_VERSION = 'v3.4.8';
 
@@ -12,7 +14,7 @@ angular.module('blocktrail.wallet').factory(
         ];
 
         var checkGlideraActivated = function() {
-            if ($rootScope.BUYBTC_ENABLED && $state.includes('app.wallet')) {
+            if (CONFIG.NETWORKS[walletData.networkType].BUYBTC && $state.includes('app.wallet')) {
                 return settingsService.$isLoaded().then(function () {
                     var p;
 
