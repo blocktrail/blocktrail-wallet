@@ -1,5 +1,6 @@
 angular.module('blocktrail.wallet')
-    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http, settingsService, $ionicHistory, $ionicSideMenuDelegate) {
+    .controller('LaunchCtrl', function($rootScope, $state, $log, launchService, CONFIG, blocktrailLocalisation, $http,
+                                       settingsService, $ionicHistory, $ionicSideMenuDelegate, storageService) {
         $log.debug('starting');
 
         //disable animation on transition from this state
@@ -7,13 +8,52 @@ angular.module('blocktrail.wallet')
             disableAnimate: true
         });
 
-        settingsService.$isLoaded()
+        /**
+         * @returns Promise<bool> TRUE when we can continue loading
+         */
+        function checkStorageVersion() {
+            var storageVersionDB = storageService.db('_storage-version');
+            var STORAGE_VERSION_DOC = "STORAGE_VERSION";
+
+            return storageVersionDB.get(STORAGE_VERSION_DOC)
+                .then(function(doc) {
+                    if (doc.STORAGE_VERSION !== CONFIG.STORAGE_VERSION) {
+                        doc.STORAGE_VERSION = CONFIG.STORAGE_VERSION;
+                        storageVersionDB.put(doc)
+                            .catch(function(e) {
+                                console.log('ERR', e);
+                            })
+                            .then(function() {
+                                $state.go('app.reset');
+                            });
+                    } else {
+                        return true;
+                    }
+                }, function() {
+                    storageVersionDB.put({_id: STORAGE_VERSION_DOC, STORAGE_VERSION: CONFIG.STORAGE_VERSION})
+                        .catch(function(e) {
+                            console.log('ERR', e);
+                        })
+                        .then(function() {
+                            $state.go('app.reset');
+                        });
+                });
+        }
+
+        checkStorageVersion()
+            .then(function(continueLoading) {
+                if (!continueLoading) {
+                    return;
+                }
+
+                return settingsService.$isLoaded();
+            })
             .then(function() {
                 //setup not started yet
                 if (!settingsService.setupStarted) {
                     // never show rebrand to user who just got started
-                    settingsService.$isLoaded().then(function() {
-                         settingsService.showRebrandMessage = false;
+                    settingsService.$isLoaded().then(function () {
+                        settingsService.showRebrandMessage = false;
                         settingsService.$store();
                         $state.go('app.setup.start');
                     });
@@ -60,10 +100,10 @@ angular.module('blocktrail.wallet')
 
                     $state.go(nextState);
 
-                } else if(!settingsService.backupSaved && !settingsService.backupSkipped) {
+                } else if (!settingsService.backupSaved && !settingsService.backupSkipped) {
                     //backup saving
                     $state.go('app.setup.backup');
-                } else if(!settingsService.phoneVerified) {
+                } else if (!settingsService.phoneVerified) {
                     //phone setup
                     $state.go('app.setup.phone');
                 } else if (!settingsService.contactsLastSync) {
@@ -73,7 +113,7 @@ angular.module('blocktrail.wallet')
                     //profile
                     $state.go('app.setup.profile');
                 }
-        });
+            });
     });
 
 angular.module('blocktrail.wallet')
