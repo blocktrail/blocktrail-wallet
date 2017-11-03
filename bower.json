@@ -3,7 +3,7 @@
   "private": "true",
   "dependencies": {
     "blocktrail-sdk": "3.3.4",
-    "ionic": "1.0.1",
+    "ionic": "git@github.com:btccom/ionic.git#btccomwallet-v1",
     "pouchdb": "git@github.com:blocktrail/pouchdb.git#blocktrail",
     "q": "1.2.0",
     "angular-moment": "~0.10.0",
