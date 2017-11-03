@@ -162,7 +162,8 @@
             bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
             placeholder: (typeof parameters.placeholder === "string") ? parameters.placeholder : "",
             buttonConfirm: (typeof parameters.buttonConfirm === "string") ? parameters.buttonConfirm : "CONFIRM",
-            buttonCancel: (typeof parameters.buttonCancel === "string") ? parameters.buttonCancel : "CANCEL"
+            buttonCancel: (typeof parameters.buttonCancel === "string") ? parameters.buttonCancel : "CANCEL",
+            prefill: (typeof parameters.prefill === "string") ? parameters.prefill : ""
         };
 
         return self.show("js/modules/core/controllers/modal-prompt/modal-prompt.tpl.html", "ModalPromptCtrl", parameters);

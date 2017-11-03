@@ -14,7 +14,7 @@
         $scope.buttonCancel = parameters.buttonCancel;
 
         $scope.form = {
-            confirmPassword: ""
+            confirmPassword: parameters.prefill || ""
         };
 
         $scope.confirm = function() {
