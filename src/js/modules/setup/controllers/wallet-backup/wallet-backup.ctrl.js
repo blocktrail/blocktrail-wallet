@@ -186,7 +186,6 @@
                         cordova.plugins.disusered.open(backupSettings.path + backupSettings.filename,
                             function() {
                                 $scope.isSaveButtonClicked = true;
-                                $scope.form.isBackupSaved = true;
                             },
                             function(err) {
                                 $scope.isSaveButtonClicked = true;
