@@ -34,7 +34,7 @@
             email: data.email,
             password: self._cryptoJS.SHA512(data.password).toString(),
             password_score: data.passwordCheck && data.passwordCheck.score || 0,
-            platform: "Web",
+            platform: ionic.Platform.isIOS() ? "iOS" : "Android",
             version: self._CONFIG.VERSION || self._CONFIG.VERSION_REV,
             device_uuid: self._device.uuid,
             device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : "Unknown Device",
