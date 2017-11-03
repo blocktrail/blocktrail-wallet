@@ -486,7 +486,7 @@ angular.module('blocktrail.wallet').config(
                     clearHistory: false,
                     excludeFromHistory: true
                 },
-                templateUrl: "js/modules/wallet/controllers/wallet-pin/wallet-pin.tpl.html",
+                templateUrl: "js/modules/wallet/controllers/open-wallet-pin/open-wallet-pin.tpl.html",
                 controller: 'OpenWalletPinCtrl',
                 params: {
                     nextState: 'app.wallet.summary'
