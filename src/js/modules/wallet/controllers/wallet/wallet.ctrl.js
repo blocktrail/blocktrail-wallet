@@ -20,6 +20,7 @@
 
         $scope.settings = settingsData;
         $scope.walletData = walletData;
+        $scope.walletCount = walletsManagerService.getWalletsList().length;
 
         $scope.$watch('walletData.networkType', function() {
             glideraService.init();

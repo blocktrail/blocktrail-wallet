@@ -27,7 +27,8 @@
                 class="item item-icon-right button-switch-wallet"
                 ng-click="onClickSetActiveWallet()"
             >
-                {{ walletData.networkType }}: {{ walletData.identifier }}
+                <span ng-if="walletCount <= 2">{{ CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG }}</span>
+                <span ng-if="walletCount > 2">{{ CONFIG.NETWORKS[walletData.networkType].NETWORK }}: {{ walletData.identifier }}</span>
                 <i class="icon ion-chevron-down" ng-class="item.linkIcon"></i>
             </div>
         </div>
