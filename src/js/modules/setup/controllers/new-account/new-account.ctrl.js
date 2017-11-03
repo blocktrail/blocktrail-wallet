@@ -11,8 +11,8 @@
         var listenerFormPassword;
 
         $scope.form = {
-            email: "",
-            password: "",
+            email: CONFIG.DEBUG_EMAIL_PREFILL || "",
+            password: CONFIG.DEBUG_PASSWORD_PREFILL || "",
             passwordCheck: null,
             networkType: sdkService.getNetworkType(),
             termsOfService: false
