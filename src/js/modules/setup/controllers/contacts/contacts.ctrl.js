@@ -7,6 +7,11 @@
     function SetupContactsCtrl($scope, Contacts, settingsService, $q, $btBackButtonDelegate, $cordovaDialogs, $translate, $log) {
         $btBackButtonDelegate.rootState = null;
 
+        $scope.appControl = {
+            syncing: false,
+            syncComplete: false
+        };
+
         $scope.syncContacts = function() {
             if ($scope.appControl.syncing) {
                 return false;
