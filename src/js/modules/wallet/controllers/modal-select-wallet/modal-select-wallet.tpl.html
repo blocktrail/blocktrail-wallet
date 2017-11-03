@@ -35,7 +35,7 @@
                             ng-click="onOptionClick(option.value)"
                             class="item item-icon-right text-left"
                         >
-                            {{ option.wallet.network }} ({{ option.wallet.balance | satoshiToCoin : 'BTC' : 4 }}) {{ option.wallet.identifier }}
+                            {{ option.wallet.network }} ({{ option.wallet.balance | satoshiToCoin : option.wallet.network : 4 }}) {{ option.wallet.identifier }}
                             <i
                                 ng-if="option.selected"
                                 class="icon ion-checkmark"
