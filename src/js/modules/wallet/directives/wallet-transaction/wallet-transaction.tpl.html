@@ -9,8 +9,12 @@
         transaction="transaction"
     ></wallet-transaction-description>
 
-    <!-- Is pending transaction -->
-    <div class="pending" ng-if="!transaction.block_height">
+    <!-- Is pending transaction - respecting btc precision -->
+    <div
+        class="pending"
+        ng-if="!transaction.block_height"
+        ng-style="btcPrecision > 4 && btcPrecision < 7 && { 'right' : '115px' } || btcPrecision > 6 && { 'right' : '130px' }"
+    >
         <i class="icon ion-clock"></i>
     </div>
 
