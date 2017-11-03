@@ -160,7 +160,6 @@
                     cordova.plugins.email.open(options, function(result) {
                         deferred.resolve(result);
                         $scope.isSaveButtonClicked = true;
-                        $scope.form.isBackupSaved = true;
                         modalService.hideSpinner();
                     });
                 } else {
