@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="col text-right">
                                     <p>
-                                        <span ng-if="transaction.block_height">{{ transaction.block_height }}</span>
+                                        <span ng-if="transaction.block_height">{{ transaction.block_height | confirmations }}</span>
                                         <span ng-if="transaction.block_height == null">{{ 'TX_INFO_PENDING' | translate }}</span>
                                     </p>
                                 </div>
