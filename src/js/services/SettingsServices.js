@@ -69,6 +69,8 @@ angular.module('blocktrail.wallet').service(
         permissionContacts: false,      //iOS contacts access
         permissionNotifications: false, //push notification allowed
 
+        showArchived: false,
+
         /* PIN lock */
         pinOnOpen: true,            // ask for pin on each wallet open
         pinFailureCount: 0,         // counter of pin input failures
@@ -217,7 +219,8 @@ angular.module('blocktrail.wallet').service(
                     glideraTransactions: self.glideraTransactions || [],
                     buyBTCRegion: self.buyBTCRegion,
                     glideraActivationNoticePending: self.glideraActivationNoticePending,
-                    latestVersionMobile: self.latestVersionMobile
+                    latestVersionMobile: self.latestVersionMobile,
+                    showArchived: self.showArchived
                 };
 
                 return sdk.syncSettings(settingsData);
@@ -242,6 +245,7 @@ angular.module('blocktrail.wallet').service(
                     self.buyBTCRegion = result.buyBTCRegion;
                     self.glideraActivationNoticePending = result.glideraActivationNoticePending;
                     self.latestVersionMobile = result.latestVersionMobile;
+                    self.showArchived = result.showArchived;
 
                     return self.$store();
                 });

@@ -102,6 +102,12 @@
         function prepareWalletListOptions(walletsList) {
             var list = [];
 
+            if (!$scope.settings.showArchived) {
+                walletsList = walletsList.filter(function(wallet) {
+                    return !wallet.archived;
+                });
+            }
+
             walletsList.forEach(function(wallet) {
                 list.push({
                     value: wallet.uniqueIdentifier,
