@@ -100,6 +100,7 @@
                         $scope.appControl.pin = DEFAULT_PIN;
                         $rootScope.STATE.PENDING_PIN_REQUEST = false;
                         $rootScope.STATE.INITIAL_PIN_DONE = true;
+                        $rootScope.hideLoadingScreen = false;
                         $timeout(function() {
                             $state.go($stateParams.nextState);
                         });
