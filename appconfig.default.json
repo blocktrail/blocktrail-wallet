@@ -66,9 +66,9 @@
         },
         "BCC": {
             "NETWORK": "BCC",
-            "NETWORK_LONG": "BitcoinCash",
-            "TICKER": "BCC",
-            "TICKER_LONG": "BitcoinCash",
+            "NETWORK_LONG": "Bitcoin Cash",
+            "TICKER": "BCH",
+            "TICKER_LONG": "Bitcoin Cash",
             "TX_FILTER_MIN_BLOCK_HEIGHT": 478559,
             "BUYBTC": false,
             "PRIOBOOST": false,
