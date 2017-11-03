@@ -137,8 +137,7 @@
 /*--- Framework Hacks & Fixes ---*/
 //fix the issue with the title for odd bar padding
 .bar .title {
-    //padding: $bar-padding-portrait;
-    //line-height: $bar-height/2;
+    margin: 0 15px;
 }
 .bar .title + .buttons {
     top: initial;
@@ -625,11 +624,7 @@ $balance-display-height: 40vw;
 
 @import "partials/apprate";
 
-@import "partials/sidemenu";
-
 @import "partials/setup";
-
-@import "partials/wallet-summary";
 
 @import "partials/send-receive";
 
@@ -644,6 +639,28 @@ $balance-display-height: 40vw;
 @import "partials/buybtc";
 
 @import "partials/address-lookup";
+
+@import "partials/vertical-alignment";
+
+@import "partials/modals";
+
+@import "directives/wallet/wallet-side-header";
+@import "directives/wallet/wallet-side-subheader.scss";
+@import "directives/wallet/wallet-side-nav";
+@import "directives/wallet/dialog-wallet-transaction";
+
+@import "controllers/setup/start";
+@import "controllers/setup/create-new-accout";
+@import "controllers/setup/login";
+
+
+@import "controllers/wallet/wallet-summary";
+@import "controllers/wallet/modal-select-wallet";
+
+
+
+
+
 
 /*
 .bar {

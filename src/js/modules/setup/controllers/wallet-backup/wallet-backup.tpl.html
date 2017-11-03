@@ -1,0 +1,48 @@
+<ion-view class="state-setup state-backup">
+    <ion-nav-title class="">{{ 'SETUP_WALLET_BACKUP' | translate }}</ion-nav-title>
+
+    <ion-content scroll="true">
+        <div class="card">
+            <ion-item class="item-text-wrap">
+                <p>{{ 'MSG_BACKUP_DESCRIPTION' | translate }}</p>
+            </ion-item>
+
+            <ion-item>
+                <button
+                    class="button button-block button-positive"
+                    ng-click="onShowExportOptions()"
+                >{{ 'SAVE' | translate }}
+                </button>
+            </ion-item>
+
+            <ion-item>
+                <button
+                    class="pull-right button button-small button-neutral sentence-case"
+                    ng-disabled="isSaveButtonClicked"
+                    ng-click="onSkipBackup()"
+                >{{ 'SETUP_SKIP_BACKUP' | translate }}...
+                </button>
+            </ion-item>
+        </div>
+
+        <div class="card" ng-show="isSaveButtonClicked">
+            <form>
+                <ion-item>
+                    <ion-checkbox ng-model="form.isBackupSaved">
+                        {{ 'SETUP_WALLET_BACKUP_CONFIRM' | translate }}
+                    </ion-checkbox>
+                </ion-item>
+
+                <ion-item class="item-borderless">
+                    <button class="button button-block button-positive"
+                            ng-disabled="!form.isBackupSaved"
+
+                            ng-click="clearBackupInfoAndContinue()">{{ 'CONTINUE' | translate }}
+                    </button>
+                </ion-item>
+
+            </form>
+        </div>
+    </ion-content>
+
+</ion-view>

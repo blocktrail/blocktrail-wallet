@@ -20,6 +20,11 @@ angular.module('blocktrail.wallet').factory(
 
         var resetAll = function() {
             return Q.all(Object.keys(dbs).map(function(name) {
+                // protected DB names with _ won't get deleted
+                if (name.substr(0, 1) === "_") {
+                    return Q.resolve();
+                }
+
                 var adapter = db(name).adapter;
 
                 return db(name).destroy().then(function() {
@@ -52,9 +57,8 @@ angular.module('blocktrail.wallet').factory(
         // init defaults
         db('launch');
         db('contacts');
-        db('tx-cache');
-        db('wallet-cache');
-        db('history');
+        db('wallet');
+        db('wallet_info');
         db('settings');
         db('currency-rates-cache');
         db('apprate');

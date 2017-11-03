@@ -135,7 +135,7 @@ angular.module('blocktrail.wallet').factory(
                                             });
                                         });
 
-                                        return sdkService.sdk().then(function(sdk) {
+                                        return $q.when(sdkService.getSdkByActiveNetwork()).then(function(sdk) {
                                             return sdk.client.post("/contacts", null, {
                                                 contacts: syncContactsByHash,
                                                 category: 'phone',
@@ -265,7 +265,7 @@ angular.module('blocktrail.wallet').factory(
             var self = this;
             hashIndex = hashIndex ? hashIndex: 0;
 
-            return $q.when(sdkService.sdk()).then(function(sdk) {
+            return $q.when(sdkService.getSdkByActiveNetwork()).then(function(sdk) {
                 return sdk.requestContactAddress(contact.hashes[hashIndex]).then(function(result) {
                     return result;
                 }, function(err) {

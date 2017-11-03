@@ -1,0 +1,214 @@
+<ion-view class="state-send">
+    <ion-nav-title class="">
+        <div ng-switch="$state.current.name">
+            <span ng-switch-when="app.wallet.send.contacts.list">{{ 'CONTACTS' | translate }}</span>
+            <span ng-switch-default>{{ 'SEND' | translate }}</span>
+        </div>
+    </ion-nav-title>
+    <ion-nav-buttons side="right">
+        <div class="button button-clear button-filtercontacts {{ !($state.current.name == 'app.wallet.send.contacts') && 'hide' || '' }}"
+             ng-click="showFilterOptions();"
+        ><i class="icon-filter"></i>
+        </div>
+    </ion-nav-buttons>
+
+    <form name="sendInputForm" novalidate>
+        <ion-content has-bouncing="true" scroll="!appControl.showPasswordInput" ng-class="{'blur-me': appControl.showOptionsScreen}">
+
+            <section class="user-balance-display row" ng-class="'minimise'">
+                <div class="col">
+                    <div class="balance-label" ng-if="walletData.balance !== null">
+                        <canvas-display
+                            text="$translate.instant('AVAILABLE_BALANCE')"
+                            width="100%"
+                            height="19"
+                            font="17px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                            text-baseline="bottom"
+                            color="#FFFFFF">
+                        </canvas-display>
+                    </div>
+                </div>
+                <div class="col no-padding user-balance-col">
+                    <div class="row no-padding btc-display">
+                        <div class="col">
+                            <div class="btc-value" ng-if="walletData.balance !== null">
+                                <canvas-display
+                                    text="(walletData.balance+walletData.uncBalance | satoshiToCoin: walletData.networkType : settings.btcPrecision : false : 'hide')"
+                                    width="100%"
+                                    height="26"
+                                    font="26px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                    text-baseline="bottom"
+                                    color="#FFFFFF">
+                                </canvas-display>
+                            </div>
+                        </div>
+                        <div class="col col-20 no-padding">
+                            <canvas-display
+                                text="CONFIG.NETWORKS[walletData.networkType].TICKER"
+                                width="100%"
+                                height="18"
+                                font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                text-baseline="top"
+                                color="#FFFFFF">
+                            </canvas-display>
+                        </div>
+                    </div>
+                    <div class="row no-padding fiat-display">
+                        <div class="col col-80">
+                            <div class="fiat-value" ng-if="walletData.balance !== null">
+                                <canvas-display
+                                    text="(walletData.balance+walletData.uncBalance) | satoshiToCurrency: settings.localCurrency :  bitcoinPrices : 2 : htmlMarkup=false"
+                                    width="100%"
+                                    height="18"
+                                    font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
+                                    text-baseline="bottom"
+                                    color="#FFFFFF">
+                                </canvas-display>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- /balance display -->
+
+
+            <!-- amount input -->
+            <div class="card">
+                <div class="amount-input-section" ng-class="{'btc-first': !fiatFirst, 'fiat-first': fiatFirst}">
+                    <div class="input-group btc-input" ng-class="{'position-first': !fiatFirst, 'position-last': fiatFirst}">
+                        <input type="{{ isSamsung && 'text' || 'number' }}" step="0.0001" name="btcValue" select-on-focus
+                               ng-model="sendInput.btcValue"
+                               raw-model="btcValueRaw"
+                               ng-change="setFiat(); sendInputForm.fiatValue.$setDirty(); fetchFee();"
+                               ng-enter="blurInput($event)"
+                               tabindex="{{ !fiatFirst && 1 || -1 }}"/>
+                        <div class="label-group">
+                            <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
+                            <span class="spacer">{{ btcValueRaw }}</span>
+                            <span class="label" ng-class="{'opacity-30': sendInputForm.btcValue.$invalid}"
+                            >
+                                {{ CONFIG.NETWORKS[walletData.networkType].TICKER }}
+                            </span>
+
+                        </div>
+                    </div>
+                    <div class="input-group fiat-input" ng-class="{'position-first': fiatFirst, 'position-last': !fiatFirst}">
+                        <input type="{{ isSamsung && 'text' || 'number' }}" step="0.01" name="fiatValue"
+                               ng-model="sendInput.fiatValue"
+                               raw-model="fiatValueRaw"
+                               ng-change="setBTC(); sendInputForm.btcValue.$setDirty(); fetchFee();"
+                               ng-enter="blurInput($event)"
+                               tabindex="{{ fiatFirst && 1 || -1 }}"/>
+                        <div class="label-group">
+                            <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
+                            <span class="label">{{ settings.localCurrency | toCurrencySymbol}}</span>
+                            <span class="spacer">{{ fiatValueRaw }}</span>
+                        </div>
+                    </div>
+                    <div class="input-swapping-overlay" ng-click="swapInputs()">
+                        <i class="swap-icon ion-arrow-swap"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- /amount input -->
+
+            <!-- recipient input -->
+            <div class="recipient-input-section padding-t card">
+                <h4 class="opacity-50 padding-left no-padding-b sentence-case">
+                    {{ 'RECIPIENT_PLACEHOLDER' | translate }}
+                </h4>
+
+                <div class="row recipient-display" ng-if="sendInput.recipientDisplay">
+                    <div class="col col-20 text-right" ng-if="sendInput.recipient">
+                        <div  class="display-token contact-token">
+                            <div class="initials">{{ sendInput.recipient.displayName | contactInitials }}</div>
+                            <span class="avatar" style="background-image: url('data:image/jpeg;base64, {{ sendInput.recipient.avatarUrl }}');"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- TODO: Maybe we add this to the CSS so that we always display the full address? -->
+                        <div class="recipient-display-name" style="font-size:calc(10px + 1vw);">
+                            {{ sendInput.recipientDisplay }}
+                        </div>
+                        <a class="clear-input" ng-if="sendInput.recipientDisplay" ng-click="clearRecipient()">
+                            <i class="ion ion-close"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- /recipient display -->
+
+                <div class="row options" ng-if="!sendInput.recipientDisplay">
+                    <div class="col text-center">
+                        <div class="option">
+                            <a class="contacts" ng-click="dismissMessage(); selectContact();"><i class="icon ion-person"></i></a>
+                            <span class="label">{{ 'CONTACTS' | translate }}</span>
+                        </div>
+                    </div>
+                    <div class="col text-center">
+                        <div class="option">
+                            <a class="qrcode" ui-sref="app.wallet.send.qrcode" ng-click="dismissMessage();"><i class="icon-qrcode"></i></a>
+                            <span class="label">{{ 'QR' | translate }}</span>
+                        </div>
+                    </div>
+                    <div class="col text-center">
+                        <div class="option">
+                            <a class="copy" ui-sref="app.wallet.send.address" ng-click="dismissMessage();"><i class="icon ion-ios-copy"></i></a>
+                            <span class="label">{{ 'ADDRESS' | translate }}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /recipient options -->
+
+            </div>
+
+            <div class="card">
+                <div class="list fee-choice-selected" style="margin-bottom: 0px;">
+                    <div class="item">
+                        <span ng-if="sendInput.feeChoice === OPTIMAL_FEE">{{ 'OPTIMAL_FEE_LONG' | translate }}</span>
+                        <span ng-if="sendInput.feeChoice === LOW_PRIORITY_FEE">{{ 'LOW_PRIORITY_FEE_LONG' | translate }}</span>
+                        <span ng-if="sendInput.feeChoice === PRIOBOOST">{{ 'PRIOBOOST_LONG' | translate }}</span>
+                        <span class="fee-choice-selected-edit" ui-sref="app.wallet.send.fee-choice">
+                            <i class="icon icon-edit"></i>
+                        </span>
+                        <span class="fee-choice-selected-fee"  ng-show="appControl.displayFee && sendInput.btcValue + sendInput.fiatValue > 0">
+                            {{ fee | satoshiToCoin : walletData.networkType : 8 : false : 'hide' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="fee-warning">
+                    <div class="text-muted" ng-if="sendInput.feeChoice === OPTIMAL_FEE && sendInput.btcValue + sendInput.fiatValue > 0">{{ 'OPTIMAL_PRIORITY_NOTICE' | translate }}</div>
+                    <div class="text-muted" ng-if="sendInput.feeChoice === LOW_PRIORITY_FEE && sendInput.btcValue + sendInput.fiatValue > 0">{{ 'OPTIMAL_PRIORITY_NOTICE' | translate }}</div>
+                    <div ng-if="sendInput.feeChoice === PRIOBOOST && sendInput.btcValue + sendInput.fiatValue > 0">
+                        <div class="text-bad" ng-if="prioboost.credits > 0 && (prioboost.tooLarge || prioboost.zeroConf)">{{ 'PRIOBOOST_NOT_POSSIBLE' | translate }}</div>
+                        <div class="text-bad" ng-if="prioboost.credits <= 0">{{ 'PRIOBOOST_NO_CREDITS_SHORT' | translate }}</div>
+                        <div class="text-muted">{{ 'PRIOBOOST_NOTICE' | translate }}</div>
+                    </div>
+                </div>
+                <div class="list">
+                    <div class="item">
+                        <button class="button send-button button-block button-energized"
+                                ng-disabled="appControl.prepareSending"
+                                ng-click="confirmSend()">
+                            {{ 'SEND' | translate }}
+                            <ion-spinner ng-show="appControl.prepareSending" icon="dots" class="spinner-stable" style="position: relative; top: 8px;"></ion-spinner>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+
+
+        <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="dismissMessage()">
+            <h2 class="title sentence-case" ng-class="message.title_class">{{ message.title | translate }}</h2>
+            <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
+
+            <a class="button dismiss" ng-click="dismissMessage()">{{ 'OK' | translate }}</a>
+        </div>
+        <!-- /message screen -->
+
+        <div ui-view="overlayView" class="overlay-screen-wrapper"></div>
+        <!-- /general purpose overlay screen -->
+
+    </form>
+</ion-view>

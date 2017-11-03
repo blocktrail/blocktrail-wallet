@@ -1,0 +1,49 @@
+<ion-view class="state-setup state-login">
+    <ion-nav-title class="">{{ 'SETUP_LOGIN' | translate }}</ion-nav-title>
+
+    <ion-nav-buttons side="left">
+        <button ng-click="$btBackButtonDelegate.goBack($event)"
+                class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
+                ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content scroll="true" >
+        <form
+            class="form-login"
+            name="loginForm"
+            novalidate
+        >
+            <div class="card">
+                <!-- Email -->
+                <ion-item>
+                    <input
+                        type="email"
+                        placeholder="{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}"
+                        name="email"
+                        ng-model="form.email"
+                        required
+                        auto-focus
+                    >
+                </ion-item>
+
+                <!-- Password -->
+                <ion-item>
+                    <input
+                        class="form-control"
+                        type="password"
+                        placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}"
+                        name="password"
+                        ng-model="form.password"
+                        required
+                    >
+                </ion-item>
+
+                <!-- Submit button -->
+                <ion-item>
+                    <button class="button button-block" ng-click="onSubmitFormLogin(loginForm)">{{ 'SETUP_LOGIN' | translate }}</button>
+                </ion-item>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

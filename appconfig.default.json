@@ -8,10 +8,7 @@
     "API_HOST": "api.blocktrail.com",
     "API_HTTPS": true,
 
-    "TICKER": "BTC",
-    "TICKER_LONG": "Bitcoin",
-    "NETWORK": "BTC",
-    "NETWORK_LONG": "Bitcoin",
+    "STORAGE_VERSION": "v2",
 
     "APPSTORE_URLS": {
         "ANDROID": "market://details?id=com.blocktrail.mywallet",
@@ -25,7 +22,6 @@
 
     "CSP": ["https://api.blocktrail.com", "https://www.glidera.io", "https://sandbox.glidera.io", "https://bitonic.nl", "https://staging.bitonic.nl"],
 
-    "BUYBTC": false,
     "GLIDERA_URL": "https://www.glidera.io",
     "BITONIC_URL": "https://bitonic.nl",
 
@@ -45,13 +41,6 @@
         "api_key": "9e0747befc483f602b04ba0f938db9422800d917d25b1ee9"
     },
 
-    "POLL_INTERVAL_TRANSACTIONS": 10000, // 8s
-    "POLL_INTERVAL_PRICE": 20000, // 10s
-    "POLL_INTERVAL_BALANCE": 10000, // 10s
-    "POLL_INTERVAL_BLOCKHEIGHT": 11000, // 11s
-    "POLL_INTERVAL_CONTACTS": 150000, // 150s
-    "POLL_INTERVAL_PROFILE": 300500, // 300s
-
     "FALLBACK_LANGUAGE": false, // don't fallback to make it explicit that we're missing a translation
 
     "WALLET_DEFAULT_VERSION": "v3",
@@ -59,6 +48,57 @@
     "REQUIRED_PASSWORD_STRENGTH": 2,
 
     "DEFAULT_IDENTIFIER": "mywallet",
-    
-    "NULL": null // just here so we can have a trailing , on every line
+
+    "NETWORKS_ENABLED": ["BTC", "BCC"],
+
+    "NETWORKS": {
+        "BTC": {
+            "NETWORK": "BTC",
+            "NETWORK_LONG": "Bitcoin",
+            "TICKER": "BTC",
+            "TICKER_LONG": "Bitcoin",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
+            "BUYBTC": true,
+            "PRIOBOOST": true,
+            "EXPLORER_ADDRESS_URL": "https://btc.com",
+            "EXPLORER_TX_URL": "https://btc.com",
+            "PROMOCODE": false
+        },
+        "BCC": {
+            "NETWORK": "BCC",
+            "NETWORK_LONG": "Bitcoin Cash",
+            "TICKER": "BCH",
+            "TICKER_LONG": "Bitcoin Cash",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": 478559,
+            "BUYBTC": false,
+            "PRIOBOOST": false,
+            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/BCC/address",
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/BCC/tx",
+            "PROMOCODE": true
+        },
+        "tBTC": {
+            "NETWORK": "tBTC",
+            "NETWORK_LONG": "Bitcoin TESTNET",
+            "TICKER": "tBTC",
+            "TICKER_LONG": "Bitcoin TESTNET",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
+            "BUYBTC": true,
+            "PRIOBOOST": false,
+            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBTC/address",
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBTC/tx",
+            "PROMOCODE": false
+        },
+        "tBCC": {
+            "NETWORK": "tBCC",
+            "NETWORK_LONG": "BitcoinCash TESTNET",
+            "TICKER": "tBCC",
+            "TICKER_LONG": "BitcoinCash TESTNET",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
+            "BUYBTC": false,
+            "PRIOBOOST": false,
+            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBCC/address",
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx",
+            "PROMOCODE": true
+        }
+    }
 }

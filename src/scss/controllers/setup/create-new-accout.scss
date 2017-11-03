@@ -1,0 +1,56 @@
+.form-create-new-account {
+    .item {
+        position: relative;
+
+        input {
+            width: 100%;
+            background: transparent;
+            position: relative;
+            z-index: 10;
+        }
+    }
+
+    .item-checkbox {
+        border: none;
+    }
+
+    .password-check-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        margin: -8px 0 0;
+        z-index: 1;
+    }
+
+    .password-check-message {
+        position: absolute;
+        bottom: 2px;
+        left: 16px;
+        z-index: 1;
+        font-size: 10px;
+        line-height: 12px;
+
+        &.password-checker-score-0,
+        &.password-checker-score-1 {
+            color: $bt-red;
+        }
+        &.password-checker-score-2 {
+            color: $bt-neon;
+        }
+        &.password-checker-score-3,
+        &.password-checker-score-4 {
+            color: $bt-green;
+        }
+    }
+
+    .terms-of-service {
+        font-size: 12px;
+        line-height: 14px;
+
+        a {
+            color: #666;
+        }
+    }
+}
+
+

@@ -1,0 +1,44 @@
+<ion-side-menus enable-menu-with-back-views="true">
+    <ion-side-menu-content>
+        <ion-nav-bar class="bar-energized">
+            <ion-nav-buttons side="left">
+                <button
+                    menu-toggle="left"
+                    class="button button-icon icon ion-navicon menu-button"
+                    ng-class="{'hide': ($btBackButtonDelegate.isDisplayed || !$btBackButtonDelegate.enableMenuButton)}">
+                </button>
+                <button ng-click="$btBackButtonDelegate.goBack($event)"
+                        class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
+                        ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+                </button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+
+        <ion-nav-view name="mainView"></ion-nav-view>
+
+    </ion-side-menu-content>
+
+    <!-- Left menu -->
+    <ion-side-menu side="left">
+        <wallet-side-header settings="settings"></wallet-side-header>
+
+        <div class="bar bar-subheader wallet-side-subheader">
+            <div
+                class="item item-icon-right button-switch-wallet"
+                ng-click="onClickSetActiveWallet()"
+            >
+                <span ng-if="walletCount <= 2">{{ CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG }}</span>
+                <span ng-if="walletCount > 2">{{ CONFIG.NETWORKS[walletData.networkType].NETWORK }}: {{ walletData.identifier }}</span>
+                <i class="icon ion-chevron-down" ng-class="item.linkIcon"></i>
+            </div>
+        </div>
+
+        <!-- Nav list -->
+        <ion-content>
+            <wallet-side-nav
+                list="sideNavList"
+                handler="navHandler(item)"
+            ></wallet-side-nav>
+        </ion-content>
+    </ion-side-menu>
+</ion-side-menus>

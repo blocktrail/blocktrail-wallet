@@ -16,6 +16,7 @@ $dark:                            #444 !default;
 */
 
 $app-default-color: #3c78c2 !default;
+$app-pin-color:     #1f4079;
 
 // custom function to create a -light version of a color
 @function lightencolor($color) {
@@ -149,7 +150,7 @@ $menu-side-shadow:                -1px 0px 7px rgba(0, 0, 0, 0.2), 1px 0px 7px r
 
 /*--- Main Side Menu ---*/
 $sidemenu-header-bg:               #a5a5a5;
-
+$ios-statusbar-height: 8px; // fix for ios 10+ to fight the old ios9 fix but still allow for some padding
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../fonts" !default;
@@ -175,20 +176,3 @@ $ionicons-font-path: "../fonts" !default;
 
 //import our theme
 @import "theme";
-
-
-//NOTE - watch out when using .ion class anywhere, sass will do some crazy stuff when extending and in certain situations can really mess everything up (uncomment snippet below to see
-//problem caused by @extend .ion in _ionicon-icons.scss, read more: http://csswizardry.com/2014/01/extending-silent-classes-in-sass/
-/*
-.state-send {
-    .two {
-        .three {
-            .four {
-                i.ion {
-                    display: none;
-                }
-            }
-        }
-    }
-}
-*/

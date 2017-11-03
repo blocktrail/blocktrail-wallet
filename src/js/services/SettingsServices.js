@@ -2,9 +2,12 @@ angular.module('blocktrail.wallet').service(
     'settingsService',
     function($q, storageService, sdkService, $log, $window) {
 
+
+
     var DEFAULT_ACCOUNT_CREATED = 1478097190;
 
     var defaultBtcPrecision = $window.innerWidth <= 375 ? 4 : 8;
+
     var defaults = {
         displayName:  null,
         username:  '',
@@ -66,11 +69,12 @@ angular.module('blocktrail.wallet').service(
         permissionContacts: false,      //iOS contacts access
         permissionNotifications: false, //push notification allowed
 
+        showArchived: false,
+
         /* PIN lock */
         pinOnOpen: true,            // ask for pin on each wallet open
         pinFailureCount: 0,         // counter of pin input failures
-        pinLastFailure: null,       // last pin input failure
-        pinLocktimeSeconds: 5 * 60  // locktime of pin input
+        pinLastFailure: null        // last pin input failure
     };
     angular.extend(this, defaults);
 
@@ -94,6 +98,10 @@ angular.module('blocktrail.wallet').service(
         }
 
         return this._$isLoaded;
+    };
+
+    this.getSettings = function() {
+        return this.$load();
     };
 
     /**
@@ -146,7 +154,8 @@ angular.module('blocktrail.wallet').service(
      */
     this.$syncProfileUp = function() {
         var self = this;
-        return $q.when(sdkService.sdk())
+
+        return $q.when(sdkService.getSdkByActiveNetwork())
             .then(function(sdk) {
                 var profileData = {
                     profilePic: self.profilePic
@@ -177,7 +186,8 @@ angular.module('blocktrail.wallet').service(
      */
     this.$syncProfileDown = function() {
         var self = this;
-        return $q.when(sdkService.sdk())
+
+        return $q.when(sdkService.getSdkByActiveNetwork())
             .then(function(sdk) {
                 return sdk.getProfile();
             })
@@ -197,7 +207,7 @@ angular.module('blocktrail.wallet').service(
     this.$syncSettingsUp = function() {
         var self = this;
 
-        return $q.when(sdkService.sdk())
+        return $q.when(sdkService.getSdkByActiveNetwork())
             .then(function(sdk) {
                 var settingsData = {
                     localCurrency: self.localCurrency,
@@ -208,7 +218,8 @@ angular.module('blocktrail.wallet').service(
                     glideraTransactions: self.glideraTransactions || [],
                     buyBTCRegion: self.buyBTCRegion,
                     glideraActivationNoticePending: self.glideraActivationNoticePending,
-                    latestVersionMobile: self.latestVersionMobile
+                    latestVersionMobile: self.latestVersionMobile,
+                    showArchived: self.showArchived
                 };
 
                 return sdk.syncSettings(settingsData);
@@ -217,7 +228,8 @@ angular.module('blocktrail.wallet').service(
 
     this.$syncSettingsDown = function() {
         var self = this;
-        return $q.when(sdkService.sdk())
+
+        return $q.when(sdkService.getSdkByActiveNetwork())
             .then(function(sdk) {
                 return sdk.getSettings();
             })
@@ -232,6 +244,7 @@ angular.module('blocktrail.wallet').service(
                     self.buyBTCRegion = result.buyBTCRegion;
                     self.glideraActivationNoticePending = result.glideraActivationNoticePending;
                     self.latestVersionMobile = result.latestVersionMobile;
+                    self.showArchived = result.showArchived;
 
                     return self.$store();
                 });

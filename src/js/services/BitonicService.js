@@ -35,45 +35,40 @@ angular.module('blocktrail.wallet').factory(
         };
 
         var buy = function(qty, fiat) {
+            var activeWallet = walletsManagerService.getActiveWallet();
+            var sdk = activeWallet.getSdkWallet().sdk;
 
-            return Wallet.wallet.then(function (wallet) {
-                $q.when(Wallet.getNewAddress()).then(function (address) {
+            return $q.when(activeWallet.getNewAddress()).then(function (address) {
+                var params = {
+                    address: address
+                };
 
-                    var params = {
-                        address: address
-                    };
+                if (qty != null) {
+                    params.btc = qty;
+                }
+                if (fiat != null) {
+                    params.euros = fiat;
+                }
 
-                    if (qty != null) {
-                        params.btc = qty;
-                    }
-                    if (fiat != null) {
-                        params.euros = fiat;
-                    }
+                return sdk.getSignedBitonicUrl(wallet.identifier, params).then(function (result) {
+                    return $cordovaDialogs.confirm(
+                        $translate.instant('MSG_BUYBTC_FORWARD_TO_BROKER', {
+                            broker: "Bitonic"
+                        }).sentenceCase(),
+                        $translate.instant('MSG_BUYBTC_CONFIRM_TITLE').sentenceCase(),
+                        [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
+                    )
+                        .then(function(dialogResult) {
+                            if (dialogResult == 2) {
+                                return;
+                            }
 
-                    return sdkService.sdk().then(function (sdk) {
+                            trackingService.trackEvent(trackingService.EVENTS.BUYBTC.BITONIC_GOTO_BITONIC);
+                            window.open(encodeOpenURI(result.url), '_system');
 
-                        sdk.getSignedBitonicUrl(wallet.identifier, params).then(function (result) {
-
-                            return $cordovaDialogs.confirm(
-                                $translate.instant('MSG_BUYBTC_FORWARD_TO_BROKER', {
-                                    broker: "Bitonic"
-                                }).sentenceCase(),
-                                $translate.instant('MSG_BUYBTC_CONFIRM_TITLE').sentenceCase(),
-                                [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
-                            )
-                                .then(function(dialogResult) {
-                                    if (dialogResult == 2) {
-                                        return;
-                                    }
-
-                                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.BITONIC_GOTO_BITONIC);
-                                    window.open(encodeOpenURI(result.url), '_system');
-
-                                    $timeout(function () {
-                                        $state.go('app.wallet.summary');
-                                    }, 1000);
-                            });
-                        });
+                            $timeout(function () {
+                                $state.go('app.wallet.summary');
+                            }, 1000);
                     });
                 });
             });

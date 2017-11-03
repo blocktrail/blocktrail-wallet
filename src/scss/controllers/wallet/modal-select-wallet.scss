@@ -1,0 +1,16 @@
+.dialog-select-wallet {
+    .item-modal-content {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .item {
+        &.active {
+            background: $lightgray-light;
+            opacity: 0.7;
+        }
+
+        &.selected {
+            background: $lightgray-dark;
+        }
+    }
+}

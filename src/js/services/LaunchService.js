@@ -81,6 +81,8 @@ angular.module('blocktrail.wallet').factory(
             return self.storage.get('account_info')
                 .then(function(doc) {
                     return doc;
+                }, function() {
+                    self._accountInfo = null;
                 });
         };
 
@@ -126,21 +128,24 @@ angular.module('blocktrail.wallet').factory(
                 .then(function(doc) { return doc; });
         };
 
-        LaunchService.prototype.storeWalletInfo = function(identifier, encryptedPassword, encryptedSecret) {
+        LaunchService.prototype.storeWalletInfo = function(identifier, networkType, encryptedSecret, encryptedPassword) {
             var self = this;
+
+            self._walletInfo = null;
 
             return self.storage.get('wallet_info')
                 .then(function(doc) { return doc; }, function() { return {_id: "wallet_info"}; })
                 .then(function(doc) {
-                    doc.identifier = identifier;
-                    doc.encryptedPassword = encryptedPassword;
-                    doc.encryptedSecret = encryptedSecret;
+                        doc.identifier = identifier;
+                        doc.networkType = networkType;
+                        doc.encryptedSecret = encryptedSecret;
+                        doc.encryptedPassword = encryptedPassword;
 
-                    return self.storage.put(doc).then(function() {
-                        return true;
-                    });
-                }
-            );
+                        return self.storage.put(doc).then(function() {
+                            return true;
+                        });
+                    }
+                );
         };
 
         LaunchService.prototype.getBackupInfo = function() {

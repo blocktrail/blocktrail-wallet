@@ -4,7 +4,7 @@ angular.module('blocktrail.wallet-bootstrapper', [
 ].filter(function filterNull(r) { return !!r; }));
 
 angular.module('blocktrail.wallet-bootstrapper').run(function ($q, $cordovaFile) {
-    var DBs = ['apprate', 'contacts', 'currency-rates-cache', 'history', 'settings', 'tx-cache', 'wallet-cache', 'launch'];
+    var DBs = ['apprate', 'contacts', 'currency-rates-cache', 'settings', 'wallet', 'wallet_info', 'launch'];
 
     ionic.Platform.ready(function () {
         $q.when(ionic.Platform.isIOS())

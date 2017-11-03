@@ -27,7 +27,7 @@ angular.module('blocktrail.wallet')
         $scope.sendFeedback = function() {
             trackingService.trackEvent(trackingService.EVENTS.APPRATE, {label: 'feedback'});
 
-            $q.when(sdkService.sdk())
+            $q.when(sdkService.getSdkByActiveNetwork())
                 .then(function(sdk) {
                     var feedback = {
                         msg: $scope.apprate.feedbackMsg,

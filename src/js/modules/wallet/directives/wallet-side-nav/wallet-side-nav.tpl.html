@@ -1,0 +1,16 @@
+<ion-list class="wallet-side-nav">
+    <ion-item
+        menu-close
+        ng-repeat="item in list"
+        ng-hide="item.isHidden"
+    >
+        <a ng-if="item.stateHref" ng-href="{{ item.stateHref }}">
+            <i class="icon" ng-class="item.linkIcon"></i>
+            <span>{{ item.linkText | translate }}</span>
+        </a>
+        <a ng-if="!item.stateHref" ng-click="handler(item)">
+            <i class="icon" ng-class="item.linkIcon"></i>
+            <span>{{ item.linkText | translate }}</span>
+        </a>
+    </ion-item>
+</ion-list>
