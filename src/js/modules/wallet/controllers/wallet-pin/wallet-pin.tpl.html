@@ -2,7 +2,7 @@
     <div class="pin-login-screen">
         <ion-content scroll="false">
             <div class="pin-input-section">
-                <img class="logo-btccom" src="img/logo-btc-new.png">
+                <img class="logo-btccom" src="img/logo-btc-com.png">
 
                 <h2 class="">{{ 'WALLET_PIN' | translate }}</h2>
                 <label class="item-input" ng-class="{error: appControl.showPinInputError || appControl.locked }">
@@ -10,13 +10,10 @@
                 </label>
                 <div class="pin-error">
                     <span ng-show="appControl.showPinInputError">{{ appControl.result.error | translate }}</span>
-                </div>
-
-                <div class="pin-error">
                     <span ng-show="appControl.locked">{{ 'PLEASE_WAIT_SECONDS' | translate : {seconds: appControl.lockTimer} }}</span>
                 </div>
 
-                <a class="button button-outline confirm-button" ng-click="proceed()">{{ 'CONFIRM' | translate }}</a>
+                <a class="button button-outline confirm-button" ng-if="!appControl.locked" ng-click="proceed()">{{ 'CONFIRM' | translate }}</a>
             </div>
         </ion-content>
     </div>

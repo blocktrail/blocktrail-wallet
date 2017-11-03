@@ -486,7 +486,7 @@ angular.module('blocktrail.wallet').config(
                     clearHistory: false,
                     excludeFromHistory: true
                 },
-                templateUrl: "templates/wallet/partials/wallet.init.pin-input.html",
+                templateUrl: "js/modules/wallet/controllers/wallet-pin/wallet-pin.tpl.html",
                 controller: 'OpenWalletPinCtrl',
                 params: {
                     nextState: 'app.wallet.summary'
@@ -501,6 +501,7 @@ angular.module('blocktrail.wallet').config(
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
                     settingsData: getSettingsData,
+                    pinOnOpen: pinOnOpen,
                     activeWallet: getActiveWallet,
                     loadingData: loadingData
                 }
@@ -842,6 +843,28 @@ angular.module('blocktrail.wallet').config(
             return settingsService.getSettings();
         }
 
+        /**
+         *
+         * @param settingsService
+         * @param $q
+         * @param $state
+         * @param $rootScope
+         * @param settingsData          not used, just for forcing order of resolves
+         */
+        function pinOnOpen(settingsService, $q, $state, $rootScope, settingsData) {
+            return settingsService.$isLoaded().then(function () {
+                // if pinOnOpen is required and last time we asked for it was more than 5min ago
+                if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE) {
+                    $rootScope.STATE.PENDING_PIN_REQUEST = true;
+
+                    $state.go('app.pin', {nextState: $state.$current.name});
+
+                    // throw error to prevent controller from loading or any other resolves to continue
+                    return $q.reject(new Error("PIN_REQUIRED"));
+                }
+            });
+        }
+
 
         /**
          * Get the active wallet
@@ -850,8 +873,9 @@ angular.module('blocktrail.wallet').config(
          * @param launchService
          * @param sdkService
          * @param walletsManagerService
+         * @param pinOnOpen                 not used, just for forcing order of resolves
          */
-        function getActiveWallet($state, $q, launchService, sdkService, walletsManagerService) {
+        function getActiveWallet($state, $q, launchService, sdkService, walletsManagerService, pinOnOpen) {
             return $q.all([launchService.getAccountInfo(), launchService.getWalletInfo()])
                 .then(function(data) {
                     var accountInfo = data[0];
@@ -888,13 +912,14 @@ angular.module('blocktrail.wallet').config(
          * @param $rootScope
          * @param $log
          * @param Currencies
+         * @param pinOnOpen                 not used, just for forcing order of resolves
          */
         /**
          * !! activeWallet and handleSetupState should stay in here even when not used
          * !! to make sure the resolves happen in the correct order
          * TODO Review
          */
-        function loadingData(settingsService, $q, $rootScope, $log, Currencies) {
+        function loadingData(settingsService, $q, $rootScope, $log, Currencies, pinOnOpen) {
             // Do an initial load of cached user data
             return $q.all([
                 Currencies.updatePrices(true),
