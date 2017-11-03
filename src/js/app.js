@@ -919,7 +919,7 @@ angular.module('blocktrail.wallet').config(
          * !! to make sure the resolves happen in the correct order
          * TODO Review
          */
-        function loadingData(settingsService, $q, $rootScope, $log, Currencies, pinOnOpen) {
+        function loadingData(settingsService, $q, $rootScope, $log, Currencies, activeWallet) {
             // Do an initial load of cached user data
             return $q.all([
                 Currencies.updatePrices(true),
