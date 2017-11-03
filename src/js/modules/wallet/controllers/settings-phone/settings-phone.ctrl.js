@@ -107,7 +107,7 @@
             $scope.message = {title: 'WORKING', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
-            $q.when(activeWallet.getSdkWallet())
+            $q.when(activeWallet.getSdkWallet().sdk)
                 .then(function(sdk) {
                     return sdk.updatePhone({phone_number: $scope.formInput.newPhoneNumber, 'country_code': $scope.formInput.selectedCountry.dialCode});
                 })
@@ -145,7 +145,7 @@
             $scope.message = {title: 'WORKING', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
-            $q.when(activeWallet.getSdkWallet())
+            $q.when(activeWallet.getSdkWallet().sdk)
                 .then(function(sdk) {
                     return sdk.removePhone();
                 })
@@ -177,7 +177,7 @@
             $scope.message = {title: 'VERIFYING', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
-            $q.when(activeWallet.getSdkWallet())
+            $q.when(activeWallet.getSdkWallet().sdk)
                 .then(function(sdk) {
                     return sdk.verifyPhone($scope.formInput.verifyToken);
                 })

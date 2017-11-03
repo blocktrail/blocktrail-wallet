@@ -258,6 +258,12 @@
             return self.client.post("/mywallet/2fa/enable", null, {two_factor_token: twoFactorToken}, cb);
         };
 
+        blocktrailSDK.prototype.redeemPromoCode = function (data, cb) {
+            var self = this;
+
+            return self.client.post("/promo/redeem", null, data, cb);
+        };
+
         blocktrailSDK.prototype.disable2FA = function (twoFactorToken, cb) {
             var self = this;
 

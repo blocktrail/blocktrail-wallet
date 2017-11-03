@@ -97,7 +97,7 @@
                                     extraInfo.push({title: 'Email', value: settingsService.email});
                                 }
 
-                                var backup = new sdkService.BackupGenerator(
+                                var backup = sdkService.getBackupGenerator(
                                     $scope.setupInfo.identifier,
                                     $scope.setupInfo.backupInfo,
                                     extraInfo
