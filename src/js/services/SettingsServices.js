@@ -74,8 +74,7 @@ angular.module('blocktrail.wallet').service(
         /* PIN lock */
         pinOnOpen: true,            // ask for pin on each wallet open
         pinFailureCount: 0,         // counter of pin input failures
-        pinLastFailure: null,       // last pin input failure
-        pinLocktimeSeconds: 5 * 60  // locktime of pin input
+        pinLastFailure: null        // last pin input failure
     };
     angular.extend(this, defaults);
 

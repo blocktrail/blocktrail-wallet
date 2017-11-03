@@ -16,6 +16,7 @@ $dark:                            #444 !default;
 */
 
 $app-default-color: #3c78c2 !default;
+$app-pin-color:     #1f4079;
 
 // custom function to create a -light version of a color
 @function lightencolor($color) {
