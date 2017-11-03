@@ -273,7 +273,7 @@
                     }
 
                     $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
-                    return $q.when(activeWallet.getSdkWallet());
+                    return $q.when(activeWallet.getSdkWallet().sdk);
                 })
                 .then(function(sdk) {
                     //delete contacts from server
