@@ -12,6 +12,7 @@
                 showPinInput: false,
                 showPinInputError: false,
                 pin: DEFAULT_PIN,
+                proceeding: false,
                 result: {
                     error: null
                 },
@@ -95,10 +96,13 @@
 
                         // Vibrate, reset pin, go to next state
                         navigator.vibrate(100);
+                        $scope.appControl.proceeding = true;
                         $scope.appControl.pin = DEFAULT_PIN;
                         $rootScope.STATE.PENDING_PIN_REQUEST = false;
                         $rootScope.STATE.INITIAL_PIN_DONE = true;
-                        $state.go($stateParams.nextState);
+                        $timeout(function() {
+                            $state.go($stateParams.nextState);
+                        });
 
                     }).catch(function () {
                         // On error, vibrate and show error message for a short while
