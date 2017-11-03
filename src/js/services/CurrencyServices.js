@@ -161,14 +161,14 @@ angular.module('blocktrail.wallet')
             var currencies = {};
             //Main currencies on top
             self.mainCurrencies.forEach(function (currency) {
-                if (self.currencies[currency]) {
+                if (typeof self.currencies[currency] !== "undefined") {
                     currencies[currency] = self.currencies[currency];
                 }
             });
             // Sort the rest fiats and add them as well
-            Object.keys(self.currencies).sort().forEach(function (key) {
-                if (self.mainCurrencies.indexOf(key) === -1) {
-                    currencies[key] = self.currencies[key];
+            Object.keys(self.currencies).sort().forEach(function (currency) {
+                if (typeof self.currencies[currency] !== "undefined" && self.mainCurrencies.indexOf(currency) === -1) {
+                    currencies[currency] = self.currencies[currency];
                 }
             });
             self.currencies = currencies;
