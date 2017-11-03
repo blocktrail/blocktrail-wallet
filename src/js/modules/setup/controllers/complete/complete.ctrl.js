@@ -4,8 +4,11 @@
     angular.module("blocktrail.setup")
         .controller("SetupCompleteCtrl", SetupCompleteCtrl);
 
-    function SetupCompleteCtrl($scope, settingsService, modalService) {
+    function SetupCompleteCtrl($scope, $rootScope, settingsService, modalService) {
         modalService.showSpinner();
+
+        // prevent PIN dialog
+        $rootScope.STATE.INITIAL_PIN_DONE = true;
 
         settingsService
             .$isLoaded()
