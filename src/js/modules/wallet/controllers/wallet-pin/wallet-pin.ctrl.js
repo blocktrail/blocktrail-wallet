@@ -6,6 +6,7 @@
                                                    settingsService, walletsManagerService, $timeout, $interval, CONFIG) {
 
             var DEFAULT_PIN = CONFIG.DEBUG_PIN_PREFILL || "";
+            var PIN_LOCKTIME_SECONDS = 5 * 60;
 
             $scope.appControl = {
                 showPinInput: false,
@@ -33,7 +34,7 @@
 
                         lockInterval = $interval(function () {
                             var lockTime = (((new Date()).getTime() - settingsService.pinLastFailure) / 1000).toFixed(0);
-                            $scope.appControl.lockTimer = settingsService.pinLocktimeSeconds - lockTime;
+                            $scope.appControl.lockTimer = PIN_LOCKTIME_SECONDS - lockTime;
 
                             if ($scope.appControl.lockTimer <= 0) {
                                 $scope.appControl.locked = false;

@@ -9,7 +9,7 @@
                     <input id="mainPinInput" type="tel" ng-model="appControl.pin" autofocus required ng-enter="proceed()" ng-tab="proceed()" tabindex="-1">
                 </label>
                 <div class="pin-error">
-                    <span ng-show="appControl.showPinInputError">{{ appControl.result.error | translate }}</span>
+                    <span ng-show="appControl.showPinInputError && !appControl.locked">{{ appControl.result.error | translate }}</span>
                     <span ng-show="appControl.locked">{{ 'PLEASE_WAIT_SECONDS' | translate : {seconds: appControl.lockTimer} }}</span>
                 </div>
 
