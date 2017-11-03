@@ -150,7 +150,7 @@ $menu-side-shadow:                -1px 0px 7px rgba(0, 0, 0, 0.2), 1px 0px 7px r
 
 /*--- Main Side Menu ---*/
 $sidemenu-header-bg:               #a5a5a5;
-
+$ios-statusbar-height: 8px; // fix for ios 10+ to fight the old ios9 fix but still allow for some padding
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../fonts" !default;
