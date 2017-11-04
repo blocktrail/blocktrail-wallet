@@ -8,14 +8,22 @@
                         modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
                         trackingService, AppVersionService, blocktrailLocalisation, $cordovaDialogs, launchService) {
         var walletData = activeWallet.getReadOnlyWalletData();
-        
-        $timeout(function() {
-            $rootScope.hideLoadingScreen = true;
+
+        function hideLoading() {
             $timeout(function() {
-                if (navigator.splashscreen) {
-                    navigator.splashscreen.hide();
-                }
+                $rootScope.hideLoadingScreen = true;
+                $timeout(function () {
+                    if (navigator.splashscreen) {
+                        navigator.splashscreen.hide();
+                    }
+                });
             });
+        }
+        hideLoading();
+
+        $scope.$on('$ionicView.enter', function() {
+            hideLoading();
+            $ionicNavBarDelegate.showBar(true);
         });
 
         $scope.settings = settingsData;
@@ -77,10 +85,6 @@
                 isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].PROMOCODE
             }
         ];
-
-        $scope.$on('$ionicView.enter', function() {
-            $ionicNavBarDelegate.showBar(true);
-        });
 
         // Methods
         $rootScope.getPrice = getPrice;

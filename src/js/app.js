@@ -482,6 +482,7 @@ angular.module('blocktrail.wallet').config(
             })
             .state('app.pin', {
                 url: "/pin",
+                cache: false,
                 data: {
                     clearHistory: false,
                     excludeFromHistory: true
