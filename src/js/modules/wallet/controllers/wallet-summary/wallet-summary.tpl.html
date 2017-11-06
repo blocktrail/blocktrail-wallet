@@ -1,4 +1,4 @@
-<ion-view class="state-wallet state-summary">
+<ion-view class="state-wallet state-summary" cache-view='false'>
     <ion-nav-title class="">{{ 'MY_WALLET' | translate }}</ion-nav-title>
 
     <ion-nav-buttons side="right">
@@ -31,7 +31,14 @@
                 </div>
 
                 <div ng-repeat="buyBtcPendingOrder in buyBtcPendingOrders track by $index">
-                    <div class="item item-avatar item-transaction" ng-click="onShowTransaction(transaction)">
+                    <div
+                        class="item item-avatar item-transaction"
+                        ng-class="{
+                            'middle-value': settings.btcPrecision <= 6 && settings.btcPrecision >= 4,
+                            'short-value': settings.btcPrecision <= 4
+                        }"
+                        ng-click="onShowTransaction(transaction)"
+                    >
                         <!-- Transaction avatar -->
                         <div class="item-image display-token received">
                             <!-- Display avatar -->
@@ -55,7 +62,11 @@
                         </div>
 
                         <!-- Value -->
-                        <div class="value received">{{ buyBtcPendingOrder.qty | satoshiToCoin : walletData.networkType : 4 }}</div>
+                        <div
+                            class="value received"
+                            ng-bind-html="buyBtcPendingOrder.qty | satoshiToCoin : walletData.networkType : settings.btcPrecision : true"
+                        ></div>
+
                     </div>
                 </div>
             </div>

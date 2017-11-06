@@ -67,7 +67,15 @@ $wallet-info-height: 90px;
         }
 
         .item-transaction {
-            padding-right: 124px;
+            padding-right: 126px;
+
+            &.middle-value {
+                padding-right: 110px;
+            }
+
+            &.short-value {
+                padding-right: 90px;
+            }
 
             .item-image {
                 i {
@@ -89,10 +97,24 @@ $wallet-info-height: 90px;
 
         .pending {
             position: absolute;
-            top: 26px;
-            right: 100px;
+            top: 14px;
+            left: 46px;
             font-size: 16px;
             color: $darkgray-light;
+            z-index: 100;
+            background: #fff;
+            width: 17px;
+            height: 17px;
+            border-radius: 100%;
+            overflow: hidden;
+
+            i {
+                vertical-align: top;
+                float: left;
+                height: 16px;
+                width: 16px;
+                font-size: 16px;
+            }
         }
 
         .value {
