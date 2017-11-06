@@ -177,6 +177,10 @@
         }
         
         function spinnerModal(modal) {
+            if (self._spinnerModal) {
+                self._spinnerModal.hide();
+            }
+
             self._spinnerModal = modal;
         }
 
