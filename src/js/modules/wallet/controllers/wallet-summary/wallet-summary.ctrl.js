@@ -15,7 +15,6 @@
         $scope.walletData = walletData;
 
         $scope.isShowNoMoreTransactions = true;
-        $scope.isTwoFactorWarning = false; // display 2FA warning once every day when it's not enabled
         $scope.showBCCSweepWarning = false;
         $scope.lastDateHeader = lastDateHeader;
         $scope.buyBtcPendingOrders = []; // Glidera transactions
@@ -40,48 +39,20 @@
          * Init data
          */
         function initData() {
+            console.error('initData::START');
             modalService.showSpinner();
 
             return $q.all([
                 $q.when($rootScope.getPrice()),
-                $q.when(twoFactorWarning()),
                 $q.when(getGlideraTransactions())
             ]).then(function() {
+                console.error('initData::DONE');
                 modalService.hideSpinner();
             }, function (err) {
                 modalService.hideSpinner();
+                console.error('initData::ERR');
                 console.log('err', err);
             });
-        }
-
-        /**
-         * Two factor warning
-         *
-         * if 2FA is turn off we display a message
-         */
-        function twoFactorWarning() {
-            return $q.when(launchService.getAccountInfo())
-                .then(function(accountInfo) {
-                    var SECONDS_AGO = 86400;
-
-                    if (!accountInfo.requires2FA) {
-
-                        return settingsService.getSettings()
-                            .then(function(settings) {
-                                var last = settings.twoFactorWarningLastDisplayed;
-
-                                if (!last || last < (new Date()).getTime() - SECONDS_AGO * 1000) {
-                                    var updateSettings = {
-                                        twoFactorWarningLastDisplayed: (new Date()).getTime()
-                                    };
-
-                                    settingsService.updateSettingsUp(updateSettings);
-
-                                    $scope.isTwoFactorWarning = true;
-                                }
-                            });
-                    }
-                });
         }
 
         /**
