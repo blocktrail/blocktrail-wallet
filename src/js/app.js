@@ -204,7 +204,7 @@ angular.module('blocktrail.wallet').run(
             facebookConnectPlugin.activateApp();
             trackingService.trackEvent(trackingService.EVENTS.APP_OPEN);
 
-            if ($state.includes('app.wallet')) {
+            if ($state.includes('app.wallet') && (typeof CONFIG.PIN_ON_OPEN === "undefined" || CONFIG.PIN_ON_OPEN === true)) {
                 settingsService.$isLoaded().then(function () {
                     var PIN_LAST_ACTIVE_DELAY = 5 * 60 * 1000; // 5 minutes
                     // if pinOnOpen is required and last time we asked for it was more than 5min ago
@@ -855,7 +855,7 @@ angular.module('blocktrail.wallet').config(
         function pinOnOpen(settingsService, $q, $state, $rootScope, settingsData) {
             return settingsService.$isLoaded().then(function () {
                 // if pinOnOpen is required and last time we asked for it was more than 5min ago
-                if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE) {
+                if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE && (typeof CONFIG.PIN_ON_OPEN === "undefined" || CONFIG.PIN_ON_OPEN === true)) {
                     $rootScope.STATE.PENDING_PIN_REQUEST = true;
 
                     $state.go('app.pin', {nextState: $state.$current.name});
