@@ -10,9 +10,9 @@
                 </div>
                 <div ng-if="!appControl.proceeding">
                     <label class="item-input" ng-class="{error: appControl.showPinInputError || appControl.locked }">
-                        <input id="mainPinInput" type="tel" autofocus required tabindex="-1"
+                        <input id="mainPinInput" type="tel" required tabindex="-1"
                                ng-model="appControl.pin" ng-disabled="appControl.proceeding"
-                               ng-enter="proceed()" ng-tab="proceed()">
+                               ng-enter="proceed()" ng-tab="proceed()" auto-focus>
                     </label>
                     
                     <div class="pin-error">
