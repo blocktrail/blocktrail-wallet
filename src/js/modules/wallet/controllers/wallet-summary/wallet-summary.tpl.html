@@ -1,4 +1,4 @@
-<ion-view class="state-wallet state-summary" cache-view='false'>
+<ion-view class="state-wallet state-summary">
     <ion-nav-title class="">{{ 'MY_WALLET' | translate }}</ion-nav-title>
 
     <ion-nav-buttons side="right">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <div ng-repeat="buyBtcPendingOrder in buyBtcPendingOrders track by $index">
+                <div ng-repeat="buyBtcPendingOrder in buyBtcPendingOrders track by buyBtcPendingOrder.transactionUuid">
                     <div
                         class="item item-avatar item-transaction"
                         ng-class="{

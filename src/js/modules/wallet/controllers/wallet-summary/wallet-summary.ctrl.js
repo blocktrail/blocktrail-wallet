@@ -77,6 +77,7 @@
                         }
 
                         var order = {
+                            transactionUuid: glideraTxInfo.transactionUuid,
                             qty: CurrencyConverter.toSatoshi(glideraTxInfo.qty, 'BTC'),
                             qtyBTC: glideraTxInfo.qty,
                             currency: glideraTxInfo.currency,

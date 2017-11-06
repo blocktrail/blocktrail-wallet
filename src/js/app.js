@@ -433,7 +433,7 @@ angular.module('blocktrail.wallet').config(
         $stateProvider
             .state('app', {
                 abstract: true,
-                template: "<ion-nav-view cache-view='false'></ion-nav-view>",
+                template: "<ion-nav-view></ion-nav-view>",
                 resolve: {
                     /**
                      * load extra languages we are aware of
@@ -497,6 +497,7 @@ angular.module('blocktrail.wallet').config(
             /*---Wallet Home---*/
             .state('app.wallet', {
                 abstract: true,
+                cache: false,
                 url: "/wallet",
                 controller: "WalletCtrl",
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
@@ -509,6 +510,7 @@ angular.module('blocktrail.wallet').config(
             })
             .state('app.wallet.summary', {
                 url: "?refresh",
+                cache: false,
                 data: {
                     clearHistory: true  //always clear history when entering this state
                 },
