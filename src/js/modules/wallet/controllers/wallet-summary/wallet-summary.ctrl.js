@@ -39,18 +39,15 @@
          * Init data
          */
         function initData() {
-            console.error('initData::START');
             modalService.showSpinner();
 
             return $q.all([
                 $q.when($rootScope.getPrice()),
                 $q.when(getGlideraTransactions())
             ]).then(function() {
-                console.error('initData::DONE');
                 modalService.hideSpinner();
             }, function (err) {
                 modalService.hideSpinner();
-                console.error('initData::ERR');
                 console.log('err', err);
             });
         }
