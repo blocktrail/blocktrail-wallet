@@ -59,12 +59,14 @@ It's okay to do PRs without bumping the translations submodule, we'll handle tha
 mv appconfig.json .appconfig.json
 cp appconfig.prod.json appconfig.json
 
+# change config.xml to bump version
+ionic prepare
+# you should commit and tag here...
+git commit -am "v1.0.x"; git tag v1.0.x
+
 rm -rf platforms/android/build/outputs/apk/* # clean up old builds
 
 ionic build android --release 
-
-# you should commit and tag here...
-# git commit -am "v1.0.x"; git tag v1.0.x
 
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/keys/blocktrail.keystore /work/blocktrail-wallet/platforms/android/build/outputs/apk/android-release-unsigned.apk blocktrail  
 
