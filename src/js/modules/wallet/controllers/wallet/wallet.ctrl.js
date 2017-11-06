@@ -34,6 +34,21 @@
             glideraService.init();
         });
 
+        var buyBTCNavItem = {
+            stateHref: $state.href("app.wallet.buybtc.choose"),
+            activeStateName: "app.wallet.buybtc",
+            linkText: "BUYBTC_NAVTITLE",
+            linkIcon: "ion-card",
+            isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].BUYBTC
+        };
+        var promocodeNavItem = {
+            stateHref: $state.href("app.wallet.promo"),
+            activeStateName: "app.wallet.promo",
+            linkText: "PROMO_CODES",
+            linkIcon: "ion-ios-heart-outline",
+            isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].PROMOCODE
+        };
+
         $scope.sideNavList = [
             {
                 stateHref: $state.href("app.wallet.summary"),
@@ -56,13 +71,7 @@
                 linkIcon: "ion-ios-undo-outline",
                 isHidden: false
             },
-            {
-                stateHref: $state.href("app.wallet.buybtc.choose"),
-                activeStateName: "app.wallet.buybtc",
-                linkText: "BUYBTC_NAVTITLE",
-                linkIcon: "ion-card",
-                isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].BUYBTC
-            },
+            buyBTCNavItem,
             {
                 stateHref: null,
                 activeStateName: "",
@@ -77,13 +86,7 @@
                 linkIcon: "ion-ios-gear-outline",
                 isHidden: false
             },
-            {
-                stateHref: $state.href("app.wallet.promo"),
-                activeStateName: "app.wallet.promo",
-                linkText: "PROMO_CODES",
-                linkIcon: "ion-ios-heart-outline",
-                isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].PROMOCODE
-            }
+            promocodeNavItem
         ];
 
         // Methods
@@ -243,6 +246,11 @@
         (function initWalletConfig() {
             launchService.getWalletConfig()
                 .then(function(result) {
+
+
+                    // merge network specific config over the default config
+                    result = angular.extend({}, result, result.networks[walletData.networkType]);
+
                     if (result.api_key && (result.api_key !== 'ok')) {
                         // alert user session is invalid
                         return $cordovaDialogs.alert(
@@ -252,6 +260,12 @@
                             .finally(function() {
                                 return $state.go('app.reset');
                             });
+                    }
+
+                    if (CONFIG.PROMOCODE_IN_MENU) {
+                        promocodeNavItem.isHidden = false;
+                    } else if (typeof result.promocodeInMenu !== "undefined") {
+                        promocodeNavItem.isHidden = !result.promocodeInMenu;
                     }
 
                     settingsService.$isLoaded().then(function () {

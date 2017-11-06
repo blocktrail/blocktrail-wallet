@@ -49,6 +49,8 @@
 
     "DEFAULT_IDENTIFIER": "mywallet",
 
+    "PROMOCODE_IN_MENU": false,
+
     "NETWORKS_ENABLED": ["BTC", "BCC"],
 
     "NETWORKS": {
@@ -61,8 +63,7 @@
             "BUYBTC": true,
             "PRIOBOOST": true,
             "EXPLORER_ADDRESS_URL": "https://btc.com",
-            "EXPLORER_TX_URL": "https://btc.com",
-            "PROMOCODE": false
+            "EXPLORER_TX_URL": "https://btc.com"
         },
         "BCC": {
             "NETWORK": "BCC",
@@ -73,8 +74,7 @@
             "BUYBTC": false,
             "PRIOBOOST": false,
             "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/BCC/address",
-            "EXPLORER_TX_URL": "https://www.blocktrail.com/BCC/tx",
-            "PROMOCODE": true
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/BCC/tx"
         },
         "tBTC": {
             "NETWORK": "tBTC",
@@ -85,8 +85,7 @@
             "BUYBTC": true,
             "PRIOBOOST": false,
             "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBTC/address",
-            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBTC/tx",
-            "PROMOCODE": false
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBTC/tx"
         },
         "tBCC": {
             "NETWORK": "tBCC",
@@ -97,8 +96,7 @@
             "BUYBTC": false,
             "PRIOBOOST": false,
             "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBCC/address",
-            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx",
-            "PROMOCODE": true
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx"
         }
     }
 }
