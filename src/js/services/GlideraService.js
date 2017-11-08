@@ -101,7 +101,7 @@ angular.module('blocktrail.wallet').factory(
                     }
 
                     var activeWallet = walletsManagerService.getActiveWallet();
-                    var sdk = activeWallet.getSdkWallet().sdk;
+                    var sdk = activeWallet.getWalletSdk().sdk;
 
                     return sdk.glideraOauth(qs.code, returnuri)
                         .then(function(result) {
@@ -378,7 +378,7 @@ angular.module('blocktrail.wallet').factory(
 
         var buyPrices = function(qty, fiat) {
             var activeWallet = walletsManagerService.getActiveWallet();
-            var sdk = activeWallet.getSdkWallet().sdk;
+            var sdk = activeWallet.getWalletSdk().sdk;
 
             return sdk.glideraBuyPrices(qty, fiat)
                 .then(function(result) {

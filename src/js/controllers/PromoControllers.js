@@ -106,7 +106,7 @@ angular.module('blocktrail.wallet')
                 .then(function(address) {
                     $scope.promoCodeInput.address = address;
                     trackingService.trackEvent(trackingService.EVENTS.PROMO_ATTEMPT);
-                    return activeWallet.getSdkWallet().sdk.redeemPromoCode($scope.promoCodeInput);
+                    return activeWallet.getWalletSdk().sdk.redeemPromoCode($scope.promoCodeInput);
                 })
                 .then(function(result) {
                     trackingService.trackEvent(trackingService.EVENTS.PROMO_REDEEM);
