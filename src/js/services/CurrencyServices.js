@@ -106,7 +106,7 @@ angular.module('blocktrail.wallet')
                     })
                     .then(function(pricesDoc) {
                         if (forceFetch) {
-                            return sdkService.getSdkByActiveNetwork().price().then(function(result) {
+                            return sdkService.getGenericSdk().price().then(function(result) {
                                 angular.extend(pricesDoc, result);
 
                                 //store in cache and then return

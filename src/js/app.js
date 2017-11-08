@@ -62,7 +62,8 @@ angular.module('blocktrail.wallet').run(
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
              amMoment, trackingService, blocktrailLocalisation, sdkService) {
-        $rootScope.sdkReadOnlySdkData = sdkService.getReadOnlySdkData();
+
+        $rootScope.readOnlySdkServiceData = sdkService.getReadOnlySdkServiceData();
         $rootScope.networkClassType = "";
 
         $rootScope.CONFIG = CONFIG || {};
@@ -75,7 +76,7 @@ angular.module('blocktrail.wallet').run(
         $rootScope.isAndroid = ionic.Platform.isAndroid();
         $rootScope.isIOS = ionic.Platform.isIOS();
 
-        $rootScope.$watch("sdkReadOnlySdkData.networkType", function(newValue, oldValue) {
+        $rootScope.$watch("readOnlySdkServiceData.networkType", function(newValue, oldValue) {
             if (newValue !== oldValue) {
                 var network = CONFIG.NETWORKS[newValue].NETWORK;
                 if (network.substr(0, 1) === "t") {
@@ -768,7 +769,6 @@ angular.module('blocktrail.wallet').config(
                     }
                 }
             })
-            // TODO move to setup module
             .state('app.wallet.settings.backup', {
                 url: "/wallet-backup",
                 data: {
