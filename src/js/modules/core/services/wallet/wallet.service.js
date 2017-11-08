@@ -133,8 +133,7 @@
         return self._readonlyDoc;
     };
 
-    // TODO getSdkWallet -> getWalletSdk
-    Wallet.prototype.getSdkWallet = function() {
+    Wallet.prototype.getWalletSdk = function() {
         var self = this;
 
         return self._sdkWallet;
