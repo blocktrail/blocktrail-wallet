@@ -199,9 +199,9 @@
                 return _maxSpendablePromise;
             } else {
                 _maxSpendablePromise = $q.all([
-                        activeWallet.getSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL),
-                        activeWallet.getSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY),
-                        activeWallet.getSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_MIN_RELAY_FEE)
+                        activeWallet.getWalletSdk().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL),
+                        activeWallet.getWalletSdk().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY),
+                        activeWallet.getWalletSdk().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_MIN_RELAY_FEE)
                 ]).then(function (results) {
                     // set the local stored value
                     _maxSpendable = {};
@@ -234,7 +234,7 @@
             $scope.prioboost.estSize = null;
             $scope.prioboost.zeroConf = null;
 
-            return $q.when(activeWallet.getSdkWallet()).then(function(sdkWallet) {
+            return $q.when(activeWallet.getWalletSdk()).then(function(sdkWallet) {
                 var localPay = {};
                 var amount = 0;
 

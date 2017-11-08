@@ -94,7 +94,7 @@
     WalletsManagerService.prototype.getActiveWalletSdk = function() {
         var self = this;
 
-        return self._activeWallet.getSdkWallet();
+        return self._activeWallet.getWalletSdk();
     };
 
     /**

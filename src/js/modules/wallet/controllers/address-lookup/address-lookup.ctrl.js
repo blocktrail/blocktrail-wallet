@@ -76,7 +76,7 @@
                             options.search_label = searchText;
                         }
 
-                        return activeWallet.getSdkWallet()
+                        return activeWallet.getWalletSdk()
                             .addresses(options)
                             .then(function (addrs) {
                                 $cache.put(cacheKey, addrs);
@@ -184,7 +184,7 @@
             var idx = $scope.items.indexOf($scope.labelEdit.selectedAddress);
             var label = $scope.labelEdit.labelInput;
 
-            return activeWallet.getSdkWallet()
+            return activeWallet.getWalletSdk()
                 .labelAddress($scope.items[idx].address, label)
                 .then(function () {
                     $scope.items[idx].label = label;
