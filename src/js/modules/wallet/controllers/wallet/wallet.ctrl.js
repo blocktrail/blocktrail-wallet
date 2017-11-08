@@ -30,9 +30,11 @@
         $scope.walletData = walletData;
         $scope.walletCount = walletsManagerService.getWalletsList().length;
 
-        $scope.$watch('walletData.networkType', function() {
-            glideraService.init();
-        });
+        // default to false (then overwritten in initWalletConfig)
+        $rootScope.PRIOBOOST_ENABLED = false;
+
+        // init glidera service
+        glideraService.init();
 
         var buyBTCNavItem = {
             stateHref: $state.href("app.wallet.buybtc.choose"),
@@ -246,8 +248,6 @@
         (function initWalletConfig() {
             launchService.getWalletConfig()
                 .then(function(result) {
-
-
                     // merge network specific config over the default config
                     result = angular.extend({}, result, result.networks[walletData.networkType]);
 

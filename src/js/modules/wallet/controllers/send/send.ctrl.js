@@ -64,6 +64,15 @@
             minRelayFee: null
         };
 
+        $scope.PRIOBOOST_ENABLED = false;
+        launchService.getWalletConfig()
+            .then(function(result) {
+                // merge network specific config over the default config
+                result = angular.extend({}, result, result.networks[$scope.walletData.networkType]);
+
+                $scope.PRIOBOOST_ENABLED = CONFIG.NETWORKS[$scope.walletData.networkType].PRIOBOOST && result.prioboost;
+            });
+
         $scope.getTranslations = function() {
             if ($scope.translations) {
                 return $q.when($scope.translations);
