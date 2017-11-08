@@ -9,7 +9,6 @@
                                 $log, $translate, $timeout, launchService, modalService, blocktrailSDK, sdkService, settingsService, CONFIG) {
         var retry = 0;
         var sdk = null;
-        var sdkReadOnlyObject = null;
 
         $scope.form = {
             pin: CONFIG.DEBUG_PIN_PREFILL || "",
@@ -94,7 +93,7 @@
             return $q.when(launchService.getAccountInfo())
                 .then(function(accountInfo) {
                     sdkService.setAccountInfo(accountInfo);
-                    return sdkService.getSdkByActiveNetwork();
+                    return sdkService.getSdkByNetworkType($scope.form.networkType);
                 })
                 .then(sdkInitWallet)
                 .then(initWalletSuccessHandler, initWalletErrorHandler)
@@ -125,7 +124,6 @@
          */
         function sdkInitWallet(sdkObject) {
             sdk = sdkObject;
-            sdkReadOnlyObject = sdkService.getReadOnlySdkData();
             $log.debug("Initialising wallet: " + $scope.setupInfo.identifier, sdk);
 
             return sdk.initWallet({
@@ -317,7 +315,7 @@
             // set the wallet as the main wallet
             $log.debug("setting wallet as main wallet");
             modalService.updateSpinner({title: "", body: "SAVING_WALLET"});
-            return sdk.setMainMobileWallet($scope.setupInfo.identifier);
+            return sdkService.getGenericSdk().setMainMobileWallet($scope.setupInfo.identifier);
         }
 
         /**

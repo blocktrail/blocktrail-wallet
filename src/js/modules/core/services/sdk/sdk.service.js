@@ -1,7 +1,6 @@
 (function () {
     "use strict";
 
-    // TODO Add later
     angular.module('blocktrail.core')
         .factory('sdkService', function(genericSdkService, blocktrailSDK, CONFIG) {
             extendBlocktrailSDK(blocktrailSDK);
@@ -11,13 +10,17 @@
     );
 
     /**
-     * TODO here
+     * Sdk service
+     * @param genericSdkService
+     * @param blocktrailSDK
+     * @param CONFIG
      * @constructor
      */
     function SdkService(genericSdkService, blocktrailSDK, CONFIG) {
         var self = this;
 
         self._genericSdkService = genericSdkService;
+
         self._blocktrailSDK = blocktrailSDK;
         self._CONFIG = CONFIG;
 
@@ -46,11 +49,14 @@
             });
         });
 
-
         self.activeNetworkType = null;
     }
 
-    SdkService.prototype.getReadOnlySdkData = function() {
+    /**
+     * Get the read only SDK service data
+     * @return {{readonly: boolean}|*}
+     */
+    SdkService.prototype.getReadOnlySdkServiceData = function() {
         var self = this;
 
         return self._readonlyDoc;
@@ -72,16 +78,6 @@
         self._sdkData.networkType = networkType;
 
         return self._readonlyDoc;
-    };
-
-    SdkService.prototype.getSdkByActiveNetwork = function() {
-        var self = this;
-
-        if(self._sdkData.networkType === null) {
-            throw new Error("Blocktrail core module, sdk service. Network type is not set up");
-        }
-
-        return self._sdkList[self._sdkData.networkType];
     };
 
     SdkService.prototype.getSdkByNetworkType = function(networkType) {
@@ -123,8 +119,14 @@
     SdkService.prototype._initSdkList = function() {
         var self = this;
 
+        // Network SDKs
         self._CONFIG.NETWORKS_ENABLED.forEach(function(networkType) {
-            var isTestNet = (networkType.substr(0, 1) === 't');
+            if (isTestNet && networkType.charAt(0) !== 't') {
+                throw new Error("Blocktrail core module, sdk service. Only test networks are available (tBTC, tBCC ...).");
+            } else if (!isTestNet && networkType.charAt(0) === 't') {
+                throw new Error("Blocktrail core module, sdk service. Only regular networks are available (BTC, BCC ...).");
+            }
+
             var sdkNetwork = self._CONFIG.NETWORKS[networkType].NETWORK;
             if (isTestNet) {
                 sdkNetwork = sdkNetwork.substr(1);

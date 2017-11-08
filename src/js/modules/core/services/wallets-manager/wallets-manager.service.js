@@ -78,6 +78,26 @@
     };
 
     /**
+     * Get the active wallet network type
+     * @return { string }
+     */
+    WalletsManagerService.prototype.getActiveWalletNetwork = function() {
+        var self = this;
+
+        return self._activeWallet.getReadOnlyWalletData().networkType;
+    };
+
+    /**
+     * Get the active wallet network type
+     * @return { string }
+     */
+    WalletsManagerService.prototype.getActiveWalletSdk = function() {
+        var self = this;
+
+        return self._activeWallet.getSdkWallet();
+    };
+
+    /**
      * Set the active wallet by the network type and the identifier
      * @param networkType
      * @param identifier

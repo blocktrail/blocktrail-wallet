@@ -6,7 +6,8 @@
 
     function SettingsWalletBackupCtrl($scope, backupInfo, $q, $btBackButtonDelegate, $translate, $cordovaDialogs,
                                 $ionicActionSheet, $log, $cordovaFileOpener2, $cordovaFile, sdkService,
-                                launchService, settingsService, $timeout) {
+                                launchService, settingsService, $timeout, walletsManagerService) {
+
         if (!backupInfo) {
             settingsService.$isLoaded().then(function() {
 
@@ -48,7 +49,7 @@
 
         // hacky, we asume that user won't click generate backup before this promise is finished
         if (!$scope.setupInfo.backupInfo.blocktrailPublicKeys) {
-            $q.when(sdkService.getSdkByActiveNetwork()).then(function(sdk) {
+            $q.when(walletsManagerService.getActiveWalletSdk()).then(function(sdk) {
                 $scope.setupInfo.backupInfo.blocktrailPublicKeys = {};
                 angular.forEach(backupInfo.blocktrailPublicKeys, function(pubkey, key) {
                     $scope.setupInfo.backupInfo.blocktrailPublicKeys[pubkey.keyIndex] = bitcoinjs.HDNode.fromBase58(pubkey.pubKey, sdk.network);
