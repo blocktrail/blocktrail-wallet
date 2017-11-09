@@ -36,6 +36,24 @@ var APIClient = function(options) {
         return new APIClient(options);
     }
 
+    self.testnet = options.testnet = options.testnet || false;
+    if (self.testnet) {
+        self.network = bitcoin.networks.testnet;
+    } else {
+        self.network = bitcoin.networks.bitcoin;
+    }
+
+    self.bitcoinCash = options.network && options.network === "BCC";
+
+    options.apiNetwork = options.apiNetwork || ((self.testnet ? "t" : "") + (options.network || 'BTC').toUpperCase());
+
+    /**
+     * @type RestClient
+     */
+    self.client = APIClient.initRestClient(options);
+};
+
+APIClient.initRestClient = function(options) {
     // BLOCKTRAIL_SDK_API_ENDPOINT overwrite for development
     if (process.env.BLOCKTRAIL_SDK_API_ENDPOINT) {
         options.host = process.env.BLOCKTRAIL_SDK_API_ENDPOINT;
@@ -62,23 +80,11 @@ var APIClient = function(options) {
         options.port = options.https ? 443 : 80;
     }
 
-    self.testnet = options.testnet = options.testnet || false;
-    if (self.testnet) {
-        self.network = bitcoin.networks.testnet;
-    } else {
-        self.network = bitcoin.networks.bitcoin;
-    }
-
-    self.bitcoinCash = options.network && options.network === "BCC";
-
     if (!options.endpoint) {
-        options.endpoint = "/" + (options.apiVersion || "v1") + "/" + (self.testnet ? "t" : "") + (options.network || 'BTC').toUpperCase();
+        options.endpoint = "/" + (options.apiVersion || "v1") + (options.apiNetwork ? ("/" + options.apiNetwork) : "");
     }
 
-    /**
-     * @type RestClient
-     */
-    self.client = new RestClient(options);
+    return new RestClient(options);
 };
 
 var determineDataStorageV2_3 = function(options) {
@@ -904,6 +910,7 @@ APIClient.prototype.initWallet = function(options, cb) {
             blocktrailPublicKeys,
             keyIndex,
             result.chain || 0,
+            result.segwit || 0,
             self.testnet,
             result.checksum,
             result.upgrade_key_index,
@@ -1087,6 +1094,7 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                                     blocktrailPublicKeys,
                                     keyIndex,
                                     result.chain || 0,
+                                    result.segwit || 0,
                                     self.testnet,
                                     checksum,
                                     result.upgrade_key_index,
@@ -1196,6 +1204,7 @@ APIClient.prototype._createNewWalletV2 = function(options) {
                         blocktrailPublicKeys,
                         keyIndex,
                         result.chain || 0,
+                        result.segwit || 0,
                         self.testnet,
                         checksum,
                         result.upgrade_key_index,
@@ -1306,6 +1315,7 @@ APIClient.prototype._createNewWalletV3 = function(options) {
                             blocktrailPublicKeys,
                             keyIndex,
                             result.chain || 0,
+                            result.segwit || 0,
                             self.testnet,
                             checksum,
                             result.upgrade_key_index,
@@ -1679,17 +1689,25 @@ APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFe
         prioboost = false;
     }
 
+    var data = {
+        paths: paths,
+        two_factor_token: twoFactorToken
+    };
+    if (typeof txHex === "string") {
+        data.raw_transaction = txHex;
+    } else if (typeof txHex === "object") {
+        Object.keys(txHex).map(function(key) {
+            data[key] = txHex[key];
+        });
+    }
+
     return self.client.post(
         "/wallet/" + identifier + "/send",
         {
             check_fee: checkFee ? 1 : 0,
             prioboost: prioboost ? 1 : 0
         },
-        {
-            raw_transaction: txHex,
-            paths: paths,
-            two_factor_token: twoFactorToken
-        },
+        data,
         cb
     );
 };

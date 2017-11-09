@@ -30,9 +30,9 @@ var RestClient = function(options) {
         self.defaultParams['api_key'] = self.apiKey;
     }
 
-    self.defaultHeaders = {
+    self.defaultHeaders = _.defaults({}, {
         'X-SDK-Version': 'blocktrail-sdk-nodejs/3.1.x'
-    };
+    }, options.defaultHeaders);
 };
 
 RestClient.prototype.create_request = function(options) {

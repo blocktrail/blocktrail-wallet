@@ -29,6 +29,11 @@ The Blocktrail SDK is tested against;
    - iPhone OS X 10.10
 
 
+Upgrading from v3.x to v3.4.0
+-----------------------------
+We've seperated out the backup PDF generator because it contained a lot of dependencies while barely anyone uses it.  
+If you do want to use it, see the `blocktrail-sdk-backup-generator` package.
+
 Upgrading from v2.x to v3.0.0
 -----------------------------
 **IMPORTANT** `v3.0.0` introduces a new **DEFAULT** wallet encryption, please make sure you upgrade the SDK everywhere you're using it!!

@@ -277,6 +277,7 @@ WalletSweeper.prototype.createAddress = function(path) {
     //ensure a public path is used
     path = path.replace("m", "M");
     var keyIndex = path.split("/")[1].replace("'", "");
+    var scriptType = parseInt(path.split("/")[2]);
 
     //derive the primary pub key directly from the primary priv key
     var primaryPubKey = walletSDK.deriveByPath(this.primaryPrivateKey, path, "m");
@@ -291,7 +292,16 @@ WalletSweeper.prototype.createAddress = function(path) {
         backupPubKey.keyPair.getPublicKeyBuffer(),
         blocktrailPubKey.keyPair.getPublicKeyBuffer()
     ]);
-    var redeemScript = bitcoin.script.multisig.output.encode(2, multisigKeys);
+
+    var multisig = bitcoin.script.multisig.output.encode(2, multisigKeys);
+    var redeemScript, witnessScript;
+    if (this.network !== "bitcoincash" && scriptType === walletSDK.CHAIN_BTC_SEGWIT) {
+        witnessScript = multisig;
+        redeemScript = bitcoin.script.witnessScriptHash.output.encode(bitcoin.crypto.sha256(witnessScript));
+    } else {
+        witnessScript = null;
+        redeemScript = multisig;
+    }
     var scriptHash = bitcoin.crypto.hash160(redeemScript);
     var scriptPubKey = bitcoin.script.scriptHash.output.encode(scriptHash);
 
@@ -302,7 +312,7 @@ WalletSweeper.prototype.createAddress = function(path) {
     var address = bitcoin.address.fromOutputScript(scriptPubKey, network);
 
     //@todo return as buffers
-    return {address: address.toString(), redeem: redeemScript};
+    return {address: address.toString(), redeem: redeemScript, witness: witnessScript};
 };
 
 /**
@@ -324,6 +334,7 @@ WalletSweeper.prototype.createBatchAddresses = function(start, count, keyIndex, 
         var multisig = self.createAddress(path);
         addresses[multisig['address']] = {
             redeem: multisig['redeem'],
+            witness: multisig['witness'],
             path: path
         };
     })).then(function() {
@@ -344,10 +355,17 @@ WalletSweeper.prototype.discoverWalletFunds = function(increment, cb) {
     var deferred = q.defer();
     deferred.promise.nodeify(cb);
 
+    var checkChain;
+    if (this.network === "bitcoincash") {
+        checkChain = [0, 1];
+    } else {
+        checkChain = [0, 1, 2];
+    }
+
     async.nextTick(function() {
         //for each blocktrail pub key, do fund discovery on batches of addresses
         async.eachSeries(Object.keys(self.blocktrailPublicKeys), function(keyIndex, done) {
-            async.eachSeries([0, 1], function(chain, done) {
+            async.eachSeries(checkChain, function(chain, done) {
                 var i = 0;
                 var hasTransactions = false;
 
@@ -405,11 +423,18 @@ WalletSweeper.prototype.discoverWalletFunds = function(increment, cb) {
                                             return self.utxoFinder.getUTXOs(_.keys(batch)).then(function(utxos) {
                                                 // save the address utxos, along with relevant path and redeem script
                                                 _.each(utxos, function(outputs, address) {
+                                                    var witnessScript = null;
+                                                    if (typeof batch[address]['witness'] !== 'undefined') {
+                                                        witnessScript = batch[address]['witness'];
+
+                                                    }
                                                     addressUTXOs[address] = {
                                                         path: batch[address]['path'],
                                                         redeem: batch[address]['redeem'],
+                                                        witness: witnessScript,
                                                         utxos: outputs
                                                     };
+
                                                     totalUTXOs += outputs.length;
 
                                                     //add up the total utxo value for all addresses
@@ -577,7 +602,8 @@ WalletSweeper.prototype.createTransaction = function(destinationAddress, fee, fe
                 value:        utxo['value'],
                 address:      address,
                 path:         data['path'],
-                redeemScript: data['redeem']
+                redeemScript: data['redeem'],
+                witnessScript: data['witness']
             });
         });
     });
@@ -595,7 +621,19 @@ WalletSweeper.prototype.createTransaction = function(destinationAddress, fee, fe
                 message: "estimating transaction fee, based on " + blocktrail.toBTC(feePerKb) + " BTC/kb"
             });
         }
-        fee = walletSDK.estimateIncompleteTxFee(rawTransaction.tx, feePerKb);
+        var calcUtxos = inputs.map(function(input) {
+            return {
+                txid: input.txid,
+                vout: input.vout,
+                address: input.vout,
+                scriptpubkey_hex: input.vout,
+                redeem_script: input.redeemScript,
+                witness_script: input.witnessScript,
+                path: input.path,
+                value: input.value
+            };
+        });
+        fee = walletSDK.estimateVsizeFee(rawTransaction.tx, calcUtxos, feePerKb);
     }
     rawTransaction.tx.outs[outputIdx].value -= fee;
 
@@ -623,11 +661,11 @@ WalletSweeper.prototype.signTransaction = function(rawTransaction, inputs) {
     _.each(inputs, function(input, index) {
         //create private keys for signing
         var primaryPrivKey =  walletSDK.deriveByPath(self.primaryPrivateKey, input['path'].replace("M", "m"), "m").keyPair;
-        rawTransaction.sign(index, primaryPrivKey, input['redeemScript'], sigHash, input['value']);
+        rawTransaction.sign(index, primaryPrivKey, input['redeemScript'], sigHash, input['value'], input['witnessScript']);
 
         if (self.backupPrivateKey) {
             var backupPrivKey = walletSDK.deriveByPath(self.backupPrivateKey, input['path'].replace("'", "").replace("M", "m"), "m").keyPair;
-            rawTransaction.sign(index, backupPrivKey, input['redeemScript'], sigHash, input['value']);
+            rawTransaction.sign(index, backupPrivKey, input['redeemScript'], sigHash, input['value'], input['witnessScript']);
         }
     });
 
