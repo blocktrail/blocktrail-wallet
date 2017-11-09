@@ -4,39 +4,25 @@
     angular.module("blocktrail.setup")
         .controller("SetupNewAccountCtrl", SetupNewAccountCtrl);
 
-    function SetupNewAccountCtrl($scope, $state, $q, CONFIG, $filter, formHelperService, sdkService,
-                                 modalService, passwordStrengthService, newAccountFormService) {
-
-        var listenerForm;
+    function SetupNewAccountCtrl($scope, $state, $q, $cordovaNetwork, CONFIG, $filter, formHelperService,
+                                 modalService, passwordStrengthService, newAccountFormService, setupInfoService) {
         var listenerFormPassword;
 
         $scope.form = {
             email: CONFIG.DEBUG_EMAIL_PREFILL || "",
             password: CONFIG.DEBUG_PASSWORD_PREFILL || "",
             passwordCheck: null,
-            networkType: sdkService.getNetworkType(),
+            networkType: CONFIG.NETWORKS_ENABLED[0],
             termsOfService: false
         };
 
         // Listeners
-        listenerForm = $scope.$watch("form", onFormChange, true);
         listenerFormPassword = $scope.$watch("form.password", onFormPasswordChange, true);
 
         $scope.$on("$destroy", onScopeDestroy);
 
         // Methods
         $scope.onSubmitFormRegister = onSubmitFormRegister;
-
-        /**
-         * On form change handler
-         * @param newValue
-         * @param oldValue
-         */
-        function onFormChange(newValue, oldValue) {
-            if (newValue.networkType !== oldValue.networkType) {
-                sdkService.setNetworkType(newValue.networkType);
-            }
-        }
 
         /**
          * On form password change handler
@@ -108,19 +94,27 @@
          * @return { promise }
          */
         function register() {
-            modalService.showSpinner();
+            if ($cordovaNetwork.isOnline()) {
+                modalService.showSpinner();
 
-            return newAccountFormService
-                .register($scope.form)
-                .then(registerFormSuccessHandler, registerFormErrorHandler);
+                return newAccountFormService
+                    .register($scope.form)
+                    .then(registerFormSuccessHandler, registerFormErrorHandler);
+            } else {
+                modalService.alert({
+                    body: "MSG_BAD_NETWORK"
+                });
+            }
         }
 
         /**
          * Register form success handler
          */
         function registerFormSuccessHandler() {
-            $scope.setupInfo.password = $scope.form.password;
-            $scope.setupInfo.networkType = $scope.form.networkType;
+            setupInfoService.updateSetupInfo({
+                password: $scope.form.password,
+                networkType: $scope.form.networkType
+            });
 
             modalService.hideSpinner();
             $state.go("app.setup.pin");
@@ -140,10 +134,6 @@
          * On the scope destroy handler
          */
         function onScopeDestroy() {
-            if (listenerForm) {
-                listenerForm();
-            }
-
             if (listenerFormPassword) {
                 listenerFormPassword();
             }

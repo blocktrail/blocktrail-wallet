@@ -113,11 +113,12 @@
         angular.forEach(self._walletData, function(value, key) {
             Object.defineProperty(self._readonlyDoc, key, {
                 set: function() {
-                    throw new Error("Read only object. Blocktrail core module, wallet service.");
+                    throw new Error("Blocktrail core module, wallet service. Read only object.");
                 },
                 get: function() {
                     return self._walletData[key];
-                }
+                },
+                enumerable: true
             });
         });
 
@@ -143,10 +144,8 @@
         var self = this;
 
         if (self._isInitData) {
-            console.log("_initData", true);
             return self._$q.when(self);
         } else {
-            console.log("_initData", false);
             return self._$q.when(self._getBalance())
                 .then(self._pollTransactionsAndGetBlockHeight.bind(self))
                 .then(self._getTransactions.bind(self))
@@ -208,7 +207,6 @@
      */
     Wallet.prototype._setupTimeout = function() {
         var self = this;
-        console.log("_setupTimeout");
 
         if (!self._noPolling) {
             if (self._pollTimeout) {
@@ -228,7 +226,6 @@
      */
     Wallet.prototype._pollTransactionsAndGetBlockHeight = function() {
         var self = this;
-        console.log("_pollTransactionsAndGetBlockHeight", !!self._pollPromise);
 
         if (self._pollPromise) {
             return self._pollPromise;
@@ -1006,9 +1003,7 @@
 
                     // trigger update if we modified data
                     if (updateGlideraTransactions) {
-                        self._settingsService.$store().then(function() {
-                            return self._settingsService.$syncSettingsUp();
-                        });
+                        return self._settingsService.updateGlideraTransactions(settings.glideraTransactions);
                     }
                 });
 

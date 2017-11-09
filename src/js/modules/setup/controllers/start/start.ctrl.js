@@ -4,7 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupStartCtrl", SetupStartCtrl);
 
-    function SetupStartCtrl($scope, $state, $timeout) {
+    function SetupStartCtrl($scope, $state) {
         $scope.slider = {
             displayed: 0
         };

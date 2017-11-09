@@ -3,7 +3,7 @@ angular.module('blocktrail.wallet')
                                        settingsService, $ionicHistory, $ionicSideMenuDelegate, storageService) {
         $log.debug('starting');
 
-        //disable animation on transition from this state
+        // disable animation on transition from this state
         $ionicHistory.nextViewOptions({
             disableAnimate: true
         });
@@ -47,14 +47,29 @@ angular.module('blocktrail.wallet')
                 });
         }
 
+        // debugger;
+
+        // TODO Create Steps service
+        // TODO Create handleOpenURL Service
+        // TODO Get properties from localSettingsService
+
         function gotoNextState() {
-            return settingsService.$isLoaded()
+
+
+            debugger;
+
+            navigator.splashscreen.hide();
+            return $state.go('app.setup.start');
+
+            /*return settingsService.$isLoaded()
                 .then(function() {
                     if (navigator.splashscreen) {
                         navigator.splashscreen.hide();
+
+                        $state.go('app.setup.start');
                     }
 
-                    //setup not started yet
+                    // setup not started yet
                     if (!settingsService.setupStarted) {
                         // never show rebrand to user who just got started
                         settingsService.$isLoaded().then(function () {
@@ -67,11 +82,13 @@ angular.module('blocktrail.wallet')
                     }
 
                     if (settingsService.showRebrandMessage) {
-                        $state.go('app.rebrand');
+                        $state.go('app.rebrand'); // @TODO: remove all traces of rebrand
                         return;
                     }
 
                     var nextState = null;
+
+
 
                     //setup has been started: resume from the relevant step
                     if (settingsService.setupComplete) {
@@ -81,7 +98,9 @@ angular.module('blocktrail.wallet')
                             $log.log("bitcoincash? " + ($rootScope.handleOpenURL.startsWith("bitcoincash") || $rootScope.handleOpenURL.startsWith("bitcoin cash")));
                             $log.log("glidera? " + $rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback"));
 
-                            if ($rootScope.handleOpenURL.startsWith("bitcoin") || $rootScope.handleOpenURL.startsWith("bitcoincash") || $rootScope.handleOpenURL.startsWith("bitcoin cash")) {
+                            if ($rootScope.handleOpenURL.startsWith("bitcoin") ||
+                                $rootScope.handleOpenURL.startsWith("bitcoincash") ||
+                                $rootScope.handleOpenURL.startsWith("bitcoin cash")) {
                                 $rootScope.bitcoinuri = $rootScope.handleOpenURL;
                                 nextState = 'app.wallet.send';
                                 $ionicSideMenuDelegate.toggleLeft(false);
@@ -102,19 +121,19 @@ angular.module('blocktrail.wallet')
                         $state.go(nextState);
 
                     } else if (!settingsService.backupSaved && !settingsService.backupSkipped) {
-                        //backup saving
+                        // backup saving
                         $state.go('app.setup.backup');
                     } else if (!settingsService.phoneVerified) {
-                        //phone setup
+                        // phone setup
                         $state.go('app.setup.phone');
                     } else if (!settingsService.contactsLastSync) {
-                        //contacts sync
+                        // contacts sync
                         $state.go('app.setup.contacts');
                     } else {
-                        //profile
+                        // profile
                         $state.go('app.setup.profile');
                     }
-                });
+                });*/
         }
     });
 
