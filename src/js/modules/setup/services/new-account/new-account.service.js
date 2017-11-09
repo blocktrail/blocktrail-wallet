@@ -2,14 +2,29 @@
     "use strict";
 
     angular.module("blocktrail.setup")
-        .factory("newAccountFormService", function($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
-                return new NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService);
+        .factory("newAccountFormService", function($log, $http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
+                return new NewAccountFormService($log, $http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService);
             }
         );
 
-    function NewAccountFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
+    /**
+     * New account form service
+     * @param $log
+     * @param $http
+     * @param $q
+     * @param _
+     * @param cryptoJS
+     * @param device
+     * @param CONFIG
+     * @param launchService
+     * @param settingsService
+     * @param trackingService
+     * @constructor
+     */
+    function NewAccountFormService($log, $http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
         var self = this;
 
+        self._$log = $log;
         self._$http = $http;
         self._$q = $q;
         self._lodash = _;
@@ -38,14 +53,16 @@
             version: self._CONFIG.VERSION || self._CONFIG.VERSION_REV,
             device_uuid: self._device.uuid,
             device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : "Unknown Device",
-            super_secret: self._CONFIG.SUPER_SECRET || null,
+            super_secret: null,
             powtcha: null,
             browser_fingerprint: null,
             skip_two_factor: true // will make the resulting API key not require 2FA in the future
         };
 
+        // TODO UPDATE API CALL
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/register";
 
+        self._$log.debug("M:SETUP:newAccountFormService: register", postData.email, postData.platform, postData.device_name);
         return self._$http.post(url, postData)
             .then(self._trackEvent.bind(self))
             .then(self._storeAccountInfo.bind(self))
@@ -73,18 +90,12 @@
      */
     NewAccountFormService.prototype._storeAccountInfo = function(response) {
         var self = this;
-
         var accountInfo = self._lodash.merge({}, response.data);
 
+        self._$log.debug("M:SETUP:newAccountFormService: register success");
         return self._launchService.storeAccountInfo(accountInfo)
             .then(function() {
-                // save the default settings and do a profile sync
-                self._settingsService.username = "";
-                self._settingsService.displayName = "";
-                self._settingsService.enableContacts = false;
-                self._settingsService.email = response.data.email;
-            })
-            .then(function() {
+                self._$log.debug("M:SETUP:newAccountFormService: store account info success");
                 return response.data;
             });
     };
@@ -92,11 +103,14 @@
     /**
      * Error handler
      * @param response
+     * @return { promise }
      * @private
      */
     NewAccountFormService.prototype._errorHandler = function(response) {
+        var self = this;
         var error;
 
+        self._$log.debug("M:SETUP:newAccountFormService: register error");
         if (response && response.data && response.data.msg.toLowerCase().match(/username exists/)) {
             error = "MSG_USERNAME_TAKEN";
         } else if (response && response.data && response.data.msg.toLowerCase().match(/already in use/)) {
