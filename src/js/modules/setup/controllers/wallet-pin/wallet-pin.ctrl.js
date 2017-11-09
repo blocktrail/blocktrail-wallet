@@ -6,7 +6,7 @@
 
     // TODO Remove $btBackButtonDelegate, $cordovaDialogs, $ionicLoading use modalService instead
     function SetupWalletPinCtrl($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, $btBackButtonDelegate, $cordovaDialogs, $ionicLoading,
-                                $log, $translate, launchService, modalService, blocktrailSDK, sdkService, settingsService, CONFIG, setupInfoService,
+                                $log, $translate, launchService, modalService, blocktrailSDK, sdkService, genericSdkService, settingsService, CONFIG, setupInfoService,
                                 randomBytesJS) {
         var sdk = null;
 
@@ -299,20 +299,23 @@
             launchService.stashWalletSecret(secretHex);
 
             wallet.lock();
+
+            return wallet;
         }
 
         /**
          * Set to SDK main mobile wallet
          * @param wallet
          */
-        function setSdkMainMobileWallet() {
+        function setSdkMainMobileWallet(wallet) {
             // set the wallet as the main wallet
             $log.debug("M:SETUP:SetupWalletPinCtrl: setting wallet as main wallet");
             modalService.updateSpinner({
                 title: "",
                 body: "SAVING_WALLET"
             });
-            return sdkService.getGenericSdk().setMainMobileWallet($scope.setupInfo.identifier);
+
+            return wallet.sdk.setMainMobileWallet($scope.setupInfo.identifier);
         }
 
         /**

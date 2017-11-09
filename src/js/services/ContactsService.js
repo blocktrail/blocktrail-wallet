@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'Contacts',
-    function($log, $rootScope, settingsService, launchService, sdkService, genericSdkService, storageService, $q) {
+    function($log, $rootScope, settingsService, launchService, walletsManagerService, genericSdkService, storageService, $q) {
         var Contacts = function() {
             var self = this;
 
@@ -265,19 +265,21 @@ angular.module('blocktrail.wallet').factory(
             var self = this;
             hashIndex = hashIndex ? hashIndex: 0;
 
-            return $q.when(sdkService.getGenericSdk()).then(function(sdk) {
-                return sdk.requestContactAddress(contact.hashes[hashIndex]).then(function(result) {
-                    return result;
-                }, function(err) {
-                    //if more than one phone hash try them all
-                    if (contact.hashes.length > hashIndex+1) {
-                        hashIndex++;
-                        return self.getSendingAddress(contact, hashIndex);
-                    } else {
-                        $log.error('contacts ERR ' + err);
-                        throw err;
-                    }
-                });
+            // use wallet SDK because the address we get depends on network
+            var activeWallet = walletsManagerService.getActiveWallet();
+            var sdk = activeWallet.getWalletSdk().sdk;
+
+            return sdk.requestContactAddress(contact.hashes[hashIndex]).then(function(result) {
+                return result;
+            }, function(err) {
+                //if more than one phone hash try them all
+                if (contact.hashes.length > hashIndex+1) {
+                    hashIndex++;
+                    return self.getSendingAddress(contact, hashIndex);
+                } else {
+                    $log.error('contacts ERR ' + err);
+                    throw err;
+                }
             });
         };
 
