@@ -158,6 +158,12 @@
             return self.client.post("/contacts", null, data, cb);
         };
 
+        blocktrailSDK.prototype.deleteContacts = function () {
+            var self = this;
+
+            return self.client.delete("/contacts");
+        };
+
         blocktrailSDK.prototype.getProfile = function () {
             var self = this;
 
