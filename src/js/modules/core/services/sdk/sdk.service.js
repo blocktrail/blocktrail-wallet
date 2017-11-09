@@ -3,10 +3,10 @@
 
     // TODO Add later
     angular.module('blocktrail.core')
-        .factory('sdkService', function(blocktrailSDK, CONFIG) {
+        .factory('sdkService', function(genericSdkService, blocktrailSDK, CONFIG) {
             extendBlocktrailSDK(blocktrailSDK);
 
-            return new SdkService(blocktrailSDK, CONFIG);
+            return new SdkService(genericSdkService, blocktrailSDK, CONFIG);
         }
     );
 
@@ -14,9 +14,10 @@
      * TODO here
      * @constructor
      */
-    function SdkService(blocktrailSDK, CONFIG) {
+    function SdkService(genericSdkService, blocktrailSDK, CONFIG) {
         var self = this;
 
+        self._genericSdkService = genericSdkService;
         self._blocktrailSDK = blocktrailSDK;
         self._CONFIG = CONFIG;
 
@@ -102,6 +103,9 @@
 
         self._accountInfo = accountInfo;
 
+        // @TODO: move out of here // @roman
+        self._genericSdkService.setAccountInfo(accountInfo);
+
         self._initSdkList();
     };
 
@@ -140,76 +144,10 @@
     };
 
     function extendBlocktrailSDK(blocktrailSDK) {
-        blocktrailSDK.prototype.updateMetadata = function (data, cb) {
+        blocktrailSDK.prototype.requestContactAddress = function (phoneHash) {
             var self = this;
 
-            return self.client.post("/metadata", null, data, cb);
-        };
-
-        blocktrailSDK.prototype.getAllWallets = function () {
-            var self = this;
-
-            return self.client.get("/mywallet/wallets");
-        };
-
-        blocktrailSDK.prototype.syncContacts = function (data, cb) {
-            var self = this;
-
-            return self.client.post("/contacts", null, data, cb);
-        };
-
-        blocktrailSDK.prototype.deleteContacts = function () {
-            var self = this;
-
-            return self.client.delete("/contacts");
-        };
-
-        blocktrailSDK.prototype.getProfile = function () {
-            var self = this;
-
-            return self.client.get("/mywallet/profile");
-        };
-
-        blocktrailSDK.prototype.syncProfile = function (data) {
-            var self = this;
-
-            return self.client.post("/mywallet/profile", null, data);
-        };
-
-        blocktrailSDK.prototype.getSettings = function (data) {
-            var self = this;
-
-            return self.client.get("/mywallet/settings");
-        };
-
-        blocktrailSDK.prototype.syncSettings = function (data) {
-            var self = this;
-
-            return self.client.post("/mywallet/settings", null, data);
-        };
-
-        blocktrailSDK.prototype.requestContactAddress = function (phoneHash, cb) {
-            var self = this;
-
-            return self.client.get("/contact/" + phoneHash + "/new-address", null, false, cb);
-        };
-
-        blocktrailSDK.prototype.updatePhone = function (data, cb) {
-            var self = this;
-
-            return self.client.post("/mywallet/phone", null, data, cb);
-        };
-
-        blocktrailSDK.prototype.removePhone = function (cb) {
-            var self = this;
-
-            return self.client.delete("/mywallet/phone", null, null, cb);
-        };
-
-        blocktrailSDK.prototype.verifyPhone = function (token, cb) {
-            var self = this;
-
-            return self.client.post("/mywallet/phone/verify", null, {token: token}, cb);
+            return self.client.get("/contact/" + phoneHash + "/new-address", null, false);
         };
 
         blocktrailSDK.prototype.glideraOauth = function (code, redirect_uri) {
@@ -222,6 +160,12 @@
             var self = this;
 
             return self.client.get("/mywallet/glidera/prices/buy", {qty: qty, fiat: fiat, platform: 'web'});
+        };
+
+        blocktrailSDK.prototype.redeemPromoCode = function (data) {
+            var self = this;
+
+            return self.client.post("/promo/redeem", null, data);
         };
 
         blocktrailSDK.prototype.passwordChange = function (oldPassword, newPassword, encryptedSecret, twoFactorToken, walletsData) {
@@ -240,10 +184,10 @@
             );
         };
 
-        blocktrailSDK.prototype.setMainMobileWallet = function (identifier, cb) {
+        blocktrailSDK.prototype.setMainMobileWallet = function (identifier) {
             var self = this;
 
-            return self.client.post("/mywallet/main", null, {identifier: identifier}, cb);
+            return self.client.post("/mywallet/main", null, {identifier: identifier});
         };
 
         blocktrailSDK.prototype.getSignedBitonicUrl = function (identifier, params) {
@@ -252,52 +196,10 @@
             return self.client.post("/mywallet/" + identifier + "/bitonic/oauth", null, params);
         };
 
-        blocktrailSDK.prototype.setup2FA = function (password, cb) {
-            var self = this;
-
-            return self.client.post("/mywallet/2fa/setup", null, {password: password}, cb);
-        };
-
-        blocktrailSDK.prototype.enable2FA = function (twoFactorToken, cb) {
-            var self = this;
-
-            return self.client.post("/mywallet/2fa/enable", null, {two_factor_token: twoFactorToken}, cb);
-        };
-
-        blocktrailSDK.prototype.redeemPromoCode = function (data, cb) {
-            var self = this;
-
-            return self.client.post("/promo/redeem", null, data, cb);
-        };
-
-        blocktrailSDK.prototype.disable2FA = function (twoFactorToken, cb) {
-            var self = this;
-
-            return self.client.post("/mywallet/2fa/disable", null, {two_factor_token: twoFactorToken}, cb);
-        };
-
-        blocktrailSDK.prototype.contacts = function (lastSynced, cb) {
-            var self = this;
-
-            return self.client.get("/mywallet/contacts", {last_synced: lastSynced}, cb);
-        };
-
         blocktrailSDK.prototype.walletTransaction = function (identifier, txHash) {
             var self = this;
 
             return self.client.get("/wallet/" + identifier + "/transaction/" + txHash);
-        };
-
-        /**
-         * send feedback
-         * @param identifier
-         * @param cb
-         * @returns {*}
-         */
-        blocktrailSDK.prototype.sendFeedback = function (data, cb) {
-            var self = this;
-
-            return self.client.post("/mywallet/feedback", null, data, cb);
         };
     }
 })();

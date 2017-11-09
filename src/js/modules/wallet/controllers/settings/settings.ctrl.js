@@ -6,7 +6,8 @@
 
     function SettingsCtrl($scope, $rootScope, $q, launchService, settingsService,
                             activeWallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
-                            $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast) {
+                            $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast,
+                            genericSdkService) {
 
         $scope.walletData = activeWallet.getReadOnlyWalletData();
 
@@ -273,7 +274,7 @@
                     }
 
                     $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
-                    return $q.when(activeWallet.getSdkWallet().sdk);
+                    return $q.when(genericSdkService.getSdk());
                 })
                 .then(function(sdk) {
                     //delete contacts from server

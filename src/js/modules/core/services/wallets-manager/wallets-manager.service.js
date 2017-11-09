@@ -3,16 +3,16 @@
 
     // TODO Add later
     angular.module("blocktrail.core")
-        .factory("walletsManagerService", function($q, CONFIG, sdkService, walletService, launchService) {
-            return new WalletsManagerService($q, CONFIG, sdkService, walletService, launchService);
+        .factory("walletsManagerService", function($q, CONFIG, genericSdkService, walletService, launchService) {
+            return new WalletsManagerService($q, CONFIG, genericSdkService, walletService, launchService);
         });
 
-    function WalletsManagerService($q, CONFIG, sdkService, walletService, launchService) {
+    function WalletsManagerService($q, CONFIG, genericSdkService, walletService, launchService) {
         var self = this;
 
         self._$q = $q;
         self._CONFIG = CONFIG;
-        self._sdkService = sdkService;
+        self._genericSdkService = genericSdkService;
         self._walletService = walletService;
         self._launchService = launchService;
 
@@ -28,7 +28,7 @@
     WalletsManagerService.prototype.fetchWalletsList = function() {
         var self = this;
 
-        return self._sdkService.getSdkByActiveNetwork()
+        return self._genericSdkService.getSdk()
             .getAllWallets({mywallet: 1, limit: 200})
             .then(function(result) {
                 return self._launchService.getWalletConfig()

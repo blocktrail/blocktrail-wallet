@@ -53,7 +53,7 @@
                                     return settingsService.$store();
                                 });
                             })
-                            .catch(function() {
+                            .catch(function(e) {
                                 console.error(e);
                             });
                     },
