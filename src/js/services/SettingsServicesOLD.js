@@ -1,6 +1,8 @@
 angular.module('blocktrail.wallet').service(
-    'settingsService',
+    'settingsServiceOLD',
     function($q, storageService, genericSdkService, $log, $window) {
+    // TODO Remove it
+
     var DEFAULT_ACCOUNT_CREATED = 1478097190;
 
     var defaultBtcPrecision = $window.innerWidth <= 375 ? 4 : 8;
@@ -37,7 +39,7 @@ angular.module('blocktrail.wallet').service(
         contactsWebSync: true,      //enable syncing contacts to web wallet
 
         // defaults to an arbitrary timestamp prior to when this was added
-        //  so that we can use this to check for activation of new stuff etc
+        // so that we can use this to check for activation of new stuff etc
         accountCreated: DEFAULT_ACCOUNT_CREATED,
         backupSaved: false,
         backupNotifyTimestamp: 0,// notification if backup PDF is not yet saved

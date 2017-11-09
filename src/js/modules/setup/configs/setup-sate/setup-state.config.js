@@ -12,65 +12,8 @@
                 controller: "SetupCtrl",
                 templateUrl: "js/modules/setup/controllers/setup/setup.tpl.html",
                 resolve: {
-                    /**
-                     * check for extra languages to enable
-                     * if new language is new preferred, set it
-                     */
-                    preferredLanguage: function(CONFIG, $rootScope, settingsService, blocktrailLocalisation, launchService, AppVersionService) {
-                        return launchService
-                            .getWalletConfig()
-                            .then(function(result) {
-                                AppVersionService.checkVersion(
-                                    null,
-                                    null,
-                                    result.versionInfo.mobile,
-                                    AppVersionService.CHECKS.SETUP
-                                );
-
-                                return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
-                            })
-                            .then(function(extraLanguages) {
-                                return settingsService.$isLoaded().then(function() {
-                                    // parse extra languages to determine if there's any new
-                                    var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
-                                    var preferredLanguage;
-
-                                    // if there's any new we should store those
-                                    if (r) {
-                                        var newLanguages = r[0];
-                                        preferredLanguage = r[1];
-                                        settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
-                                    } else {
-                                        preferredLanguage = blocktrailLocalisation.setupPreferredLanguage();
-                                    }
-
-                                    // activate preferred language
-                                    $rootScope.changeLanguage(preferredLanguage);
-
-                                    // store preferred language
-                                    settingsService.language = preferredLanguage;
-
-                                    return settingsService.$store();
-                                });
-                            })
-                            .catch(function(e) {
-                                console.error(e);
-                            });
-                    },
-                    settings: function(settingsService, $rootScope) {
-                        //do an initial load of the user's settings (will return defaults if none have been saved yet)
-                        return settingsService
-                            .$isLoaded().then(function() {
-                            $rootScope.settings = settingsService;
-                            return settingsService;
-                        });
-                    },
-                    sdkSetAccountInfo: function(launchService, sdkService) {
-                        return launchService.getAccountInfo()
-                            .then(function(accountInfo) {
-                                return sdkService.setAccountInfo(accountInfo);
-                            });
-                    }
+                    preferredLanguage: preferredLanguage,
+                    sdkSetAccountInfo: sdkSetAccountInfo
                 }
             })
             .state("app.setup.start", {
@@ -129,6 +72,7 @@
                 templateUrl: "templates/settings/settings.phone.html",
                 controller: "SettingsPhoneCtrl",
                 resolve: {
+                    // TODO Review !!!
                     settings: function(settingsService, $rootScope) {
                         // do an initial load of the user's settings
                         return settingsService
@@ -167,6 +111,56 @@
                 templateUrl: "js/modules/setup/controllers/complete/complete.tpl.html"
             });
     }
+
+    /**
+     * Check for extra languages to enable, if new language is new preferred, set it
+     *
+     * @param $state
+     * @param $rootScope
+     * @param CONFIG
+     * @param blocktrailLocalisation
+     * @param launchService
+     */
+    function preferredLanguage($state, $rootScope, CONFIG, blocktrailLocalisation, launchService) {
+        var bannedIp = false;
+
+        return launchService.getWalletConfig()
+            .then(function(result) {
+                // TODO Review
+                bannedIp = result.is_banned_ip;
+                return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
+            })
+            .then(function(extraLanguages) {
+                // parse extra languages to determine if there"s any new
+                var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
+                var preferredLanguage;
+
+                // if there's any new we should store those
+                if (r) {
+                    preferredLanguage = r[1];
+                } else {
+                    preferredLanguage = blocktrailLocalisation.setupPreferredLanguage();
+                }
+
+                // activate preferred language
+                $rootScope.changeLanguage(preferredLanguage);
+            })
+            .then(function() {
+                if (bannedIp) {
+                    // TODO Add this state
+                    $state.go("app.bannedip", { bannedIp: bannedIp });
+                }
+            }, function(e) {
+                console.error(e);
+            });
+    }
+
+    function sdkSetAccountInfo(launchService, sdkService) {
+        return launchService.getAccountInfo()
+            .then(function(accountInfo) {
+                return sdkService.setAccountInfo(accountInfo);
+            });
+    }
     
     function getAccountInfo($state, launchService) {
         return launchService
@@ -190,7 +184,8 @@
         return data;
     }
 
+    // TODO Redirect to 'reset state'
     function toAppSetupState($state) {
-        return $state.go("app.setup.start");
+        return $state.go("app.reset");
     }
 })();
