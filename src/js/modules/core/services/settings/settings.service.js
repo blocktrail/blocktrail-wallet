@@ -2,11 +2,11 @@
     "use strict";
 
     angular.module('blocktrail.core')
-        .factory('settingsService', function($q, storageService, sdkService) {
-            return new Settings($q, sdkService, storageService);
+        .factory('settingsService', function($q, storageService, genericSdkService) {
+            return new Settings($q, genericSdkService, storageService);
         });
 
-    function Settings($q, sdkService, storageService) {
+    function Settings($q, genericSdkService, storageService) {
         var self = this;
         // Document id
         var documentId = "user_settings";
@@ -54,7 +54,7 @@
 
         // Mapping for object dependencies
         self._$q = $q;
-        self._sdkService = sdkService;
+        self._genericSdkService = genericSdkService;
 
         // Id of the document we keep in storage
         self._id = documentId;
@@ -391,7 +391,7 @@
     Settings.prototype._syncSettingsDown = function() {
         var self = this;
 
-        return self._$q.when(self._sdkService.getGenericSdk())
+        return self._$q.when(self._genericSdkService.getSdk())
             .then(self._getSDKSettings.bind(self))
             .then(self._setSDKSettingsToDoc.bind(self));
     };
@@ -443,7 +443,7 @@
     Settings.prototype._syncProfileDown = function() {
         var self = this;
 
-        return this._$q.when(this._sdkService.getGenericSdk())
+        return this._$q.when(this._genericSdkService.getSdk())
             .then(this._getSDKProfile.bind(self))
             .then(this._setSDKProfileToDoc.bind(self));
     };
@@ -553,7 +553,7 @@
     Settings.prototype._syncSettingsUp = function() {
         var self = this;
 
-        return this._$q.when(self._sdkService.getGenericSdk())
+        return this._$q.when(self._genericSdkService.getSdk())
             .then(function(sdk) {
                 var settingsData = {
                     username: self._doc.username,
@@ -586,7 +586,7 @@
     Settings.prototype._syncProfileUp = function() {
         var self = this;
 
-        return this._$q.when(self._sdkService.getGenericSdk())
+        return this._$q.when(self._genericSdkService.getSdk())
             .then(function(sdk) {
                 var profileData = {
                     profilePic: self._doc.profilePic

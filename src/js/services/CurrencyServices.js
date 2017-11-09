@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .service( 'Currencies', function($rootScope, storageService, $log, sdkService, CONFIG) {
+    .service( 'Currencies', function($rootScope, storageService, $log, walletsManagerService, CONFIG) {
         var self = this;
 
         self.cache = storageService.db('currency-rates-cache');
@@ -88,6 +88,10 @@ angular.module('blocktrail.wallet')
 
             var forceFetch = !getCached;
 
+            // @TODO: we should make a generic endpoint that returns ALL prices and adjust the prices used based on active wallet
+            var activeWallet = walletsManagerService.getActiveWallet();
+            var sdk = activeWallet.getWalletSdk().sdk;
+
             if (updatePrices) {
                 if (updatePrices.forceFetch !== forceFetch) {
                     return updatePrices.then(function() {
@@ -106,7 +110,7 @@ angular.module('blocktrail.wallet')
                     })
                     .then(function(pricesDoc) {
                         if (forceFetch) {
-                            return sdkService.getGenericSdk().price().then(function(result) {
+                            return sdk.price().then(function(result) {
                                 angular.extend(pricesDoc, result);
 
                                 //store in cache and then return
