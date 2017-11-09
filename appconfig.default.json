@@ -51,7 +51,7 @@
 
     "PROMOCODE_IN_MENU": false,
 
-    "NETWORKS_ENABLED": ["BTC", "BCC", "B2X"],
+    "NETWORKS_ENABLED": ["BTC", "BCC"],
 
     "NETWORKS": {
         "BTC": {
@@ -76,17 +76,6 @@
             "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/BCC/address",
             "EXPLORER_TX_URL": "https://www.blocktrail.com/BCC/tx"
         },
-        "B2X": {
-            "NETWORK": "B2X",
-            "NETWORK_LONG": "Bitcoin2X",
-            "TICKER": "B2X",
-            "TICKER_LONG": "Bitcoin2X",
-            "TX_FILTER_MIN_BLOCK_HEIGHT": 494784,
-            "BUYBTC": false,
-            "PRIOBOOST": false,
-            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/B2X/address",
-            "EXPLORER_TX_URL": "https://www.blocktrail.com/B2X/tx"
-        },
         "tBTC": {
             "NETWORK": "tBTC",
             "NETWORK_LONG": "Bitcoin TESTNET",
@@ -108,17 +97,6 @@
             "PRIOBOOST": false,
             "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBCC/address",
             "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx"
-        },
-        "tB2X": {
-            "NETWORK": "tB2X",
-            "NETWORK_LONG": "Bitcoin2X TESTNET",
-            "TICKER": "tB2X",
-            "TICKER_LONG": "Bitcoin2X TESTNET",
-            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
-            "BUYBTC": false,
-            "PRIOBOOST": false,
-            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tB2X/address",
-            "EXPLORER_TX_URL": "https://www.blocktrail.com/tB2X/tx"
         }
     }
 }
