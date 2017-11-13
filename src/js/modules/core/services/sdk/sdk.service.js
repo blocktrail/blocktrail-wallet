@@ -119,6 +119,9 @@
     SdkService.prototype._initSdkList = function() {
         var self = this;
 
+        // set testnet flag from config
+        var isTestNet = !!self._CONFIG.TESTNET;
+
         // Network SDKs
         self._CONFIG.NETWORKS_ENABLED.forEach(function(networkType) {
             if (isTestNet && networkType.charAt(0) !== 't') {
