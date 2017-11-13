@@ -5,7 +5,7 @@
         .controller("BuyBTCBrokerCtrl", BuyBTCBrokerCtrl);
 
     function BuyBTCBrokerCtrl($scope, $state, $ionicLoading, $cordovaDialogs, glideraService,
-                              bitonicService, $stateParams, $timeout, $interval, $translate, $filter,
+                              $stateParams, $timeout, $interval, $translate, $filter,
                               CONFIG, trackingService, $q) {
         trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_OPEN);
         $scope.broker = $stateParams.broker;
@@ -44,12 +44,6 @@
                     $scope.buyInput.fiatCurrency = 'USD';
                     return glideraService;
                     break;
-                case 'bitonic':
-                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.BITONIC_OPEN);
-                    $scope.buyInput.currencyType = 'EUR';
-                    $scope.buyInput.fiatCurrency = 'EUR';
-                    return bitonicService;
-                    break;
                 default:
                     return null;
                     break;
@@ -62,32 +56,9 @@
                     $scope.currencies = [{code: 'USD', symbol: 'USD'}];
                     return true;
                     break;
-                case 'bitonic':
-                    $scope.currencies = [{code: 'EUR', symbol: 'EUR'}];
-                    return true;
-                    break;
                 default:
                     return false;
                     break;
-            }
-        };
-
-        var evaluateResponseErrors = function(result) {
-            // These are Bitonic-specific - 'success' key in result object
-            if ("success" in result) {
-                if (!result.success && result.error.indexOf('Invalid value') !== -1) {
-                    return $cordovaDialogs.confirm(
-                        $translate.instant('MSG_BUYBTC_ERROR_INVALID_AMOUNT'),
-                        $translate.instant('MSG_INVALID_AMOUNT'),
-                        [$translate.instant('OK')]);
-                }
-
-                if (!result.success) {
-                    return $cordovaDialogs.confirm(
-                        $translate.instant('MSG_BUYBTC_ERROR_TRY_AGAIN_LATER'),
-                        $translate.instant('ERROR_TITLE_3'),
-                        [$translate.instant('OK')]);
-                }
             }
         };
 
@@ -272,13 +243,8 @@
         });
 
         $scope.buyBTC = function() {
-
             var btcValue = $scope.buyInput.btcValue;
             var fiatValue = $scope.buyInput.fiatValue;
-
-            if (lastPriceResponse.error) {
-                return evaluateResponseErrors(lastPriceResponse);
-            }
 
             if(fiatValue + btcValue <= 0) {
                 return $cordovaDialogs.confirm(
@@ -349,37 +315,7 @@
                             }
                         });
                     break;
-
-                case 'bitonic':
-                    return bitonicService.buyPrices(btcValue, fiatValue).then(function (result) {
-                        return $cordovaDialogs.confirm(
-                            $translate.instant('MSG_BUYBTC_CONFIRM_BODY', {
-                                qty: $filter('number')(result.qty, 6),
-                                price: $filter('number')(result.total, 2),
-                                fee: $filter('number')(result.fees, 2),
-                                currencySymbol: $filter('toCurrencySymbol')('EUR')
-                            }).sentenceCase(),
-                            $translate.instant('MSG_BUYBTC_CONFIRM_TITLE').sentenceCase(),
-                            [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
-                        ).then(function (dialogResult) {
-                            if (dialogResult === 2) {
-                                $ionicLoading.hide();
-                                return;
-                            }
-
-                            $ionicLoading.hide();
-
-                            if ($scope.fiatFirst) {
-                                console.log('fiat first');
-                                bitonicService.buy(null, result.total);
-                            } else {
-                                bitonicService.buy(result.qty, null);
-                            }
-                            trackingService.trackEvent(trackingService.EVENTS.BUYBTC.BITONIC_BUY_CONFIRM);
-                        })
-                    });
-                    break;
-            }// switch
+            }
         };
     }
 })();
