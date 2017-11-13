@@ -44,6 +44,8 @@ var APIClient = function(options) {
     }
 
     self.bitcoinCash = options.network && options.network === "BCC";
+    self.feeSanityCheck = typeof options.feeSanityCheck !== "undefined" ? options.feeSanityCheck : true;
+    self.feeSanityCheckBaseFeeMultiplier = options.feeSanityCheckBaseFeeMultiplier || 200;
 
     options.apiNetwork = options.apiNetwork || ((self.testnet ? "t" : "") + (options.network || 'BTC').toUpperCase());
 

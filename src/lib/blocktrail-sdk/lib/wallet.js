@@ -1201,20 +1201,22 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                         function(cb) {
                             var estimatedFee = Wallet.estimateVsizeFee(tx, utxos);
 
-                            switch (feeStrategy) {
-                                case Wallet.FEE_STRATEGY_BASE_FEE:
-                                    if (Math.abs(estimatedFee - fee) > blocktrail.BASE_FEE) {
-                                        return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
-                                            "seems incorrect (" + estimatedFee + ") for FEE_STRATEGY_BASE_FEE"));
-                                    }
-                                break;
+                            if (self.sdk.feeSanityCheck) {
+                                switch (feeStrategy) {
+                                    case Wallet.FEE_STRATEGY_BASE_FEE:
+                                        if (Math.abs(estimatedFee - fee) > blocktrail.BASE_FEE) {
+                                            return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
+                                                "seems incorrect (" + estimatedFee + ") for FEE_STRATEGY_BASE_FEE"));
+                                        }
+                                        break;
 
-                                case Wallet.FEE_STRATEGY_OPTIMAL:
-                                    if (fee > estimatedFee * 50) {
-                                        return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
-                                            "seems awefully high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
-                                    }
-                                break;
+                                    case Wallet.FEE_STRATEGY_OPTIMAL:
+                                        if (fee > estimatedFee * self.feeSanityCheckBaseFeeMultiplier) {
+                                            return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
+                                                "seems awefully high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
+                                        }
+                                        break;
+                                }
                             }
 
                             cb();
