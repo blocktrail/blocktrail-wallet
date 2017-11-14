@@ -571,6 +571,15 @@
                                 detailed: $translate.instant('MSG_SEND_FAIL_FEE_DETAILED', {fee: blocktrailSDK.toBTC(requiredFee)})
                             };
                         }
+                    } else if (err instanceof blocktrail.WalletMissing2FAError) {
+                        $cordovaDialogs.alert(
+                            $translate.instant('INVALID_SESSION_LOGOUT_NOW'),
+                            $translate.instant('INVALID_SESSION'),
+                            $translate.instant('OK')
+                        )
+                            .finally(function () {
+                                $state.go('app.reset');
+                            });
                     } else {
                         //other error
                         $scope.appControl.showPinInputError = true;
