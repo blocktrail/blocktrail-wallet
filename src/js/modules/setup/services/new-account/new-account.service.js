@@ -40,7 +40,8 @@
             device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : "Unknown Device",
             super_secret: self._CONFIG.SUPER_SECRET || null,
             powtcha: null,
-            browser_fingerprint: null
+            browser_fingerprint: null,
+            skip_two_factor: true // will make the resulting API key not require 2FA in the future
         };
 
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/register";
