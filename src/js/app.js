@@ -502,6 +502,7 @@ angular.module('blocktrail.wallet').config(
                 controller: "WalletCtrl",
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
+                    checkAPIKeyActive: checkAPIKeyActive,
                     settingsData: getSettingsData,
                     pinOnOpen: pinOnOpen,
                     activeWallet: getActiveWallet,
@@ -841,8 +842,33 @@ angular.module('blocktrail.wallet').config(
                 }
             });
 
+        function checkAPIKeyActive(launchService, $state, $q, $translate, $cordovaDialogs) {
+            return launchService.getWalletConfig()
+                .then(function(result) {
+                    if (result.api_key && (result.api_key !== 'ok')) {
+                        // alert user session is invalid
+                        $cordovaDialogs.alert(
+                            $translate.instant('INVALID_SESSION_LOGOUT_NOW'),
+                            $translate.instant('INVALID_SESSION'),
+                            $translate.instant('OK')
+                        )
+                            .finally(function () {
+                                $state.go('app.reset');
+                            });
 
-        function getSettingsData(settingsService) {
+                        // throw error to prevent controller from loading or any other resolves to continue
+                        return $q.reject(new Error("API_KEY_INVALID"));
+                    }
+                });
+        }
+
+        /**
+         *
+         * @param settingsService
+         * @param checkAPIKeyActive          not used, just for forcing order of resolves
+         * @returns {*}
+         */
+        function getSettingsData(settingsService, checkAPIKeyActive) {
             return settingsService.getSettings();
         }
 
@@ -877,8 +903,9 @@ angular.module('blocktrail.wallet').config(
          * @param sdkService
          * @param walletsManagerService
          * @param pinOnOpen                 not used, just for forcing order of resolves
+         * @param checkAPIKeyActive          not used, just for forcing order of resolves
          */
-        function getActiveWallet($state, $q, launchService, sdkService, walletsManagerService, pinOnOpen) {
+        function getActiveWallet($state, $q, launchService, sdkService, walletsManagerService, pinOnOpen, checkAPIKeyActive) {
             return $q.all([launchService.getAccountInfo(), launchService.getWalletInfo()])
                 .then(function(data) {
                     var accountInfo = data[0];
