@@ -29,6 +29,18 @@
 
         initData();
 
+        var transactionInterval = setInterval(function () {
+            activeWallet.forcePolling().then(function () {
+                var walletData = activeWallet.getReadOnlyWalletData();
+                $scope.walletData = walletData;
+                /* call the polling instantly on controller entry */
+            }());
+        }, 30 * 1000);
+
+        $scope.$on("$destroy", function() {
+            clearInterval(transactionInterval);
+        });
+
         if ($scope.walletData.networkType === "BCC") {
             activeWallet.isReady.then(function() {
                 $scope.showBCCSweepWarning = !$scope.walletData.transactions.length && !settings.hideBCCSweepWarning;
