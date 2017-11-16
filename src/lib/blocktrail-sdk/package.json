@@ -13,7 +13,7 @@
     "multi-signature",
     "transaction"
   ],
-  "version": "3.5.2",
+  "version": "3.5.4",
   "homepage": "https://www.blocktrail.com/api/docs/lang/nodejs",
   "license": "MIT",
   "repository": {
@@ -29,13 +29,14 @@
   "main": "./main.js",
   "browser": {
     "./lib/backup_generator.js": "./lib/backup_generator-browser.js",
-    "./lib/pbkdf2_sha512.js": "./lib/pbkdf2_sha512-asm.js"
+    "./lib/pbkdf2_sha512.js": "./lib/pbkdf2_sha512-asm.js",
+    "./lib/pkginfo.js": "./lib/pkginfo-browser.js"
   },
   "dependencies": {
     "assert-plus": "0.1.5",
     "async": "0.9.0",
     "bip39": "git://github.com/blocktrail/bip39.git#sjcl-browser-bip39",
-    "bitcoinjs-lib": "git://github.com/blocktrail/bitcoinjs-lib.git#ce1c5e9e684b77b015f82f698e8d726ebe9f0a15",
+    "bitcoinjs-lib": "git://github.com/blocktrail/bitcoinjs-lib.git#f6a644a24afe83160969a9fb5da0cc6ffb74fd51",
     "bitcoinjs-message": "^1.0.1",
     "bops": "0.0.6",
     "bowser": "^0.7.2",
@@ -45,6 +46,7 @@
     "crypto-js": "^3.1.5",
     "debug": "0.8.1",
     "lodash": "~4.17.2",
+    "pkginfo": "^0.4.1",
     "promise": "^6.1.0",
     "q": "1.0.1",
     "randombytes": "^2.0.1",
@@ -71,6 +73,7 @@
     "blocktrail-sdk-backup-generator": "0.1.0",
     "brfs": "*",
     "browserify": "*",
+    "browserify-versionify": "^1.0.6",
     "coveralls": "^2.13.1",
     "grunt": "~0.4.2",
     "grunt-browserify": "git://github.com/jmreidy/grunt-browserify.git#4f96beb75d27fdebc4359e08e7db4c514f6265a8",

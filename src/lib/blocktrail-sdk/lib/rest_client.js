@@ -31,7 +31,7 @@ var RestClient = function(options) {
     }
 
     self.defaultHeaders = _.defaults({}, {
-        'X-SDK-Version': 'blocktrail-sdk-nodejs/3.1.x'
+        'X-SDK-Version': 'blocktrail-sdk-nodejs/' + require('./pkginfo').VERSION
     }, options.defaultHeaders);
 };
 

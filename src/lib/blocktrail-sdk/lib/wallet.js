@@ -67,10 +67,18 @@ var Wallet = function(
     assert(segwit === 0 || !self.bitcoinCash);
 
     self.testnet = testnet;
-    if (self.testnet) {
-        self.network = bitcoin.networks.testnet;
+    if (self.bitcoinCash) {
+        if (self.testnet) {
+            self.network = bitcoin.networks.bitcoincashtestnet;
+        } else {
+            self.network = bitcoin.networks.bitcoincash;
+        }
     } else {
-        self.network = bitcoin.networks.bitcoin;
+        if (self.testnet) {
+            self.network = bitcoin.networks.testnet;
+        } else {
+            self.network = bitcoin.networks.bitcoin;
+        }
     }
 
     assert(backupPublicKey instanceof bitcoin.HDNode);
@@ -861,7 +869,6 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
 
     q.nextTick(function() {
         deferred.notify(Wallet.PAY_PROGRESS_START);
-
         self.buildTransaction(pay, changeAddress, allowZeroConf, randomizeChangeIdx, feeStrategy, options)
             .then(
             function(r) { return r; },
@@ -905,6 +912,141 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
     return deferred.promise;
 };
 
+Wallet.prototype.decodeAddress = function(address) {
+    return Wallet.getAddressAndType(address, this.network);
+};
+
+Wallet.getAddressAndType = function(address, network) {
+    var addr;
+    var type;
+    var err;
+
+    if (network === bitcoin.networks.bitcoin || network === bitcoin.networks.testnet) {
+        try {
+            addr = bitcoin.address.fromBech32(address, network);
+            err = null;
+            type = "bech32";
+
+        } catch (_err) {
+            err = _err;
+        }
+
+        if (!err) {
+            // Valid bech32 but invalid network immediately alerts
+            if (addr.prefix !== network.bech32) {
+                throw new blocktrail.InvalidAddressError("Address invalid on this network");
+            }
+        }
+    }
+
+    if (!addr) {
+        try {
+            addr = bitcoin.address.fromBase58Check(address);
+            err = null;
+            type = "base58";
+        } catch (_err) {
+            err = _err;
+        }
+
+        if (!err) {
+            // Valid base58 but invalid network immediately alerts
+            if (addr.version !== network.pubKeyHash && addr.version !== network.scriptHash) {
+                throw new blocktrail.InvalidAddressError("Address invalid on this network");
+            }
+        }
+    }
+
+    if (err) {
+        throw new blocktrail.InvalidAddressError(err.message);
+    }
+
+    return {
+        address: address,
+        decoded: addr,
+        type: type
+    };
+};
+
+Wallet.convertPayToOutputs = function(pay, network) {
+    var send = [];
+
+    var readFunc;
+
+    // Deal with two different forms
+    if (Array.isArray(pay)) {
+        // output[]
+        readFunc = function(i, output, obj) {
+            if (typeof output !== "object") {
+                throw new Error("Invalid transaction output for numerically indexed list [1]");
+            }
+
+            var keys = Object.keys(output);
+            if (keys.indexOf("scriptPubKey") !== -1 && keys.indexOf("value") !== -1) {
+                obj.scriptPubKey = output["scriptPubKey"];
+                obj.value = output["value"];
+            } else if (keys.indexOf("address") !== -1 && keys.indexOf("value") !== -1) {
+                obj.address = output["address"];
+                obj.value = output["value"];
+            } else if (keys.length !== 2 && output.length !== 2 && keys[0] !== 0 && keys[1] !== 1) {
+                obj.address = output[0];
+                obj.value = output[1];
+            } else {
+                throw new Error("Invalid transaction output for numerically indexed list [2]");
+            }
+        };
+    } else if (typeof pay === "object") {
+        // map[addr]amount
+        readFunc = function(address, value, obj) {
+            obj.address = address.trim();
+            obj.value = value;
+            if (obj.address === Wallet.OP_RETURN) {
+                var datachunk = Buffer.isBuffer(value) ? value : new Buffer(value, 'utf-8');
+                obj.scriptPubKey = bitcoin.script.nullData.output.encode(datachunk).toString('hex');
+                obj.value = 0;
+                obj.address = null;
+            }
+        };
+    } else {
+        throw new Error("Invalid input");
+    }
+
+    Object.keys(pay).forEach(function(key) {
+        var obj = {};
+        readFunc(key, pay[key], obj);
+
+        if (parseInt(obj.value, 10).toString() !== obj.value.toString()) {
+            throw new blocktrail.WalletSendError("Values should be in Satoshis");
+        }
+
+        // Remove address, replace with scriptPubKey
+        if (typeof obj.address === "string") {
+            try {
+                var addrAndType = Wallet.getAddressAndType(obj.address, network);
+                obj.scriptPubKey = bitcoin.address.toOutputScript(addrAndType.address, network).toString('hex');
+                delete obj.address;
+            } catch (e) {
+                throw new blocktrail.InvalidAddressError("Invalid address [" + obj.address + "] (" + e.message + ")");
+            }
+        }
+
+        // Extra checks when the output isn't OP_RETURN
+        if (obj.scriptPubKey.slice(0, 2) !== "6a") {
+            if (!(obj.value = parseInt(obj.value, 10))) {
+                throw new blocktrail.WalletSendError("Values should be non zero");
+            } else if (obj.value <= blocktrail.DUST) {
+                throw new blocktrail.WalletSendError("Values should be more than dust (" + blocktrail.DUST + ")");
+            }
+        }
+
+        // Value fully checked now
+        obj.value = parseInt(obj.value, 10);
+
+        send.push(obj);
+    });
+
+    return send;
+};
+
 Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, randomizeChangeIdx, feeStrategy, options, cb) {
     /* jshint -W071 */
     var self = this;
@@ -934,66 +1076,13 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
     deferred.promise.spreadNodeify(cb);
 
     q.nextTick(function() {
-        var send = [];
-
-        // normalize / validate sends
-        Object.keys(pay).forEach(function(address) {
-            address = address.trim();
-            var value = pay[address];
-            var err = null;
-
-            if (address === Wallet.OP_RETURN) {
-                var datachunk = Buffer.isBuffer(value) ? value : new Buffer(value, 'utf-8');
-                send.push({scriptPubKey: bitcoin.script.nullData.output.encode(datachunk).toString('hex'), value: 0});
-                return;
-            }
-
-            var addr;
-            var type;
-
-            try {
-                addr = bitcoin.address.fromBech32(address, self.network);
-                err = null;
-                type = "bech32";
-            } catch (_err) {
-                err = _err;
-            }
-
-            if (!addr) {
-                try {
-                    addr = bitcoin.address.fromBase58Check(address, self.network);
-                    err = null;
-                    type = "base58";
-                } catch (_err) {
-                    err = _err;
-                }
-            }
-
-            if (!addr || err) {
-                err = new blocktrail.InvalidAddressError("Invalid address [" + address + "]" + (err ? " (" + err.message + ")" : ""));
-            } else if (parseInt(value, 10).toString() !== value.toString()) {
-                err = new blocktrail.WalletSendError("Values should be in Satoshis");
-            } else if (!(value = parseInt(value, 10))) {
-                err = new blocktrail.WalletSendError("Values should be non zero");
-            } else if (value <= blocktrail.DUST) {
-                err = new blocktrail.WalletSendError("Values should be more than dust (" + blocktrail.DUST + ")");
-            }
-
-            if (err) {
-                deferred.reject(err);
-                return deferred.promise;
-            }
-
-            var payload = {
-                value: parseInt(value, 10)
-            };
-            if (type === "bech32") {
-                payload.scriptPubKey = bitcoin.address.toOutputScript(address, self.network).toString('hex');
-            } else {
-                payload.address = address;
-            }
-            send.push(payload);
-        });
+        var send;
+        try {
+            send = Wallet.convertPayToOutputs(pay, self.network);
+        } catch (e) {
+            deferred.reject(e);
+            return deferred.promise;
+        }
 
         if (!send.length) {
             deferred.reject(new blocktrail.WalletSendError("Need at least one recipient"));
@@ -1029,8 +1118,8 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                             }).reduce(function(a, b) {
                                 return a + b;
                             });
-                            var outputsTotal = Object.keys(send).map(function(address) {
-                                return send[address];
+                            var outputsTotal = send.map(function(output) {
+                                return output.value;
                             }).reduce(function(a, b) {
                                 return a + b;
                             });
@@ -1208,14 +1297,14 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                                             return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
                                                 "seems incorrect (" + estimatedFee + ") for FEE_STRATEGY_BASE_FEE"));
                                         }
-                                        break;
+                                    break;
 
                                     case Wallet.FEE_STRATEGY_OPTIMAL:
                                         if (fee > estimatedFee * self.feeSanityCheckBaseFeeMultiplier) {
                                             return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
                                                 "seems awefully high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
                                         }
-                                        break;
+                                    break;
                                 }
                             }
 
@@ -1238,6 +1327,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
 
     return deferred.promise;
 };
+
 
 /**
  * use the API to get the best inputs to use based on the outputs
@@ -1271,7 +1361,17 @@ Wallet.prototype.coinSelection = function(pay, lockUTXO, allowZeroConf, feeStrat
     feeStrategy = feeStrategy || Wallet.FEE_STRATEGY_OPTIMAL;
     options = options || {};
 
-    return self.sdk.coinSelection(self.identifier, pay, lockUTXO, allowZeroConf, feeStrategy, options, cb);
+    var send;
+    try {
+        send = Wallet.convertPayToOutputs(pay, self.network);
+    } catch (e) {
+        var deferred = q.defer();
+        deferred.promise.nodeify(cb);
+        deferred.reject(e);
+        return deferred.promise;
+    }
+
+    return self.sdk.coinSelection(self.identifier, send, lockUTXO, allowZeroConf, feeStrategy, options, cb);
 };
 
 /**

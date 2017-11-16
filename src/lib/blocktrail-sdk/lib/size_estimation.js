@@ -60,23 +60,6 @@ SizeEstimation.estimateMultisigStackSize = function(m, keys) {
     return [stackSizes, scriptSize];
 };
 
-
-SizeEstimation.estimateMultisigStackSize = function(m, keys) {
-    // Initialize with OP_0
-    var stackSizes = [0];
-    var i;
-    for (i = 0; i < m; i++) {
-        stackSizes.push(SizeEstimation.SIZE_DER_SIGNATURE);
-    }
-
-    var scriptSize = 1; // OP_$m
-    for (i = 0; i < keys.length; i++) {
-        scriptSize += this.getLengthForScriptPush(keys[i].length) + keys[i].length;
-    }
-    scriptSize += 2; // OP_$n OP_CHECKMULTISIG
-    return [stackSizes, scriptSize];
-};
-
 SizeEstimation.estimateP2PKStackSize = function(key) {
     var stackSizes = [SizeEstimation.SIZE_DER_SIGNATURE];
     var scriptSize = this.getLengthForScriptPush(key.length) + key.length + 1; // KEY OP_CHECKSIG
@@ -90,7 +73,7 @@ SizeEstimation.estimateP2PKHStackSize = function(isCompressed) {
     }
 
     var stackSizes = [this.SIZE_DER_SIGNATURE, this.getPublicKeySize(isCompressed)];
-    var scriptSize = 2 + this.getLengthForScriptPush(20) + 2;
+    var scriptSize = 2 + this.getLengthForScriptPush(20) + 20 + 2;
 
     return [stackSizes, scriptSize];
 };
@@ -147,8 +130,9 @@ SizeEstimation.estimateStackSignatureSize = function(stackSizes, isWitness, rs, 
  * @param {Buffer} redeemScript
  * @param {Buffer} witnessScript
  * @param {boolean} isWitness - required, covers P2WPKH and so on
+ * @param {boolean} compressed - only strictly required for p2pkh
  */
-SizeEstimation.estimateInputFromScripts = function(script, redeemScript, witnessScript, isWitness) {
+SizeEstimation.estimateInputFromScripts = function(script, redeemScript, witnessScript, isWitness, compressed) {
     assert(witnessScript === null || isWitness);
 
     var stackSizes;
@@ -157,10 +141,9 @@ SizeEstimation.estimateInputFromScripts = function(script, redeemScript, witness
         stackSizes = this.estimateMultisigStackSize(multisig.m, multisig.pubKeys)[0];
     } else if (bitcoin.script.pubKey.output.check(script)) {
         var p2pk = bitcoin.script.pubKey.output.decode(script);
-        stackSizes = this.estimateP2PKStackSize(p2pk);
+        stackSizes = this.estimateP2PKStackSize(p2pk)[0];
     } else if (bitcoin.script.pubKeyHash.output.check(script)) {
-        // assumes compressed
-        stackSizes = this.estimateP2PKHStackSize(true);
+        stackSizes = this.estimateP2PKHStackSize(compressed)[0];
     } else {
         throw new Error("Unsupported script type");
     }
@@ -168,7 +151,7 @@ SizeEstimation.estimateInputFromScripts = function(script, redeemScript, witness
     return this.estimateStackSignatureSize(stackSizes, isWitness, redeemScript, witnessScript);
 };
 
-SizeEstimation.estimateUtxo = function(utxo) {
+SizeEstimation.estimateUtxo = function(utxo, compressed) {
     var spk = Buffer.from(utxo.scriptpubkey_hex, 'hex');
     var rs = typeof utxo.redeem_script === 'string' ? Buffer.from(utxo.redeem_script, 'hex') : null;
     var ws = typeof utxo.witness_script === 'string' ? Buffer.from(utxo.witness_script, 'hex') : null;
@@ -184,7 +167,7 @@ SizeEstimation.estimateUtxo = function(utxo) {
 
     if (bitcoin.script.witnessPubKeyHash.output.check(signScript)) {
         var p2wpkh = bitcoin.script.witnessPubKeyHash.output.decode(signScript);
-        signScript = bitcoin.script.pubKeyHash.encode(p2wpkh);
+        signScript = bitcoin.script.pubKeyHash.output.encode(p2wpkh);
         witness = true;
     } else if (bitcoin.script.witnessScriptHash.output.check(signScript)) {
         if (null === ws) {
@@ -201,7 +184,7 @@ SizeEstimation.estimateUtxo = function(utxo) {
         throw new Error("Unsupported script type");
     }
 
-    var estimation = this.estimateInputFromScripts(signScript, rs, ws, witness);
+    var estimation = this.estimateInputFromScripts(signScript, rs, ws, witness, compressed);
 
     return {
         scriptSig: estimation[0],
@@ -223,6 +206,7 @@ SizeEstimation.estimateInputsSize = function(utxos, withWitness) {
     var witnessSize = 0;
     utxos.map(function(utxo) {
         var estimate = SizeEstimation.estimateUtxo(utxo);
+        // txid + vout + sequence + scriptSig
         inputSize += 32 + 4 + 4 + estimate.scriptSig;
         if (withWitness) {
             witnessSize += estimate.witness;
@@ -244,8 +228,8 @@ SizeEstimation.estimateInputsSize = function(utxos, withWitness) {
 SizeEstimation.calculateOutputsSize = function(outs) {
     var outputsSize = 0;
     outs.map(function(out) {
-        var scriptSize = SizeEstimation.getLengthForVarInt(out.script.length / 2);
-        outputsSize += 8 + scriptSize + (out.script.length / 2);
+        var scriptSize = SizeEstimation.getLengthForVarInt(out.script.length);
+        outputsSize += 8 + scriptSize + (out.script.length);
     });
     return outputsSize;
 };
@@ -259,11 +243,15 @@ SizeEstimation.calculateOutputsSize = function(outs) {
  */
 SizeEstimation.estimateTxWeight = function(tx, utxos) {
     var outSize = SizeEstimation.calculateOutputsSize(tx.outs);
-    var baseSize = 4 + 4 + this.estimateInputsSize(utxos, false) + 4 + outSize + 4;
-    var witSize = 4 + 4 + this.estimateInputsSize(utxos, false) + 4 + outSize + 4;
+    // version + vinLen + vin + voutLen + vout + nlocktime
+    var baseSize = 4 + SizeEstimation.getLengthForVarInt(utxos.length) + this.estimateInputsSize(utxos, false) +
+        SizeEstimation.getLengthForVarInt(tx.outs.length) + outSize + 4;
+    // version + vinLen + vin (includes witness) + voutLen + vout + nlocktime
+    var witSize = 4 + SizeEstimation.getLengthForVarInt(utxos.length) + this.estimateInputsSize(utxos, true) +
+        SizeEstimation.getLengthForVarInt(tx.outs.length) + outSize + 4;
+
     return (3 * baseSize) + witSize;
 };
-
 
 /**
  * Returns the vsize for a transaction. Same as size

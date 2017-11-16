@@ -178,7 +178,7 @@ module.exports = function (grunt) {
                     browserifyOptions : {
                         standalone: 'blocktrailSDK'
                     },
-                    transform : ['brfs']
+                    transform : ['brfs', 'browserify-versionify']
                 },
                 src: 'main.js',
                 dest: 'build/blocktrail-sdk.js'
@@ -188,7 +188,7 @@ module.exports = function (grunt) {
                     browserifyOptions : {
                         standalone: 'blocktrailSDK'
                     },
-                    transform : ['brfs']
+                    transform : ['brfs', 'browserify-versionify']
                 },
                 src: 'main-with-backup-generator.js',
                 dest: 'build/blocktrail-sdk-with-backup-generator.js'
@@ -198,7 +198,7 @@ module.exports = function (grunt) {
                     browserifyOptions : {
                         standalone: 'blocktrailTEST'
                     },
-                    transform : ['brfs']
+                    transform : ['brfs', 'browserify-versionify']
                 },
                 src: 'test.js',
                 dest: 'build/test.js'
