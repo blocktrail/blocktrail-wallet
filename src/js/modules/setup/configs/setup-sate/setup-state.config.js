@@ -12,8 +12,7 @@
                 controller: "SetupCtrl",
                 templateUrl: "js/modules/setup/controllers/setup/setup.tpl.html",
                 resolve: {
-                    preferredLanguage: preferredLanguage,
-                    sdkSetAccountInfo: sdkSetAccountInfo
+                    preferredLanguage: preferredLanguage
                 }
             })
             .state("app.setup.start", {
@@ -46,15 +45,53 @@
                     accountInfo: getAccountInfo
                 }
             })
+
+
+
+            // TODO Review
             .state("app.setup.backup", {
                 url: "/wallet-backup",
                 cache: false,
                 controller: "SetupWalletBackupCtrl",
                 templateUrl: "js/modules/setup/controllers/wallet-backup/wallet-backup.tpl.html",
                 resolve: {
-                    backupInfo: getBackupInfo
+                    // TODO Do we need it ??
+                    getWalletBackup: getWalletBackup,
+
+                    // TODO check initialization for SDK
+                    sdkSetAccountInfo: sdkSetAccountInfo
                 }
             })
+
+            .state("app.setup.wallet", {
+                url: "/phone",
+                controller: "SetupPhoneCtrl",
+                templateUrl: "js/modules/setup/controllers/phone/phone.tpl.html",
+                data: {
+                    clearHistory: true  //clear any previous history
+                },
+                resolve: {
+                    // TODO Do we need it ??
+                    getWalletBackup: getWalletBackup,
+
+                    // TODO check initialization for SDK
+                    sdkSetAccountInfo: sdkSetAccountInfo
+                }
+            })
+
+            .state("app.setup.wallet.phone", {
+                url: "/phone",
+                controller: "SetupPhoneCtrl",
+                templateUrl: "js/modules/setup/controllers/phone/phone.tpl.html",
+                data: {
+                    clearHistory: true  //clear any previous history
+                },
+                resolve: {
+                    walletInfo: getWalletInfo
+                }
+            })
+
+
             .state("app.setup.phone", {
                 url: "/phone",
                 controller: "SetupPhoneCtrl",
@@ -165,27 +202,26 @@
     function getAccountInfo($state, launchService) {
         return launchService
             .getAccountInfo()
-            .then(returnData, toAppSetupState.bind(this, $state));
+            .then(returnData, toAppResetState.bind(this, $state));
     }
 
-    function getBackupInfo($state, launchService) {
+    function getWalletBackup($state, launchService) {
         return launchService
-            .getBackupInfo()
-            .then(returnData, toAppSetupState.bind(this, $state));
+            .getWalletBackup()
+            .then(returnData, toAppResetState.bind(this, $state));
     }
     
     function getWalletInfo($state, launchService) {
         return launchService
             .getWalletInfo()
-            .then(returnData, toAppSetupState.bind(this, $state));
+            .then(returnData, toAppResetState.bind(this, $state));
     }
 
     function returnData(data) {
         return data;
     }
 
-    // TODO Redirect to 'reset state'
-    function toAppSetupState($state) {
+    function toAppResetState($state) {
         return $state.go("app.reset");
     }
 })();

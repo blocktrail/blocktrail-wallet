@@ -1,8 +1,8 @@
 (function () {
     "use strict";
 
-    angular.module('blocktrail.setup')
-        .factory('loginFormService', function($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
+    angular.module("blocktrail.setup")
+        .factory("loginFormService", function($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
 
             return new LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService);
         }
@@ -41,7 +41,7 @@
             version: self._CONFIG.VERSION || self._CONFIG.VERSION_REV,
             two_factor_token: data.twoFactorToken,
             device_uuid: self._device.uuid,
-            device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : 'Unknown Device',
+            device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : "Unknown Device",
             super_secret: self._CONFIG.SUPER_SECRET || null,
             browser_fingerprint: null,
             skip_two_factor: true // will make the resulting API key not require 2FA in the future
@@ -53,7 +53,7 @@
             .then(function(postData) {
                 return self._$http.post(url, postData)
                     .then(self._decryptSecret.bind(self, data.password))
-                    .then(self._storeAccountInfo.bind(self));
+                    .then(self._setAccountInfo.bind(self));
             })
             .catch(self._errorHandler.bind(self));
     };
@@ -95,12 +95,12 @@
      * @return { promise }
      * @private
      */
-    LoginFormService.prototype._storeAccountInfo = function(data) {
+    LoginFormService.prototype._setAccountInfo = function(data) {
         var self = this;
 
         var accountInfo = self._lodash.merge({}, { secret: data.secret }, data.responseData);
 
-        return self._launchService.storeAccountInfo(accountInfo)
+        return self._launchService.setAccountInfo(accountInfo)
             .then(function() {
                 //save the default settings and do a profile sync
                 self._settingsService.username = data.responseData.username;

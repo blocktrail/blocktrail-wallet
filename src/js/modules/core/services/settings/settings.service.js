@@ -1,12 +1,12 @@
 (function () {
     "use strict";
 
-    angular.module('blocktrail.core')
-        .factory('settingsService', function($q, storageService, genericSdkService) {
-            return new Settings($q, genericSdkService, storageService);
+    angular.module("blocktrail.core")
+        .factory("settingsService", function($q, storageService, genericSdkService) {
+            return new SettingsService($q, storageService, genericSdkService);
         });
 
-    function Settings($q, genericSdkService, storageService) {
+    function SettingsService($q, storageService, genericSdkService) {
         var self = this;
         // Document id
         var documentId = "user_settings";
@@ -68,7 +68,7 @@
         self._loaded = false;
 
         // Init storage DB
-        self._storage = storageService.db('settings');
+        self._storage = storageService.db("settings");
 
         // Settings object with pending functionality, only for internal usage!
         self._doc = {
@@ -148,7 +148,7 @@
      * as resolve parameter we get _readonlyDoc object
      * @returns { promise }
      */
-    Settings.prototype.getSettings = function() {
+    SettingsService.prototype.getSettings = function() {
         var self = this;
         var promise;
 
@@ -168,7 +168,7 @@
      * @param newSettings
      * @returns { promise }
      */
-    Settings.prototype.updateSettingsUp = function(newSettings) {
+    SettingsService.prototype.updateSettingsUp = function(newSettings) {
         var self = this;
         var promise;
 
@@ -210,7 +210,7 @@
      * @param propertyList
      * @returns { boolean }
      */
-    Settings.prototype.checkOnPropertyUpList = function(obj, propertyList) {
+    SettingsService.prototype.checkOnPropertyUpList = function(obj, propertyList) {
         var flag = false;
         var i = 0;
 
@@ -230,7 +230,7 @@
      * @param transaction
      * @returns { promise }
      */
-    Settings.prototype.addGlideraTransaction = function(transaction) {
+    SettingsService.prototype.addGlideraTransaction = function(transaction) {
         var self = this;
         var promise;
 
@@ -257,7 +257,7 @@
      * @param transactions
      * @returns { promise }
      */
-    Settings.prototype.updateGlideraTransactions = function(transactions) {
+    SettingsService.prototype.updateGlideraTransactions = function(transactions) {
         var self = this;
         var promise;
 
@@ -283,7 +283,7 @@
      * Get settings object return a link on _readonlyDoc
      * @returns _readonlyDoc { object }
      */
-    Settings.prototype.getReadOnlySettingsData = function() {
+    SettingsService.prototype.getReadOnlySettingsData = function() {
         var self = this;
 
         return self._readonlyDoc;
@@ -294,7 +294,7 @@
      * @returns _isSyncingSettingsDown { promise }
      * @private
      */
-    Settings.prototype.syncSettingsDown = function() {
+    SettingsService.prototype.syncSettingsDown = function() {
         var self = this;
 
         if (!this._isSyncingSettingsDown) {
@@ -314,7 +314,7 @@
      * @returns _isSyncingProfileDown { promise }
      * @private
      */
-    Settings.prototype.syncProfileDown = function() {
+    SettingsService.prototype.syncProfileDown = function() {
         var self = this;
 
         if (!self._isSyncingProfileDown) {
@@ -335,7 +335,7 @@
      * @returns { promise }
      * @private
      */
-    Settings.prototype._loadSettings = function() {
+    SettingsService.prototype._loadSettings = function() {
         var self = this;
 
         self._loaded = self._$q
@@ -358,7 +358,7 @@
      * @returns _doc { promise }
      * @private
      */
-    Settings.prototype._syncDocWithLocalStorage = function() {
+    SettingsService.prototype._syncDocWithLocalStorage = function() {
         var self = this;
 
         return self._$q.when(self._storage.get(self._id))
@@ -377,7 +377,7 @@
      * @returns { promise } all[ _isSyncingSettingsDown, _isSyncingProfileDown ]
      * @private
      */
-    Settings.prototype._syncSettingsAndProfileDown = function() {
+    SettingsService.prototype._syncSettingsAndProfileDown = function() {
         var self = this;
 
         return self._$q.all([self.syncSettingsDown(), self.syncProfileDown()]);
@@ -388,7 +388,7 @@
      * @returns { promise }
      * @private
      */
-    Settings.prototype._syncSettingsDown = function() {
+    SettingsService.prototype._syncSettingsDown = function() {
         var self = this;
 
         return self._$q.when(self._genericSdkService.getSdk())
@@ -402,7 +402,7 @@
      * @returns sdkSettings { Object }
      * @private
      */
-    Settings.prototype._getSDKSettings = function(sdk) {
+    SettingsService.prototype._getSDKSettings = function(sdk) {
         return sdk.getSettings();
     };
 
@@ -412,7 +412,7 @@
      * @returns _doc { Object }
      * @private
      */
-    Settings.prototype._setSDKSettingsToDoc = function(sdkSettings) {
+    SettingsService.prototype._setSDKSettingsToDoc = function(sdkSettings) {
         var self = this;
         // Reset flag before set
         self._isSyncingSettingsDown = null;
@@ -440,7 +440,7 @@
      * @returns { promise }
      * @private
      */
-    Settings.prototype._syncProfileDown = function() {
+    SettingsService.prototype._syncProfileDown = function() {
         var self = this;
 
         return this._$q.when(this._genericSdkService.getSdk())
@@ -454,7 +454,7 @@
      * @returns sdkProfile { Object }
      * @private
      */
-    Settings.prototype._getSDKProfile = function(sdk) {
+    SettingsService.prototype._getSDKProfile = function(sdk) {
         return sdk.getProfile();
     };
 
@@ -464,7 +464,7 @@
      * @returns _doc { Object }
      * @private
      */
-    Settings.prototype._setSDKProfileToDoc = function(sdkProfile) {
+    SettingsService.prototype._setSDKProfileToDoc = function(sdkProfile) {
         var self = this;
 
         self._isSyncingProfileDown = null;
@@ -479,7 +479,7 @@
      * @returns _readonlyDoc { object }
      * @private
      */
-    Settings.prototype._getSettings = function() {
+    SettingsService.prototype._getSettings = function() {
         var self = this;
 
         return self._readonlyDoc;
@@ -490,7 +490,7 @@
      * @returns _doc
      * @private
      */
-    Settings.prototype._syncSettingsFromPendingObject = function() {
+    SettingsService.prototype._syncSettingsFromPendingObject = function() {
         var self = this;
 
         // Copy the pending changes into the doc
@@ -518,7 +518,7 @@
      * @returns _doc { promise }
      * @private
      */
-    Settings.prototype._updateLocalStorage = function() {
+    SettingsService.prototype._updateLocalStorage = function() {
         var self = this;
 
         if (self._isUpdatingLocalStorage) {
@@ -550,7 +550,7 @@
      * @returns { promise }
      * @private
      */
-    Settings.prototype._syncSettingsUp = function() {
+    SettingsService.prototype._syncSettingsUp = function() {
         var self = this;
 
         return this._$q.when(self._genericSdkService.getSdk())
@@ -583,7 +583,7 @@
      * @returns { promise }
      * @private
      */
-    Settings.prototype._syncProfileUp = function() {
+    SettingsService.prototype._syncProfileUp = function() {
         var self = this;
 
         return this._$q.when(self._genericSdkService.getSdk())

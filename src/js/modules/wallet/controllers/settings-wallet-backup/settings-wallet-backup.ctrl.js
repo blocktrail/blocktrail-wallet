@@ -34,9 +34,10 @@
         };
         $scope.setupInfo = {
             identifier: backupInfo.identifier,
-            password: "",
-            primaryMnemonic: "",
-            backupMnemonic: "",
+            pasword: "",
+            // TODO Check this properties, do we need them
+            // primaryMnemonic: "",
+            // backupMnemonic: "",
             blocktrailPublicKeys: null
         };
         //$scope.setupInfo.identifier = backupInfo.identifier;
@@ -228,7 +229,7 @@
                 $cordovaDialogs.alert($translate.instant('MSG_SAVE_BACKUP'), $translate.instant('SETUP_WALLET_BACKUP'), $translate.instant('OK'))
             } else {
                 //delete all temp backup info
-                launchService.clearBackupInfo()
+                launchService.clearWalletBackup()
                     .then(function() {
                         settingsService.$isLoaded().then(function() {
                             settingsService.backupSaved = true;

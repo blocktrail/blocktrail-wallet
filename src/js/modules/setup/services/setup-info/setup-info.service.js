@@ -1,9 +1,9 @@
 (function () {
     "use strict";
 
-    angular.module('blocktrail.setup')
-        .factory('setupInfoService', function(CONFIG, randomBytesJS) {
-            return new SetupInfoService(CONFIG, randomBytesJS);
+    angular.module("blocktrail.setup")
+        .factory("setupInfoService", function(CONFIG, randomBytesJS, helperService) {
+            return new SetupInfoService(CONFIG, randomBytesJS, helperService);
         }
     );
 
@@ -13,19 +13,26 @@
      * @param randomBytesJS
      * @constructor
      */
-    function SetupInfoService(CONFIG, randomBytesJS) {
+    function SetupInfoService(CONFIG, randomBytesJS, helperService) {
         var self = this;
-        var setupInfo = {
+
+        var defaultSetupinfo = {
             // force uniqueness of the identifier to make it easier to force a
-            identifier: CONFIG.DEFAULT_IDENTIFIER + "-" + randomBytesJS(8).toString('hex'),
-            password: "",
-            primaryMnemonic: "",
-            backupMnemonic: "",
+            identifier: CONFIG.DEFAULT_IDENTIFIER + "-" + randomBytesJS(8).toString("hex"),
+            password: null,
             blocktrailPublicKeys: null,
-            networkType: null,
+            networkType: CONFIG.DEBUG_DEFAULT_NETWORK || null,
             backupInfo: null,
             supportSecret: null
         };
+
+        var setupInfo = helperService.prepareObjectAccordingToSchema(defaultSetupinfo, {
+            // force uniqueness of the identifier to make it easier to force a
+            identifier: CONFIG.DEFAULT_IDENTIFIER + "-" + randomBytesJS(8).toString("hex"),
+            networkType: CONFIG.DEBUG_DEFAULT_NETWORK || null
+        });
+
+        var walletSecret = null;
 
         /**
          * Get setup info
@@ -35,6 +42,11 @@
             return angular.copy({}, setupInfo);
         };
 
+        /**
+         * Get setup info property
+         * @param key
+         * @return { * }
+         */
         self.getSetupInfoProperty = function(key) {
             return setupInfo[key];
         };
@@ -43,16 +55,41 @@
          * Update setup info
          * @param data
          */
-        self.updateSetupInfo = function(data) {
-            if(!angular.isObject(data)) {
-                throw new Error("Blocktrail setup module, setup info service. Data is not an object");
-            }
+        self.setSetupInfo = function(data) {
+            setupInfo = helperService.prepareObjectAccordingToSchema(setupInfo, data);
+        };
 
-            for (var property in setupInfo) {
-                if (setupInfo.hasOwnProperty(property) && data[property] !== "undefined") {
-                    setupInfo[property] = data[property];
-                }
-            }
-        }
+        /**
+         * Reset setup info
+         * @return { object }
+         */
+        self.resetSetupInfo = function() {
+            setupInfo = helperService.prepareObjectAccordingToSchema(defaultSetupinfo, {
+                // force uniqueness of the identifier to make it easier to force a
+                identifier: CONFIG.DEFAULT_IDENTIFIER + "-" + randomBytesJS(8).toString("hex"),
+                networkType: CONFIG.DEBUG_DEFAULT_NETWORK || null
+            });
+
+            return setupInfo;
+        };
+
+        /**
+         * Stash wallet secret
+         * @param secret
+         */
+        self.stashWalletSecret = function(secret) {
+            walletSecret = secret;
+        };
+
+        /**
+         * Unstash wallet secret
+         * @return { string }
+         */
+        self.unstashWalletSecret = function() {
+            var secret = walletSecret;
+            walletSecret = null;
+
+            return secret;
+        };
     }
 })();

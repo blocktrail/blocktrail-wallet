@@ -4,7 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupNewAccountCtrl", SetupNewAccountCtrl);
 
-    function SetupNewAccountCtrl($scope, $state, $q, $cordovaNetwork, CONFIG, $filter, formHelperService,
+    function SetupNewAccountCtrl($scope, $state, $q, $filter, $cordovaNetwork, CONFIG, formHelperService,
                                  modalService, passwordStrengthService, newAccountFormService, setupInfoService) {
         var listenerFormPassword;
 
@@ -111,7 +111,7 @@
          * Register form success handler
          */
         function registerFormSuccessHandler() {
-            setupInfoService.updateSetupInfo({
+            setupInfoService.setSetupInfo({
                 password: $scope.form.password,
                 networkType: $scope.form.networkType
             });
@@ -139,4 +139,5 @@
             }
         }
     }
+
 })();

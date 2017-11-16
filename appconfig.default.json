@@ -51,6 +51,8 @@
 
     "PROMOCODE_IN_MENU": false,
 
+    "TEST_NETWORK": false,
+
     "NETWORKS_ENABLED": ["BTC", "BCC"],
 
     "NETWORKS": {

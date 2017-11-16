@@ -1,3 +1,25 @@
+// TODO REVIEW STORAGE SERVICE
+/*(function () {
+    "use strict";
+
+    angular.module('blocktrail.core')
+        .factory('storageService', function($q, $window, $log, CONFIG) {
+            return new StorageService($q, $window, $log, CONFIG);
+        });
+
+        function StorageService($q, $window, $log, CONFIG) {
+            var self = this;
+
+            self._$q = $q;
+            self._$window = $window;
+            self._$log = $log;
+            self._CONFIG = CONFIG;
+
+            self._dbs = {};
+        }
+
+})();*/
+
 angular.module('blocktrail.wallet').factory(
     'storageService',
     function(CONFIG, $log, $window, $q) {
@@ -55,13 +77,14 @@ angular.module('blocktrail.wallet').factory(
         };
 
         // init defaults
+        db('appRate');
         db('launch');
         db('contacts');
         db('wallet');
-        db('wallet_info');
+        db('walletInfo');
         db('settings');
-        db('currency-rates-cache');
-        db('apprate');
+        db('localSettings');
+        db('currencyRatesCache');
 
         return {
             db: db,

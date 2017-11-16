@@ -128,6 +128,7 @@
 
         return self.client.post("/mywallet/2fa/enable", null, {two_factor_token: twoFactorToken});
     };
+
     genericBlocktrailSDK.prototype.disable2FA = function (twoFactorToken) {
         var self = this;
 

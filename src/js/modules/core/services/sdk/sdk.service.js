@@ -1,8 +1,8 @@
 (function () {
     "use strict";
 
-    angular.module('blocktrail.core')
-        .factory('sdkService', function(genericSdkService, blocktrailSDK, CONFIG) {
+    angular.module("blocktrail.core")
+        .factory("sdkService", function(genericSdkService, blocktrailSDK, CONFIG) {
             extendBlocktrailSDK(blocktrailSDK);
 
             return new SdkService(genericSdkService, blocktrailSDK, CONFIG);
@@ -25,6 +25,8 @@
         self._CONFIG = CONFIG;
 
         self._accountInfo = null;
+
+        self._keyForGenericSdk = "GENERIC";
 
         self._sdkList = {};
 
@@ -80,6 +82,12 @@
         return self._readonlyDoc;
     };
 
+    SdkService.prototype.getGenericSdk = function() {
+        var self = this;
+
+        return self._sdkList[self._keyForGenericSdk];
+    };
+
     SdkService.prototype.getSdkByNetworkType = function(networkType) {
         var self = this;
 
@@ -97,12 +105,10 @@
     SdkService.prototype.setAccountInfo = function(accountInfo) {
         var self = this;
 
-        self._accountInfo = accountInfo;
-
-        // @TODO: move out of here // @roman
-        self._genericSdkService.setAccountInfo(accountInfo);
-
-        self._initSdkList();
+        if(self._accountInfo === null) {
+            self._accountInfo = accountInfo;
+            self._initSdkList();
+        }
     };
 
     SdkService.prototype.getBackupGenerator = function(identifier, backupInfo, extraInfo) {
@@ -118,26 +124,33 @@
 
     SdkService.prototype._initSdkList = function() {
         var self = this;
+        var isTestNet = self._CONFIG.TEST_NETWORK;
 
-        // set testnet flag from config
-        var isTestNet = !!self._CONFIG.TESTNET;
+        // Generic SDK
+        self._sdkList[self._keyForGenericSdk] = new GenericBlocktrailSDK({
+            apiKey: self._accountInfo ? self._accountInfo.apiKey : null,
+            apiSecret: self._accountInfo ? self._accountInfo.apiSecret : null,
+            host: self._CONFIG.API_HOST || null,
+            https: typeof self._CONFIG.API_HTTPS !== "undefined" ? self._CONFIG.API_HTTPS : true
+        }, self._blocktrailSDK);
 
         // Network SDKs
         self._CONFIG.NETWORKS_ENABLED.forEach(function(networkType) {
-            if (isTestNet && networkType.charAt(0) !== 't') {
+            if (isTestNet && networkType.charAt(0) !== "t") {
                 throw new Error("Blocktrail core module, sdk service. Only test networks are available (tBTC, tBCC ...).");
-            } else if (!isTestNet && networkType.charAt(0) === 't') {
+            } else if (!isTestNet && networkType.charAt(0) === "t") {
                 throw new Error("Blocktrail core module, sdk service. Only regular networks are available (BTC, BCC ...).");
             }
 
             var sdkNetwork = self._CONFIG.NETWORKS[networkType].NETWORK;
+
             if (isTestNet) {
                 sdkNetwork = sdkNetwork.substr(1);
             }
 
             var sdkConfiguration = {
-                apiKey: self._accountInfo ? self._accountInfo.api_key : null,
-                apiSecret: self._accountInfo ? self._accountInfo.api_secret : null,
+                apiKey: self._accountInfo ? self._accountInfo.apiKey : null,
+                apiSecret: self._accountInfo ? self._accountInfo.apiSecret : null,
                 testnet: isTestNet,
                 host: self._CONFIG.API_HOST || null,
                 network: sdkNetwork,
@@ -148,6 +161,10 @@
         });
     };
 
+    /**
+     * Extend blocktrail SDK
+     * @param blocktrailSDK
+     */
     function extendBlocktrailSDK(blocktrailSDK) {
         blocktrailSDK.prototype.requestContactAddress = function (phoneHash) {
             var self = this;
@@ -158,13 +175,13 @@
         blocktrailSDK.prototype.glideraOauth = function (code, redirect_uri) {
             var self = this;
 
-            return self.client.post("/mywallet/glidera/oauth", {platform: 'web'}, {code: code, redirect_uri: redirect_uri});
+            return self.client.post("/mywallet/glidera/oauth", {platform: "web"}, {code: code, redirect_uri: redirect_uri});
         };
 
         blocktrailSDK.prototype.glideraBuyPrices = function (qty, fiat) {
             var self = this;
 
-            return self.client.get("/mywallet/glidera/prices/buy", {qty: qty, fiat: fiat, platform: 'web'});
+            return self.client.get("/mywallet/glidera/prices/buy", {qty: qty, fiat: fiat, platform: "web"});
         };
 
         blocktrailSDK.prototype.redeemPromoCode = function (data) {
@@ -207,4 +224,106 @@
             return self.client.get("/wallet/" + identifier + "/transaction/" + txHash);
         };
     }
+
+    /**
+     * Generic blocktrail SDK
+     * @param sdkConfig
+     * @param blocktrailSDK
+     * @constructor
+     */
+    function GenericBlocktrailSDK(sdkConfig, blocktrailSDK) {
+        var self = this;
+
+        self.client = blocktrailSDK.initRestClient(sdkConfig);
+    }
+
+    GenericBlocktrailSDK.prototype.getAllWallets = function () {
+        var self = this;
+
+        return self.client.get("/mywallet/wallets");
+    };
+
+    GenericBlocktrailSDK.prototype.syncContacts = function (data) {
+        var self = this;
+
+        return self.client.post("/mywallet/contacts", null, data);
+    };
+
+    GenericBlocktrailSDK.prototype.deleteContacts = function () {
+        var self = this;
+
+        return self.client.delete("/mywallet/contacts");
+    };
+
+    GenericBlocktrailSDK.prototype.getProfile = function () {
+        var self = this;
+
+        return self.client.get("/mywallet/profile");
+    };
+
+    GenericBlocktrailSDK.prototype.syncProfile = function (data) {
+        var self = this;
+
+        return self.client.post("/mywallet/profile", null, data);
+    };
+
+    GenericBlocktrailSDK.prototype.getSettings = function () {
+        var self = this;
+
+        return self.client.get("/mywallet/settings");
+    };
+
+    GenericBlocktrailSDK.prototype.syncSettings = function (data) {
+        var self = this;
+
+        return self.client.post("/mywallet/settings", null, data);
+    };
+
+    GenericBlocktrailSDK.prototype.updatePhone = function (data) {
+        var self = this;
+
+        return self.client.post("/mywallet/phone", null, data);
+    };
+
+    GenericBlocktrailSDK.prototype.removePhone = function () {
+        var self = this;
+
+        return self.client.delete("/mywallet/phone", null, null);
+    };
+
+    GenericBlocktrailSDK.prototype.verifyPhone = function (token) {
+        var self = this;
+
+        return self.client.post("/mywallet/phone/verify", null, {token: token});
+    };
+
+    GenericBlocktrailSDK.prototype.setup2FA = function (password) {
+        var self = this;
+
+        return self.client.post("/mywallet/2fa/setup", null, {password: password});
+    };
+
+    GenericBlocktrailSDK.prototype.enable2FA = function (twoFactorToken) {
+        var self = this;
+
+        return self.client.post("/mywallet/2fa/enable", null, {two_factor_token: twoFactorToken});
+    };
+
+    GenericBlocktrailSDK.prototype.disable2FA = function (twoFactorToken) {
+        var self = this;
+
+        return self.client.post("/mywallet/2fa/disable", null, {two_factor_token: twoFactorToken});
+    };
+
+    GenericBlocktrailSDK.prototype.contacts = function (lastSynced) {
+        var self = this;
+
+        return self.client.get("/mywallet/contacts", {last_synced: lastSynced});
+    };
+
+    GenericBlocktrailSDK.prototype.sendFeedback = function (data) {
+        var self = this;
+
+        return self.client.post("/mywallet/feedback", null, data);
+    };
 })();

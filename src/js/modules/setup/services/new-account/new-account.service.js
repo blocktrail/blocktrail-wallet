@@ -59,12 +59,12 @@
             skip_two_factor: true // will make the resulting API key not require 2FA in the future
         };
 
-        // TODO UPDATE API CALL
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/register";
 
         self._$log.debug("M:SETUP:newAccountFormService: register", postData.email, postData.platform, postData.device_name);
+
         return self._$http.post(url, postData)
-            .then(self._storeAccountInfo.bind(self))
+            .then(self._setAccountInfo.bind(self))
             .catch(self._errorHandler.bind(self));
     };
 
@@ -74,37 +74,46 @@
      * @return { promise }
      * @private
      */
-    NewAccountFormService.prototype._storeAccountInfo = function(response) {
+    // TODO Clean API request, return data object only
+    NewAccountFormService.prototype._setAccountInfo = function(response) {
         var self = this;
-        var accountInfo = self._lodash.merge({}, response.data);
 
-        self._$log.debug("M:SETUP:newAccountFormService: register success");
-        return self._launchService.storeAccountInfo(accountInfo)
+        var accountInfo = {
+            username: response.data.username,
+            email: response.data.email,
+            apiKey: response.data.api_key,
+            apiSecret: response.data.api_secret
+        };
+
+        self._$log.debug("M:SETUP:newAccountFormService:_setAccountInfo", accountInfo);
+
+        return self._launchService.setAccountInfo(accountInfo)
             .then(function() {
-                self._$log.debug("M:SETUP:newAccountFormService: store account info success");
-                return response.data;
+                return self._launchService.getAccountInfo();
             });
     };
 
     /**
      * Error handler
-     * @param response
-     * @return { promise }
+     * @param error
+     * @return { promise<string> }
      * @private
      */
-    NewAccountFormService.prototype._errorHandler = function(response) {
+    NewAccountFormService.prototype._errorHandler = function(error) {
         var self = this;
-        var error;
+        var response;
 
-        self._$log.debug("M:SETUP:newAccountFormService: register error");
-        if (response && response.data && response.data.msg.toLowerCase().match(/username exists/)) {
-            error = "MSG_USERNAME_TAKEN";
-        } else if (response && response.data && response.data.msg.toLowerCase().match(/already in use/)) {
-            error = "MSG_EMAIL_TAKEN";
-        } else if (!!response) {
-            error = "" + (response.message || response.msg || response);
+        self._$log.debug("M:SETUP:newAccountFormService:_errorHandler", error);
+
+        if (error && error.data && error.data.msg.toLowerCase().match(/username exists/)) {
+            response = "MSG_USERNAME_TAKEN";
+        } else if (error && error.data && error.data.msg.toLowerCase().match(/already in use/)) {
+            response = "MSG_EMAIL_TAKEN";
+        } else if (!!error) {
+            response = "" + (error.message || error.msg || error);
         }
 
-        return this._$q.reject(error);
+        return this._$q.reject(response);
     };
+
 })();
