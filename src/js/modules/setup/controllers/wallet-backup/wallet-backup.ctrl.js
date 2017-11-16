@@ -4,11 +4,17 @@
     angular.module("blocktrail.setup")
         .controller("SetupWalletBackupCtrl", SetupWalletBackupCtrl);
 
-    function SetupWalletBackupCtrl($scope, $window, backupInfo, $state, $q, $translate,
-                                   $ionicActionSheet, $cordovaFileOpener2, $cordovaFile, sdkService,
-                                   launchService, settingsService, modalService) {
 
-        var actionSheet = null;
+    // $scope, $window, backupInfo, $state, $q, $translate,
+    // $ionicActionSheet, $cordovaFileOpener2, $cordovaFile, sdkService,
+    // launchService, settingsService, modalService
+
+    function SetupWalletBackupCtrl() {
+
+        console.log("SETUP BACKUP CONTROLLER !!!");
+
+
+        /*var actionSheet = null;
         var backupSettings = {
             // NB: on android fileOpener2 only works with SD storage (i.e. non-private storage)
             path: $window.cordova ? ($window.ionic.Platform.isAndroid() ? $window.cordova.file.externalDataDirectory : $window.cordova.file.documentsDirectory) : null,
@@ -26,9 +32,9 @@
         $scope.onShowExportOptions = onShowExportOptions;
         $scope.clearBackupInfoAndContinue = clearBackupInfoAndContinue;
 
-        /**
+        /!**
          * On show export options
-         */
+         *!/
         function onShowExportOptions() {
             actionSheet = $ionicActionSheet.show({
                 titleText: "",
@@ -41,11 +47,11 @@
             });
         }
 
-        /**
+        /!**
          * Click handler for action sheet buttons
          * @param index { integer }
          * @return { boolean }
-         */
+         *!/
         function onActionSheetButtonClickHandler(index) {
             modalService.showSpinner({
                 title: "",
@@ -68,9 +74,9 @@
             return true;
         }
 
-        /**
+        /!**
          * Generate the PDF
-         */
+         *!/
         function generatePdf() {
             return $q.when(true)
                 .then(function() {
@@ -132,9 +138,9 @@
                 });
         }
 
-        /**
+        /!**
          * Email the backup PDF
-         */
+         *!/
         function emailBackupPdf() {
             // email the backup pdf
             var options = {
@@ -171,9 +177,9 @@
             return deferred.promise;
         }
 
-        /**
+        /!**
          * Open the backup PDF
-         */
+         *!/
         function openBackupPdf() {
             modalService.hideSpinner();
 
@@ -199,10 +205,10 @@
                 });
         }
 
-        /**
+        /!**
          * Backup PDF error handler
          * @param e
-         */
+         *!/
         function backupPdfErrorHandler(e) {
             modalService.hideSpinner();
             var alert = {};
@@ -215,12 +221,12 @@
             modalService.alert(alert);
         }
 
-        /**
+        /!**
          * Clear the backup info and continue, next step is 'app.setup.phone'
-         */
+         *!/
         function clearBackupInfoAndContinue() {
             // delete all temp backup info
-            return launchService.clearBackupInfo()
+            return launchService.clearWalletBackup()
                 .then(function() {
                     return settingsService.$isLoaded()
                         .then(function() {
@@ -252,9 +258,9 @@
                 });
         }
 
-        /**
+        /!**
          * On skip backup process
-         */
+         *!/
         function onSkipBackup() {
             modalService.confirm({
                 body: "MSG_SKIP_BACKUP",
@@ -273,6 +279,6 @@
                         $state.go("app.setup.phone");
                     }
                 });
-        }
+        }*/
     }
 })();

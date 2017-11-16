@@ -113,7 +113,7 @@ angular.module('blocktrail.wallet').factory(
                                     // if a new secret is created then we need to resync everything
                                     if (newSecret) {
                                         forceAll = true;
-                                        return launchService.updateAccountInfo({new_secret: false});
+                                        return launchService.setAccountInfo({ newSecret: false });
                                     }
                                 })
                                 .then(function() {

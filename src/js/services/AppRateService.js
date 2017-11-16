@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
     .factory('AppRateService', function($ionicPopover, $rootScope, settingsService, CONFIG, $log, $q, storageService) {
-        var db = storageService.db('apprate');
+        var db = storageService.db('appRate');
         var _counter = null;
 
         var APPRATE_STATUS = {};

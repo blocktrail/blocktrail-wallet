@@ -4,7 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupLoginCtrl", SetupLoginCtrl);
 
-    function SetupLoginCtrl($scope, $state, $translate, CONFIG, loginFormService, modalService, sdkService, formHelperService) {
+    function SetupLoginCtrl($scope, $state, CONFIG, modalService, formHelperService , sdkService, loginFormService, setupInfoService) {
         $scope.form = {
             email: CONFIG.DEBUG_EMAIL_PREFILL || "",
             password: CONFIG.DEBUG_PASSWORD_PREFILL || "",
@@ -25,14 +25,14 @@
 
             if (loginForm.email.$invalid) {
                 modalService.alert({
-                    body: 'MSG_BAD_EMAIL'
+                    body: "MSG_BAD_EMAIL"
                 });
                 return false;
             }
 
             if (loginForm.password.$invalid) {
                 modalService.alert({
-                    body: 'MSG_MISSING_LOGIN'
+                    body: "MSG_MISSING_LOGIN"
                 });
                 return false;
             }
@@ -67,14 +67,18 @@
         function loginFormSuccessHandler(data) {
             modalService.hideSpinner();
 
+            var setupInfo = {
+                password: $scope.form.password,
+                networkType: $scope.form.networkType
+            };
+
             if (!$scope.form.forceNewWallet) {
-                $scope.setupInfo.identifier = data.existing_wallet || $scope.setupInfo.identifier;
+                setupInfo.identifier = data.existing_wallet || setupInfoService.getSetupInfoProperty("identifier");
             }
 
-            $scope.setupInfo.password = $scope.form.password;
-            $scope.setupInfo.networkType = $scope.form.networkType;
+            setupInfoService.setSetupInfo(setupInfo);
 
-            $state.go('app.setup.pin');
+            $state.go("app.setup.pin");
         }
 
         /**
@@ -89,7 +93,7 @@
                 case "BANNED_IP":
                     return modalService.alert({
                         title: "BANNED_IP_TITLE",
-                        body: $translate.instant('BANNED_IP_BODY', {bannedIp: error.data})
+                        body: "BANNED_IP_BODY"
                     });
 
                     break;

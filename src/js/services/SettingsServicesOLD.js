@@ -45,8 +45,10 @@ angular.module('blocktrail.wallet').service(
         backupNotifyTimestamp: 0,// notification if backup PDF is not yet saved
         backupSavedPersistent: false,
         backupSkipped: false,
+
         setupStarted: false,
         setupComplete: false,
+
         installTracked: false,
         walletActivated: false, // balance > 0
 
