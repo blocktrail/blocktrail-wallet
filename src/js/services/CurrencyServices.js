@@ -2,7 +2,7 @@ angular.module('blocktrail.wallet')
     .service( 'Currencies', function($rootScope, storageService, $log, walletsManagerService, CONFIG) {
         var self = this;
 
-        self.cache = storageService.db('currency-rates-cache');
+        self.cache = storageService.db('currencyRatesCache');
 
         self.mainCurrencies = ["EUR", "USD", "CNY"];
 

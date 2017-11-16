@@ -149,7 +149,14 @@
                         encryptedPassword = CryptoJS.AES.encrypt(unlockData.password, newPIN).toString();
                     }
 
-                    return launchService.storeWalletInfo($scope.defaultWallet, encryptedPassword, encryptedSecret);
+                    // TODO Check this part
+                    // return launchService.storeWalletInfo($scope.defaultWallet, encryptedPassword, encryptedSecret);
+                    return launchService.setWalletInfo({
+                        identifier: $scope.defaultWallet,
+                        networkType: "", // TODO add network type
+                        encryptedPassword: encryptedPassword,
+                        encryptedSecret: encryptedSecret
+                    });
                 })
                 .then(function() {
                     // success

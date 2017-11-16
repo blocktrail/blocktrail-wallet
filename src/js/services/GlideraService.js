@@ -1,7 +1,7 @@
 angular.module('blocktrail.wallet').factory(
     'glideraService',
     function(CONFIG, $log, $q, walletsManagerService, $cordovaDialogs, $translate,
-             $http, $timeout, $ionicLoading, settingsService, launchService, $rootScope, trackingService) {
+             $http, $timeout, $ionicLoading, settingsService, setupInfoService, $rootScope, trackingService) {
         var clientId;
         var returnuri = "btccomwallet://glideraCallback/oauth2";
         var GLIDERA_URL = CONFIG.GLIDERA_URL;
@@ -178,7 +178,7 @@ angular.module('blocktrail.wallet').factory(
                 if (settingsService.glideraAccessToken.userCanTransact === true) {
                     return settingsService.glideraAccessToken.userCanTransact;
                 }
-
+getWalletSecret
                 return accessToken().then(function(accessToken) {
                     if (!accessToken) {
                         return false;
@@ -610,7 +610,7 @@ angular.module('blocktrail.wallet').factory(
             if (CONFIG.NETWORKS[walletsManagerService.getActiveWallet().getReadOnlyWalletData().networkType].BUYBTC) {
                 initialized = true;
 
-                $q.when(launchService.getWalletSecret())
+                $q.when(setupInfoService.unstashWalletSecret())
                     .then(function(walletSecret) {
                         if (!walletSecret) {
                             return;

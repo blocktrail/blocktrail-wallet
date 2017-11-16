@@ -1176,7 +1176,13 @@
                                 }
 
                                 // store encrypted secret
-                                return self._launchService.storeWalletInfo(wallet.identifier, self._walletData.networkType, self._cryptoJS.AES.encrypt(secretHex, pin).toString())
+                                // TODO Check this part
+                                // return self._launchService.storeWalletInfo(wallet.identifier, self._walletData.networkType, self._cryptoJS.AES.encrypt(secretHex, pin).toString())
+                                return self._launchService.setWalletInfo({
+                                        identifier: wallet.identifier,
+                                        networkType: self._walletData.networkType,
+                                        encryptedPassword: self._cryptoJS.AES.encrypt(secretHex, pin).toString()
+                                    })
                                     .then(function () {
                                         return self._sdkWallet;
                                     });

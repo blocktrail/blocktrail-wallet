@@ -19,6 +19,7 @@ var blocktrail = angular.module('blocktrail.wallet', [
 
     "blocktrail.config",
     "blocktrail.core",
+    "blocktrail.launch",
     "blocktrail.setup",
     "blocktrail.templates",
 
@@ -303,6 +304,7 @@ angular.module('blocktrail.wallet').run(
             $rootScope.handleOpenURL = "" + url;
 
             if (!$state.is('app.launch')) {
+                // TODO Use state params
                 $state.go('app.launch');
             }
         };
@@ -444,49 +446,6 @@ angular.module('blocktrail.wallet').config(
             .state('app', {
                 abstract: true,
                 template: "<ion-nav-view></ion-nav-view>"
-            })
-
-
-            // TODO Discuss lunch states, may be better to move them to setup module
-            /*---Launch---*/
-            .state('app.launch', {
-                url: "/launch",
-                cache: false,
-                data: {
-                    excludeFromHistory: true,
-                    clearHistory: true  // always clear history when entering this state
-                },
-                controller: "LaunchCtrl"
-            })
-            .state('app.reset', {
-                url: "/reset",
-                data: {
-                    excludeFromHistory: true,
-                    clearHistory: true
-                },
-                controller: "ResetCtrl"
-            })
-            .state('app.rebrand', {
-                url: "/rebrand",
-                data: {
-                    excludeFromHistory: true,
-                    clearHistory: true
-                },
-                templateUrl: "templates/rebrand.html",
-                controller: "RebrandCtrl"
-            })
-            .state('app.pin', {
-                url: "/pin",
-                cache: false,
-                data: {
-                    clearHistory: false,
-                    excludeFromHistory: true
-                },
-                templateUrl: "js/modules/wallet/controllers/open-wallet-pin/open-wallet-pin.tpl.html",
-                controller: 'OpenWalletPinCtrl',
-                params: {
-                    nextState: 'app.wallet.summary'
-                }
             })
 
             /*--- Error ---*/

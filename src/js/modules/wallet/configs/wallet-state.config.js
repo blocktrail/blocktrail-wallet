@@ -7,7 +7,7 @@
     function walletStateConfig($stateProvider) {
         $stateProvider
         /*---Wallet Home---*/
-            .state('app.wallet', {
+            .state("app.wallet", {
                 abstract: true,
                 cache: false,
                 url: "/wallet",
@@ -21,7 +21,7 @@
                     loadingData: loadingData
                 }
             })
-            .state('app.wallet.summary', {
+            .state("app.wallet.summary", {
                 url: "?refresh",
                 cache: false,
                 data: {
@@ -30,16 +30,16 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/wallet-summary/wallet-summary.tpl.html",
-                        controller: 'WalletSummaryCtrl'
+                        controller: "WalletSummaryCtrl"
                     }
                 }
             })
-            .state('app.wallet.buybtc', {
+            .state("app.wallet.buybtc", {
                 url: "/buy",
                 abstract: true,
                 template: "<ion-nav-view />"
             })
-            .state('app.wallet.buybtc.choose', {
+            .state("app.wallet.buybtc.choose", {
                 url: "/choose",
                 data: {
                     clearHistory: true  //always clear history when entering this state
@@ -47,21 +47,21 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/buy-btc-choose/buy-btc-choose.tpl.html",
-                        controller: 'BuyBTCChooseCtrl'
+                        controller: "BuyBTCChooseCtrl"
                     }
                 }
             })
-            .state('app.wallet.buybtc.glidera_oauth2_callback', {
+            .state("app.wallet.buybtc.glidera_oauth2_callback", {
                 cache: false,
                 url: "/glidera/oaoth2/callback",
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/buy-btc-glidera-oauth-callback/buy-btc-glidera-oauth-callback.tpl.html",
-                        controller: 'BuyBTCGlideraOauthCallbackCtrl'
+                        controller: "BuyBTCGlideraOauthCallbackCtrl"
                     }
                 }
             })
-            .state('app.wallet.buybtc.buy', {
+            .state("app.wallet.buybtc.buy", {
                 url: "/broker/:broker",
                 data: {
                     clearHistory: true  //always clear history when entering this state
@@ -70,13 +70,13 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/buy-btc-broker/buy-btc-broker.tpl.html",
-                        controller: 'BuyBTCBrokerCtrl'
+                        controller: "BuyBTCBrokerCtrl"
                     }
                 }
             })
 
             /*--- Send ---*/
-            .state('app.wallet.send', {
+            .state("app.wallet.send", {
                 url: "/send",
                 cache: false,
                 data: {
@@ -85,11 +85,11 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/send/send.tpl.html",
-                        controller: 'SendCtrl'
+                        controller: "SendCtrl"
                     }
                 }
             })
-            .state('app.wallet.send.qrcode', {
+            .state("app.wallet.send.qrcode", {
                 url: "/scan?backdrop",
                 data: {
                     clearHistory: false,
@@ -98,18 +98,18 @@
                 views: {
                     "overlayView": {
                         templateProvider: function($stateParams, $log) {
-                            $log.debug('set the backdrop', $stateParams);
+                            $log.debug("set the backdrop", $stateParams);
                             if ($stateParams.backdrop) {
-                                return '<div class="scan-screen"><h1>Loading...</h1></div>';
+                                return "<div class='scan-screen'><h1>Loading...</h1></div>";
                             } else {
-                                return '';
+                                return "";
                             }
                         },
-                        controller: 'SendScanQRCtrl'
+                        controller: "SendScanQRCtrl"
                     }
                 }
             })
-            .state('app.wallet.send.contacts', {
+            .state("app.wallet.send.contacts", {
                 url: "/contacts",
                 data: {
                     clearHistory: false,
@@ -118,11 +118,11 @@
                 views: {
                     "overlayView": {
                         templateUrl: "js/modules/wallet/controllers/contact-list/contact-list.tpl.html",
-                        controller: 'ContactsListCtrl'
+                        controller: "ContactsListCtrl"
                     }
                 }
             })
-            .state('app.wallet.send.address', {
+            .state("app.wallet.send.address", {
                 url: "/address-input",
                 data: {
                     clearHistory: false,
@@ -131,11 +131,11 @@
                 views: {
                     "overlayView": {
                         templateUrl: "js/modules/wallet/controllers/send-address-input/send-address-input.tpl.html",
-                        controller: 'SendAddressInputCtrl'
+                        controller: "SendAddressInputCtrl"
                     }
                 }
             })
-            .state('app.wallet.send.fee-choice', {
+            .state("app.wallet.send.fee-choice", {
                 url: "/fee-choice",
                 data: {
                     clearHistory: false,
@@ -147,7 +147,7 @@
                     }
                 }
             })
-            .state('app.wallet.send.confirm', {
+            .state("app.wallet.send.confirm", {
                 url: "/confirm",
                 data: {
                     clearHistory: false,
@@ -156,13 +156,13 @@
                 views: {
                     "overlayView": {
                         templateUrl: "js/modules/wallet/controllers/send-confirm/send-confirm.tpl.html",
-                        controller: 'SendConfirmCtrl'
+                        controller: "SendConfirmCtrl"
                     }
                 }
             })
 
             /*--- Receive ---*/
-            .state('app.wallet.receive', {
+            .state("app.wallet.receive", {
                 url: "/receive",
                 cache: false,
                 data: {
@@ -171,13 +171,13 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/receive/receive.tpl.html",
-                        controller: 'ReceiveCtrl'
+                        controller: "ReceiveCtrl"
                     }
                 }
             })
 
             /*--- Address lookup ---*/
-            .state('app.wallet.receive.address-lookup', {
+            .state("app.wallet.receive.address-lookup", {
                 url: "/receive/address-lookup",
                 cache: false,
                 data: {
@@ -186,13 +186,13 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/address-lookup/address-lookup.tpl.html",
-                        controller: 'AddressLookupCtrl'
+                        controller: "AddressLookupCtrl"
                     }
                 }
             })
 
             /*--- Promo Codes ---*/
-            .state('app.wallet.promo', {
+            .state("app.wallet.promo", {
                 url: "/promo?code",
                 cache: false,
                 data: {
@@ -201,13 +201,13 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "templates/promo/promo.redeem-code.html",
-                        controller: 'PromoCodeRedeemCtrl'
+                        controller: "PromoCodeRedeemCtrl"
                     }
                 }
             })
 
             /*--- Settings ---*/
-            .state('app.wallet.settings', {
+            .state("app.wallet.settings", {
                 url: "/settings",
                 cache: false,
                 data: {
@@ -216,11 +216,11 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/settings/settings.tpl.html",
-                        controller: 'SettingsCtrl'
+                        controller: "SettingsCtrl"
                     }
                 }
             })
-            .state('app.wallet.settings.profile', {
+            .state("app.wallet.settings.profile", {
                 url: "/profile",
                 data: {
                     clearHistory: false
@@ -228,11 +228,11 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/settings-profile/settings-profile.tpl.html",
-                        controller: 'SettingsProfileCtrl'
+                        controller: "SettingsProfileCtrl"
                     }
                 }
             })
-            .state('app.wallet.settings.phone', {
+            .state("app.wallet.settings.phone", {
                 url: "/phone?goBackTo",
                 data: {
                     clearHistory: false
@@ -240,11 +240,11 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/settings-phone/settings-phone.tpl.html",
-                        controller: 'SettingsPhoneCtrl'
+                        controller: "SettingsPhoneCtrl"
                     }
                 }
             })
-            .state('app.wallet.settings.currency', {
+            .state("app.wallet.settings.currency", {
                 url: "/currency",
                 data: {
                     clearHistory: false
@@ -252,11 +252,11 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/settings-currency/settings-currency.tpl.html",
-                        controller: 'SettingsCurrencyCtrl'
+                        controller: "SettingsCurrencyCtrl"
                     }
                 }
             })
-            .state('app.wallet.settings.language', {
+            .state("app.wallet.settings.language", {
                 url: "/language",
                 data: {
                     clearHistory: false
@@ -264,11 +264,11 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/settings-language/settings-language.tpl.html",
-                        controller: 'SettingsLanguageCtrl'
+                        controller: "SettingsLanguageCtrl"
                     }
                 }
             })
-            .state('app.wallet.settings.wallet', {
+            .state("app.wallet.settings.wallet", {
                 url: "/wallet",
                 data: {
                     clearHistory: false
@@ -276,11 +276,11 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/settings-wallet/settings-wallet.tpl.html",
-                        controller: 'SettingsWalletCtrl'
+                        controller: "SettingsWalletCtrl"
                     }
                 }
             })
-            .state('app.wallet.settings.backup', {
+            .state("app.wallet.settings.backup", {
                 url: "/wallet-backup",
                 data: {
                     clearHistory: false
@@ -288,12 +288,12 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/settings-wallet-backup/settings-wallet-backup.tpl.html",
-                        controller: 'SettingsWalletBackupCtrl'
+                        controller: "SettingsWalletBackupCtrl"
                     }
                 },
                 resolve: {
                     backupInfo: function($state, launchService) {
-                        return launchService.getBackupInfo().then(
+                        return launchService.getWalletBackup().then(
                             function(backupInfo) {
                                 return backupInfo;
                             },
@@ -304,7 +304,7 @@
                     }
                 }
             })
-            .state('app.wallet.settings.about', {
+            .state("app.wallet.settings.about", {
                 url: "/about",
                 cache: true,
                 data: {
@@ -313,13 +313,13 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "js/modules/wallet/controllers/settings-about/settings-about.tpl.html",
-                        controller: 'SettingsAboutCtrl'
+                        controller: "SettingsAboutCtrl"
                     }
                 }
             })
 
             /*--- Feedback ---*/
-            .state('app.wallet.feedback', {
+            .state("app.wallet.feedback", {
                 url: "/feedback",
                 data: {
                     clearHistory: true,
@@ -328,7 +328,7 @@
                 views: {
                     "mainView@app.wallet": {
                         templateUrl: "templates/feedback/feedback.html",
-                        controller: 'FeedbackCtrl'
+                        controller: "FeedbackCtrl"
                     }
                 }
             });
@@ -382,7 +382,7 @@
             if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE && (typeof CONFIG.PIN_ON_OPEN === "undefined" || CONFIG.PIN_ON_OPEN === true)) {
                 $rootScope.STATE.PENDING_PIN_REQUEST = true;
 
-                $state.go('app.pin', { nextState: $state.$current.name });
+                $state.go("app.pin", { nextState: $state.$current.name });
 
                 // throw error to prevent controller from loading or any other resolves to continue
                 return $q.reject(new Error("PIN_REQUIRED"));
