@@ -52,10 +52,24 @@
         return self._$q.when(postData)
             .then(function(postData) {
                 return self._$http.post(url, postData)
+                    .then(self._trackEvent.bind(self))
                     .then(self._decryptSecret.bind(self, data.password))
                     .then(self._storeAccountInfo.bind(self));
             })
             .catch(self._errorHandler.bind(self));
+    };
+
+    /**
+     * @param response
+     * @return response
+     * @private
+     */
+    LoginFormService.prototype._trackEvent = function(response) {
+        var self = this;
+
+        self._trackingService.trackEvent(self._trackingService.EVENTS.LOGIN);
+
+        return response;
     };
 
     /**

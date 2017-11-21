@@ -47,8 +47,22 @@
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/register";
 
         return self._$http.post(url, postData)
+            .then(self._trackEvent.bind(self))
             .then(self._storeAccountInfo.bind(self))
             .catch(self._errorHandler.bind(self));
+    };
+
+    /**
+     * @param response
+     * @return response
+     * @private
+     */
+    NewAccountFormService.prototype._trackEvent = function(response) {
+        var self = this;
+
+        self._trackingService.trackEvent(self._trackingService.EVENTS.SIGN_UP);
+
+        return response;
     };
 
     /**
