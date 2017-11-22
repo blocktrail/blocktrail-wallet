@@ -4,7 +4,10 @@
     angular.module("blocktrail.core")
         .controller("ModalPromptCtrl", ModalPromptCtrl);
 
-    function ModalPromptCtrl($scope, parameters) {
+    function ModalPromptCtrl($scope, $controller, parameters) {
+        // Extend from base controller
+        $controller('ModalBaseCtrl', { $scope: $scope });
+
         $scope.title = parameters.title;
         $scope.titleClass = parameters.titleClass;
         $scope.body = parameters.body;
@@ -14,15 +17,19 @@
         $scope.buttonCancel = parameters.buttonCancel;
 
         $scope.form = {
-            confirmPassword: parameters.prefill || ""
+            confirmValue: parameters.preFill || ""
         };
 
-        $scope.confirm = function() {
-            $scope.closeModal($scope.form.confirmPassword);
-        };
+        // Methods
+        $scope.confirm = confirm;
 
-        $scope.cancel = function() {
-            $scope.closeModal(null);
-        };
+        /**
+         * Confirm
+         * @param confirmValue
+         */
+        function confirm(confirmValue) {
+            $scope.closeModal(confirmValue);
+        }
     }
+
 })();

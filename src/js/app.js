@@ -131,12 +131,13 @@ angular.module('blocktrail.wallet').run(
             $log.debug('keyboard is closing', e);
         };
 
-        window.addEventListener('native.keyboardshow', keyboardShow);
-        window.addEventListener('native.keyboardhide', keyboardHide);
+        // TODO Review this part
+        //window.addEventListener('native.keyboardshow', keyboardShow);
+        //window.addEventListener('native.keyboardhide', keyboardHide);
 
         $rootScope.$on('$destroy', function(e) {
-            window.removeEventListener('native.keyboardshow', keyboardShow);
-            window.removeEventListener('native.keyboardhide', keyboardHide);
+            //window.removeEventListener('native.keyboardshow', keyboardShow);
+            //window.removeEventListener('native.keyboardhide', keyboardHide);
         });
         /*----/iOS keyboard fix---*/
 
@@ -172,8 +173,9 @@ angular.module('blocktrail.wallet').run(
             }
         });*/
 
+
         $rootScope.$btBackButtonDelegate = $btBackButtonDelegate;
-        //register our hardware back button handler
+        // register our hardware back button handler
         $ionicPlatform.registerBackButtonAction($btBackButtonDelegate.hardwareBack, 101);
 
         //get the real app version

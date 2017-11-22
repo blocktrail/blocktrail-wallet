@@ -423,8 +423,11 @@
                     //  or we skip that and go directly to phone verification for existing accounts
                     // save backup -> phone verification -> contacts synchronization -> profile picture
                     // TODO Move this login into abstract class app.setup.wallet
+                    // TODO check this cases
+                    // if user already logged in but didn't save backup, verified phone,
+                    // profile picture all the data we can get from settings
                     if(!isWalletBackupSaved) {
-                        nextStep = "app.setup.backup";
+                        nextStep = "app.setup.settings.backup";
                     } else {
                         nextStep = "app.wallet.summary";
                     }

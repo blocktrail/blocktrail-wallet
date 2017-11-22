@@ -642,21 +642,25 @@ $balance-display-height: 40vw;
 
 @import "partials/vertical-alignment";
 
-@import "partials/modals";
 @import "partials/photo-crop";
+
+// Core module
+@import "controllers/core/modals";
+
+// Setup module
+@import "controllers/setup/start";
+@import "controllers/setup/create-new-accout";
+@import "controllers/setup/login";
+
+// Wallet module
+@import "controllers/wallet/wallet-summary";
+@import "controllers/wallet/modal-select-wallet";
 
 @import "directives/wallet/wallet-side-header";
 @import "directives/wallet/wallet-side-subheader.scss";
 @import "directives/wallet/wallet-side-nav";
 @import "directives/wallet/dialog-wallet-transaction";
 
-@import "controllers/setup/start";
-@import "controllers/setup/create-new-accout";
-@import "controllers/setup/login";
-
-
-@import "controllers/wallet/wallet-summary";
-@import "controllers/wallet/modal-select-wallet";
 
 
 

@@ -2,11 +2,11 @@
     "use strict";
 
     angular.module("blocktrail.core")
-        .factory("settingsService", function($q, storageService, genericSdkService) {
-            return new SettingsService($q, storageService, genericSdkService);
+        .factory("settingsService", function($q, storageService, sdkService) {
+            return new SettingsService($q, storageService, sdkService);
         });
 
-    function SettingsService($q, storageService, genericSdkService) {
+    function SettingsService($q, storageService, sdkService) {
         var self = this;
         // Document id
         var documentId = "user_settings";
@@ -54,7 +54,7 @@
 
         // Mapping for object dependencies
         self._$q = $q;
-        self._genericSdkService = genericSdkService;
+        self._sdkService = sdkService;
 
         // Id of the document we keep in storage
         self._id = documentId;
@@ -155,7 +155,8 @@
         if (self._loaded === false) {
             promise = self._loadSettings();
         } else if (self._loaded === true) {
-            promise = self._$q.when(true).then(self._getSettings.bind(self));
+            promise = self._$q.when(true)
+                .then(self._getSettings.bind(self));
         } else {
             promise = self._loaded;
         }
@@ -191,9 +192,9 @@
 
                 promise = promise.then(promiseForSettingsAndProfile);
             } else if(settingsUpFlag) {
-                promise = promise.then(self._syncSettingsUp.bind(this));
+                promise = promise.then(self._syncSettingsUp.bind(self));
             } else if(profileUpFlag) {
-                promise = promise.then(self._syncProfileUp.bind(this));
+                promise = promise.then(self._syncProfileUp.bind(self));
             }
 
             promise = promise.then(function() {
@@ -243,7 +244,7 @@
             self._doc.glideraTransactions.push(transaction);
 
             promise = self._updateLocalStorage()
-                .then(self._syncSettingsUp.bind(this))
+                .then(self._syncSettingsUp.bind(self))
                 .then(function() {
                     return self._readonlyDoc;
                 });
@@ -270,7 +271,7 @@
             self._doc.glideraTransactions = transactions;
 
             promise = self._updateLocalStorage()
-                .then(self._syncSettingsUp.bind(this))
+                .then(self._syncSettingsUp.bind(self))
                 .then(function() {
                     return self._readonlyDoc;
                 });
@@ -319,7 +320,7 @@
 
         if (!self._isSyncingProfileDown) {
             self._isSyncingProfileDown = self._$q.when(self._syncProfileDown())
-                .then(this._syncSettingsFromPendingObject.bind(self))
+                .then(self._syncSettingsFromPendingObject.bind(self))
                 .then(self._updateLocalStorage.bind(self))
                 .finally(function() {
                     return self._readonlyDoc;
@@ -391,7 +392,7 @@
     SettingsService.prototype._syncSettingsDown = function() {
         var self = this;
 
-        return self._$q.when(self._genericSdkService.getSdk())
+        return self._$q.when(self._sdkService.getGenericSdk())
             .then(self._getSDKSettings.bind(self))
             .then(self._setSDKSettingsToDoc.bind(self));
     };
@@ -443,9 +444,9 @@
     SettingsService.prototype._syncProfileDown = function() {
         var self = this;
 
-        return this._$q.when(this._genericSdkService.getSdk())
-            .then(this._getSDKProfile.bind(self))
-            .then(this._setSDKProfileToDoc.bind(self));
+        return this._$q.when(this._sdkService.getGenericSdk())
+            .then(self._getSDKProfile.bind(self))
+            .then(self._setSDKProfileToDoc.bind(self));
     };
 
     /**
@@ -553,7 +554,7 @@
     SettingsService.prototype._syncSettingsUp = function() {
         var self = this;
 
-        return this._$q.when(self._genericSdkService.getSdk())
+        return this._$q.when(self._sdkService.getGenericSdk())
             .then(function(sdk) {
                 var settingsData = {
                     username: self._doc.username,
@@ -586,7 +587,7 @@
     SettingsService.prototype._syncProfileUp = function() {
         var self = this;
 
-        return this._$q.when(self._genericSdkService.getSdk())
+        return this._$q.when(self._sdkService.getGenericSdk())
             .then(function(sdk) {
                 var profileData = {
                     profilePic: self._doc.profilePic
