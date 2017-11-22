@@ -3,12 +3,11 @@
 
     // TODO Add later
     angular.module("blocktrail.core")
-        .factory("modalService", function($ionicModal, $rootScope, $q, $injector, $controller) {
-                return new ModalService($ionicModal, $rootScope, $q, $injector, $controller);
-            }
-        );
+        .factory("modalService", function($ionicModal, $rootScope, $q, $injector, $controller, _) {
+            return new ModalService($ionicModal, $rootScope, $q, $injector, $controller, _);
+        });
 
-    function ModalService($ionicModal, $rootScope, $q, $injector, $controller) {
+    function ModalService($ionicModal, $rootScope, $q, $injector, $controller, _) {
         var self = this;
 
         self._$ionicModal = $ionicModal;
@@ -16,10 +15,18 @@
         self._$q = $q;
         self._$injector = $injector;
         self._$controller = $controller;
+        self._lodash = _;
 
         self._spinnerModal = null;
     }
 
+    /**
+     * Show
+     * @param templateUrl
+     * @param controller
+     * @param parameters
+     * @param options
+     */
     ModalService.prototype.show = function(templateUrl, controller, parameters, options) {
         var self = this;
         // Grab the injector and create a new scope
@@ -67,7 +74,7 @@
                 });
 
                 // Invoke the controller
-                var locals = {"$scope": modalScope, "parameters": parameters};
+                var locals = { "$scope": modalScope, "parameters": parameters };
                 var ctrlEval = self._evalController(controller);
 
                 ctrlInstance = self._$controller(controller, locals);
@@ -93,6 +100,10 @@
         return deferred.promise;
     };
 
+    /**
+     * Message
+     * @param parameters
+     */
     ModalService.prototype.message = function(parameters) {
         var self = this;
 
@@ -101,16 +112,20 @@
 
         // Set default values for undefined properties
         parameters = {
-            title: (typeof parameters.title === "string") ? parameters.title : "WARNING",
-            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "",
-            body: (typeof parameters.body === "string") ? parameters.body : "",
-            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
-            button: (typeof parameters.button === "string") ? parameters.button : "OK"
+            title: self._lodash.isString(parameters.title) ? parameters.title : "WARNING",
+            titleClass: self._lodash.isString(parameters.titleClass) ? parameters.titleClass : "",
+            body: self._lodash.isString(parameters.body) ? parameters.body : "",
+            bodyClass: self._lodash.isString(parameters.bodyClass) ? parameters.bodyClass : "",
+            button: self._lodash.isString(parameters.button) ? parameters.button : "OK"
         };
 
         return self.show("js/modules/core/controllers/modal-message/modal-message.tpl.html", "ModalMessageCtrl", parameters);
     };
 
+    /**
+     * Alert
+     * @param parameters
+     */
     ModalService.prototype.alert = function(parameters) {
         var self = this;
 
@@ -119,16 +134,20 @@
 
         // Set default values for undefined properties
         parameters = {
-            title: (typeof parameters.title === "string") ? parameters.title : "FAIL",
-            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "text-bad",
-            body: (typeof parameters.body === "string") ? parameters.body : "",
-            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
-            button: (typeof parameters.button === "string") ? parameters.button : "OK"
+            title: self._lodash.isString(parameters.title) ? parameters.title : "FAIL",
+            titleClass: self._lodash.isString(parameters.titleClass) ? parameters.titleClass : "text-bad",
+            body: self._lodash.isString(parameters.body) ? parameters.body : "",
+            bodyClass: self._lodash.isString(parameters.bodyClass) ? parameters.bodyClass : "",
+            button: self._lodash.isString(parameters.button) ? parameters.button : "OK"
         };
 
         return self.message(parameters);
     };
 
+    /**
+     * Confirm
+     * @param parameters
+     */
     ModalService.prototype.confirm = function(parameters) {
         var self = this;
 
@@ -137,17 +156,21 @@
 
         // Set default values for undefined properties
         parameters = {
-            title: (typeof parameters.title === "string") ? parameters.title : "WARNING",
-            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "",
-            body: (typeof parameters.body === "string") ? parameters.body : "",
-            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
-            buttonConfirm: (typeof parameters.buttonConfirm === "string") ? parameters.buttonConfirm : "CONFIRM",
-            buttonCancel: (typeof parameters.buttonCancel === "string") ? parameters.buttonCancel : "CANCEL"
+            title: self._lodash.isString(parameters.title) ? parameters.title : "WARNING",
+            titleClass: self._lodash.isString(parameters.titleClass) ? parameters.titleClass : "",
+            body: self._lodash.isString(parameters.body) ? parameters.body : "",
+            bodyClass: self._lodash.isString(parameters.bodyClass) ? parameters.bodyClass : "",
+            buttonConfirm: self._lodash.isString(parameters.buttonConfirm) ? parameters.buttonConfirm : "CONFIRM",
+            buttonCancel: self._lodash.isString(parameters.buttonCancel) ? parameters.buttonCancel : "CANCEL"
         };
 
         return self.show("js/modules/core/controllers/modal-confirm/modal-confirm.tpl.html", "ModalConfirmCtrl", parameters);
     };
 
+    /**
+     * Prompt
+     * @param parameters
+     */
     ModalService.prototype.prompt = function(parameters) {
         var self = this;
 
@@ -156,19 +179,63 @@
 
         // Set default values for undefined properties
         parameters = {
-            title: (typeof parameters.title === "string") ? parameters.title : "",
-            titleClass: (typeof parameters.titleClass === "string") ? parameters.titleClass : "",
-            body: (typeof parameters.body === "string") ? parameters.body : "",
-            bodyClass: (typeof parameters.bodyClass === "string") ? parameters.bodyClass : "",
-            placeholder: (typeof parameters.placeholder === "string") ? parameters.placeholder : "",
-            buttonConfirm: (typeof parameters.buttonConfirm === "string") ? parameters.buttonConfirm : "CONFIRM",
-            buttonCancel: (typeof parameters.buttonCancel === "string") ? parameters.buttonCancel : "CANCEL",
-            prefill: (typeof parameters.prefill === "string") ? parameters.prefill : ""
+            title: self._lodash.isString(parameters.title) ? parameters.title : "",
+            titleClass: self._lodash.isString(parameters.titleClass) ? parameters.titleClass : "",
+            body: self._lodash.isString(parameters.body) ? parameters.body : "",
+            bodyClass: self._lodash.isString(parameters.bodyClass) ? parameters.bodyClass : "",
+            placeholder: self._lodash.isString(parameters.placeholder) ? parameters.placeholder : "",
+            buttonConfirm: self._lodash.isString(parameters.buttonConfirm) ? parameters.buttonConfirm : "CONFIRM",
+            buttonCancel: self._lodash.isString(parameters.buttonCancel) ? parameters.buttonCancel : "CANCEL",
+            preFill: self._lodash.isString(parameters.preFill) ? parameters.preFill : ""
         };
 
         return self.show("js/modules/core/controllers/modal-prompt/modal-prompt.tpl.html", "ModalPromptCtrl", parameters);
     };
 
+    /**
+     * Select
+     * @param parameters
+     */
+    ModalService.prototype.select = function(parameters) {
+        var self = this;
+
+        // Check on undefined
+        parameters = parameters ? parameters : {};
+
+        // Set default values for undefined properties
+        parameters = {
+            options: self._lodash.isArray(parameters.options) ? parameters.options : [],
+            buttonCancel: self._lodash.isString(parameters.buttonCancel) ? parameters.buttonCancel : "CANCEL"
+        };
+
+        return self.show("js/modules/core/controllers/modal-select/modal-select.tpl.html", "ModalSelectCtrl", parameters);
+    };
+
+
+    /**
+     * Action buttons
+     * @param parameters
+     */
+    ModalService.prototype.actionButtons = function(parameters) {
+        var self = this;
+
+        // Check on undefined
+        parameters = parameters ? parameters : {};
+
+        // Set default values for undefined properties
+        parameters = {
+            options: self._lodash.isArray(parameters.options) ? parameters.options : [],
+            buttonCancel: self._lodash.isString(parameters.buttonCancel) ? parameters.buttonCancel : "CANCEL"
+        };
+
+        return self.show("js/modules/core/controllers/modal-action-buttons/modal-action-buttons.tpl.html", "ModalActionButtonsCtrl", parameters);
+    };
+
+    /**
+     * Show spinner
+     * @param parameters
+     * @return {{closeSpinner: *}}
+     */
     ModalService.prototype.showSpinner = function(parameters) {
         var self = this;
 
@@ -204,6 +271,9 @@
         };
     };
 
+    /**
+     * Hide spinner
+     */
     ModalService.prototype.hideSpinner = function() {
         var self = this;
 
@@ -213,6 +283,10 @@
         }
     };
 
+    /**
+     * Update spinner
+     * @param parameters
+     */
     ModalService.prototype.updateSpinner = function(parameters) {
         var self = this;
 
@@ -234,6 +308,11 @@
         }
     };
 
+    /**
+     * Cleanup
+     * @param scope
+     * @private
+     */
     ModalService.prototype._cleanup = function(scope) {
         scope.$destroy();
 
@@ -242,6 +321,12 @@
         }
     };
 
+    /**
+     * Eval controller
+     * @param ctrlName
+     * @return {{isControllerAs: boolean, controllerName: string, propName: string}}
+     * @private
+     */
     ModalService.prototype._evalController = function(ctrlName) {
         var result = {
             isControllerAs: false,

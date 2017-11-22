@@ -86,8 +86,9 @@
                     //  because the password is required to init/create wallet and we wouldn't have that if you're logged in already from a previous session
                     if (isLoggedIn && walletCreated) {
                         if(!isWalletBackupSaved) {
-                            nextStep = "app.setup.backup";
+                            nextStep = "app.setup.settings.backup";
                         } else if(!localSettings.isPhoneVerified) {
+                            // TODO checnge the state to app.setup.settings. ...
                             nextStep = "app.setup.phone";
                         } else if(!localSettings.isContactsSynchronized) {
                             nextStep = "app.setup.contacts";

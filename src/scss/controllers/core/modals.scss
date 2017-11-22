@@ -1,0 +1,128 @@
+$item-modal-option: 58px;
+$item-modal-content-height: ($item-modal-option * 3) + ($item-modal-option/2) + 1px;
+$item-modal-prompt-content-height: $item-modal-content-height - 68px;
+
+.modal-backdrop-bg {
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+.modal {
+    .card-modal {
+        margin: 0 auto;
+
+        &.card-sm {
+            max-width: 400px;
+        }
+
+        &.outer-bottom-indent {
+            margin-bottom: 6px;
+        }
+    }
+
+    .item-modal-content,
+    .item-modal-prompt-content {
+        width: 100%;
+        position: relative;
+
+        .item-modal-content-holder {
+            position: relative;
+            max-height: $item-modal-content-height;
+            overflow-y: scroll;
+        }
+    }
+
+    .item-modal-prompt-content {
+        .item-modal-content-holder {
+            max-height: $item-modal-prompt-content-height;
+        }
+    }
+
+    .item-no-bottom-indent {
+        padding-bottom: 0;
+    }
+
+    .item {
+        input {
+            width: 100%;
+        }
+    }
+
+    &.dialog-message {
+        text-align: center;
+        background: transparent;
+        position: absolute;
+        top: 2%;
+        right: 5%;
+        bottom: 2%;
+        left: 5%;
+        overflow: hidden;
+        width: 90%;
+        height: 90%;
+        min-height: 96%;
+        max-height: 90%;
+    }
+
+    &.dialog-spinner {
+        opacity: .8;
+    }
+
+    .text-top-gradient,
+    .text-bottom-gradient {
+        position: absolute;
+        left: 0;
+        height: 8px;
+        width: 100%;
+        z-index: 10;
+        background: none; /* For browsers that do not support gradients */
+    }
+
+    .text-top-gradient {
+        top: 0;
+        background: -o-linear-gradient(bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)); /*Opera 11.1-12*/
+        background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)); /*Fx 3.6-15*/
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)); /*Standard*/
+    }
+
+    .text-bottom-gradient {
+        bottom: 0;
+        background: -o-linear-gradient(bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)); /*Opera 11.1-12*/
+        background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)); /*Fx 3.6-15*/
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)); /*Standard*/
+
+        &.text-bottom-gradient-b1 {
+            bottom: 1px;
+        }
+    }
+
+    .modal-select-options {
+        border-bottom: 1px solid #ddd;
+
+        .option {
+            border-bottom: 1px solid #ddd;
+            height: $item-modal-option;
+            padding: 5px 24px;
+            line-height: $item-modal-option - 10px;
+            text-align: left;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+
+    .action-buttons {
+        padding-top: 5px;
+        padding-bottom: 5px;
+
+        .button {
+            border: 1px solid #ececec;
+            margin: 0;
+        }
+
+        .action-button-icon {
+            font-size: 32px;
+            vertical-align: middle;
+        }
+    }
+
+}

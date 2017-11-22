@@ -1,3 +1,9 @@
+/**
+ * TODO Review back button service
+ * TODO Rename it $btBackButtonDelegate -> backButtonService
+ */
+
+
 angular.module('blocktrail.wallet')
     .factory('$btBackButtonDelegate', function($ionicHistory, $state, $rootScope, $ionicPlatform, $log, $ionicSideMenuDelegate, $ionicViewSwitcher, settingsService) {
         var priorityLevel = 101;    //priority level for the hardware back button handler
@@ -64,6 +70,7 @@ angular.module('blocktrail.wallet')
             var self = this;
 
             $log.debug('state history', self.history);
+
             if (self.history.length > 0) {
                 // there is a back view, go to it
                 var back = self.history.pop();
@@ -136,9 +143,9 @@ angular.module('blocktrail.wallet')
          * @param $event
          */
         BackButtonDelegate.prototype.goBack = function($event) {
-            //call the function set to the back button
+            // call the function set to the back button
             if (self.enableBackButton) {
-                //decide the animation style to use
+                // decide the animation style to use
                 if (self.history.length > 0) {
                     $ionicViewSwitcher.nextDirection('back');
                 } else {

@@ -45,23 +45,23 @@
                     accountInfo: getAccountInfo
                 }
             })
-
-
-
-            // TODO Review
-            .state("app.setup.backup", {
+            .state("app.setup.settings", {
+                url: "/settings",
+                abstract: true,
+                cache: false,
+                template: "<ion-nav-view></ion-nav-view>",
+                resolve: {
+                    isSetAccountInfo: sdkSetAccountInfo
+                }
+            })
+            .state("app.setup.settings.backup", {
                 url: "/wallet-backup",
                 cache: false,
                 controller: "SetupWalletBackupCtrl",
-                templateUrl: "js/modules/setup/controllers/wallet-backup/wallet-backup.tpl.html",
-                resolve: {
-                    // TODO Do we need it ??
-                    getWalletBackup: getWalletBackup,
-
-                    // TODO check initialization for SDK
-                    sdkSetAccountInfo: sdkSetAccountInfo
-                }
+                templateUrl: "js/modules/setup/controllers/wallet-backup/wallet-backup.tpl.html"
             })
+
+
 
             .state("app.setup.wallet", {
                 url: "/phone",
@@ -91,7 +91,7 @@
                 }
             })
 
-
+            // TODO Remove this
             .state("app.setup.phone", {
                 url: "/phone",
                 controller: "SetupPhoneCtrl",
@@ -210,7 +210,13 @@
             .getWalletBackup()
             .then(returnData, toAppResetState.bind(this, $state));
     }
-    
+
+    function getReadOnlySettingsData($state, settingsService) {
+        return settingsService
+            .getReadOnlySettingsData()
+            .then(returnData, toAppResetState.bind(this, $state));
+    }
+
     function getWalletInfo($state, launchService) {
         return launchService
             .getWalletInfo()

@@ -2,15 +2,9 @@
     "use strict";
 
     angular.module("blocktrail.core")
-        .controller("ModalMessageCtrl", ModalMessageCtrl);
+        .controller("ModalBaseCtrl", ModalBaseCtrl);
 
-    function ModalMessageCtrl($scope, $ionicPlatform, parameters) {
-        $scope.title = parameters.title;
-        $scope.titleClass = parameters.titleClass;
-        $scope.body = parameters.body;
-        $scope.bodyClass = parameters.bodyClass;
-        $scope.button = parameters.button;
-
+    function ModalBaseCtrl($scope, $ionicPlatform) {
         // Methods
         $scope.cancel = cancel;
         // The back button handler
@@ -33,4 +27,5 @@
             $ionicPlatform.offHardwareBackButton(cancel);
         }
     }
+
 })();

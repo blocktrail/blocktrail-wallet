@@ -1,0 +1,28 @@
+<div class="modal dialog-message">
+    <div class="va">
+        <div class="va-holder">
+            <div class="va-content">
+                <div class="card card-modal card-sm">
+                    <div class="item-modal-content">
+                        <div class="item-modal-content-holder modal-select-options">
+                            <div
+                                class="option"
+                                ng-repeat="option in options"
+                                ng-click="select(option.value)"
+                            >{{ option.label }}</div>
+                        </div>
+                        <div class="text-top-gradient"></div>
+                        <div class="text-bottom-gradient text-bottom-gradient-b1"></div>
+                    </div>
+
+                    <div class="row action-buttons">
+                        <div class="col col-offset-50">
+                            <button class="button button-block" ng-click="cancel()">{{ buttonCancel | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
