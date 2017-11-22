@@ -1,3 +1,4 @@
+/*
 (function () {
     "use strict";
 
@@ -8,10 +9,10 @@
         }
     );
 
-    /**
+    /!**
      * TODO here
      * @constructor
-     */
+     *!/
     function GenericSdkService(blocktrailSDK, CONFIG) {
         var self = this;
 
@@ -48,9 +49,9 @@
         }, self._blocktrailSDK);
     };
 
-    /**
+    /!**
      * @constructor
-     */
+     *!/
     function genericBlocktrailSDK(sdkConfig, blocktrailSDK) {
         var self = this;
 
@@ -147,3 +148,4 @@
         return self.client.post("/mywallet/feedback", null, data);
     };
 })();
+*/

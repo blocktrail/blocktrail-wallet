@@ -3,13 +3,18 @@
         <div class="va-holder">
             <div class="va-content">
                 <div class="card card-modal card-sm">
-                    <ion-item class="item-text-wrap item-borderless item-modal-content item-no-bottom-indent">
-                        <h2 ng-if="title" class="title" ng-class="titleClass" ng-bind-html="(title | translate)"></h2>
-                        <p ng-if="body" class="body" ng-class="bodyClass" browse-to-children>
-                            <span ng-bind-html="(body | translate | nl2br)"></span>
-                        </p>
-                    </ion-item>
-                    <div class="row" ng-if="button">
+                    <div class="item-modal-content">
+                        <ion-item class="item-modal-content-holder item-text-wrap item-borderless item-no-bottom-indent">
+                            <h2 ng-if="title" class="title" ng-class="titleClass" ng-bind-html="(title | translate)"></h2>
+                            <p ng-if="body" class="body" ng-class="bodyClass" browse-to-children>
+                                <span ng-bind-html="(body | translate | nl2br)"></span>
+                            </p>
+                        </ion-item>
+                        <div class="text-top-gradient"></div>
+                        <div class="text-bottom-gradient"></div>
+                    </div>
+
+                    <div class="row action-buttons">
                         <div class="col">
                             <button class="button button-block" ng-click="cancel()">{{ button | translate }}</button>
                         </div>

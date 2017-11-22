@@ -1,0 +1,35 @@
+<div class="modal dialog-message dialog-action-buttons">
+    <div class="va">
+        <div class="va-holder va-bottom">
+            <div class="va-content">
+                <div class="card card-modal card-sm outer-bottom-indent">
+                    <div class="item-modal-content">
+                        <div class="row action-buttons">
+                            <div
+                                class="col"
+                                ng-repeat="option in options"
+
+                            >
+                                <button
+                                    class="button button-block action-button-icon"
+                                    ng-class="option.icon"
+                                    ng-click="select(option.value)"
+                                >
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-modal card-sm">
+                    <div class="row action-buttons">
+                        <div class="col">
+                            <button class="button button-block" ng-click="cancel()">{{ buttonCancel | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

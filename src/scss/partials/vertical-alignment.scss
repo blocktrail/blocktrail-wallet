@@ -8,6 +8,10 @@
     .va-holder {
         display: table-cell;
         vertical-align: middle;
+
+        &.va-bottom {
+            vertical-align: bottom;
+        }
     }
 
     .va-content {

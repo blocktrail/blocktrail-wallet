@@ -2,24 +2,21 @@
     "use strict";
 
     angular.module("blocktrail.core")
-        .factory("sdkService", function(genericSdkService, blocktrailSDK, CONFIG) {
+        .factory("sdkService", function(blocktrailSDK, CONFIG) {
             extendBlocktrailSDK(blocktrailSDK);
 
-            return new SdkService(genericSdkService, blocktrailSDK, CONFIG);
+            return new SdkService(blocktrailSDK, CONFIG);
         }
     );
 
     /**
      * Sdk service
-     * @param genericSdkService
      * @param blocktrailSDK
      * @param CONFIG
      * @constructor
      */
-    function SdkService(genericSdkService, blocktrailSDK, CONFIG) {
+    function SdkService(blocktrailSDK, CONFIG) {
         var self = this;
-
-        self._genericSdkService = genericSdkService;
 
         self._blocktrailSDK = blocktrailSDK;
         self._CONFIG = CONFIG;
@@ -109,6 +106,8 @@
             self._accountInfo = accountInfo;
             self._initSdkList();
         }
+
+        return true;
     };
 
     SdkService.prototype.getBackupGenerator = function(identifier, backupInfo, extraInfo) {
