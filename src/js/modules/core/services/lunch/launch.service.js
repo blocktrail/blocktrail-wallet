@@ -15,7 +15,7 @@
         self._helperService = helperService;
 
         // Account info
-        self._keyIdForAccountInfo = "account_info";
+        self._keyIdForAccountInfo = "accountInfo";
         self._defaultAccountInfoDoc = {
             _id: self._keyIdForAccountInfo,
             username: null,
@@ -43,7 +43,7 @@
         self._promiseWalletInfo = null;
 
         // Wallet backup
-        self._keyIdForWalletBackup = "wallet_backup";
+        self._keyIdForWalletBackup = "walletBackup";
         self._defaultWalletBackupDoc = {
             _id: self._keyIdForWalletBackup,
             identifier: null,
@@ -70,12 +70,16 @@
      * Get wallet config
      * @return { promise }
      */
-    LaunchService.prototype.getWalletConfig = function() {
+    LaunchService.prototype.getWalletConfig = function(force) {
         var self = this;
 
         self._$log.debug("M:CORE:LaunchService:getWalletConfig");
 
-        if (!self._walletConfigPromise || (self._walletConfigTimestamps > (new Date()).getTime() + (600 * 1000))) {
+        if(force) {
+            self._walletConfigTimestamps = null;
+        }
+
+        if(!self._walletConfigPromise || (self._walletConfigTimestamps > (new Date()).getTime() + (600 * 1000))) {
             self._walletConfigPromise = self.getAccountInfo()
                 .then(function(accountInfo) {
                     var url = self._CONFIG.API_URL + "/v1/mywallet/config?";
@@ -85,8 +89,8 @@
                         "testnet=" + (self._CONFIG.TESTNET ? 1 : 0)
                     ];
 
-                    if (accountInfo.api_key) {
-                        params.push("api_key=" + accountInfo.api_key);
+                    if (accountInfo.apiKey) {
+                        params.push("api_key=" + accountInfo.apiKey);
                     }
 
                     return self._$http.get(url + params.join("&"))

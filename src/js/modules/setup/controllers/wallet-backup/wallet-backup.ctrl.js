@@ -4,7 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupWalletBackupCtrl", SetupWalletBackupCtrl);
 
-    function SetupWalletBackupCtrl($scope, $q, modalService, launchService, settingsService, walletBackupService) {
+    function SetupWalletBackupCtrl($scope, $q, $state, modalService, launchService, settingsService, walletBackupService) {
         var walletBackupData;
         var readOnlySettingsData;
 
@@ -154,13 +154,15 @@
                             });
 
                     }*/
+
+                    // debugger;
+
                     // TODO Continue here
-
                     if(dialogResult) {
-
+                        $state.go("app.setup.settings.phone-verify");
                     } else {
                         // TODO Check on phone or profile else redirect to "summary"
-                        // $state.go("app.setup.phone");
+                        $state.go("app.setup.settings.phone-verify");
                     }
                 });
         }
@@ -188,7 +190,7 @@
                 })
                 .then(function() {
                     // TODO Check on phone or profile else redirect to "summary"
-                    // $state.go("app.setup.phone");
+                    $state.go("app.setup.settings.phone-verify");
                 });
         }
     }
