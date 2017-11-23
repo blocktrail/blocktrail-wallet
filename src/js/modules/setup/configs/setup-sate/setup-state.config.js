@@ -38,7 +38,7 @@
                 controller: "SetupStartCtrl",
                 templateUrl: "js/modules/setup/controllers/start/start.tpl.html",
                 data: {
-                    clearHistory: true
+                    clearHistory: true // clear any previous history (backButtonService)
                 }
             })
             .state("app.setup.login", {
@@ -58,6 +58,9 @@
                 cache: false,
                 controller: "SetupWalletPinCtrl",
                 templateUrl: "js/modules/setup/controllers/wallet-pin/wallet-pin.tpl.html",
+                data: {
+                    clearHistory: true  // clear any previous history (backButtonService)
+                },
                 resolve: {
                     accountInfo: getAccountInfo
                 }
@@ -67,6 +70,9 @@
                 abstract: true,
                 cache: false,
                 template: "<ion-nav-view></ion-nav-view>",
+                data: {
+                    clearHistory: true  // clear any previous history (backButtonService)
+                },
                 resolve: {
                     isSetAccountInfo: sdkSetAccountInfo
                 }
@@ -75,95 +81,33 @@
                 url: "/wallet-backup",
                 cache: false,
                 controller: "SetupWalletBackupCtrl",
-                templateUrl: "js/modules/setup/controllers/wallet-backup/wallet-backup.tpl.html"
-            })
-
-
-
-            .state("app.setup.wallet", {
-                url: "/phone",
-                controller: "SetupPhoneCtrl",
-                templateUrl: "js/modules/setup/controllers/phone/phone.tpl.html",
+                templateUrl: "js/modules/setup/controllers/wallet-backup/wallet-backup.tpl.html",
                 data: {
-                    clearHistory: true  //clear any previous history
-                },
-                resolve: {
-                    // TODO Do we need it ??
-                    getWalletBackup: getWalletBackup,
-
-                    // TODO check initialization for SDK
-                    sdkSetAccountInfo: sdkSetAccountInfo
+                    clearHistory: true  // clear any previous history (backButtonService)
                 }
             })
-
-            .state("app.setup.wallet.phone", {
+            .state("app.setup.settings.phone-verify", {
                 url: "/phone",
-                controller: "SetupPhoneCtrl",
-                templateUrl: "js/modules/setup/controllers/phone/phone.tpl.html",
+                controller: "SetupPhoneVerifyCtrl",
+                templateUrl: "js/modules/setup/controllers/phone-verify/phone-verify.tpl.html",
                 data: {
-                    clearHistory: true  //clear any previous history
-                },
-                resolve: {
-                    walletInfo: getWalletInfo
+                    clearHistory: true  // clear any previous history (backButtonService)
                 }
             })
-
-            // TODO Remove this
-            .state("app.setup.phone", {
-                url: "/phone",
-                controller: "SetupPhoneCtrl",
-                templateUrl: "js/modules/setup/controllers/phone/phone.tpl.html",
-                data: {
-                    clearHistory: true  //clear any previous history
-                },
-                resolve: {
-                    walletInfo: getWalletInfo
-                }
-            })
-            // NB: create a copy of the app.wallet.settings.phone to bypass the WalletController which inits the wallet and starts polling
-            .state("app.setup.phone-verify", {
-                url: "/phone?goBackTo",
-                templateUrl: "templates/settings/settings.phone.html",
-                controller: "SettingsPhoneCtrl",
-                resolve: {
-                    // TODO Review !!!
-                    settings: function(settingsService, $rootScope) {
-                        // do an initial load of the user's settings
-                        return settingsService
-                            .$isLoaded()
-                            .then(
-                                function(data) {
-                                    $rootScope.settings = settingsService;
-                                    //set the preferred language
-                                    $rootScope.changeLanguage(settingsService.language);
-
-                                    return data;
-                                });
-                    }
-                }
-            })
-            .state("app.setup.contacts", {
-                url: "/contacts",
-                controller: "SetupContactsCtrl",
-                templateUrl: "js/modules/setup/controllers/contacts/contacts.tpl.html",
-                resolve: {
-                    walletInfo: getWalletInfo
-                }
-            })
-            // TODO review profile for wallet & setup !!! to complex logic
-            .state("app.setup.profile", {
+            .state("app.setup.settings.profile", {
                 url: "/profile",
-                controller: "SettingsProfileCtrl", // This controller from the wallet module
+                controller: "SetupProfileCtrl",
                 templateUrl: "js/modules/setup/controllers/profile/profile.tpl.html",
-                resolve: {
-                    walletInfo: getWalletInfo
+                data: {
+                    clearHistory: true  // clear any previous history (backButtonService)
                 }
-            })
-            .state("app.setup.complete", {
+            });
+            // TODO Do we need this state
+            /*.state("app.setup.complete", {
                 url: "/complete",
                 controller: "SetupCompleteCtrl",
                 templateUrl: "js/modules/setup/controllers/complete/complete.tpl.html"
-            });
+            });*/
     }
 
     /**
@@ -215,36 +159,11 @@
                 return sdkService.setAccountInfo(accountInfo);
             });
     }
-
-    function getAccountInfo($state, launchService) {
+    
+    function getAccountInfo($state, launchService, helperService) {
         return launchService
             .getAccountInfo()
-            .then(returnData, toAppResetState.bind(this, $state));
+            .then(helperService.returnData, helperService.toAppResetState.bind(this, $state));
     }
 
-    function getWalletBackup($state, launchService) {
-        return launchService
-            .getWalletBackup()
-            .then(returnData, toAppResetState.bind(this, $state));
-    }
-
-    function getReadOnlySettingsData($state, settingsService) {
-        return settingsService
-            .getReadOnlySettingsData()
-            .then(returnData, toAppResetState.bind(this, $state));
-    }
-
-    function getWalletInfo($state, launchService) {
-        return launchService
-            .getWalletInfo()
-            .then(returnData, toAppResetState.bind(this, $state));
-    }
-
-    function returnData(data) {
-        return data;
-    }
-
-    function toAppResetState($state) {
-        return $state.go("app.reset");
-    }
 })();

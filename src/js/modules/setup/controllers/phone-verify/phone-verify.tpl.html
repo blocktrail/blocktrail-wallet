@@ -8,6 +8,27 @@
             </div>
 
             <ion-item class="item-borderless item-text-wrap">
+                <p>{{ 'SETUP_PHONE_DESC_SUBTITLE' | translate }}</p>
+                <h1 class="text-bad">TODO this later</h1>
+            </ion-item>
+
+            <ion-item class="text-right">
+                <button
+                    class="button button-small button-stable"
+                    ng-click="onSkipPhoneVerify()"
+                >{{ 'SETUP_SKIP_BACKUP' | translate }}
+                </button>
+            </ion-item>
+        </div>
+    </ion-content>
+
+    <!--<ion-content scroll="true">
+        <div class="card">
+            <div class="list-header">
+                <p>{{ 'SETUP_PHONE_DESC_TITLE' | translate }}</p>
+            </div>
+
+            <ion-item class="item-borderless item-text-wrap">
                 <p class="padding-t">{{ 'SETUP_PHONE_DESC_SUBTITLE' | translate }}</p>
 
             </ion-item>
@@ -34,5 +55,5 @@
             </ion-item>
         </div>
     </ion-content>
-
+-->
 </ion-view>

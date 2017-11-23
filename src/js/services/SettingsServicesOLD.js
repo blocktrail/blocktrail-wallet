@@ -73,6 +73,7 @@ angular.module('blocktrail.wallet').service(
         showArchived: false,
 
         /* PIN lock */
+        // TODO Move it to local settings
         pinOnOpen: true,            // ask for pin on each wallet open
         pinFailureCount: 0,         // counter of pin input failures
         pinLastFailure: null        // last pin input failure

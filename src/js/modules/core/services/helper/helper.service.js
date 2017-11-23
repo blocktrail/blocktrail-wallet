@@ -15,6 +15,7 @@
 
     /**
      * Prepare an object according to a schema
+     * For storage
      * @param schema
      * @param data
      * @return { object }
@@ -49,6 +50,7 @@
 
     /**
      * Push a pending data
+     * For storage
      * @param pendingData
      * @param data
      */
@@ -68,6 +70,7 @@
 
     /**
      * Get a squashed pending data
+     * For storage
      * The method mutate the pendingData
      * @param pendingData
      * @return { object | null }
@@ -86,6 +89,24 @@
         }
 
         return self._lodash.isEmpty(quashedPendingData) ? null : quashedPendingData;
+    };
+
+    /**
+     * Return data
+     * @param data
+     * @return {*}
+     */
+    HelperService.prototype.returnData = function(data) {
+        return data;
+    };
+
+    /**
+     * To the app reset state
+     * @param $state
+     * @return { promise|void }
+     */
+    HelperService.prototype.toAppResetState = function($state) {
+        return $state.go("app.reset");
     };
 
 })();
