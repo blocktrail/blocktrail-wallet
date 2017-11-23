@@ -135,9 +135,6 @@ angular.module('blocktrail.wallet').factory(
 
                                     return activeWallet.unlock(dialogResult.input1).then(function(wallet) {
                                         var secretBuf = wallet.secret;
-                                        if (wallet.walletVersion === 'v2') {
-                                            secretBuf = new blocktrailSDK.Buffer(secretBuf, 'hex');
-                                        }
                                         var accessTokenBuf = new blocktrailSDK.Buffer(accessToken, 'utf8');
                                         glideraAccessToken.encryptedAccessToken = blocktrailSDK.Encryption.encrypt(
                                             accessTokenBuf, secretBuf, blocktrailSDK.KeyDerivation.subkeyIterations
@@ -347,10 +344,6 @@ angular.module('blocktrail.wallet').factory(
                     return unlockWallet()
                         .then(function(wallet) {
                             var walletSecretBuf = wallet.secret;
-                            if (wallet.walletVersion === 'v2') {
-                                walletSecretBuf = new blocktrailSDK.Buffer(walletSecretBuf, 'hex');
-                            }
-
                             wallet.lock();
 
                             return decryptAccessToken(walletSecretBuf)

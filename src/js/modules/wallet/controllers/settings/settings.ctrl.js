@@ -53,10 +53,7 @@
                     return activeWallet.unlockWithPassword(dialogResult.input1).then(function(wallet) {
                         $ionicLoading.hide();
 
-                        var secret = wallet.secret;
-                        if (wallet.secret && wallet.walletVersion !== 'v2') {
-                            secret = wallet.secret.toString('hex');
-                        }
+                        var secret = wallet.secret.toString('hex');
 
                         return {secret: secret};
                     });
@@ -137,24 +134,16 @@
         $scope.updatePin = function(newPIN, unlockData) {
             return $q.when(true)
                 .then(function() {
-                    var encryptedPassword = null, encryptedSecret = null;
-
                     console.log(unlockData);
                     console.log(newPIN);
 
-                    // still gotta support legacy wallet where we encrypted the password isntead of secret
-                    if (unlockData.secret) {
-                        encryptedSecret = CryptoJS.AES.encrypt(unlockData.secret, newPIN).toString();
-                    } else {
-                        encryptedPassword = CryptoJS.AES.encrypt(unlockData.password, newPIN).toString();
-                    }
+                    var encryptedSecret = CryptoJS.AES.encrypt(unlockData.secret, newPIN).toString();
 
                     // TODO Check this part
                     // return launchService.storeWalletInfo($scope.defaultWallet, encryptedPassword, encryptedSecret);
                     return launchService.setWalletInfo({
                         identifier: $scope.defaultWallet,
                         networkType: "", // TODO add network type
-                        encryptedPassword: encryptedPassword,
                         encryptedSecret: encryptedSecret
                     });
                 })

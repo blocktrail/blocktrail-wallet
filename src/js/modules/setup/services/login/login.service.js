@@ -114,6 +114,10 @@
 
         var accountInfo = self._lodash.merge({}, { secret: data.secret }, data.responseData);
 
+        // server response is snake_case
+        accountInfo.apiKey = accountInfo.apiKey || accountInfo.api_key;
+        accountInfo.apiSecret = accountInfo.apiSecret || accountInfo.api_secret;
+
         return self._launchService.setAccountInfo(accountInfo)
             .then(function() {
                 //save the default settings and do a profile sync

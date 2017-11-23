@@ -65,15 +65,10 @@
 
                 settingsService.$isLoaded().then(function () {
                     launchService.getWalletInfo().then(function(walletInfo) {
-                        var password, secret;
+                        var secret;
 
                         try {
-                            // legacy; storing encrypted password instead of secret
-                            if (walletInfo.encryptedSecret) {
-                                secret = CryptoJS.AES.decrypt(walletInfo.encryptedSecret, $scope.appControl.pin).toString(CryptoJS.enc.Utf8);
-                            } else {
-                                password = CryptoJS.AES.decrypt(walletInfo.encryptedPassword, $scope.appControl.pin).toString(CryptoJS.enc.Utf8);
-                            }
+                            secret = CryptoJS.AES.decrypt(walletInfo.encryptedSecret, $scope.appControl.pin).toString(CryptoJS.enc.Utf8);
                         } catch (e) {
                             throw new blocktrail.WalletPinError(e.message);
                         }
@@ -84,11 +79,7 @@
 
                         var unlockData = {};
 
-                        if (password) {
-                            unlockData.password = password;
-                        } else {
-                            unlockData.secret = secret;
-                        }
+                        unlockData.secret = secret;
 
                         return unlockData;
                     }).then(function() {
