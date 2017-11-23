@@ -178,7 +178,7 @@ angular.module('blocktrail.wallet').factory(
                 if (settingsService.glideraAccessToken.userCanTransact === true) {
                     return settingsService.glideraAccessToken.userCanTransact;
                 }
-getWalletSecret
+
                 return accessToken().then(function(accessToken) {
                     if (!accessToken) {
                         return false;
