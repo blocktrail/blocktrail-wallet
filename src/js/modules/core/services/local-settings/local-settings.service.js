@@ -20,7 +20,9 @@
             _id: self._keyIdForLocalSettings,
             isSetupComplete: false,
             isPhoneVerified: false,
-            isContactsSynchronized: false
+            isContactsSynchronized: false,
+            // TODO Use it here
+            pinOnOpen: false
         };
         self._pendingLocalSettings = [];
         self._promiseLocalSettings = null;

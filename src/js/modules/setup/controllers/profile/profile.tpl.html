@@ -7,7 +7,19 @@
                 <p>{{ 'SETTINGS_PROFILE_DESCRIPTION' | translate }}</p>
             </div>
 
-            <ion-item class="item-borderless item-text-wrap text-center">
+            <ion-item class="item-borderless item-text-wrap">
+                <h1 class="text-bad">TODO this later</h1>
+            </ion-item>
+
+            <ion-item class="text-right">
+                <button
+                    class="button button-small button-stable"
+                    ng-click="onSkipProfile()"
+                >{{ 'SETUP_SKIP_BACKUP' | translate }}
+                </button>
+            </ion-item>
+
+            <!--<ion-item class="item-borderless item-text-wrap text-center">
                 <div class="display-token contact-token profile-image" ng-click="updatePicture()">
                     <div class="initials"><i class="ion-person"></i></div>
                     <span class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: 50%; background-position-y: 50%;"></span>
@@ -35,12 +47,12 @@
                 <a class="button button-block button-positive"
                    ui-sref="app.setup.complete">{{ 'CONTINUE' | translate }}
                 </a>
-            </ion-item>
+            </ion-item>-->
         </div>
     </ion-content>
 
     <!-- TODO Move to modal -->
-    <div class="photo-crop-screen" ng-class="{ displayed: appControl.showImageCrop }">
+    <!--<div class="photo-crop-screen" ng-class="{ displayed: appControl.showImageCrop }">
         <img-crop image="newProfileImage"
                   result-image="croppedProfileImage"
                   area-type="circle"
@@ -55,14 +67,14 @@
         </div>
 
         <button class="button button-outline confirm-button" ng-click="assignProfileImage(croppedProfileImage)">{{ 'APPLY' | translate }}</button>
-    </div>
+    </div>-->
     <!-- photo crop screen -->
 
 </ion-view>
 
-<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
+<!--<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
     <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
     <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
     <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
     <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
-</div>
+</div>-->

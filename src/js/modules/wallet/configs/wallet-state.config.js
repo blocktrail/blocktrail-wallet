@@ -15,10 +15,9 @@
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
                     checkAPIKeyActive: checkAPIKeyActive,
-                    settingsData: getSettingsData,
-                    pinOnOpen: pinOnOpen,
-                    activeWallet: getActiveWallet,
-                    loadingData: loadingData
+                    pinOnOpen: pinOnOpen
+                    // activeWallet: getActiveWallet,
+                    // loadingData: loadingData
                 }
             })
             .state("app.wallet.summary", {
@@ -334,35 +333,37 @@
             });
     }
 
-    function checkAPIKeyActive(launchService, $state, $q, $translate, $cordovaDialogs) {
-        return launchService.getWalletConfig()
+    function checkAPIKeyActive($state, $q, launchService, modalService, sdkService) {
+        return launchService.getWalletConfig(true)
             .then(function(result) {
                 if (result.api_key && (result.api_key !== 'ok')) {
                     // alert user session is invalid
-                    $cordovaDialogs.alert(
-                        $translate.instant('INVALID_SESSION_LOGOUT_NOW'),
-                        $translate.instant('INVALID_SESSION'),
-                        $translate.instant('OK')
-                    )
-                        .finally(function () {
+                    modalService.alert({
+                            title: "INVALID_SESSION_LOGOUT_NOW",
+                            body: "INVALID_SESSION"
+                        })
+                        .then(function () {
                             $state.go('app.reset');
                         });
 
                     // throw error to prevent controller from loading or any other resolves to continue
                     return $q.reject(new Error("API_KEY_INVALID"));
                 }
+
+                return true;
+            })
+            .then(sdkSetAccountInfo.bind({}, launchService, sdkService));
+    }
+
+    function sdkSetAccountInfo(launchService, sdkService) {
+        return launchService.getAccountInfo()
+            .then(function(accountInfo) {
+                return sdkService.setAccountInfo(accountInfo);
             });
     }
 
-    /**
-     *
-     * @param settingsService
-     * @param checkAPIKeyActive leave here for forcing order of resolves
-     * @return {promise|*}
-     */
-    function getSettingsData(settingsService, checkAPIKeyActive) {
-        return settingsService.getSettings();
-    }
+
+
 
     /**
      *
@@ -373,11 +374,10 @@
      * @param settingsData          not used, just for forcing order of resolves
      */
     function pinOnOpen(settingsService, $q, $state, $rootScope, settingsData) {
+        return true;
 
-        debugger;
-
-
-        return settingsService.$isLoaded().then(function () {
+        // TODO Review pin functionality
+        /*return settingsService.$isLoaded().then(function () {
             // if pinOnOpen is required and last time we asked for it was more than 5min ago
             if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE && (typeof CONFIG.PIN_ON_OPEN === "undefined" || CONFIG.PIN_ON_OPEN === true)) {
                 $rootScope.STATE.PENDING_PIN_REQUEST = true;
@@ -387,7 +387,7 @@
                 // throw error to prevent controller from loading or any other resolves to continue
                 return $q.reject(new Error("PIN_REQUIRED"));
             }
-        });
+        });*/
     }
 
 
@@ -446,8 +446,7 @@
      */
     function loadingData(settingsService, $q, $rootScope, $log, Currencies, activeWallet) {
         // Do an initial load of cached user data
-        debugger;
-
+        // TODO Review this part
 
         return $q.all([
             Currencies.updatePrices(true),
@@ -459,4 +458,5 @@
             return true;
         });
     }
+
 })();
