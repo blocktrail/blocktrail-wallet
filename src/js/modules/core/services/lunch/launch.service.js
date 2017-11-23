@@ -36,7 +36,6 @@
             _id: self._keyIdForWalletInfo,
             identifier: null,
             networkType: null,
-            encryptedPassword: null,
             encryptedSecret: null
         };
         self._pendingWalletInfo = [];
@@ -48,7 +47,6 @@
             _id: self._keyIdForWalletBackup,
             identifier: null,
             backupSeed: null,
-            encryptedPassword: null,
             encryptedSecret: null,
             encryptedPrimarySeed: null,
             blocktrailPublicKeys: null,

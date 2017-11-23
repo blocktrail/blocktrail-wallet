@@ -78,6 +78,10 @@
          * @param secret
          */
         self.stashWalletSecret = function(secret) {
+            if (typeof secret !== "string") {
+                throw new Error("wallet secret should be stashed as string");
+            }
+
             walletSecret = secret;
         };
 
