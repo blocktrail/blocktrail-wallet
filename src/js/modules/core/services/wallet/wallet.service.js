@@ -1122,35 +1122,23 @@
 
         return self._launchService.getWalletInfo()
             .then(function(walletInfo) {
-                var password, secret;
+                var secret;
 
                 try {
-                    // legacy; storing encrypted password instead of secret
-                    if (walletInfo.encryptedSecret) {
-                        secret = self._cryptoJS.AES.decrypt(walletInfo.encryptedSecret, pin).toString(self._cryptoJS.enc.Utf8);
-                    } else {
-                        password = self._cryptoJS.AES.decrypt(walletInfo.encryptedPassword, pin).toString(self._cryptoJS.enc.Utf8);
-                    }
+                    secret = self._cryptoJS.AES.decrypt(walletInfo.encryptedSecret, pin).toString(self._cryptoJS.enc.Utf8);
                 } catch (e) {
                     throw new blocktrail.WalletPinError(e.message);
                 }
 
-                if (!password && !secret) {
+                if (!secret) {
                     throw new blocktrail.WalletPinError("Bad PIN");
                 }
 
-                var unlockData = {
+                return {
                     identifier: walletInfo.identifier,
-                    networkType: walletInfo.networkType
+                    networkType: walletInfo.networkType,
+                    secret: secret
                 };
-
-                if (password) {
-                    unlockData.password = password;
-                } else {
-                    unlockData.secret = secret;
-                }
-
-                return unlockData;
             });
     };
 
@@ -1161,21 +1149,13 @@
             .then(function(wallet) {
                 return self.unlockDataWithPin(pin)
                     .then(function(unlock) {
-                        // if unlock.secret is set we need to switch it to a buffer for v3+ wallets
-                        if (unlock.secret && wallet.walletVersion !== 'v2') {
-                            unlock.secret = new blocktrailSDK.Buffer(unlock.secret, 'hex');
-                        }
+                        // secret needs to be buffer
+                        unlock.secret = new blocktrailSDK.Buffer(unlock.secret, 'hex');
 
                         return wallet.unlock(unlock).then(function() {
                             // if we were still storing encrypted password we want to swtich to storing encrypted secret
                             if (!unlock.secret) {
-                                var secretHex = null;
-
-                                if (wallet.walletVersion === 'v2') {
-                                    secretHex = wallet.secret;
-                                } else {
-                                    secretHex = wallet.secret.toString('hex');
-                                }
+                                var secretHex = wallet.secret.toString('hex');
 
                                 // store encrypted secret
                                 // TODO Check this part
@@ -1183,7 +1163,7 @@
                                 return self._launchService.setWalletInfo({
                                         identifier: wallet.identifier,
                                         networkType: self._walletData.networkType,
-                                        encryptedPassword: self._cryptoJS.AES.encrypt(secretHex, pin).toString()
+                                        encryptedSecret: self._cryptoJS.AES.encrypt(secretHex, pin).toString()
                                     })
                                     .then(function () {
                                         return self._sdkWallet;

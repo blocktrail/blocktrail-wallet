@@ -85,6 +85,7 @@
                 .then(stashWalletSecret)
                 .then(setSdkMainMobileWallet)
                 .then(setWalletInfo)
+                .then(lockWallet)
                 .then(setWalletBackup)
                 // God damn you've done it
                 .then(hallelujah)
@@ -92,7 +93,7 @@
                     $log.debug("M:SETUP:SetupWalletPinCtrl:initWallet:catch", e.toString());
                     modalService.hideSpinner();
 
-                    if (e == "CANCELLED") {
+                    if (e === "CANCELLED") {
                         // user canceled action
                         return false;
                     } else {
@@ -141,7 +142,7 @@
             $analytics.eventTrack("initWallet", { category: "Events" });
 
             // time to upgrade to V3 ppl!
-            if (wallet.walletVersion != blocktrailSDK.Wallet.WALLET_VERSION_V3) {
+            if (wallet.walletVersion !== blocktrailSDK.Wallet.WALLET_VERSION_V3) {
                 modalService.updateSpinner({
                     title: "UPGRADING_WALLET",
                     body: "UPGRADING_WALLET_BODY"
@@ -283,20 +284,13 @@
         /**
          * Stash the wallet secret
          * @param wallet
+         * @return wallet
          */
         function stashWalletSecret(wallet) {
-            var secretHex = null;
-
-            if (wallet.walletVersion === "v2") {
-                secretHex = wallet.secret;
-            } else {
-                secretHex = wallet.secret.toString("hex");
-            }
+            var secretHex = wallet.secret.toString("hex");
 
             // while logging in we stash the secret so we can decrypt the glidera access token
             setupInfoService.stashWalletSecret(secretHex);
-
-            wallet.lock();
 
             return wallet;
         }
@@ -317,25 +311,19 @@
 
             setupInfoService.getSetupInfoProperty("identifier");
 
-            return wallet.sdk.setMainMobileWallet(setupInfoService.getSetupInfoProperty("identifier"));
+            return wallet.sdk.setMainMobileWallet(setupInfoService.getSetupInfoProperty("identifier"))
+                .then(function() {
+                    return wallet;
+                });
         }
 
         /**
          * Set wallet info
+         * @param wallet
          * @return { promise }
          */
         function setWalletInfo(wallet) {
-            // store the identity and encrypted password
-            var encryptedSecret = null;
-            var encryptedPassword = null;
-
-            // legacy wallets use password instead of secret,
-            // using secret is a lot better since someone cracking a PIN won't get your much reused password xD
-            if (wallet.secret) {
-                encryptedSecret = CryptoJS.AES.encrypt(wallet.secret.toString("hex"), $scope.form.pin).toString();
-            } else {
-                encryptedPassword = CryptoJS.AES.encrypt(setupInfoService.getSetupInfoProperty("password"), $scope.form.pin).toString();
-            }
+            var encryptedSecret = CryptoJS.AES.encrypt(wallet.secret.toString("hex"), $scope.form.pin).toString();
 
             $log.debug("M:SETUP:SetupWalletPinCtrl:setWalletInfo",
                 setupInfoService.getSetupInfoProperty("identifier"),
@@ -345,9 +333,22 @@
             return launchService.setWalletInfo({
                 identifier: setupInfoService.getSetupInfoProperty("identifier"),
                 networkType: setupInfoService.getSetupInfoProperty("networkType"),
-                encryptedPassword: encryptedPassword,
                 encryptedSecret: encryptedSecret
+            }).then(function() {
+                return wallet;
             });
+        }
+
+        /**
+         * Lock the wallet (unsets the secret, privkeys, etc)
+         *
+         * @param wallet
+         * @return { promise }
+         */
+        function lockWallet(wallet) {
+            wallet.lock();
+
+            return wallet;
         }
 
         /**
