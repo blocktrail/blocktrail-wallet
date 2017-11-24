@@ -121,15 +121,6 @@
     };
 
     /**
-     * Return data
-     * @param data
-     * @return {*}
-     */
-    HelperService.prototype.returnData = function(data) {
-        return data;
-    };
-
-    /**
      * To the app reset state
      * @param $state
      * @return { promise|void }

@@ -2,11 +2,11 @@
     "use strict";
 
     angular.module("blocktrail.core")
-        .factory("launchService", function($http, $log, CONFIG, helperService, storageService, localStorageFactory) {
-            return new LaunchService($http, $log, CONFIG, helperService, storageService, localStorageFactory);
+        .factory("launchService", function($http, $log, CONFIG, helperService, storageService, localStorageService) {
+            return new LaunchService($http, $log, CONFIG, helperService, storageService, localStorageService);
         });
 
-    function LaunchService($http, $log, CONFIG, helperService, storageService, localStorageFactory) {
+    function LaunchService($http, $log, CONFIG, helperService, storageService, localStorageService) {
         var self = this;
 
         self._$http = $http;
@@ -15,7 +15,7 @@
         self._helperService = helperService;
 
         // Account info
-        self._accountInfoStorage = localStorageFactory.init("accountInfo", {
+        self._accountInfoStorage = localStorageService.init("accountInfo", {
             username: null,
             email: null,
             apiKey: null, // api_key
@@ -27,14 +27,14 @@
         });
 
         // Wallet info
-        self._walletInfoStorage = localStorageFactory.init("walletInfo", {
+        self._walletInfoStorage = localStorageService.init("walletInfo", {
             identifier: null,
             networkType: null,
             encryptedSecret: null
         });
 
         // Backup info
-        self._walletBackupStorage = localStorageFactory.init("walletBackup", {
+        self._walletBackupStorage = localStorageService.init("walletBackup", {
             identifier: null,
             backupSeed: null,
             encryptedSecret: null,

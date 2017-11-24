@@ -2,12 +2,12 @@
     "use strict";
 
     angular.module("blocktrail.core")
-        .factory("localStorageFactory", function($log, CONFIG, helperService, storageService) {
-            return new LocalStorageFactory($log, CONFIG, helperService, storageService);
+        .factory("localStorageService", function($log, CONFIG, helperService, storageService) {
+            return new LocalStorageService($log, CONFIG, helperService, storageService);
         }
     );
 
-    function LocalStorageFactory($log, CONFIG, helperService, storageService) {
+    function LocalStorageService($log, CONFIG, helperService, storageService) {
         var self = this;
 
         self._$log = $log;
@@ -24,7 +24,7 @@
      * @param props
      * @returns { LocalStorage }
      */
-    LocalStorageFactory.prototype.init = function(keyId, props) {
+    LocalStorageService.prototype.init = function(keyId, props) {
         var self = this;
 
         // init storage if it doesn't exist yet, reuse if it does
@@ -43,7 +43,7 @@
         self._helperService = helperService;
 
         self._keyId = keyId;
-        self._defaults = angular.extend({}, {_id: keyId}, props);
+        self._defaults = angular.extend({}, { _id: keyId }, props);
         self._pending = [];
         self._pendingPromise = null;
         self._storage = storage;
@@ -58,7 +58,8 @@
         self._$log.debug("M:CORE:LocalStorage:" + self._keyId + ":getData");
 
         return self._storage.get(self._keyId)
-            .then(function(doc) { return doc; }, function() { return self._defaults; });
+            // TODO updateDocAccordingToSchema we need to update it ones when we change the schema
+            .then(function(doc) { return self._helperService.updateDocAccordingToSchema(self._defaults, doc); }, function() { return self._defaults; });
     };
 
     /**
