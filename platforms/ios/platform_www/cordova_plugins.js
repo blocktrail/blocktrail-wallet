@@ -57,14 +57,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.verso.cordova.clipboard/www/clipboard.js",
-        "id": "com.verso.cordova.clipboard.Clipboard",
-        "pluginId": "com.verso.cordova.clipboard",
-        "clobbers": [
-            "cordova.plugins.clipboard"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-network-information/www/network.js",
         "id": "cordova-plugin-network-information.network",
         "pluginId": "cordova-plugin-network-information",
@@ -495,6 +487,14 @@ module.exports = [
         "merges": [
             "cordova.plugins.disusered"
         ]
+    },
+    {
+        "file": "plugins/cordova-universal-clipboard/www/clipboard.js",
+        "id": "cordova-universal-clipboard.Clipboard",
+        "pluginId": "cordova-universal-clipboard",
+        "clobbers": [
+            "cordova.plugins.clipboard"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -507,7 +507,6 @@ module.exports.metadata =
     "org.apache.cordova.splashscreen": "1.0.0",
     "com.dbaq.cordova.contactsPhoneNumbers": "0.0.3",
     "cordova-plugin-whitelist": "1.0.0",
-    "com.verso.cordova.clipboard": "0.1.0",
     "cordova-plugin-network-information": "1.0.1",
     "com.synconset.imagepicker": "1.0.6",
     "cordova-plugin-camera": "1.2.0",
@@ -533,7 +532,8 @@ module.exports.metadata =
     "cordova-plugin-x-socialsharing": "5.1.7",
     "cordova-plugin-firebase": "0.1.24",
     "cordova-plugin-file-transfer": "1.6.3",
-    "cordova-open": "1.0.12"
+    "cordova-open": "1.0.12",
+    "cordova-universal-clipboard": "0.1.0"
 }
 // BOTTOM OF METADATA
 });

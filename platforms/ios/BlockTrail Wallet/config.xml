@@ -22,9 +22,6 @@
     <feature name="ContactsPhoneNumbers">
         <param name="ios-package" value="CDVContactsPhoneNumbers" />
     </feature>
-    <feature name="Clipboard">
-        <param name="ios-package" value="CDVClipboard" />
-    </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
     </feature>
@@ -112,6 +109,9 @@
     </feature>
     <feature name="Open">
         <param name="ios-package" value="Open" />
+    </feature>
+    <feature name="Clipboard">
+        <param name="ios-package" value="CDVClipboard" />
     </feature>
     <name>BlockTrail Wallet</name>
     <description>

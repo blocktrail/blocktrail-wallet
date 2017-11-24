@@ -268,9 +268,6 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "com.verso.cordova.clipboard": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
@@ -349,6 +346,9 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-open": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-universal-clipboard": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },

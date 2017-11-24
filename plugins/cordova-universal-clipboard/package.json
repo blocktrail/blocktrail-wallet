@@ -1,0 +1,52 @@
+{
+  "name": "cordova-universal-clipboard",
+  "version": "0.1.1",
+  "description": "Clipboard management plugin for Cordova/PhoneGap",
+  "cordova": {
+    "id": "cordova-universal-clipboard",
+    "platforms": [
+      "ios",
+      "android",
+      "wp8",
+      "windows"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Visigo/CordovaClipboard.git"
+  },
+  "keywords": [
+    "cordova",
+    "clipboard",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android",
+    "cordova-wp8",
+    "cordova-windows8",
+    "cordova-windows"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Verso Solutions LLC",
+  "contributors": [
+    {
+      "name" : "Visigo Software Consulting Inc.",
+      "email" : "info@visigo.com",
+      "url" : "http://www.visigo.com/"
+    },
+    {
+      "name" : "Ranvir Singh",
+      "email" : "er.ranvirsingh@gmail.com",
+      "url" : "https://in.linkedin.com/in/singhranvir"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Visigo/CordovaClipboard/issues"
+  },
+  "homepage": "https://github.com/Visigo/CordovaClipboard#readme"
+}
