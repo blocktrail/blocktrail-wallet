@@ -924,7 +924,6 @@ APIClient.prototype.initWallet = function(options, cb) {
             backupPublicKey,
             blocktrailPublicKeys,
             keyIndex,
-            result.chain || 0,
             result.segwit || 0,
             self.testnet,
             result.checksum,
@@ -1109,7 +1108,6 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                                     options.backupPublicKey,
                                     blocktrailPublicKeys,
                                     keyIndex,
-                                    result.chain || 0,
                                     result.segwit || 0,
                                     self.testnet,
                                     checksum,
@@ -1220,7 +1218,6 @@ APIClient.prototype._createNewWalletV2 = function(options) {
                         options.backupPublicKey,
                         blocktrailPublicKeys,
                         keyIndex,
-                        result.chain || 0,
                         result.segwit || 0,
                         self.testnet,
                         checksum,
@@ -1331,7 +1328,6 @@ APIClient.prototype._createNewWalletV3 = function(options) {
                             options.backupPublicKey,
                             blocktrailPublicKeys,
                             keyIndex,
-                            result.chain || 0,
                             result.segwit || 0,
                             self.testnet,
                             checksum,
@@ -2404,7 +2400,7 @@ module.exports = {
 }).call(this,require("buffer").Buffer)
 },{"../vendor/asmcrypto.js/asmcrypto.js":389,"buffer":125}],7:[function(require,module,exports){
 module.exports = exports = {
-    VERSION: '3.5.3'
+    VERSION: '3.5.5'
 };
 
 },{}],8:[function(require,module,exports){
@@ -3516,7 +3512,6 @@ var SignMode = {
  * @param backupPublicKey       string          BIP32 master pubKey M/
  * @param blocktrailPublicKeys  array           list of blocktrail pubKeys indexed by keyIndex
  * @param keyIndex              int             key index to use
- * @param chain                 int             chain to use
  * @param segwit                int             segwit toggle from server
  * @param testnet               bool            testnet
  * @param checksum              string
@@ -3536,7 +3531,6 @@ var Wallet = function(
     backupPublicKey,
     blocktrailPublicKeys,
     keyIndex,
-    chain,
     segwit,
     testnet,
     checksum,
@@ -3552,7 +3546,8 @@ var Wallet = function(
     self.locked = true;
     self.bypassNewAddressCheck = !!bypassNewAddressCheck;
     self.bitcoinCash = self.sdk.bitcoinCash;
-    assert(segwit === 0 || !self.bitcoinCash);
+    self.segwit = !!segwit;
+    assert(!self.segwit || !self.bitcoinCash);
 
     self.testnet = testnet;
     if (self.bitcoinCash) {
@@ -3588,18 +3583,19 @@ var Wallet = function(
     self.primaryPublicKeys = primaryPublicKeys;
     self.keyIndex = keyIndex;
 
-    var chainIdx;
     if (!self.bitcoinCash) {
-        if (segwit) {
-            chainIdx = Wallet.CHAIN_BTC_SEGWIT;
+        if (self.segwit) {
+            self.chain = Wallet.CHAIN_BTC_DEFAULT;
+            self.changeChain = Wallet.CHAIN_BTC_SEGWIT;
         } else {
-            chainIdx = Wallet.CHAIN_BTC_DEFAULT;
+            self.chain = Wallet.CHAIN_BTC_DEFAULT;
+            self.changeChain = Wallet.CHAIN_BTC_DEFAULT;
         }
     } else {
-        chainIdx = Wallet.CHAIN_BCC_DEFAULT;
+        self.chain = Wallet.CHAIN_BCC_DEFAULT;
+        self.changeChain = Wallet.CHAIN_BCC_DEFAULT;
     }
 
-    self.chain = chainIdx;
     self.checksum = checksum;
     self.upgradeToKeyIndex = upgradeToKeyIndex;
 
@@ -3634,7 +3630,7 @@ Wallet.FEE_STRATEGY_LOW_PRIORITY = blocktrail.FEE_STRATEGY_LOW_PRIORITY;
 Wallet.FEE_STRATEGY_MIN_RELAY_FEE = blocktrail.FEE_STRATEGY_MIN_RELAY_FEE;
 
 Wallet.prototype.isSegwit = function() {
-    return Wallet.CHAIN_BTC_SEGWIT === this.chain;
+    return !!this.segwit;
 };
 
 Wallet.prototype.unlock = function(options, cb) {
@@ -4170,16 +4166,28 @@ Wallet.prototype.upgradeKeyIndex = function(keyIndex, cb) {
 /**
  * generate a new derived private key and return the new address for it
  *
+ * @param [chainIdx] int
  * @param [cb]  function        callback(err, address)
  * @returns {q.Promise}
  */
-Wallet.prototype.getNewAddress = function(cb) {
+Wallet.prototype.getNewAddress = function(chainIdx, cb) {
     var self = this;
+
+    // chainIdx is optional
+    if (typeof chainIdx === "function") {
+        cb = chainIdx;
+        chainIdx = null;
+    }
+    // default chainIdx to self.chain
+    if (typeof chainIdx === "undefined" || chainIdx === null) {
+        chainIdx = self.chain;
+    }
+
     var deferred = q.defer();
     deferred.promise.spreadNodeify(cb);
 
     deferred.resolve(
-        self.sdk.getNewDerivation(self.identifier, "M/" + self.keyIndex + "'/" + self.chain)
+        self.sdk.getNewDerivation(self.identifier, "M/" + self.keyIndex + "'/" + chainIdx)
             .then(function(newDerivation) {
                 var path = newDerivation.path;
                 var address = newDerivation.address;
@@ -4678,7 +4686,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                                     if (!changeAddress) {
                                         deferred.notify(Wallet.PAY_PROGRESS_CHANGE_ADDRESS);
 
-                                        return self.getNewAddress(function(err, address) {
+                                        return self.getNewAddress(self.changeChain, function(err, address) {
                                             if (err) {
                                                 return cb(err);
                                             }

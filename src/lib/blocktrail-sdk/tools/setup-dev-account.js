@@ -56,7 +56,6 @@ var _createTestWallet = function(identifier, passphrase, primaryMnemonic, backup
             backupPublicKey,
             blocktrailPublicKeys,
             keyIndex,
-            result.chain || 0,
             result.segwit || 0,
             client.testnet,
             checksum
