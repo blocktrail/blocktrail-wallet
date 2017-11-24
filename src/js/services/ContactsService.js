@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'Contacts',
-    function($log, $rootScope, settingsService, launchService, walletsManagerService, genericSdkService, storageService, $q) {
+    function($log, $rootScope, settingsService, launchService, walletsManagerService, sdkService, storageService, $q) {
         var Contacts = function() {
             var self = this;
 
@@ -135,7 +135,8 @@ angular.module('blocktrail.wallet').factory(
                                             });
                                         });
 
-                                        return $q.when(genericSdkService.getSdk()).then(function(sdk) {
+                                        // TODO CHECK IT
+                                        return $q.when(sdkService.getGenericSdk()).then(function(sdk) {
                                             return sdk.syncContacts({
                                                 contacts: syncContactsByHash,
                                                 category: 'phone',

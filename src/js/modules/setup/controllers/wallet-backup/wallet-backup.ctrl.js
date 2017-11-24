@@ -159,10 +159,10 @@
 
                     // TODO Continue here
                     if(dialogResult) {
-                        $state.go("app.setup.settings.phone-verify");
+                        $state.go("app.setup.settings.profile");
                     } else {
                         // TODO Check on phone or profile else redirect to "summary"
-                        $state.go("app.setup.settings.phone-verify");
+                        $state.go("app.setup.settings.profile");
                     }
                 });
         }
@@ -190,7 +190,7 @@
                 })
                 .then(function() {
                     // TODO Check on phone or profile else redirect to "summary"
-                    $state.go("app.setup.settings.phone-verify");
+                    $state.go("app.setup.settings.profile");
                 });
         }
     }

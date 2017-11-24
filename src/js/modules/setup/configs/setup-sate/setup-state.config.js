@@ -86,14 +86,6 @@
                     clearHistory: true  // clear any previous history (backButtonService)
                 }
             })
-            .state("app.setup.settings.phone-verify", {
-                url: "/phone",
-                controller: "SetupPhoneVerifyCtrl",
-                templateUrl: "js/modules/setup/controllers/phone-verify/phone-verify.tpl.html",
-                data: {
-                    clearHistory: true  // clear any previous history (backButtonService)
-                }
-            })
             .state("app.setup.settings.profile", {
                 url: "/profile",
                 controller: "SetupProfileCtrl",
@@ -163,7 +155,7 @@
     function getAccountInfo($state, launchService, helperService) {
         return launchService
             .getAccountInfo()
-            .then(helperService.returnData, helperService.toAppResetState.bind(this, $state));
+            .catch(helperService.toAppResetState.bind(this, $state));
     }
 
 })();
