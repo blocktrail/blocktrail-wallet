@@ -14,6 +14,35 @@
     }
 
     /**
+     * TODO Extend doc object according to a schema
+     * @return {null}
+     */
+    HelperService.prototype.updateDocAccordingToSchema = function(schema, doc) {
+        var self = this;
+
+        if(!self._lodash.isObject(doc)) {
+            throw new Error("Blocktrail core module, helper service: updateDocObjectAccordingToSchema. Doc is not an object");
+        }
+
+        if(!self._lodash.isObject(schema)) {
+            throw new Error("Blocktrail core module, helper service: updateDocObjectAccordingToSchema. Schema is not an object");
+        }
+
+        var schemaKeys = self._lodash.keys(schema);
+
+        if(!schemaKeys.length) {
+            throw new Error("Blocktrail core module, helper service: updateDocObjectAccordingToSchema. Schema is empty");
+        }
+
+        // Add extra key, related to the local storage - revision id
+        schemaKeys.push("_rev");
+
+        var docAccordingSchema = self._lodash.pick(doc, schemaKeys);
+
+        return self._lodash.assign({}, schema, docAccordingSchema);
+    };
+
+    /**
      * Prepare an object according to a schema
      * For storage
      * @param schema
@@ -33,7 +62,7 @@
             throw new Error("Blocktrail core module, helper service: prepareObjectAccordingToSchema. Schema is not an object");
         }
 
-        var schemaKeys = self._lodash.keys(data);
+        var schemaKeys = self._lodash.keys(schema);
 
         if(!schemaKeys.length) {
             throw new Error("Blocktrail core module, helper service: prepareObjectAccordingToSchema. Schema is empty");
