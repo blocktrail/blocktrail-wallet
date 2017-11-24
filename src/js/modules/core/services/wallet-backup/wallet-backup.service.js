@@ -28,7 +28,7 @@
     WalletBackupService.prototype.emailBackupPdf = function(walletBackupData, extraInfo) {
         var self = this;
 
-        self._$log.debug("M:CORE:walletBackupService:emailBackupPdf", walletBackupData.identifier());
+        self._$log.debug("M:CORE:walletBackupService:emailBackupPdf", walletBackupData.identifier);
 
         return self._generatePdf(walletBackupData, extraInfo)
             .then(self._emailPdf.bind(self, walletBackupData));
@@ -43,7 +43,7 @@
     WalletBackupService.prototype.openBackupPdf = function(walletBackupData, extraInfo) {
         var self = this;
 
-        self._$log.debug("M:CORE:walletBackupService:openBackupPdf", walletBackupData.identifier());
+        self._$log.debug("M:CORE:walletBackupService:openBackupPdf", walletBackupData.identifier);
 
         return self._generatePdf(walletBackupData, extraInfo)
             .then(self._openPdf.bind(self, walletBackupData));
@@ -57,7 +57,7 @@
     WalletBackupService.prototype.clearBackupPdf = function(identifier) {
         var self = this;
 
-        self._$log.debug("M:CORE:walletBackupService:openBackupPdf", walletBackupData.identifier());
+        self._$log.debug("M:CORE:walletBackupService:openBackupPdf", walletBackupData.identifier);
 
         return self._$cordovaFile.removeFile(self._preparePath() + self._prepareFileName(identifier));
     };
@@ -89,11 +89,18 @@
 
         var deferred = self._$q.defer();
 
+        var blocktrailPublicKeys = [];
+        angular.forEach(walletBackupData.blocktrailPublicKeys, function (blocktrailPublicKey, index) {
+          blocktrailPublicKeys.push(blocktrailSDK.bitcoin.HDNode.fromBase58(blocktrailPublicKey.pubKey))
+        })
+
         var backupInfo = {
             encryptedPrimarySeed: walletBackupData.encryptedPrimarySeed,
             encryptedSecret: walletBackupData.encryptedSecret,
             backupSeed: walletBackupData.backupSeed,
-            recoveryEncryptedSecret: walletBackupData.recoveryEncryptedSecret
+            recoveryEncryptedSecret: walletBackupData.recoveryEncryptedSecret,
+            walletVersion: walletBackupData.walletVersion,
+            blocktrailPublicKeys: blocktrailPublicKeys,
         };
 
         self._sdkService.getBackupGenerator(walletBackupData.identifier, backupInfo, extraInfo)
