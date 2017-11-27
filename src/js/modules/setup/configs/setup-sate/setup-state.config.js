@@ -12,6 +12,22 @@
                 controller: "SetupCtrl",
                 templateUrl: "js/modules/setup/controllers/setup/setup.tpl.html",
                 resolve: {
+                    checkIsBanned: function($q, modalService, $translate, launchService) {
+                        return launchService.getWalletConfig()
+                            .then(function(result) {
+                                if (result.is_banned_ip) {
+                                    modalService.alert({
+                                        title: "BANNED_IP_TITLE",
+                                        body: $translate.instant('BANNED_IP_BODY', {bannedIp: result.is_banned_ip}),
+                                        button: ""
+                                    });
+
+                                    // throw error to prevent controller from loading or any other resolves to continue
+                                    return $q.reject(new Error("IS_BANNED"));
+                                }
+                            });
+                    },
+
                     /**
                      * check for extra languages to enable
                      * if new language is new preferred, set it

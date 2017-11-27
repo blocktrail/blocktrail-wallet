@@ -842,9 +842,20 @@ angular.module('blocktrail.wallet').config(
                 }
             });
 
-        function checkAPIKeyActive(launchService, $state, $q, $translate, $cordovaDialogs) {
+        function checkAPIKeyActive(launchService, $state, $q, $translate, modalService, $cordovaDialogs) {
             return launchService.getWalletConfig()
                 .then(function(result) {
+                    if (result.is_banned_ip) {
+                        modalService.alert({
+                            title: "BANNED_IP_TITLE",
+                            body: $translate.instant('BANNED_IP_BODY', {bannedIp: result.is_banned_ip}),
+                            button: ""
+                        });
+
+                        // throw error to prevent controller from loading or any other resolves to continue
+                        return $q.reject(new Error("IS_BANNED"));
+                    }
+
                     if (result.api_key && (result.api_key !== 'ok')) {
                         // alert user session is invalid
                         $cordovaDialogs.alert(
