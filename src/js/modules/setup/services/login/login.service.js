@@ -2,17 +2,13 @@
     "use strict";
 
     angular.module("blocktrail.setup")
-        .factory("loginFormService", function($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
+        .factory("loginFormService", function($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
 
-            return new LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService);
+            return new LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService);
         }
     );
 
-    /**
-     * TODO here
-     * @constructor
-     */
-    function LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
+    function LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
         var self = this;
 
         self._$http = $http;
@@ -22,7 +18,6 @@
         self._device = device || {};
         self._CONFIG = CONFIG;
         self._launchService = launchService;
-        self._settingsService = settingsService;
         self._trackingService = trackingService;
     }
 
@@ -102,34 +97,31 @@
         };
     };
 
-
     /**
-     * Store the account info
-     * @param data
+     * Set the account info
+     * @param response
      * @return { promise }
      * @private
      */
-    LoginFormService.prototype._setAccountInfo = function(data) {
+    LoginFormService.prototype._setAccountInfo = function(response) {
         var self = this;
 
-        var accountInfo = self._lodash.merge({}, { secret: data.secret }, data.responseData);
+        var accountInfo = {
+            username: response.data.username,
+            email: response.data.email,
+            apiKey: response.data.api_key,
+            apiSecret: response.data.api_secret
+        };
 
-        // server response is snake_case
-        accountInfo.apiKey = accountInfo.apiKey || accountInfo.api_key;
-        accountInfo.apiSecret = accountInfo.apiSecret || accountInfo.api_secret;
+        self._$log.debug("M:SETUP:loginFormService:_setAccountInfo", accountInfo);
 
         return self._launchService.setAccountInfo(accountInfo)
             .then(function() {
-                //save the default settings and do a profile sync
-                self._settingsService.username = data.responseData.username;
-                self._settingsService.displayName = data.responseData.username;
-                self._settingsService.enableContacts = false;
-                self._settingsService.accountCreated = data.responseData.timestamp_registered;
-                self._settingsService.email = data.responseData.email;
+                return self._launchService.getAccountInfo();
             })
             .then(function() {
-                return data.responseData;
-            })
+                return response;
+            });
     };
 
     /**

@@ -76,56 +76,6 @@
     }
 }
 
-/*
-.display-token {
-    position: relative;
-    display: inline-block;
-    width: $display-token-size;
-    height: $display-token-size;
-    border-radius: 100%;
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.13);
-    text-decoration: none;
-
-    &.contact-token {
-        background-color: #bcbcbc;
-        color: #fff;
-        text-align: center;
-        font-size: $display-token-size/2;
-        line-height: $display-token-size;
-        text-transform: uppercase;
-        font-weight: 200;
-
-        color: transparent;
-        text-shadow: 0 0 0px #fff, 0 -1px 1px rgba(0,0,0,0.35);
-
-        .avatar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-position: 50% 50%;
-            background-size: cover;
-        }
-    }
-    &.anon-token {
-        background-color: #fff;
-        color: $darkgray-light;
-        text-align: center;
-        font-size: $display-token-size/1.5;
-        line-height: $display-token-size;
-
-        &.received {
-            border: 2px solid $good-green;
-        }
-        &.sent {
-            border: 2px solid $bad-red;
-        }
-    }
-}
-*/
-
 @mixin transform($transforms) {
     -moz-transform: $transforms;
     -o-transform: $transforms;
@@ -154,4 +104,35 @@
         opacity: 1;
         top: 100%;
     }
+}
+
+// Indents
+/*-- Indents --*/
+@mixin make-inner-indents() {
+    @for $i from 1 through $indent-amount-of-steps {
+        @include inner-indent($i);
+    }
+}
+
+@mixin inner-indent($i) {
+    @include inner-indent-top($i, $indent-step);
+    @include inner-indent-right($i, $indent-step);
+    @include inner-indent-bottom($i, $indent-step);
+    @include inner-indent-left($i, $indent-step);
+}
+
+@mixin inner-indent-top($i, $indent) {
+    .iit-#{$i * $indent} { padding-top: $i * $indent * 1px; }
+}
+
+@mixin inner-indent-right($i, $indent) {
+    .iir-#{$i * $indent} { padding-right: $i * $indent * 1px; }
+}
+
+@mixin inner-indent-bottom($i, $indent) {
+    .iib-#{$i * $indent} { padding-bottom: $i * $indent * 1px; }
+}
+
+@mixin inner-indent-left($i, $indent) {
+    .iil-#{$i * $indent} { padding-left: $i * $indent * 1px; }
 }

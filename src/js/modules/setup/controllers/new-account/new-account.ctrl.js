@@ -7,6 +7,8 @@
     function SetupNewAccountCtrl($scope, $state, $q, $filter, $cordovaNetwork, CONFIG, formHelperService,
                                  modalService, passwordStrengthService, newAccountFormService, setupInfoService) {
         var listenerFormPassword;
+        // Flag for submitting form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+        var isFormSubmit = false;
 
         $scope.form = {
             email: CONFIG.DEBUG_EMAIL_PREFILL || "",
@@ -50,6 +52,11 @@
          */
         function onSubmitFormRegister(registerForm) {
             formHelperService.setAllDirty(registerForm);
+
+            // Submit the form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+            if(isFormSubmit) {
+                return false;
+            }
 
             if (registerForm.email.$invalid) {
                 modalService.alert({
@@ -125,6 +132,10 @@
          */
         function registerFormErrorHandler(error) {
             modalService.hideSpinner();
+
+            // to make the form available for the repeat enter
+            isFormSubmit = false;
+
             modalService.alert({
                 body: error
             });

@@ -45,7 +45,9 @@
     }
 
     //profile image select and crop
-    .profile-image.contact-token {
+
+    // TODO REMOVE IT AFTER PROFILE REVIEW
+    /*.profile-image.contact-token {
         top: -2px;
         width: 120px;
         height: 120px;
@@ -58,7 +60,8 @@
             font-size: 140px;
             color: $lightgray-dark;
         }
-    }
+    }*/
+
     .action-sheet {
         .button {
             display: inline-block;

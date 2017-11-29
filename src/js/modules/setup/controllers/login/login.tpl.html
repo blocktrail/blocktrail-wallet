@@ -4,11 +4,11 @@
     <ion-nav-buttons side="left">
         <button ng-click="$btBackButtonDelegate.goBack($event)"
                 class="button button-clear icon bt-back-button {{ !$btBackButtonDelegate.isDisplayed && 'hide' || '' }}"
-                ng-class="{'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid}">
+                ng-class="{ 'ion-ios-arrow-back': isIOS, 'ion-android-arrow-back': isAndroid }">
         </button>
     </ion-nav-buttons>
 
-    <ion-content scroll="true" >
+    <ion-content scroll="true">
         <form
             class="form-login"
             name="loginForm"

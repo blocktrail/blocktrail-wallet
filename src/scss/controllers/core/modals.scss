@@ -109,20 +109,4 @@ $item-modal-prompt-content-height: $item-modal-content-height - 68px;
             }
         }
     }
-
-    .action-buttons {
-        padding-top: 5px;
-        padding-bottom: 5px;
-
-        .button {
-            border: 1px solid #ececec;
-            margin: 0;
-        }
-
-        .action-button-icon {
-            font-size: 32px;
-            vertical-align: middle;
-        }
-    }
-
 }

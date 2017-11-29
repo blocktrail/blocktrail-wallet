@@ -58,7 +58,7 @@
          * TODO move this logic to Wallet class
          */
         function getGlideraTransactions() {
-            return settingsService.getSettings()
+            return settingsService.initSettings()
                 .then(function(settings) {
                     $scope.buyBtcPendingOrders = [];
 

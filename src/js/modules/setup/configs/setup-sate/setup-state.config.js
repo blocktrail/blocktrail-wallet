@@ -59,7 +59,7 @@
                 controller: "SetupWalletPinCtrl",
                 templateUrl: "js/modules/setup/controllers/wallet-pin/wallet-pin.tpl.html",
                 data: {
-                    clearHistory: true  // clear any previous history (backButtonService)
+                    clearHistory: true // clear any previous history (backButtonService)
                 },
                 resolve: {
                     accountInfo: getAccountInfo
@@ -70,36 +70,22 @@
                 abstract: true,
                 cache: false,
                 template: "<ion-nav-view></ion-nav-view>",
-                data: {
-                    clearHistory: true  // clear any previous history (backButtonService)
-                },
                 resolve: {
-                    isSetAccountInfo: sdkSetAccountInfo
+                    isSetAccountInfo: sdkSetAccountInfoAndInitSettings
                 }
             })
             .state("app.setup.settings.backup", {
                 url: "/wallet-backup",
                 cache: false,
                 controller: "SetupWalletBackupCtrl",
-                templateUrl: "js/modules/setup/controllers/wallet-backup/wallet-backup.tpl.html",
-                data: {
-                    clearHistory: true  // clear any previous history (backButtonService)
-                }
+                templateUrl: "js/modules/setup/controllers/wallet-backup/wallet-backup.tpl.html"
             })
             .state("app.setup.settings.profile", {
                 url: "/profile",
+                cache: false,
                 controller: "SetupProfileCtrl",
-                templateUrl: "js/modules/setup/controllers/profile/profile.tpl.html",
-                data: {
-                    clearHistory: true  // clear any previous history (backButtonService)
-                }
+                templateUrl: "js/modules/setup/controllers/profile/profile.tpl.html"
             });
-            // TODO Do we need this state
-            /*.state("app.setup.complete", {
-                url: "/complete",
-                controller: "SetupCompleteCtrl",
-                templateUrl: "js/modules/setup/controllers/complete/complete.tpl.html"
-            });*/
     }
 
     /**
@@ -145,10 +131,13 @@
             });
     }
 
-    function sdkSetAccountInfo(launchService, sdkService) {
+    function sdkSetAccountInfoAndInitSettings(launchService, sdkService, settingsService) {
         return launchService.getAccountInfo()
             .then(function(accountInfo) {
                 return sdkService.setAccountInfo(accountInfo);
+            })
+            .then(function() {
+                return settingsService.initSettings();
             });
     }
     

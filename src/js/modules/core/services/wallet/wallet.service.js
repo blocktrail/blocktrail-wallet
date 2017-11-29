@@ -950,7 +950,7 @@
     Wallet.prototype._extentTransactionsWithContactsAndGlideraData = function(transactions) {
         var self = this;
 
-        return self._settingsService.getSettings()
+        return self._settingsService.initSettings()
             .then(function(settings) {
                 var promises = [];
                 var completeGlideraTransactions = settings.glideraTransactions.filter(function(item) {

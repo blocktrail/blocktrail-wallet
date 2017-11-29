@@ -7,12 +7,6 @@
         }
     );
 
-    /**
-     * Setup info service
-     * @param CONFIG
-     * @param randomBytesJS
-     * @constructor
-     */
     function SetupInfoService(CONFIG, randomBytesJS, helperService) {
         var self = this;
 

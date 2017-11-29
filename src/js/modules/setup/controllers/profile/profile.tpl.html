@@ -3,78 +3,19 @@
 
     <ion-content scroll="true">
         <div class="card">
-            <div class="list-header">
-                <p>{{ 'SETTINGS_PROFILE_DESCRIPTION' | translate }}</p>
-            </div>
+            <profile-picture></profile-picture>
 
-            <ion-item class="item-borderless item-text-wrap">
-                <h1 class="text-bad">TODO this later</h1>
-            </ion-item>
-
-            <ion-item class="text-right">
-                <button
-                    class="button button-small button-stable"
-                    ng-click="onSkipProfile()"
-                >{{ 'SETUP_SKIP_BACKUP' | translate }}
-                </button>
-            </ion-item>
-
-            <!--<ion-item class="item-borderless item-text-wrap text-center">
-                <div class="display-token contact-token profile-image" ng-click="updatePicture()">
-                    <div class="initials"><i class="ion-person"></i></div>
-                    <span class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: 50%; background-position-y: 50%;"></span>
-                </div>
-                <div ng-if="settings.profilePic">
-                    <a class="" ng-click="updatePicture()">{{ 'SETTINGS_UPDATE_PHOTO' | translate }}</a>
+            <ion-item class="iit-5 iib-5">
+                <div class="row action-buttons">
+                    <div class="col text-right">
+                        <button
+                            class="button button-small button-stable"
+                            ng-click="onSkipProfile()"
+                        >{{ 'SETUP_SKIP_BACKUP' | translate }}
+                        </button>
+                    </div>
                 </div>
             </ion-item>
-
-            <ion-item class="item-borderless item-text-wrap" ng-if="!settings.profilePic">
-                <button class="button button-block button-positive"
-                        ng-click="updatePicture()">{{ 'SETUP_PROFILE_PIC' | translate }}
-                </button>
-            </ion-item>
-
-            <ion-item ng-if="!settings.profilePic">
-                <a
-                    class="pull-right button button-small button-neutral sentence-case"
-                    ui-sref="app.setup.complete"
-
-                >{{ 'SETUP_SKIP_BACKUP' | translate }}...</a>
-            </ion-item>
-
-            <ion-item ng-if="settings.profilePic">
-                <a class="button button-block button-positive"
-                   ui-sref="app.setup.complete">{{ 'CONTINUE' | translate }}
-                </a>
-            </ion-item>-->
         </div>
     </ion-content>
-
-    <!-- TODO Move to modal -->
-    <!--<div class="photo-crop-screen" ng-class="{ displayed: appControl.showImageCrop }">
-        <img-crop image="newProfileImage"
-                  result-image="croppedProfileImage"
-                  area-type="circle"
-                  area-min-size="100"
-                  result-image-size="500"
-                  result-image-format="image/jpeg"
-                  result-image-quality="0.8">late
-        </img-crop>
-        <div class="loading" ng-if="appControl.showImageCrop && !newProfileImage" >
-            <ion-spinner icon="dots" class="spinner-stable"></ion-spinner>
-            <p>{{ 'LOADING' | translate }}</p>
-        </div>
-
-        <button class="button button-outline confirm-button" ng-click="assignProfileImage(croppedProfileImage)">{{ 'APPLY' | translate }}</button>
-    </div>-->
-    <!-- photo crop screen -->
-
 </ion-view>
-
-<!--<div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="">
-    <h2 class="title" ng-class="message.title_class">{{ message.title | translate }}</h2>
-    <ion-spinner icon="dots" ng-if="appControl.working"></ion-spinner>
-    <p class="body" ng-class="message.body_class">{{ message.body | translate }}</p>
-    <button class="button dismiss no-animate" ng-click="dismissMessage()" ng-hide="appControl.working">{{ 'OK' | translate }}</button>
-</div>-->

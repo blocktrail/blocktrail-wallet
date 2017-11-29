@@ -1,0 +1,15 @@
+.profile-picture {
+    text-align: center;
+
+    .display-token {
+        width: 150px;
+        height: 150px;
+        margin: 0;
+
+        .initials {
+            font-size: 100px;
+            line-height: 150px;
+            color: $lightgray-dark;
+        }
+    }
+}

@@ -7,20 +7,6 @@
             }
         );
 
-    /**
-     * New account form service
-     * @param $log
-     * @param $http
-     * @param $q
-     * @param _
-     * @param cryptoJS
-     * @param device
-     * @param CONFIG
-     * @param launchService
-     * @param settingsService
-     * @param trackingService
-     * @constructor
-     */
     function NewAccountFormService($log, $http, $q, _, cryptoJS, device, CONFIG, launchService, settingsService, trackingService) {
         var self = this;
 
@@ -86,12 +72,11 @@
 
 
     /**
-     * Store the account info
+     * Set the account info
      * @param response
      * @return { promise }
      * @private
      */
-    // TODO Clean API request, return data object only
     NewAccountFormService.prototype._setAccountInfo = function(response) {
         var self = this;
 

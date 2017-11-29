@@ -1,0 +1,25 @@
+<div class="item item-body profile-picture">
+    <div class="display-token contact-token profile-image" ng-click="updatePicture()">
+        <div class="initials"><i class="ion-person"></i></div>
+        <div class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: 50%; background-position-y: 50%;"></div>
+    </div>
+
+    <p>{{ 'SETTINGS_PROFILE_DESCRIPTION' | translate }}</p>
+
+    <div class="row action-buttons">
+        <div class="col">
+            <button
+                class="button button-block action-button-icon ion-trash-b"
+                ng-click="removePicture()"
+            >
+            </button>
+        </div>
+        <div class="col">
+            <button
+                class="button button-block action-button-icon ion-edit"
+                ng-click="updatePicture()"
+            >
+            </button>
+        </div>
+    </div>
+</div>
