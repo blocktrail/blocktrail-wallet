@@ -73,8 +73,8 @@
             "TX_FILTER_MIN_BLOCK_HEIGHT": 478559,
             "BUYBTC": false,
             "PRIOBOOST": false,
-            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/BCC/address",
-            "EXPLORER_TX_URL": "https://www.blocktrail.com/BCC/tx"
+            "EXPLORER_ADDRESS_URL": "https://bch.btc.com",
+            "EXPLORER_TX_URL": "https://bch.btc.com"
         },
         "tBTC": {
             "NETWORK": "tBTC",
@@ -84,8 +84,8 @@
             "TX_FILTER_MIN_BLOCK_HEIGHT": null,
             "BUYBTC": true,
             "PRIOBOOST": false,
-            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBTC/address",
-            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBTC/tx"
+            "EXPLORER_ADDRESS_URL": "https://tchain.btc.com",
+            "EXPLORER_TX_URL": "https://tchain.btc.com"
         },
         "tBCC": {
             "NETWORK": "tBCC",
