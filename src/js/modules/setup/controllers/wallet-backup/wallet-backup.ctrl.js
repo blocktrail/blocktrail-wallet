@@ -4,10 +4,14 @@
     angular.module("blocktrail.setup")
         .controller("SetupWalletBackupCtrl", SetupWalletBackupCtrl);
 
-    function SetupWalletBackupCtrl($scope, $q, $state, modalService, launchService, settingsService, walletBackupService) {
-        var walletBackupData;
-        var readOnlySettingsData;
+    function SetupWalletBackupCtrl($scope, $q, $btBackButtonDelegate, modalService, launchService,
+                                   settingsService, walletBackupService, setupStepsService) {
+        // disable back button
+        $btBackButtonDelegate.setBackButton(angular.noop);
+        $btBackButtonDelegate.setHardwareBackButton(angular.noop);
 
+        var walletBackupData;
+        var readOnlySettingsData = settingsService.getReadOnlySettingsData();
         var actionButtonOptions = [
             {
                 icon: "ion-email",
@@ -28,6 +32,9 @@
         $scope.onSkipBackup = onSkipBackup;
         $scope.onNextStep = onNextStep;
 
+        $scope.emailBackupPdf = emailBackupPdf;
+        $scope.openBackupPdf = openBackupPdf;
+
         init();
 
         /**
@@ -36,10 +43,9 @@
         function init() {
             modalService.showSpinner();
 
-            $q.all([launchService.getWalletBackup(), settingsService.getSettings()])
+            launchService.getWalletBackup()
                 .then(function(data) {
-                    walletBackupData = data[0];
-                    readOnlySettingsData = settingsService.getReadOnlySettingsData();
+                    walletBackupData = data;
                     modalService.hideSpinner();
                 });
         }
@@ -58,7 +64,7 @@
                             openBackupPdf();
                             break;
                     }
-                })
+                });
         }
 
         /**
@@ -145,24 +151,8 @@
                     titleClass: "text-bad"
                 })
                 .then(function(dialogResult) {
-                    /*if (dialogResult) {
-                        settingsService.$isLoaded()
-                            .then(function() {
-                                settingsService.backupSkipped = true;
-                                settingsService.backupSavedPersistent = true;
-                                settingsService.$store();
-                            });
-
-                    }*/
-
-                    // debugger;
-
-                    // TODO Continue here
                     if(dialogResult) {
-                        $state.go("app.setup.settings.profile");
-                    } else {
-                        // TODO Check on phone or profile else redirect to "summary"
-                        $state.go("app.setup.settings.profile");
+                        setupStepsService.toNextStep();
                     }
                 });
         }
@@ -186,11 +176,7 @@
                     }
                 })
                 .then(function() {
-                    // TODO Save in settings (settingsService)
-                })
-                .then(function() {
-                    // TODO Check on phone or profile else redirect to "summary"
-                    $state.go("app.setup.settings.profile");
+                    setupStepsService.toNextStep();
                 });
         }
     }

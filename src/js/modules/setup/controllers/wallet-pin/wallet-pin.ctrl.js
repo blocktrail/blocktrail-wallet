@@ -4,11 +4,20 @@
     angular.module("blocktrail.setup")
         .controller("SetupWalletPinCtrl", SetupWalletPinCtrl);
 
-    function SetupWalletPinCtrl($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, $log, CONFIG, blocktrailSDK,
-                                sdkService, modalService, launchService, localSettingsService, setupInfoService) {
+    function SetupWalletPinCtrl($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, $log, $btBackButtonDelegate, CONFIG,
+                                blocktrailSDK, sdkService, modalService, launchService, setupStepsService, setupInfoService) {
+
+        // disable back button
+        $btBackButtonDelegate.setBackButton(angular.noop);
+        $btBackButtonDelegate.setHardwareBackButton(angular.noop);
+
+        // Flag for submitting form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+        var isFormSubmit = false;
+
         $scope.form = {
             pin: CONFIG.DEBUG_PIN_PREFILL || "",
-            pinRepeat: CONFIG.DEBUG_PIN_PREFILL || ""
+            pinRepeat: CONFIG.DEBUG_PIN_PREFILL || "",
+            isSubmit: false
         };
 
         // Methods
@@ -19,6 +28,11 @@
          * @return { boolean }
          */
         function onSubmitFormPin(pin, pinRepeat) {
+            // Submit the form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+            if(isFormSubmit) {
+                return false;
+            }
+
             // Check on numbers, pattern="[0-9]*" is in html
             if (!pin) {
                 modalService.alert({
@@ -51,6 +65,7 @@
          */
         function createWallet() {
             if ($cordovaNetwork.isOnline()) {
+                isFormSubmit = true;
                 initWallet();
             } else {
                 modalService.alert({
@@ -91,7 +106,11 @@
                 .then(hallelujah)
                 .catch(function(e) {
                     $log.debug("M:SETUP:SetupWalletPinCtrl:initWallet:catch", e.toString());
+
                     modalService.hideSpinner();
+
+                    // to make the form available for the repeat enter
+                    isFormSubmit = false;
 
                     if (e === "CANCELLED") {
                         // user canceled action
@@ -405,36 +424,15 @@
          * Hallelujah :)
          */
         function hallelujah() {
-            // store the backup info temporarily
             $log.debug("M:SETUP:SetupWalletPinCtrl:hallelujah");
 
-            return $q.all([launchService.getWalletBackup(), localSettingsService.getLocalSettings(), setupInfoService.resetSetupInfo()])
-                .then(function(data) {
-                    debugger;
+            // Reset the setup info data
+            setupInfoService.resetSetupInfo();
 
-                    modalService.hideSpinner();
-
-                    var walletBackup = data[0];
-                    var localSettings = data[1];  // @TODO: don't need right now
-
-                    var isWalletBackupSaved = !walletBackup.identifier;
-
-                    var nextStep;
-                    // after wallet-pin we either goto backup for new accounts
-                    //  or we skip that and go directly to phone verification for existing accounts
-                    // save backup -> phone verification -> contacts synchronization -> profile picture
-                    // TODO Move this login into abstract class app.setup.wallet
-                    // TODO check this cases
-                    // if user already logged in but didn't save backup, verified phone,
-                    // profile picture all the data we can get from settings
-                    if(!isWalletBackupSaved) {
-                        nextStep = "app.setup.settings.backup";
-                    } else {
-                        nextStep = "app.wallet.summary";
-                    }
-
-                    $state.go(nextStep);
-                });
+            // TODO Save this in local settings service, do not save it in the $rootScope
+            // prevent PIN dialog
+            $rootScope.STATE.INITIAL_PIN_DONE = true;
+            return setupStepsService.toNextStep();
         }
 
         /**

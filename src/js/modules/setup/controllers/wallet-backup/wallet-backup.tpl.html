@@ -7,23 +7,44 @@
                 <p>{{ 'MSG_BACKUP_DESCRIPTION' | translate }}</p>
             </div>
 
-            <ion-item class="item-borderless item-text-wrap text-center">
+            <!--<ion-item class="item-borderless item-text-wrap text-center">
                 <button
                     class="button button-block button-positive"
                     ng-click="onShowExportOptions()"
                 >{{ 'SAVE' | translate }}
                 </button>
-            </ion-item>
+            </ion-item>-->
+
+            <div class="row action-buttons">
+                <div class="col">
+                    <button
+                        class="button button-block action-button-icon ion-email"
+                        ng-click="emailBackupPdf()"
+                    >
+                    </button>
+                </div>
+                <div class="col">
+                    <button
+                        class="button button-block action-button-icon ion-upload"
+                        ng-click="openBackupPdf()"
+                    >
+                    </button>
+                </div>
+            </div>
 
             <ion-item
-                class="text-right"
                 ng-if="!isButtonEmailOrOpenClicked"
+                class="iit-5 iib-5"
             >
-                <button
-                    class="button button-small button-stable"
-                    ng-click="onSkipBackup()"
-                >{{ 'SETUP_SKIP_BACKUP' | translate }}
-                </button>
+                <div class="row action-buttons">
+                    <div class="col text-right">
+                        <button
+                            class="button button-small button-stable"
+                            ng-click="onSkipBackup()"
+                        >{{ 'SETUP_SKIP_BACKUP' | translate }}
+                        </button>
+                    </div>
+                </div>
             </ion-item>
         </div>
 

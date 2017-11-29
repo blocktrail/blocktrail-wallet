@@ -450,7 +450,7 @@
 
         return $q.all([
             Currencies.updatePrices(true),
-            settingsService.getSettings()
+            settingsService.initSettings()
         ]).then(function(results) {
             $log.debug("Initial load complete");
             $rootScope.bitcoinPrices = results[0];

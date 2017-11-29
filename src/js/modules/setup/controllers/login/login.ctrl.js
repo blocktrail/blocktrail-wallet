@@ -5,6 +5,9 @@
         .controller("SetupLoginCtrl", SetupLoginCtrl);
 
     function SetupLoginCtrl($scope, $state, CONFIG, modalService, formHelperService , sdkService, loginFormService, setupInfoService) {
+        // Flag for submitting form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+        var isFormSubmit = false;
+
         $scope.form = {
             email: CONFIG.DEBUG_EMAIL_PREFILL || "",
             password: CONFIG.DEBUG_PASSWORD_PREFILL || "",
@@ -22,6 +25,11 @@
          */
         function onSubmitFormRegister(loginForm) {
             formHelperService.setAllDirty(loginForm);
+
+            // Submit the form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+            if(isFormSubmit) {
+                return false;
+            }
 
             if (loginForm.email.$invalid) {
                 modalService.alert({
@@ -88,8 +96,11 @@
         function loginFormErrorHandler(error) {
             modalService.hideSpinner();
 
+            // to make the form available for the repeat enter
+            isFormSubmit = false;
+
             switch (error.type) {
-                // TODO Add state later
+                // TODO Add BANNED_IP state
                 case "BANNED_IP":
                     return modalService.alert({
                         title: "BANNED_IP_TITLE",

@@ -148,7 +148,7 @@
      * as resolve parameter we get _readonlyDoc object
      * @returns { promise }
      */
-    SettingsService.prototype.getSettings = function() {
+    SettingsService.prototype.initSettings = function() {
         var self = this;
         var promise;
 

@@ -1,0 +1,6 @@
+@import "../mixins";
+
+$indent-step: 5;
+$indent-amount-of-steps: 3;
+
+@include make-inner-indents();

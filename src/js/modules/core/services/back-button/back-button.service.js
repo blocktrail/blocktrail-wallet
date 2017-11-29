@@ -2,79 +2,23 @@
     "use strict";
 
     /**
-     * window.device adds to widow dynamically that's why we use factory instead of constant
+     * TODO Review $btBackButtonDelegate
+     * $btBackButtonDelegate -> backButtonService
+     * get rid of the $rootScope
+     * clean the controllers
+     * review the logic with disable/enable the back button / menu button
      */
     angular.module("blocktrail.core")
-        .factory("backButtonService", function($log, $state, $ionicHistory, $ionicPlatform, $ionicSideMenuDelegate, $ionicViewSwitcher) {
+        .factory("backButtonService", function() {
                 return new BackButtonService();
             }
         );
 
 
     function BackButtonService() {
-        var self = this;
-
-        self._history = [];
-        self._onBack = this._default;
-        self._onHardwareBack = this._default;
-        self._rootState = "app.wallet.summary"; // used as a fake "back" state before closing app on hardware back button (android)
-
-        self._isDisplayed = false;
-        self._backButtonText = "";
-        self._enableBackButton = true;
-        self._enableHardwareBackButton = true;
-        self._enableMenuButton = true;
-
-        // watch the "isDisplayed" value to enable/disable the side menu
-        // TODO Review this part
-        $rootScope.$watch(function() {
-                return !self.isDisplayed && self.enableMenuButton;
-            }, function watchCallback(newValue, oldValue) {
-                $ionicSideMenuDelegate.canDragContent(newValue);
-            }
-        );
-
-        // TODO Review this part create a method and call it from app.js
-        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-            //don't add the last state if we're going back, we're at root, or the state says not to
-            if (!goingBack && fromState.name && !(fromState.data && fromState.data.excludeFromHistory)) {
-                $log.debug('pushing state to stack', fromState.name, fromState);
-                self.history.push({state: fromState.name, params: fromParams});
-            } else {
-                //$log.debug('no state added to history', goingBack, fromState.name, toState.name);
-            }
-            //clear history if the entering state/toParams says to
-            if ( (toState.data && toState.data.clearHistory) || toParams.clearHistory) {
-                self.clearHistory();
-            }
-
-            //show/hide the back button (and thus the side menu)
-            if (self.enableBackButton && self.history.length > 0) {
-                $log.debug('show back button');
-                self.isDisplayed = true;
-            } else {
-                $log.debug('hide back button');
-                self.isDisplayed = false;
-            }
-
-            //reset flags
-            // goingBack = false;
-        });
     }
 
-
 })();
-
-
-
-/**
- * TODO Review back button service
- * TODO Rename it $btBackButtonDelegate -> backButtonService
- */
-
-
-
-
 
 angular.module('blocktrail.wallet')
     .factory('$btBackButtonDelegate', function($ionicHistory, $state, $rootScope, $ionicPlatform, $log, $ionicSideMenuDelegate, $ionicViewSwitcher, settingsService) {
@@ -106,7 +50,7 @@ angular.module('blocktrail.wallet')
 
             $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 
-                //don't add the last state if we're going back, we're at root, or the state says not to
+                // don't add the last state if we're going back, we're at root, or the state says not to
                 if (!goingBack && fromState.name && !(fromState.data && fromState.data.excludeFromHistory)) {
                     $log.debug('pushing state to stack', fromState.name, fromState);
                     self.history.push({state: fromState.name, params: fromParams});
@@ -118,7 +62,7 @@ angular.module('blocktrail.wallet')
                     self.clearHistory();
                 }
 
-                //show/hide the back button (and thus the side menu)
+                // show / hide the back button (and thus the side menu)
                 if (self.enableBackButton && self.history.length > 0) {
                     $log.debug('show back button');
                     self.isDisplayed = true;
