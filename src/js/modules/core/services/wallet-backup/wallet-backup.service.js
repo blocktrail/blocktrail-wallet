@@ -57,9 +57,9 @@
     WalletBackupService.prototype.clearBackupPdf = function(identifier) {
         var self = this;
 
-        self._$log.debug("M:CORE:walletBackupService:openBackupPdf", identifier);
+        self._$log.debug("M:CORE:walletBackupService:clearBackupPdf", self._preparePath() + self._prepareFileName(identifier));
 
-        return self._$cordovaFile.removeFile(self._preparePath() + self._prepareFileName(identifier));
+        return self._$cordovaFile.removeFile(self._preparePath(), self._prepareFileName(identifier));
     };
 
     /**
@@ -87,12 +87,13 @@
     WalletBackupService.prototype._generatePdfFormSdk = function(walletBackupData, extraInfo) {
         var self = this;
 
+        var sdk = self._sdkService.getSdkByNetworkType(self._sdkService.getNetworkType());
         var deferred = self._$q.defer();
 
         var blocktrailPublicKeys = [];
 
         angular.forEach(walletBackupData.blocktrailPublicKeys, function(blocktrailPublicKey) {
-          blocktrailPublicKeys.push(blocktrailSDK.bitcoin.HDNode.fromBase58(blocktrailPublicKey.pubKey))
+            blocktrailPublicKeys.push(blocktrailSDK.bitcoin.HDNode.fromBase58(blocktrailPublicKey.pubKey, sdk.network));
         });
 
         var backupInfo = {

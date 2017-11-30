@@ -1,0 +1,39 @@
+<div class="modal dialog-message">
+    <div class="va">
+        <div class="va-holder">
+            <div class="va-content">
+                <div class="card card-modal card-sm">
+                    <div class="img-crop-holder">
+                        <img-crop image="picData"
+                                  result-image="croppedPicData"
+                                  area-type="circle"
+                                  area-min-size="180"
+                                  result-image-size="500"
+                                  result-image-format="image/jpeg"
+                                  result-image-quality="0.8"
+                        >
+                        </img-crop>
+                        <div
+                            class="rotate-button ion-reply"
+                            ng-click="rotate(false)"
+                        ></div>
+                        <div
+                            class="rotate-button ion-forward"
+                            ng-click="rotate(true)"
+                        ></div>
+                    </div>
+                    <div class="row action-buttons">
+                        <div class="col">
+                            <button class="button button-block" ng-click="cancel()">{{ buttonCancel | translate }}
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button class="button button-block" ng-click="confirm(croppedPicData)">{{ buttonConfirm | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

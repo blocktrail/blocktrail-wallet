@@ -61,14 +61,12 @@
             return $q.all([
                 launchService.getAccountInfo(),
                 launchService.getWalletInfo(),
-                launchService.getWalletBackup(),
-                localSettingsService.getLocalSettings()
+                launchService.getWalletBackup()
             ])
                 .then(function(data) {
                     var accountInfo = data[0];
                     var walletInfo = data[1];
                     var walletBackup = data[2];
-                    var localSettings = data[3];
 
                     var isLoggedIn = !!(accountInfo.apiKey && accountInfo.apiSecret);
                     var walletCreated = !!walletInfo.identifier;
@@ -83,21 +81,17 @@
                     var nextStep = "app.reset";
 
                     // when not logged in or when wallet is not created yet, we go back to start
-                    //  because the password is required to init/create wallet and we wouldn't have that if you're logged in already from a previous session
+                    // because the password is required to init/create wallet and we wouldn't have that if you're logged in already from a previous session
                     if (isLoggedIn && walletCreated) {
                         if(!isWalletBackupSaved) {
                             nextStep = "app.setup.settings.backup";
-                        } else if(!localSettings.isPhoneVerified) {
-                            // TODO checnge the state to app.setup.settings. ...
-                            nextStep = "app.setup.phone";
-                        } else if(!localSettings.isContactsSynchronized) {
-                            nextStep = "app.setup.contacts";
                         } else {
                             nextStep = "app.wallet.summary";
                         }
 
 
                         // TODO Discuss with Ruben
+                        // TODO Review this part after the waller sent/receive controllers
                         /*if ($rootScope.handleOpenURL) {
                          $log.log("launching app with uri: " + $rootScope.handleOpenURL);
                          $log.log("bitcoin? " + $rootScope.handleOpenURL.startsWith("bitcoin"));
