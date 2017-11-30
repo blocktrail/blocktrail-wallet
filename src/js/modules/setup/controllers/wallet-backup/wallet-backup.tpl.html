@@ -3,39 +3,27 @@
 
     <ion-content scroll="true">
         <div class="card">
-            <div class="list-header">
+            <div class="item item-body profile-picture">
                 <p>{{ 'MSG_BACKUP_DESCRIPTION' | translate }}</p>
-            </div>
-
-            <!--<ion-item class="item-borderless item-text-wrap text-center">
-                <button
-                    class="button button-block button-positive"
-                    ng-click="onShowExportOptions()"
-                >{{ 'SAVE' | translate }}
-                </button>
-            </ion-item>-->
-
-            <div class="row action-buttons">
-                <div class="col">
-                    <button
-                        class="button button-block action-button-icon ion-email"
-                        ng-click="emailBackupPdf()"
-                    >
-                    </button>
-                </div>
-                <div class="col">
-                    <button
-                        class="button button-block action-button-icon ion-upload"
-                        ng-click="openBackupPdf()"
-                    >
-                    </button>
+                <div class="row action-buttons">
+                    <div class="col">
+                        <button
+                            class="button button-block action-button-icon ion-email"
+                            ng-click="emailBackupPdf()"
+                        >
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button
+                            class="button button-block action-button-icon ion-upload"
+                            ng-click="openBackupPdf()"
+                        >
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <ion-item
-                ng-if="!isButtonEmailOrOpenClicked"
-                class="iit-5 iib-5"
-            >
+            <ion-item class="iit-5 iib-5">
                 <div class="row action-buttons">
                     <div class="col text-right">
                         <button

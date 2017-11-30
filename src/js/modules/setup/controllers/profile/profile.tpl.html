@@ -3,14 +3,30 @@
 
     <ion-content scroll="true">
         <div class="card">
-            <profile-picture></profile-picture>
+            <profile-picture is-show-remove-button="false"></profile-picture>
 
             <ion-item class="iit-5 iib-5">
-                <div class="row action-buttons">
-                    <div class="col text-right">
+                <div
+                    class="row"
+                    ng-class="{'action-buttons': !settingsData.profilePic}"
+                >
+                    <div
+                        class="col"
+                        ng-if="settingsData.profilePic"
+                    >
+                        <button
+                            class="button button-block button-positive"
+                            ng-click="onNextStep()"
+                        >{{ 'CONTINUE' | translate }}
+                        </button>
+                    </div>
+                    <div
+                        class="col text-right"
+                        ng-if="!settingsData.profilePic"
+                    >
                         <button
                             class="button button-small button-stable"
-                            ng-click="onSkipProfile()"
+                            ng-click="onNextStep()"
                         >{{ 'SETUP_SKIP_BACKUP' | translate }}
                         </button>
                     </div>

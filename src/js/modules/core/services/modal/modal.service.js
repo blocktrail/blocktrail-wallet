@@ -211,7 +211,6 @@
         return self.show("js/modules/core/controllers/modal-select/modal-select.tpl.html", "ModalSelectCtrl", parameters);
     };
 
-
     /**
      * Action buttons
      * @param parameters
@@ -232,9 +231,30 @@
     };
 
     /**
+     * Action buttons
+     * @param parameters
+     */
+    ModalService.prototype.cropPic = function(parameters) {
+        var self = this;
+
+        // Check on undefined
+        parameters = parameters ? parameters : {};
+
+        // Set default values for undefined properties
+        parameters = {
+            options: self._lodash.isArray(parameters.options) ? parameters.options : [],
+            picData: self._lodash.isString(parameters.picData) ? parameters.picData : null,
+            buttonConfirm: self._lodash.isString(parameters.buttonConfirm) ? parameters.buttonConfirm : "CONFIRM",
+            buttonCancel: self._lodash.isString(parameters.buttonCancel) ? parameters.buttonCancel : "CANCEL"
+        };
+
+        return self.show("js/modules/core/controllers/modal-crop-pic/modal-crop-pic.tpl.html", "ModalCropPicCtrl", parameters);
+    };
+
+    /**
      * Show spinner
      * @param parameters
-     * @return {{closeSpinner: *}}
+     * @return {{ closeSpinner: * }}
      */
     ModalService.prototype.showSpinner = function(parameters) {
         var self = this;

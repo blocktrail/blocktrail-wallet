@@ -4,16 +4,21 @@
     angular.module("blocktrail.setup")
         .controller("SetupProfileCtrl", SetupProfileCtrl);
 
-    function SetupProfileCtrl($state, $scope, $btBackButtonDelegate) {
+    function SetupProfileCtrl($scope, $btBackButtonDelegate, settingsService, setupStepsService) {
         // disable back button
         $btBackButtonDelegate.setBackButton(angular.noop);
         $btBackButtonDelegate.setHardwareBackButton(angular.noop);
 
+        $scope.settingsData = settingsService.getReadOnlySettingsData();
 
-        $scope.onSkipProfile = onSkipProfile;
+        // Methods
+        $scope.onNextStep = onNextStep;
 
-        function onSkipProfile() {
-            $state.go("app.wallet.summary");
+        /**
+         * On the next step
+         */
+        function onNextStep() {
+            setupStepsService.toNextStep();
         }
     }
 

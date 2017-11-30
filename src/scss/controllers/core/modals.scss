@@ -109,4 +109,39 @@ $item-modal-prompt-content-height: $item-modal-content-height - 68px;
             }
         }
     }
+
+    .img-crop-holder {
+        position: relative;
+
+        img-crop {
+            margin: 0 auto;
+            height: 360px;
+        }
+
+        .rotate-button {
+            position: absolute;
+            bottom: 10px;
+            z-index: 100;
+            width: 36px;
+            height: 36px;
+            background-image: radial-gradient(#ccc 5%, transparent 70%);
+            border-radius: 50%;
+            color: #777;
+            font-size: 26px;
+            line-height: 36px;
+            text-align: center;
+            transform: rotate(180deg);
+
+            &.ion-reply {
+                left: 10px;
+            }
+
+            &.ion-forward {
+                right: 10px;
+            }
+        }
+    }
 }
+
+
+

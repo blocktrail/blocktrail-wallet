@@ -12,23 +12,12 @@
 
         var walletBackupData;
         var readOnlySettingsData = settingsService.getReadOnlySettingsData();
-        var actionButtonOptions = [
-            {
-                icon: "ion-email",
-                value: "email"
-            },
-            {
-                icon: "ion-upload",
-                value: "open"
-            }
-        ];
 
         $scope.isButtonEmailOrOpenClicked = false;
         $scope.form = {
             isBackupSaved: false
         };
 
-        $scope.onShowExportOptions = onShowExportOptions;
         $scope.onSkipBackup = onSkipBackup;
         $scope.onNextStep = onNextStep;
 
@@ -51,27 +40,10 @@
         }
 
         /**
-         * On show export options
-         */
-        function onShowExportOptions() {
-            modalService.actionButtons({ options: actionButtonOptions })
-                .then(function(action) {
-                    switch (action) {
-                        case "email":
-                            emailBackupPdf();
-                            break;
-                        case "open":
-                            openBackupPdf();
-                            break;
-                    }
-                });
-        }
-
-        /**
          * Email the backup PDF
          */
         function emailBackupPdf() {
-            modalService.updateSpinner({ body: "SEND_PDF_FILE" });
+            modalService.showSpinner();
 
             var extraInfo = prepareExtraPdfInfo();
 
@@ -93,9 +65,12 @@
                     title: "IMPORTANT",
                     body: ionic.Platform.isIOS() ? "BACKUP_EXPORT_PDF_IOS_INFO" : "BACKUP_EXPORT_PDF_ANDROID_INFO"
                 }).then(function() {
+                    modalService.showSpinner();
+
                     walletBackupService.openBackupPdf(walletBackupData, extraInfo)
                         .then(function() {
                             $scope.isButtonEmailOrOpenClicked = true;
+                            modalService.hideSpinner();
                         })
                         .catch(backupPdfErrorHandler);
                 });
@@ -152,7 +127,13 @@
                 })
                 .then(function(dialogResult) {
                     if(dialogResult) {
-                        setupStepsService.toNextStep();
+                        // Remove pdf if it was open before but not saved
+                        return walletBackupService.clearBackupPdf(walletBackupData.identifier)
+                            .catch(backupPdfClearErrorHandler)
+                            .then(function() {
+                                setupStepsService.toNextStep();
+                            });
+
                     }
                 });
         }
@@ -172,12 +153,28 @@
                 })
                 .then(function(dialogResult) {
                     if (!dialogResult) {
-                        return walletBackupService.clearBackupPdf(walletBackupData.identifier);
+                        return walletBackupService.clearBackupPdf(walletBackupData.identifier)
+                            .catch(backupPdfClearErrorHandler);
                     }
                 })
                 .then(function() {
                     setupStepsService.toNextStep();
                 });
+        }
+
+        /**
+         * Backup PDF clear error handler
+         * @param e
+         * @return {boolean}
+         */
+        function backupPdfClearErrorHandler(e) {
+            if(e && e.message === "NOT_FOUND_ERR") {
+                return true;
+            } else {
+                backupPdfErrorHandler();
+                // TODO discuss with Ruben, do we have to stop or continue
+                return true;
+            }
         }
     }
 

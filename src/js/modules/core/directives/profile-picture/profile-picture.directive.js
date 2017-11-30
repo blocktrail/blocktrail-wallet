@@ -9,20 +9,22 @@
             restrict: "E",
             transclude: false,
             replace: true,
-            scope: {},
+            scope: {
+                isShowRemoveButton: "="
+            },
             templateUrl: "js/modules/core/directives/profile-picture/profile-picture.directive.tpl.html",
             controller: ProfilePictureCtrl
         };
     }
 
     function ProfilePictureCtrl($scope, $window, $cordovaImagePicker, $cordovaCamera, modalService, settingsService) {
-        var photoSelectOptions = {
+        var picSelectOptions = {
             maximumImagesCount: 1,
             width: 800,
             height: 0,
             quality: 80
         };
-        var photoTakeOptions = {
+        var picTakeOptions = {
             quality: 80,
             destinationType: $window.Camera.DestinationType.DATA_URL,
             sourceType: $window.Camera.PictureSourceType.CAMERA,
@@ -30,45 +32,23 @@
             encodingType: $window.Camera.EncodingType.JPEG,
             targetWidth: 800,
             targetHeight: 800,
-            popoverOptions: (typeof $window.CameraPopoverOptions == "undefined") ? null : $window.CameraPopoverOptions,
+            popoverOptions: $window.CameraPopoverOptions ? null : $window.CameraPopoverOptions,
             saveToPhotoAlbum: true
         };
-        var actionButtonOptions = [
-            {
-                icon: "ion-images",
-                value: "images"
-            },
-            {
-                icon: "ion-camera",
-                value: "camera"
-            }
-        ];
 
-
-        $scope.newProfileImageSource = null;
+        $scope.settingsData = settingsService.getReadOnlySettingsData();
 
         // Methods
-        $scope.updatePicture = updatePicture;
+        $scope.removePic = removePic;
+        $scope.choosePic = choosePic;
+        $scope.takePic = takePic;
 
-
-
-        function updatePicture() {
-            modalService.actionButtons({ options: actionButtonOptions })
-                .then(function(action) {
-                    switch (action) {
-                        case "images":
-                            choosePhoto();
-                            break;
-                        case "camera":
-                            takePhoto();
-                            break;
-                    }
-                });
-        }
-
-        function choosePhoto() {
+        /**
+         * Choose the picture
+         */
+        function choosePic() {
             // Do not test it with live reload, img.src = results[0] doesn't work because of cross-domain request
-            $cordovaImagePicker.getPictures(photoSelectOptions)
+            $cordovaImagePicker.getPictures(picSelectOptions)
                 .then(function(results) {
                     if (results[0]) {
                         // convert image URL into data URL
@@ -80,39 +60,78 @@
                             canvas.height = this.height;
                             canvas.width = this.width;
                             ctx.drawImage(this, 0, 0);
-                            var imageData = canvas.toDataURL('image/jpeg');
+                            var picData = canvas.toDataURL('image/jpeg');
                             canvas = null;
-                            showPhotoCrop(imageData);
+                            showPicCrop(picData);
                         };
                         img.src = results[0];
-
-
                     }
-                }, function(e) {
-                    modalService.alert({ body: e.message ? e.message : e.toString() });
                 });
         }
 
-        function takePhoto() {
-            $cordovaCamera.getPicture(photoTakeOptions).then(function(imageData) {
-                var imageData = "data:image/jpeg;base64," + imageData;
-                showPhotoCrop(imageData);
-            }, function(e) {
-                modalService.alert({ body: e.message ? e.message : e.toString() });
-            });
+        /**
+         * Take the picture
+         */
+        function takePic() {
+            $cordovaCamera.getPicture(picTakeOptions)
+                .then(function(picData) {
+                    var picData = "data:image/jpeg;base64," + picData;
+                    showPicCrop(picData);
+                }, function(e) {
+                    if(e !== "Camera cancelled.") {
+                        modalService.alert({ body: e.message ? e.message : e.toString() });
+                    }
+                });
         }
 
-
-        function showPhotoCrop(imageData) {
-            debugger;
-
-            imageData
+        /**
+         * Remove the picture
+         */
+        function removePic() {
+            modalService.confirm({
+                    body: "SETTINGS_REMOVE_PHOTO"
+                })
+                .then(function(dialogResult) {
+                    if(dialogResult) {
+                        settingsService.updateSettingsUp({
+                                profilePic: null
+                            })
+                            .then(function() {
+                                modalService.hideSpinner();
+                            })
+                            .catch(function(e) {
+                                modalService.hideSpinner();
+                                modalService.alert({ body: e.message ? e.message : e.toString() });
+                            });
+                    }
+                });
         }
 
-
-        // formSettingsService.saveData(saveObj)
-        //    .then(saveDataSuccessHandler, saveDataErrorHandler);
-
+        /**
+         * Show the picture crop modal
+         * @param picData
+         */
+        function showPicCrop(picData) {
+            modalService.cropPic({
+                    picData: picData,
+                    buttonConfirm: "APPLY"
+                })
+                .then(function(croppedPicData) {
+                    if(croppedPicData) {
+                        modalService.showSpinner();
+                        settingsService.updateSettingsUp({
+                                profilePic: croppedPicData
+                            })
+                            .then(function() {
+                                modalService.hideSpinner();
+                            })
+                            .catch(function(e) {
+                                modalService.hideSpinner();
+                                modalService.alert({ body: e.message ? e.message : e.toString() });
+                            });
+                    }
+                });
+        }
     }
 
 })();
