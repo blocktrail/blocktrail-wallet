@@ -18,8 +18,10 @@
          * Select
          * @param value
          */
-        function select(value) {
-            $scope.closeModal(value);
+        function select(option) {
+            if(!option.selected) {
+                $scope.closeModal(option.value);
+            }
         }
     }
 

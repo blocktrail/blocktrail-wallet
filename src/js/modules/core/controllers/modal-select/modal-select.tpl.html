@@ -8,7 +8,8 @@
                             <div
                                 class="option"
                                 ng-repeat="option in options"
-                                ng-click="select(option.value)"
+                                ng-click="select(option)"
+                                ng-class="{ selected: option.selected }"
                             >{{ option.label }}</div>
                         </div>
                         <div class="text-top-gradient"></div>
