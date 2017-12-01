@@ -162,6 +162,7 @@ angular.module('blocktrail.wallet').run(
 
         // trigger loading of settings
         // TODO Discuss with Ruben
+        // TODO Switch to localSettings
         /*settingsService.$isLoaded().then(function() {
             if (settingsService.permissionUsageData) {
                 if (!settingsService.installTracked) {
@@ -210,19 +211,17 @@ angular.module('blocktrail.wallet').run(
             facebookConnectPlugin.activateApp();
             trackingService.trackEvent(trackingService.EVENTS.APP_OPEN);
 
-            if ($state.includes('app.wallet') && (typeof CONFIG.PIN_ON_OPEN === "undefined" || CONFIG.PIN_ON_OPEN === true)) {
+            if ($state.includes("app.wallet") && (typeof CONFIG.PIN_ON_OPEN === "undefined" || CONFIG.PIN_ON_OPEN === true)) {
+                localSettingsService.getLocalSettings()
+                    .then(function (localSettings) {
+                        var PIN_LAST_ACTIVE_DELAY = 5 * 60 * 1000; // 5 minutes
+                        // if pinOnOpen is required and last time we asked for it was more than 5min ago
+                        if (localSettings.isPinOnOpen && ($rootScope.STATE.PENDING_PIN_REQUEST || ($rootScope.STATE.LAST_ACTIVE < (new Date()).getTime() - PIN_LAST_ACTIVE_DELAY))) {
+                            $rootScope.STATE.PENDING_PIN_REQUEST = true;
 
-                // TODO Check it later
-
-                /*settingsService.$isLoaded().then(function () {
-                    var PIN_LAST_ACTIVE_DELAY = 5 * 60 * 1000; // 5 minutes
-                    // if pinOnOpen is required and last time we asked for it was more than 5min ago
-                    if (settingsService.pinOnOpen && ($rootScope.STATE.PENDING_PIN_REQUEST || ($rootScope.STATE.LAST_ACTIVE < (new Date()).getTime() - PIN_LAST_ACTIVE_DELAY))) {
-                        $rootScope.STATE.PENDING_PIN_REQUEST = true;
-
-                        $state.go('app.pin', { nextState: $state.$current.name });
-                    }
-                });*/
+                            $state.go("app.pin", { nextState: $state.$current.name });
+                        }
+                    });
             }
         });
 

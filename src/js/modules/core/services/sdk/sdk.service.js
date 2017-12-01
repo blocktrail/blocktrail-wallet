@@ -165,6 +165,7 @@
      * @param blocktrailSDK
      */
     function extendBlocktrailSDK(blocktrailSDK) {
+        // TODO Discuss with Ruben, why it depends on the network and why we can't move in into generic SDK?
         blocktrailSDK.prototype.requestContactAddress = function (phoneHash) {
             var self = this;
 

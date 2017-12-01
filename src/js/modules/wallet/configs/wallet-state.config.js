@@ -15,9 +15,9 @@
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
                     checkAPIKeyActive: checkAPIKeyActive,
-                    pinOnOpen: pinOnOpen
-                    // activeWallet: getActiveWallet,
-                    // loadingData: loadingData
+                    pinOnOpen: pinOnOpen,
+                    activeWallet: getActiveWallet,
+                    loadingData: loadingData
                 }
             })
             .state("app.wallet.summary", {
@@ -362,34 +362,26 @@
             });
     }
 
-
-
-
     /**
      *
-     * @param settingsService
      * @param $q
      * @param $state
      * @param $rootScope
-     * @param settingsData          not used, just for forcing order of resolves
      */
-    function pinOnOpen(settingsService, $q, $state, $rootScope, settingsData) {
-        return true;
+    function pinOnOpen(localSettingsService, $q, $state, $rootScope) {
+        return localSettingsService.getLocalSettings()
+            .then(function(localSettings) {
+                // if pinOnOpen is required and last time we asked for it was more than 5min ago
+                if (localSettings.isPinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE && (typeof CONFIG.PIN_ON_OPEN === "undefined" || CONFIG.PIN_ON_OPEN === true)) {
+                    $rootScope.STATE.PENDING_PIN_REQUEST = true;
 
-        // TODO Review pin functionality
-        /*return settingsService.$isLoaded().then(function () {
-            // if pinOnOpen is required and last time we asked for it was more than 5min ago
-            if (settingsService.pinOnOpen && !$rootScope.STATE.INITIAL_PIN_DONE && (typeof CONFIG.PIN_ON_OPEN === "undefined" || CONFIG.PIN_ON_OPEN === true)) {
-                $rootScope.STATE.PENDING_PIN_REQUEST = true;
+                    $state.go("app.pin", { nextState: $state.$current.name });
 
-                $state.go("app.pin", { nextState: $state.$current.name });
-
-                // throw error to prevent controller from loading or any other resolves to continue
-                return $q.reject(new Error("PIN_REQUIRED"));
-            }
-        });*/
+                    // throw error to prevent controller from loading or any other resolves to continue
+                    return $q.reject(new Error("PIN_REQUIRED"));
+                }
+            });
     }
-
 
     /**
      * Get the active wallet
@@ -446,8 +438,6 @@
      */
     function loadingData(settingsService, $q, $rootScope, $log, Currencies, activeWallet) {
         // Do an initial load of cached user data
-        // TODO Review this part
-
         return $q.all([
             Currencies.updatePrices(true),
             settingsService.initSettings()

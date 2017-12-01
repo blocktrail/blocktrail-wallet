@@ -390,7 +390,7 @@
                     throw blocktrail.Error('MSG_MISSING_RECIPIENT');
                 }
 
-                return $scope.getSendingAddress();
+                return $scope.getSendingAddress(activeWallet.getWalletSdk());
             }).then(function() {
                 //validate address
                 return activeWallet.validateAddress($scope.sendInput.recipientAddress);
@@ -433,7 +433,7 @@
         $scope.getSendingAddress = function() {
             var deferred = $q.defer();
             if ($scope.sendInput.recipient && !$scope.sendInput.recipientAddress) {
-                Contacts.getSendingAddress($scope.sendInput.recipient).then(function(result){
+                Contacts.getSendingAddress(activeWallet.getWalletSdk(), $scope.sendInput.recipient).then(function(result){
                     $scope.sendInput.recipientAddress = result.address;
                     deferred.resolve();
                 }, function(err) {
@@ -466,7 +466,7 @@
             var trackingBtcValue = blocktrailSDK.toBTC(Math.ceil($scope.sendInput.btcValue / 1000000) * 1000000);
 
             //get an address for the contact
-            $scope.getSendingAddress()
+            $scope.getSendingAddress(activeWallet.getWalletSdk())
                 .then(function() {
                     $scope.appControl.result = {working: true, message: 'MSG_INIT_WALLET'};
 
