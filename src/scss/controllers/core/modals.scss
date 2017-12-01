@@ -107,6 +107,11 @@ $item-modal-prompt-content-height: $item-modal-content-height - 68px;
             &:last-child {
                 border-bottom: none;
             }
+
+            &.selected {
+                opacity: 0.5;
+                background: #e5e5e5;
+            }
         }
     }
 

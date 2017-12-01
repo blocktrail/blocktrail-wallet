@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("WalletCtrl", WalletCtrl);
 
-    function WalletCtrl($rootScope, $timeout, $scope, $state, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast,
+    function WalletCtrl($rootScope, $timeout, $scope, $state, $filter, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast,
                         CONFIG, modalService, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
                         trackingService) {
 
@@ -105,9 +105,10 @@
         $scope.navHandler = navHandler;
 
         function onClickSetActiveWallet() {
-            modalService.show("js/modules/wallet/controllers/modal-select-wallet/modal-select-wallet.tpl.html", "ModalSelectWalletCtrl", {
-                walletsListOptions: prepareWalletListOptions(walletsManagerService.getWalletsList())
-            }).then(setActiveWalletHandler);
+            modalService.select({
+                    options: prepareWalletListOptions(walletsManagerService.getWalletsList())
+                })
+                .then(setActiveWalletHandler);
         }
 
         /**
@@ -124,12 +125,23 @@
                 });
             }
 
-            walletsList.forEach(function(wallet) {
-                list.push({
-                    value: wallet.uniqueIdentifier,
-                    wallet: wallet
-                })
-            });
+            if(walletsList.length > 2) {
+                walletsList.forEach(function(wallet) {
+                    list.push({
+                        value: wallet.uniqueIdentifier,
+                        selected: walletData.uniqueIdentifier === wallet.uniqueIdentifier,
+                        label: CONFIG.NETWORKS[wallet.network].TICKER + " " + $filter("satoshiToCoin")(wallet.balance, 4) + " " + wallet.identifier
+                    })
+                });
+            } else {
+                walletsList.forEach(function(wallet) {
+                    list.push({
+                        value: wallet.uniqueIdentifier,
+                        selected: walletData.uniqueIdentifier === wallet.uniqueIdentifier,
+                        label: CONFIG.NETWORKS[wallet.network].NETWORK_LONG
+                    })
+                });
+            }
 
             // copy original list for the order
             var originalList = list.slice();
