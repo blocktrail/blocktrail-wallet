@@ -4,14 +4,16 @@
     angular.module("blocktrail.wallet")
         .controller("WalletCtrl", WalletCtrl);
 
-    function WalletCtrl($rootScope, $timeout, $scope, $state, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast, CONFIG,
-                        modalService, settingsData, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
-                        trackingService, AppVersionService, blocktrailLocalisation, $cordovaDialogs, launchService) {
+    function WalletCtrl($rootScope, $timeout, $scope, $state, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast,
+                        CONFIG, modalService, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
+                        trackingService) {
+
         var walletData = activeWallet.getReadOnlyWalletData();
 
         function hideLoading() {
             $timeout(function() {
                 $rootScope.hideLoadingScreen = true;
+
                 $timeout(function () {
                     if (navigator.splashscreen) {
                         navigator.splashscreen.hide();
@@ -19,6 +21,7 @@
                 });
             });
         }
+
         hideLoading();
 
         $scope.$on('$ionicView.enter', function() {
@@ -26,7 +29,7 @@
             $ionicNavBarDelegate.showBar(true);
         });
 
-        $scope.settings = settingsData;
+        $scope.settings = settingsService.getReadOnlySettingsData();
         $scope.walletData = walletData;
         $scope.walletCount = walletsManagerService.getWalletsList().length;
 
@@ -93,8 +96,11 @@
 
         // Methods
         $rootScope.getPrice = getPrice;
-        $rootScope.syncProfile = syncProfile;
-        $rootScope.syncContacts = syncContacts;
+        // TODO Review this later
+        // $rootScope.syncProfile = syncProfile;
+        // $rootScope.syncContacts = syncContacts;
+
+
         $scope.onClickSetActiveWallet = onClickSetActiveWallet;
         $scope.navHandler = navHandler;
 
@@ -121,20 +127,17 @@
             walletsList.forEach(function(wallet) {
                 list.push({
                     value: wallet.uniqueIdentifier,
-                    active: (wallet.uniqueIdentifier === walletData.uniqueIdentifier),
-                    selected: (wallet.uniqueIdentifier === walletData.uniqueIdentifier),
                     wallet: wallet
                 })
             });
 
             // copy original list for the order
             var originalList = list.slice();
-
             list.sort(function(a, b) {
                 // always prioritize the selected value
-                if (a.value === walletData.uniqueIdentifier) {
+                if (a.value === $scope.walletData.uniqueIdentifier) {
                     return -1;
-                } else if (b.value === walletData.uniqueIdentifier) {
+                } else if (b.value === $scope.walletData.uniqueIdentifier) {
                     return 1;
                 }
 
@@ -159,7 +162,7 @@
             $timeout(function() {
                 walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
                     .then(function() {
-                        $state.transitionTo("app.wallet.summary", null, {reload: true, inherit: false});
+                        $state.transitionTo("app.wallet.summary", null, { reload: true, inherit: false });
 
                         $timeout(function() {
                             modalService.hideSpinner();
@@ -182,19 +185,21 @@
         /**
          * Sync profile
          */
-        function syncProfile() {
+        // TODO Review
+        /*function syncProfile() {
             // sync profile if a pending update is present, else check for upstream changes
             if (!settingsService.profileSynced) {
                 settingsService.$syncProfileUp();
             } else {
                 settingsService.$syncProfileDown();
             }
-        }
+        }*/
 
         /**
          * Sync contacts
          */
-        function syncContacts() {
+        // TODO Review
+        /*function syncContacts() {
             // sync any changes to contacts, if syncing enabled
             if (settingsService.enableContacts) {
                 Contacts.sync()
@@ -220,7 +225,7 @@
                         }
                     });
             }
-        }
+        }*/
 
         /**
          * Nav handler, social share
@@ -244,8 +249,9 @@
                 });
         }
 
-        // @TODO: review & bring back network specfic config values
-        (function initWalletConfig() {
+        // @TODO: review & bring back network specific config values
+        // TODO propose the language
+        /*(function initWalletConfig() {
             launchService.getWalletConfig()
                 .then(function(result) {
                     // merge network specific config over the default config
@@ -338,12 +344,12 @@
                     });
                 })
                 .then(function() {}, function(e) { console.error('extraLanguages', e && (e.msg || e.message || "" + e)); });
-        })();
+        })();*/
 
         $timeout(function() { $rootScope.getPrice(); }, 1000);
-        $timeout(function() { $rootScope.syncProfile(); }, 2000);
-        $timeout(function() { $rootScope.syncContacts(); }, 4000);
+        // $timeout(function() { $rootScope.syncProfile(); }, 2000);
+        // $timeout(function() { $rootScope.syncContacts(); }, 4000);
         $timeout(function() { activeWallet.refillOfflineAddresses(1); }, 6000);
-        $timeout(function() { settingsService.$syncSettingsDown(); }, 500);
+        //$timeout(function() { settingsService.$syncSettingsDown(); }, 500);
     }
 })();

@@ -415,9 +415,9 @@
      */
     SettingsService.prototype._setSDKSettingsToDoc = function(sdkSettings) {
         var self = this;
+
         // Reset flag before set
         self._isSyncingSettingsDown = null;
-
         self._doc.receiveNewsletter = sdkSettings.receiveNewsletter !== null ? sdkSettings.receiveNewsletter : self._doc.receiveNewsletter;
         self._doc.language = sdkSettings.language !== null ? sdkSettings.language : self._doc.language;
         self._doc.localCurrency = sdkSettings.localCurrency !== null ? sdkSettings.localCurrency : self._doc.localCurrency;

@@ -1,6 +1,9 @@
 angular.module('blocktrail.wallet').factory(
     'Contacts',
-    function($log, $rootScope, settingsService, launchService, walletsManagerService, sdkService, storageService, $q) {
+    function($log, $rootScope, settingsService, launchService, sdkService, storageService, $q) {
+
+        var settings = settingsService.getReadOnlySettingsData();
+
         var Contacts = function() {
             var self = this;
 
@@ -128,7 +131,8 @@ angular.module('blocktrail.wallet').factory(
                                             contact.hashes.forEach(function(hash) {
                                                 if (hash && (forceAll || syncedDoc.synced.indexOf(hash) === -1) && !syncContactsByHash[hash]) {
                                                     syncContactsByHash[hash] =
-                                                        settingsService.contactsWebSync ?
+                                                        // TODO Move to local settings
+                                                        settings.contactsWebSync ?
                                                         CryptoJS.AES.encrypt(contact.displayName, accountInfo.secret).toString() :
                                                         "";
                                                 }
@@ -201,7 +205,8 @@ angular.module('blocktrail.wallet').factory(
         Contacts.prototype.formatE164 = function(phoneNumber, defaultRegionCode) {
             var self = this;
 
-            defaultRegionCode = typeof defaultRegionCode === 'undefined' ? settingsService.phoneRegionCode : defaultRegionCode;
+            // TODO Move to local settings
+            defaultRegionCode = typeof defaultRegionCode === 'undefined' ? settings.phoneRegionCode : defaultRegionCode;
 
             phoneNumber = phoneNumber.normalizedNumber || phoneNumber.number || phoneNumber;
 
@@ -262,13 +267,9 @@ angular.module('blocktrail.wallet').factory(
          * @param hashIndex
          * @returns {*}
          */
-        Contacts.prototype.getSendingAddress = function(contact, hashIndex) {
+        Contacts.prototype.getSendingAddress = function(sdk, contact, hashIndex) {
             var self = this;
             hashIndex = hashIndex ? hashIndex: 0;
-
-            // use wallet SDK because the address we get depends on network
-            var activeWallet = walletsManagerService.getActiveWallet();
-            var sdk = activeWallet.getWalletSdk().sdk;
 
             return sdk.requestContactAddress(contact.hashes[hashIndex]).then(function(result) {
                 return result;

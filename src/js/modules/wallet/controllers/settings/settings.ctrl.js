@@ -4,6 +4,8 @@
     angular.module("blocktrail.wallet")
         .controller("SettingsCtrl", SettingsCtrl);
 
+    // TODO For Language use self._$translate.use()
+
     function SettingsCtrl($scope, $rootScope, $q, launchService, settingsService,
                             activeWallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
                             $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast,
@@ -496,8 +498,9 @@
         /**
          * enable/disable PIN on wallet open
          */
+        // TODO SWITCH to localSettingsService
         $scope.updateSettingsPinOnOpen = function() {
-            $scope.updateSettings();
+            // $scope.updateSettings();
         };
 
         var tapEnableDevCnt = 0;
