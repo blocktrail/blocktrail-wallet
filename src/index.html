@@ -14,6 +14,15 @@
         <link id="css-ionic-app" href="css/ionic.btc-app.css" rel="stylesheet">
 
         <script src="js/libs.js"></script>
+        <script src="js/asmcrypto.js"></script>
+        <script>
+            function onLoadWorkerLoadAsmCrypto(worker) {
+                worker.postMessage({
+                        method: 'importScripts',
+                        script: document.location.protocol + '//' + document.location.host + '/' + "js/asmcrypto.js"
+                });
+            }
+        </script>
         <script src="js/sdk.js"></script>
 
         <script src="js/ng-cordova.js"></script>

@@ -320,6 +320,18 @@ gulp.task('js:sdk', ['appconfig'], function() {
     });
 });
 
+gulp.task('js:sdk:asmcrypto', ['appconfig'], function() {
+
+    return appConfig.then(function(APPCONFIG) {
+        return streamAsPromise(gulp.src([
+                "./src/lib/blocktrail-sdk/build/asmcrypto.js"
+            ])
+                .pipe(concat('asmcrypto.js'))
+                .pipe(gulp.dest('./www/js/'))
+        );
+    });
+});
+
 gulp.task('js:zxcvbn', ['appconfig'], function() {
 
     return appConfig.then(function(APPCONFIG) {
@@ -402,7 +414,7 @@ gulp.task('watch', function() {
     gulp.watch(['./appconfig.json', './appconfig.default.json'], ['default']);
 });
 
-gulp.task('js', ['js:libs', 'js:app', 'js:ng-cordova', 'js:sdk', 'js:zxcvbn']);
+gulp.task('js', ['js:libs', 'js:app', 'js:ng-cordova', 'js:sdk:asmcrypto', 'js:sdk', 'js:zxcvbn']);
 gulp.task('templates', ['templates:index', 'templates:rest']);
 gulp.task('default', function (done) {
     sequence('fontello', 'nofontello', done);
