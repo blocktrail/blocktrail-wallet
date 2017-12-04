@@ -17,9 +17,17 @@
         <script src="js/asmcrypto.js"></script>
         <script>
             function onLoadWorkerLoadAsmCrypto(worker) {
+                var baseUrl = document.location.protocol + '//' + document.location.host;
+                if (document.location.pathname) {
+                    baseUrl += document.location.pathname.replace(/index\.html$/, '').replace(/\/$/, '');
+                    baseUrl += "/";
+                } else {
+                    baseUrl += "/";
+                }
+
                 worker.postMessage({
-                        method: 'importScripts',
-                        script: document.location.protocol + '//' + document.location.host + '/' + "js/asmcrypto.js"
+                    method: 'importScripts',
+                    script: baseUrl + "js/asmcrypto.js"
                 });
             }
         </script>
