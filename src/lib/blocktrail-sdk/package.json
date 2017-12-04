@@ -13,7 +13,7 @@
     "multi-signature",
     "transaction"
   ],
-  "version": "3.5.6",
+  "version": "3.6.1",
   "homepage": "https://www.blocktrail.com/api/docs/lang/nodejs",
   "license": "MIT",
   "repository": {
@@ -29,7 +29,7 @@
   "main": "./main.js",
   "browser": {
     "./lib/backup_generator.js": "./lib/backup_generator-browser.js",
-    "./lib/pbkdf2_sha512.js": "./lib/pbkdf2_sha512-asm.js",
+    "./lib/pbkdf2_sha512.js": "./lib/pbkdf2_sha512-browser.js",
     "./lib/pkginfo.js": "./lib/pkginfo-browser.js"
   },
   "dependencies": {
@@ -79,7 +79,7 @@
     "grunt-browserify": "git://github.com/jmreidy/grunt-browserify.git#4f96beb75d27fdebc4359e08e7db4c514f6265a8",
     "grunt-contrib-concat": "~0.5.1",
     "grunt-contrib-connect": "^0.7.1",
-    "grunt-contrib-uglify": "~2.0.0",
+    "grunt-contrib-uglify": "^3.2.1",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-exec": "^1.0.1",
     "grunt-notify": "~0.2.17",

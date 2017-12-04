@@ -125,6 +125,21 @@ For the following any modern version will work just fine:
  - FireFox
  - Safari
 
+Webworker
+---------
+To defer encryption/decryption/keyderivation to webworkers in the browser it's neccesary to make create the following function in the global scope:
+```
+function onLoadWorkerLoadAsmCrypto(worker) {
+    worker.postMessage({
+        method: 'importScripts',
+        script: document.location.protocol + '//' + document.location.host + '/build/asmcrypto.min.js'
+    });
+}
+```
+
+This will get called as the onLoad of the webworker and will trigger importing the `asmcrypto.min.js`.  
+We had to seperate `asmcrypto.js` from the main browserify bundle because uglify was killing the ASM.js.
+
 Uglify
 ------
 If you're planning to uglify/minify the javascript yourself, make sure to exclude the following variable names from being mangled:  
