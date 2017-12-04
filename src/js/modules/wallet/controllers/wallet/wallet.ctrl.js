@@ -169,16 +169,10 @@
                 return;
             }
 
-            modalService.showSpinner();
-
             $timeout(function() {
                 walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
                     .then(function() {
                         $state.transitionTo("app.wallet.summary", null, { reload: true, inherit: false });
-
-                        $timeout(function() {
-                            modalService.hideSpinner();
-                        }, 500);
                     });
             });
         }

@@ -32,8 +32,6 @@
             };
         });
 
-
-
         $scope.allData = $q.all([
             launchService.getWalletInfo()
         ]).then(function(data){
@@ -41,7 +39,6 @@
             $scope.defaultWallet = data[0].identifier;
             return data;
         });
-
 
         /**
          * initiate change of pin

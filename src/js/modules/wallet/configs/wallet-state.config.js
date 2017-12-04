@@ -14,6 +14,7 @@
                 controller: "WalletCtrl",
                 templateUrl: "js/modules/wallet/controllers/wallet/wallet.tpl.html",
                 resolve: {
+                    showLoadingScreenOnAppWalletResolveStart: showLoadingScreenOnAppWalletResolveStart,
                     checkAPIKeyActive: checkAPIKeyActive,
                     pinOnOpen: pinOnOpen,
                     activeWallet: getActiveWallet,
@@ -41,7 +42,7 @@
             .state("app.wallet.buybtc.choose", {
                 url: "/choose",
                 data: {
-                    clearHistory: true  //always clear history when entering this state
+                    clearHistory: true  // always clear history when entering this state
                 },
                 views: {
                     "mainView@app.wallet": {
@@ -63,7 +64,7 @@
             .state("app.wallet.buybtc.buy", {
                 url: "/broker/:broker",
                 data: {
-                    clearHistory: true  //always clear history when entering this state
+                    clearHistory: true  // always clear history when entering this state
                 },
                 cache: false,
                 views: {
@@ -165,7 +166,7 @@
                 url: "/receive",
                 cache: false,
                 data: {
-                    clearHistory: true  //always clear history when entering this state
+                    clearHistory: true  // always clear history when entering this state
                 },
                 views: {
                     "mainView@app.wallet": {
@@ -180,7 +181,7 @@
                 url: "/receive/address-lookup",
                 cache: false,
                 data: {
-                    clearHistory: true //always clear history when entering this state
+                    clearHistory: true // always clear history when entering this state
                 },
                 views: {
                     "mainView@app.wallet": {
@@ -195,7 +196,7 @@
                 url: "/promo?code",
                 cache: false,
                 data: {
-                    clearHistory: true  //always clear history when entering this state
+                    clearHistory: true  // always clear history when entering this state
                 },
                 views: {
                     "mainView@app.wallet": {
@@ -447,6 +448,11 @@
             $rootScope.changeLanguage(results[1].language);
             return true;
         });
+    }
+
+    // Display full loading screen while we initialize the wallet
+    function showLoadingScreenOnAppWalletResolveStart($rootScope) {
+        $rootScope.hideLoadingScreen = false;
     }
 
 })();

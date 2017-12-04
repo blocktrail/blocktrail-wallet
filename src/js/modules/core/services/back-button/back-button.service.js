@@ -49,7 +49,6 @@ angular.module('blocktrail.wallet')
             );
 
             $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-
                 // don't add the last state if we're going back, we're at root, or the state says not to
                 if (!goingBack && fromState.name && !(fromState.data && fromState.data.excludeFromHistory)) {
                     $log.debug('pushing state to stack', fromState.name, fromState);
@@ -62,7 +61,7 @@ angular.module('blocktrail.wallet')
                     self.clearHistory();
                 }
 
-                // show / hide the back button (and thus the side menu)
+                //show/hide the back button (and thus the side menu)
                 if (self.enableBackButton && self.history.length > 0) {
                     $log.debug('show back button');
                     self.isDisplayed = true;
@@ -86,7 +85,6 @@ angular.module('blocktrail.wallet')
             var self = this;
 
             $log.debug('state history', self.history);
-
             if (self.history.length > 0) {
                 // there is a back view, go to it
                 var back = self.history.pop();
@@ -101,10 +99,17 @@ angular.module('blocktrail.wallet')
                     ionic.Platform.exitApp();
                 }
             }
-
             $event && $event.preventDefault();
         };
 
+        /**
+         * alternative onBack function, which goes up a level ignoring the history stack
+         * @param e
+         * @private
+         */
+        BackButtonDelegate.prototype._goUpState = function(e){
+            $state.go('^');
+        };
 
         /**
          * clear the history
@@ -152,9 +157,9 @@ angular.module('blocktrail.wallet')
          * @param $event
          */
         BackButtonDelegate.prototype.goBack = function($event) {
-            // call the function set to the back button
+            //call the function set to the back button
             if (self.enableBackButton) {
-                // decide the animation style to use
+                //decide the animation style to use
                 if (self.history.length > 0) {
                     $ionicViewSwitcher.nextDirection('back');
                 } else {
@@ -222,3 +227,4 @@ angular.module('blocktrail.wallet')
 
         return new BackButtonDelegate();
     });
+
