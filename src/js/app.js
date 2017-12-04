@@ -62,7 +62,7 @@ angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $q, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
-             amMoment, trackingService, blocktrailLocalisation, sdkService) {
+             amMoment, trackingService, blocktrailLocalisation, sdkService, localSettingsService) {
 
         $rootScope.readOnlySdkServiceData = sdkService.getReadOnlySdkServiceData();
         $rootScope.networkClassType = "";

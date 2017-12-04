@@ -1,5 +1,6 @@
 <ion-view class="state-settings">
     <ion-nav-title class="">{{ 'SETTINGS' | translate }}</ion-nav-title>
+
     <ion-content>
         <form>
             <h3 class="group-title">{{ 'SETTINGS_HELP' | translate }}</h3>
@@ -11,17 +12,19 @@
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </a>
-                <div class="item item-button-right" ui-sref="app.wallet.feedback">
+                <!-- TODO -->
+                <!--<div class="item item-button-right" ui-sref="app.wallet.feedback">
                     <span class="sentence-case">{{ 'SEND_FEEDBACK' | translate }}</span>
                     <button class="button button-clear">
                         <i class="icon ion-chevron-right"></i>
                     </button>
-                </div>
+                </div>-->
             </div>
 
             <h3 class="group-title">{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
 
             <div class="list list-inset">
+                <!-- Start profile -->
                 <div class="item item-button-right">
                     <span class="sentence-case">{{ 'SETTINGS_PROFILE' | translate }}</span>
                     <button class="button button-clear" ui-sref=".profile">
@@ -33,7 +36,7 @@
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </div>
-                <!-- /profile -->
+                <!-- End profile -->
 
                 <div class="item item-button-right" ui-sref=".currency">
                     <span class="sentence-case">{{ 'SETTINGS_CURRENCY' | translate }}</span>

@@ -18,14 +18,22 @@
             syncingAll: false,
             syncComplete: false
         };
+
+
+
+
+
         $scope.$on('$ionicView.enter', function() {
-            //reset app state control
+            // reset app state control
             $scope.appControl = {
                 syncing: false,
                 syncingAll: false,
                 syncComplete: false
             };
         });
+
+
+
         $scope.allData = $q.all([
             launchService.getWalletInfo()
         ]).then(function(data){
@@ -33,6 +41,7 @@
             $scope.defaultWallet = data[0].identifier;
             return data;
         });
+
 
         /**
          * initiate change of pin
