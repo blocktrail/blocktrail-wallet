@@ -1036,6 +1036,8 @@
                 } else {
                     transaction.contact = null;
                 }
+            }, function() {
+                transaction.contact = null;
             });
     };
 
