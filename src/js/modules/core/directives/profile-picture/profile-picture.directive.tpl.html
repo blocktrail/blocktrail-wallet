@@ -1,7 +1,8 @@
 <div class="item item-body profile-picture">
-    <div class="display-token contact-token profile-image" ng-click="updatePicture()">
-        <div class="initials"><i class="ion-person"></i></div>
-        <div class="avatar" style="background-image: url('{{ settingsData.profilePic }}');  "></div>
+    <div class="profile-avatar-holder" ng-click="takePic()">
+        <profile-avatar
+            settings-data="settingsData"
+        ></profile-avatar>
     </div>
 
     <p>{{ 'SETTINGS_PROFILE_DESCRIPTION' | translate }}</p>
