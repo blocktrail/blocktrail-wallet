@@ -11,24 +11,57 @@
         .group-title {
             margin: 20px 10px 10px 14px;
             padding: 0;
-            font-size: 1.2rem;
+            font-size: 16px;
             font-weight: lighter;
             color: $darkgray-light;
         }
+
         .list-inset {
             margin: 0 10px 35px 10px;
             box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.05);
         }
+
         .display-name {
             margin: 0 15px;
         }
-        /*.contact-token {
-            top: -2px;
+
+        .settings-avatar-holder {
+            top: -3px;
+            bottom: -4px;
             width: 40px;
             height: 40px;
-            line-height: 40px;
-            font-size: 20px;
-        }*/
+            position: relative;
+
+            .profile-avatar {
+                display: block;
+                width: 40px;
+                height: 40px;
+
+                .initials {
+                    font-size: 28px;
+                    line-height: 40px;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         .phone-status {
             display: block;
             color: #666;
@@ -42,27 +75,15 @@
         }
 
     }
+
+
+
     .button .icon {
         margin-left: 1rem;
     }
 
-    //profile image select and crop
 
-    // TODO REMOVE IT AFTER PROFILE REVIEW
-    /*.profile-image.contact-token {
-        top: -2px;
-        width: 120px;
-        height: 120px;
-        margin-right: 20px;
-        line-height: 120px;
-        font-size: 60px;
-        float: left;
 
-        .initials {
-            font-size: 140px;
-            color: $lightgray-dark;
-        }
-    }*/
 
     .action-sheet {
         .button {

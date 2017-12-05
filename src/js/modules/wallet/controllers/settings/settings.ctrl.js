@@ -12,6 +12,7 @@
                             sdkService) {
 
         $scope.walletData = activeWallet.getReadOnlyWalletData();
+        $scope.settingsData = settingsService.getReadOnlySettingsData();
 
         $scope.appControl = {
             syncing: false,

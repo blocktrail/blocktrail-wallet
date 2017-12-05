@@ -1,0 +1,17 @@
+.profile-avatar {
+    text-align: center;
+    width: 45px;
+    height: 45px;
+    margin: 0;
+
+    .initials {
+        font-size: 36px;
+        line-height: 45px;
+        color: $lightgray-dark;
+    }
+
+    .avatar {
+        background-position-x: 50%;
+        background-position-y: 50%;
+    }
+}

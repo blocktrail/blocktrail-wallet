@@ -626,7 +626,7 @@ $balance-display-height: 40vw;
 @import "partials/send-receive";
 @import "partials/pin-entry";
 @import "partials/promo-code";
-@import "partials/settings";
+
 @import "partials/buybtc";
 @import "partials/address-lookup";
 @import "partials/vertical-alignment";
@@ -636,6 +636,7 @@ $balance-display-height: 40vw;
 @import "controllers/core/modals";
 
 @import "directives/core/profile-picture";
+@import "directives/core/profile-avatar";
 
 // Setup module
 @import "controllers/setup/start";
@@ -645,6 +646,7 @@ $balance-display-height: 40vw;
 // Wallet module
 @import "controllers/wallet/wallet-summary";
 @import "controllers/wallet/modal-select-wallet";
+@import "controllers/wallet/settings";
 
 @import "directives/wallet/wallet-side-header";
 @import "directives/wallet/wallet-side-subheader.scss";

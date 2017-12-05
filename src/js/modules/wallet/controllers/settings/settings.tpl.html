@@ -12,7 +12,7 @@
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </a>
-                <div class="item item-button-right" ui-sref="app.wallet.settings.feedback">
+                <div class="item item-button-right" ui-sref=".feedback">
                     <span class="sentence-case">{{ 'SEND_FEEDBACK' | translate }}</span>
                     <button class="button button-clear">
                         <i class="icon ion-chevron-right"></i>
@@ -27,10 +27,11 @@
                 <div class="item item-button-right">
                     <span class="sentence-case">{{ 'SETTINGS_PROFILE' | translate }}</span>
                     <button class="button button-clear" ui-sref=".profile">
-                        <div class="display-token contact-token">
-                            {{ settings.displayName | contactInitials }}
-                            <span class="avatar" style="background-image: url('{{ settings.profilePic }}'); background-position-x: 50%; background-position-y: 50%;"></span>
-                        </div>
+                        <span class="settings-avatar-holder">
+                            <profile-avatar
+                                settings-data="settingsData"
+                            ></profile-avatar>
+                        </span>
 
                         <i class="icon ion-chevron-right"></i>
                     </button>
