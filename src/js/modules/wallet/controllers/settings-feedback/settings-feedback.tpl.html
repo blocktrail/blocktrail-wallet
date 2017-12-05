@@ -1,0 +1,56 @@
+<ion-view class="state-settings state-profile">
+    <ion-nav-title class="">{{ 'FEEDBACK' | translate }}</ion-nav-title>
+    <ion-nav-buttons side="right">
+        <div class="button hide"
+             nav-direction="back"
+             ng-click="$btBackButtonDelegate.goBack()">{{ 'CANCEL' | translate }}
+        </div>
+    </ion-nav-buttons>
+
+    <ion-content scroll="true">
+        <form
+            class="form-feedback"
+            name="feedbackForm"
+            ng-submit="onSubmitFormFeedback(feedbackForm)"
+            novalidate
+        >
+            <div class="card">
+                <!-- Message -->
+                <ion-item>
+                    <textarea
+                        cols="30"
+                        rows="4"
+                        placeholder="{{ 'SEND_FEEDBACK_PLACEHOLDER' | translate}}"
+                        name="msg"
+                        ng-model="form.msg"
+                        required
+                        auto-focus
+                    ></textarea>
+                </ion-item>
+
+                <!-- Email -->
+                <ion-item>
+                    <input
+                        type="email"
+                        placeholder="{{ 'EMAIL' | translate }} ({{ 'OPTIONAL' | translate}})"
+                        name="email"
+                        ng-model="form.email"
+                    >
+                </ion-item>
+
+                <!-- Submit button -->
+                <div class="item item-body">
+                    <div class="row action-buttons">
+                        <div class="col">
+                            <button
+                                type="submit"
+                                class="button button-block"
+                            >{{ 'SEND' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>
