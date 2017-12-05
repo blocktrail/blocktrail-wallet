@@ -12,6 +12,7 @@
         <form
             class="form-create-new-account"
             name="registerForm"
+            ng-submit="onSubmitFormRegister(registerForm)"
             novalidate
         >
             <div class="card">
@@ -67,10 +68,12 @@
 
                 <!-- Submit button -->
                 <ion-item class="item-borderless">
-                    <button type="submit" class="button button-block" ng-click="onSubmitFormRegister(registerForm)">{{ 'SETUP_REGISTER' | translate }}</button>
+                    <button
+                        type="submit"
+                        class="button button-block"
+                    >{{ 'SETUP_REGISTER' | translate }}</button>
                 </ion-item>
             </div>
         </form>
     </ion-content>
-
 </ion-view>

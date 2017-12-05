@@ -317,18 +317,15 @@
                     }
                 }
             })
-
-            /*--- Feedback ---*/
-            .state("app.wallet.feedback", {
+            .state("app.wallet.settings.feedback", {
                 url: "/feedback",
                 data: {
-                    clearHistory: true,
-                    excludeFromHistory: true
+                    clearHistory: false
                 },
                 views: {
                     "mainView@app.wallet": {
-                        templateUrl: "templates/feedback/feedback.html",
-                        controller: "FeedbackCtrl"
+                        templateUrl: "js/modules/wallet/controllers/settings-feedback/settings-feedback.tpl.html",
+                        controller: "SettingsFeedbackCtrl"
                     }
                 }
             });

@@ -12,6 +12,7 @@
         <form
             class="form-login"
             name="loginForm"
+            ng-click="onSubmitFormLogin(loginForm)"
             novalidate
         >
             <div class="card">
@@ -41,7 +42,10 @@
 
                 <!-- Submit button -->
                 <ion-item>
-                    <button class="button button-block" ng-click="onSubmitFormLogin(loginForm)">{{ 'SETUP_LOGIN' | translate }}</button>
+                    <button
+                        type="submit"
+                        class="button button-block"
+                    >{{ 'SETUP_LOGIN' | translate }}</button>
                 </ion-item>
             </div>
         </form>
