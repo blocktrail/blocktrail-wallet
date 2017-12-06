@@ -6,14 +6,136 @@
 
     // TODO For Language use self._$translate.use()
 
-    function SettingsCtrl($scope, $rootScope, $q, launchService, settingsService,
-                            activeWallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
-                            $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast,
-                            sdkService) {
+    function SettingsCtrl($rootScope, $scope, $btBackButtonDelegate, $translate, modalService, activeWallet, settingsService,
+                          trackingService, Currencies, blocktrailLocalisation) {
+        // Enable back button
+        enableBackButton();
 
         $scope.walletData = activeWallet.getReadOnlyWalletData();
         $scope.settingsData = settingsService.getReadOnlySettingsData();
+        $scope.languageName = blocktrailLocalisation.languageName($translate.use());
 
+        // Methods
+        $scope.onClickSetCurrency = onClickSetCurrency;
+        $scope.onClickSetLanguage = onClickSetLanguage;
+
+        /**
+         * On click set currency
+         */
+        function onClickSetCurrency() {
+            modalService.select({
+                    options: prepareCurrencyListOptions(Currencies.getFiatCurrencies() || [])
+                })
+                .then(setCurrencyHandler);
+        }
+
+        /**
+         * Prepare the currency list options
+         * @param currencies
+         * @return {Array}
+         */
+        function prepareCurrencyListOptions(currencies) {
+            var list = [];
+
+            currencies.forEach(function(item) {
+                list.push({
+                    value: item.code,
+                    selected: $scope.settingsData.localCurrency === item.code,
+                    label: item.code + " " + "(" + item.symbol + ")"
+                })
+            });
+
+            return list;
+        }
+
+        /**
+         * Set currency handler
+         * @param currency
+         */
+        function setCurrencyHandler(currency) {
+            disableBackButton();
+            modalService.showSpinner();
+
+            settingsService.updateSettingsUp({
+                    localCurrency: currency
+                })
+                .then(function() {
+                    enableBackButton();
+                    modalService.hideSpinner();
+                })
+                .catch(function(e) {
+                    enableBackButton();
+                    modalService.hideSpinner();
+                    modalService.alert({ body: e.message ? e.message : e.toString() });
+                });
+        }
+        
+        
+        function onClickSetLanguage() {
+            modalService.select({
+                    options: prepareLanguageListOptions(blocktrailLocalisation.getLanguages() || [])
+                })
+                .then(setLanguageHandler);
+        }
+        
+        function prepareLanguageListOptions(languages) {
+            var list = [];
+
+            languages.forEach(function(item) {
+                list.push({
+                    value: item,
+                    selected: item === $translate.use(),
+                    label:  $translate.instant(blocktrailLocalisation.languageName(item))
+                })
+            });
+
+            return list;
+        }
+
+        function setLanguageHandler(language) {
+            disableBackButton();
+            modalService.showSpinner();
+
+            settingsService.updateSettingsUp({
+                language: language
+            })
+                .then(function() {
+                    enableBackButton();
+                    modalService.hideSpinner();
+                    $scope.languageName = blocktrailLocalisation.languageName($scope.settingsData.language);
+                    $rootScope.changeLanguage($scope.settingsData.language);
+                })
+                .catch(function(e) {
+                    enableBackButton();
+                    modalService.hideSpinner();
+                    modalService.alert({ body: e.message ? e.message : e.toString() });
+                });
+        }
+
+
+
+
+        /**
+         * Enable the back button
+         */
+        function enableBackButton() {
+            $btBackButtonDelegate.setBackButton($btBackButtonDelegate._default);
+            $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
+        }
+
+        /**
+         * Disable the back button
+         */
+        function disableBackButton() {
+            $btBackButtonDelegate.setBackButton(angular.noop);
+            $btBackButtonDelegate.setHardwareBackButton(angular.noop);
+        }
+    }
+
+    function old($scope, $rootScope, $q, launchService, settingsService,
+                 activeWallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
+                 $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast,
+                 sdkService) {
         $scope.appControl = {
             syncing: false,
             syncingAll: false,
@@ -535,6 +657,6 @@
                 }
             );
         };
-
     }
+
 })();

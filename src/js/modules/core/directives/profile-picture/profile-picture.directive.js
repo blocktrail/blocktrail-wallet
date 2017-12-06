@@ -93,6 +93,8 @@
                 })
                 .then(function(dialogResult) {
                     if(dialogResult) {
+                        modalService.showSpinner();
+
                         settingsService.updateSettingsUp({
                                 profilePic: null
                             })
