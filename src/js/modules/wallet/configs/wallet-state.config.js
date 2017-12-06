@@ -434,15 +434,26 @@
      * !! to make sure the resolves happen in the correct order
      * TODO Review
      */
-    function loadingData(settingsService, $q, $rootScope, $log, Currencies, activeWallet) {
+    function loadingData($q, $rootScope, $log, CONFIG, settingsService, launchService, blocktrailLocalisation, Currencies, activeWallet) {
         // Do an initial load of cached user data
         return $q.all([
             Currencies.updatePrices(true),
-            settingsService.initSettings()
+            settingsService.initSettings(),
+            launchService.getWalletConfig()
         ]).then(function(results) {
+            var settings = results[1];
+            var walletConfig = results[2];
+            // TODO Review the logic with selected language
+            var extraLanguages = walletConfig.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
+
+            // enable all languages
+            extraLanguages.forEach(function(language) {
+                blocktrailLocalisation.enableLanguage(language);
+            });
+
             $log.debug("Initial load complete");
             $rootScope.bitcoinPrices = results[0];
-            $rootScope.changeLanguage(results[1].language);
+            $rootScope.changeLanguage(settings.language);
             return true;
         });
     }

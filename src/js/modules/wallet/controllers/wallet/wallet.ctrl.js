@@ -139,7 +139,7 @@
                         value: wallet.uniqueIdentifier,
                         selected: walletData.uniqueIdentifier === wallet.uniqueIdentifier,
                         label: CONFIG.NETWORKS[wallet.network].NETWORK_LONG
-                    })
+                    });
                 });
             }
 
@@ -257,7 +257,8 @@
 
         // @TODO: review & bring back network specific config values
         // TODO propose the language
-        /*(function initWalletConfig() {
+        /*
+        (function initWalletConfig() {
             launchService.getWalletConfig()
                 .then(function(result) {
                     // merge network specific config over the default config

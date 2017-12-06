@@ -6,12 +6,14 @@
             <h3 class="group-title">{{ 'SETTINGS_HELP' | translate }}</h3>
 
             <div class="list list-inset">
+                <!-- FAQ -->
                 <a class="item item-button-right" href="https://btc.com/faq" browse-to>
                     <span class="sentence-case">{{ 'SETTINGS_FAQ' | translate }}</span>
                     <button class="button button-clear">
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </a>
+                <!-- Feedback -->
                 <div class="item item-button-right" ui-sref=".feedback">
                     <span class="sentence-case">{{ 'SEND_FEEDBACK' | translate }}</span>
                     <button class="button button-clear">
@@ -23,7 +25,7 @@
             <h3 class="group-title">{{ 'SETTINGS_ACCOUNT' | translate }}</h3>
 
             <div class="list list-inset">
-                <!-- Start profile -->
+                <!-- Profile -->
                 <div class="item item-button-right">
                     <span class="sentence-case">{{ 'SETTINGS_PROFILE' | translate }}</span>
                     <button class="button button-clear" ui-sref=".profile">
@@ -36,26 +38,23 @@
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </div>
-                <!-- End profile -->
-
-                <div class="item item-button-right" ui-sref=".currency">
+                <!-- Currency -->
+                <div class="item item-button-right" ng-click="onClickSetCurrency()">
                     <span class="sentence-case">{{ 'SETTINGS_CURRENCY' | translate }}</span>
                     <button class="button button-clear">
-                        {{ settings.localCurrency }}
+                        {{ settingsData.localCurrency }}
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </div>
-                <!-- /currency -->
 
-                <div class="item item-button-right" ui-sref=".language">
+                <!-- Language -->
+                <div class="item item-button-right" ng-click="onClickSetLanguage()">
                     <span class="sentence-case">{{ 'SETTINGS_LANGUAGE' | translate }}</span>
                     <button class="button button-clear">
-                        <!-- TODO Review this part -->
-                        languageName<!--{{ settings.language | languageName | translate }}-->
+                        {{ languageName | translate }}
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </div>
-                <!-- /language -->
             </div>
 
 
