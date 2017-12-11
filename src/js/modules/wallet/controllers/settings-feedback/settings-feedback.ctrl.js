@@ -69,13 +69,13 @@
             };
 
             feedbackFromService.send(data)
-                .then(feedbackFromSuccessHandler, feedbackFromErrorHandler);
+                .then(feedbackFormSuccessHandler, feedbackFormErrorHandler);
         }
 
         /**
          * Feedback form success handler
          */
-        function feedbackFromSuccessHandler() {
+        function feedbackFormSuccessHandler() {
             isFormSubmit = false;
             enableBackButton();
             modalService.hideSpinner();
@@ -88,7 +88,7 @@
         /**
          * Feedback form error handler
          */
-        function feedbackFromErrorHandler() {
+        function feedbackFormErrorHandler() {
             isFormSubmit = false;
             enableBackButton();
             modalService.hideSpinner();

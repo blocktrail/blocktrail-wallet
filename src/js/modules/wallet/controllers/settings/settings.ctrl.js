@@ -7,12 +7,13 @@
     // TODO For Language use self._$translate.use()
 
     function SettingsCtrl($rootScope, $scope, $btBackButtonDelegate, $translate, modalService, activeWallet, settingsService,
-                          trackingService, Currencies, blocktrailLocalisation) {
+                          localSettingsService, trackingService, Currencies, blocktrailLocalisation) {
         // Enable back button
         enableBackButton();
 
         $scope.walletData = activeWallet.getReadOnlyWalletData();
         $scope.settingsData = settingsService.getReadOnlySettingsData();
+        $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
         $scope.languageName = blocktrailLocalisation.languageName($translate.use());
 
         // Methods
@@ -53,31 +54,31 @@
          * @param currency
          */
         function setCurrencyHandler(currency) {
-            disableBackButton();
-            modalService.showSpinner();
+            if(currency) {
+                disableBackButton();
+                modalService.showSpinner();
 
-            settingsService.updateSettingsUp({
-                    localCurrency: currency
-                })
-                .then(function() {
-                    enableBackButton();
-                    modalService.hideSpinner();
-                })
-                .catch(function(e) {
-                    enableBackButton();
-                    modalService.hideSpinner();
-                    modalService.alert({ body: e.message ? e.message : e.toString() });
-                });
+                settingsService.updateSettingsUp({ localCurrency: currency })
+                    .then(successHandler)
+                    .catch(errorHandler);
+            }
         }
-        
-        
+
+        /**
+         * On click set language
+         */
         function onClickSetLanguage() {
             modalService.select({
                     options: prepareLanguageListOptions(blocktrailLocalisation.getLanguages() || [])
                 })
                 .then(setLanguageHandler);
         }
-        
+
+        /**
+         * Prepare the language list options
+         * @param languages
+         * @return {Array}
+         */
         function prepareLanguageListOptions(languages) {
             var list = [];
 
@@ -92,28 +93,42 @@
             return list;
         }
 
+        /**
+         * Set language handler
+         * @param language
+         */
         function setLanguageHandler(language) {
-            disableBackButton();
-            modalService.showSpinner();
+            if(language) {
+                disableBackButton();
+                modalService.showSpinner();
 
-            settingsService.updateSettingsUp({
-                language: language
-            })
-                .then(function() {
-                    enableBackButton();
-                    modalService.hideSpinner();
-                    $scope.languageName = blocktrailLocalisation.languageName($scope.settingsData.language);
-                    $rootScope.changeLanguage($scope.settingsData.language);
-                })
-                .catch(function(e) {
-                    enableBackButton();
-                    modalService.hideSpinner();
-                    modalService.alert({ body: e.message ? e.message : e.toString() });
-                });
+                settingsService.updateSettingsUp({ language: language })
+                    .then(function() {
+                        $scope.languageName = blocktrailLocalisation.languageName($scope.settingsData.language);
+                        $rootScope.changeLanguage($scope.settingsData.language);
+                    })
+                    .then(successHandler)
+                    .catch(errorHandler);
+            }
         }
 
+        /**
+         * Success handler
+         */
+        function successHandler() {
+            enableBackButton();
+            modalService.hideSpinner();
+        }
 
-
+        /**
+         * Error handler
+         * @param e
+         */
+        function errorHandler(e) {
+            enableBackButton();
+            modalService.hideSpinner();
+            modalService.alert({ body: e.message ? e.message : e.toString() });
+        }
 
         /**
          * Enable the back button
@@ -130,6 +145,10 @@
             $btBackButtonDelegate.setBackButton(angular.noop);
             $btBackButtonDelegate.setHardwareBackButton(angular.noop);
         }
+
+
+
+
     }
 
     function old($scope, $rootScope, $q, launchService, settingsService,

@@ -17,7 +17,7 @@
         >
             <div class="card">
                 <!-- Email -->
-                <ion-item>
+                <label class="item">
                     <input
                         type="email"
                         placeholder="{{ 'SETUP_EMAIL_PLACEHOLDER' | translate }}"
@@ -26,12 +26,11 @@
                         required
                         auto-focus
                     >
-                </ion-item>
+                </label>
 
                 <!-- Password -->
-                <ion-item>
+                <label class="item">
                     <input
-                        class="form-control"
                         type="password"
                         placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}"
                         name="password"
@@ -54,7 +53,7 @@
                         <span ng-bind-html="'PASSWORD_TIME_TO_CRACK' | translate:form.passwordCheck"></span>
                     </div>
 
-                </ion-item>
+                </label>
 
                 <!-- Terms of service -->
                 <ion-item>

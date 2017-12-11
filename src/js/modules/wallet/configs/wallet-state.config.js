@@ -244,30 +244,6 @@
                     }
                 }
             })
-            .state("app.wallet.settings.currency", {
-                url: "/currency",
-                data: {
-                    clearHistory: false
-                },
-                views: {
-                    "mainView@app.wallet": {
-                        templateUrl: "js/modules/wallet/controllers/settings-currency/settings-currency.tpl.html",
-                        controller: "SettingsCurrencyCtrl"
-                    }
-                }
-            })
-            .state("app.wallet.settings.language", {
-                url: "/language",
-                data: {
-                    clearHistory: false
-                },
-                views: {
-                    "mainView@app.wallet": {
-                        templateUrl: "js/modules/wallet/controllers/settings-language/settings-language.tpl.html",
-                        controller: "SettingsLanguageCtrl"
-                    }
-                }
-            })
             .state("app.wallet.settings.wallet", {
                 url: "/wallet",
                 data: {
@@ -434,15 +410,17 @@
      * !! to make sure the resolves happen in the correct order
      * TODO Review
      */
-    function loadingData($q, $rootScope, $log, CONFIG, settingsService, launchService, blocktrailLocalisation, Currencies, activeWallet) {
+    function loadingData($q, $rootScope, $log, CONFIG, settingsService, localSettingsService, launchService,
+                         blocktrailLocalisation, Currencies, activeWallet) {
         // Do an initial load of cached user data
         return $q.all([
             Currencies.updatePrices(true),
             settingsService.initSettings(),
+            localSettingsService.initLocalSettings(),
             launchService.getWalletConfig()
         ]).then(function(results) {
             var settings = results[1];
-            var walletConfig = results[2];
+            var walletConfig = results[3];
             // TODO Review the logic with selected language
             var extraLanguages = walletConfig.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
 
