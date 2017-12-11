@@ -43,105 +43,17 @@
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        .phone-status {
-            display: block;
-            color: #666;
-            //margin-top: 5px;
-            font-size: 14px;
-        }
-        .spin-me {
-            display: inline-block;
-            -webkit-transform-origin: 74% 46%;
-            transform-origin: 74% 46%;
-        }
-
     }
-
-
 
     .button .icon {
         margin-left: 1rem;
     }
-
-
-
 
     .action-sheet {
         .button {
             display: inline-block;
             &::first-letter {
                 text-transform: uppercase;
-            }
-        }
-    }
-
-    &.state-phone {
-        background: $lightgray-dark;
-
-        label.item-input {
-            background: $lightgray-dark;
-
-            i.placeholder-icon {
-                font-size: 18px;
-                margin-left: -5px;
-                padding-right: 8px;
-            }
-        }
-        .tabs {
-            background-image: none; //for some reason they've used a gradient to create a thin line instead of border....very annoying to discover and remove >:(
-        }
-        .country-code {
-            padding: 0 0 5px 0;
-            p {
-                padding-top: 8px;
-            }
-        }
-        .country-select-screen {
-            margin-top: 0;
-            padding: 0;
-            padding-top: $bar-height;
-            text-align: left;
-
-            .clear-input {
-                position: absolute;
-                right: 22px;
-                font-size: 20px;
-                line-height: 29px;
-                height: 29px;
-                z-index: 10;
-            }
-
-            .filter-input {
-                position: absolute;
-                background: #bbb;
-                border-bottom: 1px solid #e1e1e1;
-                width: 100%;
-                height: 50px;
-                top: $bar-height;
-                z-index: 100;
-            }
-            .scroll-content {
-                padding-top: 50px;
-                //@include transform(translate(0, 50px));
             }
         }
     }

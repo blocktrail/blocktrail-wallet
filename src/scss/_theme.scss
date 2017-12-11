@@ -618,6 +618,19 @@ $balance-display-height: 40vw;
     }
 }
 
+.item {
+    position: relative;
+
+    input,
+    textarea {
+        width: 100%;
+        background: transparent;
+        position: relative;
+        z-index: 10;
+    }
+}
+
+
 @import "partials/action-buttons";
 @import "partials/indents";
 @import "partials/popover";
@@ -641,12 +654,12 @@ $balance-display-height: 40vw;
 // Setup module
 @import "controllers/setup/start";
 @import "controllers/setup/create-new-accout";
-@import "controllers/setup/login";
 
 // Wallet module
 @import "controllers/wallet/wallet-summary";
 @import "controllers/wallet/modal-select-wallet";
 @import "controllers/wallet/settings";
+@import "controllers/wallet/settings-phone";
 
 @import "directives/wallet/wallet-side-header";
 @import "directives/wallet/wallet-side-subheader.scss";

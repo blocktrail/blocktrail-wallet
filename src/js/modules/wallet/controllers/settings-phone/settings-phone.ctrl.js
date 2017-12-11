@@ -4,210 +4,356 @@
     angular.module("blocktrail.wallet")
         .controller("SettingsPhoneCtrl", SettingsPhoneCtrl);
 
-    function SettingsPhoneCtrl($scope, $stateParams, settingsService, $btBackButtonDelegate, sdkService,
-                          $q, $log, $timeout, $filter, $cordovaGlobalization) {
-        $scope.allCountries = allCountries;
-        $scope.formInput = {
-            newPhoneNumber: !settingsService.phoneVerified ? settingsService.phoneNationalNumber : null,
-            selectedCountry: null,
-            verifyToken: null
-        };
-        $scope.appControl = {
-            working: false,
-            showMessage: false,
-            showCountrySelect: false,
-            showPhoneInput: true
-        };
-        $scope.message = {
-            title: "",
-            title_class: "",
-            body: "",
-            body_class: ""
-        };
-        $scope.dismissAndGoBack = false;
+    function SettingsPhoneCtrl($scope, $window, $filter, $btBackButtonDelegate, $cordovaGlobalization, localSettingsService, modalService,
+                               phoneFromService, formHelperService) {
+        // Enable back button
+        enableBackButton();
 
-        //hide the phone input if verification pending
-        if (settingsService.phoneNumber && !settingsService.phoneVerified) {
-            $scope.appControl.showPhoneInput = false;
-        }
+        // Flag for submitting form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+        // We use one flag for both forms phone/phone verify
+        var isFormSubmit = false;
 
-        //set the selected country
-        if (settingsService.phoneRegionCode) {
-            $scope.formInput.selectedCountry = $filter('filter')(allCountries, function(val, index) {
-                return val.dialCode == settingsService.phoneRegionCode;
-            })[0];
-        } else {
-            //try and determine the user's country (use SIM info on android, or guess from locale)
-            $cordovaGlobalization.getLocaleName().then(
-                function(result) {
-                    var country = result.value.substr(-2, 2).toLowerCase();
-                    $scope.formInput.selectedCountry = $filter('filter')(allCountries, function(val, index) {
-                        return val.iso2 == country;
-                    })[0];
-                },
-                function(error) { console.error(error);});
-        }
+        $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
-        $scope.showMessage = function() {
-            $scope.appControl.showMessage = true;
-            //set alternative back button function (just fires once)
-            $btBackButtonDelegate.setBackButton(function() {
-                $timeout(function() {
-                    $scope.dismissMessage();
-                });
-            }, true);
-            $btBackButtonDelegate.setHardwareBackButton(function() {
-                $timeout(function() {
-                    $scope.dismissMessage();
-                });
-            }, true);
+        $scope.formData = {
+            phoneNumber: null,
+            phoneCountry: null
         };
 
-        $scope.dismissMessage = function() {
-            $scope.appControl.showMessage = false;
-            //reset back button functionality
-            $btBackButtonDelegate.setBackButton($btBackButtonDelegate._default);
-            $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
-
-            if ($scope.dismissAndGoBack) {
-                //go back to previous state
-                $btBackButtonDelegate.goBack();
-            }
+        $scope.formDataVerifyPhone = {
+            token: null
         };
 
-        $scope.showCountrySelect = function() {
-            $scope.appControl.showCountrySelect = true;
-            //set alternative back button function (just fires once)
-            $btBackButtonDelegate.setBackButton(function() {
-                $timeout(function() {
-                    $scope.dismissCountrySelect();
-                });
-            }, true);
+        $scope.isUpdatePhone = false;
 
-            $btBackButtonDelegate.setHardwareBackButton(function() {
-                $timeout(function() {
-                    $scope.dismissCountrySelect();
-                });
-            }, true);
-        };
+        // Methods
+        $scope.onSubmitFormPhone = onSubmitFormPhone;
+        $scope.onSubmitFormVerifyPhone = onSubmitFormVerifyPhone;
+        $scope.getCountryCode = getCountryCode;
+        $scope.onSetCountry = onSetCountry;
+        $scope.onRemovePhone = onRemovePhone;
+        $scope.onUpdatePhone = onUpdatePhone;
+        $scope.onResendPhone = onResendPhone;
 
-        $scope.dismissCountrySelect = function() {
-            $scope.appControl.showCountrySelect = false;
-            //reset back button functionality
-            $btBackButtonDelegate.setBackButton($btBackButtonDelegate._default);
-            $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
-        };
+        init();
 
-        $scope.updatePhone = function() {
-            if ($scope.appControl.working || !$scope.formInput.newPhoneNumber) {
-                return false;
-            }
+        /**
+         * Initialization
+         */
+        function init() {
+            resetForm();
 
-            //send new phone number to be normalised and validated
-            $scope.message = {title: 'WORKING', title_class: 'text-neutral', body: ''};
-            $scope.appControl.working = true;
-            $scope.showMessage();
-            // TODO CHECK IT
-            $q.when(sdkService.getGenericSdk())
-                .then(function(sdk) {
-                    return sdk.updatePhone({phone_number: $scope.formInput.newPhoneNumber, 'country_code': $scope.formInput.selectedCountry.dialCode});
-                })
-                .then(function(result) {
-                    //success, update settings with returned hash and normalised number
-                    settingsService.phoneVerified = false;
-                    settingsService.phoneHash = result.hash;
-                    settingsService.phoneNumber = result.phone;
-                    settingsService.phoneNationalNumber = result.phone_national;
-                    settingsService.phoneRegionCode = result.country_code;
-                    $scope.formInput.newPhoneNumber = null;//result.phone;
-                    settingsService.$store();
-
-                    $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: ''};
-                    $scope.appControl.working = false;
-                    $scope.appControl.showPhoneInput = false;
-                    $scope.dismissMessage();
-                }, function(err) {
-                    $log.error(err);
-                    $scope.message = {title: 'ERROR_TITLE_3', title_class: 'text-bad', body: err};
-                    $scope.showMessage();
-                    $scope.appControl.working = false;
-                });
-        };
-
-        $scope.removePhone = function() {
-            if ($scope.appControl.working) {
-                return false;
-            }
-            if (!settingsService.phoneNumber) {
-                $scope.formInput.newPhoneNumber = null;
-                return false;
-            }
-
-            $scope.message = {title: 'WORKING', title_class: 'text-neutral', body: ''};
-            $scope.appControl.working = true;
-            $scope.showMessage();
-            // TODO CHECK IT
-            $q.when(sdkService.getGenericSdk())
-                .then(function(sdk) {
-                    return sdk.removePhone();
-                })
-                .then(function(result) {
-                    //success, update settings with returned hash and normalised number
-                    settingsService.phoneVerified = false;
-                    settingsService.phoneHash = null;
-                    settingsService.phoneNumber = null;
-                    //settingsService.phoneNationalNumber = result.phone_national;  //leave this phone number for display, so they can add it again
-                    $scope.formInput.newPhoneNumber = null;
-                    settingsService.$store();
-
-                    $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: ''};
-                    $scope.appControl.working = false;
-                    $timeout(function() {$scope.dismissMessage();}, 1000);
-                }, function(err) {
-                    $log.error(err);
-                    $scope.message = {title: 'ERROR_TITLE_3', title_class: 'text-bad', body: err};
-                    $scope.showMessage();
-                    $scope.appControl.working = false;
-                });
-        };
-
-        $scope.verifyPhone = function() {
-            if ($scope.appControl.working || !$scope.formInput.verifyToken) {
-                return false;
-            }
-
-            $scope.message = {title: 'VERIFYING', title_class: 'text-neutral', body: ''};
-            $scope.appControl.working = true;
-            $scope.showMessage();
-            // TODO CHECK IT
-            $q.when(sdkService.getGenericSdk())
-                .then(function(sdk) {
-                    return sdk.verifyPhone($scope.formInput.verifyToken);
-                })
-                .then(function(result) {
-                    //success, update status locally
-                    settingsService.phoneVerified = true;
-                    $scope.formInput.verifyToken = null;
-                    $scope.formInput.newPhoneNumber = null;
-
-                    $scope.message = {title: 'SUCCESS', title_class: 'text-good', body: 'MSG_PHONE_VERIFIED'};
-                    $scope.showMessage();
-                    $scope.appControl.working = false;
-                    $scope.dismissAndGoBack = true;
-                    //push the provided state into the history if indicated in the url
-                    if ($stateParams.goBackTo) {
-                        $btBackButtonDelegate.addHistory($stateParams.goBackTo);
-                    }
-
-                    settingsService.$store().then(function() {
-                        //$btBackButtonDelegate.goBack();
+            if(!$scope.localSettingsData.phoneCountry) {
+                getDefaultCountry()
+                    .then(function(country) {
+                        $scope.formData.phoneCountry = country.iso2 || null;
                     });
-                }, function(err) {
-                    $log.error(err);
-                    $scope.message = {title: 'ERROR_TITLE_2', title_class: 'text-bad', body: 'MSG_BAD_TOKEN'};
-                    $scope.showMessage();
-                    $scope.appControl.working = false;
+            }
+        }
+
+        /**
+         * Reset the form
+         */
+        function resetForm() {
+            $scope.formData = {
+                phoneNumber: $scope.localSettingsData.phoneNumber,
+                phoneCountry: $scope.localSettingsData.phoneCountry
+            };
+        }
+
+        /**
+         * Reset the verify phone form
+         */
+        function resetVerifyPhoneForm() {
+            $scope.formDataVerifyPhone = {
+                token: null
+            };
+        }
+
+        /**
+         * Get the country code
+         * @param iso2
+         * @return {string}
+         */
+        function getCountryCode(iso2) {
+            var country = $filter('filter')($window.allCountries, function(item) {
+                return item.iso2 === iso2;
+            })[0];
+
+            return country ? country.dialCode : "";
+
+        }
+
+        /**
+         * Get the default country
+         * @return {*}
+         */
+        function getDefaultCountry() {
+            // try and determine the user's country (use SIM info on android, or guess from locale)
+            return $cordovaGlobalization.getLocaleName()
+                .then(function(result) {
+                    var iso2 = result.value.substr(-2, 2).toLowerCase();
+
+                    return $filter('filter')($window.allCountries, function(item) {
+                        return item.iso2 == iso2;
+                    })[0];
+                }, function() {
+                    console.log("Error get country");
+                    return {};
                 });
-        };
+        }
+
+        /**
+         * On set the country
+         */
+        function onSetCountry() {
+            modalService.select({
+                    options: prepareCountryListOptions($window.allCountries || [])
+                })
+                .then(setCountryHandler);
+        }
+
+        /**
+         * Prepare the country list options
+         * @return {Array}
+         */
+        function prepareCountryListOptions() {
+            var list = [];
+
+            $window.allCountries.forEach(function(item) {
+                list.push({
+                    value: item.iso2,
+                    selected: $scope.localSettingsData.phoneCountry === item.iso2,
+                    label: "(+" + item.dialCode + ") " + item.name
+                })
+            });
+
+            return list;
+        }
+
+        /**
+         * Set the country handler
+         * @param iso2
+         */
+        function setCountryHandler(iso2) {
+            if(iso2) {
+                $scope.formData.phoneCountry = iso2;
+            }
+        }
+
+        /**
+         * On submit the form phone
+         * @param formPhone
+         * @return {boolean}
+         */
+        function onSubmitFormPhone(formPhone) {
+            formHelperService.setAllDirty(formPhone);
+
+            // Submit the form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+            if(isFormSubmit) {
+                return false;
+            }
+
+            if (formPhone.phone.$invalid) {
+                // TODO @Tobias Add the translation message field is required
+                modalService.alert({
+                    body: "ERROR_TITLE_2"
+                });
+                return false;
+            }
+
+            sendPhone();
+        }
+
+        /**
+         * On reset the phone
+         */
+        function onResendPhone() {
+            sendPhone();
+        }
+
+        /**
+         * Send the phone
+         */
+        function sendPhone() {
+            isFormSubmit = true;
+
+            // disable back button
+            disableBackButton();
+
+            modalService.showSpinner({
+                title: "SENDING"
+            });
+
+            var data = {
+                phone: $scope.formData.phoneNumber,
+                countryCode: getCountryCode($scope.formData.phoneCountry)
+            };
+
+            phoneFromService.sendPhone(data)
+                .then(formPhoneSuccessHandler, errorHandler);
+        }
+
+        /**
+         * The phone form success handler
+         */
+        function formPhoneSuccessHandler(response) {
+            var data = {
+                isPhoneVerified: false,
+                phoneNumber: $scope.formData.phoneNumber,
+                phoneCountry: $scope.formData.phoneCountry,
+                phoneHash: response.hash
+            };
+
+            localSettingsService.setLocalSettings(data)
+                .then(successHandler, errorHandler);
+        }
+
+        /**
+         * On submit the form verify phone
+         * @param formVerifyPhone
+         * @return {boolean}
+         */
+        function onSubmitFormVerifyPhone(formVerifyPhone) {
+            formHelperService.setAllDirty(formVerifyPhone);
+
+            // Submit the form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
+            if(isFormSubmit) {
+                return false;
+            }
+
+            if (formVerifyPhone.token.$invalid) {
+                // TODO @Tobias Add the translation message field is required
+                modalService.alert({
+                    body: "ERROR_TITLE_2"
+                });
+
+                return false;
+            }
+
+            verifyPhone();
+        }
+
+        /**
+         * Verify the phone
+         */
+        function verifyPhone() {
+            isFormSubmit = true;
+
+            // disable back button
+            disableBackButton();
+
+            modalService.showSpinner({
+                title: "SENDING"
+            });
+
+            var data = {
+                token: $scope.formDataVerifyPhone.token
+            };
+
+            phoneFromService.verifyPhone(data)
+                .then(formVerifyPhoneSuccessHandler, errorHandler);
+        }
+
+        /**
+         * The form verify phone success handler
+         */
+        function formVerifyPhoneSuccessHandler() {
+            var data = {
+                isPhoneVerified: true,
+                phoneHash: null
+            };
+
+            localSettingsService.setLocalSettings(data)
+                .then(successHandler, errorHandler);
+        }
+
+        /**
+         * On update the phone
+         */
+        function onUpdatePhone() {
+            var data = {
+                phoneHash: null
+            };
+
+            localSettingsService.setLocalSettings(data)
+                .then(successHandler, errorHandler);
+        }
+
+        /**
+         * On remove the phone
+         */
+        function onRemovePhone() {
+            modalService.confirm({
+                    body: "MSG_ARE_YOU_SURE"
+                })
+                .then(function(dialogResult) {
+                    if(dialogResult) {
+                        phoneFromService.removePhone()
+                            .then(removePhoneSuccessHandler, errorHandler);
+                    }
+                });
+        }
+
+        /**
+         * Remove the phone
+         */
+        function removePhoneSuccessHandler() {
+            // disable back button
+            disableBackButton();
+
+            modalService.showSpinner({
+                title: "SETTINGS_PHONE_REMOVE"
+            });
+
+            var data = {
+                isPhoneVerified: false,
+                phoneNumber: null,
+                phoneHash: null
+            };
+
+            localSettingsService.setLocalSettings(data)
+                .then(successHandler, errorHandler);
+        }
+
+        /**
+         * Success handler success handler
+         */
+        function successHandler() {
+            isFormSubmit = false;
+            enableBackButton();
+            resetForm();
+            resetVerifyPhoneForm();
+            modalService.hideSpinner();
+        }
+
+        /**
+         * Error handler
+         */
+        function errorHandler() {
+            isFormSubmit = false;
+            enableBackButton();
+            modalService.hideSpinner();
+            resetForm();
+            resetVerifyPhoneForm();
+            modalService.alert({ body: "ERROR_TITLE_3" });
+        }
+
+        /**
+         * Enable the back button
+         */
+        function enableBackButton() {
+            $btBackButtonDelegate.setBackButton($btBackButtonDelegate._default);
+            $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
+        }
+
+        /**
+         * Disable the back button
+         */
+        function disableBackButton() {
+            $btBackButtonDelegate.setBackButton(angular.noop);
+            $btBackButtonDelegate.setHardwareBackButton(angular.noop);
+        }
     }
+
 })();

@@ -16,7 +16,7 @@
         >
             <div class="card">
                 <!-- Message -->
-                <ion-item>
+                <label class="item">
                     <textarea
                         cols="30"
                         rows="4"
@@ -26,17 +26,17 @@
                         required
                         auto-focus
                     ></textarea>
-                </ion-item>
+                </label>
 
                 <!-- Email -->
-                <ion-item>
+                <label class="item">
                     <input
                         type="email"
                         placeholder="{{ 'EMAIL' | translate }} ({{ 'OPTIONAL' | translate}})"
                         name="email"
                         ng-model="form.email"
                     >
-                </ion-item>
+                </label>
 
                 <!-- Submit button -->
                 <div class="item item-body">

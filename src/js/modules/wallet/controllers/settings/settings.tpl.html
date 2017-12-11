@@ -26,9 +26,9 @@
 
             <div class="list list-inset">
                 <!-- Profile -->
-                <div class="item item-button-right">
+                <div class="item item-button-right" ui-sref=".profile">
                     <span class="sentence-case">{{ 'SETTINGS_PROFILE' | translate }}</span>
-                    <button class="button button-clear" ui-sref=".profile">
+                    <button class="button button-clear">
                         <span class="settings-avatar-holder">
                             <profile-avatar
                                 settings-data="settingsData"
@@ -46,7 +46,6 @@
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </div>
-
                 <!-- Language -->
                 <div class="item item-button-right" ng-click="onClickSetLanguage()">
                     <span class="sentence-case">{{ 'SETTINGS_LANGUAGE' | translate }}</span>
@@ -57,23 +56,32 @@
                 </div>
             </div>
 
-
             <h3 class="group-title">{{ 'SETTINGS_PHONE' | translate }}</h3>
-            <div class="list card list-inset">
+
+            <div class="list list-inset">
+                <!-- Phone -->
                 <div class="item item-button-right" ui-sref=".phone">
                     <span class="sentence-case">{{ 'SETTINGS_PHONE_NUMBER' | translate }}</span>
                     <button class="button button-clear">
-                        <small ng-if="settings.phoneNumber">{{ settings.phoneNumber }}</small>
-                        {{ !settings.phoneNumber && ('NONE' | translate) || '' }}
+                        <small ng-if="!localSettingsData.phoneHash && !localSettingsData.isPhoneVerified">{{ 'NONE' | translate }}</small>
+                        <small ng-if="localSettingsData.phoneHash && !localSettingsData.isPhoneVerified">{{ 'SETTINGS_PHONE_UNVERIFIED' | translate }}</small>
+                        <small ng-if="!localSettingsData.phoneHash && localSettingsData.isPhoneVerified">{{ 'SETTINGS_PHONE_VERIFIED' | translate }}</small>
                         <i class="icon ion-chevron-right"></i>
                     </button>
-                    <label class="phone-status" ng-if="settings.phoneNumber">
-                        <span class="">{{ 'STATUS' | translate }}: </span>
-                        <span ng-class="{'text-good': settings.phoneVerified, 'text-bad': !settings.phoneVerified}">{{ settings.phoneVerified && ('SETTINGS_PHONE_VERIFIED' | translate) || ('SETTINGS_PHONE_UNVERIFIED' | translate) }}</span>
-                    </label>
                 </div>
-                <!-- /phone -->
 
+
+
+
+
+
+
+
+
+
+
+
+                <!-- Contacts -->
                 <div class="item">
                     <span class="sentence-case">{{ 'CONTACTS' | translate }}</span>
                     <button class="button button-small button-neutral pull-right no-animate"
@@ -101,7 +109,7 @@
                         </span>
                     </label>
                 </div>
-                <!-- /contacts -->
+
             </div>
 
 

@@ -8,7 +8,7 @@ angular.module('blocktrail.wallet').service(
     var defaultBtcPrecision = $window.innerWidth <= 375 ? 4 : 8;
 
     var defaults = {
-        displayName:  null,
+        /*displayName:  null,
         username:  '',
         email:  null,
         language: null,
@@ -17,7 +17,7 @@ angular.module('blocktrail.wallet').service(
         profilePic:  null,
         profileSynced: true,
         profilePosX: 50,
-        profilePosY: 50,
+        profilePosY: 50,*/
 
         apprateStatus: null,
 
@@ -29,11 +29,13 @@ angular.module('blocktrail.wallet').service(
 
         buyBTCRegion: null,
 
-        phoneNumber: null,
+        /*phoneNumber: null,
         phoneNationalNumber: null,
         phoneRegionCode: null,
         phoneHash: null,
-        phoneVerified: false,
+        phoneVerified: false,*/
+
+
         enableContacts: true,       //contacts access and syncing. default to true for previous installs
         contactsLastSync: null,
         contactsWebSync: true,      //enable syncing contacts to web wallet
@@ -41,19 +43,17 @@ angular.module('blocktrail.wallet').service(
         // defaults to an arbitrary timestamp prior to when this was added
         // so that we can use this to check for activation of new stuff etc
         accountCreated: DEFAULT_ACCOUNT_CREATED,
+
         backupSaved: false,
         backupNotifyTimestamp: 0,// notification if backup PDF is not yet saved
         backupSavedPersistent: false,
         backupSkipped: false,
 
-        setupStarted: false,
-        setupComplete: false,
 
         installTracked: false,
-        walletActivated: false, // balance > 0
 
         //display options
-        btcPrecision: defaultBtcPrecision,        //show 8 decimals by default, 4 on smaller screens
+        btcPrecision: defaultBtcPrecision,        // show 8 decimals by default, 4 on smaller screens
         vibrateOnTx: true,
 
         enablePolling: true,    //dev setting - disables auto polling for transactions
@@ -70,13 +70,13 @@ angular.module('blocktrail.wallet').service(
         permissionContacts: false,      //iOS contacts access
         permissionNotifications: false, //push notification allowed
 
-        showArchived: false,
+        showArchived: false
 
         /* PIN lock */
         // TODO Move it to local settings
-        pinOnOpen: true,            // ask for pin on each wallet open
+        /*pinOnOpen: true,            // ask for pin on each wallet open
         pinFailureCount: 0,         // counter of pin input failures
-        pinLastFailure: null        // last pin input failure
+        pinLastFailure: null        // last pin input failure*/
     };
     angular.extend(this, defaults);
 

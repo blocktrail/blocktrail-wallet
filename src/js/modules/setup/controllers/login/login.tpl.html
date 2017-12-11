@@ -12,12 +12,12 @@
         <form
             class="form-login"
             name="loginForm"
-            ng-click="onSubmitFormLogin(loginForm)"
+            ng-submit="onSubmitFormLogin(loginForm)"
             novalidate
         >
             <div class="card">
                 <!-- Email -->
-                <ion-item>
+                <label class="item">
                     <input
                         type="email"
                         placeholder="{{ 'SETUP_LOGIN_PLACEHOLDER' | translate }}"
@@ -26,19 +26,18 @@
                         required
                         auto-focus
                     >
-                </ion-item>
+                </label>
 
                 <!-- Password -->
-                <ion-item>
+                <label class="item">
                     <input
-                        class="form-control"
                         type="password"
                         placeholder="{{ 'SETUP_PASSWORD_PLACEHOLDER' | translate }}"
                         name="password"
                         ng-model="form.password"
                         required
                     >
-                </ion-item>
+                </label>
 
                 <!-- Submit button -->
                 <ion-item>
