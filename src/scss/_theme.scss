@@ -621,7 +621,10 @@ $balance-display-height: 40vw;
 .item {
     position: relative;
 
-    input,
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="tel"],
     textarea {
         width: 100%;
         background: transparent;

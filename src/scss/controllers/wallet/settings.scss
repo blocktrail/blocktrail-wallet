@@ -1,7 +1,3 @@
-
-//--- settings screens ---
-
-// TODO Review
 .state-settings {
     background: $lightgray-dark;
 
@@ -20,58 +16,40 @@
             margin: 0 10px 35px 10px;
             box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.05);
         }
+    }
 
-        .display-name {
-            margin: 0 15px;
-        }
+    .display-name {
+        margin: 0 15px;
+    }
 
-        .settings-avatar-holder {
-            top: -3px;
-            bottom: -4px;
+    .settings-avatar-holder {
+        top: -3px;
+        bottom: -4px;
+        width: 40px;
+        height: 40px;
+        position: relative;
+
+        .profile-avatar {
+            display: block;
             width: 40px;
             height: 40px;
-            position: relative;
 
-            .profile-avatar {
-                display: block;
-                width: 40px;
-                height: 40px;
-
-                .initials {
-                    font-size: 28px;
-                    line-height: 40px;
-                }
+            .initials {
+                font-size: 28px;
+                line-height: 40px;
             }
         }
     }
 
-    .button .icon {
-        margin-left: 1rem;
-    }
+    .range {
+        position: relative;
+        margin: 0 -10px;
 
-    .action-sheet {
-        .button {
-            display: inline-block;
-            &::first-letter {
-                text-transform: uppercase;
-            }
+        input {
+            padding-left: 2px;
+            padding-right: 2px;
         }
     }
+
 }
-//platform specifics
-.platform-ios {
-    .state-settings {
-        .photo-crop-screen {
-            padding-top: $bar-height + $ios-statusbar-height;
-        }
-    }
-    .state-phone {
-        .country-select-screen {
-            //padding-top: $bar-height + $ios-statusbar-height;
 
-            .filter-input {
-                margin-top: $ios-statusbar-height;
-            }
-        }
-    }
-}

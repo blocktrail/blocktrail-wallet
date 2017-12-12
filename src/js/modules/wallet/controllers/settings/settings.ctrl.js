@@ -16,6 +16,14 @@
         $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
         $scope.languageName = blocktrailLocalisation.languageName($translate.use());
 
+        $scope.btcPrecision = {
+            value: $scope.localSettingsData.btcPrecision
+        };
+
+        var watchBtcPrecision = $scope.$watch("btcPrecision.value", onSetBtcPrecision);
+        // On scope destroy
+        $scope.$on("$destroy", onScopeDestroy);
+
         // Methods
         $scope.onSetCurrency = onSetCurrency;
         $scope.onSetLanguage = onSetLanguage;
@@ -244,6 +252,23 @@
                 });
         }
 
+        /**
+         * On set BTC precision
+         * @param newValue
+         * @param oldValue
+         */
+        function onSetBtcPrecision(newValue, oldValue) {
+            if(newValue !== oldValue) {
+                var data = {
+                    btcPrecision: $scope.btcPrecision.value
+                };
+
+                localSettingsService.setLocalSettings(data)
+                    .then(angular.noop, errorHandler);
+            }
+        }
+
+
 
 
 
@@ -287,6 +312,13 @@
         function disableBackButton() {
             $btBackButtonDelegate.setBackButton(angular.noop);
             $btBackButtonDelegate.setHardwareBackButton(angular.noop);
+        }
+
+        /**
+         * On scope destroy
+         */
+        function onScopeDestroy() {
+            watchBtcPrecision();
         }
     }
 

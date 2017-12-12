@@ -4,15 +4,14 @@
     angular.module("blocktrail.wallet")
         .controller("WalletSummaryCtrl", WalletSummaryCtrl);
 
-    function WalletSummaryCtrl($rootScope, $scope, $q, activeWallet, settingsService,
+    function WalletSummaryCtrl($rootScope, $scope, $q, activeWallet, settingsService, localSettingsService,
                                buyBTCService, CurrencyConverter, modalService) {
-
-        var walletData = activeWallet.getReadOnlyWalletData();
-        var settings = settingsService.getReadOnlySettingsData();
         var transactionsListLimitStep = 7;
         var lastDateHeader = 0; // used to keep track of the last date header added
 
-        $scope.walletData = walletData;
+        $scope.walletData = activeWallet.getReadOnlyWalletData();;
+        $scope.settingsData = settingsService.getReadOnlySettingsData();
+        $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
         $scope.isShowNoMoreTransactions = true;
         $scope.showBCCSweepWarning = false;
@@ -31,7 +30,7 @@
 
         if ($scope.walletData.networkType === "BCC") {
             activeWallet.isReady.then(function() {
-                $scope.showBCCSweepWarning = !$scope.walletData.transactions.length && !settings.hideBCCSweepWarning;
+                $scope.showBCCSweepWarning = !$scope.walletData.transactions.length && !$scope.settingsData.hideBCCSweepWarning;
             });
         }
 
@@ -58,39 +57,36 @@
          * TODO move this logic to Wallet class
          */
         function getGlideraTransactions() {
-            return settingsService.initSettings()
-                .then(function(settings) {
-                    $scope.buyBtcPendingOrders = [];
+            $scope.buyBtcPendingOrders = [];
 
-                    settings.glideraTransactions.forEach(function(glideraTxInfo) {
-                        // don't display completed TXs, they will be part of our normal transaction history
-                        if (glideraTxInfo.transactionHash || glideraTxInfo.status === "COMPLETE") {
-                            return;
-                        }
+            $scope.settingsData.glideraTransactions.forEach(function(glideraTxInfo) {
+                // don't display completed TXs, they will be part of our normal transaction history
+                if (glideraTxInfo.transactionHash || glideraTxInfo.status === "COMPLETE") {
+                    return;
+                }
 
-                        // only display TXs that are related to this wallet
-                        if (glideraTxInfo.walletIdentifier !== $scope.walletData.identifier) {
-                            return;
-                        }
+                // only display TXs that are related to this wallet
+                if (glideraTxInfo.walletIdentifier !== $scope.walletData.identifier) {
+                    return;
+                }
 
-                        var order = {
-                            transactionUuid: glideraTxInfo.transactionUuid,
-                            qty: CurrencyConverter.toSatoshi(glideraTxInfo.qty, 'BTC'),
-                            qtyBTC: glideraTxInfo.qty,
-                            currency: glideraTxInfo.currency,
-                            price: glideraTxInfo.price,
-                            total: (glideraTxInfo.price * glideraTxInfo.qty).toFixed(2),
-                            time: glideraTxInfo.time,
-                            avatarUrl: buyBTCService.BROKERS.glidera.avatarUrl,
-                            displayName: buyBTCService.BROKERS.glidera.displayName
-                        };
+                var order = {
+                    transactionUuid: glideraTxInfo.transactionUuid,
+                    qty: CurrencyConverter.toSatoshi(glideraTxInfo.qty, 'BTC'),
+                    qtyBTC: glideraTxInfo.qty,
+                    currency: glideraTxInfo.currency,
+                    price: glideraTxInfo.price,
+                    total: (glideraTxInfo.price * glideraTxInfo.qty).toFixed(2),
+                    time: glideraTxInfo.time,
+                    avatarUrl: buyBTCService.BROKERS.glidera.avatarUrl,
+                    displayName: buyBTCService.BROKERS.glidera.displayName
+                };
 
-                        $scope.buyBtcPendingOrders.push(order);
-                    });
+                $scope.buyBtcPendingOrders.push(order);
+            });
 
-                    // latest first
-                    $scope.buyBtcPendingOrders.reverse();
-                });
+            // latest first
+            $scope.buyBtcPendingOrders.reverse();
         }
 
 
@@ -149,8 +145,8 @@
         function onShowTransaction(transaction) {
             modalService.show("js/modules/wallet/controllers/modal-wallet-transaction-info/modal-wallet-transaction-info.tpl.html", "ModalWalletTransactionInfo", {
                 transaction: transaction,
-                walletData: walletData,
-                localCurrency: settings.localCurrency
+                walletData: $scope.walletData,
+                localCurrency: $scope.settingsData.localCurrency
             });
         }
     }

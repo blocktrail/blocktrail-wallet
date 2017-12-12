@@ -14,6 +14,7 @@
         $scope.PRIOBOOST_MAX_SIZE = 1300;
 
         $scope.walletData = activeWallet.getReadOnlyWalletData();
+        $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
         $scope.fiatFirst = false;
         $scope.prioboost = {

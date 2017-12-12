@@ -8,13 +8,13 @@
     <div class="bar bar-subheader wallet-info">
         <div class="wallet-info-avatar">
             <div class="display-token">
-                <img class="avatar" ng-if="settings.profilePic" ng-src="{{ settings.profilePic }}" alt=""/>
-                <i class="icon ion-person" ng-if="!settings.profilePic"></i>
+                <img class="avatar" ng-if="settingsData.profilePic" ng-src="{{ settingsData.profilePic }}" alt=""/>
+                <i class="icon ion-person" ng-if="!settingsData.profilePic"></i>
             </div>
         </div>
         <div class="wallet-info-description">
             <h1 ng-bind-html="((walletData.balance + walletData.uncBalance) | satoshiToCoin : walletData.networkType : 4 : true : 'short')">{{ (walletData.balance + walletData.uncBalance) | satoshiToCoin : walletData.networkType : 4 : false : 'short' }}</h1>
-            <p>{{ (walletData.balance + walletData.uncBalance) | satoshiToCurrency : settings.localCurrency : bitcoinPrices }}</p>
+            <p>{{ (walletData.balance + walletData.uncBalance) | satoshiToCurrency : settingsData.localCurrency : bitcoinPrices }}</p>
         </div>
     </div>
 
@@ -34,8 +34,8 @@
                     <div
                         class="item item-avatar item-transaction"
                         ng-class="{
-                            'middle-value': settings.btcPrecision <= 6 && settings.btcPrecision >= 4,
-                            'short-value': settings.btcPrecision <= 4
+                            'middle-value': localSettingsData.btcPrecision <= 6 && localSettingsData.btcPrecision >= 4,
+                            'short-value': localSettingsData.btcPrecision <= 4
                         }"
                         ng-click="onShowTransaction(transaction)"
                     >
@@ -64,7 +64,7 @@
                         <!-- Value -->
                         <div
                             class="value received"
-                            ng-bind-html="buyBtcPendingOrder.qty | satoshiToCoin : walletData.networkType : settings.btcPrecision : true"
+                            ng-bind-html="buyBtcPendingOrder.qty | satoshiToCoin : walletData.networkType : localSettingsData.btcPrecision : true"
                         ></div>
 
                     </div>
@@ -87,7 +87,7 @@
                 <wallet-transaction
                     wallet-data="walletData"
                     transaction="transaction"
-                    btc-precision="settings.btcPrecision"
+                    btc-precision="localSettingsData.btcPrecision"
                     on-show-transaction="onShowTransaction(transaction)"
                 ></wallet-transaction>
             </div>
