@@ -33,7 +33,7 @@
                         <div class="col">
                             <div class="btc-value" ng-if="walletData.balance !== null">
                                 <canvas-display
-                                    text="(walletData.balance+walletData.uncBalance | satoshiToCoin: walletData.networkType : settings.btcPrecision : false : 'hide')"
+                                    text="(walletData.balance+walletData.uncBalance | satoshiToCoin: walletData.networkType : localSettingsData.btcPrecision : false : 'hide')"
                                     width="100%"
                                     height="26"
                                     font="26px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "

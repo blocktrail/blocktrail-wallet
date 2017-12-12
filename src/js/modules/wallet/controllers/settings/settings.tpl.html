@@ -34,8 +34,7 @@
                                 settings-data="settingsData"
                             ></profile-avatar>
                         </span>
-
-                        <i class="icon ion-chevron-right"></i>
+                        <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
                 <!-- Currency -->
@@ -43,7 +42,7 @@
                     <span class="sentence-case">{{ 'SETTINGS_CURRENCY' | translate }}</span>
                     <button class="button button-clear">
                         {{ settingsData.localCurrency }}
-                        <i class="icon ion-chevron-right"></i>
+                        <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
                 <!-- Language -->
@@ -51,7 +50,7 @@
                     <span class="sentence-case">{{ 'SETTINGS_LANGUAGE' | translate }}</span>
                     <button class="button button-clear">
                         {{ languageName | translate }}
-                        <i class="icon ion-chevron-right"></i>
+                        <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
             </div>
@@ -66,7 +65,7 @@
                         <small ng-if="!localSettingsData.phoneHash && !localSettingsData.isPhoneVerified">{{ 'NONE' | translate }}</small>
                         <small ng-if="localSettingsData.phoneHash && !localSettingsData.isPhoneVerified">{{ 'SETTINGS_PHONE_UNVERIFIED' | translate }}</small>
                         <small ng-if="!localSettingsData.phoneHash && localSettingsData.isPhoneVerified">{{ 'SETTINGS_PHONE_VERIFIED' | translate }}</small>
-                        <i class="icon ion-chevron-right"></i>
+                        <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
                 <!-- Contacts -->
@@ -77,27 +76,34 @@
 
                         <small ng-if="localSettingsData.isEnableContacts">{{ 'ENABLE' | translate }}</small>
                         <small ng-if="!localSettingsData.isEnableContacts">{{ 'DISABLE' | translate }}</small>
-                        <i class="icon ion-chevron-right"></i>
+                        <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
             </div>
-            
+
             <h3 class="group-title">{{ 'SETTINGS_DISPLAY' | translate }}</h3>
 
             <div class="list list-inset">
-
                 <div class="item ">
-                    <span class="sentence-case">{{ 'SETTINGS_BTC_DECIMALS' | translate }}</span>
-                    <br>
+                    <p>
+                        <small>{{ 'SETTINGS_BTC_DECIMALS' | translate }}</small>
+                        <small class="pull-right">{{ btcPrecision.value }}</small>
+                    </p>
                     <div class="range range-positive">
-                        <input type="range" name="volume" step="1" min="0" max="8" ng-model="settings.btcPrecision" ng-change="updateSettings()">
-                        {{settings.btcPrecision}}
+                        <input
+                            type="range"
+                            name="volume"
+                            step="1"
+                            min="0"
+                            max="8"
+                            ng-model="btcPrecision.value"
+                            ng-model-options="{ debounce: 150 }"
+                        >
                     </div>
                     <div class="text-center">
-                        <small>{{ (walletData.balance != null && walletData.balance + walletData.uncBalance || 0) | satoshiToCoin: walletData.networkType : settings.btcPrecision : false : 'hide' }}</small>
+                        <small>{{ (walletData.balance != null && walletData.balance + walletData.uncBalance || 0) | satoshiToCoin: walletData.networkType : btcPrecision.value : false : 'hide' }}</small>
                     </div>
                 </div>
-                <!-- /btc fraction display -->
             </div>
 
 

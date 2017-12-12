@@ -21,6 +21,10 @@
             isEnableContacts: false,
             contactsWebSync: false,
             contactsLastSync: null,
+            // BTC precision
+            btcPrecision: 4,
+
+
             // TODO Update pinOnOpen
             /* PIN lock */
             isPinOnOpen: false,            // ask for pin on each wallet open // TODO Change to true as default
