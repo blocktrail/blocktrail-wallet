@@ -43,7 +43,7 @@
         function init() {
             resetForm();
 
-            if(!$scope.localSettingsData.phoneCountry) {
+            if (!$scope.localSettingsData.phoneCountry) {
                 getDefaultCountry()
                     .then(function(country) {
                         $scope.formData.phoneCountry = country.iso2 || null;
@@ -76,7 +76,7 @@
          * @return {string}
          */
         function getCountryCode(iso2) {
-            var country = $filter('filter')($window.allCountries, function(item) {
+            var country = $filter("filter")($window.allCountries, function(item) {
                 return item.iso2 === iso2;
             })[0];
 
@@ -94,7 +94,7 @@
                 .then(function(result) {
                     var iso2 = result.value.substr(-2, 2).toLowerCase();
 
-                    return $filter('filter')($window.allCountries, function(item) {
+                    return $filter("filter")($window.allCountries, function(item) {
                         return item.iso2 == iso2;
                     })[0];
                 }, function() {
@@ -108,8 +108,8 @@
          */
         function onSetCountry() {
             modalService.select({
-                    options: prepareCountryListOptions($window.allCountries || [])
-                })
+                options: prepareCountryListOptions($window.allCountries || [])
+            })
                 .then(setCountryHandler);
         }
 
@@ -125,7 +125,7 @@
                     value: item.iso2,
                     selected: $scope.localSettingsData.phoneCountry === item.iso2,
                     label: "(+" + item.dialCode + ") " + item.name
-                })
+                });
             });
 
             return list;
@@ -136,7 +136,7 @@
          * @param iso2
          */
         function setCountryHandler(iso2) {
-            if(iso2) {
+            if (iso2) {
                 $scope.formData.phoneCountry = iso2;
             }
         }
@@ -150,7 +150,7 @@
             formHelperService.setAllDirty(formPhone);
 
             // Submit the form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
-            if(isFormSubmit) {
+            if (isFormSubmit) {
                 return false;
             }
 
@@ -202,6 +202,7 @@
                 isPhoneVerified: false,
                 phoneNumber: $scope.formData.phoneNumber,
                 phoneCountry: $scope.formData.phoneCountry,
+                phoneCountryCode: getCountryCode($scope.formData.phoneCountry),
                 phoneHash: response.hash
             };
 
@@ -218,7 +219,7 @@
             formHelperService.setAllDirty(formVerifyPhone);
 
             // Submit the form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
-            if(isFormSubmit) {
+            if (isFormSubmit) {
                 return false;
             }
 
@@ -285,14 +286,13 @@
          */
         function onRemovePhone() {
             modalService.confirm({
-                    body: "MSG_ARE_YOU_SURE"
-                })
-                .then(function(dialogResult) {
-                    if(dialogResult) {
-                        phoneFromService.removePhone()
-                            .then(removePhoneSuccessHandler, errorHandler);
-                    }
-                });
+                body: "MSG_ARE_YOU_SURE"
+            }).then(function(dialogResult) {
+                if (dialogResult) {
+                    phoneFromService.removePhone()
+                        .then(removePhoneSuccessHandler, errorHandler);
+                }
+            });
         }
 
         /**
@@ -336,7 +336,7 @@
             modalService.hideSpinner();
             resetForm();
             resetVerifyPhoneForm();
-            modalService.alert({ body: "ERROR_TITLE_3" });
+            modalService.alert({body: "ERROR_TITLE_3"});
         }
 
         /**

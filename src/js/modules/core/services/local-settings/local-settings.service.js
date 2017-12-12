@@ -11,13 +11,16 @@
         var self = this;
 
         var localSettingsDataSchema = {
+            // Phone
             isPhoneVerified: false,
             phoneNumber: null,
             phoneCountry: null,
+            phoneRegionCode: null,
             phoneHash: null,
-
-
-            isContactsSynchronized: false,
+            // Contacts
+            isEnableContacts: false,
+            contactsWebSync: false,
+            contactsLastSync: null,
             // TODO Update pinOnOpen
             /* PIN lock */
             isPinOnOpen: false,            // ask for pin on each wallet open // TODO Change to true as default

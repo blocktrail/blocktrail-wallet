@@ -1,8 +1,7 @@
 angular.module('blocktrail.wallet').factory(
     'Contacts',
-    function($log, $rootScope, settingsService, launchService, sdkService, storageService, $q) {
-
-        var settings = settingsService.getReadOnlySettingsData();
+    function($log, $rootScope, settingsService, localSettingsService, launchService, sdkService, storageService, $q) {
+        var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
         var Contacts = function() {
             var self = this;
@@ -98,6 +97,7 @@ angular.module('blocktrail.wallet').factory(
 
         Contacts.prototype.sync = function(forceAll) {
             var self = this;
+
             return $q.when(self.contactsCache.get('synced'))
                 .then(function(syncedDoc) {
                     $log.debug('contacts: notfirst sync');
@@ -131,8 +131,7 @@ angular.module('blocktrail.wallet').factory(
                                             contact.hashes.forEach(function(hash) {
                                                 if (hash && (forceAll || syncedDoc.synced.indexOf(hash) === -1) && !syncContactsByHash[hash]) {
                                                     syncContactsByHash[hash] =
-                                                        // TODO Move to local settings
-                                                        settings.contactsWebSync ?
+                                                        localSettingsData.contactsWebSync ?
                                                         CryptoJS.AES.encrypt(contact.displayName, accountInfo.secret).toString() :
                                                         "";
                                                 }
@@ -203,10 +202,7 @@ angular.module('blocktrail.wallet').factory(
         };
 
         Contacts.prototype.formatE164 = function(phoneNumber, defaultRegionCode) {
-            var self = this;
-
-            // TODO Move to local settings
-            defaultRegionCode = typeof defaultRegionCode === 'undefined' ? settings.phoneRegionCode : defaultRegionCode;
+            defaultRegionCode = typeof defaultRegionCode === 'undefined' ? localSettingsData.phoneCountryCode : defaultRegionCode;
 
             phoneNumber = phoneNumber.normalizedNumber || phoneNumber.number || phoneNumber;
 
