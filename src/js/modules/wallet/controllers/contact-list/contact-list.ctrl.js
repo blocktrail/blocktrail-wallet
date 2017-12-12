@@ -85,6 +85,7 @@
         };
 
         $scope.getContacts = function(forceRebuild) {
+            // TODO @Roman replace localSettingsService.isEnableContacts
             //if user manages to get here (i.e. after verifying phone) automatically enable contacts and force a first sync
             if (!settingsService.enableContacts) {
                 settingsService.enableContacts = true;

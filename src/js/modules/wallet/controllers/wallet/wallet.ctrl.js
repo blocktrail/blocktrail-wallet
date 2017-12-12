@@ -207,6 +207,7 @@
         // TODO Review
         /*function syncContacts() {
             // sync any changes to contacts, if syncing enabled
+            // TODO replace localSettingsService.isEnableContacts
             if (settingsService.enableContacts) {
                 Contacts.sync()
                     .then(function() {

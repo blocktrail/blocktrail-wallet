@@ -39,7 +39,7 @@
                     </button>
                 </div>
                 <!-- Currency -->
-                <div class="item item-button-right" ng-click="onClickSetCurrency()">
+                <div class="item item-button-right" ng-click="onSetCurrency()">
                     <span class="sentence-case">{{ 'SETTINGS_CURRENCY' | translate }}</span>
                     <button class="button button-clear">
                         {{ settingsData.localCurrency }}
@@ -47,7 +47,7 @@
                     </button>
                 </div>
                 <!-- Language -->
-                <div class="item item-button-right" ng-click="onClickSetLanguage()">
+                <div class="item item-button-right" ng-click="onSetLanguage()">
                     <span class="sentence-case">{{ 'SETTINGS_LANGUAGE' | translate }}</span>
                     <button class="button button-clear">
                         {{ languageName | translate }}
@@ -69,52 +69,21 @@
                         <i class="icon ion-chevron-right"></i>
                     </button>
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
                 <!-- Contacts -->
-                <div class="item">
+                <div class="item item-button-right" ng-click="onSetContacts()">
                     <span class="sentence-case">{{ 'CONTACTS' | translate }}</span>
-                    <button class="button button-small button-neutral pull-right no-animate"
-                            ng-class="{'button-neutral': !appControl.syncing, 'button-positive': appControl.syncing}"
-                            ng-if="!appControl.syncComplete"
-                            ng-click="settings.enableContacts ? disableContacts() : enableContacts()">
-                        <span ng-if="!settings.enableContacts && !appControl.syncing">{{ 'ENABLE' | translate }}</span>
-                        <span ng-if="settings.enableContacts && !appControl.syncing">{{ 'DISABLE' | translate }}</span>
-                        <span ng-if="appControl.syncing && !appControl.syncingAll">{{ 'SYNCING' | translate }}</span>
-                        <span ng-if="appControl.syncing && appControl.syncingAll">{{ 'SYNCING_ALL' | translate }}</span>
-                        <span ng-if="appControl.syncing" ng-class="{'spin-me': appControl.syncing}"><i class="icon ion-refresh"></i></span>
+                    <button class="button button-clear">
+                        <small>Not ready: </small>
+
+                        <small ng-if="localSettingsData.isEnableContacts">{{ 'ENABLE' | translate }}</small>
+                        <small ng-if="!localSettingsData.isEnableContacts">{{ 'DISABLE' | translate }}</small>
+                        <i class="icon ion-chevron-right"></i>
                     </button>
-                    <button class="button button-small button-balanced pull-right no-animate" ng-if="appControl.syncComplete">
-                        {{ 'COMPLETE' | translate }}
-                    </button>
-                    <label class="phone-status">
-                        <span class="">{{ 'STATUS' | translate }}: </span>
-                        <span ng-class="{'text-good': (settings.contactsLastSync && settings.enableContacts), 'text-bad': (!settings.contactsLastSync || !settings.enableContacts) }">
-                            <span ng-if="settings.enableContacts && settings.contactsLastSync">{{ 'SETTINGS_CONTACTS_SYNCED' | translate }}</span>
-                            <span ng-if="settings.enableContacts && !settings.contactsLastSync">{{ 'SETTINGS_CONTACTS_UNSYNCED' | translate }}</span>
-                            <span ng-if="!settings.enableContacts">{{ 'DISABLED' | translate }}</span>
-                            <small class="text-neutral opacity-50" ng-if="settings.enableContacts && settings.contactsLastSync && !appControl.syncing">
-                                ({{ settings.contactsLastSync | amDateFormat:'Do MMM YYYY' }})
-                            </small>
-                        </span>
-                    </label>
                 </div>
-
             </div>
-
-
-
+            
             <h3 class="group-title">{{ 'SETTINGS_DISPLAY' | translate }}</h3>
+
             <div class="list list-inset">
 
                 <div class="item ">
