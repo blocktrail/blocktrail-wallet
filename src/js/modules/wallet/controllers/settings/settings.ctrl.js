@@ -6,7 +6,7 @@
 
     // TODO For Language use self._$translate.use()
 
-    function SettingsCtrl($rootScope, $scope, $state, $q, $btBackButtonDelegate, $translate, modalService, activeWallet,
+    function SettingsCtrl($rootScope, $scope, $state, $q, $btBackButtonDelegate, $translate, modalService, activeWallet, launchService,
                           settingsService, localSettingsService, trackingService, Currencies, Contacts, blocktrailLocalisation) {
         // Enable back button
         enableBackButton();
@@ -19,6 +19,7 @@
         $scope.btcPrecision = {
             value: $scope.localSettingsData.btcPrecision
         };
+        $scope.isWalletBackupSaved = true;
 
         var watchBtcPrecision = $scope.$watch("btcPrecision.value", onSetBtcPrecision);
         // On scope destroy
@@ -28,6 +29,21 @@
         $scope.onSetCurrency = onSetCurrency;
         $scope.onSetLanguage = onSetLanguage;
         $scope.onSetContacts = onSetContacts;
+        $scope.onWalletBackupSaved = onWalletBackupSaved;
+
+        init();
+
+        /**
+         * Initialize
+         */
+        function init() {
+            launchService.getWalletBackup()
+                .then(function(walletBackup) {
+                    if(walletBackup.identifier) {
+                        $scope.isWalletBackupSaved = false;
+                    }
+                });
+        }
 
         /**
          * On click set currency
@@ -120,6 +136,38 @@
                     .catch(errorHandler);
             }
         }
+
+        /**
+         * On click wallet backup saved
+         */
+        function onWalletBackupSaved() {
+            modalService.message({
+                title: "",
+                body: "MSG_BACKUP_SAVED_ALREADY"
+            })
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /**
          * On set the contacts

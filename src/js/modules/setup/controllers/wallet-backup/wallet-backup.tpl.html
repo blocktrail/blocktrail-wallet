@@ -40,13 +40,13 @@
             class="card"
             ng-if="isButtonEmailOrOpenClicked"
         >
-            <ion-item>
+            <ion-item class="item-borderless iib-5">
                 <ion-checkbox ng-model="form.isBackupSaved">
                     {{ 'SETUP_WALLET_BACKUP_CONFIRM' | translate }}
                 </ion-checkbox>
             </ion-item>
 
-            <ion-item class="item-borderless">
+            <ion-item class="item-borderless iit-5">
                 <button
                     class="button button-block button-positive"
                     ng-disabled="!form.isBackupSaved"

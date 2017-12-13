@@ -232,30 +232,6 @@
                     }
                 }
             })
-            .state("app.wallet.settings.phone", {
-                url: "/phone?goBackTo",
-                data: {
-                    clearHistory: false
-                },
-                views: {
-                    "mainView@app.wallet": {
-                        templateUrl: "js/modules/wallet/controllers/settings-phone/settings-phone.tpl.html",
-                        controller: "SettingsPhoneCtrl"
-                    }
-                }
-            })
-            .state("app.wallet.settings.wallet", {
-                url: "/wallet",
-                data: {
-                    clearHistory: false
-                },
-                views: {
-                    "mainView@app.wallet": {
-                        templateUrl: "js/modules/wallet/controllers/settings-wallet/settings-wallet.tpl.html",
-                        controller: "SettingsWalletCtrl"
-                    }
-                }
-            })
             .state("app.wallet.settings.backup", {
                 url: "/wallet-backup",
                 data: {
@@ -266,17 +242,17 @@
                         templateUrl: "js/modules/wallet/controllers/settings-wallet-backup/settings-wallet-backup.tpl.html",
                         controller: "SettingsWalletBackupCtrl"
                     }
+                }
+            })
+            .state("app.wallet.settings.phone", {
+                url: "/phone?goBackTo",
+                data: {
+                    clearHistory: false
                 },
-                resolve: {
-                    backupInfo: function($state, launchService) {
-                        return launchService.getWalletBackup().then(
-                            function(backupInfo) {
-                                return backupInfo;
-                            },
-                            function() {
-                                return null;
-                            }
-                        );
+                views: {
+                    "mainView@app.wallet": {
+                        templateUrl: "js/modules/wallet/controllers/settings-phone/settings-phone.tpl.html",
+                        controller: "SettingsPhoneCtrl"
                     }
                 }
             })
