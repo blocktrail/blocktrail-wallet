@@ -4,7 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupWalletBackupCtrl", SetupWalletBackupCtrl);
 
-    function SetupWalletBackupCtrl($scope, $q, $btBackButtonDelegate, modalService, launchService,
+    function SetupWalletBackupCtrl($scope, $btBackButtonDelegate, modalService, launchService,
                                    settingsService, walletBackupService, setupStepsService) {
         // disable back button
         $btBackButtonDelegate.setBackButton(angular.noop);

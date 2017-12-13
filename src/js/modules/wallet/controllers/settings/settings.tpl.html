@@ -41,7 +41,7 @@
                 <div class="item item-button-right" ng-click="onSetCurrency()">
                     <span class="sentence-case">{{ 'SETTINGS_CURRENCY' | translate }}</span>
                     <button class="button button-clear">
-                        {{ settingsData.localCurrency }}
+                        <small>{{ settingsData.localCurrency }}</small>
                         <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
@@ -49,10 +49,30 @@
                 <div class="item item-button-right" ng-click="onSetLanguage()">
                     <span class="sentence-case">{{ 'SETTINGS_LANGUAGE' | translate }}</span>
                     <button class="button button-clear">
-                        {{ languageName | translate }}
+                        <small>{{ languageName | translate }}</small>
                         <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
+
+                <!-- Wallet backup not saved -->
+                <div ng-if="!isWalletBackupSaved" class="item item-button-right" ui-sref=".backup">
+                    <span class="sentence-case">{{ 'SETTINGS_WALLET_BACKUP' | translate }}</span>
+                    <button class="button button-clear">
+                        <small class="text-bad">{{ "SETTINGS_BACKUP_INCOMPLETE" | translate }}</small>
+                        <i class="icon ion-chevron-right iil-15"></i>
+                    </button>
+                </div>
+                <!-- Wallet backup saved -->
+                <div ng-if="isWalletBackupSaved" class="item item-button-right" ng-click="onWalletBackupSaved()">
+                    <span class="sentence-case">{{ 'SETTINGS_WALLET_BACKUP' | translate }}</span>
+                    <button class="button button-clear">
+                        <small>{{ "SETTINGS_BACKUP_COMPLETE" | translate }}</small>
+                        <i class="icon ion-chevron-right iil-15"></i>
+                    </button>
+                </div>
+
+
+
             </div>
 
             <h3 class="group-title">{{ 'SETTINGS_PHONE' | translate }}</h3>
@@ -108,30 +128,13 @@
 
 
 
+
+
             <h3 class="group-title">{{ 'SETTINGS_WALLET' | translate }}</h3>
+
             <div class="list list-inset">
-                <div class="item item-button-right">
-                    <span class="sentence-case">{{ 'SETTINGS_CURRENT_WALLET' | translate }}</span>
-                    <button class="button button-clear">
-                        {{ defaultWallet | characters: 17}}
-                        <ion-spinner icon="dots" ng-if="!defaultWallet"></ion-spinner>
-                        <i class="icon ion-chevron-right" ng-if="false"></i>
-                    </button>
-                </div>
-                <!-- /default wallet -->
 
-                <div class="item item-button-right" ng-click="walletBackup()">
-                    <span class="sentence-case">{{ 'SETTINGS_WALLET_BACKUP' | translate }}</span>
-                    <label class="phone-status">
-                        <span ng-class="{'text-good': settings.backupSaved, 'text-bad': !settings.backupSaved}">
-                            {{ settings.backupSaved && ('SETTINGS_BACKUP_COMPLETE' | translate) || ('SETTINGS_BACKUP_INCOMPLETE' | translate) }}
-                        </span>
-                    </label>
 
-                    <button class="button button-clear">
-                        <i class="icon ion-chevron-right"></i>
-                    </button>
-                </div>
                 <!-- /wallet backup -->
 
                 <div class="item item-button-right" ng-click="changePin()">
