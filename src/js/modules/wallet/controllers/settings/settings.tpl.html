@@ -53,7 +53,6 @@
                         <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
-
                 <!-- Wallet backup not saved -->
                 <div ng-if="!isWalletBackupSaved" class="item item-button-right" ui-sref=".backup">
                     <span class="sentence-case">{{ 'SETTINGS_WALLET_BACKUP' | translate }}</span>
@@ -70,9 +69,20 @@
                         <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
-
-
-
+                <!-- Change pin -->
+                <div class="item item-button-right" ng-click="onChangePin()">
+                    <span class="sentence-case">{{ 'SETTINGS_CHANGE_PIN' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right iil-15"></i>
+                    </button>
+                </div>
+                <!-- Forgot pin -->
+                <div class="item item-button-right" ng-click="onForgotPin()">
+                    <span class="sentence-case">{{ 'SETTINGS_FORGOT_PIN' | translate }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right iil-15"></i>
+                    </button>
+                </div>
             </div>
 
             <h3 class="group-title">{{ 'SETTINGS_PHONE' | translate }}</h3>
@@ -134,24 +144,6 @@
 
             <div class="list list-inset">
 
-
-                <!-- /wallet backup -->
-
-                <div class="item item-button-right" ng-click="changePin()">
-                    <span class="sentence-case">{{ 'SETTINGS_CHANGE_PIN' | translate }}</span>
-                    <button class="button button-clear">
-                        <i class="icon ion-chevron-right"></i>
-                    </button>
-                </div>
-                <!-- /PIN -->
-
-                <div class="item item-button-right" ng-click="forgotPin()">
-                    <span class="sentence-case">{{ 'SETTINGS_FORGOT_PIN' | translate }}</span>
-                    <button class="button button-clear">
-                        <i class="icon ion-chevron-right"></i>
-                    </button>
-                </div>
-                <!-- /PIN -->
 
                 <div class="item ">
                     <button class="button button-block button-assertive" ng-click="resetWallet()">
