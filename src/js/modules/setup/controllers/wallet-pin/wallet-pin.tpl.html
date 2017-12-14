@@ -5,6 +5,7 @@
         <form
             class="form-create-new-account"
             name="pinForm"
+            ng-submit="onSubmitFormPin(form.pin, form.pinRepeat)"
             novalidate
         >
             <div class="card">
@@ -35,14 +36,17 @@
                         type="tel"
                         pattern="[0-9]*"
                         placeholder="{{ 'SETUP_PIN_REPEAT_PLACEHOLDER' | translate }}"
-                        name=""
+                        name="pinRepeat"
                         ng-model="form.pinRepeat"
                     >
                 </label>
 
                 <!-- Submit button -->
                 <ion-item>
-                    <button type="submit" class="button button-block" ng-click="onSubmitFormPin(form.pin, form.pinRepeat)">{{ 'CONTINUE' | translate }}</button>
+                    <button
+                        type="submit"
+                        class="button button-block"
+                    >{{ 'CONTINUE' | translate }}</button>
                 </ion-item>
             </div>
         </form>
