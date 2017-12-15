@@ -1,0 +1,81 @@
+<ion-view class="state-pin-login-screen">
+    <ion-content scroll="false">
+        <div class="va">
+            <div class="va-holder">
+                <div class="va-content">
+                    <form
+                        class="card form-pin-entry"
+                        name="pinForm"
+                        ng-submit="onSubmitFormPin(form.pin)"
+                        ng-if="!isLocked"
+                        novalidate
+                    >
+                        <div class="item-modal-content">
+                            <img class="logo-btc-com" src="img/logo-btc-com.png">
+                            <h4 class="title">{{ 'WALLET_PIN' | translate }}</h4>
+                        </div>
+
+                        <label class="item item-borderless item-input item-input-pin">
+                            <input
+                                type="tel"
+                                class="password-mask"
+                                placeholder=""
+                                name="pin"
+                                ng-model="form.pin"
+                                required
+                                auto-focus
+                            >
+                        </label>
+
+                        <!-- Submit button -->
+                        <div class="item item-borderless item-button-pin">
+                            <button
+                                type="submit"
+                                class="button"
+                            >{{ 'CONFIRM' | translate }}</button>
+                        </div>
+
+                    </form>
+
+                    <div
+                        class="card form-pin-entry"
+                        ng-if="isLocked"
+                    >
+                        <div class="item-modal-content">
+                            <img class="logo-btc-com" src="img/logo-btc-com.png">
+                            <h3 class="title">{{ 'PLEASE_WAIT_SECONDS' | translate }}</h3>
+                            <h4 class="title">{{ lockTimer }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <!--<div class="pin-input-section">
+            <div ng-if="!appControl.proceeding">
+                <ion-spinner icon="dots" class="spinner-stable"></ion-spinner>
+            </div>
+
+            <div ng-if="appControl.proceeding">
+                <label class="item-input" ng-class="{error: appControl.showPinInputError || appControl.locked }">
+                    <input id="mainPinInput" type="tel" required tabindex="-1"
+                           ng-model="appControl.pin" ng-disabled="appControl.proceeding"
+                           ng-enter="proceed()" ng-tab="proceed()" auto-focus>
+                </label>
+
+                <div class="pin-error">
+                    <span ng-show="appControl.showPinInputError && !appControl.locked">{{ appControl.result.error | translate }}</span>
+                    <span ng-show="appControl.locked">{{ 'PLEASE_WAIT_SECONDS' | translate : {seconds: appControl.lockTimer} }}</span>
+                </div>
+
+                <a class="button button-outline confirm-button" ng-if="!appControl.locked" ng-click="proceed()">{{ 'CONFIRM' | translate }}</a>
+            </div>
+        </div>-->
+    </ion-content>
+</ion-view>
