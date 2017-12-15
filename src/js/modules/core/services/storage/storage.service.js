@@ -47,21 +47,21 @@ angular.module('blocktrail.wallet').factory(
                     return Q.resolve();
                 }
 
-                var adapter = db(name).adapter;
-
-                return db(name).destroy().then(function() {
-                    if (adapter === 'idb') {
-                        indexedDB.deleteDatabase('_pouch_' + name);
-                    }
-
-                    return db(name);
-                });
+                return resetSingle(name);
             }))
                 .catch(function(e) { $log.error('storage ERR' + e); })
             ;
         };
 
         var resetSingle = function(name) {
+            return deleteDB(name)
+                .then(function() {
+                //recreate the database, empty
+                return $q.when(db(name));
+            });
+        };
+
+        var deleteDB = function(name) {
             var adapter = db(name).adapter;
             return db(name).destroy().then(function() {
                 if (adapter === 'idb') {
@@ -70,24 +70,20 @@ angular.module('blocktrail.wallet').factory(
                 dbs[name] = null;
 
                 $log.debug('cleared database: ' + name);
-
-                //recreate the database, empty
-                return $q.when(db(name));
             });
         };
 
         // init defaults
         db('appRate');
-        db('launch');
         db('contacts');
         db('wallet');
-        db('walletInfo');
         db('settings');
         db('localSettings');
         db('currencyRatesCache');
 
         return {
             db: db,
+            deleteDB: deleteDB,
             reset: resetSingle,
             resetAll: resetAll
         };
