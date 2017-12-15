@@ -8,7 +8,7 @@
     "API_HOST": "api.blocktrail.com",
     "API_HTTPS": true,
 
-    "STORAGE_VERSION": "v2",
+    "STORAGE_VERSION": "v3",
 
     "APPSTORE_URLS": {
         "ANDROID": "market://details?id=com.blocktrail.mywallet",

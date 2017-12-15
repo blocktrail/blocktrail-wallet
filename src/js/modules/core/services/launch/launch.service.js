@@ -47,9 +47,6 @@
 
         self._walletConfigTimestamps = null;
         self._walletConfigPromise = null;
-
-        // Init storage DB
-        self._storage = storageService.db("launch"); // @TODO: remove, no longer used?
     }
 
     /**
