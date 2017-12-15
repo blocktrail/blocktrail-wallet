@@ -156,7 +156,8 @@
                                 return launchService.setWalletInfo({
                                     identifier: walletInfo.identifier,
                                     networkType: walletInfo.networkType,
-                                    encryptedSecret: walletInfo.encryptedSecret
+                                    encryptedSecret: walletInfo.encryptedSecret,
+                                    encryptedPassword: walletInfo.encryptedPassword
                                 });
                             }, supressMissingErr)
                     ])

@@ -648,14 +648,20 @@
                     console.log(unlockData);
                     console.log(newPIN);
 
-                    var encryptedSecret = CryptoJS.AES.encrypt(unlockData.secret, newPIN).toString();
+                    var encryptedPassword = null;
+                    var encryptedSecret = null;
 
-                    // TODO Check this part
-                    // return launchService.storeWalletInfo($scope.defaultWallet, encryptedPassword, encryptedSecret);
+                    if (unlockData.secret) {
+                        encryptedSecret = CryptoJS.AES.encrypt(unlockData.secret, newPIN).toString();
+                    } else {
+                        encryptedPassword = CryptoJS.AES.encrypt(unlockData.password, newPIN).toString();
+                    }
+
                     return launchService.setWalletInfo({
                         identifier: $scope.defaultWallet,
                         networkType: "", // TODO add network type
-                        encryptedSecret: encryptedSecret
+                        encryptedSecret: encryptedSecret,
+                        encryptedPassword: encryptedPassword
                     });
                 })
                 .then(function() {
