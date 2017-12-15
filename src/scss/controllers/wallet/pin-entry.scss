@@ -1,78 +1,55 @@
-.pin-login-screen {
-    position: absolute;
-    width: 100vw;
-    height: 100%;
-    z-index: 101;
+.state-pin-login-screen {
+    background-color: $app-pin-color;
 
-    .pin-input-section, .sending-progress-section {
+    > ion-content {
         background-color: $app-pin-color;
-        height: 100%;
+    }
 
-        padding-top: 1rem;
+    .form-pin-entry {
+        box-shadow: none;
+        background: transparent;
 
-        &, h1, h2, h3, h4 {
-            text-align: center;
-            color: #fff;
-        }
-
-        .logo-btccom {
-            padding-top: 30px;
-            width: 35%;
-            max-width: 35%;
-        }
-
-        .item-input {
-            padding: 6px 16px 5px 16px;
-        }
-
-        input {
-            height: auto;
-            padding: 0.5rem;
+        .item-input-pin {
+            display: block;
+            max-width: 140px;
+            margin: 10px auto;
+            padding: 8px;
             border: 1px solid rgba(255,255,255,0.2);
             background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.7);
-            text-align: center;
-            font-size: 1.5rem;
-            -webkit-text-security: disc;
 
-            @include transition(all 0.2s linear);
-        }
-
-        .error input {
-            border: 1px solid rgb(187, 136, 136);
-            background: rgba(232, 100, 100, 0.29);
-            @include transition(all 0.2s linear);
-        }
-
-        .pin-error {
-            min-height: 1.5rem;
-        }
-
-        .min-height {
-            min-height: 3.5rem;
-        }
-
-        .confirm-button {
-            margin-top: 1rem;
-            min-width: 7rem;
-            color: #fff;
-            color: rgba(0,0,0,0.5);
-            border-color: #fff;
-            background-color: rgba(255,255,255,0.4);
-        }
-
-        .spinner svg {
-            width: 60px;
-            height: 60px;
-        }
-
-        .progress-message {
-            margin-top: 1.5rem;
-            font-size: 1.75rem;
-
-            &.complete {
-                font-size: 3rem;
+            input {
+                padding: 2px;
+                width: 100%;
+                color: #e5e5e5;
+                text-align: center;
             }
         }
+
+        .item-button-pin {
+            background: none;
+            text-align: center;
+
+            button {
+                display: block;
+                width: 140px;
+                padding: 5px 0;
+                margin: 0 auto;
+                border: 1px solid rgba(255,255,255,0.2);
+                background: rgba(255,255,255,0.1);
+                color: #e5e5e5;
+            }
+        }
+    }
+
+    .logo-btc-com {
+        display: block;
+        margin: 0 auto;
+        width: 50%;
+    }
+
+    .title {
+        margin: 24px 0 0;
+        text-align: center;
+        color: #fff;
     }
 }

@@ -61,8 +61,8 @@ angular.module('blocktrail.wallet').config(function() {
 angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $q, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
-             $cordovaStatusbar, settingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
-             amMoment, trackingService, blocktrailLocalisation, sdkService, localSettingsService) {
+             $cordovaStatusbar, settingsService, localSettingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
+             amMoment, trackingService, blocktrailLocalisation, sdkService) {
 
         $rootScope.readOnlySdkServiceData = sdkService.getReadOnlySdkServiceData();
         $rootScope.networkClassType = "";
@@ -131,13 +131,12 @@ angular.module('blocktrail.wallet').run(
             $log.debug('keyboard is closing', e);
         };
 
-        // TODO Review this part
-        //window.addEventListener('native.keyboardshow', keyboardShow);
-        //window.addEventListener('native.keyboardhide', keyboardHide);
+        window.addEventListener('native.keyboardshow', keyboardShow);
+        window.addEventListener('native.keyboardhide', keyboardHide);
 
         $rootScope.$on('$destroy', function(e) {
-            //window.removeEventListener('native.keyboardshow', keyboardShow);
-            //window.removeEventListener('native.keyboardhide', keyboardHide);
+            window.removeEventListener('native.keyboardshow', keyboardShow);
+            window.removeEventListener('native.keyboardhide', keyboardHide);
         });
         /*----/iOS keyboard fix---*/
 
@@ -159,21 +158,6 @@ angular.module('blocktrail.wallet').run(
 
             $translate.use(language);
         };
-
-        // trigger loading of settings
-        // TODO Discuss with Ruben
-        // TODO Switch to localSettings
-        /*settingsService.$isLoaded().then(function() {
-            if (settingsService.permissionUsageData) {
-                if (!settingsService.installTracked) {
-                    $analytics.eventTrack('install', {category: 'Events'});
-
-                    settingsService.installTracked = true;
-                    settingsService.$store();
-                }
-            }
-        });*/
-
 
         $rootScope.$btBackButtonDelegate = $btBackButtonDelegate;
         // register our hardware back button handler

@@ -7,7 +7,7 @@
     // TODO For Language use self._$translate.use()
 
     function SettingsCtrl($rootScope, $scope, $state, $q, $btBackButtonDelegate, $translate, modalService, activeWallet, launchService,
-                          settingsService, localSettingsService, trackingService, Currencies, Contacts, blocktrailLocalisation) {
+                          settingsService, localSettingsService, trackingService, Currencies, Contacts, blocktrailLocalisation, cryptoJS) {
         // Enable back button
         enableBackButton();
 
@@ -15,13 +15,15 @@
         $scope.settingsData = settingsService.getReadOnlySettingsData();
         $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
         $scope.languageName = blocktrailLocalisation.languageName($translate.use());
-
-        $scope.btcPrecision = {
-            value: $scope.localSettingsData.btcPrecision
+        $scope.formLocalSettings = {
+            btcPrecision: $scope.localSettingsData.btcPrecision,
+            isPinOnOpen: $scope.localSettingsData.isPinOnOpen
         };
         $scope.isWalletBackupSaved = true;
 
-        var watchBtcPrecision = $scope.$watch("btcPrecision.value", onSetBtcPrecision);
+        var watchBtcPrecision = $scope.$watch("formLocalSettings.btcPrecision", onSetBtcPrecision);
+        var watchIsPinOnOpen = $scope.$watch("formLocalSettings.isPinOnOpen", onSetIsPinOnOpen);
+
         // On scope destroy
         $scope.$on("$destroy", onScopeDestroy);
 
@@ -147,6 +149,22 @@
                 title: "",
                 body: "MSG_BACKUP_SAVED_ALREADY"
             })
+        }
+
+        /**
+         * On set is pin on open
+         * @param newValue
+         * @param oldValue
+         */
+        function onSetIsPinOnOpen(newValue, oldValue) {
+            if(newValue !== oldValue) {
+                var data = {
+                    isPinOnOpen: $scope.formLocalSettings.isPinOnOpen
+                };
+
+                localSettingsService.setLocalSettings(data)
+                    .then(angular.noop, errorHandler);
+            }
         }
 
         /**
@@ -293,7 +311,7 @@
                 title: "WORKING"
             });
 
-            var encryptedSecret = CryptoJS.AES.encrypt(data.secret, pin).toString();
+            var encryptedSecret = cryptoJS.AES.encrypt(data.secret, pin).toString();
 
             return launchService.setWalletInfo({
                     encryptedSecret: encryptedSecret
@@ -307,6 +325,22 @@
                     });
                 }, unlockDataErrorHandler);
 
+        }
+
+        /**
+         * On set BTC precision
+         * @param newValue
+         * @param oldValue
+         */
+        function onSetBtcPrecision(newValue, oldValue) {
+            if(newValue !== oldValue) {
+                var data = {
+                    btcPrecision: $scope.formLocalSettings.btcPrecision
+                };
+
+                localSettingsService.setLocalSettings(data)
+                    .then(angular.noop, errorHandler);
+            }
         }
 
         /**
@@ -441,34 +475,6 @@
         }
 
         /**
-         * On set BTC precision
-         * @param newValue
-         * @param oldValue
-         */
-        function onSetBtcPrecision(newValue, oldValue) {
-            if(newValue !== oldValue) {
-                var data = {
-                    btcPrecision: $scope.btcPrecision.value
-                };
-
-                localSettingsService.setLocalSettings(data)
-                    .then(angular.noop, errorHandler);
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /**
          * Success handler
          */
         function successHandler() {
@@ -507,6 +513,7 @@
          */
         function onScopeDestroy() {
             watchBtcPrecision();
+            watchIsPinOnOpen();
         }
     }
 
@@ -648,7 +655,7 @@
                     console.log(unlockData);
                     console.log(newPIN);
 
-                    var encryptedSecret = CryptoJS.AES.encrypt(unlockData.secret, newPIN).toString();
+                    var encryptedSecret = cryptoJS.AES.encrypt(unlockData.secret, newPIN).toString();
 
                     // TODO Check this part
                     // return launchService.storeWalletInfo($scope.defaultWallet, encryptedPassword, encryptedSecret);

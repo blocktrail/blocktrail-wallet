@@ -318,7 +318,7 @@
      * @param $state
      * @param $rootScope
      */
-    function pinOnOpen(localSettingsService, $q, $state, $rootScope) {
+    function pinOnOpen(localSettingsService, $q, $state, $rootScope, CONFIG) {
         return localSettingsService.getLocalSettings()
             .then(function(localSettings) {
                 // if pinOnOpen is required and last time we asked for it was more than 5min ago

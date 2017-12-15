@@ -69,6 +69,25 @@
                         <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
+            </div>
+
+            <h3 class="group-title">{{ 'SETTINGS_PRIVACY' | translate }}</h3>
+
+            <div class="list list-inset">
+                <!-- Is pin on open -->
+                <div class="item item-toggle">
+                    <span class="sentence-case">{{ 'SETTINGS_PIN_ON_OPEN' | translate }}</span>
+                    <label class="toggle toggle-balanced">
+                        <input
+                            type="checkbox"
+                            ng-model="formLocalSettings.isPinOnOpen"
+                            ng-model-options="{ debounce: 150 }"
+                        >
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
                 <!-- Change pin -->
                 <div class="item item-button-right" ng-click="onChangePin()">
                     <span class="sentence-case">{{ 'SETTINGS_CHANGE_PIN' | translate }}</span>
@@ -82,6 +101,31 @@
                     <button class="button button-clear">
                         <i class="icon ion-chevron-right iil-15"></i>
                     </button>
+                </div>
+            </div>
+
+            <h3 class="group-title">{{ 'SETTINGS_DISPLAY' | translate }}</h3>
+
+            <div class="list list-inset">
+                <div class="item ">
+                    <p>
+                        <small>{{ 'SETTINGS_BTC_DECIMALS' | translate }}</small>
+                        <small class="pull-right">{{ formLocalSettings.btcPrecision }}</small>
+                    </p>
+                    <div class="range range-positive">
+                        <input
+                            type="range"
+                            name="volume"
+                            step="1"
+                            min="0"
+                            max="8"
+                            ng-model="formLocalSettings.btcPrecision"
+                            ng-model-options="{ debounce: 150 }"
+                        >
+                    </div>
+                    <div class="text-center">
+                        <small>{{ (walletData.balance != null && walletData.balance + walletData.uncBalance || 0) | satoshiToCoin: walletData.networkType : formLocalSettings.btcPrecision : false : 'hide' }}</small>
+                    </div>
                 </div>
             </div>
 
@@ -111,75 +155,14 @@
                 </div>
             </div>
 
-            <h3 class="group-title">{{ 'SETTINGS_DISPLAY' | translate }}</h3>
-
-            <div class="list list-inset">
-                <div class="item ">
-                    <p>
-                        <small>{{ 'SETTINGS_BTC_DECIMALS' | translate }}</small>
-                        <small class="pull-right">{{ btcPrecision.value }}</small>
-                    </p>
-                    <div class="range range-positive">
-                        <input
-                            type="range"
-                            name="volume"
-                            step="1"
-                            min="0"
-                            max="8"
-                            ng-model="btcPrecision.value"
-                            ng-model-options="{ debounce: 150 }"
-                        >
-                    </div>
-                    <div class="text-center">
-                        <small>{{ (walletData.balance != null && walletData.balance + walletData.uncBalance || 0) | satoshiToCoin: walletData.networkType : btcPrecision.value : false : 'hide' }}</small>
-                    </div>
-                </div>
-            </div>
 
 
 
 
-
-            <h3 class="group-title">{{ 'SETTINGS_WALLET' | translate }}</h3>
-
-            <div class="list list-inset">
-
-
-                <div class="item ">
-                    <button class="button button-block button-assertive" ng-click="resetWallet()">
-                        {{ 'LOGOUT' | translate }}
-                    </button>
-                </div>
-                <!-- /reset wallet -->
-            </div>
-
-
-
-
-            <h3 class="group-title">{{ 'SETTINGS_PRIVACY' | translate }}</h3>
-            <div class="list list-inset">
-                <div class="item item-toggle">
-                    <span class="sentence-case">{{ 'SETTINGS_USAGE_DATA' | translate }}</span>
-                    <label class="toggle toggle-balanced">
-                        <input type="checkbox" ng-model="settings.permissionUsageData" ng-change="updateSettingsPrivacy()">
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                    </label>
-                </div>
-                <div class="item item-toggle">
-                    <span class="sentence-case">{{ 'SETTINGS_PIN_ON_OPEN' | translate }}</span>
-                    <label class="toggle toggle-balanced">
-                        <input type="checkbox" ng-model="settings.pinOnOpen" ng-change="updateSettingsPinOnOpen()">
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                    </label>
-                </div>
-            </div>
 
 
             <h3 class="group-title">{{ 'SETTINGS_INFO' | translate }}</h3>
+
             <div class="list list-inset">
                 <div class="item item-button-right" ui-sref=".about">
                     <span class="sentence-case">{{ 'SETTINGS_ABOUT' | translate }}</span>
@@ -196,47 +179,14 @@
                 <!-- version -->
             </div>
 
-
-            <div ng-if="devEnabled">
-                <h3 class="group-title">{{ 'SETTINGS_DEVELOPMENT' | translate }}</h3>
-                <div class="list list-inset">
-
-                    <div class="item item-button-right" ng-click="apprate()">
-                        <span class="sentence-case">Apprate</span>
-                        <button class="button button-clear">
-                            <i class="icon ion-chevron-right"></i>
-                        </button>
-                    </div>
-                    <!-- /PIN -->
-
-                    <div class="item item-toggle">
-                        <span class="sentence-case">Contacts web syncing</span>
-                        <label class="toggle toggle-balanced">
-                            <input type="checkbox" ng-model="settings.contactsWebSync" ng-change="updateSettings()">
-                            <div class="track">
-                                <div class="handle"></div>
-                            </div>
-                        </label>
-                    </div>
-                    <!-- /contact syncing to web -->
-
-                    <div class="item item-toggle">
-                        <span class="sentence-case">Ignore phone verification</span>
-                        <label class="toggle toggle-balanced">
-                            <input type="checkbox" ng-model="settings.phoneVerified">
-                            <div class="track">
-                                <div class="handle"></div>
-                            </div>
-                        </label>
-                    </div>
-                    <!-- /ignore phone verification -->
-
-                    <div class="item">
-                        Build: <small class="pull-right" on-hold="resetApp($event)">{{ CONFIG.VERSION }}</small>
-                    </div>
+            <div class="list list-inset">
+                <div class="item ">
+                    <button class="button button-block button-assertive" ng-click="resetWallet()">
+                        {{ 'LOGOUT' | translate }}
+                    </button>
                 </div>
+                <!-- /reset wallet -->
             </div>
-
         </form>
     </ion-content>
 </ion-view>

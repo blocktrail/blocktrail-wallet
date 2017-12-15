@@ -30,10 +30,15 @@
                     clearHistory: false,
                     excludeFromHistory: true
                 },
-                templateUrl: "js/modules/wallet/controllers/open-wallet-pin/open-wallet-pin.tpl.html",
+                templateUrl: "js/modules/launch/controllers/open-wallet-pin/open-wallet-pin.tpl.html",
                 controller: "OpenWalletPinCtrl",
                 params: {
                     nextState: "app.wallet.summary"
+                },
+                resolve: {
+                    initLocalSettings: function(localSettingsService) {
+                        return localSettingsService.initLocalSettings();
+                    }
                 }
             });
     }
