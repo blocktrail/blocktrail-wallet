@@ -6,10 +6,12 @@
 
     // TODO For Language use self._$translate.use()
 
-    function SettingsCtrl($rootScope, $scope, $state, $q, $btBackButtonDelegate, $translate, modalService, activeWallet, launchService,
-                          settingsService, localSettingsService, trackingService, Currencies, Contacts, blocktrailLocalisation, cryptoJS) {
+    function SettingsCtrl($rootScope, $scope, $state, $q, $btBackButtonDelegate, $translate, modalService, walletsManagerService, launchService,
+                          settingsService, localSettingsService, storageService, Currencies, Contacts, blocktrailLocalisation, cryptoJS) {
         // Enable back button
         enableBackButton();
+
+        var activeWallet = walletsManagerService.getActiveWallet();
 
         $scope.walletData = activeWallet.getReadOnlyWalletData();
         $scope.settingsData = settingsService.getReadOnlySettingsData();
@@ -34,6 +36,7 @@
         $scope.onWalletBackupSaved = onWalletBackupSaved;
         $scope.onChangePin = onChangePin;
         $scope.onForgotPin = onForgotPin;
+        $scope.onLogout = onLogout;
 
         init();
 
@@ -515,340 +518,44 @@
             watchBtcPrecision();
             watchIsPinOnOpen();
         }
-    }
-
-    function old($scope, $rootScope, $q, launchService, settingsService,
-                 activeWallet, Contacts, storageService, $cordovaDialogs, $ionicLoading, $cordovaFile,
-                 $translate, $timeout, $state, $log, $analytics, AppRateService, $cordovaToast,
-                 sdkService) {
-        $scope.appControl = {
-            syncing: false,
-            syncingAll: false,
-            syncComplete: false
-        };
-
-        $scope.$on("$ionicView.enter", function() {
-            // reset app state control
-            $scope.appControl = {
-                syncing: false,
-                syncingAll: false,
-                syncComplete: false
-            };
-        });
-
-        $scope.allData = $q.all([
-            launchService.getWalletInfo()
-        ]).then(function(data) {
-            $log.debug("data loaded", data);
-            $scope.defaultWallet = data[0].identifier;
-            return data;
-        });
 
         /**
-         * initiate change of pin
+         * On logout
          */
-        $scope.forgotPin = function() {
-            return $cordovaDialogs.prompt(
-                $translate.instant("ENTER_CURRENT_PASSWORD"),
-                $translate.instant("SETTINGS_FORGOT_PIN"),
-                [$translate.instant("OK"), $translate.instant("CANCEL")],
-                "",
-                true   //isPassword
-            )
-                .then(function(dialogResult) {
-                    if (dialogResult.buttonIndex == 2) {
-                        return $q.reject("CANCELLED");
-                    }
-                    //decrypt password with the provided PIN
-                    $ionicLoading.show({
-                        template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
-                        hideOnStateChange: true
-                    });
-
-                    return activeWallet.unlockWithPassword(dialogResult.input1).then(function(wallet) {
-                        $ionicLoading.hide();
-
-                        var secret = wallet.secret.toString("hex");
-
-                        return {secret: secret};
-                    });
-                })
-                .then(function(unlockData) {
-                    //prompt for a new PIN
-                    return $scope.promptNewPin().then(function(newPIN) {
-                        return $scope.updatePin(newPIN, unlockData);
-                    });
-                })
-                .catch(function(err) {
-                    $log.error("PIN change error: " + err);
-
-                    $ionicLoading.hide();
-
-                    if (err instanceof blocktrail.WalletDecryptError) {
-                        //incorrect PIN...try again Mr. user
-                        $cordovaDialogs.alert($translate.instant("MSG_TRY_AGAIN"), $translate.instant("MSG_INCORRECT_PASSWORD"), $translate.instant("OK")).then(function() {
-                            $scope.forgotPin();
-                        });
-                    } else if (err === "CANCELLED") {
-                        return false;
+        function onLogout() {
+            modalService.confirm({
+                title: "MSG_ARE_YOU_SURE",
+                body: "MSG_RESET_WALLET"
+            }).then(function(dialogResult) {
+                if(dialogResult) {
+                    if(!$scope.isWalletBackupSaved) {
+                        modalService.confirm({
+                            title: "MSG_ARE_YOU_SURE",
+                            body: "MSG_BACKUP_UNSAVED"
+                        }).then(function(dialogResult) {
+                            if(dialogResult) {
+                                resetApp();
+                            }
+                        })
                     } else {
-                        $cordovaDialogs.alert(err.toString(), $translate.instant("FAILED"), $translate.instant("OK"));
+                        resetApp();
                     }
-                });
-        };
-
-        /**
-         * initiate change of pin
-         */
-        $scope.changePin = function() {
-            return $cordovaDialogs.prompt(
-                $translate.instant("MSG_ENTER_PIN"),
-                $translate.instant("SETTINGS_CHANGE_PIN"),
-                [$translate.instant("OK"), $translate.instant("CANCEL")],
-                "",
-                true,   //isPassword
-                "tel"   //input type (uses html5 style)
-            )
-                .then(function(dialogResult) {
-                    if (dialogResult.buttonIndex == 2) {
-                        return $q.reject("CANCELLED");
-                    }
-                    //decrypt password with the provided PIN
-                    $ionicLoading.show({
-                        template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
-                        hideOnStateChange: true
-                    });
-
-                    return activeWallet.unlockDataWithPin(dialogResult.input1).then(function(unlockData) {
-                        $ionicLoading.hide();
-
-                        return unlockData;
-                    });
-                })
-                .then(function(unlockData) {
-                    //prompt for a new PIN
-                    return $scope.promptNewPin().then(function(newPIN) {
-                        return $scope.updatePin(newPIN, unlockData);
-                    });
-                })
-                .catch(function(err) {
-                    $log.error("PIN change error: " + err);
-
-                    $ionicLoading.hide();
-
-                    if (err instanceof blocktrail.WalletPinError) {
-                        //incorrect PIN...try again Mr. user
-                        $cordovaDialogs.alert($translate.instant("MSG_TRY_AGAIN"), $translate.instant("MSG_BAD_PIN"), $translate.instant("OK")).then(function() {
-                            $scope.changePin();
-                        });
-                    } else if (err === "CANCELLED") {
-                        return false;
-                    } else {
-                        $cordovaDialogs.alert(err.toString(), $translate.instant("FAILED"), $translate.instant("OK"));
-                    }
-                });
-        };
-
-        $scope.updatePin = function(newPIN, unlockData) {
-            return $q.when(true)
-                .then(function() {
-                    console.log(unlockData);
-                    console.log(newPIN);
-
-                    var encryptedSecret = cryptoJS.AES.encrypt(unlockData.secret, newPIN).toString();
-
-                    // TODO Check this part
-                    // return launchService.storeWalletInfo($scope.defaultWallet, encryptedPassword, encryptedSecret);
-                    return launchService.setWalletInfo({
-                        identifier: $scope.defaultWallet,
-                        networkType: "", // TODO add network type
-                        encryptedSecret: encryptedSecret
-                    });
-                })
-                .then(function() {
-                    // success
-                    return $cordovaDialogs.alert($translate.instant("MSG_PIN_CHANGED"), $translate.instant("SUCCESS"), $translate.instant("OK"));
-                });
-        };
-
-        $scope.apprate = function() {
-            AppRateService.popover();
-        };
-
-        /**
-         * prompts for new pin and repeat, and then sets the new pin for the wallet
-         * @returns {*}
-         */
-        $scope.promptNewPin = function() {
-            //prompt for new PIN and save
-            var newPIN = null;
-            var repeatPIN = null;
-            //prompt for new PIN
-            return $cordovaDialogs.prompt(
-                $translate.instant("MSG_ENTER_NEW_PIN"),
-                $translate.instant("SETTINGS_NEW_PIN"),
-                [$translate.instant("OK"), $translate.instant("CANCEL")],
-                "",
-                true,   //isPassword
-                "tel"   //input type (uses html5 style)
-            )
-                .then(function(dialogResult) {
-                    if (dialogResult.buttonIndex == 2) {
-                        return $q.reject("CANCELLED");
-                    }
-
-                    newPIN = dialogResult.input1.trim();
-                    //prompt for repeat of new PIN
-                    return $cordovaDialogs.prompt(
-                        $translate.instant("MSG_REPEAT_PIN"),
-                        $translate.instant("SETTINGS_REPEAT_PIN"),
-                        [$translate.instant("OK"), $translate.instant("CANCEL")],
-                        "",
-                        true,   //isPassword
-                        "tel"   //input type (uses html5 style)
-                    );
-                })
-                .then(function(dialogResult) {
-                    if (dialogResult.buttonIndex == 2) {
-                        return $q.reject("CANCELLED");
-                    }
-
-                    repeatPIN = dialogResult.input1.trim();
-                    //check PINs match and are valid
-                    if (newPIN !== repeatPIN) {
-                        //no match, try again Mr. user
-                        return $cordovaDialogs.alert($translate.instant("MSG_BAD_PIN_REPEAT"), $translate.instant("MSG_TRY_AGAIN"), $translate.instant("OK"))
-                            .then(function() {
-                                return $scope.promptNewPin();
-                            });
-                    } else if (newPIN.length < 4) {
-                        //PIN must be at least 4 chrs, try again Mr. user
-                        return $cordovaDialogs.alert($translate.instant("MSG_BAD_PIN_LENGTH"), $translate.instant("MSG_TRY_AGAIN"), $translate.instant("OK"))
-                            .then(function() {
-                                return $scope.promptNewPin();
-                            });
-
-                    } else {
-                        return newPIN;
-                    }
-                })
-                ;
-        };
-
-
-
-
-
-
-
-        $scope.apprate = function() {
-            AppRateService.popover();
-        };
-
-
-
-        /**
-         * delete all local data and start again from scratch. Requires PIN to do
-         */
-        $scope.resetWallet = function() {
-            //ask the user to finally confirm their action
-            return $cordovaDialogs.confirm(
-                $translate.instant("MSG_RESET_WALLET"),
-                $translate.instant("MSG_ARE_YOU_SURE"),
-                [$translate.instant("OK"), $translate.instant("CANCEL")]
-            )
-                .then(function(dialogResult) {
-                    if (dialogResult == 1) {
-                        //if the backup hasn't been saved yet, warn user
-                        if (!settingsService.backupSaved) {
-                            return $cordovaDialogs.confirm(
-                                $translate.instant("MSG_BACKUP_UNSAVED"),
-                                $translate.instant("MSG_ARE_YOU_SURE"),
-                                [$translate.instant("OK"), $translate.instant("CANCEL")]
-                            );
-                        } else {
-                            return dialogResult;
-                        }
-                    } else {
-                        return $q.reject("CANCELLED");
-                    }
-                })
-                .then(function(dialogResult) {
-                    if (dialogResult == 1) {
-                        //destroy EVERYTHING!!!!
-                        $log.debug("Resetting wallet");
-                        $ionicLoading.show({
-                            template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
-                            hideOnStateChange: true
-                        });
-                        storageService.resetAll()
-                            .then(function() {
-                                window.location.replace("");
-                            });
-                    } else {
-                        return $q.reject("CANCELLED");
-                    }
-                })
-                .catch(function(err) {
-                    $log.error("Wallet reset error: " + err);
-                    $ionicLoading.hide();
-                    if (err instanceof blocktrail.WalletPinError) {
-                        //incorrect PIN...try again Mr. user
-                        $cordovaDialogs.alert($translate.instant("MSG_TRY_AGAIN"), $translate.instant("MSG_BAD_PIN"), $translate.instant("OK")).then(function() {
-                            $scope.resetWallet();
-                        });
-                    } else if (err === "CANCELLED") {
-                        return false;
-                    } else {
-                        $cordovaDialogs.alert(err.toString(), $translate.instant("FAILED"), $translate.instant("OK"));
-                    }
-                });
-        };
-
-        /**
-         * enable/disable sending anonymous usage data
-         */
-        $scope.updateSettingsPrivacy = function() {
-            $scope.updateSettings();
-
-            if (!settingsService.permissionUsageData) {
-                $analytics.eventTrack("DisableUsageData", {category: "Events"});
-            }
-        };
-
-        /**
-         * enable/disable PIN on wallet open
-         */
-        // TODO SWITCH to localSettingsService
-        $scope.updateSettingsPinOnOpen = function() {
-            // $scope.updateSettings();
-        };
-
-        var tapEnableDevCnt = 0;
-        $scope.tapEnableDev = function() {
-            if (tapEnableDevCnt++ > 5) {
-                $scope.enableDev();
-            }
-        };
-
-        $scope.enableDev = function() {
-            $cordovaToast.showShortCenter("DEV MODE");
-            $rootScope.devEnabled = true;
-            $state.reload();
-        };
-
-        $scope.updateSettings = function() {
-            settingsService.$store();
-        };
-
-        $scope.resetApp = function($event) {
-            storageService.resetAll().then(
-                function() {
-                    alert("reset!");
-                    window.location.replace("");
                 }
-            );
-        };
+            });
+        }
+
+        /**
+         * Reset the app
+         */
+        function resetApp() {
+            modalService.showSpinner({
+                title: "LOGOUT"
+            });
+            storageService.resetAll()
+                .then(function() {
+                    window.location.replace("");
+                });
+        }
     }
 
 })();

@@ -3,21 +3,29 @@
 
     <ion-content>
         <form>
-            <h3 class="group-title">{{ 'SETTINGS_HELP' | translate }}</h3>
+            <h3 class="group-title">{{ 'SETTINGS_INFO' | translate }}</h3>
 
             <div class="list list-inset">
+                <!-- About -->
+                <div class="item item-button-right" ui-sref=".about">
+                    <span class="sentence-case">{{ 'SETTINGS_ABOUT' | translate }}</span>
+                    <button class="button button-clear">
+                        <small>v{{ appVersion }}</small>
+                        <i class="icon ion-chevron-right iil-15"></i>
+                    </button>
+                </div>
                 <!-- FAQ -->
                 <a class="item item-button-right" href="https://btc.com/faq" browse-to>
                     <span class="sentence-case">{{ 'SETTINGS_FAQ' | translate }}</span>
                     <button class="button button-clear">
-                        <i class="icon ion-chevron-right"></i>
+                        <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </a>
                 <!-- Feedback -->
                 <div class="item item-button-right" ui-sref=".feedback">
                     <span class="sentence-case">{{ 'SEND_FEEDBACK' | translate }}</span>
                     <button class="button button-clear">
-                        <i class="icon ion-chevron-right"></i>
+                        <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>
             </div>
@@ -155,37 +163,13 @@
                 </div>
             </div>
 
-
-
-
-
-
-
-            <h3 class="group-title">{{ 'SETTINGS_INFO' | translate }}</h3>
-
             <div class="list list-inset">
-                <div class="item item-button-right" ui-sref=".about">
-                    <span class="sentence-case">{{ 'SETTINGS_ABOUT' | translate }}</span>
-                    <button class="button button-clear">
-                        <i class="icon ion-chevron-right"></i>
-                    </button>
-                </div>
-                <!-- about -->
-
-                <div class="item" on-hold="enableDev()" ng-click="tapEnableDev()">
-                    <span class="sentence-case">{{ 'SETTINGS_VERSION' | translate }}: </span>
-                    <small class="pull-right">{{ appVersion }}</small>
-                </div>
-                <!-- version -->
-            </div>
-
-            <div class="list list-inset">
+                <!-- Logout -->
                 <div class="item ">
-                    <button class="button button-block button-assertive" ng-click="resetWallet()">
+                    <button class="button button-block button-assertive" ng-click="onLogout()">
                         {{ 'LOGOUT' | translate }}
                     </button>
                 </div>
-                <!-- /reset wallet -->
             </div>
         </form>
     </ion-content>

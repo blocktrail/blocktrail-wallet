@@ -78,6 +78,16 @@
     };
 
     /**
+     * Get the active wallet
+     * @return { null | object } _activeWallet
+     */
+    WalletsManagerService.prototype.getActiveWalletReadOnlyData = function() {
+        var self = this;
+
+        return self._activeWallet.getReadOnlyWalletData();
+    };
+
+    /**
      * Get the active wallet network type
      * @return { string }
      */

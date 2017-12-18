@@ -6,14 +6,11 @@
             <div class="item item-divider text-center">
                 <h1 class="text-neutral no-padding no-margin">{{ 'ABOUT_TITLE' | translate }}</h1>
                 <h2 class="text-neutral padding-b">{{ 'ABOUT_SUBTITLE' | translate }}</h2>
-                <small class="text-neutral opacity-50">version {{ appVersion }}</small>
+                <p><small class="text-neutral opacity-50">version {{ appVersion }}</small></p>
+                <p><small class="text-neutral opacity-50">{{ walletData.identifier }}</small></p>
             </div>
             <div class="item item-body">
                 <div class="text-center padding-b"></div>
-
-                <p class="text-center">
-                    {{ 'ABOUT_DESCRIPTION' | translate }}
-                </p>
 
                 <div class="row padding-b">
                     <div class="col col-33">Twitter:</div>
