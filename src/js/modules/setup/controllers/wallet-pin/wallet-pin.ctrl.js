@@ -432,6 +432,9 @@
             // TODO Save this in local settings service, do not save it in the $rootScope
             // prevent PIN dialog
             $rootScope.STATE.INITIAL_PIN_DONE = true;
+
+            modalService.hideSpinner();
+
             return setupStepsService.toNextStep();
         }
 

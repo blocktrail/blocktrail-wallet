@@ -142,7 +142,7 @@ angular.module('blocktrail.wallet').run(
 
 
         /*---Samsung keyboard fix---*/
-        //detect if device is samsung, and use input type=text instead of type=number
+        // detect if device is samsung, and use input type=text instead of type=number
         $rootScope.isSamsung = !!$cordovaDevice.getModel().toLowerCase().match(/samsung/);
 
         $rootScope.changeLanguage = function(language) {

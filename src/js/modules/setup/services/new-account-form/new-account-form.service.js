@@ -50,8 +50,7 @@
         self._$log.debug("M:SETUP:newAccountFormService: register", postData.email, postData.platform, postData.device_name);
 
         return self._$http.post(url, postData)
-            // .then(self._trackEvent.bind(self))
-
+            .then(self._trackEvent.bind(self))
             .then(self._setAccountInfo.bind(self))
             .catch(self._errorHandler.bind(self));
     };

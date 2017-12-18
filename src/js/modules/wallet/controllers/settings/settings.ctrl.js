@@ -4,8 +4,6 @@
     angular.module("blocktrail.wallet")
         .controller("SettingsCtrl", SettingsCtrl);
 
-    // TODO For Language use self._$translate.use()
-
     function SettingsCtrl($rootScope, $scope, $state, $q, $btBackButtonDelegate, $translate, modalService, walletsManagerService, launchService,
                           settingsService, localSettingsService, storageService, Currencies, Contacts, blocktrailLocalisation, cryptoJS) {
         // Enable back button

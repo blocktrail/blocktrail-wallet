@@ -2,15 +2,16 @@
     "use strict";
 
     angular.module("blocktrail.setup")
-        .factory("loginFormService", function($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
+        .factory("loginFormService", function($log, $http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
 
-            return new LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService);
+            return new LoginFormService($log, $http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService);
         }
     );
 
-    function LoginFormService($http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
+    function LoginFormService($log, $http, $q, _, cryptoJS, device, CONFIG, launchService, trackingService) {
         var self = this;
 
+        self._$log = $log;
         self._$http = $http;
         self._$q = $q;
         self._lodash = _;
@@ -107,10 +108,12 @@
         var self = this;
 
         var accountInfo = {
-            username: response.data.username,
-            email: response.data.email,
-            apiKey: response.data.api_key,
-            apiSecret: response.data.api_secret
+            username: response.responseData.username || null,
+            email: response.responseData.email,
+            apiKey: response.responseData.api_key,
+            apiSecret: response.responseData.api_secret,
+            encryptedSecret: response.responseData.encrypted_secret,
+            secret: response.secret
         };
 
         self._$log.debug("M:SETUP:loginFormService:_setAccountInfo", accountInfo);
@@ -120,7 +123,7 @@
                 return self._launchService.getAccountInfo();
             })
             .then(function() {
-                return response;
+                return response.responseData;
             });
     };
 

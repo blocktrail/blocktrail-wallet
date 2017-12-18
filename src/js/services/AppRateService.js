@@ -1,7 +1,8 @@
 angular.module('blocktrail.wallet')
-    .factory('AppRateService', function($ionicPopover, $rootScope, settingsService, CONFIG, $log, $q, storageService) {
+    .factory('AppRateService', function($ionicPopover, $rootScope, localSettingsService, settingsService, CONFIG, $log, $q, storageService) {
         var db = storageService.db('appRate');
         var _counter = null;
+        var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
         var APPRATE_STATUS = {};
         APPRATE_STATUS.NEW = null;
@@ -75,8 +76,11 @@ angular.module('blocktrail.wallet')
             popover: popover,
 
             updateStatus: function(status) {
-                settingsService.apprateStatus = status;
-                settingsService.$store().then(function() { settingsService.$syncSettingsUp(); });
+                var data = {
+                    appRateStatus: status
+                };
+
+                localSettingsService.setLocalSettings(data);
 
                 if (status === APPRATE_STATUS.REMIND) {
                     resetCounter();
@@ -96,36 +100,32 @@ angular.module('blocktrail.wallet')
             },
 
             sendCompleted: function() {
-                var unsub = $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState, fromParams) {
+                var unsub = $rootScope.$on("$stateChangeSuccess", function(event, toState) {
                     if (toState.name === 'app.wallet.summary') {
                         unsub();
 
                         if (!$rootScope.hadErrDuringSend) {
-                            settingsService.$isLoaded().then(function() {
-                                $log.debug('settingsService.apprateStatus: ' + settingsService.apprateStatus);
+                            $log.debug("LocalSettingsData.appRateStatus: " + localSettingsData.appRateStatus);
 
-                                if (settingsService.apprateStatus === APPRATE_STATUS.NEW) {
-                                    popover();
-                                }
-                            });
+                            if (localSettingsData.appRateStatus === APPRATE_STATUS.NEW) {
+                                popover();
+                            }
                         }
                     }
                 });
             },
 
             init: function() {
-                settingsService.$isLoaded().then(function () {
-                    $log.debug('settingsService.apprateStatus: ' + settingsService.apprateStatus);
+                $log.debug("LocalSettingsData.appRateStatus: " + localSettingsData.appRateStatus);
 
-                    if (settingsService.apprateStatus === APPRATE_STATUS.REMIND) {
-                        return counter().then(function (counter) {
-                            $log.debug('settingsService.init:counter: ' + counter);
-                            if (counter > 5) {
-                                popover();
-                            }
-                        });
-                    }
-                });
+                if (localSettingsData.appRateStatus === APPRATE_STATUS.REMIND) {
+                    return counter().then(function (counter) {
+                        $log.debug('settingsService.init:counter: ' + counter);
+                        if (counter > 5) {
+                            popover();
+                        }
+                    });
+                }
             }
         };
     })

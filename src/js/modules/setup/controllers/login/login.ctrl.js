@@ -70,19 +70,17 @@
 
         /**
          * Login success handle
-         * @param data
+         * @param response
          */
-        function loginFormSuccessHandler(data) {
+        function loginFormSuccessHandler(response) {
             modalService.hideSpinner();
 
             var setupInfo = {
                 password: $scope.form.password,
-                networkType: $scope.form.networkType
+                networkType: $scope.form.networkType,
+                // set the identifier of the existing wallet (from API) or otherwise use a new identifier
+                identifier: response.existing_wallet || setupInfoService.getSetupInfoProperty("identifier")
             };
-
-            if (!$scope.form.forceNewWallet) {
-                setupInfo.identifier = data.existing_wallet || setupInfoService.getSetupInfoProperty("identifier");
-            }
 
             setupInfoService.setSetupInfo(setupInfo);
 

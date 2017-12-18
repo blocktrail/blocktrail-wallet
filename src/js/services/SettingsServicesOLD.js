@@ -36,9 +36,9 @@ angular.module('blocktrail.wallet').service(
         phoneVerified: false,*/
 
 
-        enableContacts: true,       //contacts access and syncing. default to true for previous installs
-        contactsLastSync: null,
-        contactsWebSync: true,      //enable syncing contacts to web wallet
+        // enableContacts: true,       //contacts access and syncing. default to true for previous installs
+        // contactsLastSync: null,
+        // contactsWebSync: true,      //enable syncing contacts to web wallet
 
         // defaults to an arbitrary timestamp prior to when this was added
         // so that we can use this to check for activation of new stuff etc

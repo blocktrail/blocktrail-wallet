@@ -27,7 +27,9 @@
             // Pin
             isPinOnOpen: false,     // ask for pin on each wallet open // TODO Change to true as default
             pinFailureCount: 0,     // counter of pin input failures
-            pinLastFailure: null    // last pin input failure
+            pinLastFailure: null,    // last pin input failure
+            // App rate
+            appRateStatus: null
         };
 
         self._$log = $log;
