@@ -2,7 +2,6 @@
     "DEBUG": false,
     "TUNE_DEBUG": false,
     "MINIFY": true,
-    "TESTNET": true,
     "NG_CORDOVA_MOCKS": false,
     "POUCHDB_DRIVER": null,
     "API_HOST": "api.blocktrail.com",
@@ -51,7 +50,7 @@
 
     "PROMOCODE_IN_MENU": false,
 
-    "TEST_NETWORK": false,
+    "TESTNET": true,
 
     "NETWORKS_ENABLED": ["BTC", "BCC"],
 
