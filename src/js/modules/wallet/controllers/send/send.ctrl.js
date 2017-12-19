@@ -8,7 +8,8 @@
                          $timeout, $q, $btBackButtonDelegate, $state, settingsService, localSettingsService,
                          $rootScope, $translate, $cordovaDialogs, AppRateService,
                          launchService, CONFIG) {
-        var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
+
+        var sdkWallet = walletsManagerService.getActiveSdkWallet();
 
         $scope.OPTIMAL_FEE = 'optimal';
         $scope.LOW_PRIORITY_FEE = 'low_priority';
@@ -16,6 +17,7 @@
         $scope.PRIOBOOST_MAX_SIZE = 1300;
 
         $scope.settingsData = settingsService.getReadOnlySettingsData();
+        $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
         $scope.fiatFirst = false;
         $scope.prioboost = {
@@ -172,7 +174,7 @@
 
         $scope.selectContact = function() {
             // check if phone has been verified yet
-            if (!localSettingsData.isPhoneVerified) {
+            if (!$scope.localSettingsData.isPhoneVerified) {
                 $scope.getTranslations()
                     .then(function() {
                         return $cordovaDialogs.alert($scope.translations['MSG_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['SETTINGS_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['OK']);
@@ -181,7 +183,7 @@
                         $state.go('app.wallet.settings.phone', {goBackTo: 'app.wallet.send.contacts'});
                     });
                 return false;
-            } else if(!localSettingsData.isEnableContacts) {
+            } else if(!$scope.localSettingsData.isEnableContacts) {
                 $cordovaDialogs.alert(
                     $translate.instant('MSG_REQUIRE_CONTACTS_ACCESS').sentenceCase(),
                     $translate.instant('CONTACTS_DISABLED').sentenceCase(),
@@ -201,9 +203,9 @@
                 return _maxSpendablePromise;
             } else {
                 _maxSpendablePromise = $q.all([
-                    walletsManagerService.getActiveSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL),
-                    walletsManagerService.getActiveSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY),
-                    walletsManagerService.getActiveSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_MIN_RELAY_FEE)
+                    sdkWallet.maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL),
+                    sdkWallet.maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY),
+                    sdkWallet.maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_MIN_RELAY_FEE)
                 ]).then(function (results) {
                     // set the local stored value
                     _maxSpendable = {};
@@ -236,7 +238,7 @@
             $scope.prioboost.estSize = null;
             $scope.prioboost.zeroConf = null;
 
-            return $q.when(walletsManagerService.getActiveSdkWallet()).then(function(sdkWallet) {
+            return $q.when(sdkWallet).then(function(sdkWallet) {
                 var localPay = {};
                 var amount = 0;
 
@@ -392,7 +394,7 @@
                     throw blocktrail.Error('MSG_MISSING_RECIPIENT');
                 }
 
-                return $scope.getSendingAddress(walletsManagerService.getActiveSdkWallet());
+                return $scope.getSendingAddress(sdkWallet);
             }).then(function() {
                 //validate address
                 return walletsManagerService.getActiveWallet().validateAddress($scope.sendInput.recipientAddress);
@@ -435,7 +437,7 @@
         $scope.getSendingAddress = function() {
             var deferred = $q.defer();
             if ($scope.sendInput.recipient && !$scope.sendInput.recipientAddress) {
-                Contacts.getSendingAddress(walletsManagerService.getActiveSdkWallet(), $scope.sendInput.recipient).then(function(result){
+                Contacts.getSendingAddress(sdkWallet, $scope.sendInput.recipient).then(function(result){
                     $scope.sendInput.recipientAddress = result.address;
                     deferred.resolve();
                 }, function(err) {
@@ -468,7 +470,7 @@
             var trackingBtcValue = blocktrailSDK.toBTC(Math.ceil($scope.sendInput.btcValue / 1000000) * 1000000);
 
             //get an address for the contact
-            $scope.getSendingAddress(walletsManagerService.getActiveSdkWallet())
+            $scope.getSendingAddress(sdkWallet)
                 .then(function() {
                     $scope.appControl.result = {working: true, message: 'MSG_INIT_WALLET'};
 
