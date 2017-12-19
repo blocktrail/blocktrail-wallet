@@ -123,7 +123,7 @@
 
     SdkService.prototype._initSdkList = function() {
         var self = this;
-        var isTestNet = self._CONFIG.TEST_NETWORK;
+        var isTestNet = self._CONFIG.TESTNET;
 
         // Generic SDK
         self._sdkList[self._keyForGenericSdk] = new GenericBlocktrailSDK({

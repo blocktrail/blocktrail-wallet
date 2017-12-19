@@ -20,7 +20,7 @@
             email: null,
             apiKey: null, // api_key
             apiSecret: null, // api_secret
-            isTestNetwork: self._CONFIG.TEST_NETWORK,
+            isTestNetwork: self._CONFIG.TESTNET,
             secret: null,
             encryptedSecret: null,
             newSecret: null // new_secret
