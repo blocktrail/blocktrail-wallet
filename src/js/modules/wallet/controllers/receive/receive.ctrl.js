@@ -4,17 +4,15 @@
     angular.module("blocktrail.wallet")
         .controller("ReceiveCtrl", ReceiveCtrl);
 
-    function ReceiveCtrl($scope, walletsManagerService, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
+    function ReceiveCtrl($scope, walletsManagerService, settingsService, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
                           $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast, CONFIG) {
-        var walletData = walletsManagerService.getActiveWalletReadOnlyData();;
+        var walletData = walletsManagerService.getActiveWalletReadOnlyData();
 
         $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
         $scope.address = null;
         $scope.path = null;
         $scope.bitcoinUri = null;
         $scope.qrcode = null;
-
-
 
         $scope.newRequest = {
             address: null,
@@ -30,6 +28,8 @@
             showMessage: false,
             showRequestOptions: false
         };
+
+        $scope.settingsData = settingsService.getReadOnlySettingsData();
 
         $scope.message = {};
 
@@ -53,12 +53,12 @@
 
         $scope.setFiat = function() {
             //converts and sets the FIAT value from the BTC value
-            $scope.newRequest.fiatValue = parseFloat(CurrencyConverter.fromBTC($scope.newRequest.btcValue, $scope.settings.localCurrency, 2)) || 0;
+            $scope.newRequest.fiatValue = parseFloat(CurrencyConverter.fromBTC($scope.newRequest.btcValue, $scope.settingsData.localCurrency, 2)) || 0;
             //$scope.newRequest.fiatValue.$setDirty();   //ideally set the other input to dirty as well
         };
         $scope.setBTC = function() {
             //converts and sets the BTC value from the FIAT value
-            $scope.newRequest.btcValue = parseFloat(CurrencyConverter.toBTC($scope.newRequest.fiatValue, $scope.settings.localCurrency, 6)) || 0;
+            $scope.newRequest.btcValue = parseFloat(CurrencyConverter.toBTC($scope.newRequest.fiatValue, $scope.settingsData.localCurrency, 6)) || 0;
             //$scope.newRequest.btcValue.$setDirty();    //ideally set the other input to dirty as well
         };
         $scope.newAddress = function() {
@@ -146,7 +146,7 @@
                 addressURI: $scope.newRequest.bitcoinUri,
                 btcValue: $scope.newRequest.btcValue,
                 fiatValue: $scope.newRequest.fiatValue,
-                localCurrency: $scope.settings.localCurrency,
+                localCurrency: $scope.settingsData.localCurrency,
                 qrcode: qrcode.src
             };
 
@@ -177,7 +177,7 @@
                 address: $scope.newRequest.address,
                 btcValue: $scope.newRequest.btcValue,
                 fiatValue: $scope.newRequest.fiatValue,
-                localCurrency: $scope.settings.localCurrency
+                localCurrency: $scope.settingsData.localCurrency
             };
 
             var smsMessage = $scope.newRequest.btcValue ? $translate.instant('MSG_REQUEST_SMS_2', params) : $translate.instant('MSG_REQUEST_SMS_1', params);

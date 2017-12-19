@@ -57,7 +57,7 @@
                         <div class="col col-80">
                             <div class="fiat-value" ng-if="walletData.balance !== null">
                                 <canvas-display
-                                    text="(walletData.balance+walletData.uncBalance) | satoshiToCurrency: settings.localCurrency :  bitcoinPrices : 2 : htmlMarkup=false"
+                                    text="(walletData.balance+walletData.uncBalance) | satoshiToCurrency: settingsData.localCurrency :  bitcoinPrices : 2 : htmlMarkup=false"
                                     width="100%"
                                     height="18"
                                     font="18px 'Helvetica', 'Roboto', 'Open Sans', sans-serif "
@@ -101,7 +101,7 @@
                                tabindex="{{ fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
                             <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
-                            <span class="label">{{ settings.localCurrency | toCurrencySymbol}}</span>
+                            <span class="label">{{ settingsData.localCurrency | toCurrencySymbol}}</span>
                             <span class="spacer">{{ fiatValueRaw }}</span>
                         </div>
                     </div>

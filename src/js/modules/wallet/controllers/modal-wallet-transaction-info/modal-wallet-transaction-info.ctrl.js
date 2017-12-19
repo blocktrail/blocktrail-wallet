@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("ModalWalletTransactionInfo", ModalWalletTransactionInfo);
 
-    function ModalWalletTransactionInfo($scope, $filter, CONFIG, parameters) {
+    function ModalWalletTransactionInfo($scope, $filter, $controller, CONFIG, parameters) {
         // Extend from base controller
         $controller('ModalBaseCtrl', { $scope: $scope });
 

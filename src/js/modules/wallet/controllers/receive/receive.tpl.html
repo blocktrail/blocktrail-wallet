@@ -36,7 +36,7 @@
                            tabindex="{{ fiatFirst && 1 || -1 }}"/>
                     <div class="label-group">
                         <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
-                        <span class="label">{{ settings.localCurrency | toCurrencySymbol}}</span>
+                        <span class="label">{{ settingsData.localCurrency | toCurrencySymbol}}</span>
                         <span class="spacer">{{ fiatValueRaw }}</span>
                     </div>
                 </div>
@@ -89,7 +89,6 @@
             <!-- /send request options -->
         </div>
     </ion-content>
-
 
     <!--
     <div class="message-display" ng-class="{displayed: appControl.showMessage}" on-swipe-down="dismissMessage()">

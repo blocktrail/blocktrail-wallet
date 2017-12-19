@@ -5,16 +5,17 @@
         .controller("SendCtrl", SendCtrl);
 
     function SendCtrl($scope, trackingService, $log, Contacts, walletsManagerService, CurrencyConverter,
-                         $timeout, $q, $btBackButtonDelegate, $state, settingsService,
+                         $timeout, $q, $btBackButtonDelegate, $state, settingsService, localSettingsService,
                          $rootScope, $translate, $cordovaDialogs, AppRateService,
                          launchService, CONFIG) {
+        var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
+
         $scope.OPTIMAL_FEE = 'optimal';
         $scope.LOW_PRIORITY_FEE = 'low_priority';
         $scope.PRIOBOOST = 'prioboost';
         $scope.PRIOBOOST_MAX_SIZE = 1300;
 
-        $scope.walletData = walletsManagerService.getActiveWalletReadOnlyData();
-        $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
+        $scope.settingsData = settingsService.getReadOnlySettingsData();
 
         $scope.fiatFirst = false;
         $scope.prioboost = {
@@ -97,11 +98,11 @@
 
         $scope.setFiat = function() {
             //converts and sets the FIAT value from the BTC value
-            $scope.sendInput.fiatValue = parseFloat(CurrencyConverter.fromBTC($scope.sendInput.btcValue, $scope.settings.localCurrency, 2)) || 0;
+            $scope.sendInput.fiatValue = parseFloat(CurrencyConverter.fromBTC($scope.sendInput.btcValue, $scope.settingsData.localCurrency, 2)) || 0;
         };
         $scope.setBTC = function() {
             //converts and sets the BTC value from the FIAT value
-            $scope.sendInput.btcValue = parseFloat(CurrencyConverter.toBTC($scope.sendInput.fiatValue, $scope.settings.localCurrency, 6)) || 0;
+            $scope.sendInput.btcValue = parseFloat(CurrencyConverter.toBTC($scope.sendInput.fiatValue, $scope.settingsData.localCurrency, 6)) || 0;
         };
 
         $scope.clearRecipient = function() {
@@ -170,8 +171,8 @@
         };
 
         $scope.selectContact = function() {
-            //check if phone has been verified yet
-            if (!settingsService.phoneVerified) {
+            // check if phone has been verified yet
+            if (!localSettingsData.isPhoneVerified) {
                 $scope.getTranslations()
                     .then(function() {
                         return $cordovaDialogs.alert($scope.translations['MSG_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['SETTINGS_PHONE_REQUIRE_VERIFY'].sentenceCase(), $scope.translations['OK']);
@@ -180,7 +181,7 @@
                         $state.go('app.wallet.settings.phone', {goBackTo: 'app.wallet.send.contacts'});
                     });
                 return false;
-            } else if(!settingsService.enableContacts) {
+            } else if(!localSettingsData.isEnableContacts) {
                 $cordovaDialogs.alert(
                     $translate.instant('MSG_REQUIRE_CONTACTS_ACCESS').sentenceCase(),
                     $translate.instant('CONTACTS_DISABLED').sentenceCase(),
