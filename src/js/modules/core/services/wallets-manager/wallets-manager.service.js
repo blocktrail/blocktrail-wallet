@@ -98,14 +98,24 @@
     };
 
     /**
-     * Get the active wallet network type
+     * Get the active sdk wallet
      * @return { string }
      */
-    WalletsManagerService.prototype.getActiveWalletSdk = function() {
+    WalletsManagerService.prototype.getActiveSdkWallet = function() {
         var self = this;
 
-        return self._activeWallet.getWalletSdk();
+        return self._activeWallet.getSdkWallet();
     };
+
+    /**
+     * Get active sdk
+     */
+    WalletsManagerService.prototype.getActiveSdk = function() {
+        var self = this;
+
+        return self._activeWallet.getSdk();
+    };
+
 
     /**
      * Set the active wallet by the network type and the identifier

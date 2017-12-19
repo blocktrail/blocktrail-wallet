@@ -11,7 +11,7 @@
 
         var activeWallet = walletsManagerService.getActiveWallet();
 
-        $scope.walletData = activeWallet.getReadOnlyWalletData();
+        $scope.walletData = walletsManagerService.getActiveWalletReadOnlyData();
         $scope.settingsData = settingsService.getReadOnlySettingsData();
         $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
         $scope.languageName = blocktrailLocalisation.languageName($translate.use());

@@ -101,10 +101,7 @@ angular.module('blocktrail.wallet').factory(
                         throw new Error(qs.error_message.replace("+", " "));
                     }
 
-                    var activeWallet = walletsManagerService.getActiveWallet();
-                    var sdk = activeWallet.getWalletSdk().sdk;
-
-                    return sdk.glideraOauth(qs.code, returnuri)
+                    return walletsManagerService.getSdkWallet().glideraOauth(qs.code, returnuri)
                         .then(function(result) {
                             $log.debug('oauthtoken', JSON.stringify(result, null, 4));
                             trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_SETUP_DONE);
@@ -133,7 +130,7 @@ angular.module('blocktrail.wallet').factory(
                                         hideOnStateChange: true
                                     });
 
-                                    return activeWallet.unlock(dialogResult.input1).then(function(wallet) {
+                                    return walletsManagerService.getActiveWallet().unlock(dialogResult.input1).then(function(wallet) {
                                         var secretBuf = wallet.secret;
                                         var accessTokenBuf = new blocktrailSDK.Buffer(accessToken, 'utf8');
                                         glideraAccessToken.encryptedAccessToken = blocktrailSDK.Encryption.encrypt(
@@ -299,8 +296,6 @@ angular.module('blocktrail.wallet').factory(
 
         var accessTokenPromise = null; // use promise to avoid doing things twice
         var accessToken = function() {
-            var activeWallet = walletsManagerService.getActiveWallet();
-
             if (decryptedAccessToken) {
                 $log.debug('decryptedAccessToken');
                 return $q.when(decryptedAccessToken);
@@ -346,7 +341,7 @@ angular.module('blocktrail.wallet').factory(
                     var unlockWallet = function() {
                         return promptForPin()
                             .then(function(pin) {
-                                return activeWallet.unlockWithPin(pin)
+                                return walletsManagerService.getActiveWallet().unlockWithPin(pin)
                                     .catch(function(e) {
                                         console.log('unlock ERR', e);
                                         return unlockWallet();
@@ -383,10 +378,7 @@ angular.module('blocktrail.wallet').factory(
         };
 
         var buyPrices = function(qty, fiat) {
-            var activeWallet = walletsManagerService.getActiveWallet();
-            var sdk = activeWallet.getWalletSdk().sdk;
-
-            return sdk.glideraBuyPrices(qty, fiat)
+            return walletsManagerService.getActiveSdkWallet().glideraBuyPrices(qty, fiat)
                 .then(function(result) {
                     console.log('buyPrices ' + JSON.stringify(result));
 
@@ -407,15 +399,13 @@ angular.module('blocktrail.wallet').factory(
         };
 
         var buy = function(qty, priceUuid) {
-            var activeWallet = walletsManagerService.getActiveWallet();
-
             return userCanTransact().then(function(userCanTransact) {
                 if (!userCanTransact) {
                     throw new Error("User can't transact!");
                 }
 
                 return accessToken().then(function(accessToken) {
-                    return activeWallet.getNewAddress().then(function (address) {
+                    return walletsManagerService.getActiveWallet().getNewAddress().then(function (address) {
                         return twoFactor().then(function (twoFactor) {
                             var r = createRequest(null, accessToken, twoFactor);
                             $log.debug('buy', JSON.stringify({
@@ -444,7 +434,7 @@ angular.module('blocktrail.wallet').factory(
                                         total: result.total,
                                         currency: result.currency,
                                         // add walletIdentifier so we always know which wallet it belongs to
-                                        walletIdentifier: activeWallet._sdkWallet.identifier
+                                        walletIdentifier: walletsManagerService.getActiveSdkWallet().identifier
                                     };
 
                                     return settingsService.addGlideraTransaction(glideraTransaction).then(function() {

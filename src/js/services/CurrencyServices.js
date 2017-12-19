@@ -89,9 +89,6 @@ angular.module('blocktrail.wallet')
             var forceFetch = !getCached;
 
             // @TODO: we should make a generic endpoint that returns ALL prices and adjust the prices used based on active wallet
-            var activeWallet = walletsManagerService.getActiveWallet();
-            var sdk = activeWallet.getWalletSdk().sdk;
-
             if (updatePrices) {
                 if (updatePrices.forceFetch !== forceFetch) {
                     return updatePrices.then(function() {
@@ -110,7 +107,7 @@ angular.module('blocktrail.wallet')
                     })
                     .then(function(pricesDoc) {
                         if (forceFetch) {
-                            return sdk.price().then(function(result) {
+                            return walletsManagerService.getActiveSdk().price().then(function(result) {
                                 angular.extend(pricesDoc, result);
 
                                 //store in cache and then return

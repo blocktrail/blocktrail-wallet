@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("SendCtrl", SendCtrl);
 
-    function SendCtrl($scope, trackingService, $log, Contacts, activeWallet, CurrencyConverter,
+    function SendCtrl($scope, trackingService, $log, Contacts, walletsManagerService, CurrencyConverter,
                          $timeout, $q, $btBackButtonDelegate, $state, settingsService,
                          $rootScope, $translate, $cordovaDialogs, AppRateService,
                          launchService, CONFIG) {
@@ -13,7 +13,7 @@
         $scope.PRIOBOOST = 'prioboost';
         $scope.PRIOBOOST_MAX_SIZE = 1300;
 
-        $scope.walletData = activeWallet.getReadOnlyWalletData();
+        $scope.walletData = walletsManagerService.getActiveWalletReadOnlyData();
         $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
         $scope.fiatFirst = false;
@@ -200,9 +200,9 @@
                 return _maxSpendablePromise;
             } else {
                 _maxSpendablePromise = $q.all([
-                        activeWallet.getWalletSdk().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL),
-                        activeWallet.getWalletSdk().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY),
-                        activeWallet.getWalletSdk().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_MIN_RELAY_FEE)
+                    walletsManagerService.getActiveSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_OPTIMAL),
+                    walletsManagerService.getActiveSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_LOW_PRIORITY),
+                    walletsManagerService.getActiveSdkWallet().maxSpendable($scope.useZeroConf, blocktrailSDK.Wallet.FEE_STRATEGY_MIN_RELAY_FEE)
                 ]).then(function (results) {
                     // set the local stored value
                     _maxSpendable = {};
@@ -235,7 +235,7 @@
             $scope.prioboost.estSize = null;
             $scope.prioboost.zeroConf = null;
 
-            return $q.when(activeWallet.getWalletSdk()).then(function(sdkWallet) {
+            return $q.when(walletsManagerService.getActiveSdkWallet()).then(function(sdkWallet) {
                 var localPay = {};
                 var amount = 0;
 
@@ -391,10 +391,10 @@
                     throw blocktrail.Error('MSG_MISSING_RECIPIENT');
                 }
 
-                return $scope.getSendingAddress(activeWallet.getWalletSdk());
+                return $scope.getSendingAddress(walletsManagerService.getActiveSdkWallet());
             }).then(function() {
                 //validate address
-                return activeWallet.validateAddress($scope.sendInput.recipientAddress);
+                return walletsManagerService.getActiveWallet().validateAddress($scope.sendInput.recipientAddress);
             }).then(function() {
                 $scope.pay = {};
                 $scope.pay[$scope.sendInput.recipientAddress] = parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC"));
@@ -434,7 +434,7 @@
         $scope.getSendingAddress = function() {
             var deferred = $q.defer();
             if ($scope.sendInput.recipient && !$scope.sendInput.recipientAddress) {
-                Contacts.getSendingAddress(activeWallet.getWalletSdk(), $scope.sendInput.recipient).then(function(result){
+                Contacts.getSendingAddress(walletsManagerService.getActiveSdkWallet(), $scope.sendInput.recipient).then(function(result){
                     $scope.sendInput.recipientAddress = result.address;
                     deferred.resolve();
                 }, function(err) {
@@ -467,17 +467,17 @@
             var trackingBtcValue = blocktrailSDK.toBTC(Math.ceil($scope.sendInput.btcValue / 1000000) * 1000000);
 
             //get an address for the contact
-            $scope.getSendingAddress(activeWallet.getWalletSdk())
+            $scope.getSendingAddress(walletsManagerService.getActiveSdkWallet())
                 .then(function() {
                     $scope.appControl.result = {working: true, message: 'MSG_INIT_WALLET'};
 
                     if ($scope.appControl.unlockType === 'PIN') {
-                        return $q.when(activeWallet.unlockWithPin($scope.sendInput.pin));
+                        return $q.when(walletsManagerService.getActiveWallet().unlockWithPin($scope.sendInput.pin));
                     } else {
                         var deferred = $q.defer();
 
                         $timeout(function() {
-                            deferred.resolve(activeWallet.unlockWithPassword($scope.sendInput.password));
+                            deferred.resolve(walletsManagerService.getActiveWallet().unlockWithPassword($scope.sendInput.password));
                         }, 50);
 
                         return deferred.promise;
@@ -532,7 +532,7 @@
                         $btBackButtonDelegate.toggleBackButton(true);
                     });
 
-                    activeWallet.forcePolling();
+                    walletsManagerService.getActiveWallet().forcePolling();
                     AppRateService.sendCompleted();
                 })
                 .catch(function(err) {
@@ -603,7 +603,7 @@
                     .then(function(result) {
                         $scope.sendInput.recipientDisplay = "test";
                         $log.debug('found address in uri: ' + result.address);
-                        $q.when(activeWallet.validateAddress(result.address)).then(function() {
+                        $q.when(walletsManagerService.getActiveWallet().validateAddress(result.address)).then(function() {
                             $scope.sendInput.recipientDisplay = result.address;
                             $scope.sendInput.recipientAddress = result.address;
                             $scope.sendInput.recipientSource = 'BitcoinURI';

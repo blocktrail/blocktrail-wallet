@@ -9,7 +9,7 @@
         var transactionsListLimitStep = 7;
         var lastDateHeader = 0; // used to keep track of the last date header added
 
-        $scope.walletData = activeWallet.getReadOnlyWalletData();;
+        $scope.walletData = activeWallet.getReadOnlyWalletData();
         $scope.settingsData = settingsService.getReadOnlySettingsData();
         $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 

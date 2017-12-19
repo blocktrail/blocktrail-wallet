@@ -134,10 +134,16 @@
         return self._readonlyDoc;
     };
 
-    Wallet.prototype.getWalletSdk = function() {
+    Wallet.prototype.getSdkWallet = function() {
         var self = this;
 
         return self._sdkWallet;
+    };
+
+    Wallet.prototype.getSdk = function() {
+        var self = this;
+
+        return self._sdkWallet.sdk;
     };
 
     Wallet.prototype._initData = function() {

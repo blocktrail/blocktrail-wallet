@@ -4,8 +4,8 @@
     angular.module("blocktrail.wallet")
         .controller("SendAddressInputCtrl", SendAddressInputCtrl);
 
-    function SendAddressInputCtrl($scope, $state, $log, $timeout, $cordovaClipboard, CONFIG, $q, activeWallet) {
-        var walletData = activeWallet.getReadOnlyWalletData();
+    function SendAddressInputCtrl($scope, $state, $log, $timeout, $cordovaClipboard, CONFIG, $q, walletsManagerService) {
+        var walletData = walletsManagerService.getActiveWalletReadOnlyData();
 
         $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
         $scope.addressInput = null;
@@ -23,7 +23,7 @@
             $scope.addressInput = address;
             return $q.when().then(
                 function() {
-                    return activeWallet.validateAddress($scope.addressInput);
+                    return walletsManagerService.getActiveWallet().validateAddress($scope.addressInput);
                 })
                 .then(function(result) {
                     //address is valid, assign to parent scope
@@ -54,7 +54,7 @@
                     return $scope.parseForAddress(result);
                 })
                 .then(function(result) {
-                    return activeWallet.validateAddress(result.address).then(function() {
+                    return walletsManagerService.getActiveWallet().validateAddress(result.address).then(function() {
                         $scope.addressInput = result.address;
                         if (result.amount) {
                             $scope.addressAmount = result.amount;

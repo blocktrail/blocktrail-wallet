@@ -4,9 +4,8 @@
     angular.module("blocktrail.wallet")
         .controller("AddressLookupCtrl", AddressLookupCtrl);
 
-    function AddressLookupCtrl($scope, activeWallet, CONFIG, $q, $timeout, $cacheFactory, $log,
+    function AddressLookupCtrl($scope, CONFIG, $q, $timeout, $cacheFactory, $log, walletsManagerService,
                                $ionicPopover, $translate, $cordovaClipboard, $cordovaToast, $ionicActionSheet) {
-
         var $cache = $cacheFactory.get('address-lookup') || $cacheFactory('address-lookup', {capacity: 10});
         $scope.onScroll = angular.noop;
 
@@ -14,7 +13,7 @@
         $scope.totalItems = null;
         $scope.itemsPerPage = 15;
         $scope.currentPage = 1;
-        $scope.walletData = activeWallet.getReadOnlyWalletData();
+        $scope.walletData = walletsManagerService.getActiveWalletReadOnlyData();
 
         // Search related
         $scope.search = {
@@ -76,7 +75,7 @@
                             options.search_label = searchText;
                         }
 
-                        return activeWallet.getWalletSdk()
+                        return walletsManagerService.getActiveSdkWallet()
                             .addresses(options)
                             .then(function (addrs) {
                                 $cache.put(cacheKey, addrs);
@@ -184,7 +183,7 @@
             var idx = $scope.items.indexOf($scope.labelEdit.selectedAddress);
             var label = $scope.labelEdit.labelInput;
 
-            return activeWallet.getWalletSdk()
+            return walletsManagerService.getActiveSdkWallet()
                 .labelAddress($scope.items[idx].address, label)
                 .then(function () {
                     $scope.items[idx].label = label;

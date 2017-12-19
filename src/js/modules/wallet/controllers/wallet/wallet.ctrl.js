@@ -8,7 +8,7 @@
                         CONFIG, modalService, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
                         trackingService) {
 
-        var walletData = activeWallet.getReadOnlyWalletData();
+        var walletData = walletsManagerService.getActiveWalletReadOnlyData();
 
         function hideLoading() {
             $timeout(function() {
@@ -130,7 +130,7 @@
                     list.push({
                         value: wallet.uniqueIdentifier,
                         selected: walletData.uniqueIdentifier === wallet.uniqueIdentifier,
-                        label: CONFIG.NETWORKS[wallet.network].TICKER + " " + $filter("satoshiToCoin")(wallet.balance, 4) + " " + wallet.identifier
+                        label: CONFIG.NETWORKS[wallet.network].TICKER + " " + $filter("satoshiToCoin")(wallet.balance, wallet.network, 4) + " " + wallet.identifier
                     })
                 });
             } else {

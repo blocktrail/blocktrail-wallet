@@ -4,9 +4,9 @@
     angular.module("blocktrail.wallet")
         .controller("ReceiveCtrl", ReceiveCtrl);
 
-    function ReceiveCtrl($scope, activeWallet, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
+    function ReceiveCtrl($scope, walletsManagerService, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
                           $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast, CONFIG) {
-        var walletData = activeWallet.getReadOnlyWalletData();
+        var walletData = walletsManagerService.getActiveWalletReadOnlyData();;
 
         $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
         $scope.address = null;
@@ -62,7 +62,7 @@
             //$scope.newRequest.btcValue.$setDirty();    //ideally set the other input to dirty as well
         };
         $scope.newAddress = function() {
-            $q.when(activeWallet.getNewAddress()).then(function(address) {
+            $q.when(walletsManagerService.getActiveWallet().getNewAddress()).then(function(address) {
                 $scope.newRequest.address = address;
             });
         };

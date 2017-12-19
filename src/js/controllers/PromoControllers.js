@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet')
-    .controller('PromoCodeRedeemCtrl', function($scope, $rootScope, $stateParams, $btBackButtonDelegate, $q,
-                                                $log, $cordovaToast, $ionicLoading, QR, $timeout, activeWallet, trackingService) {
+    .controller('PromoCodeRedeemCtrl', function($scope, $rootScope, $stateParams, $btBackButtonDelegate, $q, $log,
+                                                $cordovaToast, $ionicLoading, QR, $timeout, walletsManagerService, trackingService) {
         $scope.appControl = {
             working: false,
             showMessage: false
@@ -102,11 +102,11 @@ angular.module('blocktrail.wallet')
             $scope.message = {title: 'CHECKING', title_class: 'text-neutral', body: ''};
             $scope.appControl.working = true;
             $scope.showMessage();
-            $q.when($scope.promoCodeInput.address || activeWallet.getNewAddress())
+            $q.when($scope.promoCodeInput.address || walletsManagerService.getActiveWallet().getNewAddress())
                 .then(function(address) {
                     $scope.promoCodeInput.address = address;
                     trackingService.trackEvent(trackingService.EVENTS.PROMO_ATTEMPT);
-                    return activeWallet.getWalletSdk().sdk.redeemPromoCode($scope.promoCodeInput);
+                    return walletsManagerService.getActiveSdk().redeemPromoCode($scope.promoCodeInput);
                 })
                 .then(function(result) {
                     trackingService.trackEvent(trackingService.EVENTS.PROMO_REDEEM);
