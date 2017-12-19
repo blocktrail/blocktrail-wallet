@@ -19,6 +19,7 @@
             phoneHash: null,
             // Contacts
             isEnableContacts: false,
+            isPermissionContacts: true,
             contactsWebSync: false,
             contactsLastSync: null,
             // BTC precision

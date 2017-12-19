@@ -5,10 +5,11 @@
         .controller("WalletCtrl", WalletCtrl);
 
     function WalletCtrl($rootScope, $timeout, $scope, $state, $filter, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast,
-                        CONFIG, modalService, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
+                        CONFIG, modalService, localSettingsService, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
                         trackingService) {
 
         var walletData = walletsManagerService.getActiveWalletReadOnlyData();
+        var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
         function hideLoading() {
             $timeout(function() {
@@ -96,11 +97,7 @@
 
         // Methods
         $rootScope.getPrice = getPrice;
-        // TODO Review this later
-        // $rootScope.syncProfile = syncProfile;
-        // $rootScope.syncContacts = syncContacts;
-
-
+        $rootScope.syncContacts = syncContacts;
         $scope.onClickSetActiveWallet = onClickSetActiveWallet;
         $scope.navHandler = navHandler;
 
@@ -189,50 +186,42 @@
         }
 
         /**
-         * Sync profile
-         */
-        // TODO Review
-        /*function syncProfile() {
-            // sync profile if a pending update is present, else check for upstream changes
-            if (!settingsService.profileSynced) {
-                settingsService.$syncProfileUp();
-            } else {
-                settingsService.$syncProfileDown();
-            }
-        }*/
-
-        /**
          * Sync contacts
          */
-        // TODO Review
-        /*function syncContacts() {
+        function syncContacts() {
             // sync any changes to contacts, if syncing enabled
-            // TODO replace localSettingsService.isEnableContacts
-            if (settingsService.enableContacts) {
+            if (localSettingsData.isEnableContacts) {
                 Contacts.sync()
                     .then(function() {
                         //rebuild the cached contacts list
                         return Contacts.list(true);
                     })
                     .then(function() {
-                        settingsService.contactsLastSync = new Date().valueOf();
-                        settingsService.permissionContacts = true;
-                        return settingsService.$store();
+                        var data = {
+                            // TODO Review the logic related to 'contactsLastSync' discuss with Ruben,
+                            // TODO we do not use it right no
+                            contactsLastSync: new Date().valueOf(),
+                            isPermissionContacts: true
+                        };
+
+                        return localSettingsService.setLocalSettings(data);
                     })
                     .catch(function(err) {
-                        //check if permission related error happened and update settings accordingly
+                        // check if permission related error happened and update settings accordingly
                         if (err instanceof blocktrail.ContactsPermissionError) {
-                            settingsService.permissionContacts = false;
-                            settingsService.enableContacts = false;
-                            settingsService.$store();
+                            var data = {
+                                enableContacts: false,
+                                isPermissionContacts: false
+                            };
 
-                            //alert user that contact syncing is disabled
+                            // alert user that contact syncing is disabled
+                            return localSettingsService.setLocalSettings(data);
                         } else {
                             $log.error(err);
                         }
                     });
             }
-        }*/
+        }
 
         /**
          * Nav handler, social share
@@ -256,108 +245,8 @@
                 });
         }
 
-        // @TODO: review & bring back network specific config values
-        // TODO propose the language
-        /*
-        (function initWalletConfig() {
-            launchService.getWalletConfig()
-                .then(function(result) {
-                    // merge network specific config over the default config
-                    result = angular.extend({}, result, result.networks[walletData.networkType]);
-
-                    if (result.api_key && (result.api_key !== 'ok')) {
-                        // alert user session is invalid
-                        return $cordovaDialogs.alert(
-                            $translate.instant('INVALID_SESSION_LOGOUT_NOW'),
-                            $translate.instant('INVALID_SESSION'),
-                            $translate.instant('OK'))
-                            .finally(function() {
-                                return $state.go('app.reset');
-                            });
-                    }
-
-                    if (CONFIG.PROMOCODE_IN_MENU) {
-                        promocodeNavItem.isHidden = false;
-                    } else if (typeof result.promocodeInMenu !== "undefined") {
-                        promocodeNavItem.isHidden = !result.promocodeInMenu;
-                    }
-
-                    settingsService.$isLoaded().then(function () {
-                        AppVersionService.checkVersion(
-                            settingsService.latestVersionMobile,
-                            settingsService.latestOutdatedNoticeVersion,
-                            result.versionInfo.mobile,
-                            AppVersionService.CHECKS.LOGGEDIN
-                        );
-
-                        if (!settingsService.latestVersionMobile || semver.gt(CONFIG.VERSION, settingsService.latestVersionMobile) ||
-                            !settingsService.latestOutdatedNoticeVersion ||
-                            (result.versionInfo.mobile.latest && semver.gt(result.versionInfo.mobile.latest, settingsService.latestOutdatedNoticeVersion))) {
-                            settingsService.latestOutdatedNoticeVersion = result.versionInfo.mobile.latest;
-                            settingsService.latestVersionMobile = CONFIG.VERSION;
-                            settingsService.$store().then(function () {
-                                settingsService.$syncSettingsUp();
-                            });
-                        }
-                    });
-
-                    if (result.currencies) {
-                        result.currencies.forEach(function (currency) {
-                            Currencies.enableCurrency(currency);
-                        });
-                    }
-
-                    return result.extraLanguages.concat(CONFIG.EXTRA_LANGUAGES).unique();
-                })
-                .then(function(extraLanguages) {
-                    return settingsService.$isLoaded().then(function() {
-                        // determine (new) preferred language
-                        var r = blocktrailLocalisation.parseExtraLanguages(extraLanguages);
-                        if (r) {
-                            var newLanguages = r[0];
-                            var preferredLanguage = r[1];
-
-                            // store extra languages
-                            settingsService.extraLanguages = settingsService.extraLanguages.concat(newLanguages).unique();
-                            return settingsService.$store()
-                                .then(function () {
-                                    // check if we have a new preferred language
-                                    if (preferredLanguage !== settingsService.language && newLanguages.indexOf(preferredLanguage) !== -1) {
-                                        // prompt to enable
-                                        return $cordovaDialogs.confirm(
-                                            $translate.instant('MSG_BETTER_LANGUAGE', {
-                                                oldLanguage: $translate.instant(blocktrailLocalisation.languageName(settingsService.language)),
-                                                newLanguage: $translate.instant(blocktrailLocalisation.languageName(preferredLanguage))
-                                            }).sentenceCase(),
-                                            $translate.instant('MSG_BETTER_LANGUAGE_TITLE').sentenceCase(),
-                                            [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
-                                        )
-                                            .then(function (dialogResult) {
-                                                if (dialogResult === 2) {
-                                                    return;
-                                                }
-
-                                                // enable new language
-                                                settingsService.language = preferredLanguage;
-                                                $rootScope.changeLanguage(preferredLanguage);
-
-                                                return settingsService.$store()
-                                                    .then(function() {
-                                                        settingsService.$syncSettingsUp();
-                                                    });
-                                            });
-                                    }
-                                });
-                        }
-                    });
-                })
-                .then(function() {}, function(e) { console.error('extraLanguages', e && (e.msg || e.message || "" + e)); });
-        })();*/
-
         $timeout(function() { $rootScope.getPrice(); }, 1000);
-        // $timeout(function() { $rootScope.syncProfile(); }, 2000);
-        // $timeout(function() { $rootScope.syncContacts(); }, 4000);
+        $timeout(function() { $rootScope.syncContacts(); }, 40000);
         $timeout(function() { activeWallet.refillOfflineAddresses(1); }, 6000);
-        //$timeout(function() { settingsService.$syncSettingsDown(); }, 500);
     }
 })();

@@ -14,20 +14,19 @@
                 resolve: {
                     checkIsBanned: function($q, modalService, $translate, launchService) {
                         // TODO Add this later
-                        /*return launchService.getWalletConfig()
+                        return launchService.getWalletConfig()
+                            .then(function(result) {
+                                if (result.is_banned_ip) {
+                                    modalService.alert({
+                                        title: "BANNED_IP_TITLE",
+                                        body: $translate.instant('BANNED_IP_BODY', {bannedIp: result.is_banned_ip}),
+                                        button: ""
+                                    });
 
-                         .then(function(result) {
-                         if (result.is_banned_ip) {
-                         modalService.alert({
-                         title: "BANNED_IP_TITLE",
-                         body: $translate.instant('BANNED_IP_BODY', {bannedIp: result.is_banned_ip}),
-                         button: ""
-                         });
-
-                         // throw error to prevent controller from loading or any other resolves to continue
-                         return $q.reject(new Error("IS_BANNED"));
-                         }
-                         });*/
+                                    // throw error to prevent controller from loading or any other resolves to continue
+                                    return $q.reject(new Error("IS_BANNED"));
+                                }
+                            });
                     },
                     preferredLanguage: preferredLanguage
                 }
