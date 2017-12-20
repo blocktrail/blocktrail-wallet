@@ -8,12 +8,15 @@
                                buyBTCService, CurrencyConverter, modalService) {
         var transactionsListLimitStep = 7;
         var lastDateHeader = 0; // used to keep track of the last date header added
+        var isIgnoreInfiniteScroll = false;
 
         $scope.walletData = activeWallet.getReadOnlyWalletData();
         $scope.settingsData = settingsService.getReadOnlySettingsData();
         $scope.localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
-        $scope.isShowNoMoreTransactions = true;
+        $scope.isLoading = true;
+        $scope.isForceForcePolling = false;
+        $scope.isShowNoMoreTransactions = false;
         $scope.showBCCSweepWarning = false;
         $scope.lastDateHeader = lastDateHeader;
         $scope.buyBtcPendingOrders = []; // Glidera transactions
@@ -23,6 +26,7 @@
         $scope.getTransactionHeader = getTransactionHeader;
         $scope.onShowTransaction = onShowTransaction;
         $scope.onShowMoreTransactions = onShowMoreTransactions;
+        $scope.onRefreshTransactions = onRefreshTransactions;
 
         $scope.onScroll = angular.noop;
 
@@ -38,17 +42,30 @@
          * Init data
          */
         function initData() {
-            modalService.showSpinner();
+            $scope.isLoading = true;
 
             return $q.all([
                 $q.when($rootScope.getPrice()),
                 $q.when(getGlideraTransactions())
             ]).then(function() {
-                modalService.hideSpinner();
+                $scope.isLoading = false;
             }, function (err) {
-                modalService.hideSpinner();
+                $scope.isLoading = false;
                 console.log('err', err);
             });
+        }
+
+        function onRefreshTransactions() {
+            if(!$scope.isForceForcePolling) {
+                $scope.isForceForcePolling = true;
+
+                activeWallet.forcePolling()
+                    .then(function() {
+                        $scope.$broadcast('scroll.refreshComplete');
+                        $scope.isForceForcePolling = false;
+                        isIgnoreInfiniteScroll = true;
+                    });
+            }
         }
 
         /**
@@ -96,10 +113,14 @@
          * Handler for "infinite-scroll" directive
          */
         function onShowMoreTransactions() {
-            if($scope.transactionsListLimit < $scope.walletData.transactions.length) {
-                $scope.transactionsListLimit = $scope.transactionsListLimit + transactionsListLimitStep;
-            } else if ($scope.walletData.transactions.length && $scope.transactionsListLimit >= $scope.walletData.transactions.length) {
-                $scope.isShowNoMoreTransactions = false;
+            if(isIgnoreInfiniteScroll) {
+                isIgnoreInfiniteScroll = false;
+            } else {
+                if($scope.transactionsListLimit < $scope.walletData.transactions.length) {
+                    $scope.transactionsListLimit = $scope.transactionsListLimit + transactionsListLimitStep;
+                } else if ($scope.walletData.transactions.length && $scope.transactionsListLimit >= $scope.walletData.transactions.length) {
+                    $scope.isShowNoMoreTransactions = true;
+                }
             }
 
             $scope.$broadcast('scroll.infiniteScrollComplete');

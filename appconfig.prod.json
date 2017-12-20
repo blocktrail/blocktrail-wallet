@@ -2,6 +2,7 @@
     "DEBUG": false,
     "MINIFY": true,
     "TESTNET": false,
+    "NETWORKS_ENABLED": ["BTC", "BCC"],
 
     "BUYBTC": false,
 

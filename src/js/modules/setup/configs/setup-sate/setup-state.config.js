@@ -90,13 +90,14 @@
     /**
      * Check for extra languages to enable, if new language is new preferred, set it
      *
+     * @param checkIsBanned Used a dependency
      * @param $state
      * @param $rootScope
      * @param CONFIG
      * @param blocktrailLocalisation
      * @param launchService
      */
-    function preferredLanguage($state, $rootScope, CONFIG, blocktrailLocalisation, launchService) {
+    function preferredLanguage(checkIsBanned, $state, $rootScope, CONFIG, blocktrailLocalisation, launchService) {
         var bannedIp = false;
 
         return launchService.getWalletConfig()

@@ -52,7 +52,7 @@
 
     "TESTNET": true,
 
-    "NETWORKS_ENABLED": ["BTC", "BCC"],
+    "NETWORKS_ENABLED": ["tBTC", "tBCC"],
 
     "NETWORKS": {
         "BTC": {

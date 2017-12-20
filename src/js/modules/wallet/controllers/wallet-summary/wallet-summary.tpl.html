@@ -13,12 +13,24 @@
             </div>
         </div>
         <div class="wallet-info-description">
-            <h1 ng-bind-html="((walletData.balance + walletData.uncBalance) | satoshiToCoin : walletData.networkType : 4 : true : 'short')">{{ (walletData.balance + walletData.uncBalance) | satoshiToCoin : walletData.networkType : 4 : false : 'short' }}</h1>
+            <h1 ng-bind-html="((walletData.balance + walletData.uncBalance) | satoshiToCoin : walletData.networkType : localSettingsData.btcPrecision : true : 'short')"></h1>
             <p>{{ (walletData.balance + walletData.uncBalance) | satoshiToCurrency : settingsData.localCurrency : bitcoinPrices }}</p>
         </div>
     </div>
 
-    <ion-content>
+    <ion-content class="summary-content">
+        <ion-refresher
+            pulling-text="{{'ION_REFRESHER' | translate}}"
+            on-refresh="onRefreshTransactions()">
+        </ion-refresher>
+
+        <div
+            class="transaction-loading text-center"
+            ng-if="!(buyBtcPendingOrders.length || !walletData.transactions.length) && isLoading"
+        >
+            <ion-spinner></ion-spinner>
+        </div>
+
         <ion-list class="transactions-list">
             <div ng-if="buyBtcPendingOrders.length > 0">
                 <!-- Show header -->
@@ -66,11 +78,9 @@
                             class="value received"
                             ng-bind-html="buyBtcPendingOrder.qty | satoshiToCoin : walletData.networkType : localSettingsData.btcPrecision : true"
                         ></div>
-
                     </div>
                 </div>
             </div>
-
 
             <!-- Transactions -->
             <div ng-repeat="transaction in walletData.transactions | limitTo : transactionsListLimit : 0 track by transaction.hash">
@@ -98,17 +108,16 @@
             </ion-item>
 
             <!-- Wallet no more transaction message -->
-            <ion-item ng-if="walletData.transactions.length && !isShowNoMoreTransactions">
+            <ion-item ng-if="walletData.transactions.length && isShowNoMoreTransactions">
                 <p class="text-center opacity-50">{{ 'WALLET_NO_MORE_TXS' | translate }}</p>
             </ion-item>
         </ion-list>
 
         <ion-infinite-scroll
-            ng-if="isShowNoMoreTransactions"
+            ng-if="!isShowNoMoreTransactions && !isForceForcePolling"
             on-infinite="onShowMoreTransactions()"
             immediate-check="false"
             distance="25%">
         </ion-infinite-scroll>
-
     </ion-content>
 </ion-view>
