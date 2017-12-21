@@ -154,10 +154,8 @@
                 <div class="item item-button-right" ng-click="onSetContacts()">
                     <span class="sentence-case">{{ 'CONTACTS' | translate }}</span>
                     <button class="button button-clear">
-                        <small>Not ready: </small>
-
-                        <small ng-if="localSettingsData.isEnableContacts">{{ 'ENABLE' | translate }}</small>
-                        <small ng-if="!localSettingsData.isEnableContacts">{{ 'DISABLE' | translate }}</small>
+                        <small ng-if="localSettingsData.isEnableContacts">{{ 'ENABLED' | translate }}</small>
+                        <small ng-if="!localSettingsData.isEnableContacts">{{ 'DISABLED' | translate }}</small>
                         <i class="icon ion-chevron-right iil-15"></i>
                     </button>
                 </div>

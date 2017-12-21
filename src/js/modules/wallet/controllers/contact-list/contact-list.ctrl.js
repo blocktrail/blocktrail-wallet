@@ -6,7 +6,10 @@
 
     function ContactsListCtrl($scope, $state, $q, Contacts, $timeout, $translate,
                       $ionicScrollDelegate, $ionicActionSheet, $ionicLoading, $cordovaDialogs,
-                      $log, settingsService, $cordovaSms) {
+                      $log, $cordovaSms, localSettingsService) {
+
+        var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
+
         $scope.contactsFilter = {};
         $scope.contactsWithWalletOnly = true;
         $scope.contactsWithPhoneOnly = true;
@@ -87,9 +90,7 @@
         $scope.getContacts = function(forceRebuild) {
             // TODO @Roman replace localSettingsService.isEnableContacts
             //if user manages to get here (i.e. after verifying phone) automatically enable contacts and force a first sync
-            if (!settingsService.enableContacts) {
-                settingsService.enableContacts = true;
-                settingsService.contactsWebSync = true;
+            if (!localSettingsData.isEnableContacts) {
                 return $scope.reloadContacts();
             }
 
@@ -98,22 +99,34 @@
                     return $q.when(Contacts.list(forceRebuild));
                 })
                 .then(function(list) {
-                    settingsService.permissionContacts = true;      //ensure iOS permissions are up to date
-                    settingsService.$store();
+                    var data = {
+                        isEnableContacts: true,
+                        isPermissionContacts: true
+                    };
 
-                    $scope.contacts = list.contacts.filter(function(contact) {
-                        var walletOnlyFilter = ($scope.contactsWithWalletOnly && contact.matches.length || !$scope.contactsWithWalletOnly); //apply the walletOnly filter if enabled
-                        var phoneOnlyFilter = ($scope.contactsWithPhoneOnly && contact.phoneNumbers || !$scope.contactsWithPhoneOnly);      //apply the phoneOnly filter if enabled
-                        return walletOnlyFilter && phoneOnlyFilter;
-                    });
-                    return $q.when($scope.contacts);
+                    localSettingsService.setLocalSettings(data)
+                        .then(function() {
+                            $scope.contacts = list.contacts.filter(function(contact) {
+                                var walletOnlyFilter = ($scope.contactsWithWalletOnly && contact.matches.length || !$scope.contactsWithWalletOnly); //apply the walletOnly filter if enabled
+                                var phoneOnlyFilter = ($scope.contactsWithPhoneOnly && contact.phoneNumbers || !$scope.contactsWithPhoneOnly);      //apply the phoneOnly filter if enabled
+                                return walletOnlyFilter && phoneOnlyFilter;
+                            });
+                            return $q.when($scope.contacts);
+                        });
                 })
                 .catch(function(err) {
                     $log.error(err);
                     if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.permissionContacts = false;      //ensure iOS permissions are up to date
-                        settingsService.enableContacts = false;
-                        settingsService.$store();
+                        var data = {
+                            isEnableContacts: false,
+                            isPermissionContacts: false,
+                            isContactsWebSync: false
+                        };
+
+                        localSettingsService.setLocalSettings(data)
+                            .then(function() {
+                                $scope.$broadcast('scroll.refreshComplete')
+                            });
                         $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].sentenceCase(), $scope.translations['OK'])
                     }
 
@@ -134,19 +147,36 @@
                 .then(function() {
                     return $scope.getContacts(true);
                 }).then(function() {
-                    settingsService.permissionContacts = true;      //ensure iOS permissions are up to date
-                    settingsService.contactsLastSync = new Date().valueOf();
-                    settingsService.$store();
-                    return $q.when($scope.$broadcast('scroll.refreshComplete'));
+                    var data = {
+                        isEnableContacts: true,
+                        isPermissionContacts: true,
+                        isContactsWebSync: true,
+                        contactsLastSync: new Date().valueOf()
+                    };
+
+                    localSettingsService.setLocalSettings(data)
+                        .then(function() {
+                            $scope.$broadcast('scroll.refreshComplete')
+                        });
                 })
                 .catch(function(err) {
                     $log.error(err);
+
                     if (err instanceof blocktrail.ContactsPermissionError) {
-                        settingsService.enableContacts = false;
-                        settingsService.permissionContacts = false; //ensure iOS permissions are up to date
-                        settingsService.$store();
+                        var data = {
+                            isEnableContacts: false,
+                            isPermissionContacts: false,
+                            isContactsWebSync: false
+                        };
+
+                        localSettingsService.setLocalSettings(data)
+                            .then(function() {
+                                $scope.$broadcast('scroll.refreshComplete')
+                            });
+
                         $cordovaDialogs.alert($scope.translations['MSG_CONTACTS_PERMISSIONS'].sentenceCase(), $scope.translations['PERMISSION_REQUIRED_CONTACTS'].sentenceCase(), $scope.translations['OK'])
                     }
+
                     return $q.when($scope.$broadcast('scroll.refreshComplete'));
                 });
         };

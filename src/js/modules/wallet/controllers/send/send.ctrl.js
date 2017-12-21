@@ -369,7 +369,7 @@
             $scope.appControl.isSending = false;
             $scope.appControl.showPinInputError = false;
 
-            //validate input
+            // validate input
             return $scope.fetchFee().then(function() {
                 $scope.appControl.prepareSending = false;
 
@@ -394,7 +394,7 @@
                     throw blocktrail.Error('MSG_MISSING_RECIPIENT');
                 }
 
-                return $scope.getSendingAddress(sdkWallet);
+                return $scope.getSendingAddress();
             }).then(function() {
                 //validate address
                 return walletsManagerService.getActiveWallet().validateAddress($scope.sendInput.recipientAddress);
@@ -437,12 +437,13 @@
         $scope.getSendingAddress = function() {
             var deferred = $q.defer();
             if ($scope.sendInput.recipient && !$scope.sendInput.recipientAddress) {
-                Contacts.getSendingAddress(sdkWallet, $scope.sendInput.recipient).then(function(result){
-                    $scope.sendInput.recipientAddress = result.address;
-                    deferred.resolve();
-                }, function(err) {
-                    deferred.reject(new blocktrail.ContactAddressError(err));
-                })
+                Contacts.getSendingAddress(sdkWallet.sdk, $scope.sendInput.recipient)
+                    .then(function(result){
+                        $scope.sendInput.recipientAddress = result.address;
+                        deferred.resolve();
+                    }, function(err) {
+                        deferred.reject(new blocktrail.ContactAddressError(err));
+                    });
             } else {
                 deferred.resolve();
             }
@@ -469,8 +470,8 @@
             // ceil value to make it a bit more anonymous
             var trackingBtcValue = blocktrailSDK.toBTC(Math.ceil($scope.sendInput.btcValue / 1000000) * 1000000);
 
-            //get an address for the contact
-            $scope.getSendingAddress(sdkWallet)
+            // get an address for the contact
+            $scope.getSendingAddress()
                 .then(function() {
                     $scope.appControl.result = {working: true, message: 'MSG_INIT_WALLET'};
 

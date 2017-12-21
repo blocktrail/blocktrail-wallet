@@ -20,7 +20,7 @@
             // Contacts
             isEnableContacts: false,
             isPermissionContacts: true,
-            contactsWebSync: false,
+            isContactsWebSync: false,
             contactsLastSync: null,
             // BTC precision
             btcPrecision: 4,

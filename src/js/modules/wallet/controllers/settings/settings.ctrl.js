@@ -4,8 +4,8 @@
     angular.module("blocktrail.wallet")
         .controller("SettingsCtrl", SettingsCtrl);
 
-    function SettingsCtrl($rootScope, $scope, $state, $q, $btBackButtonDelegate, $translate, modalService, walletsManagerService, launchService,
-                          settingsService, localSettingsService, storageService, Currencies, Contacts, blocktrailLocalisation, cryptoJS) {
+    function SettingsCtrl($rootScope, $scope, $state, $btBackButtonDelegate, $translate, modalService, walletsManagerService, launchService,
+                          settingsService, localSettingsService, storageService, Currencies, Contacts, blocktrailLocalisation, cryptoJS, sdkService) {
         // Enable back button
         enableBackButton();
 
@@ -380,49 +380,31 @@
             });
         }
 
-        // TODO Continue here !!!
         function disableContacts() {
-            //confirm with user first
-            $cordovaDialogs.confirm(
-                $translate.instant("MSG_DISABLE_CONTACTS").sentenceCase(),
-                $translate.instant("MSG_ARE_YOU_SURE").sentenceCase(),
-                [$translate.instant("OK").sentenceCase(), $translate.instant("CANCEL").sentenceCase()]
-            )
-                .then(function(dialogResult) {
-                    if (dialogResult == 2) {
-                        return $q.reject("CANCELLED");
-                    }
+            modalService.confirm({
+                title: "MSG_ARE_YOU_SURE",
+                body: "MSG_DISABLE_CONTACTS"
+            }).then(function(dialogResult) {
+                if(dialogResult) {
+                    modalService.showSpinner({ title: "WORKING" });
+                    // disable back button
+                    disableBackButton();
 
-                    $ionicLoading.show({
-                        template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
-                        hideOnStateChange: true
-                    });
-                    return $q.when(sdkService.getGenericSdk());
-                })
-                .then(function(sdk) {
-                    //delete contacts from server
-                    return sdk.deleteContacts();
-                })
-                .then(function() {
-                    //delete cache from local storage
-                    return Contacts.clearCache();
-                })
-                .then(function(result) {
-                    //disable
-                    settingsService.enableContacts = false;
-                    settingsService.contactsWebSync = false;
-                    settingsService.contactsLastSync = null;
-                    settingsService.$store();
+                    sdkService.getGenericSdk()
+                        .deleteContacts()
+                        .then(function() {
+                            var data = {
+                                isEnableContacts: false,
+                                isContactsWebSync: false,
+                                contactsLastSync: null
+                            };
 
-                    $ionicLoading.hide();
-                })
-                .catch(function(error) {
-                    if (error !== "CANCELLED") {
-                        $cordovaDialogs.alert(error.toString(), $translate.instant("FAILED").sentenceCase(), $translate.instant("OK"));
-                    }
-
-                    $ionicLoading.hide();
-                });
+                            localSettingsService.setLocalSettings(data)
+                                .then(successHandler, errorHandler);
+                        })
+                        .catch(errorHandler);
+                }
+            });
         }
 
         // TODO Review with @Ruben
@@ -444,8 +426,9 @@
                 })
                 .then(function() {
                     var data = {
-                        enableContacts: true,
-                        contactsWebSync: true,
+                        isEnableContacts: true,
+                        isPermissionContacts: true,
+                        isContactsWebSync: true,
                         contactsLastSync: new Date().valueOf()
                     };
 

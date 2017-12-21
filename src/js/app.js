@@ -279,12 +279,8 @@ angular.module('blocktrail.wallet').run(
         };
 
         // uri intent handler, rest is handled by LaunchController
-
         // TODO !!! Calls from CORDOVA
         $window.handleOpenURL = function(url) {
-
-            debugger;
-
             $log.debug('handleOpenURL: ' + url + ' (' + $state.is('app.launch') + ')');
             $rootScope.handleOpenURL = "" + url;
 

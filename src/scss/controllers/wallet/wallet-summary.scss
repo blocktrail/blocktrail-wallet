@@ -106,6 +106,10 @@ $wallet-info-height: 90px;
                 }
             }
 
+            .token-text {
+                line-height: 42px;
+            }
+
             h2 {
                 font-weight: 300;
                 color: $darkgray-dark;
@@ -256,6 +260,7 @@ $wallet-info-height: 90px;
                 line-height: 40px;
 
             }
+
             .fiat {
                 font-size: 19px;
                 .label {
@@ -264,11 +269,13 @@ $wallet-info-height: 90px;
                 }
             }
         }
+
         .fee {
             .fiat {
                 margin-left: 1rem;
             }
         }
+
         .fee, .buybtc, .date, .confirmations, .contact, .message, .more-info {
             margin-top: 0.75rem;
             border-top: 1px solid rgba(178, 178, 178, 0.48);

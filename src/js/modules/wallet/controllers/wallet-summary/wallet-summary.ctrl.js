@@ -64,6 +64,10 @@
                         $scope.$broadcast('scroll.refreshComplete');
                         $scope.isForceForcePolling = false;
                         isIgnoreInfiniteScroll = true;
+                    })
+                    .catch(function() {
+                        $scope.$broadcast('scroll.refreshComplete');
+                        $scope.isForceForcePolling = false;
                     });
             }
         }
