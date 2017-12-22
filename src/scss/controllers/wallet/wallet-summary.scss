@@ -3,6 +3,17 @@ $display-token-size:        50px !default;
 $divider-height: 35px;
 $wallet-info-height: 90px;
 
+.platform-ios {
+    &.platform-cordova {
+        .state-summary {
+            .scroll-content {
+                top: $wallet-info-height + 73px;
+            }
+        }
+    }
+}
+
+
 .state-summary {
     .scroll-content {
         top: $wallet-info-height + 65px;
