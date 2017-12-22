@@ -6,6 +6,8 @@
 
     function BuyBTCChooseCtrl($q, $scope, $state, $cordovaDialogs, settingsService, $ionicLoading,
                       $translate, $timeout, $ionicScrollDelegate, glideraService, buyBTCService, trackingService, $log) {
+        var settingsData = settingsService.getReadOnlySettingsData();
+
         $scope.brokers = [];
 
         // load chooseRegion from settingsService
@@ -19,28 +21,26 @@
             hideOnStateChange: true
         });
 
-        settingsService.$isLoaded().then(function() {
-            $q.all([
-                buyBTCService.regions().then(function(regions) {
-                    $scope.regions = regions;
-                }),
-                buyBTCService.usStates().then(function(usStates) {
-                    $scope.usStates = usStates;
-                })
-            ]).then(function() {
-                $scope.chooseRegion = _.defaults({}, settingsService.buyBTCRegion, {
-                    code: null,
-                    name: null
-                });
-                $scope.chooseState.gettingStarted = !$scope.chooseRegion.code;
+        $q.all([
+            buyBTCService.regions().then(function(regions) {
+                $scope.regions = regions;
+            }),
+            buyBTCService.usStates().then(function(usStates) {
+                $scope.usStates = usStates;
+            })
+        ]).then(function() {
+            $scope.chooseRegion = _.defaults({}, settingsData.buyBTCRegion, {
+                code: null,
+                name: null
+            });
+            $scope.chooseState.gettingStarted = !$scope.chooseRegion.code;
 
-                return buyBTCService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
-                    $scope.brokers = brokers;
-                    $scope.chooseRegion.regionOk = $scope.brokers.length;
+            return buyBTCService.regionBrokers($scope.chooseRegion.code).then(function(brokers) {
+                $scope.brokers = brokers;
+                $scope.chooseRegion.regionOk = $scope.brokers.length;
 
-                    $timeout(function() {
-                        $ionicLoading.hide();
-                    });
+                $timeout(function() {
+                    $ionicLoading.hide();
                 });
             });
         });
@@ -62,12 +62,7 @@
 
                 $ionicScrollDelegate.scrollTop();
 
-                settingsService.$isLoaded().then(function() {
-                    settingsService.buyBTCRegion = _.defaults({}, $scope.chooseRegion);
-                    return settingsService.$store().then(function() {
-                        return settingsService.$syncSettingsUp();
-                    });
-                })
+                settingsService.updateSettingsUp({ buyBTCRegion: $scope.chooseRegion });
             });
         };
 
@@ -80,33 +75,33 @@
                 if (!userCanTransact) {
                     return glideraService.accessToken().then(function(accessToken) {
                         if (accessToken) {
-                            return settingsService.$isLoaded().then(function() {
-                                // 2: Additional user verification information is required
-                                if (settingsService.glideraAccessToken.userCanTransactInfo.code == 2) {
-                                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_SETUP_UPDATE);
+                            // 2: Additional user verification information is required
+                            if (settingsData.glideraAccessToken.userCanTransactInfo.code == 2) {
+                                trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_SETUP_UPDATE);
 
-                                    return $cordovaDialogs.confirm(
-                                        $translate.instant('MSG_BUYBTC_SETUP_MORE_GLIDERA_BODY', {
-                                            message: settingsService.glideraAccessToken.userCanTransactInfo.message
-                                        }).sentenceCase(),
-                                        $translate.instant('MSG_BUYBTC_SETUP_MORE_GLIDERA_TITLE').sentenceCase(),
-                                        [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
-                                    )
-                                        .then(function(dialogResult) {
-                                            if (dialogResult == 2) {
-                                                return;
-                                            }
+                                return $cordovaDialogs.confirm(
+                                    $translate.instant('MSG_BUYBTC_SETUP_MORE_GLIDERA_BODY', {
+                                        message: settingsData.glideraAccessToken.userCanTransactInfo.message
+                                    }).sentenceCase(),
+                                    $translate.instant('MSG_BUYBTC_SETUP_MORE_GLIDERA_TITLE').sentenceCase(),
+                                    [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
+                                )
+                                    .then(function(dialogResult) {
+                                        if (dialogResult == 2) {
+                                            return;
+                                        }
 
-                                            return glideraService.setup();
-                                        })
-                                        ;
+                                        return glideraService.setup();
+                                    })
+                                    ;
 
-                                } else if (settingsService.glideraAccessToken.userCanTransactInfo) {
-                                    throw new Error("User can't transact because: " + settingsService.glideraAccessToken.userCanTransactInfo.message);
-                                } else {
-                                    throw new Error("User can't transact for unknown reason!");
-                                }
-                            });
+                            } else if (settingsData.glideraAccessToken.userCanTransactInfo) {
+                                throw new Error("User can't transact because: " + settingsData.glideraAccessToken.userCanTransactInfo.message);
+                            } else {
+                                throw new Error("User can't transact for unknown reason!");
+                            }
+
+
 
                         } else {
                             trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_SETUP_INIT);
@@ -142,21 +137,23 @@
          * reset buy BTC state for debugging purposes
          */
         $scope.resetBuyBTC = function() {
-            return settingsService.$isLoaded().then(function() {
-                settingsService.glideraAccessToken = null;
-                settingsService.glideraTransactions = [];
-                settingsService.buyBTCRegion = null;
 
-                return settingsService.$store().then(function() {
-                    return settingsService.$syncSettingsUp();
+
+            return $q.when()
+                .then(function() {
+                    var updateSettings = {
+                        glideraAccessToken: null,
+                        buyBTCRegion: null,
+                        glideraTransactions: []
+                    };
+
+                    return settingsService.updateSettingsUp(updateSettings);
                 })
-            })
                 .then(function() {
                     $state.go('app.wallet.summary');
                 }, function(err) {
                     alert(err);
-                })
-                ;
+                });
         };
     }
 })();
