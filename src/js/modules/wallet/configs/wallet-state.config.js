@@ -283,7 +283,7 @@
             });
     }
 
-    function checkAPIKeyActive($state, $q, launchService, modalService, sdkService) {
+    function checkAPIKeyActive($state, $q, launchService, modalService, sdkService, Currencies) {
         return launchService.getWalletConfig(true)
             .then(function(result) {
                 if (result.api_key && (result.api_key !== 'ok')) {
@@ -298,6 +298,13 @@
 
                     // throw error to prevent controller from loading or any other resolves to continue
                     return $q.reject(new Error("API_KEY_INVALID"));
+                } else {
+                    // TODO Review checkAPIKeyActive
+                    if(result.currencies) {
+                        result.currencies.forEach(function (currency) {
+                            Currencies.enableCurrency(currency);
+                        });
+                    }
                 }
 
                 return true;
