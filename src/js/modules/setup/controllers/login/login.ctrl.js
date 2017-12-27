@@ -16,14 +16,14 @@
         };
 
         // Methods
-        $scope.onSubmitFormLogin = onSubmitFormRegister;
+        $scope.onSubmitFormLogin = onSubmitFormLogin;
 
         /**
          * On submit the form login handler
          * @param loginForm
          * @return { boolean | promise }
          */
-        function onSubmitFormRegister(loginForm) {
+        function onSubmitFormLogin(loginForm) {
             formHelperService.setAllDirty(loginForm);
 
             // Submit the form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open

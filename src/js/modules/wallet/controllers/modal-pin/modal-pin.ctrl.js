@@ -15,8 +15,8 @@
         $scope.isRepeatPin = parameters.isRepeatPin;
 
         $scope.form = {
-            pin: "",
-            pinRepeat: ""
+            pin: parameters.preFill || "",
+            pinRepeat: parameters.preFill || ""
         };
 
         // Methods

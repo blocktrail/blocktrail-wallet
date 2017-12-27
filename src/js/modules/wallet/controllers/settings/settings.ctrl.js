@@ -5,7 +5,7 @@
         .controller("SettingsCtrl", SettingsCtrl);
 
     function SettingsCtrl($rootScope, $scope, $state, $btBackButtonDelegate, $translate, modalService, walletsManagerService, launchService,
-                          settingsService, localSettingsService, storageService, Currencies, Contacts, blocktrailLocalisation, cryptoJS, sdkService) {
+                          settingsService, localSettingsService, storageService, Currencies, Contacts, blocktrailLocalisation, cryptoJS, sdkService, CONFIG) {
         // Enable back button
         enableBackButton();
 
@@ -176,7 +176,8 @@
                 title: "SETTINGS_CHANGE_PIN",
                 body: "MSG_ENTER_PIN",
                 placeholderPin: "SETTINGS_CURRENT_PIN",
-                isPinRepeat: false
+                isPinRepeat: false,
+                preFill: CONFIG.DEBUG_PIN_PREFILL
             }).then(function(dialogResult) {
                 if(dialogResult && dialogResult.pin) {
                     unlockData(false, dialogResult.pin);
@@ -191,7 +192,8 @@
             modalService.prompt({
                 title: "SETTINGS_FORGOT_PIN",
                 body: "ENTER_CURRENT_PASSWORD",
-                placeholder: "SETUP_PASSWORD_PLACEHOLDER"
+                placeholder: "SETUP_PASSWORD_PLACEHOLDER",
+                preFill: CONFIG.DEBUG_PASSWORD_PREFILL
             }).then(function(dialogResult) {
                 if(dialogResult) {
                     unlockData(true, dialogResult);
@@ -212,32 +214,25 @@
 
             if(isPassword) {
                 activeWallet.unlockWithPassword(key)
-                    .then(unlockDataSuccessHandler)
+                    .then(function(wallet) {
+                        enableBackButton();
+                        modalService.hideSpinner();
+                        promptNewPin({
+                            secret: wallet.secret.toString('hex')
+                        });
+                    })
                     .catch(unlockDataErrorHandler);
             } else {
                 activeWallet.unlockDataWithPin(key)
-                    .then(unlockDataSuccessHandler)
+                    .then(function(data) {
+                        enableBackButton();
+                        modalService.hideSpinner();
+                        promptNewPin(data);
+                    })
                     .catch(unlockDataErrorHandler);
             }
         }
 
-        /**
-         * Unlock the data success handler
-         * @param data
-         */
-        function unlockDataSuccessHandler(data) {
-            var secret = "";
-
-            if(typeof data.secret === "string") {
-                secret = data.secret;
-            } else {
-                secret = data.secret.toString("hex");
-            }
-
-            enableBackButton();
-            modalService.hideSpinner();
-            promptNewPin({ secret: secret });
-        }
 
         /**
          * Unlock the data error handler
@@ -268,7 +263,8 @@
                 body: "MSG_ENTER_NEW_PIN",
                 placeholderPin: "SETUP_PIN_PLACEHOLDER",
                 placeholderRepeatPin: "SETUP_PIN_REPEAT_PLACEHOLDER",
-                isRepeatPin: true
+                isRepeatPin: true,
+                preFill: CONFIG.DEBUG_PIN_PREFILL
             }).then(function(dialogResult) {
                 if(dialogResult) {
                     // Check on numbers, pattern="[0-9]*" is in html
@@ -312,11 +308,18 @@
                 title: "WORKING"
             });
 
-            var encryptedSecret = cryptoJS.AES.encrypt(data.secret, pin).toString();
+            var update = {
+                encryptedPassword: null,
+                encryptedSecret: null
+            };
 
-            return launchService.setWalletInfo({
-                    encryptedSecret: encryptedSecret
-                })
+            if (data.secret) {
+                update.encryptedSecret = CryptoJS.AES.encrypt(data.secret, pin).toString();
+            } else {
+                update.encryptedPassword = CryptoJS.AES.encrypt(data.password, pin).toString();
+            }
+
+            return launchService.setWalletInfo(update)
                 .then(function() {
                     enableBackButton();
                     modalService.hideSpinner();
@@ -532,6 +535,7 @@
             modalService.showSpinner({
                 title: "LOGOUT"
             });
+
             storageService.resetAll()
                 .then(function() {
                     window.location.replace("");

@@ -80,22 +80,24 @@
 
             launchService.getWalletInfo()
                 .then(function(walletInfo) {
-                    var secret;
+                    var unlockData = {
+                        secret: null,
+                        password: null
+                    };
 
                     try {
-                        secret = cryptoJS.AES.decrypt(walletInfo.encryptedSecret, pin).toString(cryptoJS.enc.Utf8);
+                        if (walletInfo.encryptedSecret) {
+                            unlockData.secret = cryptoJS.AES.decrypt(walletInfo.encryptedSecret, pin).toString(cryptoJS.enc.Utf8);
+                        } else {
+                            unlockData.password = cryptoJS.AES.decrypt(walletInfo.encryptedPassword, pin).toString(cryptoJS.enc.Utf8)
+                        }
                     } catch (e) {
                         throw new blocktrail.WalletPinError(e.message);
                     }
 
-                    // TODO Add password !password &&. Add logic if forgot pin unlock with password or logout
-                    if (!secret) {
+                    if (!unlockData.secret && !unlockData.password) {
                         throw new blocktrail.WalletPinError("Bad PIN");
                     }
-
-                    var unlockData = {
-                        secret: secret
-                    };
 
                     return unlockData;
                 })

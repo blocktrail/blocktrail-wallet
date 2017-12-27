@@ -1128,22 +1128,27 @@
 
         return self._launchService.getWalletInfo()
             .then(function(walletInfo) {
-                var secret;
+                var password, secret;
 
                 try {
-                    secret = self._cryptoJS.AES.decrypt(walletInfo.encryptedSecret, pin).toString(self._cryptoJS.enc.Utf8);
+                    if (walletInfo.encryptedSecret) {
+                        secret = self._cryptoJS.AES.decrypt(walletInfo.encryptedSecret, pin).toString(self._cryptoJS.enc.Utf8);
+                    } else {
+                        password = self._cryptoJS.AES.decrypt(walletInfo.encryptedPassword, pin).toString(self._cryptoJS.enc.Utf8);
+                    }
                 } catch (e) {
                     throw new blocktrail.WalletPinError(e.message);
                 }
 
-                if (!secret) {
+                if (!password && !secret) {
                     throw new blocktrail.WalletPinError("Bad PIN");
                 }
 
                 return {
                     identifier: walletInfo.identifier,
                     networkType: walletInfo.networkType,
-                    secret: secret
+                    secret: secret,
+                    password: password
                 };
             });
     };
@@ -1155,21 +1160,22 @@
             .then(function(wallet) {
                 return self.unlockDataWithPin(pin)
                     .then(function(unlock) {
-                        // secret needs to be buffer
-                        unlock.secret = new blocktrailSDK.Buffer(unlock.secret, 'hex');
+                        if (unlock.secret) {
+                            // secret needs to be buffer for the SDK to unlock
+                            unlock.secret = new blocktrailSDK.Buffer(unlock.secret, 'hex');
+                        }
 
                         return wallet.unlock(unlock).then(function() {
-                            // if we were still storing encrypted password we want to swtich to storing encrypted secret
+                            // if we were still storing encrypted password we want to switch to storing encrypted secret
                             if (!unlock.secret) {
                                 var secretHex = wallet.secret.toString('hex');
 
                                 // store encrypted secret
-                                // TODO Check this part
-                                // return self._launchService.storeWalletInfo(wallet.identifier, self._walletData.networkType, self._cryptoJS.AES.encrypt(secretHex, pin).toString())
                                 return self._launchService.setWalletInfo({
                                         identifier: wallet.identifier,
                                         networkType: self._walletData.networkType,
-                                        encryptedSecret: self._cryptoJS.AES.encrypt(secretHex, pin).toString()
+                                        encryptedSecret: self._cryptoJS.AES.encrypt(secretHex, pin).toString(),
+                                        encryptedPassword: null
                                     })
                                     .then(function () {
                                         return self._sdkWallet;

@@ -30,7 +30,8 @@
         self._walletInfoStorage = localStorageService.init("walletInfo", {
             identifier: null,
             networkType: null,
-            encryptedSecret: null
+            encryptedSecret: null,
+            encryptedPassword: null
         });
 
         // Backup info
