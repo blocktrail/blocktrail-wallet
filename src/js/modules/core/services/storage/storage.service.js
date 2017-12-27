@@ -74,11 +74,9 @@ angular.module('blocktrail.wallet').factory(
         };
 
         // init defaults
-        db('appRate');
         db('contacts');
         db('wallet');
         db('settings');
-        db('localSettings');
         db('currencyRatesCache');
 
         return {

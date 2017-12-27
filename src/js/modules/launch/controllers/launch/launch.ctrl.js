@@ -4,7 +4,7 @@
     angular.module("blocktrail.launch")
         .controller("LaunchCtrl", LaunchCtrl);
 
-    function LaunchCtrl($q, $state, $log, $ionicHistory, launchService, CONFIG, storageService) {
+    function LaunchCtrl($window, $filter, $q, $state, $log, $ionicHistory, launchService, CONFIG, storageService, localSettingsService) {
         var storageVersionDB = storageService.db('_storage-version');
 
         // disable animation on transition from this state
@@ -109,6 +109,7 @@
                 .then(function() {
                     console.log('upgradeStorageV2toV3 LAUNCH');
                     var oldLaunchStorage = storageService.db('launch');
+                    var oldSettings = storageService.db('settings');
 
                     return $q.all([
                         oldLaunchStorage.get('wallet_backup')
@@ -118,7 +119,7 @@
                                 if (!walletBackup.identifier) {
                                     return;
                                 }
-
+                                
                                 return launchService.setWalletBackup({
                                     identifier: walletBackup.identifier,
                                     walletVersion: walletBackup.walletVersion,
@@ -159,6 +160,46 @@
                                     encryptedSecret: walletInfo.encryptedSecret,
                                     encryptedPassword: walletInfo.encryptedPassword
                                 });
+                            }, supressMissingErr),
+                        oldSettings.get('user_settings')
+                            .then(function(settingsDoc) {
+                                var country = null;
+
+                                if(settingsDoc.phoneRegionCode) {
+                                    var filteredCountry = $filter("filter")($window.allCountries, function(item) {
+                                        return item.dialCode == settingsDoc.phoneRegionCode;
+                                    })[0];
+
+                                    if (filteredCountry) {
+                                        country = filteredCountry.iso2;
+                                    }
+                                }
+
+                                return localSettingsService.setLocalSettings({
+                                    // Phone
+                                    isPhoneVerified: settingsDoc.phoneVerified || false,
+                                    phoneNumber: settingsDoc.phoneNationalNumber || null,
+                                    phoneCountry: country,
+                                    phoneCountryCode: settingsDoc.phoneRegionCode || null,
+                                    phoneHash: settingsDoc.phoneVerified ? null : settingsDoc.phoneHash,
+                                    // Contacts
+                                    isEnableContacts: settingsDoc.enableContacts || false,
+                                    isPermissionContacts: settingsDoc.permissionContacts || false,
+                                    isContactsWebSync: settingsDoc.contactsWebSync || false,
+                                    contactsLastSync: settingsDoc.contactsLastSync || null,
+                                    // BTC precision
+                                    btcPrecision: settingsDoc.btcPrecision || 4,
+                                    // Pin
+                                    isPinOnOpen: settingsDoc.pinOnOpen || false,
+                                    pinFailureCount: settingsDoc.pinFailureCount || 0,
+                                    pinLastFailure: settingsDoc.pinLastFailure || null,
+                                    // App rate
+                                    appRateStatus: settingsDoc.apprateStatus || null
+                                })
+                                    .then(function() {
+                                        // We use the same DB name, that is why we have to clear settings
+                                        oldSettings.remove(settingsDoc);
+                                    })
                             }, supressMissingErr)
                     ])
                         .then(function() {

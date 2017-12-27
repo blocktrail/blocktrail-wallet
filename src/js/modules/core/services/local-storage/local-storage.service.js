@@ -100,7 +100,7 @@
     };
 
     /**
-     *
+     * Clear data
      * @return { promise<bool> }
      */
     LocalStorage.prototype.clearData = function() {

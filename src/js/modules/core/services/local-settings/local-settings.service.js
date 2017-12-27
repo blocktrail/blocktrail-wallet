@@ -15,7 +15,7 @@
             isPhoneVerified: false,
             phoneNumber: null,
             phoneCountry: null,
-            phoneRegionCode: null,
+            phoneCountryCode: null,
             phoneHash: null,
             // Contacts
             isEnableContacts: false,
