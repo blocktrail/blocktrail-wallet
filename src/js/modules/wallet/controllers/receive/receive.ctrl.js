@@ -72,7 +72,9 @@
             if (!$scope.newRequest.address) {
                 return false;
             }
-            $scope.newRequest.bitcoinUri = "bitcoin:" + $scope.newRequest.address;
+
+            $scope.newRequest.bitcoinUri = CONFIG.NETWORKS[walletData.networkType].URI_PREFIX + ":" + $scope.newRequest.address;
+
             if ($scope.newRequest.btcValue) {
                 $scope.newRequest.bitcoinUri += "?amount=" + $scope.newRequest.btcValue.toFixed(8);
             }
