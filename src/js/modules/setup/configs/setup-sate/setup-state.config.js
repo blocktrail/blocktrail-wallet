@@ -70,7 +70,7 @@
                 cache: false,
                 template: "<ion-nav-view></ion-nav-view>",
                 resolve: {
-                    isSetAccountInfo: sdkSetAccountInfoAndInitSettings
+                    isSetAccountInfo: setSdkAccountInfoAndInitSettings
                 }
             })
             .state("app.setup.settings.backup", {
@@ -131,7 +131,14 @@
             });
     }
 
-    function sdkSetAccountInfoAndInitSettings(launchService, sdkService, settingsService) {
+    /**
+     * Set sdk account info and init settings
+     * @param launchService
+     * @param sdkService
+     * @param settingsService
+     * @return {*}
+     */
+    function setSdkAccountInfoAndInitSettings(launchService, sdkService, settingsService) {
         return launchService.getAccountInfo()
             .then(function(accountInfo) {
                 return sdkService.setAccountInfo(accountInfo);
@@ -140,7 +147,13 @@
                 return settingsService.initSettings();
             });
     }
-    
+
+    /**
+     * Get account info
+     * @param $state
+     * @param launchService
+     * @param helperService
+     */
     function getAccountInfo($state, launchService, helperService) {
         return launchService
             .getAccountInfo()

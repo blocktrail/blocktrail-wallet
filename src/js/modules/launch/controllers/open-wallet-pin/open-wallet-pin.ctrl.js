@@ -113,9 +113,13 @@
 
                     $timeout(function() {
                         isFormSubmit = false;
-                        $state.go($stateParams.nextState);
+                        // app.wallet.summary
+                        if($stateParams.nextState === "app.wallet.send" || $stateParams.nextState === "app.wallet.send") {
+                            $state.go($stateParams.nextState);
+                        } else {
+                            $state.go("app.wallet.summary");
+                        }
                     });
-
                 })
                 .catch(function () {
                     navigator.vibrate(300);

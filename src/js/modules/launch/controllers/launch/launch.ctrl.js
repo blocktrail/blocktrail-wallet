@@ -4,7 +4,7 @@
     angular.module("blocktrail.launch")
         .controller("LaunchCtrl", LaunchCtrl);
 
-    function LaunchCtrl($window, $filter, $q, $state, $log, $ionicHistory, launchService, CONFIG, storageService, localSettingsService) {
+    function LaunchCtrl($window, $filter, $q, $rootScope, $state, $log, $ionicHistory, launchService, CONFIG, storageService, localSettingsService) {
         var storageVersionDB = storageService.db('_storage-version');
 
         // disable animation on transition from this state
@@ -231,17 +231,14 @@
 
             return $q.all([
                 launchService.getAccountInfo(),
-                launchService.getWalletInfo(),
-                launchService.getWalletBackup()
+                launchService.getWalletInfo()
             ])
                 .then(function(data) {
                     var accountInfo = data[0];
                     var walletInfo = data[1];
-                    var walletBackup = data[2];
 
                     var isLoggedIn = !!(accountInfo.apiKey && accountInfo.apiSecret);
                     var walletCreated = !!walletInfo.identifier;
-                    var isWalletBackupSaved = !walletBackup.identifier;
 
                     navigator.splashscreen.hide();
 
@@ -253,43 +250,34 @@
 
                     // when not logged in or when wallet is not created yet, we go back to start
                     // because the password is required to init/create wallet and we wouldn't have that if you're logged in already from a previous session
-                    if (isLoggedIn && walletCreated) {
-                        if(!isWalletBackupSaved) {
-                            nextStep = "app.setup.settings.backup";
-                        } else {
-                            nextStep = "app.wallet.summary";
-                        }
-
-
+                    if(isLoggedIn && walletCreated) {
                         // TODO Discuss with Ruben
                         // TODO Review this part after the waller sent/receive controllers
-                        /*if ($rootScope.handleOpenURL) {
-                         $log.log("launching app with uri: " + $rootScope.handleOpenURL);
-                         $log.log("bitcoin? " + $rootScope.handleOpenURL.startsWith("bitcoin"));
-                         $log.log("bitcoincash? " + ($rootScope.handleOpenURL.startsWith("bitcoincash") || $rootScope.handleOpenURL.startsWith("bitcoin cash")));
-                         $log.log("glidera? " + $rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback"));
+                        if($rootScope.handleOpenURL) {
+                            $log.log("launching app with uri: " + $rootScope.handleOpenURL);
+                            $log.log("bitcoin? " + $rootScope.handleOpenURL.startsWith("bitcoin"));
+                            $log.log("bitcoincash? " + ($rootScope.handleOpenURL.startsWith("bitcoincash") || $rootScope.handleOpenURL.startsWith("bitcoin cash")));
+                            $log.log("glidera? " + $rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback"));
 
-                         if ($rootScope.handleOpenURL.startsWith("bitcoin") ||
-                         $rootScope.handleOpenURL.startsWith("bitcoincash") ||
-                         $rootScope.handleOpenURL.startsWith("bitcoin cash")) {
-                         $rootScope.bitcoinuri = $rootScope.handleOpenURL;
-                         nextState = "app.wallet.send";
-                         $ionicSideMenuDelegate.toggleLeft(false);
-                         } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/oauth2")) {
-                         $rootScope.glideraCallback = $rootScope.handleOpenURL;
-                         nextState = "app.wallet.buybtc.glidera_oauth2_callback";
-                         $ionicSideMenuDelegate.toggleLeft(false);
-                         } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
-                         nextState = "app.wallet.buybtc.choose";
-                         $ionicSideMenuDelegate.toggleLeft(false);
+                            if($rootScope.handleOpenURL.startsWith("bitcoin") ||
+                                $rootScope.handleOpenURL.startsWith("bitcoincash") ||
+                                $rootScope.handleOpenURL.startsWith("bitcoin cash")) {
+                                    $rootScope.bitcoinuri = $rootScope.handleOpenURL;
+                                    nextStep = "app.wallet.send";
+                                    $ionicSideMenuDelegate.toggleLeft(false);
+                            } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/oauth2")) {
+                                $rootScope.glideraCallback = $rootScope.handleOpenURL;
+                                nextStep = "app.wallet.buybtc.glidera_oauth2_callback";
+                                $ionicSideMenuDelegate.toggleLeft(false);
+                            } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
+                                nextStep = "app.wallet.buybtc.choose";
+                                $ionicSideMenuDelegate.toggleLeft(false);
+                            } else {
+                                nextStep = "app.wallet.summary";
+                            }
                          } else {
-                         nextState = "app.wallet.summary";
+                            nextStep = "app.wallet.summary";
                          }
-                         } else {
-                         nextState = "app.wallet.summary";
-                         }
-
-                         $state.go(nextState);*/
                     } else {
                         nextStep = "app.setup.start";
                     }
