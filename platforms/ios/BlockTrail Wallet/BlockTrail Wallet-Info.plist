@@ -156,7 +156,7 @@
       </dict>
     </dict>
     <key>NSCameraUsageDescription</key>
-    <string>BTC.com uses your camera to scan QR codes</string>
+    <string>BTC.com uses your camera</string>
     <key>NSContactsUsageDescription</key>
     <string>BTC.com can use your addressbook to send and receive transactions from contacts</string>
     <key>NSLocationWhenInUseUsageDescription</key>
@@ -164,7 +164,9 @@
     <key>NSMainNibFile~ipad</key>
     <string/>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>BTC.com</string>
+    <string>BTC.com Wallet</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>BTC.com Wallet</string>
     <key>UIFileSharingEnabled</key>
     <true/>
     <key>UIInterfaceOrientation</key>
