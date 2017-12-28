@@ -4,7 +4,7 @@
     angular.module("blocktrail.launch")
         .controller("LaunchCtrl", LaunchCtrl);
 
-    function LaunchCtrl($window, $filter, $q, $rootScope, $state, $log, $ionicHistory, launchService, CONFIG, storageService, localSettingsService) {
+    function LaunchCtrl($window, $filter, $q, $rootScope, $state, $log, $ionicHistory, $ionicSideMenuDelegate, launchService, CONFIG, storageService, localSettingsService) {
         var storageVersionDB = storageService.db('_storage-version');
 
         // disable animation on transition from this state

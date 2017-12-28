@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'glideraService',
-    function(CONFIG, $log, $q, walletsManagerService, $cordovaDialogs, $translate,
+    function(CONFIG, $log, $q, walletsManagerService, $cordovaDialogs, modalService, $translate,
              $http, $timeout, $ionicLoading, settingsService, setupInfoService, $rootScope, trackingService) {
         var clientId;
         var returnuri = "btccomwallet://glideraCallback/oauth2";
@@ -101,7 +101,7 @@ angular.module('blocktrail.wallet').factory(
                         throw new Error(qs.error_message.replace("+", " "));
                     }
 
-                    return walletsManagerService.getSdkWallet().glideraOauth(qs.code, returnuri)
+                    return walletsManagerService.getActiveSdk().glideraOauth(qs.code, returnuri)
                         .then(function(result) {
                             $log.debug('oauthtoken', JSON.stringify(result, null, 4));
                             trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_SETUP_DONE);
@@ -111,36 +111,33 @@ angular.module('blocktrail.wallet').factory(
                                 scope: result.scope
                             };
 
-                            return $cordovaDialogs.prompt(
-                                    $translate.instant('MSG_BUYBTC_PIN_TO_ENCRYPT').sentenceCase(),
-                                    $translate.instant('MSG_ENTER_PIN').sentenceCase(),
-                                    [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()],
-                                    "",
-                                    true,   //isPassword
-                                    "tel"   //input type (uses html5 style)
-                                )
-                                .result
+                            return modalService.show("js/modules/wallet/controllers/modal-pin/modal-pin.tpl.html", "ModalPinCtrl", {
+                                    title: "MSG_BUYBTC_PIN_TO_ENCRYPT",
+                                    placeholderPin: "MSG_ENTER_PIN",
+                                    isPinRepeat: false,
+                                    preFill: CONFIG.DEBUG_PIN_PREFILL
+                                })
                                 .then(function(dialogResult) {
-                                    if (dialogResult.buttonIndex == 2) {
+                                    if(dialogResult && dialogResult.pin) {
+                                        //decrypt password with the provided PIN
+                                        $ionicLoading.show({
+                                            template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
+                                            hideOnStateChange: true
+                                        });
+
+                                        return walletsManagerService.getActiveWallet().unlockWithPin(dialogResult.pin).then(function(wallet) {
+                                            var secretBuf = wallet.secret;
+                                            var accessTokenBuf = new blocktrailSDK.Buffer(accessToken, 'utf8');
+                                            glideraAccessToken.encryptedAccessToken = blocktrailSDK.Encryption.encrypt(
+                                                accessTokenBuf, secretBuf, blocktrailSDK.KeyDerivation.subkeyIterations
+                                            ).toString('base64');
+                                        })
+                                    } else {
                                         return $q.reject('CANCELLED');
                                     }
-                                    //decrypt password with the provided PIN
-                                    $ionicLoading.show({
-                                        template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
-                                        hideOnStateChange: true
-                                    });
-
-                                    return walletsManagerService.getActiveWallet().unlock(dialogResult.input1).then(function(wallet) {
-                                        var secretBuf = wallet.secret;
-                                        var accessTokenBuf = new blocktrailSDK.Buffer(accessToken, 'utf8');
-                                        glideraAccessToken.encryptedAccessToken = blocktrailSDK.Encryption.encrypt(
-                                            accessTokenBuf, secretBuf, blocktrailSDK.KeyDerivation.subkeyIterations
-                                        ).toString('base64');
-                                    })
                                 })
                                 .then(function() {
                                     setDecryptedAccessToken(accessToken);
-                                    settings.glideraAccessToken = glideraAccessToken;
 
                                     var updateSettings = {
                                         glideraAccessToken: glideraAccessToken
@@ -378,7 +375,7 @@ angular.module('blocktrail.wallet').factory(
         };
 
         var buyPrices = function(qty, fiat) {
-            return walletsManagerService.getActiveSdkWallet().glideraBuyPrices(qty, fiat)
+            return walletsManagerService.getActiveSdk().glideraBuyPrices(qty, fiat)
                 .then(function(result) {
                     console.log('buyPrices ' + JSON.stringify(result));
 
