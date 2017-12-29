@@ -54,6 +54,18 @@ Keep this in mind when adding / updating translations, don't forget to commit th
 It's okay to do PRs without bumping the translations submodule, we'll handle that before doing releases!
 
 ## Release Process
+### Use production config
+```
+mv appconfig.json .appconfig.json
+cp appconfig.prod.json appconfig.json
+```
+
+### Bump Version
+edit `config.xml` and bump the version
+
+### Ionic prepare
+run `ionic prepare` for the version update to take effect and `git commit` with "vX.Y.Z"
+
 ### Android
 ```
 mv appconfig.json .appconfig.json
@@ -76,6 +88,13 @@ mv .appconfig.json appconfig.json
 ```
 
 ### iOS
+```
+mv appconfig.json .appconfig.json
+cp appconfig.prod.json appconfig.json
+
+ionic prepare ios
+```
+
 In xCode build for archiving: Product > Archive  
 Select new build in Archives Organiser and submitt to app store (optionally validate before hand)  
 
