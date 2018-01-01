@@ -134,7 +134,7 @@
                                     <p><strong>{{ 'TX_INFO_MORE_TITLE' | translate }} <i class="ion-android-open"></i>:</strong></p>
                                 </div>
                                 <div class="col text-right">
-                                    <p><a href="https://btc.com/{{ data.hash }}" browse-to>{{ 'TX_INFO_MORE_LINK' | translate }}</a></p>
+                                    <p><a href="{{ CONFIG.NETWORKS[walletData.networkType].EXPLORER_TX_URL }}/{{ transaction.hash }}" browse-to>{{ 'TX_INFO_MORE_LINK' | translate }}</a></p>
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.verso.cordova.clipboard"
+    id="cordova-universal-clipboard"
     version="0.1.0">
 
     <engines>
@@ -12,7 +12,7 @@
 
     <description>Clipboard management plugin for Cordova/PhoneGap</description>
 
-    <author>Verso Solutions LLC</author>
+    <author>Verso Solutions LLC and contributors</author>
 
     <keywords>clipboard,copy,paste</keywords>
 
@@ -54,6 +54,13 @@
         </config-file>
 
         <source-file src="src/wp8/Clipboard.cs" />
+    </platform>
+
+    <!-- windows -->
+    <platform name="windows">
+        <js-module src="src/windows/ClipboardProxy.js" name="ClipboardProxy">
+            <merges target="" />
+        </js-module>
     </platform>
 
 </plugin>

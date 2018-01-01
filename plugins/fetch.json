@@ -56,15 +56,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.verso.cordova.clipboard": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/VersoSolutions/CordovaClipboard",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-network-information": {
         "source": {
             "type": "registry",
@@ -306,6 +297,15 @@
             "id": "cordova-plugin-file-transfer"
         },
         "is_top_level": false,
+        "variables": {}
+    },
+    "cordova-universal-clipboard": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Visigo/CordovaClipboard",
+            "subdir": "."
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

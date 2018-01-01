@@ -33,10 +33,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Clipboard\"><param name=\"android-package\" value=\"com.verso.cordova.clipboard.Clipboard\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
                         },
@@ -158,6 +154,10 @@
                         },
                         {
                             "xml": "<feature name=\"Open\"><param name=\"android-package\" value=\"com.disusered.Open\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Clipboard\"><param name=\"android-package\" value=\"com.verso.cordova.clipboard.Clipboard\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -829,9 +829,6 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
-        "com.verso.cordova.clipboard": {
-            "PACKAGE_NAME": "com.blocktrail.mywallet"
-        },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
@@ -914,6 +911,9 @@
         },
         "cordova-open": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-universal-clipboard": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {},
@@ -963,14 +963,6 @@
             "id": "cordova-plugin-whitelist.whitelist",
             "pluginId": "cordova-plugin-whitelist",
             "runs": true
-        },
-        {
-            "file": "plugins/com.verso.cordova.clipboard/www/clipboard.js",
-            "id": "com.verso.cordova.clipboard.Clipboard",
-            "pluginId": "com.verso.cordova.clipboard",
-            "clobbers": [
-                "cordova.plugins.clipboard"
-            ]
         },
         {
             "file": "plugins/cordova-plugin-network-information/www/network.js",
@@ -1396,6 +1388,13 @@
             "merges": [
                 "cordova.plugins.disusered"
             ]
+        },
+        {
+            "file": "plugins/cordova-universal-clipboard/www/clipboard.js",
+            "id": "cordova-universal-clipboard.Clipboard",
+            "clobbers": [
+                "cordova.plugins.clipboard"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -1406,7 +1405,6 @@
         "org.apache.cordova.splashscreen": "1.0.0",
         "com.dbaq.cordova.contactsPhoneNumbers": "0.0.3",
         "cordova-plugin-whitelist": "1.0.0",
-        "com.verso.cordova.clipboard": "0.1.0",
         "cordova-plugin-network-information": "1.0.1",
         "com.synconset.imagepicker": "1.0.6",
         "cordova-plugin-camera": "1.2.0",
@@ -1432,6 +1430,7 @@
         "cordova-plugin-x-socialsharing": "5.1.7",
         "cordova-plugin-firebase": "0.1.24",
         "cordova-plugin-file-transfer": "1.6.3",
-        "cordova-open": "1.0.12"
+        "cordova-open": "1.0.12",
+        "cordova-universal-clipboard": "0.1.0"
     }
 }

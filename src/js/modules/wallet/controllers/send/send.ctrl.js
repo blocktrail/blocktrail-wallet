@@ -6,7 +6,8 @@
 
     function SendCtrl($scope, trackingService, $log, Contacts, activeWallet, CurrencyConverter,
                          $timeout, $q, $btBackButtonDelegate, $state, settingsService,
-                         $rootScope, $translate, $cordovaDialogs, AppRateService) {
+                         $rootScope, $translate, $cordovaDialogs, AppRateService,
+                         launchService, CONFIG) {
         $scope.OPTIMAL_FEE = 'optimal';
         $scope.LOW_PRIORITY_FEE = 'low_priority';
         $scope.PRIOBOOST = 'prioboost';
@@ -28,7 +29,8 @@
             fiatValue: 0.00,
             recipientAddress: "",
             referenceMessage: "",
-            pin: null,
+            pin: CONFIG.DEBUG_PIN_PREFILL || null,
+            password: CONFIG.DEBUG_PASSWORD_PREFILL || null,
             feeChoice: $scope.OPTIMAL_FEE,
 
             recipient: null,        //contact object when sending to contact
@@ -41,7 +43,8 @@
             complete: false,
             showMessage: false,
             isSending: false,
-            showPinInput: false,
+            showUnlockInput: false,
+            unlockType: 'PIN',
             displayFee: false,
             result: {}
         };
@@ -60,6 +63,15 @@
             lowPriority: null,
             minRelayFee: null
         };
+
+        $scope.PRIOBOOST_ENABLED = false;
+        launchService.getWalletConfig()
+            .then(function(result) {
+                // merge network specific config over the default config
+                result = angular.extend({}, result, result.networks[$scope.walletData.networkType]);
+
+                $scope.PRIOBOOST_ENABLED = CONFIG.NETWORKS[$scope.walletData.networkType].PRIOBOOST && result.prioboost;
+            });
 
         $scope.getTranslations = function() {
             if ($scope.translations) {
@@ -351,7 +363,6 @@
             $scope.appControl.result = {};
             $scope.appControl.prepareSending = true;
             $scope.appControl.isSending = false;
-            $scope.appControl.pinInputError = false;
             $scope.appControl.showPinInputError = false;
 
             //validate input
@@ -387,12 +398,23 @@
                 $scope.pay = {};
                 $scope.pay[$scope.sendInput.recipientAddress] = parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC"));
             }).then(function() {
-                //show the pin input screen for confirmation
-                $scope.appControl.showPinInput = true;
-                $scope.appControl.pinInputError = false;
-                $scope.appControl.showPinInputError = false;
-                $scope.appControl.complete = false;
-                return $state.go('app.wallet.send.confirm');
+                return launchService.getWalletInfo().then(function(walletInfo) {
+                    // can use PIN if walletInfo (which contains PIN encrypted wallet.secret) matches the active wallet
+                    //  otherwise need to use password instead
+                    if (walletInfo.identifier === $scope.walletData.identifier) {
+                        $scope.appControl.showUnlockInput = true;
+                        $scope.appControl.unlockType = 'PIN';
+                        $scope.appControl.showPinInputError = false;
+                        $scope.appControl.complete = false;
+                        return $state.go('app.wallet.send.confirm');
+                    } else {
+                        $scope.appControl.showUnlockInput = true;
+                        $scope.appControl.unlockType = 'PASSWORD';
+                        $scope.appControl.showPasswordInputError = false;
+                        $scope.appControl.complete = false;
+                        return $state.go('app.wallet.send.confirm');
+                    }
+                });
             }).catch(function(err) {
                 $scope.appControl.prepareSending = false;
                 $rootScope.hadErrDuringSend = true;
@@ -431,8 +453,8 @@
             $scope.appControl.result = {working: true, message: 'MSG_GET_CONTACT_ADDR'};
             $scope.appControl.working = true;
 
-            $scope.appControl.pinInputError = false;
             $scope.appControl.showPinInputError = false;
+            $scope.appControl.showPasswordInputError = false;
 
             //disable back button and menu button
             $timeout(function() {
@@ -447,12 +469,25 @@
             $scope.getSendingAddress()
                 .then(function() {
                     $scope.appControl.result = {working: true, message: 'MSG_INIT_WALLET'};
-                    return $q.when(activeWallet.unlockWithPin($scope.sendInput.pin));
+
+                    if ($scope.appControl.unlockType === 'PIN') {
+                        return $q.when(activeWallet.unlockWithPin($scope.sendInput.pin));
+                    } else {
+                        var deferred = $q.defer();
+
+                        $timeout(function() {
+                            deferred.resolve(activeWallet.unlockWithPassword($scope.sendInput.password));
+                        }, 50);
+
+                        return deferred.promise;
+                    }
                 })
                 .then(function(wallet) {
                     $log.info("wallet: unlocked");
+
                     $scope.sendInput.pin = null;
-                    $scope.appControl.showPinInput = false;
+                    $scope.sendInput.password = null;
+                    $scope.appControl.showUnlockInput = false;
                     $scope.appControl.isSending = true;
                     $scope.appControl.result = {message: 'MSG_SENDING'};
 
@@ -509,11 +544,12 @@
                     } else if (err instanceof blocktrail.WalletPinError || err instanceof blocktrail.WalletChecksumError || err instanceof blocktrail.WalletDecryptError) {
                         //PIN or password error
                         var errorDetails = err instanceof blocktrail.WalletPinError ? 'MSG_BAD_PIN' : 'MSG_BAD_PWD';
-                        $scope.appControl.result = {message: 'ERROR_TITLE_2', error: errorDetails, pinInputError: true};
+                        $scope.appControl.result = {message: 'ERROR_TITLE_2', error: errorDetails};
                         $scope.appControl.showPinInputError = true;
-                        $scope.appControl.showPinInput = true;
+                        $scope.appControl.showPasswordInputError = true;
                         $timeout(function () {
                             $scope.sendInput.pin = null;
+                            $scope.sendInput.password = null;
                         }, 650);
                     } else if (err instanceof blocktrail.WalletFeeError) {
                         var m = err.message.match('\\[([0-9]+)\\]$');
@@ -521,21 +557,33 @@
                         if (!m) {
                             //other error
                             $scope.appControl.showPinInputError = true;
+                            $scope.appControl.showPasswordInputError = true;
                             $scope.appControl.result = {message: 'FAIL', error: 'MSG_SEND_FAIL_UNKNOWN', detailed: ("" + err).replace(/^Error: /, '')};
                         } else {
                             var requiredFee = parseInt(m[1], 10);
 
                             //other error
                             $scope.appControl.showPinInputError = true;
+                            $scope.appControl.showPasswordInputError = true;
                             $scope.appControl.result = {
                                 message: 'FAIL',
                                 error: 'MSG_SEND_FAIL_FEE',
                                 detailed: $translate.instant('MSG_SEND_FAIL_FEE_DETAILED', {fee: blocktrailSDK.toBTC(requiredFee)})
                             };
                         }
+                    } else if (err instanceof blocktrail.WalletMissing2FAError) {
+                        $cordovaDialogs.alert(
+                            $translate.instant('INVALID_SESSION_LOGOUT_NOW'),
+                            $translate.instant('INVALID_SESSION'),
+                            $translate.instant('OK')
+                        )
+                            .finally(function () {
+                                $state.go('app.reset');
+                            });
                     } else {
                         //other error
                         $scope.appControl.showPinInputError = true;
+                        $scope.appControl.showPasswordInputError = true;
                         $scope.appControl.result = {message: 'FAIL', error: 'MSG_SEND_FAIL_UNKNOWN', detailed: ("" + err).replace(/^Error: /, '')};
                     }
 

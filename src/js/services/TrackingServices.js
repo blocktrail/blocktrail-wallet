@@ -20,11 +20,7 @@ angular.module('blocktrail.wallet')
                 GLIDERA_BUY: "glidera_buy",
                 GLIDERA_BUY_CONFIRM: "glidera_buy_confirm",
                 GLIDERA_BUY_ERR: "glidera_buy_error",
-                GLIDERA_BUY_DONE: "glidera_buy_done",
-
-                BITONIC_BUY_CONFIRM: "bitonic_buy_confirm",
-                BITONIC_OPEN: "bitonic_open",
-                BITONIC_GOTO_BITONIC: "bitonic_goto_bitonic"
+                GLIDERA_BUY_DONE: "glidera_buy_done"
             },
             APPRATE_STAR: "apprate_star",
             APPRATE: "apprate",

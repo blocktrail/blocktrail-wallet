@@ -1,3 +1,5 @@
+/* globals importScripts */
+
 var bip39 = require("bip39");
 var Encryption = require('./encryption');
 
@@ -6,6 +8,11 @@ module.exports = function(self) {
         var data = e.data || {};
 
         switch (data.method) {
+            case 'importScripts':
+                importScripts(data.script);
+
+            break;
+
             case 'mnemonicToSeedHex':
                 (function() {
                     try {

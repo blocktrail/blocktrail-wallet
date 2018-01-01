@@ -4,7 +4,7 @@
     angular.module("blocktrail.setup")
         .controller("SetupLoginCtrl", SetupLoginCtrl);
 
-    function SetupLoginCtrl($scope, $state, CONFIG, loginFormService, modalService, sdkService, formHelperService) {
+    function SetupLoginCtrl($scope, $state, $translate, CONFIG, loginFormService, modalService, sdkService, formHelperService) {
         $scope.form = {
             email: CONFIG.DEBUG_EMAIL_PREFILL || "",
             password: CONFIG.DEBUG_PASSWORD_PREFILL || "",
@@ -89,7 +89,7 @@
                 case "BANNED_IP":
                     return modalService.alert({
                         title: "BANNED_IP_TITLE",
-                        body: "BANNED_IP_BODY"
+                        body: $translate.instant('BANNED_IP_BODY', {bannedIp: error.data})
                     });
 
                     break;

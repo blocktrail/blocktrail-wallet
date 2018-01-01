@@ -1,10 +1,12 @@
 var blocktrail = require('../'); // require('blocktrail-sdk') when trying example from in your own project
 
 var client = blocktrail.BlocktrailSDK({
-    apiKey : "MY_APIKEY",
-    apiSecret : "MY_APISECRET",
+    apiKey : process.env.BLOCKTRAIL_SDK_APIKEY || "MY_APIKEY",
+    apiSecret : process.env.BLOCKTRAIL_SDK_APISECRET || "MY_APISECRET",
     testnet : true
 });
+
+var ALLOW_ZERO_CONF = true;
 
 var sendTransaction = function(wallet) {
     wallet.getNewAddress(function(err, address, path) {
@@ -17,7 +19,7 @@ var sendTransaction = function(wallet) {
         var pay = {};
         pay[address] = blocktrail.toSatoshi(0.001);
 
-        wallet.pay(pay, function(err, result) {
+        wallet.pay(pay, null, ALLOW_ZERO_CONF, function(err, result) {
         // wallet.pay(pay, null, true, true, blocktrail.Wallet.FEE_STRATEGY_LOW_PRIORITY, function(err, result) {
             if (err) {
                 return console.log("pay ERR", err);
@@ -43,17 +45,6 @@ if (action === 'create') {
         console.log('primary mnemonic', primaryMnemonic);
         console.log('backup mnemonic', backupMnemonic);
         console.log('blocktrail pubkeys', blocktrailPubKeys);
-
-        wallet.doDiscovery(function(err, confirmed, unconfirmed) {
-            if (err) {
-                return console.log("doDiscovery ERR", err);
-            }
-
-            console.log('confirmed balance', confirmed);
-            console.log('unconfirmed balance', unconfirmed);
-
-            sendTransaction(wallet);
-        });
     });
 } else {
     client.initWallet({

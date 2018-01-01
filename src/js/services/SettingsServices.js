@@ -1,9 +1,6 @@
 angular.module('blocktrail.wallet').service(
     'settingsService',
-    function($q, storageService, sdkService, $log, $window) {
-
-
-
+    function($q, storageService, genericSdkService, $log, $window) {
     var DEFAULT_ACCOUNT_CREATED = 1478097190;
 
     var defaultBtcPrecision = $window.innerWidth <= 375 ? 4 : 8;
@@ -155,7 +152,7 @@ angular.module('blocktrail.wallet').service(
     this.$syncProfileUp = function() {
         var self = this;
 
-        return $q.when(sdkService.getSdkByActiveNetwork())
+        return $q.when(genericSdkService.getSdk())
             .then(function(sdk) {
                 var profileData = {
                     profilePic: self.profilePic
@@ -187,7 +184,7 @@ angular.module('blocktrail.wallet').service(
     this.$syncProfileDown = function() {
         var self = this;
 
-        return $q.when(sdkService.getSdkByActiveNetwork())
+        return $q.when(genericSdkService.getSdk())
             .then(function(sdk) {
                 return sdk.getProfile();
             })
@@ -207,7 +204,7 @@ angular.module('blocktrail.wallet').service(
     this.$syncSettingsUp = function() {
         var self = this;
 
-        return $q.when(sdkService.getSdkByActiveNetwork())
+        return $q.when(genericSdkService.getSdk())
             .then(function(sdk) {
                 var settingsData = {
                     localCurrency: self.localCurrency,
@@ -229,7 +226,7 @@ angular.module('blocktrail.wallet').service(
     this.$syncSettingsDown = function() {
         var self = this;
 
-        return $q.when(sdkService.getSdkByActiveNetwork())
+        return $q.when(genericSdkService.getSdk())
             .then(function(sdk) {
                 return sdk.getSettings();
             })

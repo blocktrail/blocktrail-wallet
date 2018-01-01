@@ -13,7 +13,6 @@ Object.keys(blocktrail).forEach(function(key) {
 APIClient.q = require('q');
 APIClient.BlocktrailSDK = APIClient;
 APIClient.Wallet = require('./lib/wallet');
-APIClient.BackupGenerator = require('./lib/backup_generator');
 APIClient.Request = require('./lib/request');
 APIClient.Encryption = require('./lib/encryption');
 APIClient.KeyDerivation = require('./lib/keyderivation');
@@ -37,5 +36,6 @@ APIClient.bip39wordlist = require('bip39/wordlists/en.json');
 APIClient.bitcoin = require('bitcoinjs-lib');
 APIClient.superagent = require('superagent');
 APIClient.Buffer = Buffer;
+APIClient.VERSION = require('./lib/pkginfo').VERSION;
 
 exports = module.exports = APIClient;

@@ -1036,6 +1036,8 @@
                 } else {
                     transaction.contact = null;
                 }
+            }, function() {
+                transaction.contact = null;
             });
     };
 
@@ -1114,24 +1116,9 @@
     Wallet.prototype.validateAddress = function(address) {
         var self = this;
 
-        return self._$q.when(address)
-            .then(function(address) {
-                var addr, err;
-
-                try {
-                    addr = self._bitcoinJS.address.fromBase58Check(address);
-                    if (addr.version !== self._sdkWallet.sdk.network.pubKeyHash && addr.version !== self._sdkWallet.sdk.network.scriptHash) {
-                        err = new blocktrail.InvalidAddressError("Invalid network");
-                    }
-                } catch (_err) {
-                    err = _err;
-                }
-
-                if (!addr || err) {
-                    throw new blocktrail.InvalidAddressError("Invalid address [" + address + "]" + (err ? " (" + err.message + ")" : ""));
-                }
-
-                return address;
+        return self._$q.when(self._sdkWallet)
+            .then(function(wallet) {
+                return wallet.decodeAddress(address).address
             });
     };
 

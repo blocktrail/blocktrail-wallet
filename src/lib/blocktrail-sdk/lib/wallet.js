@@ -8,6 +8,7 @@ var blocktrail = require('./blocktrail');
 var CryptoJS = require('crypto-js');
 var Encryption = require('./encryption');
 var EncryptionMnemonic = require('./encryption_mnemonic');
+var SizeEstimation = require('./size_estimation');
 var bip39 = require('bip39');
 
 var SignMode = {
@@ -27,7 +28,7 @@ var SignMode = {
  * @param backupPublicKey       string          BIP32 master pubKey M/
  * @param blocktrailPublicKeys  array           list of blocktrail pubKeys indexed by keyIndex
  * @param keyIndex              int             key index to use
- * @param chain                 int             chain to use
+ * @param segwit                int             segwit toggle from server
  * @param testnet               bool            testnet
  * @param checksum              string
  * @param upgradeToKeyIndex     int
@@ -46,7 +47,7 @@ var Wallet = function(
     backupPublicKey,
     blocktrailPublicKeys,
     keyIndex,
-    chain,
+    segwit,
     testnet,
     checksum,
     upgradeToKeyIndex,
@@ -61,12 +62,22 @@ var Wallet = function(
     self.locked = true;
     self.bypassNewAddressCheck = !!bypassNewAddressCheck;
     self.bitcoinCash = self.sdk.bitcoinCash;
+    self.segwit = !!segwit;
+    assert(!self.segwit || !self.bitcoinCash);
 
     self.testnet = testnet;
-    if (self.testnet) {
-        self.network = bitcoin.networks.testnet;
+    if (self.bitcoinCash) {
+        if (self.testnet) {
+            self.network = bitcoin.networks.bitcoincashtestnet;
+        } else {
+            self.network = bitcoin.networks.bitcoincash;
+        }
     } else {
-        self.network = bitcoin.networks.bitcoin;
+        if (self.testnet) {
+            self.network = bitcoin.networks.testnet;
+        } else {
+            self.network = bitcoin.networks.bitcoin;
+        }
     }
 
     assert(backupPublicKey instanceof bitcoin.HDNode);
@@ -87,7 +98,20 @@ var Wallet = function(
     self.blocktrailPublicKeys = blocktrailPublicKeys;
     self.primaryPublicKeys = primaryPublicKeys;
     self.keyIndex = keyIndex;
-    self.chain = chain;
+
+    if (!self.bitcoinCash) {
+        if (self.segwit) {
+            self.chain = Wallet.CHAIN_BTC_DEFAULT;
+            self.changeChain = Wallet.CHAIN_BTC_SEGWIT;
+        } else {
+            self.chain = Wallet.CHAIN_BTC_DEFAULT;
+            self.changeChain = Wallet.CHAIN_BTC_DEFAULT;
+        }
+    } else {
+        self.chain = Wallet.CHAIN_BCC_DEFAULT;
+        self.changeChain = Wallet.CHAIN_BCC_DEFAULT;
+    }
+
     self.checksum = checksum;
     self.upgradeToKeyIndex = upgradeToKeyIndex;
 
@@ -111,11 +135,19 @@ Wallet.PAY_PROGRESS_SIGN = 30;
 Wallet.PAY_PROGRESS_SEND = 40;
 Wallet.PAY_PROGRESS_DONE = 100;
 
+Wallet.CHAIN_BTC_DEFAULT = 0;
+Wallet.CHAIN_BTC_SEGWIT = 2;
+Wallet.CHAIN_BCC_DEFAULT = 1;
+
 Wallet.FEE_STRATEGY_FORCE_FEE = blocktrail.FEE_STRATEGY_FORCE_FEE;
 Wallet.FEE_STRATEGY_BASE_FEE = blocktrail.FEE_STRATEGY_BASE_FEE;
 Wallet.FEE_STRATEGY_OPTIMAL = blocktrail.FEE_STRATEGY_OPTIMAL;
 Wallet.FEE_STRATEGY_LOW_PRIORITY = blocktrail.FEE_STRATEGY_LOW_PRIORITY;
 Wallet.FEE_STRATEGY_MIN_RELAY_FEE = blocktrail.FEE_STRATEGY_MIN_RELAY_FEE;
+
+Wallet.prototype.isSegwit = function() {
+    return !!this.segwit;
+};
 
 Wallet.prototype.unlock = function(options, cb) {
     var self = this;
@@ -508,14 +540,7 @@ Wallet.prototype.passwordChange = function(newPassword, cb) {
  * @returns string
  */
 Wallet.prototype.getAddressByPath = function(path) {
-    var self = this;
-
-    var redeemScript = self.getRedeemScriptByPath(path);
-    var scriptHash = bitcoin.crypto.hash160(redeemScript);
-    var scriptPubKey = bitcoin.script.scriptHash.output.encode(scriptHash);
-    var address = bitcoin.address.fromOutputScript(scriptPubKey, self.network);
-
-    return address.toString();
+    return this.getWalletScriptByPath(path).address;
 };
 
 /**
@@ -525,6 +550,10 @@ Wallet.prototype.getAddressByPath = function(path) {
  * @returns {bitcoin.Script}
  */
 Wallet.prototype.getRedeemScriptByPath = function(path) {
+    return this.getWalletScriptByPath(path).redeemScript;
+};
+
+Wallet.prototype.getWalletScriptByPath = function(path) {
     var self = this;
 
     // get derived primary key
@@ -541,8 +570,27 @@ Wallet.prototype.getRedeemScriptByPath = function(path) {
         derivedBlocktrailPublicKey.keyPair.getPublicKeyBuffer()
     ]);
 
-    // create multisig
-    return bitcoin.script.multisig.output.encode(2, pubKeys);
+    var multisig = bitcoin.script.multisig.output.encode(2, pubKeys);
+    var scriptType = parseInt(path.split("/")[2]);
+
+    var ws, rs;
+    if (this.network !== "bitcoincash" && scriptType === Wallet.CHAIN_BTC_SEGWIT) {
+        ws = multisig;
+        rs = bitcoin.script.witnessScriptHash.output.encode(bitcoin.crypto.sha256(ws));
+    } else {
+        ws = null;
+        rs = multisig;
+    }
+
+    var spk = bitcoin.script.scriptHash.output.encode(bitcoin.crypto.hash160(rs));
+    var addr = bitcoin.address.fromOutputScript(spk, this.network);
+
+    return {
+        witnessScript: ws,
+        redeemScript: rs,
+        scriptPubKey: spk,
+        address: addr
+    };
 };
 
 /**
@@ -634,22 +682,34 @@ Wallet.prototype.upgradeKeyIndex = function(keyIndex, cb) {
 /**
  * generate a new derived private key and return the new address for it
  *
+ * @param [chainIdx] int
  * @param [cb]  function        callback(err, address)
  * @returns {q.Promise}
  */
-Wallet.prototype.getNewAddress = function(cb) {
+Wallet.prototype.getNewAddress = function(chainIdx, cb) {
     var self = this;
+
+    // chainIdx is optional
+    if (typeof chainIdx === "function") {
+        cb = chainIdx;
+        chainIdx = null;
+    }
+    // default chainIdx to self.chain
+    if (typeof chainIdx === "undefined" || chainIdx === null) {
+        chainIdx = self.chain;
+    }
+
     var deferred = q.defer();
     deferred.promise.spreadNodeify(cb);
 
     deferred.resolve(
-        self.sdk.getNewDerivation(self.identifier, "M/" + self.keyIndex + "'/" + self.chain)
+        self.sdk.getNewDerivation(self.identifier, "M/" + self.keyIndex + "'/" + chainIdx)
             .then(function(newDerivation) {
                 var path = newDerivation.path;
                 var address = newDerivation.address;
                 if (!self.bypassNewAddressCheck) {
-                    address = self.getAddressByPath(newDerivation.path);
 
+                    address = self.getAddressByPath(newDerivation.path);
                     // debug check
                     if (address !== newDerivation.address) {
                         throw new blocktrail.WalletAddressError("Failed to verify address [" + newDerivation.address + "] !== [" + address + "]");
@@ -821,7 +881,6 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
 
     q.nextTick(function() {
         deferred.notify(Wallet.PAY_PROGRESS_START);
-
         self.buildTransaction(pay, changeAddress, allowZeroConf, randomizeChangeIdx, feeStrategy, options)
             .then(
             function(r) { return r; },
@@ -835,7 +894,12 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
 
                 deferred.notify(Wallet.PAY_PROGRESS_SEND);
 
-                return self.sendTransaction(tx.toHex(), utxos.map(function(utxo) { return utxo['path']; }), checkFee, twoFactorToken, options.prioboost)
+                var data = {
+                    signed_transaction: tx.toHex(),
+                    base_transaction: tx.__toBuffer(null, null, false).toString('hex')
+                };
+
+                return self.sendTransaction(data, utxos.map(function(utxo) { return utxo['path']; }), checkFee, twoFactorToken, options.prioboost)
                     .then(function(result) {
                         deferred.notify(Wallet.PAY_PROGRESS_DONE);
 
@@ -858,6 +922,141 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
     });
 
     return deferred.promise;
+};
+
+Wallet.prototype.decodeAddress = function(address) {
+    return Wallet.getAddressAndType(address, this.network);
+};
+
+Wallet.getAddressAndType = function(address, network) {
+    var addr;
+    var type;
+    var err;
+
+    if (network === bitcoin.networks.bitcoin || network === bitcoin.networks.testnet) {
+        try {
+            addr = bitcoin.address.fromBech32(address, network);
+            err = null;
+            type = "bech32";
+
+        } catch (_err) {
+            err = _err;
+        }
+
+        if (!err) {
+            // Valid bech32 but invalid network immediately alerts
+            if (addr.prefix !== network.bech32) {
+                throw new blocktrail.InvalidAddressError("Address invalid on this network");
+            }
+        }
+    }
+
+    if (!addr) {
+        try {
+            addr = bitcoin.address.fromBase58Check(address);
+            err = null;
+            type = "base58";
+        } catch (_err) {
+            err = _err;
+        }
+
+        if (!err) {
+            // Valid base58 but invalid network immediately alerts
+            if (addr.version !== network.pubKeyHash && addr.version !== network.scriptHash) {
+                throw new blocktrail.InvalidAddressError("Address invalid on this network");
+            }
+        }
+    }
+
+    if (err) {
+        throw new blocktrail.InvalidAddressError(err.message);
+    }
+
+    return {
+        address: address,
+        decoded: addr,
+        type: type
+    };
+};
+
+Wallet.convertPayToOutputs = function(pay, network) {
+    var send = [];
+
+    var readFunc;
+
+    // Deal with two different forms
+    if (Array.isArray(pay)) {
+        // output[]
+        readFunc = function(i, output, obj) {
+            if (typeof output !== "object") {
+                throw new Error("Invalid transaction output for numerically indexed list [1]");
+            }
+
+            var keys = Object.keys(output);
+            if (keys.indexOf("scriptPubKey") !== -1 && keys.indexOf("value") !== -1) {
+                obj.scriptPubKey = output["scriptPubKey"];
+                obj.value = output["value"];
+            } else if (keys.indexOf("address") !== -1 && keys.indexOf("value") !== -1) {
+                obj.address = output["address"];
+                obj.value = output["value"];
+            } else if (keys.length !== 2 && output.length !== 2 && keys[0] !== 0 && keys[1] !== 1) {
+                obj.address = output[0];
+                obj.value = output[1];
+            } else {
+                throw new Error("Invalid transaction output for numerically indexed list [2]");
+            }
+        };
+    } else if (typeof pay === "object") {
+        // map[addr]amount
+        readFunc = function(address, value, obj) {
+            obj.address = address.trim();
+            obj.value = value;
+            if (obj.address === Wallet.OP_RETURN) {
+                var datachunk = Buffer.isBuffer(value) ? value : new Buffer(value, 'utf-8');
+                obj.scriptPubKey = bitcoin.script.nullData.output.encode(datachunk).toString('hex');
+                obj.value = 0;
+                obj.address = null;
+            }
+        };
+    } else {
+        throw new Error("Invalid input");
+    }
+
+    Object.keys(pay).forEach(function(key) {
+        var obj = {};
+        readFunc(key, pay[key], obj);
+
+        if (parseInt(obj.value, 10).toString() !== obj.value.toString()) {
+            throw new blocktrail.WalletSendError("Values should be in Satoshis");
+        }
+
+        // Remove address, replace with scriptPubKey
+        if (typeof obj.address === "string") {
+            try {
+                var addrAndType = Wallet.getAddressAndType(obj.address, network);
+                obj.scriptPubKey = bitcoin.address.toOutputScript(addrAndType.address, network).toString('hex');
+                delete obj.address;
+            } catch (e) {
+                throw new blocktrail.InvalidAddressError("Invalid address [" + obj.address + "] (" + e.message + ")");
+            }
+        }
+
+        // Extra checks when the output isn't OP_RETURN
+        if (obj.scriptPubKey.slice(0, 2) !== "6a") {
+            if (!(obj.value = parseInt(obj.value, 10))) {
+                throw new blocktrail.WalletSendError("Values should be non zero");
+            } else if (obj.value <= blocktrail.DUST) {
+                throw new blocktrail.WalletSendError("Values should be more than dust (" + blocktrail.DUST + ")");
+            }
+        }
+
+        // Value fully checked now
+        obj.value = parseInt(obj.value, 10);
+
+        send.push(obj);
+    });
+
+    return send;
 };
 
 Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, randomizeChangeIdx, feeStrategy, options, cb) {
@@ -889,44 +1088,13 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
     deferred.promise.spreadNodeify(cb);
 
     q.nextTick(function() {
-        var send = [];
-
-        // normalize / validate sends
-        Object.keys(pay).forEach(function(address) {
-            address = address.trim();
-            var value = pay[address];
-            var err = null;
-
-            if (address === Wallet.OP_RETURN) {
-                var datachunk = Buffer.isBuffer(value) ? value : new Buffer(value, 'utf-8');
-                send.push({scriptPubKey: bitcoin.script.nullData.output.encode(datachunk).toString('hex'), value: 0});
-                return;
-            }
-
-            var addr;
-            try {
-                addr = bitcoin.address.fromBase58Check(address, self.network);
-            } catch (_err) {
-                err = _err;
-            }
-
-            if (!addr || err) {
-                err = new blocktrail.InvalidAddressError("Invalid address [" + address + "]" + (err ? " (" + err.message + ")" : ""));
-            } else if (parseInt(value, 10).toString() !== value.toString()) {
-                err = new blocktrail.WalletSendError("Values should be in Satoshis");
-            } else if (!(value = parseInt(value, 10))) {
-                err = new blocktrail.WalletSendError("Values should be non zero");
-            } else if (value <= blocktrail.DUST) {
-                err = new blocktrail.WalletSendError("Values should be more than dust (" + blocktrail.DUST + ")");
-            }
-
-            if (err) {
-                deferred.reject(err);
-                return deferred.promise;
-            }
-
-            send.push({address: address, value: parseInt(value, 10)});
-        });
+        var send;
+        try {
+            send = Wallet.convertPayToOutputs(pay, self.network);
+        } catch (e) {
+            deferred.reject(e);
+            return deferred.promise;
+        }
 
         if (!send.length) {
             deferred.reject(new blocktrail.WalletSendError("Need at least one recipient"));
@@ -962,8 +1130,8 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                             }).reduce(function(a, b) {
                                 return a + b;
                             });
-                            var outputsTotal = Object.keys(send).map(function(address) {
-                                return send[address];
+                            var outputsTotal = send.map(function(output) {
+                                return output.value;
                             }).reduce(function(a, b) {
                                 return a + b;
                             });
@@ -1034,7 +1202,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                                     if (!changeAddress) {
                                         deferred.notify(Wallet.PAY_PROGRESS_CHANGE_ADDRESS);
 
-                                        return self.getNewAddress(function(err, address) {
+                                        return self.getNewAddress(self.changeChain, function(err, address) {
                                             if (err) {
                                                 return cb(err);
                                             }
@@ -1084,7 +1252,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                          * @param cb
                          */
                         function(cb) {
-                            var i, privKey, path;
+                            var i, privKey, path, redeemScript, witnessScript;
 
                             deferred.notify(Wallet.PAY_PROGRESS_SIGN);
 
@@ -1094,9 +1262,12 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                                     mode = utxos[i].sign_mode;
                                 }
 
+                                redeemScript = null;
+                                witnessScript = null;
                                 if (mode === SignMode.SIGN) {
                                     path = utxos[i]['path'].replace("M", "m");
 
+                                    // todo: regenerate scripts for path and compare for utxo (paranoid mode)
                                     if (self.primaryPrivateKey) {
                                         privKey = Wallet.deriveByPath(self.primaryPrivateKey, path, "m").keyPair;
                                     } else if (self.backupPrivateKey) {
@@ -1105,14 +1276,17 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                                         throw new Error("No master privateKey present");
                                     }
 
-                                    var redeemScript = new Buffer(utxos[i]['redeem_script'], 'hex');
+                                    redeemScript = new Buffer(utxos[i]['redeem_script'], 'hex');
+                                    if (typeof utxos[i]['witness_script'] === 'string') {
+                                        witnessScript = new Buffer(utxos[i]['witness_script'], 'hex');
+                                    }
 
                                     var sigHash = bitcoin.Transaction.SIGHASH_ALL;
                                     if (self.bitcoinCash) {
                                         sigHash |= bitcoin.Transaction.SIGHASH_BITCOINCASHBIP143;
                                     }
 
-                                    txb.sign(i, privKey, redeemScript, sigHash, utxos[i].value);
+                                    txb.sign(i, privKey, redeemScript, sigHash, utxos[i].value, witnessScript);
                                 }
                             }
 
@@ -1126,23 +1300,24 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                          * @param cb
                          */
                         function(cb) {
+                            var estimatedFee = Wallet.estimateVsizeFee(tx, utxos);
 
-                            var estimatedFee = Wallet.estimateIncompleteTxFee(tx);
+                            if (self.sdk.feeSanityCheck) {
+                                switch (feeStrategy) {
+                                    case Wallet.FEE_STRATEGY_BASE_FEE:
+                                        if (Math.abs(estimatedFee - fee) > blocktrail.BASE_FEE) {
+                                            return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
+                                                "seems incorrect (" + estimatedFee + ") for FEE_STRATEGY_BASE_FEE"));
+                                        }
+                                    break;
 
-                            switch (feeStrategy) {
-                                case Wallet.FEE_STRATEGY_BASE_FEE:
-                                    if (Math.abs(estimatedFee - fee) > blocktrail.BASE_FEE) {
-                                        return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
-                                            "seems incorrect (" + estimatedFee + ") for FEE_STRATEGY_BASE_FEE"));
-                                    }
-                                break;
-
-                                case Wallet.FEE_STRATEGY_OPTIMAL:
-                                    if (fee > estimatedFee * 50) {
-                                        return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
-                                            "seems awefully high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
-                                    }
-                                break;
+                                    case Wallet.FEE_STRATEGY_OPTIMAL:
+                                        if (fee > estimatedFee * self.feeSanityCheckBaseFeeMultiplier) {
+                                            return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
+                                                "seems awefully high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
+                                        }
+                                    break;
+                                }
                             }
 
                             cb();
@@ -1164,6 +1339,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
 
     return deferred.promise;
 };
+
 
 /**
  * use the API to get the best inputs to use based on the outputs
@@ -1197,7 +1373,17 @@ Wallet.prototype.coinSelection = function(pay, lockUTXO, allowZeroConf, feeStrat
     feeStrategy = feeStrategy || Wallet.FEE_STRATEGY_OPTIMAL;
     options = options || {};
 
-    return self.sdk.coinSelection(self.identifier, pay, lockUTXO, allowZeroConf, feeStrategy, options, cb);
+    var send;
+    try {
+        send = Wallet.convertPayToOutputs(pay, self.network);
+    } catch (e) {
+        var deferred = q.defer();
+        deferred.promise.nodeify(cb);
+        deferred.reject(e);
+        return deferred.promise;
+    }
+
+    return self.sdk.coinSelection(self.identifier, send, lockUTXO, allowZeroConf, feeStrategy, options, cb);
 };
 
 /**
@@ -1395,6 +1581,7 @@ Wallet.sortMultiSigKeys = function(pubKeys) {
  * determine how much fee is required based on the inputs and outputs
  *  this is an estimation, not a proper 100% correct calculation
  *
+ * @todo: mark deprecated in favor of estimations where UTXOS are known
  * @param {bitcoin.Transaction} tx
  * @param {int} feePerKb when not null use this feePerKb, otherwise use BASE_FEE legacy calculation
  * @returns {number}
@@ -1403,6 +1590,28 @@ Wallet.estimateIncompleteTxFee = function(tx, feePerKb) {
     var size = Wallet.estimateIncompleteTxSize(tx);
     var sizeKB = size / 1000;
     var sizeKBCeil = Math.ceil(size / 1000);
+
+    if (feePerKb) {
+        return parseInt(sizeKB * feePerKb, 10);
+    } else {
+        return parseInt(sizeKBCeil * blocktrail.BASE_FEE, 10);
+    }
+};
+
+/**
+ * Takes tx and utxos, computing their estimated vsize,
+ * and uses feePerKb (or BASEFEE as default) to estimate
+ * the number of satoshis in fee.
+ *
+ * @param {bitcoin.Transaction} tx
+ * @param {Array} utxos
+ * @param feePerKb
+ * @returns {Number}
+ */
+Wallet.estimateVsizeFee = function(tx, utxos, feePerKb) {
+    var vsize = SizeEstimation.estimateTxVsize(tx, utxos);
+    var sizeKB = vsize / 1000;
+    var sizeKBCeil = Math.ceil(vsize / 1000);
 
     if (feePerKb) {
         return parseInt(sizeKB * feePerKb, 10);
@@ -1491,6 +1700,7 @@ Wallet.estimateIncompleteTxSize = function(tx) {
  *  this is an estimation, not a proper 100% correct calculation
  *  this asumes all inputs are 2of3 multisig
  *
+ * @todo: mark deprecated in favor of situations where UTXOS are known
  * @param txinCnt       {number}
  * @param txoutCnt      {number}
  * @returns {number}

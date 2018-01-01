@@ -18,7 +18,7 @@ var TRANSACTION_TEST_WALLET_PRIMARY_MNEMONIC = "give pause forget seed dance cra
     TRANSACTION_TEST_WALLET_BACKUP_MNEMONIC = "give pause forget seed dance crawl situate hole give",
     TRANSACTION_TEST_WALLET_PASSWORD = "password";
 
-var _createTestWallet = function(identifier, passphrase, primaryMnemonic, backupMnemonic, cb) {
+var _createTestWallet = function(identifier, passphrase, primaryMnemonic, backupMnemonic, segwit, cb) {
     var keyIndex = 9999;
     var network = client.testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
 
@@ -29,7 +29,7 @@ var _createTestWallet = function(identifier, passphrase, primaryMnemonic, backup
     var backupPrivateKey = bitcoin.HDNode.fromSeedBuffer(backupSeed, network);
     var backupPublicKey = backupPrivateKey.neutered();
 
-    var checksum = primaryPrivateKey.getAddress().toBase58Check();
+    var checksum = primaryPrivateKey.getAddress();
     var primaryPublicKey = primaryPrivateKey.deriveHardened(keyIndex).neutered();
 
     client.storeNewWalletV1(
@@ -39,37 +39,36 @@ var _createTestWallet = function(identifier, passphrase, primaryMnemonic, backup
         primaryMnemonic,
         checksum,
         keyIndex,
-        function(err, result) {
-            if (err) {
-                return cb(err);
-            }
+        segwit
+    ).then(function(result) {
+        var blocktrailPublicKeys = _.mapValues(result.blocktrail_public_keys, function(blocktrailPublicKey) {
+            return bitcoin.HDNode.fromBase58(blocktrailPublicKey[0], network);
+        });
 
-            var blocktrailPublicKeys = _.mapValues(result.blocktrail_public_keys, function(blocktrailPublicKey) {
-                return bitcoin.HDNode.fromBase58(blocktrailPublicKey[0], network);
-            });
+        var wallet = new blocktrail.Wallet(
+            client,
+            identifier,
+            blocktrail.Wallet.WALLET_VERSION_V1,
+            primaryMnemonic,
+            null,
+            null,
+            {keyIndex: primaryPublicKey},
+            backupPublicKey,
+            blocktrailPublicKeys,
+            keyIndex,
+            result.segwit || 0,
+            client.testnet,
+            checksum
+        );
 
-            var wallet = new blocktrail.Wallet(
-                client,
-                identifier,
-                blocktrail.Wallet.WALLET_VERSION_V1,
-                primaryMnemonic,
-                null,
-                null,
-                {keyIndex: primaryPublicKey},
-                backupPublicKey,
-                blocktrailPublicKeys,
-                keyIndex,
-                client.testnet,
-                checksum
-            );
-
-            wallet.unlock({
-                passphrase: passphrase
-            }, function(err) {
-                cb(err, wallet);
-            });
-        }
-    );
+        wallet.unlock({
+            passphrase: passphrase
+        }, function(err) {
+            cb(err, wallet);
+        });
+    }, function(err) {
+        cb(err);
+    });
 };
 
 var createDiscoveryTestWallet = function(identifier, passphrase, cb) {
@@ -79,11 +78,27 @@ var createDiscoveryTestWallet = function(identifier, passphrase, cb) {
     return _createTestWallet(identifier, passphrase, primaryMnemonic, backupMnemonic, cb);
 };
 
-var createTransactionTestWallet = function(identifier, cb) {
-    return _createTestWallet(identifier, TRANSACTION_TEST_WALLET_PASSWORD, TRANSACTION_TEST_WALLET_PRIMARY_MNEMONIC, TRANSACTION_TEST_WALLET_BACKUP_MNEMONIC, cb);
+var createTransactionTestWallet = function(identifier, segwit, cb) {
+    return _createTestWallet(identifier, TRANSACTION_TEST_WALLET_PASSWORD, TRANSACTION_TEST_WALLET_PRIMARY_MNEMONIC, TRANSACTION_TEST_WALLET_BACKUP_MNEMONIC, segwit, cb);
 };
 
-createTransactionTestWallet("unittest-transaction", function(err, wallet) {
+createTransactionTestWallet("unittest-transaction", false, function(err, wallet) {
+    if (err) {
+        console.log(err);
+        return;
+    }
+
+    wallet.doDiscovery(50, function(err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        console.log(result);
+    });
+});
+
+createTransactionTestWallet("unittest-transaction-sw", true, function(err, wallet) {
     if (err) {
         console.log(err);
         return;

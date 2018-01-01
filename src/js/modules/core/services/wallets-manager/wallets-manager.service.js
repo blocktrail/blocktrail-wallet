@@ -3,17 +3,18 @@
 
     // TODO Add later
     angular.module("blocktrail.core")
-        .factory("walletsManagerService", function($q, CONFIG, sdkService, walletService) {
-            return new WalletsManagerService($q, CONFIG, sdkService, walletService);
+        .factory("walletsManagerService", function($q, CONFIG, genericSdkService, walletService, launchService) {
+            return new WalletsManagerService($q, CONFIG, genericSdkService, walletService, launchService);
         });
 
-    function WalletsManagerService($q, CONFIG, sdkService, walletService) {
+    function WalletsManagerService($q, CONFIG, genericSdkService, walletService, launchService) {
         var self = this;
 
         self._$q = $q;
         self._CONFIG = CONFIG;
-        self._sdkService = sdkService;
+        self._genericSdkService = genericSdkService;
         self._walletService = walletService;
+        self._launchService = launchService;
 
         self._wallets = {};
         self._walletsList = [];
@@ -27,13 +28,24 @@
     WalletsManagerService.prototype.fetchWalletsList = function() {
         var self = this;
 
-        return self._sdkService.getSdkByActiveNetwork()
+        return self._genericSdkService.getSdk()
             .getAllWallets({mywallet: 1, limit: 200})
-            .then(function(resp) {
-                self._walletsList = [];
+            .then(function(result) {
+                return self._launchService.getWalletConfig()
+                    .then(function(walletConfig) {
+                        return {
+                            disabledNetworks: walletConfig.disabledNetworks || [],
+                            list: result.data
+                        }
+                    });
+            })
+            .then(function(res) {
+                var disabledNetworks = res.disabledNetworks;
+                var list = res.list;
 
-                resp.data.forEach(function(wallet) {
-                    if (self._CONFIG.NETWORKS_ENABLED.indexOf(wallet.network) !== -1) {
+                self._walletsList = [];
+                list.forEach(function(wallet) {
+                    if (self._CONFIG.NETWORKS_ENABLED.indexOf(wallet.network) !== -1 && disabledNetworks.indexOf(wallet.network) === -1) {
                         // Add unique id
                         wallet.uniqueIdentifier = self._getWalletUniqueIdentifier(wallet.network, wallet.identifier);
 

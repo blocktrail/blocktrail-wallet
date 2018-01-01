@@ -29,6 +29,11 @@ The Blocktrail SDK is tested against;
    - iPhone OS X 10.10
 
 
+Upgrading from v3.x to v3.4.0
+-----------------------------
+We've seperated out the backup PDF generator because it contained a lot of dependencies while barely anyone uses it.  
+If you do want to use it, see the `blocktrail-sdk-backup-generator` package.
+
 Upgrading from v2.x to v3.0.0
 -----------------------------
 **IMPORTANT** `v3.0.0` introduces a new **DEFAULT** wallet encryption, please make sure you upgrade the SDK everywhere you're using it!!
@@ -119,6 +124,21 @@ For the following any modern version will work just fine:
  - Chrome
  - FireFox
  - Safari
+
+Webworker
+---------
+To defer encryption/decryption/keyderivation to webworkers in the browser it's neccesary to make create the following function in the global scope:
+```
+function onLoadWorkerLoadAsmCrypto(worker) {
+    worker.postMessage({
+        method: 'importScripts',
+        script: document.location.protocol + '//' + document.location.host + '/build/asmcrypto.min.js'
+    });
+}
+```
+
+This will get called as the onLoad of the webworker and will trigger importing the `asmcrypto.min.js`.  
+We had to seperate `asmcrypto.js` from the main browserify bundle because uglify was killing the ASM.js.
 
 Uglify
 ------

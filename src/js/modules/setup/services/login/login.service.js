@@ -43,7 +43,8 @@
             device_uuid: self._device.uuid,
             device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : 'Unknown Device',
             super_secret: self._CONFIG.SUPER_SECRET || null,
-            browser_fingerprint: null
+            browser_fingerprint: null,
+            skip_two_factor: true // will make the resulting API key not require 2FA in the future
         };
 
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/enable";
@@ -51,10 +52,24 @@
         return self._$q.when(postData)
             .then(function(postData) {
                 return self._$http.post(url, postData)
+                    .then(self._trackEvent.bind(self))
                     .then(self._decryptSecret.bind(self, data.password))
                     .then(self._storeAccountInfo.bind(self));
             })
             .catch(self._errorHandler.bind(self));
+    };
+
+    /**
+     * @param response
+     * @return response
+     * @private
+     */
+    LoginFormService.prototype._trackEvent = function(response) {
+        var self = this;
+
+        self._trackingService.trackEvent(self._trackingService.EVENTS.LOGIN);
+
+        return response;
     };
 
     /**

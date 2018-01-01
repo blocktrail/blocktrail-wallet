@@ -1,4 +1,5 @@
 var blocktrail = require('../'); // require('blocktrail-sdk') when trying example from in your own project
+var blocktrailBackupGenerator = require('blocktrail-sdk-backup-generator');
 var crypto = require('crypto');
 var fs = require('fs');
 var path = require('path');
@@ -23,7 +24,7 @@ var blocktrailPublicKeys = {
     3: blocktrail.bitcoin.HDNode.fromSeedHex("040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404")
 };
 
-var backup = new blocktrail.BackupGenerator(
+var backup = new blocktrailBackupGenerator(
     identifier,
     {
         encryptedPrimarySeed: encryptedPrimarySeed,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget id="com.blocktrail.mywallet" version="4.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.blocktrail.mywallet" version="4.1.12" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
     <preference name="android-minSdkVersion" value="15" />
     <preference name="SplashScreenDelay" value="10000" />
@@ -33,9 +33,6 @@
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
-    </feature>
-    <feature name="Clipboard">
-        <param name="android-package" value="com.verso.cordova.clipboard.Clipboard" />
     </feature>
     <feature name="NetworkStatus">
         <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
@@ -117,6 +114,9 @@
     <feature name="Open">
         <param name="android-package" value="com.disusered.Open" />
     </feature>
+    <feature name="Clipboard">
+        <param name="android-package" value="com.verso.cordova.clipboard.Clipboard" />
+    </feature>
     <access origin="https://m.facebook.com" />
     <access origin="https://graph.facebook.com" />
     <access origin="https://api.facebook.com" />
@@ -127,6 +127,15 @@
     <access origin="https://www.glidera.io" />
     <access origin="https://bitonic.nl" />
     <access origin="https://staging.bitonic.nl" />
+    <access dev="true" origin="http://172.21.0.1" />
+    <access dev="true" origin="http://172.19.0.1" />
+    <access dev="true" origin="http://172.18.0.1" />
+    <access dev="true" origin="http://172.20.0.1" />
+    <access dev="true" origin="http://172.22.0.1" />
+    <access dev="true" origin="http://172.17.0.1" />
+    <access dev="true" origin="http://192.168.2.17" />
+    <access dev="true" origin="http://127.0.0.1" />
+    <access dev="true" origin="http://10.4.86.190" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
     <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />

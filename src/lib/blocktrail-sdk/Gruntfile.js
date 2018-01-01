@@ -137,10 +137,16 @@ module.exports = function (grunt) {
                 ],
                 dest : 'build/jsPDF.js'
             },
+            asmcrypto : {
+                src : [
+                    'vendor/asmcrypto.js/asmcrypto.js'
+                ],
+                dest : 'build/asmcrypto.js'
+            },
             sdkfull: {
                 src : [
                     '<%= concat.jsPDF.dest %>',
-                    '<%= browserify.sdk.dest %>'
+                    '<%= browserify.sdk_with_backup_generator.dest %>'
                 ],
                 dest : 'build/blocktrail-sdk-full.js'
             }
@@ -152,13 +158,23 @@ module.exports = function (grunt) {
         uglify : {
             options: {
                 mangle: {
-                    except: ['Buffer', 'BigInteger', 'Point', 'ECPubKey', 'ECKey', 'sha512_asm', 'asm', 'ECPair', 'HDNode']
-                }
+                    reserved: ['Buffer', 'BigInteger', 'Point', 'ECPubKey', 'ECKey', 'sha512_asm', 'asm', 'ECPair', 'HDNode']
+                },
+                compress: true
             },
             sdk: {
                 files : {
-                    'build/blocktrail-sdk.min.js'      : ['<%= browserify.sdk.dest %>'],
-                    'build/blocktrail-sdk-full.min.js' : ['<%= concat.sdkfull.dest %>']
+                    'build/blocktrail-sdk.min.js'                       : ['<%= browserify.sdk.dest %>'],
+                    'build/blocktrail-sdk-with-backup-generator.min.js' : ['<%= browserify.sdk_with_backup_generator.dest %>'],
+                    'build/blocktrail-sdk-full.min.js'                  : ['<%= concat.sdkfull.dest %>']
+                }
+            },
+            asmcrypto: {
+                options: {
+                    beautify: true // atm uglify breaks ASM.js if we don't do this
+                },
+                files : {
+                    'build/asmcrypto.min.js' : ['<%= concat.asmcrypto.dest %>']
                 }
             },
             test: {
@@ -177,17 +193,27 @@ module.exports = function (grunt) {
                     browserifyOptions : {
                         standalone: 'blocktrailSDK'
                     },
-                    transform : ['brfs']
+                    transform : ['brfs', 'browserify-versionify']
                 },
                 src: 'main.js',
                 dest: 'build/blocktrail-sdk.js'
+            },
+            sdk_with_backup_generator: {
+                options : {
+                    browserifyOptions : {
+                        standalone: 'blocktrailSDK'
+                    },
+                    transform : ['brfs', 'browserify-versionify']
+                },
+                src: 'main-with-backup-generator.js',
+                dest: 'build/blocktrail-sdk-with-backup-generator.js'
             },
             test: {
                 options : {
                     browserifyOptions : {
                         standalone: 'blocktrailTEST'
                     },
-                    transform : ['brfs']
+                    transform : ['brfs', 'browserify-versionify']
                 },
                 src: 'test.js',
                 dest: 'build/test.js'
@@ -229,7 +255,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('dev', ['browserify', 'concat:sdkfull']);
-    grunt.registerTask('asmcrypto', ['exec:asmcryptobuild']);
+    grunt.registerTask('asmcrypto', ['exec:asmcryptobuild', 'concat:asmcrypto']);
     grunt.registerTask('build', ['asmcrypto', 'browserify', 'concat', 'uglify']);
     grunt.registerTask('test-browser', ['template', 'connect', 'saucelabs-mocha']);
     grunt.registerTask('default', ['build']);

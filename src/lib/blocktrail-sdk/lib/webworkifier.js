@@ -11,7 +11,14 @@ var webworkify = require('webworkify');
  * @returns {*}
  */
 module.exports = exports = {
-    workify: function(self, workerModuleFactory, message) {
+    workify: function(self, workerModuleFactory, onLoad, message) {
+        if (typeof message === "undefined") {
+            if (typeof onLoad !== "undefined") {
+                message = onLoad;
+                onLoad = function noop() {};
+            }
+        }
+
         // create promise for result
         var deferred = q.defer();
 
@@ -21,6 +28,7 @@ module.exports = exports = {
                 self.worker = webworkify(workerModuleFactory());
                 self.first = true;
                 self.id = 0;
+                onLoad(self.worker);
             }
 
             var worker = self.worker;

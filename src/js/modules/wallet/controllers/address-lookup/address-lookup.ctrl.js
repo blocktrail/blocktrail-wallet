@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("AddressLookupCtrl", AddressLookupCtrl);
 
-    function AddressLookupCtrl($scope, activeWallet, $q, $timeout, $cacheFactory, $log,
+    function AddressLookupCtrl($scope, activeWallet, CONFIG, $q, $timeout, $cacheFactory, $log,
                                $ionicPopover, $translate, $cordovaClipboard, $cordovaToast, $ionicActionSheet) {
 
         var $cache = $cacheFactory.get('address-lookup') || $cacheFactory('address-lookup', {capacity: 10});
@@ -113,15 +113,21 @@
                             showAddLabelPopover(addrItem);
                             break;
                         case 1:
-                            if(addrItem.label) showRemoveLabelPopover(addrItem);
-                            else toClipboard(addrItem.address);
+                            if(addrItem.label) {
+                                showRemoveLabelPopover(addrItem);
+                            } else {
+                                toClipboard(addrItem.address);
+                            }
                             break;
                         case 2:
-                            if(addrItem.label) toClipboard(addrItem.address);
-                            else window.open('https://btc.com/' + addrItem.address, '_system');
+                            if(addrItem.label) {
+                                toClipboard(addrItem.address);
+                            } else {
+                                window.open(CONFIG.NETWORKS[$scope.walletData.networkType].EXPLORER_ADDRESS_URL + '/' + addrItem.address, '_system');
+                            }
                             break;
                         case 3:
-                            window.open('https://btc.com/' + addrItem.address, '_system');
+                            window.open(CONFIG.NETWORKS[$scope.walletData.networkType].EXPLORER_ADDRESS_URL + '/' + addrItem.address, '_system');
                             break;
                         default:
                             return false;
