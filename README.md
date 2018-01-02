@@ -64,7 +64,8 @@ cp appconfig.prod.json appconfig.json
 edit `config.xml` and bump the version
 
 ### Ionic prepare
-run `ionic prepare` for the version update to take effect and `git commit` with "vX.Y.Z"
+run `ionic prepare` for the version update to take effect and `git commit` any and all changes with "vX.Y.Z".  
+tag the release as well in git at this point.
 
 ### Android
 ```
@@ -95,8 +96,11 @@ cp appconfig.prod.json appconfig.json
 ionic prepare ios
 ```
 
-In xCode build for archiving: Product > Archive  
-Select new build in Archives Organiser and submitt to app store (optionally validate before hand)  
+In xCode:
+ - Select "Generic iOS Device" as build target (instead of emulator or connected phone)
+ - Product > Archive
+ - Select the newest build in the Archives window and choose "Upload to App Store"
+ - Follow steps ...
 
 ### tips
 Remember to remove the old signed, zipped APK before running zipalign, it doesn't overrite the file.  
