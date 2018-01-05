@@ -95,6 +95,15 @@
             promocodeNavItem
         ];
 
+        // Subscriptions for active wallet check
+        var subscriptionOnBalance = $scope.$watch("walletData.balance", checkOnActiveWallet);
+        var subscriptionOnUncBalance = $scope.$watch("walletData.uncBalance", checkOnActiveWallet);
+        var subscriptionOnWalletActivated = $scope.$watch("settings.walletActivated", checkOnActiveWallet);
+        var isCheckOnWalletActivated = false;
+
+        // On scope destroy
+        $scope.$on("$destroy", onScopeDestroy);
+
         // Methods
         $rootScope.getPrice = getPrice;
         $rootScope.syncContacts = syncContacts;
@@ -243,6 +252,41 @@
                 }, function(err) {
                     $log.error("SocialSharing: " + err.message);
                 });
+        }
+
+        /**
+         * Check on active wallet
+         * @return {*}
+         */
+        function checkOnActiveWallet() {
+            if(!isCheckOnWalletActivated) {
+                if(!$scope.settings.walletActivated && ($scope.walletData.balance > 0 || $scope.walletData.uncBalance > 0)) {
+                    isCheckOnWalletActivated = true;
+                    settingsService.updateSettingsUp({ walletActivated: true })
+                        .then(function() {
+                            trackingService.trackEvent(trackingService.EVENTS.ACTIVATED);
+                            unsubscribe();
+                        });
+                } else if($scope.settings.walletActivated) {
+                    unsubscribe();
+                }
+            }
+        }
+
+        /**
+         * On scope destroy
+         */
+        function onScopeDestroy() {
+            unsubscribe()
+        }
+
+        /**
+         * Unsubscribe
+         */
+        function unsubscribe() {
+            subscriptionOnBalance();
+            subscriptionOnUncBalance();
+            subscriptionOnWalletActivated();
         }
 
         $timeout(function() { $rootScope.getPrice(); }, 1000);
