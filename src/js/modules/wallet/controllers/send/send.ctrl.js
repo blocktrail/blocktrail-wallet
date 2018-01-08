@@ -58,6 +58,8 @@
 
         $scope.pay = {};
         $scope.useZeroConf = true;
+
+        $scope.fee = null;
         $scope.fees = {
             optimal: null,
             lowPriority: null,
@@ -229,7 +231,7 @@
             $scope.fees.lowPriority = null;
             $scope.fees.optimal = null;
             $scope.fees.minRelayFee = null;
-            $scope.displayFee = false;
+            $scope.appControl.displayFee = false;
             $scope.prioboost.possible = null;
             $scope.prioboost.estSize = null;
             $scope.prioboost.zeroConf = null;
@@ -329,7 +331,7 @@
                         $scope.fees.lowPriority = lowPriorityFee;
                         $scope.fees.optimal = optimalFee;
                         $scope.fees.minRelayFee = minRelayFee;
-                        $scope.displayFee = true;
+                        $scope.appControl.displayFee = true;
 
                         return $scope.updateFee();
                     }, function (e) {
