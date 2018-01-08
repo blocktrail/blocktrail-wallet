@@ -27,7 +27,7 @@
                 url: "/pin",
                 cache: false,
                 data: {
-                    clearHistory: false,
+                    clearHistory: true,
                     excludeFromHistory: true
                 },
                 templateUrl: "js/modules/launch/controllers/open-wallet-pin/open-wallet-pin.tpl.html",
