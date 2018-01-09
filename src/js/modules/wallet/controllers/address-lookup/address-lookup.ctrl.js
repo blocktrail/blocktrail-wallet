@@ -5,9 +5,11 @@
         .controller("AddressLookupCtrl", AddressLookupCtrl);
 
     function AddressLookupCtrl($scope, CONFIG, $q, $timeout, $cacheFactory, $log, walletsManagerService,
-                               $ionicPopover, $translate, $cordovaClipboard, $cordovaToast, $ionicActionSheet) {
+                               $ionicPopover, $translate, $cordovaClipboard, $cordovaToast, $ionicActionSheet,
+                               bitcoinJS, sdkService) {
         var $cache = $cacheFactory.get('address-lookup') || $cacheFactory('address-lookup', {capacity: 10});
         $scope.onScroll = angular.noop;
+        $scope.useOldAddress = !CONFIG.NETWORKS[sdkService.getNetworkType()].CASHADDRESS;
 
         $scope.items = [];
         $scope.totalItems = null;

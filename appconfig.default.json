@@ -76,7 +76,8 @@
             "PRIOBOOST": true,
             "EXPLORER_ADDRESS_URL": "https://btc.com",
             "EXPLORER_TX_URL": "https://btc.com",
-            "URI_PREFIX": "bitcoin"
+            "CASHADDRESS": false,
+            "URIPREFIX": "bitcoin:"
         },
         "BCC": {
             "NETWORK": "BCC",
@@ -88,7 +89,8 @@
             "PRIOBOOST": false,
             "EXPLORER_ADDRESS_URL": "https://bch.btc.com",
             "EXPLORER_TX_URL": "https://bch.btc.com",
-            "URI_PREFIX": "bitcoincash"
+            "CASHADDRESS": true,
+            "URIPREFIX": "bitcoincash:"
         },
         "tBTC": {
             "NETWORK": "tBTC",
@@ -100,7 +102,8 @@
             "PRIOBOOST": false,
             "EXPLORER_ADDRESS_URL": "https://tchain.btc.com",
             "EXPLORER_TX_URL": "https://tchain.btc.com",
-            "URI_PREFIX": "bitcoin"
+            "CASHADDRESS": false,
+            "URIPREFIX": "bitcoin:"
         },
         "tBCC": {
             "NETWORK": "tBCC",
@@ -112,7 +115,8 @@
             "PRIOBOOST": false,
             "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBCC/address",
             "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx",
-            "URI_PREFIX": "bitcoincash"
+            "CASHADDRESS": true,
+            "URIPREFIX": "bchtest:"
         }
     }
 }

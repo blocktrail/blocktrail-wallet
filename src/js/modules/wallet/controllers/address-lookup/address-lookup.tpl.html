@@ -27,6 +27,16 @@
                 </div>
                 <span>{{ 'ADDRESS_LOOKUP_CHECKONLY_LABELED_SHORT' | translate }}</span>
             </label>
+
+            <label class="toggle-btc">
+                <div class="toggle">
+                    <input type="checkbox" ng-model="useOldAddress">
+                    <div class="track">
+                        <div class="handle"></div>
+                    </div>
+                </div>
+                <span>{{ 'ADDRESS_LOOKUP_FORMAT_BITCOIN_CASH' | translate }}</span>
+            </label>
         </div>
 
         <div class="text-center"><ion-spinner ng-if="isLoading"></ion-spinner></div>
@@ -46,7 +56,7 @@
 
                     <div class="col">
                         <div class="multi-line-elem">
-                            <span class="address">{{ item.address }}</span>
+                            <span class="address">{{ item.address | displayAddr: !useOldAddress}}</span>
 
                             <div class="label margin-top" ng-if="item.label"> {{ item.label }} </div>
 
