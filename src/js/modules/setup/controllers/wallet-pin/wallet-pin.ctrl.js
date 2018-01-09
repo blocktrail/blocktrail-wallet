@@ -136,6 +136,7 @@
 
             var sdk = sdkService.getSdkByNetworkType(setupInfoService.getSetupInfoProperty("networkType"));
 
+            options.useCashAddress = CONFIG.NETWORKS[sdkService.getNetworkType()];
             return sdk.initWallet(options);
         }
 
@@ -149,6 +150,7 @@
 
             var sdk = sdkService.getSdkByNetworkType(setupInfoService.getSetupInfoProperty("networkType"));
 
+            options.useCashAddress = CONFIG.NETWORKS[sdkService.getNetworkType()];
             return sdk.createNewWallet(options);
         }
 
