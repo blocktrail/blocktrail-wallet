@@ -45,15 +45,12 @@ if (action === 'create') {
         console.log('backup mnemonic', backupMnemonic);
         console.log('blocktrail pubkeys', blocktrailPubKeys);
 
-        wallet.doDiscovery(function(err, confirmed, unconfirmed) {
+        wallet.getNewAddress(function(err, address, path) {
             if (err) {
-                return console.log("doDiscovery ERR", err);
+                return console.log("getNewAddress ERR", err);
             }
 
-            console.log('confirmed balance', confirmed);
-            console.log('unconfirmed balance', unconfirmed);
-
-            sendTransaction(wallet);
+            console.log('new address', address, path);
         });
     });
 } else {

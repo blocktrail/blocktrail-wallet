@@ -166,8 +166,10 @@ Request.prototype.performRequest = function(options) {
         var body;
 
         if (error) {
-            self.deferred.reject(error);
-            return self.callback(error);
+            var err = Request.handleFailure(error.response.body, error.status);
+
+            self.deferred.reject(err);
+            return self.callback(err, error.response.body);
         }
 
         debug('response status code: %s content type: %s', res.status, res.headers['content-type']);
