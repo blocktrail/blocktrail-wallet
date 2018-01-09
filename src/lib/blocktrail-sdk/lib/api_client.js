@@ -16,6 +16,31 @@ var _ = require('lodash'),
     CryptoJS = require('crypto-js'),
     webworkifier = require('./webworkifier');
 
+/**
+ *
+ * @param opt
+ * @returns {*}
+ */
+function networkFromOptions(opt) {
+    if (opt.bitcoinCash) {
+        if (opt.regtest) {
+            return bitcoin.networks.bitcoincashregtest;
+        } else if (opt.testnet) {
+            return bitcoin.networks.bitcoincashtestnet;
+        } else {
+            return bitcoin.networks.bitcoincash;
+        }
+    } else {
+        if (opt.regtest) {
+            return bitcoin.networks.regtest;
+        } else if (opt.testnet) {
+            return bitcoin.networks.testnet;
+        } else {
+            return bitcoin.networks.bitcoin;
+        }
+    }
+}
+
 var useWebWorker = require('./use-webworker')();
 
 /**
@@ -37,32 +62,79 @@ var APIClient = function(options) {
     if (!(this instanceof APIClient)) {
         return new APIClient(options);
     }
-    self.bitcoinCash = options.network && options.network === "BCC";
 
-    self.testnet = options.testnet = options.testnet || false;
-    if (self.bitcoinCash) {
-        if (self.testnet) {
-            self.network = bitcoin.networks.bitcoincashtestnet;
-        } else {
-            self.network = bitcoin.networks.bitcoincash;
-        }
-    } else {
-        if (self.testnet) {
-            self.network = bitcoin.networks.testnet;
-        } else {
-            self.network = bitcoin.networks.bitcoin;
-        }
-    }
+    var normalizedNetwork = APIClient.normalizeNetworkFromOptions(options);
+    options.network = normalizedNetwork[0];
+    options.testnet = normalizedNetwork[1];
+    options.regtest = normalizedNetwork[2];
+    // apiNetwork we allow to be customized for debugging purposes
+    options.apiNetwork = options.apiNetwork || normalizedNetwork[3];
 
+    self.bitcoinCash = options.network === "BCC";
+    self.regtest = options.regtest;
+    self.testnet = options.testnet;
+    self.network = networkFromOptions(self);
     self.feeSanityCheck = typeof options.feeSanityCheck !== "undefined" ? options.feeSanityCheck : true;
     self.feeSanityCheckBaseFeeMultiplier = options.feeSanityCheckBaseFeeMultiplier || 200;
-
-    options.apiNetwork = options.apiNetwork || ((self.testnet ? "t" : "") + (options.network || 'BTC').toUpperCase());
 
     /**
      * @type RestClient
      */
     self.client = APIClient.initRestClient(options);
+};
+
+APIClient.normalizeNetworkFromOptions = function(options) {
+    /* jshint -W071, -W074 */
+    var network = 'BTC';
+    var testnet = false;
+    var regtest = false;
+    var apiNetwork = "BTC";
+
+    var prefix;
+    var done = false;
+
+    if (options.network) {
+        var lower = options.network.toLowerCase();
+
+        var m = lower.match(/^([rt])?(btc|bch|bcc)$/);
+        if (!m) {
+            throw new Error("Invalid network [" + options.network + "]");
+        }
+
+        if (m[2] === 'btc') {
+            network = "BTC";
+        } else {
+            network = "BCC";
+        }
+
+        prefix = m[1];
+        if (prefix) {
+            // if there's a prefix then we're "done", won't apply options.regtest and options.testnet after
+            done = true;
+            if (prefix === 'r') {
+                testnet = true;
+                regtest = true;
+            } else if (prefix === 't') {
+                testnet = true;
+            }
+        }
+    }
+
+    // if we're not already done then apply options.regtest and options.testnet
+    if (!done) {
+        if (options.regtest) {
+            testnet = true;
+            regtest = true;
+            prefix = "r";
+        } else if (options.testnet) {
+            testnet = true;
+            prefix = "t";
+        }
+    }
+
+    apiNetwork = (prefix || "") + network;
+
+    return [network, testnet, regtest, apiNetwork];
 };
 
 APIClient.initRestClient = function(options) {
@@ -677,6 +749,69 @@ APIClient.prototype.setupWebhook = function(url, identifier, cb) {
 };
 
 /**
+ * Converts a cash address to the legacy (base58) format
+ * @param {string} input
+ * @returns {string}
+ */
+APIClient.prototype.getLegacyBitcoinCashAddress = function(input) {
+    if (this.network === bitcoin.networks.bitcoincash ||
+        this.network === bitcoin.networks.bitcoincashtestnet ||
+        this.network === bitcoin.networks.bitcoincashregtest) {
+        var address;
+        try {
+            bitcoin.address.fromBase58Check(input, this.network);
+            return input;
+        } catch (e) {}
+
+        address = bitcoin.address.fromCashAddress(input, this.network);
+        var prefix;
+        if (address.version === bitcoin.script.types.P2PKH) {
+            prefix = this.network.pubKeyHash;
+        } else if (address.version === bitcoin.script.types.P2SH) {
+            prefix = this.network.scriptHash;
+        } else {
+            throw new Error("Unsupported address type");
+        }
+
+        return bitcoin.address.toBase58Check(address.hash, prefix);
+    }
+
+    throw new Error("Cash addresses only work on bitcoin cash");
+};
+
+/**
+ * Converts a legacy bitcoin to the new cashaddr format
+ * @param {string} input
+ * @returns {string}
+ */
+APIClient.prototype.getCashAddressFromLegacyAddress = function(input) {
+    if (this.network === bitcoin.networks.bitcoincash ||
+        this.network === bitcoin.networks.bitcoincashtestnet ||
+        this.network === bitcoin.networks.bitcoincashregtest
+    ) {
+        var address;
+        try {
+            bitcoin.address.fromCashAddress(input, this.network);
+            return input;
+        } catch (e) {}
+
+        address = bitcoin.address.fromBase58Check(input, this.network);
+        var scriptType;
+        if (address.version === this.network.pubKeyHash) {
+            scriptType = bitcoin.script.types.P2PKH;
+        } else if (address.version === this.network.scriptHash) {
+            scriptType = bitcoin.script.types.P2SH;
+        } else {
+            throw new Error("Unsupported address type");
+        }
+
+        return bitcoin.address.toCashAddress(address.hash, scriptType, this.network.cashAddrPrefix);
+    }
+
+    throw new Error("Cash addresses only work on bitcoin cash");
+};
+
+/**
  * get an existing webhook by it's identifier
  *
  * @param identifier    string      the unique identifier of the webhook to get
@@ -926,8 +1061,10 @@ APIClient.prototype.initWallet = function(options, cb) {
             keyIndex,
             result.segwit || 0,
             self.testnet,
+            self.regtest,
             result.checksum,
             result.upgrade_key_index,
+            options.useCashAddress,
             options.bypassNewAddressCheck
         );
 
@@ -1074,7 +1211,8 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                         deferred.notify(APIClient.CREATE_WALLET_PROGRESS_SUBMIT);
 
                         // create a checksum of our private key which we'll later use to verify we used the right password
-                        var checksum = options.primaryPrivateKey.getAddress();
+                        var pubKeyHash = bitcoin.crypto.hash160(options.primaryPrivateKey.getPublicKeyBuffer());
+                        var checksum = bitcoin.address.toBase58Check(pubKeyHash, self.network.pubKeyHash);
                         var keyIndex = options.keyIndex;
 
                         var primaryPublicKey = options.primaryPrivateKey.deriveHardened(keyIndex).neutered();
@@ -1110,8 +1248,10 @@ APIClient.prototype._createNewWalletV1 = function(options) {
                                     keyIndex,
                                     result.segwit || 0,
                                     self.testnet,
+                                    self.regtest,
                                     checksum,
                                     result.upgrade_key_index,
+                                    options.useCashAddress,
                                     options.bypassNewAddressCheck
                                 );
 
@@ -1181,7 +1321,8 @@ APIClient.prototype._createNewWalletV2 = function(options) {
         })
         .then(function(options) {
             // create a checksum of our private key which we'll later use to verify we used the right password
-            var checksum = options.primaryPrivateKey.getAddress();
+            var pubKeyHash = bitcoin.crypto.hash160(options.primaryPrivateKey.getPublicKeyBuffer());
+            var checksum = bitcoin.address.toBase58Check(pubKeyHash, self.network.pubKeyHash);
             var keyIndex = options.keyIndex;
 
             // send the public keys and encrypted data to server
@@ -1218,8 +1359,10 @@ APIClient.prototype._createNewWalletV2 = function(options) {
                         keyIndex,
                         result.segwit || 0,
                         self.testnet,
+                        self.regtest,
                         checksum,
                         result.upgrade_key_index,
+                        options.useCashAddress,
                         options.bypassNewAddressCheck
                     );
 
@@ -1288,7 +1431,8 @@ APIClient.prototype._createNewWalletV3 = function(options) {
         })
         .then(function(options) {
             // create a checksum of our private key which we'll later use to verify we used the right password
-            var checksum = options.primaryPrivateKey.getAddress();
+            var pubKeyHash = bitcoin.crypto.hash160(options.primaryPrivateKey.getPublicKeyBuffer());
+            var checksum = bitcoin.address.toBase58Check(pubKeyHash, self.network.pubKeyHash);
             var keyIndex = options.keyIndex;
 
             // send the public keys and encrypted data to server
@@ -1326,8 +1470,10 @@ APIClient.prototype._createNewWalletV3 = function(options) {
                             keyIndex,
                             result.segwit || 0,
                             self.testnet,
+                            self.regtest,
                             checksum,
                             result.upgrade_key_index,
+                            options.useCashAddress,
                             options.bypassNewAddressCheck
                         );
 
@@ -1529,20 +1675,6 @@ APIClient.prototype.getWalletBalance = function(identifier, cb) {
 
     return self.client.get("/wallet/" + identifier + "/balance", null, true, cb);
 };
-
-/**
- * do HD wallet discovery for the wallet
- *
- * @param identifier            string      the wallet identifier
- * @param [cb]                  function    callback(err, result)
- * @returns {q.Promise}
- */
-APIClient.prototype.doWalletDiscovery = function(identifier, gap, cb) {
-    var self = this;
-
-    return self.client.get("/wallet/" + identifier + "/discovery", {gap: gap}, true, cb);
-};
-
 
 /**
  * get a new derivation number for specified parent path

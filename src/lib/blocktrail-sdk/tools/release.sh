@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # check we have our deps
 command -v git > /dev/null || { echo "missing git"; exit 1; }

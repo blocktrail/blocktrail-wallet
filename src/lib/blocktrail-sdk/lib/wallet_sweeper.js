@@ -23,6 +23,7 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
     this.defaultSettings = {
         network: 'btc',
         testnet: false,
+        regtest: false,
         logging: false,
         bitcoinCash: false,
         sweepBatchSize: 200
@@ -36,7 +37,7 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
     if (typeof options.network === "object") {
         this.network = options.network;
     } else {
-        this.network = this.getBitcoinNetwork(this.settings.network, this.settings.testnet);
+        this.network = this.getBitcoinNetwork(this.settings.network, this.settings.testnet, this.settings.regtest);
     }
 
     backupData.walletVersion = backupData.walletVersion || 2;   //default to version 2 wallets
@@ -230,13 +231,16 @@ var WalletSweeper = function(backupData, bitcoinDataClient, options) {
  *
  * @param network
  * @param testnet
+ * @param regtest
  * @returns {*[]}
  */
-WalletSweeper.prototype.getBitcoinNetwork =  function(network, testnet) {
+WalletSweeper.prototype.getBitcoinNetwork =  function(network, testnet, regtest) {
     switch (network.toLowerCase()) {
         case 'btc':
         case 'bitcoin':
-            if (testnet) {
+            if (regtest) {
+                return bitcoin.networks.regtest;
+            } else if (testnet) {
                 return bitcoin.networks.testnet;
             } else {
                 return bitcoin.networks.bitcoin;
