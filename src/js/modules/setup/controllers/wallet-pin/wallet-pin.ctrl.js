@@ -127,10 +127,11 @@
             sdk = sdkObject;
             sdkReadOnlyObject = sdkService.getReadOnlySdkData();
             $log.debug("Initialising wallet: " + $scope.setupInfo.identifier, sdk);
-
+            var useCashAddress = CONFIG.NETWORKS[sdkService.getNetworkType()];
             return sdk.initWallet({
                 identifier: $scope.setupInfo.identifier,
-                password: $scope.setupInfo.password
+                password: $scope.setupInfo.password,
+                useCashAddress: CONFIG.CASHADDRESS
             });
         }
 
@@ -212,13 +213,14 @@
 
                 // generate support secret, 6 random digits
                 var supportSecret = randDigits(6);
-
+                var useCashAddress = CONFIG.NETWORKS[sdkService.getNetworkType()].CASHADDRESS;
                 return sdk.createNewWallet({
                         identifier: $scope.setupInfo.identifier,
                         password: $scope.setupInfo.password,
                         walletVersion: CONFIG.WALLET_DEFAULT_VERSION,
-                        support_secret: supportSecret
-                    })
+                        support_secret: supportSecret,
+                        useCashAddress: useCashAddress
+                })
                     .progress(function(progress) {
                         /*
                          * per step we increment the progress bar and display some new progress text
@@ -466,7 +468,8 @@
                     });
                     return $scope.sdk.initWallet({
                         identifier: $scope.setupInfo.identifier,
-                        password: $scope.setupInfo.password
+                        password: $scope.setupInfo.password,
+                        useCashAddress: CONFIG.CASHADDRESS
                     })
                         .then(function(wallet) {
                             //success, password is correct. We can continue
