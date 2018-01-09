@@ -32,6 +32,7 @@ var SignMode = {
  * @param testnet               bool            testnet
  * @param checksum              string
  * @param upgradeToKeyIndex     int
+ * @param useNewCashAddr        bool            flag to opt in to bitcoin cash cashaddr's
  * @param bypassNewAddressCheck bool            flag to indicate if wallet should/shouldn't derive new address locally to verify api
  * @constructor
  * @internal
@@ -51,6 +52,7 @@ var Wallet = function(
     testnet,
     checksum,
     upgradeToKeyIndex,
+    useNewCashAddr,
     bypassNewAddressCheck
 ) {
     /* jshint -W071 */
@@ -63,6 +65,7 @@ var Wallet = function(
     self.bypassNewAddressCheck = !!bypassNewAddressCheck;
     self.bitcoinCash = self.sdk.bitcoinCash;
     self.segwit = !!segwit;
+    self.useNewCashAddr = !!useNewCashAddr;
     assert(!self.segwit || !self.bitcoinCash);
 
     self.testnet = testnet;
@@ -141,6 +144,7 @@ Wallet.CHAIN_BCC_DEFAULT = 1;
 
 Wallet.FEE_STRATEGY_FORCE_FEE = blocktrail.FEE_STRATEGY_FORCE_FEE;
 Wallet.FEE_STRATEGY_BASE_FEE = blocktrail.FEE_STRATEGY_BASE_FEE;
+Wallet.FEE_STRATEGY_HIGH_PRIORITY = blocktrail.FEE_STRATEGY_HIGH_PRIORITY;
 Wallet.FEE_STRATEGY_OPTIMAL = blocktrail.FEE_STRATEGY_OPTIMAL;
 Wallet.FEE_STRATEGY_LOW_PRIORITY = blocktrail.FEE_STRATEGY_LOW_PRIORITY;
 Wallet.FEE_STRATEGY_MIN_RELAY_FEE = blocktrail.FEE_STRATEGY_MIN_RELAY_FEE;
@@ -547,12 +551,17 @@ Wallet.prototype.getAddressByPath = function(path) {
  * get redeemscript for specified path
  *
  * @param path
- * @returns {bitcoin.Script}
+ * @returns {Buffer}
  */
 Wallet.prototype.getRedeemScriptByPath = function(path) {
     return this.getWalletScriptByPath(path).redeemScript;
 };
 
+/**
+ * Generate scripts, and address.
+ * @param path
+ * @returns {{witnessScript: *, redeemScript: *, scriptPubKey, address: *}}
+ */
 Wallet.prototype.getWalletScriptByPath = function(path) {
     var self = this;
 
@@ -583,7 +592,7 @@ Wallet.prototype.getWalletScriptByPath = function(path) {
     }
 
     var spk = bitcoin.script.scriptHash.output.encode(bitcoin.crypto.hash160(rs));
-    var addr = bitcoin.address.fromOutputScript(spk, this.network);
+    var addr = bitcoin.address.fromOutputScript(spk, this.network, self.useNewCashAddr);
 
     return {
         witnessScript: ws,
@@ -694,29 +703,81 @@ Wallet.prototype.getNewAddress = function(chainIdx, cb) {
         cb = chainIdx;
         chainIdx = null;
     }
-    // default chainIdx to self.chain
-    if (typeof chainIdx === "undefined" || chainIdx === null) {
-        chainIdx = self.chain;
-    }
 
     var deferred = q.defer();
     deferred.promise.spreadNodeify(cb);
+
+    // Only enter if it's not an integer
+    if (chainIdx !== parseInt(chainIdx, 10)) {
+        // deal with undefined or null, assume defaults
+        if (typeof chainIdx === "undefined" || chainIdx === null) {
+            chainIdx = self.chain;
+        } else {
+            // was a variable but not integer
+            deferred.reject(new Error("Invalid chain index"));
+            return deferred.promise;
+        }
+    }
 
     deferred.resolve(
         self.sdk.getNewDerivation(self.identifier, "M/" + self.keyIndex + "'/" + chainIdx)
             .then(function(newDerivation) {
                 var path = newDerivation.path;
-                var address = newDerivation.address;
-                if (!self.bypassNewAddressCheck) {
+                var addressFromServer = newDerivation.address;
+                var decodedFromServer;
 
-                    address = self.getAddressByPath(newDerivation.path);
+                try {
+                    // Decode the address the serer gave us
+                    decodedFromServer = self.decodeAddress(addressFromServer);
+                    if ("cashAddrPrefix" in self.network && self.useNewCashAddr && decodedFromServer.type === "base58") {
+                        self.bypassNewAddressCheck = false;
+                    }
+                } catch (e) {
+                    throw new blocktrail.WalletAddressError("Failed to decode address [" + newDerivation.address + "]");
+                }
+
+                if (!self.bypassNewAddressCheck) {
+                    // We need to reproduce this address with the same path,
+                    // but the server (for BCH cashaddrs) uses base58?
+                    var verifyAddress = self.getAddressByPath(newDerivation.path);
+
+                    // If this occasion arises:
+                    if ("cashAddrPrefix" in self.network && self.useNewCashAddr && decodedFromServer.type === "base58") {
+                        // Decode our the address we produced for the path
+                        var decodeOurs;
+                        try {
+                            decodeOurs = self.decodeAddress(verifyAddress);
+                        } catch (e) {
+                            throw new blocktrail.WalletAddressError("Error while verifying address from server [" + e.message + "]");
+                        }
+
+                        // Peek beyond the encoding - the hashes must match at least
+                        if (decodeOurs.decoded.hash.toString('hex') !== decodedFromServer.decoded.hash.toString('hex')) {
+                            throw new blocktrail.WalletAddressError("Failed to verify legacy address [hash mismatch]");
+                        }
+
+                        var matchedP2PKH = decodeOurs.decoded.version === bitcoin.script.types.P2PKH &&
+                            decodedFromServer.decoded.version === self.network.pubKeyHash;
+                        var matchedP2SH = decodeOurs.decoded.version === bitcoin.script.types.P2SH &&
+                            decodedFromServer.decoded.version === self.network.scriptHash;
+
+                        if (!(matchedP2PKH || matchedP2SH)) {
+                            throw new blocktrail.WalletAddressError("Failed to verify legacy address [prefix mismatch]");
+                        }
+
+                        // We are satisfied that the address is for the same
+                        // destination, so substitute addressFromServer with our
+                        // 'reencoded' form.
+                        addressFromServer = decodeOurs.address;
+                    }
+
                     // debug check
-                    if (address !== newDerivation.address) {
-                        throw new blocktrail.WalletAddressError("Failed to verify address [" + newDerivation.address + "] !== [" + address + "]");
+                    if (verifyAddress !== addressFromServer) {
+                        throw new blocktrail.WalletAddressError("Failed to verify address [" + newDerivation.address + "] !== [" + addressFromServer + "]");
                     }
                 }
 
-                return [address, path];
+                return [addressFromServer, path];
             })
     );
 
@@ -925,61 +986,109 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
 };
 
 Wallet.prototype.decodeAddress = function(address) {
-    return Wallet.getAddressAndType(address, this.network);
+    return Wallet.getAddressAndType(address, this.network, this.useNewCashAddr);
 };
 
-Wallet.getAddressAndType = function(address, network) {
+function readBech32Address(address, network) {
+    var addr;
+    var err;
+    try {
+        addr = bitcoin.address.fromBech32(address, network);
+        err = null;
+
+    } catch (_err) {
+        err = _err;
+    }
+
+    if (!err) {
+        // Valid bech32 but invalid network immediately alerts
+        if (addr.prefix !== network.bech32) {
+            throw new blocktrail.InvalidAddressError("Address invalid on this network");
+        }
+    }
+
+    return [err, addr];
+}
+
+function readCashAddress(address, network) {
+    var addr;
+    var err;
+    try {
+        addr = bitcoin.address.fromCashAddress(address);
+        err = null;
+    } catch (_err) {
+        err = _err;
+    }
+
+    if (!err) {
+        // Valid base58 but invalid network immediately alerts
+        if (addr.prefix !== network.cashAddrPrefix) {
+            throw new Error(address + ' has an invalid prefix');
+        }
+    }
+
+    return [err, addr];
+}
+
+function readBase58Address(address, network) {
+    var addr;
+    var err;
+    try {
+        addr = bitcoin.address.fromBase58Check(address);
+        err = null;
+    } catch (_err) {
+        err = _err;
+    }
+
+    if (!err) {
+        // Valid base58 but invalid network immediately alerts
+        if (addr.version !== network.pubKeyHash && addr.version !== network.scriptHash) {
+            throw new blocktrail.InvalidAddressError("Address invalid on this network");
+        }
+    }
+
+    return [err, addr];
+}
+
+Wallet.getAddressAndType = function(address, network, allowCashAddress) {
     var addr;
     var type;
     var err;
 
+    function readAddress(reader, readType) {
+        var decoded = reader(address, network);
+        if (decoded[0] === null) {
+            addr = decoded[1];
+            type = readType;
+        } else {
+            err = decoded[0];
+        }
+    }
+
     if (network === bitcoin.networks.bitcoin || network === bitcoin.networks.testnet) {
-        try {
-            addr = bitcoin.address.fromBech32(address, network);
-            err = null;
-            type = "bech32";
+        readAddress(readBech32Address, "bech32");
+    }
 
-        } catch (_err) {
-            err = _err;
-        }
-
-        if (!err) {
-            // Valid bech32 but invalid network immediately alerts
-            if (addr.prefix !== network.bech32) {
-                throw new blocktrail.InvalidAddressError("Address invalid on this network");
-            }
-        }
+    if (!addr && 'cashAddrPrefix' in network && allowCashAddress) {
+        readAddress(readCashAddress, "cashaddr");
     }
 
     if (!addr) {
-        try {
-            addr = bitcoin.address.fromBase58Check(address);
-            err = null;
-            type = "base58";
-        } catch (_err) {
-            err = _err;
-        }
-
-        if (!err) {
-            // Valid base58 but invalid network immediately alerts
-            if (addr.version !== network.pubKeyHash && addr.version !== network.scriptHash) {
-                throw new blocktrail.InvalidAddressError("Address invalid on this network");
-            }
-        }
+        readAddress(readBase58Address, "base58");
     }
 
-    if (err) {
+    if (addr) {
+        return {
+            address: address,
+            decoded: addr,
+            type: type
+        };
+    } else {
         throw new blocktrail.InvalidAddressError(err.message);
     }
-
-    return {
-        address: address,
-        decoded: addr,
-        type: type
-    };
 };
 
-Wallet.convertPayToOutputs = function(pay, network) {
+Wallet.convertPayToOutputs = function(pay, network, allowCashAddr) {
     var send = [];
 
     var readFunc;
@@ -999,7 +1108,7 @@ Wallet.convertPayToOutputs = function(pay, network) {
             } else if (keys.indexOf("address") !== -1 && keys.indexOf("value") !== -1) {
                 obj.address = output["address"];
                 obj.value = output["value"];
-            } else if (keys.length !== 2 && output.length !== 2 && keys[0] !== 0 && keys[1] !== 1) {
+            } else if (keys.length === 2 && output.length === 2 && keys[0] === '0' && keys[1] === '1') {
                 obj.address = output[0];
                 obj.value = output[1];
             } else {
@@ -1033,8 +1142,8 @@ Wallet.convertPayToOutputs = function(pay, network) {
         // Remove address, replace with scriptPubKey
         if (typeof obj.address === "string") {
             try {
-                var addrAndType = Wallet.getAddressAndType(obj.address, network);
-                obj.scriptPubKey = bitcoin.address.toOutputScript(addrAndType.address, network).toString('hex');
+                var addrAndType = Wallet.getAddressAndType(obj.address, network, allowCashAddr);
+                obj.scriptPubKey = bitcoin.address.toOutputScript(addrAndType.address, network, allowCashAddr).toString('hex');
                 delete obj.address;
             } catch (e) {
                 throw new blocktrail.InvalidAddressError("Invalid address [" + obj.address + "] (" + e.message + ")");
@@ -1090,7 +1199,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
     q.nextTick(function() {
         var send;
         try {
-            send = Wallet.convertPayToOutputs(pay, self.network);
+            send = Wallet.convertPayToOutputs(pay, self.network, self.useNewCashAddr);
         } catch (e) {
             deferred.reject(e);
             return deferred.promise;
@@ -1178,9 +1287,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                          */
                         function(cb) {
                             send.forEach(function(_send) {
-                                if (_send.address) {
-                                    outputs.push({address: _send.address, value: _send.value});
-                                } else if (_send.scriptPubKey) {
+                                if (_send.scriptPubKey) {
                                     outputs.push({scriptPubKey: new Buffer(_send.scriptPubKey, 'hex'), value: _send.value});
                                 } else {
                                     throw new Error("Invalid send");
@@ -1222,13 +1329,14 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                          */
                         function(cb) {
                             if (change > 0) {
+                                var changeOutput = {
+                                    scriptPubKey: bitcoin.address.toOutputScript(changeAddress, self.network, self.useNewCashAddr),
+                                    value: change
+                                };
                                 if (randomizeChangeIdx) {
-                                    outputs.splice(_.random(0, outputs.length), 0, {
-                                        address: changeAddress,
-                                        value: change
-                                    });
+                                    outputs.splice(_.random(0, outputs.length), 0, changeOutput);
                                 } else {
-                                    outputs.push({address: changeAddress, value: change});
+                                    outputs.push(changeOutput);
                                 }
                             }
 
@@ -1241,7 +1349,7 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                          */
                         function(cb) {
                             outputs.forEach(function(outputInfo) {
-                                txb.addOutput(outputInfo.scriptPubKey || outputInfo.address, outputInfo.value);
+                                txb.addOutput(outputInfo.scriptPubKey, outputInfo.value);
                             });
 
                             cb();
@@ -1311,7 +1419,9 @@ Wallet.prototype.buildTransaction = function(pay, changeAddress, allowZeroConf, 
                                         }
                                     break;
 
+                                    case Wallet.FEE_STRATEGY_HIGH_PRIORITY:
                                     case Wallet.FEE_STRATEGY_OPTIMAL:
+                                    case Wallet.FEE_STRATEGY_LOW_PRIORITY:
                                         if (fee > estimatedFee * self.feeSanityCheckBaseFeeMultiplier) {
                                             return cb(new blocktrail.WalletFeeError("the fee suggested by the coin selection (" + fee + ") " +
                                                 "seems awefully high (" + estimatedFee + ") for FEE_STRATEGY_OPTIMAL"));
@@ -1375,7 +1485,7 @@ Wallet.prototype.coinSelection = function(pay, lockUTXO, allowZeroConf, feeStrat
 
     var send;
     try {
-        send = Wallet.convertPayToOutputs(pay, self.network);
+        send = Wallet.convertPayToOutputs(pay, self.network, self.useNewCashAddr);
     } catch (e) {
         var deferred = q.defer();
         deferred.promise.nodeify(cb);
