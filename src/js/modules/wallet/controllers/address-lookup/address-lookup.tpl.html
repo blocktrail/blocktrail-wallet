@@ -30,7 +30,7 @@
 
             <label class="toggle-btc">
                 <div class="toggle">
-                    <input type="checkbox" ng-model="useOldAddress">
+                    <input type="checkbox" ng-model="appControl.useOldAddress">
                     <div class="track">
                         <div class="handle"></div>
                     </div>
@@ -56,7 +56,7 @@
 
                     <div class="col">
                         <div class="multi-line-elem">
-                            <span class="address">{{ item.address | displayAddr: !useOldAddress}}</span>
+                            <span class="address">{{ (item.address | displayAddr: !appControl.useOldAddress) | shortDisplayAddr }}</span>
 
                             <div class="label margin-top" ng-if="item.label"> {{ item.label }} </div>
 
