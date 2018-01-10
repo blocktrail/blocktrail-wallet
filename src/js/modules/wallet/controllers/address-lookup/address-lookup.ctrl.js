@@ -6,13 +6,16 @@
 
     function AddressLookupCtrl($scope, activeWallet, CONFIG, $q, $timeout, $cacheFactory, $log,
                                $ionicPopover, $translate, $cordovaClipboard, $cordovaToast, $ionicActionSheet,
-                               bitcoinJS, sdkService) {
+                               $filter, bitcoinJS, sdkService) {
 
+        this._displayAddr = $filter("displayAddr");
         this._sdkService = sdkService;
 
         var $cache = $cacheFactory.get('address-lookup') || $cacheFactory('address-lookup', {capacity: 10});
         $scope.onScroll = angular.noop;
-        $scope.useOldAddress = !CONFIG.NETWORKS[sdkService.getNetworkType()].CASHADDRESS;
+        $scope.appControl = {
+            useOldAddress: !CONFIG.NETWORKS[sdkService.getNetworkType()].CASHADDRESS
+        };
 
         $scope.items = [];
         $scope.totalItems = null;
@@ -95,6 +98,7 @@
                 });
         };
 
+        var ctrl = this;
         /**
          * Show actionsheet with options for the current address
          * @param addrItem
@@ -120,12 +124,12 @@
                             if(addrItem.label) {
                                 showRemoveLabelPopover(addrItem);
                             } else {
-                                toClipboard(addrItem.address);
+                                toClipboard(ctrl._displayAddr(addrItem.address, !$scope.appControl.useOldAddress));
                             }
                             break;
                         case 2:
                             if(addrItem.label) {
-                                toClipboard(addrItem.address);
+                                toClipboard(ctrl._displayAddr(addrItem.address, !$scope.appControl.useOldAddress));
                             } else {
                                 window.open(CONFIG.NETWORKS[$scope.walletData.networkType].EXPLORER_ADDRESS_URL + '/' + addrItem.address, '_system');
                             }
