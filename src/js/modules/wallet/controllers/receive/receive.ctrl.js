@@ -82,9 +82,12 @@
                 return false;
             }
 
-            var prefix = "";
-            if (!(CONFIG.NETWORKS[walletData.networkType].CASHADDRESS && $scope.useCashAddress)) {
-                prefix = CONFIG.NETWORKS[walletData.networkType].URIPREFIX;
+            var prefix = CONFIG.NETWORKS[walletData.networkType].URIPREFIX;
+            if (CONFIG.NETWORKS[walletData.networkType].CASHADDRESS) {
+                prefix = "";
+                if (!$scope.appControl.useCashAddress) {
+                    prefix = CONFIG.NETWORKS["BTC"].URIPREFIX;
+                }
             }
 
             $scope.newRequest.bitcoinUri = prefix + $scope.newRequest.address;
