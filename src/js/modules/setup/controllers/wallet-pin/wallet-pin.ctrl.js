@@ -127,11 +127,11 @@
             sdk = sdkObject;
             sdkReadOnlyObject = sdkService.getReadOnlySdkData();
             $log.debug("Initialising wallet: " + $scope.setupInfo.identifier, sdk);
-            var useCashAddress = CONFIG.NETWORKS[sdkService.getNetworkType()];
+            var useCashAddress = CONFIG.NETWORKS[sdkService.getNetworkType()].CASHADDRESS;
             return sdk.initWallet({
                 identifier: $scope.setupInfo.identifier,
                 password: $scope.setupInfo.password,
-                useCashAddress: CONFIG.CASHADDRESS
+                useCashAddress: useCashAddress
             });
         }
 
@@ -466,10 +466,12 @@
                         template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>",
                         hideOnStateChange: true
                     });
+
+                    var useCashAddress = CONFIG.NETWORKS[sdkReadOnlyObject.networkType].CASHADDRESS;
                     return $scope.sdk.initWallet({
                         identifier: $scope.setupInfo.identifier,
                         password: $scope.setupInfo.password,
-                        useCashAddress: CONFIG.CASHADDRESS
+                        useCashAddress: useCashAddress
                     })
                         .then(function(wallet) {
                             //success, password is correct. We can continue
