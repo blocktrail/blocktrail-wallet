@@ -272,6 +272,10 @@
                             } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
                                 nextStep = "app.wallet.buybtc.choose";
                                 $ionicSideMenuDelegate.toggleLeft(false);
+                            } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://simplexCallback")) {
+                                // TODO: "Please wait for payment to confirm" - popup?
+                                nextStep = 'app.wallet.summary';
+                                $ionicSideMenuDelegate.toggleLeft(false);
                             } else {
                                 nextStep = "app.wallet.summary";
                             }

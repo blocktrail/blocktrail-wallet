@@ -184,6 +184,24 @@
             return self.client.get("/mywallet/glidera/prices/buy", {qty: qty, fiat: fiat, platform: "web"});
         };
 
+        blocktrailSDK.prototype.simplexBuyPrices = function (qty, fiat, fiatType, fiatFirst) {
+            var self = this;
+
+            return self.client.get("/mywallet/simplex/prices/quote", {
+                qty: qty,
+                fiat: fiat,
+                fiat_type: fiatType,
+                fiat_first: fiatFirst,
+                platform: 'mobile'
+            });
+        };
+
+        blocktrailSDK.prototype.simplexPaymentRequest = function (data) {
+            var self = this;
+
+            return self.client.post("/mywallet/simplex/payment/request", null, data);
+        };
+
         blocktrailSDK.prototype.redeemPromoCode = function (data) {
             var self = this;
 
