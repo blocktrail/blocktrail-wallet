@@ -30,15 +30,17 @@
         var self = this;
 
         return self._$q.when(self._sdkService.getSdkByNetworkType(networkType))
-            .then(self._sdkInitWallet.bind(self, identifier), self._errorHandler.bind(self))
+            .then(self._sdkInitWallet.bind(self, identifier, networkType), self._errorHandler.bind(self))
             .then(self._initWallet.bind(self, networkType, uniqueIdentifier));
     };
 
-    WalletService.prototype._sdkInitWallet = function(identifier, sdk) {
+    WalletService.prototype._sdkInitWallet = function(identifier, networkType, sdk) {
+        var useCashAddress = this._CONFIG.NETWORKS[networkType].CASHADDRESS;
         return sdk.initWallet({
             identifier: identifier,
             readOnly: true,
-            bypassNewAddressCheck: true
+            bypassNewAddressCheck: true,
+            useCashAddress: useCashAddress
         });
     };
 

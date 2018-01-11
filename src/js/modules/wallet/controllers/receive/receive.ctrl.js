@@ -9,12 +9,6 @@
         var walletData = activeWallet.getReadOnlyWalletData();
 
         $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
-        $scope.address = null;
-        $scope.path = null;
-        $scope.bitcoinUri = null;
-        $scope.qrcode = null;
-
-
 
         $scope.newRequest = {
             address: null,
@@ -26,6 +20,8 @@
         };
         //control status of the app (allows for child scope modification)
         $scope.appControl = {
+            showCashOption: CONFIG.NETWORKS[walletData.networkType].CASHADDRESS,
+            useCashAddress: CONFIG.NETWORKS[walletData.networkType].CASHADDRESS,
             working: false,
             showMessage: false,
             showRequestOptions: false
@@ -67,11 +63,32 @@
             });
         };
 
+        window.myscope = $scope;
+        $scope.$watch("appControl.useCashAddress", function(newValue, oldValue) {
+            if (newValue !== oldValue && $scope.newRequest.address) {
+                var sdk = activeWallet.getSdkWallet().sdk;
+                if (newValue) {
+                    $scope.newRequest.address = sdk.getCashAddressFromLegacyAddress($scope.newRequest.address);
+                } else {
+                    $scope.newRequest.address = sdk.getLegacyBitcoinCashAddress($scope.newRequest.address);
+                }
+            }
+        });
+
         $scope.generateQR = function() {
             if (!$scope.newRequest.address) {
                 return false;
             }
-            $scope.newRequest.bitcoinUri = "bitcoin:" + $scope.newRequest.address;
+
+            var prefix = CONFIG.NETWORKS[walletData.networkType].URIPREFIX;
+            if (CONFIG.NETWORKS[walletData.networkType].CASHADDRESS) {
+                prefix = "";
+                if (!$scope.appControl.useCashAddress) {
+                    prefix = CONFIG.NETWORKS["BTC"].URIPREFIX;
+                }
+            }
+
+            $scope.newRequest.bitcoinUri = prefix + $scope.newRequest.address;
             if ($scope.newRequest.btcValue) {
                 $scope.newRequest.bitcoinUri += "?amount=" + $scope.newRequest.btcValue.toFixed(8);
             }
