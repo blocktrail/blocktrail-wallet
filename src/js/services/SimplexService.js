@@ -43,6 +43,14 @@
 
         return sdk.simplexBuyPrices(postData)
             .then(function(response) {
+                // Check if result is for the correct coin
+                var coinType = activeWallet.getReadOnlyWalletData().networkType.replace('BCC', 'BCH').replace('t', '') // replace testnet
+                if (response.supported_digital_currencies) {
+                    if (response.supported_digital_currencies.indexOf(coinType) == -1) {
+                        throw new Exception('trying to buy different blockchain coin from wallet');
+                    }
+                }
+
                 response.qty = response.digital_money.amount;
                 response.total = response.fiat_money.total_amount;
                 response.fees = response.fiat_money.total_amount - response.fiat_money.base_amount;
