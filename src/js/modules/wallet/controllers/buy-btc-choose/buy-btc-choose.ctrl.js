@@ -4,10 +4,13 @@
     angular.module("blocktrail.wallet")
         .controller("BuyBTCChooseCtrl", BuyBTCChooseCtrl);
 
-    function BuyBTCChooseCtrl($q, $scope, $state, $cordovaDialogs, settingsService, $translate, glideraService, trackingService) {
+    function BuyBTCChooseCtrl($q, $scope, $state, $cordovaDialogs, settingsService, $translate, glideraService,
+                              trackingService, activeWallet) {
         var settingsData = settingsService.getReadOnlySettingsData();
+        var walletData = activeWallet.getReadOnlyWalletData();
 
         $scope.brokers = [];
+        $scope.network = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
 
         $scope.goBuyBTCState = function (broker) {
             $state.go('app.wallet.buybtc.buy', { broker: broker });
@@ -43,9 +46,7 @@
                             } else {
                                 throw new Error("User can't transact for unknown reason!");
                             }
-
-
-
+                        // when no access token available
                         } else {
                             trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_SETUP_INIT);
 
