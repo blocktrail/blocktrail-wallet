@@ -9,8 +9,7 @@
         var walletData = activeWallet.getReadOnlyWalletData();
 
         $scope.broker = $stateParams.broker;
-
-        // TODO: Add Notification "youre back here fast"
+        $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
 
         $scope.priceBTCCurrency = 'USD';
         $scope.fetchingInputPrice = false;
@@ -73,7 +72,6 @@
                     break;
             }
         };
-
 
         var handleErrors = function (errorMessage) {
             if (errorMessage.indexOf('value over limit') != -1) {

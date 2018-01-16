@@ -5,12 +5,24 @@
         .controller("BuyBTCChooseCtrl", BuyBTCChooseCtrl);
 
     function BuyBTCChooseCtrl($q, $scope, $state, $cordovaDialogs, settingsService, $translate, glideraService,
-                              trackingService, activeWallet) {
+                              trackingService, $timeout, activeWallet) {
         var settingsData = settingsService.getReadOnlySettingsData();
         var walletData = activeWallet.getReadOnlyWalletData();
 
         $scope.brokers = [];
-        $scope.network = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
+        $scope.network = CONFIG.NETWORKS[walletData.networkType].TICKER;
+        $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
+
+        $scope.$watch('brokers', function() {
+            $scope.simplexEnabled = CONFIG.FORCE_SIMPLEX_ENABLED || $scope.brokers.indexOf('simplex') !== -1;
+            $scope.glideraEnabled = CONFIG.FORCE_GLIDERA_ENABLED || $scope.brokers.indexOf('glidera') !== -1;
+        });
+
+        buyBTCService.brokers().then(function(brokers) {
+            $timeout(function() {
+                $scope.brokers = brokers;
+            });
+        });
 
         $scope.goBuyBTCState = function (broker) {
             $state.go('app.wallet.buybtc.buy', { broker: broker });
