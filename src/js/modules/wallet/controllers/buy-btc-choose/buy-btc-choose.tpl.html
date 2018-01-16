@@ -4,108 +4,27 @@
     </ion-nav-title>
 
     <ion-content>
-        <div ng-if="chooseState.gettingStarted">
-            <div class="item item-text-wrap">
-                <h2 class="text-neutral">{{ 'BUYBTC_GETSTARTED_HEAD' | translate }}</h2>
-                <p class="padding-t" ng-bind-html="'BUYBTC_GETSTARTED_BODY' | translate | nl2br"></p>
-                <button class="button button-block button-balanced" ng-click="chooseState.gettingStarted=false">
-                    {{ 'BUYBTC_GETSTARTED_BUTTON' | translate }}
+        <h3 class="group-title">
+            {{ 'BUYBTC_CREDIT_CARDS' | translate }}
+        </h3>
+        <div class="list list-inset">
+            <div class="item item-button-right" ng-click="goBuyBTCState('simplex')">
+                <img class="logo-simplex" src="img/simplex-logo.png">
+                <button class="button button-clear">
+                    <i class="icon ion-chevron-right"></i>
                 </button>
             </div>
-            <div ng-include="'js/modules/wallet/controllers/buy-btc-choose/buy-btc-teaser.tpl.html'"></div>
         </div>
 
-        <div ng-if="!chooseState.gettingStarted && chooseRegion">
-            <!-- CHOOSE REGION -->
-            <div ng-if="!chooseRegion.code" ng-controller="BuyBTCChooseRegionCtrl">
-                <div class="item item-text-wrap">
-                    <h2 class="text-neutral">{{ 'BUYBTC_CHOOSE_REGION_TITLE' | translate }}</h2>
-                    <p class="padding-t" ng-bind-html="'BUYBTC_CHOOSE_REGION_BODY' | translate | nl2br"></p>
-                </div>
-
-                <div ng-if="!usSelected">
-                    <h3 class="group-title">{{ 'BUYBTC_REGIONS' | translate }}</h3>
-                    <div class="list list-inset">
-                        <div class="item item-button-right" ng-click="selectUS()">
-                            <span class="sentence-case">USA</span>
-                            <button class="button button-clear">
-                                <i class="icon ion-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="item item-button-right" ng-repeat="region in regions" ng-click="selectRegion(region.code, region.name)">
-                            <span class="sentence-case">{{ region.name | translate }}</span>
-                            <button class="button button-clear">
-                                <i class="icon ion-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="item item-button-right" ng-click="selectRegion('OTHER_REGIONS')">
-                            <span class="sentence-case">{{ 'OTHER_REGIONS' | translate }}</span>
-                            <button class="button button-clear">
-                                <i class="icon ion-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div ng-if="usSelected">
-                    <h3 class="group-title">{{ 'BUYBTC_REGIONS' | translate }}</h3>
-                    <div class="list list-inset">
-                        <div ng-repeat="usState in usStates" class="item item-button-right" ng-click="selectRegion(usState.code, usState.name)">
-                            <span class="sentence-case">{{ usState.name }} ({{ usState.code.replace('US-', '') }})</span>
-                            <button class="button button-clear">
-                                <i class="icon ion-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="item item-button-right" ng-click="selectRegion('OTHER_REGIONS')">
-                            <span class="sentence-case">Other</span>
-                            <button class="button button-clear">
-                                <i class="icon ion-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- REGION NOT OK -->
-            <div ng-if="chooseRegion.code && !chooseRegion.regionOk">
-                <div class="item item-text-wrap">
-                    <h2 class="text-neutral">{{ 'BUYBTC_REGION_NOTOK_TITLE' | translate }}: <span class="">{{ chooseRegion.name | translate }}</span></h2>
-                    <p class="padding-t sentence-case" ng-bind-html="'BUYBTC_REGION_NOTOK_BODY' | translate | nl2br"></p>
-                </div>
-
-                <div class="padding-t card">
-                    <div class="list">
-                        <div class="item">
-                            <button class="button send-button button-block button-energized" ng-click="selectRegion(null, null)">
-                                {{ 'BUYBTC_CHANGE_REGION' | translate }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- REGION OK -->
-            <div ng-if="chooseRegion.code && chooseRegion.regionOk">
-                <div class="item item-text-wrap">
-                    <h2 class="text-neutral">{{ 'BUYBTC_CHOOSE_TITLE' | translate }}</h2>
-                    <p translate="BUYBTC_CHOOSE_SUBTITLE"
-                       translate-compile
-                       translate-value-region="{{ chooseRegion.name | translate }}"
-                       translate-value-href="href ng-click='selectRegion(null, null)'"></p>
-                </div>
-
-                <h3 class="group-title"
-                    translate="BUYBTC_PROVIDERS"
-                    translate-value-region="{{ chooseRegion.name | translate }}"></h3>
-                <div class="list list-inset"
-                     ng-if="brokers.indexOf('glidera') !== -1">
-                    <div class="item item-button-right" ng-click="goGlideraBrowser()">
-                        <img class="logo-glidera" src="img/glidera-bright.png">
-                        <button class="button button-clear">
-                            <i class="icon ion-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
+        <h3 class="group-title">
+            {{ 'BUYBTC_BANK_WIRE' | translate }} <span style="color: gray; font-size: 0.8rem;">({{ 'BUYBTC_US_ONLY' | translate }})</span>
+        </h3>
+        <div class="list list-inset">
+            <div class="item item-button-right" ng-click="goGlideraBrowser()">
+                <img class="logo-glidera" src="img/glidera-bright.png">
+                <button class="button button-clear">
+                    <i class="icon ion-chevron-right"></i>
+                </button>
             </div>
         </div>
     </ion-content>

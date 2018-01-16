@@ -258,6 +258,7 @@
                             $log.log("bitcoin? " + $rootScope.handleOpenURL.startsWith("bitcoin"));
                             $log.log("bitcoincash? " + ($rootScope.handleOpenURL.startsWith("bitcoincash") || $rootScope.handleOpenURL.startsWith("bitcoin cash")));
                             $log.log("glidera? " + $rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback"));
+                            $log.log("simplex? " + $rootScope.handleOpenURL.startsWith("btccomwallet://simplexCallback"));
 
                             if($rootScope.handleOpenURL.startsWith("bitcoin") ||
                                 $rootScope.handleOpenURL.startsWith("bitcoincash") ||
@@ -272,6 +273,9 @@
                             } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/return")) {
                                 nextStep = "app.wallet.buybtc.choose";
                                 $ionicSideMenuDelegate.toggleLeft(false);
+                            } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://simplexCallback")) {
+                                // TODO: "Please wait for payment to confirm" - popup?
+                                nextStep = 'app.wallet.summary';
                             } else {
                                 nextStep = "app.wallet.summary";
                             }

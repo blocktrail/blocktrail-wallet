@@ -36,7 +36,7 @@
             // Check on numbers, pattern="[0-9]*" is in html
             if (!pin) {
                 modalService.alert({
-                    body: "MSG_BAD_ONLY_NUMBERS"
+                    body: "MSG_BAD_PIN"
                 });
                 return false;
             }
@@ -236,7 +236,8 @@
                         identifier: setupInfoService.getSetupInfoProperty("identifier"),
                         password: setupInfoService.getSetupInfoProperty("password"),
                         walletVersion: CONFIG.WALLET_DEFAULT_VERSION,
-                        support_secret: supportSecret
+                        support_secret: supportSecret,
+                        keyIndex: CONFIG.DEVKEYINDEX || 0,
                     })
                     .progress(function(progress) {
                         /*

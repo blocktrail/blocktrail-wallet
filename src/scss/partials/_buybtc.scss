@@ -46,17 +46,31 @@
         color: #999;
     }
 
-    .logo-bitonic {
-        width: 180px;
-        height: auto;
-        max-height: 26px;
+    .logo-glidera {
+        width: auto;
+        height: 25px;
+        max-height: 25px;
         margin: -8px 0px -7px 0px;
     }
 
-    .logo-glidera {
-        width: 180px;
-        height: auto;
-        max-height: 26px;
-        margin: -8px 0px -7px 0px;
+    .logo-simplex {
+        width: auto;
+        height: 28px;
+        max-height: 28px;
+        margin: -8px 0px -9px 0px;
+    }
+
+    .buy-tos {
+        padding: 0px !important;
+        a {
+            font-size: 10px;
+        }
+
+        label {
+            line-height: unset;
+            font-size: 12px;
+            padding: 3px;
+            margin-top: 15px;
+        }
     }
 }

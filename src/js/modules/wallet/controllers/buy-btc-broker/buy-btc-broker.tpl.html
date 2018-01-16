@@ -50,16 +50,40 @@
 
             </div>
 
+            <div class="padding-t card" ng-show="errorMsg">
+                <div class="help-text">
+                    <div class="text-muted text-center">
+                        <p> {{ errorMsg }} </p>
+                    </div>
+                </div>
+            </div>
+
             <div class="card" ng-if="buyInput.displayFee && (buyInput.btcValue || buyInput.fiatValue)">
                 <!-- for debug //-->
-                {{ 'BUYBTC_INCL_FEE' | translate }} ({{ buyInput.feePercentage | number:1 }}%) <->
+                {{ includingFee ? 'BUYBTC_INCL_FEE': 'TX_INFO_FEE' }} ({{ buyInput.feePercentage | number:1 }}%) <->
                 {{ priceBTCCurrency | toCurrencySymbol }}{{ buyInput.feeValue | number:2 }}
+            </div>
+
+            <div class="card" ng-show="broker === 'simplex'">
+                <div class="item buy-tos text-center">
+                    <ion-checkbox ng-model="termsAccepted" style="border-width: 0px;">
+                        <span class="sentence-case" style="white-space: normal;" translate="BUYBTC_SIMPLEX_TOS"></span>
+                    </ion-checkbox>
+                    <div>
+                        <a href="https://www.simplex.com/terms-of-use/" browse-to="">{{ 'TERMS_OF_USE' | translate }} <i class="ion-android-open"></i></a>
+                        |
+                        <a href="https://www.simplex.com/privacy-policy/" browse-to="">{{ 'PRIVACY_POLICY' | translate }} <i class="ion-android-open"></i></a>
+                    </div>
+                </div>
             </div>
 
             <div class="recipient-input-section padding-t card">
                 <div class="list">
                     <div class="item">
-                        <button class="button send-button button-block button-energized" ng-click="buyBTC()">{{ 'BUYBTC_BUY' | translate }}</button>
+                        <button class="button send-button button-block button-energized"
+                                ng-click="buyBTC()"
+                                ng-disabled="errorMsg || fetchingInputPrice || fetchingMainPrice || (!termsAccepted && broker != 'glidera')"
+                        >{{ 'BUYBTC_BUY' | translate }}</button>
                     </div>
                 </div>
             </div>
@@ -73,8 +97,6 @@
                     {{ 'BUYBTC_BANK_TRANSFER_SLOW' | translate }}
                 </p>
             </div>
-
-
         </ion-content>
     </form>
 </ion-view>

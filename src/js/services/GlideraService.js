@@ -374,7 +374,7 @@ angular.module('blocktrail.wallet').factory(
             return accessTokenPromise;
         };
 
-        var buyPrices = function(qty, fiat) {
+        var buyPrices = function(qty, fiat, nullArg1 , nullArg2 /* null arguments needed in SimplexService */) {
             return walletsManagerService.getActiveSdk().glideraBuyPrices(qty, fiat)
                 .then(function(result) {
                     console.log('buyPrices ' + JSON.stringify(result));
@@ -540,7 +540,6 @@ angular.module('blocktrail.wallet').factory(
                             settings.glideraTransactions.forEach(function(tx) {
                                 oldTxMap[tx.transactionUuid] = tx;
                             });
-
 
                             var glideraTransactions = updateTxs.map(function(updateTx) {
                                 var tx = oldTxMap[updateTx.transactionUuid] || {};
