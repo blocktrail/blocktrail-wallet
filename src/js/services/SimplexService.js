@@ -96,6 +96,7 @@
                 coin_type: activeWallet.getReadOnlyWalletData().networkType.replace('t', ''), // replace testnet
                 quote_id: simplexData.quote_id,
                 payment_id: simplexData.payment_id,
+                order_id: simplexData.order_id,
                 api_key: accountInfo.api_key,
                 platform: 'mobile'
             };
@@ -106,7 +107,6 @@
                 })
                 .join('&');
 
-            // TODO: This can be network agnostic, as BUY BTC is only for BTC anyways
             window.open('http://' + self._CONFIG.API_HOST + '/v1/' + networkType + '/mywallet/simplex/payment/forward?' + queryString, '_system')
         });
     };
