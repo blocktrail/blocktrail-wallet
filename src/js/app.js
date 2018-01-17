@@ -99,6 +99,19 @@ angular.module('blocktrail.wallet').run(
             }
         });
 
+        if (CONFIG.APPSFLYER) {
+            if ($rootScope.isIOS) {
+                window.plugins.appsFlyer.initSdk({
+                    devKey: CONFIG.APPSFLYER.KEY.iOS,
+                    appId: CONFIG.APPSFLYER.APPID.iOS
+                });
+            } else {
+                window.plugins.appsFlyer.initSdk({
+                    devKey: CONFIG.APPSFLYER.KEY.android
+                });
+            }
+        }
+
         if (CONFIG.DEBUGLIBS) {
             blocktrailSDK.debug.enable('*,-pouchdb:*');
         } else {

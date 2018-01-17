@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="app_name">BTC Wallet</string>
     <string name="launcher_name">@string/app_name</string>
@@ -122,8 +122,7 @@
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
     <string name="wifi_ssid_label">Network Name</string>
     <string name="wifi_type_label">Type</string>
+    
     <string name="google_app_id">1:647858814792:android:af0575aabe6811ca</string>
     <string name="google_api_key">AIzaSyDQtYkg0yzLNBpCqrbB6JCQqXQqli6uW-s</string>
-    <string name="google_app_id">@string/google_app_id</string>
-    <string name="google_api_key">@string/google_api_key</string>
 </resources>
