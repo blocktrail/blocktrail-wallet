@@ -307,5 +307,14 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-appsflyer-sdk": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

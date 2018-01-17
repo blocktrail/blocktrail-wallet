@@ -495,6 +495,22 @@ module.exports = [
         "clobbers": [
             "cordova.plugins.clipboard"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-appsflyer-sdk/www/appsflyer.js",
+        "id": "cordova-plugin-appsflyer-sdk.appsflyer",
+        "pluginId": "cordova-plugin-appsflyer-sdk",
+        "clobbers": [
+            "window.plugins.appsFlyer"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-appsflyer-sdk/www/AppsFlyerError.js",
+        "id": "cordova-plugin-appsflyer-sdk.AppsFlyerError",
+        "pluginId": "cordova-plugin-appsflyer-sdk",
+        "clobbers": [
+            "AppsFlyerError"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -533,7 +549,8 @@ module.exports.metadata =
     "cordova-plugin-firebase": "0.1.24",
     "cordova-plugin-file-transfer": "1.6.3",
     "cordova-open": "1.0.12",
-    "cordova-universal-clipboard": "0.1.0"
+    "cordova-universal-clipboard": "0.1.0",
+    "cordova-plugin-appsflyer-sdk": "4.4.0"
 }
 // BOTTOM OF METADATA
 });

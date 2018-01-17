@@ -171,6 +171,10 @@
                         {
                             "xml": "<feature name=\"Clipboard\"><param name=\"ios-package\" value=\"CDVClipboard\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppsFlyerPlugin\"><param name=\"ios-package\" value=\"AppsFlyerPlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -353,6 +357,9 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-universal-clipboard": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-appsflyer-sdk": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -853,6 +860,22 @@
             "clobbers": [
                 "cordova.plugins.clipboard"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-appsflyer-sdk/www/appsflyer.js",
+            "id": "cordova-plugin-appsflyer-sdk.appsflyer",
+            "pluginId": "cordova-plugin-appsflyer-sdk",
+            "clobbers": [
+                "window.plugins.appsFlyer"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-appsflyer-sdk/www/AppsFlyerError.js",
+            "id": "cordova-plugin-appsflyer-sdk.AppsFlyerError",
+            "pluginId": "cordova-plugin-appsflyer-sdk",
+            "clobbers": [
+                "AppsFlyerError"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -889,6 +912,7 @@
         "cordova-plugin-firebase": "0.1.24",
         "cordova-plugin-file-transfer": "1.6.3",
         "cordova-open": "1.0.12",
-        "cordova-universal-clipboard": "0.1.0"
+        "cordova-universal-clipboard": "0.1.0",
+        "cordova-plugin-appsflyer-sdk": "4.4.0"
     }
 }

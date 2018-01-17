@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <widget id="com.blocktrail.mywallet" version="4.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
@@ -109,12 +109,26 @@
     <access origin="https://api.facebook.com" />
     <access origin="https://*.fbcdn.net" />
     <access origin="https://*.akamaihd.net" />
-    <access origin="https://api.blocktrail.com" />
-    <access origin="https://sandbox.glidera.io" />
-    <access origin="https://www.glidera.io" />
-    <access origin="https://bitonic.nl" />
-    <access origin="https://staging.bitonic.nl" />
     <name>BTC Wallet</name>
+    <preference name="loglevel" value="DEBUG" />
+    <feature name="AppsFlyerPlugin">
+        <param name="android-package" value="com.appsflyer.cordova.plugin.AppsFlyerPlugin" />
+    </feature>
+    <preference name="android-minSdkVersion" value="15" />
+    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="android-minSdkVersion" value="17" />
+    <preference name="android-targetSdkVersion" value="22" />
+    <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
+    <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+    <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
+    <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+    <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.9.png" />
+    <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.9.png" />
+    <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.9.png" />
+    <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.9.png" />
+    <name>BlockTrail Wallet</name>
     <description>
         Your personal Bitcoin wallet, powered by BTC.com
     </description>
@@ -122,19 +136,11 @@
     BTC.com Team
     </author>
     <content src="index.html" />
-    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
-    <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
-    <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
-    <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
-    <allow-navigation href="http://10.4.86.199:8100" />
-    <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.9.png" />
-    <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.9.png" />
-    <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.9.png" />
-    <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.9.png" />
-    <preference name="loglevel" value="DEBUG" />
-    <preference name="android-minSdkVersion" value="17" />
+    <access origin="https://api.blocktrail.com" />
+    <access origin="https://sandbox.glidera.io" />
+    <access origin="https://www.glidera.io" />
+    <access origin="https://bitonic.nl" />
+    <access origin="https://staging.bitonic.nl" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
@@ -142,7 +148,6 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="orientation" value="portrait" />
-    <preference name="SplashScreenDelay" value="10000" />
-    <preference name="AutoHideSplashScreen" value="true" />
-    <preference name="android-targetSdkVersion" value="22" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <allow-navigation href="http://10.4.86.199:8100" />
 </widget>

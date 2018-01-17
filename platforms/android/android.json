@@ -159,6 +159,10 @@
                         {
                             "xml": "<feature name=\"Clipboard\"><param name=\"android-package\" value=\"com.verso.cordova.clipboard.Clipboard\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppsFlyerPlugin\"><param name=\"android-package\" value=\"com.appsflyer.cordova.plugin.AppsFlyerPlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -804,6 +808,26 @@
                         }
                     ]
                 }
+            },
+            "app/src/main/AndroidManifest.xml": {
+                "parents": {
+                    "/manifest": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
+                        }
+                    ],
+                    "/manifest/application": [
+                        {
+                            "xml": "<receiver android:exported=\"true\" android:name=\"com.appsflyer.MultipleInstallBroadcastReceiver\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
+                            "count": 1
+                        }
+                    ]
+                }
             }
         }
     },
@@ -913,6 +937,9 @@
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         },
         "cordova-universal-clipboard": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-appsflyer-sdk": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
@@ -1395,6 +1422,20 @@
             "clobbers": [
                 "cordova.plugins.clipboard"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-appsflyer-sdk/www/appsflyer.js",
+            "id": "cordova-plugin-appsflyer-sdk.appsflyer",
+            "clobbers": [
+                "window.plugins.appsFlyer"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-appsflyer-sdk/www/AppsFlyerError.js",
+            "id": "cordova-plugin-appsflyer-sdk.AppsFlyerError",
+            "clobbers": [
+                "AppsFlyerError"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -1431,6 +1472,7 @@
         "cordova-plugin-firebase": "0.1.24",
         "cordova-plugin-file-transfer": "1.6.3",
         "cordova-open": "1.0.12",
-        "cordova-universal-clipboard": "0.1.0"
+        "cordova-universal-clipboard": "0.1.0",
+        "cordova-plugin-appsflyer-sdk": "4.4.0"
     }
 }

@@ -350,6 +350,9 @@
         },
         "cordova-universal-clipboard": {
             "PACKAGE_NAME": "com.blocktrail.mywallet"
+        },
+        "cordova-plugin-appsflyer-sdk": {
+            "PACKAGE_NAME": "com.blocktrail.mywallet"
         }
     },
     "dependent_plugins": {

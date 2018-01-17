@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		01446B622BD044DF80E3C5C2 /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87F93417B68945F789A387CD /* GTMSessionFetcher.framework */; };
 		0356A090D8464D4183F35B0A /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E0D6BBD2D07470CBAB1ACFC /* CDVInAppBrowser.m */; };
@@ -145,6 +144,8 @@
 		F55E606FD9EF4C7BAA056477 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F0BD4C55D4BFB89E58B14 /* CoreImage.framework */; };
 		FB51793894F04B5DAEE729B3 /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1A3CE087D0641C59D128308 /* ELCAlbumPickerController.m */; };
 		FC948E6E370A4F58B2DD9AFD /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C6AA61312E043F1B437FAA8 /* GoogleToolboxForMac.framework */; };
+		952697B0BD9F4C06B19651E0 /* AppsFlyerPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 3360E3335C9445D78F6849FD /* AppsFlyerPlugin.m */; };
+		F5715A563355491BB8D647F4 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EABCA7D4194DC4B6CBA056 /* libAppsFlyerLib.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -405,6 +406,13 @@
 		FC6DA52E297D4427AFAA97CC /* CDVClipboard.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVClipboard.h; path = "cordova-universal-clipboard/CDVClipboard.h"; sourceTree = "<group>"; };
 		FC7F7D49E4CF4AF6A6AA093A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "BlockTrail Wallet/Plugins/cordova-plugin-facebook4/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		FF78D9D50653435192A65928 /* ZBarReaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZBarReaderViewController.h; path = org.cloudsky.cordovaplugins.zbar/ZBarReaderViewController.h; sourceTree = "<group>"; };
+		3360E3335C9445D78F6849FD /* AppsFlyerPlugin.m */ = {isa = PBXFileReference; name = "AppsFlyerPlugin.m"; path = "cordova-plugin-appsflyer-sdk/AppsFlyerPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		55EABCA7D4194DC4B6CBA056 /* libAppsFlyerLib.a */ = {isa = PBXFileReference; name = "libAppsFlyerLib.a"; path = "BlockTrail Wallet/Plugins/cordova-plugin-appsflyer-sdk/libAppsFlyerLib.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		BEB1C0B813DC4B4098A4C29D /* AppsFlyerPlugin.h */ = {isa = PBXFileReference; name = "AppsFlyerPlugin.h"; path = "cordova-plugin-appsflyer-sdk/AppsFlyerPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		4FD1C4EBC8954881B858D45E /* AppsFlyerTracker.h */ = {isa = PBXFileReference; name = "AppsFlyerTracker.h"; path = "cordova-plugin-appsflyer-sdk/AppsFlyerTracker.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		7187C941FCC84EB1AE182598 /* AppsFlyerLinkGenerator.h */ = {isa = PBXFileReference; name = "AppsFlyerLinkGenerator.h"; path = "cordova-plugin-appsflyer-sdk/AppsFlyerLinkGenerator.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		9E2B6D7FB3F24FAC8E4FC0A7 /* AppsFlyerCrossPromotionHelper.h */ = {isa = PBXFileReference; name = "AppsFlyerCrossPromotionHelper.h"; path = "cordova-plugin-appsflyer-sdk/AppsFlyerCrossPromotionHelper.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		BBCB574814A04F71B5DC2A36 /* AppsFlyerShareInviteHelper.h */ = {isa = PBXFileReference; name = "AppsFlyerShareInviteHelper.h"; path = "cordova-plugin-appsflyer-sdk/AppsFlyerShareInviteHelper.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -462,6 +470,7 @@
 				01446B622BD044DF80E3C5C2 /* GTMSessionFetcher.framework in Frameworks */,
 				D40D723564F844E9B8B95382 /* QuickLook.framework in Frameworks */,
 				BF3EBF610E09448E898D64B8 /* Foundation.framework in Frameworks */,
+				F5715A563355491BB8D647F4 /* libAppsFlyerLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -596,6 +605,7 @@
 				87F93417B68945F789A387CD /* GTMSessionFetcher.framework */,
 				46CEB26CE3264F42BF895DD5 /* QuickLook.framework */,
 				3AF5D7B19B2D4AC1890DC91C /* Foundation.framework */,
+				55EABCA7D4194DC4B6CBA056 /* libAppsFlyerLib.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -746,6 +756,12 @@
 				C13173C0E41648F1962B40EC /* Open.h */,
 				13AB05573E6F4D10A6EF1030 /* CDVClipboard.m */,
 				FC6DA52E297D4427AFAA97CC /* CDVClipboard.h */,
+				3360E3335C9445D78F6849FD /* AppsFlyerPlugin.m */,
+				BEB1C0B813DC4B4098A4C29D /* AppsFlyerPlugin.h */,
+				4FD1C4EBC8954881B858D45E /* AppsFlyerTracker.h */,
+				7187C941FCC84EB1AE182598 /* AppsFlyerLinkGenerator.h */,
+				9E2B6D7FB3F24FAC8E4FC0A7 /* AppsFlyerCrossPromotionHelper.h */,
+				BBCB574814A04F71B5DC2A36 /* AppsFlyerShareInviteHelper.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -1016,6 +1032,7 @@
 				3FB2D441436144479FE0C10F /* CDVFileTransfer.m in Sources */,
 				F0EF6366A72B414889231534 /* Open.m in Sources */,
 				62183F43200D439B8D7B28F6 /* CDVClipboard.m in Sources */,
+				952697B0BD9F4C06B19651E0 /* AppsFlyerPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1085,6 +1102,7 @@
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
+					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-appsflyer-sdk\"",
 				);
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -1157,6 +1175,7 @@
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
 					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-google-analytics\"",
+					"\"$(SRCROOT)/BlockTrail Wallet/Plugins/cordova-plugin-appsflyer-sdk\"",
 				);
 				OTHER_LDFLAGS = (
 					"-weak_framework",

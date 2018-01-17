@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-appsflyer-sdk"
+        version="4.4.0">
+    <name>AppsFlyer</name>
+    <description>Cordova Plugin AppsFlyer</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,appsflyer</keywords>
+    <repo>https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk.git</repo>
+    <engines>
+        <engine name="cordova" version=">=4.3.0"/>
+    </engines>
+
+    <js-module src="www/appsflyer.js" name="appsflyer">
+        <clobbers target="window.plugins.appsFlyer" />
+    </js-module>
+
+    <js-module src="www/AppsFlyerError.js" name="AppsFlyerError">
+        <clobbers target="AppsFlyerError" />
+    </js-module>
+
+
+    
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AppsFlyerPlugin">
+                <param name="android-package" value="com.appsflyer.cordova.plugin.AppsFlyerPlugin"/>
+            </feature>
+        </config-file>
+        <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest" mode="merge">
+            <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        </config-file>
+        <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest/application" mode="merge">
+            <receiver android:name="com.appsflyer.MultipleInstallBroadcastReceiver" android:exported="true">
+                <intent-filter>
+                    <action android:name="com.android.vending.INSTALL_REFERRER" />
+                </intent-filter>
+            </receiver>
+        </config-file>
+
+        <source-file src="src/android/com/appsflyer/cordova/plugin/AppsFlyerPlugin.java" target-dir="app/src/main/java/com/appsflyer/cordova/plugin" />
+        <source-file src="src/android/com/appsflyer/cordova/plugin/AppsFlyerConstants.java" target-dir="app/src/main/java/com/appsflyer/cordova/plugin" />
+        <source-file src="src/android/libs/AF-Android-SDK.jar" target-dir="app/src/main/libs"/>
+        <framework src="src/android/cordovaAF.gradle" custom="true" type="gradleReference" />
+    </platform>
+
+
+    <!-- ios -->
+    <platform name="ios">        
+        <config-file target="config.xml" parent="/*">
+            <feature name="AppsFlyerPlugin">
+                <param name="ios-package" value="AppsFlyerPlugin" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/AppsFlyerPlugin.h" />
+        <header-file src="src/ios/AppsFlyerTracker.h" />
+        <source-file src="src/ios/AppsFlyerPlugin.m" />
+        <header-file src="src/ios/AppsFlyerLinkGenerator.h" />
+        <header-file src="src/ios/AppsFlyerCrossPromotionHelper.h" />
+        <header-file src="src/ios/AppsFlyerShareInviteHelper.h" />
+        <source-file src="src/ios/libAppsFlyerLib.a" compiler-flags="-lAppsFlyerLib" framework="true" />
+        <framework src="AdSupport.framework" weak="true" />
+        <framework src="iAd.framework" weak="true" />
+        <framework src="Security.framework" weak="true" />
+    </platform>
+</plugin>
