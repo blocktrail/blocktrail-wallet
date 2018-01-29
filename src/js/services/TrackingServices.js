@@ -37,6 +37,13 @@ angular.module('blocktrail.wallet')
             HAS_BALANCE: "has_balance"
         };
 
+        var APPSFLYER_EVENTS = {};
+        APPSFLYER_EVENTS[EVENTS.SIGN_UP] = "af_complete_registration";
+        APPSFLYER_EVENTS[EVENTS.ACTIVATED] = "af_achievement_unlocked";
+        APPSFLYER_EVENTS[EVENTS.LOGIN] = "af_login";
+        APPSFLYER_EVENTS[EVENTS.APP_OPEN] = "af_re_engage";
+        // APPSFLYER_EVENTS[EVENTS.BUYBTC.SIMPLEX_REDIRECT] = "af_initiated_checkout"; // once implemented
+
         var ANALYTICS_META = {};
         Object.keys(EVENTS.BUYBTC).forEach(function(eventKey) {
             var eventVal = EVENTS.BUYBTC[eventKey];
@@ -46,6 +53,7 @@ angular.module('blocktrail.wallet')
         var trackEvent = function(event, meta) {
             trackAnalyticsEvent(event, meta);
             trackFirebaseEvent(event, meta);
+            trackAppsflyerEvent(event, meta);
         };
 
         var trackAnalyticsEvent = function(event, meta) {
@@ -61,6 +69,15 @@ angular.module('blocktrail.wallet')
             firebaseMeta.network = sdkService.getNetworkType();
 
             FirebasePlugin.logEvent(event, firebaseMeta);
+        };
+
+        var trackAppsflyerEvent = function(event, meta) {
+            if (!!CONFIG.APPSFLYER && typeof APPSFLYER_EVENTS[event] !== "undefined") {
+                var appsFlyerMeta = {};
+                appsFlyerMeta.af_content_type = sdkService.getNetworkType();
+
+                window.plugins.appsFlyer.trackEvent(APPSFLYER_EVENTS[event], appsFlyerMeta);
+            }
         };
 
         var setUserTrackingId = function(trackingId) {
