@@ -7,6 +7,7 @@
     function BuyBTCBrokerCtrl($scope, $state, $ionicLoading, $cordovaDialogs, glideraService, simplexService, CONFIG, settingsService,
                               $stateParams, $q, $timeout, $interval, $translate, $filter, trackingService, activeWallet) {
         var walletData = activeWallet.getReadOnlyWalletData();
+        var settings = settingsService.getReadOnlySettingsData();
 
         $scope.broker = $stateParams.broker;
         $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
@@ -54,10 +55,10 @@
                 case 'simplex':
                     $scope.includingFee = false;
 
-                    if (['USD', 'EUR'].indexOf(settingsService.localCurrency)) {
-                        $scope.buyInput.currencyType = settingsService.localCurrency;
-                        $scope.buyInput.fiatCurrency = settingsService.localCurrency;
-                        $scope.priceBTCCurrency = settingsService.localCurrency;
+                    if (['USD', 'EUR'].indexOf(settings.localCurrency) !== -1) {
+                        $scope.buyInput.currencyType = settings.localCurrency;
+                        $scope.buyInput.fiatCurrency = settings.localCurrency;
+                        $scope.priceBTCCurrency = settings.localCurrency;
                     } else {
                         $scope.buyInput.currencyType = 'USD';
                         $scope.buyInput.fiatCurrency = 'USD';
@@ -109,13 +110,13 @@
         };
 
         $scope.swapInputs = function() {
-            if (!$scope.fiatFirst && $scope.settings.localCurrency !== $scope.buyInput.currencyType) {
+            if (!$scope.fiatFirst && settings.localCurrency !== $scope.buyInput.currencyType) {
                 // Glidera special case
-                if ($scope.broker == 'glidera'){
+                if ($scope.broker == 'glidera' || $scope.broker == 'simplex') {
                     return $cordovaDialogs.confirm(
                         $translate.instant('MSG_BUYBTC_FIAT_USD_ONLY', {
                             currency: $scope.currencies[0].code,
-                            yourCurrency: $scope.settings.localCurrency
+                            yourCurrency: settings.localCurrency
                         }).sentenceCase(),
                         $translate.instant('MSG_BUYBTC_FIAT_USD_ONLY_TITLE').sentenceCase(),
                         [$translate.instant('OK'), $translate.instant('CANCEL').sentenceCase()]
