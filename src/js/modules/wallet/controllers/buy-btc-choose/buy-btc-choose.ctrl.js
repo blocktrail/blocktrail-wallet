@@ -5,7 +5,7 @@
         .controller("BuyBTCChooseCtrl", BuyBTCChooseCtrl);
 
     function BuyBTCChooseCtrl($q, $scope, $state, $cordovaDialogs, settingsService, $translate, glideraService,
-                              trackingService, $timeout, activeWallet) {
+                              trackingService, $timeout, activeWallet, CONFIG, buyBTCService) {
         var settingsData = settingsService.getReadOnlySettingsData();
         var walletData = activeWallet.getReadOnlyWalletData();
 

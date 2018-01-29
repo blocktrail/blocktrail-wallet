@@ -159,7 +159,7 @@
                 return null;
             }
 
-            return fetchBrokerService().buyPrices(1, null, $scope.buyInput.fiatCurrency, false).then(function (result) {
+            return fetchBrokerService().buyPrices(1, null, $scope.buyInput.fiatCurrency, false, true).then(function (result) {
                 $scope.priceBTC = result.total;
                 $scope.fetchingMainPrice = false;
             }).catch(function (e) {
@@ -407,6 +407,11 @@
                     simplexData.identifier = walletData.identifier;
 
                     return activeWallet.getNewAddress().then(function (address) {
+                        // Convert to legacy address format if Bitcoin Cash address
+                        if (walletData.networkType === 'BCC' || walletData.networkType === 'tBCC') {
+                            address = activeWallet.getSdkWallet().sdk.getLegacyBitcoinCashAddress(address);
+                        }
+
                         // Set address and generate an order id
                         simplexData.address = address;
                         simplexData.order_id = simplexService.generateUUID();

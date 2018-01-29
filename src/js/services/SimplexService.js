@@ -21,7 +21,7 @@
         return id.slice(0, 8) + '-' + id.slice(8, 12) + '-' + id.slice(12, 16) + '-' + id.slice(16, 20)  + '-' + id.slice(20, 32);
     };
 
-    SimplexService.prototype.buyPrices = function(qty, fiat, fiatType, fiatFirst) {
+    SimplexService.prototype.buyPrices = function(qty, fiat, fiatType, fiatFirst, ignoreMinMaxCheck) {
         var self = this;
 
         var activeWallet = self._walletsManagerService.getActiveWallet();
@@ -37,8 +37,9 @@
             fiat: fiat,
             fiat_type: fiatType,
             fiat_first: fiatFirst,
-            coin_type: activeWallet.getReadOnlyWalletData().networkType.replace('t', ''), // replace testnet
-            platform: 'mobile'
+            coin_type: activeWallet.getReadOnlyWalletData().networkType.replace('BCC', 'BCH').replace('t', ''), // replace testnet
+            platform: 'mobile',
+            ignore_min_max: !!ignoreMinMaxCheck
         };
 
         return sdk.simplexBuyPrices(postData)
@@ -97,7 +98,7 @@
                 quote_id: simplexData.quote_id,
                 payment_id: simplexData.payment_id,
                 order_id: simplexData.order_id,
-                api_key: accountInfo.api_key,
+                api_key: accountInfo.apiKey,
                 platform: 'mobile'
             };
 
