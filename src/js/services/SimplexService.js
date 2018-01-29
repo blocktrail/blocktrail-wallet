@@ -70,7 +70,7 @@
             qty: simplexData.digital_money.amount,
             fiat: simplexData.fiat_money.total_amount,
             fiat_type: simplexData.fiat_money.currency,
-            coin_type: activeWallet.getReadOnlyWalletData().networkType.replace('t', ''), // replace testnet
+            coin_type: activeWallet.getReadOnlyWalletData().networkType.replace('BCC', 'BCH').replace('t', ''), // replace testnet
             address: simplexData.address,
             quote_id: simplexData.quote_id,
             order_id: simplexData.order_id,
@@ -94,7 +94,7 @@
                 qty: simplexData.digital_money.amount,
                 fiat: simplexData.fiat_money.total_amount,
                 fiat_type: simplexData.fiat_money.currency,
-                coin_type: activeWallet.getReadOnlyWalletData().networkType.replace('t', ''), // replace testnet
+                coin_type: activeWallet.getReadOnlyWalletData().networkType.replace('BCC', 'BCH').replace('t', ''), // replace testnet
                 quote_id: simplexData.quote_id,
                 payment_id: simplexData.payment_id,
                 order_id: simplexData.order_id,

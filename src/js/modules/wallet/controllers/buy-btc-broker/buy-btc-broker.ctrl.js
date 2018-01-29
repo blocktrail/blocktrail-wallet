@@ -408,8 +408,12 @@
 
                     return activeWallet.getNewAddress().then(function (address) {
                         // Convert to legacy address format if Bitcoin Cash address
-                        if (walletData.networkType === 'BCC' || walletData.networkType === 'tBCC') {
-                            address = activeWallet.getSdkWallet().sdk.getLegacyBitcoinCashAddress(address);
+                        if ((walletData.networkType === 'BCC' || walletData.networkType === 'tBCC')) {
+                            try {
+                                address = activeWallet.getSdkWallet().sdk.getLegacyBitcoinCashAddress(address);
+                            } catch (e) {
+                                console.log("bcash address conversion failed or already legacy")
+                            }
                         }
 
                         // Set address and generate an order id
