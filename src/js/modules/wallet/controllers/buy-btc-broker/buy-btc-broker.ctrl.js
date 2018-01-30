@@ -37,7 +37,7 @@
         $scope.includingFee = true;
 
         $scope.errorMsg = null;
-        var last_simplex_data = null;
+        var lastSimplexData = null;
 
         var doneTypingInterval = 500;
         var typingTimer = null;
@@ -210,7 +210,7 @@
                             };
 
                             if ($scope.broker === 'simplex') {
-                                last_simplex_data = result;
+                                lastSimplexData = result;
                             }
 
                             $scope.fetchingInputPrice = false;
@@ -257,7 +257,7 @@
                             };
 
                             if ($scope.broker === 'simplex') {
-                                last_simplex_data = result;
+                                lastSimplexData = result;
                             }
 
                             $scope.fetchingInputPrice = false;
@@ -399,10 +399,12 @@
                         });
                     break;
                 case 'simplex':
-                    // Generate local simplex data object
-                    var simplexData = {};
+                    if (!lastSimplexData) {
+                        return;
+                    }
+
                     // Make a snapshot of the current simplex data
-                    simplexData = angular.copy(last_simplex_data);
+                    var simplexData = angular.copy(lastSimplexData);
                     // Set payment id and identifier
                     simplexData.payment_id = simplexService.generateUUID();
                     simplexData.identifier = walletData.identifier;
@@ -421,7 +423,7 @@
                         simplexData.address = address;
                         simplexData.order_id = simplexService.generateUUID();
 
-                        if (last_simplex_data) {
+                        if (simplexData) {
                             return simplexService.issuePaymentRequest(simplexData).then(function (response) {
                                 return $cordovaDialogs.confirm(
                                     $translate.instant('MSG_SIMPLEX_REDIRECT', {'orderId' : simplexData.order_id}).sentenceCase(),
@@ -435,6 +437,7 @@
                                         }
 
                                         return simplexService.initRedirect(simplexData).then(function () {
+                                            trackingService.trackEvent(trackingService.EVENTS.BUYBTC.SIMPLEX_REDIRECT);
                                             $ionicLoading.hide();
                                         })
                                     });
