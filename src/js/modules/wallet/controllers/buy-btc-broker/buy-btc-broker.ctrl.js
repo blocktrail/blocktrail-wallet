@@ -41,15 +41,21 @@
 
         var doneTypingInterval = 500;
         var typingTimer = null;
+        var openEventTriggered = false;
 
+        var coinTicker = CONFIG.NETWORKS[walletData.networkType].TICKER;
         var lastPriceResponse = null;
 
         var fetchBrokerService = function () {
             switch ($scope.broker) {
                 case 'glidera':
-                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_OPEN);
                     $scope.buyInput.currencyType = 'USD';
                     $scope.buyInput.fiatCurrency = 'USD';
+
+                    if (!openEventTriggered) {
+                        trackingService.trackEvent(trackingService.EVENTS.BUYBTC.GLIDERA_OPEN);
+                        openEventTriggered = true;
+                    }
                     return glideraService;
                     break;
                 case 'simplex':
@@ -65,7 +71,17 @@
                         $scope.priceBTCCurrency = 'USD';
                     }
 
-                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.SIMPLEX_OPEN);
+                    if (!openEventTriggered) {
+                        switch (coinTicker) {
+                            case "BTC":
+                                trackingService.trackEvent(trackingService.EVENTS.BUYBTC.SIMPLEX_OPEN);
+                                break;
+                            case "BCH":
+                                trackingService.trackEvent(trackingService.EVENTS.BUYBCH.SIMPLEX_OPEN);
+                                break;
+                        }
+                        openEventTriggered = true;
+                    }
                     return simplexService;
                     break;
                 default:
@@ -437,7 +453,14 @@
                                         }
 
                                         return simplexService.initRedirect(simplexData).then(function () {
-                                            trackingService.trackEvent(trackingService.EVENTS.BUYBTC.SIMPLEX_REDIRECT);
+                                            switch (coinTicker) {
+                                                case "BTC":
+                                                    trackingService.trackEvent(trackingService.EVENTS.BUYBTC.SIMPLEX_REDIRECT);
+                                                    break;
+                                                case "BCH":
+                                                    trackingService.trackEvent(trackingService.EVENTS.BUYBCH.SIMPLEX_REDIRECT);
+                                                    break;
+                                            }
                                             $ionicLoading.hide();
                                         })
                                     });
