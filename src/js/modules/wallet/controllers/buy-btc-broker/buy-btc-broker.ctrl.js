@@ -36,6 +36,8 @@
         $scope.termsAccepted = false;
         $scope.includingFee = true;
 
+        $scope.networkTicker = CONFIG.NETWORKS[walletData.networkType].TICKER;
+
         $scope.errorMsg = null;
         var lastSimplexData = null;
 
