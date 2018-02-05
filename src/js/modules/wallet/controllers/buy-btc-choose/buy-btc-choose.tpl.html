@@ -16,15 +16,17 @@
             </div>
         </div>
 
-        <h3 class="group-title" ng-show="network == 'BTC'">
-            {{ 'BUYBTC_BANK_WIRE' | translate }} <span style="color: gray; font-size: 0.8rem;">({{ 'BUYBTC_US_ONLY' | translate }})</span>
-        </h3>
-        <div class="list list-inset">
-            <div class="item item-button-right" ng-click="goGlideraBrowser()">
-                <img class="logo-glidera" src="img/glidera-bright.png">
-                <button class="button button-clear">
-                    <i class="icon ion-chevron-right"></i>
-                </button>
+        <div ng-show="network == 'BTC'">
+            <h3 class="group-title">
+                {{ 'BUYBTC_BANK_WIRE' | translate }} <span style="color: gray; font-size: 0.8rem;">({{ 'BUYBTC_US_ONLY' | translate }})</span>
+            </h3>
+            <div class="list list-inset">
+                <div class="item item-button-right" ng-click="goGlideraBrowser()">
+                    <img class="logo-glidera" src="img/glidera-bright.png">
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </ion-content>
