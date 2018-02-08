@@ -12,7 +12,7 @@
                 <i class="icon ion-person" ng-if="!settingsData.profilePic"></i>
             </div>
         </div>
-        <div class="wallet-info-description">
+        <div class="wallet-info-description" ng-show="!isLoading">
             <h1 ng-bind-html="((walletData.balance + walletData.uncBalance) | satoshiToCoin : walletData.networkType : localSettingsData.btcPrecision : true : 'short')"></h1>
             <p>{{ (walletData.balance + walletData.uncBalance) | satoshiToCurrency : settingsData.localCurrency : bitcoinPrices }}</p>
         </div>
@@ -31,7 +31,7 @@
             <ion-spinner></ion-spinner>
         </div>
 
-        <ion-list class="transactions-list">
+        <ion-list class="transactions-list" ng-show="!isLoading">
             <div ng-if="buyBtcPendingOrders.length > 0">
                 <!-- Show header -->
                 <div>
