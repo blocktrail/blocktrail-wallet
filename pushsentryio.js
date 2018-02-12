@@ -67,10 +67,15 @@ var sentryCli = new SentryCli();
 return sentryCli
     .releases.new(version)
     .then(function () {
+        // unfortunately we need to provide the files seperately for both iOS and android because their paths differ
+
+        // Android
         sentryCli.releases.uploadSourceMaps(version, {
             include: includes,
-            ignore: ignore
-        })
+            ignore: ignore,
+            // ~ will wildcard any protocol/host
+            urlPrefix: '~/www/js'
+        });
     })
     .then(function () {
         sentryCli.releases.finalize(version)
