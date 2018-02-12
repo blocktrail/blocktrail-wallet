@@ -140,10 +140,17 @@
 
             if(walletsList.length > 2) {
                 walletsList.forEach(function(wallet) {
+                    var label;
+                    if (CONFIG.DEBUG) {
+                        label = CONFIG.NETWORKS[wallet.network].TICKER + " " + $filter("satoshiToCoin")(wallet.balance, wallet.network, 4) + " " + wallet.identifier;
+                    } else {
+                        label = CONFIG.NETWORKS[wallet.network].TICKER + " " + wallet.identifier;
+                    }
+
                     list.push({
                         value: wallet.uniqueIdentifier,
                         selected: walletData.uniqueIdentifier === wallet.uniqueIdentifier,
-                        label: CONFIG.NETWORKS[wallet.network].TICKER + " " + $filter("satoshiToCoin")(wallet.balance, wallet.network, 4) + " " + wallet.identifier
+                        label: label
                     })
                 });
             } else {

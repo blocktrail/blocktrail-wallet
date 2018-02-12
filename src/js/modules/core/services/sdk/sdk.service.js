@@ -250,10 +250,18 @@
         self.client = blocktrailSDK.initRestClient(sdkConfig);
     }
 
-    GenericBlocktrailSDK.prototype.getAllWallets = function () {
+    /**
+     * @param withbalances boolean
+     */
+    GenericBlocktrailSDK.prototype.getAllWallets = function (withbalances) {
         var self = this;
 
-        return self.client.get("/mywallet/wallets");
+        var params = {};
+        if (withbalances) {
+            params.withbalances = 1;
+        }
+
+        return self.client.get("/mywallet/wallets", params);
     };
 
     GenericBlocktrailSDK.prototype.syncContacts = function (data) {
