@@ -47,7 +47,7 @@
         <% if (APPCONFIG.SENTRY_TRACKING_URL) { %>
         <script>
             Raven
-                .config('<%= APPCONFIG.SENTRY_TRACKING_URL %>', {release: '<%= VERSION %>', dataCallback: function(data) {
+                .config('<%= APPCONFIG.SENTRY_TRACKING_URL %>', {release: 'v<%= VERSION %>', dataCallback: function(data) {
                     data.request.url = data.request.url.replace(/([&?])token=.+?[&]/, "$1");
                     if (data.stacktrace) {
                         data.stacktrace.frames.forEach(function(frame) {
