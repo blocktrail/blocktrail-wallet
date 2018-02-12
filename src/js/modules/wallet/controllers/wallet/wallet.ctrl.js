@@ -6,12 +6,12 @@
 
     function WalletCtrl($rootScope, $timeout, $scope, $state, $filter, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast,
                         CONFIG, modalService, localSettingsService, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
-                        trackingService) {
+                        trackingService, $ionicLoading) {
 
         var walletData = walletsManagerService.getActiveWalletReadOnlyData();
         var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
-        function hideLoading() {
+        function hideSplashscreen() {
             $timeout(function() {
                 $rootScope.hideLoadingScreen = true;
 
@@ -23,10 +23,10 @@
             });
         }
 
-        hideLoading();
+        hideSplashscreen();
 
         $scope.$on('$ionicView.enter', function() {
-            hideLoading();
+            hideSplashscreen();
             $ionicNavBarDelegate.showBar(true);
         });
 
@@ -114,7 +114,14 @@
             modalService.select({
                     options: prepareWalletListOptions(walletsManagerService.getWalletsList())
                 })
-                .then(setActiveWalletHandler);
+                .then(setActiveWalletHandler)
+                // hide loading
+                .then(function() {
+                    $ionicLoading.hide();
+                }, function(e) {
+                    $ionicLoading.hide();
+                    throw e;
+                });
         }
 
         /**
@@ -175,12 +182,12 @@
                 return;
             }
 
-            $timeout(function() {
-                walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
-                    .then(function() {
-                        $state.transitionTo("app.wallet.summary", null, { reload: true, inherit: false });
-                    });
-            });
+            $ionicLoading.show();
+
+            return walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
+                .then(function() {
+                    $state.transitionTo("app.wallet.summary", null, { reload: true, inherit: false });
+                });
         }
 
         /**
