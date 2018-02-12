@@ -7,6 +7,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
+var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 var xml2js = require('xml2js');
 var sh = require('shelljs');
@@ -270,7 +271,9 @@ gulp.task('js:libs', ['appconfig'], function() {
             "./src/lib/angular-qr/src/angular-qr.js"
         ])
             .pipe(concat('libs.js'))
+            .pipe(sourcemaps.init({largeFile: true}))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
+            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./www/js/'))
         );
     });
@@ -296,7 +299,9 @@ gulp.task('js:app', ['appconfig'], function() {
                     throw e;
                 }
             })
+            .pipe(sourcemaps.init({largeFile: true}))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
+            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./www/js/'))
         );
     });
@@ -310,11 +315,13 @@ gulp.task('js:sdk', ['appconfig'], function() {
             "./src/lib/blocktrail-sdk/build/blocktrail-sdk-full.js"
         ])
             .pipe(concat('sdk.js'))
+            .pipe(sourcemaps.init({largeFile: true}))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify({
                 mangle: {
                     except: ['Buffer', 'BigInteger', 'Point', 'Script', 'ECPubKey', 'ECKey', 'ECPair', 'HDNode']
                 }
             })))
+            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./www/js/'))
         );
     });
@@ -327,6 +334,8 @@ gulp.task('js:sdk:asmcrypto', ['appconfig'], function() {
                 "./src/lib/blocktrail-sdk/build/asmcrypto.js"
             ])
                 .pipe(concat('asmcrypto.js'))
+                .pipe(sourcemaps.init({largeFile: true}))
+                .pipe(sourcemaps.write('./'))
                 .pipe(gulp.dest('./www/js/'))
         );
     });
