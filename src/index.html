@@ -36,14 +36,6 @@
         <script src="js/ng-cordova.js"></script>
         <script src="cordova.js"></script>
 
-        <script src="js/templates.js"></script>
-        <script src="js/app.js"></script>
-
-        <script>
-            angular.module('blocktrail.config', []).constant('CONFIG', <%= APPCONFIG_JSON %>);
-            angular.module('blocktrail.translations', []).constant('TRANSLATIONS', <%= TRANSLATIONS %>);
-        </script>
-
         <% if (APPCONFIG.SENTRY_TRACKING_URL) { %>
         <script>
             (function() {
@@ -96,6 +88,14 @@
             window.loadNgRaven = false;
         </script>
         <% } %>
+
+        <script src="js/templates.js"></script>
+        <script src="js/app.js"></script>
+
+        <script>
+            angular.module('blocktrail.config', []).constant('CONFIG', <%= APPCONFIG_JSON %>);
+            angular.module('blocktrail.translations', []).constant('TRANSLATIONS', <%= TRANSLATIONS %>);
+        </script>
         <script>
             document.addEventListener("deviceready", function() {
                 console.log('deviceready');
