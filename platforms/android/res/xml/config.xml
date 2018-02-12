@@ -130,6 +130,7 @@
     <access origin="https://www.glidera.io" />
     <access origin="https://bitonic.nl" />
     <access origin="https://staging.bitonic.nl" />
+    <access origin="https://sentry.io" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
     <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />

@@ -24,7 +24,8 @@
         "https://www.glidera.io",
         "https://sandbox.glidera.io",
         "https://buy.btc.com",
-        "https://checkout.simplexcc.com"
+        "https://checkout.simplexcc.com",
+        "https://sentry.io"
     ],
 
     "GLIDERA_URL": "https://www.glidera.io",

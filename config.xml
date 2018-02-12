@@ -13,6 +13,7 @@
   <access origin="https://www.glidera.io"/>
   <access origin="https://bitonic.nl"/>
   <access origin="https://staging.bitonic.nl"/>
+  <access origin="https://sentry.io"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

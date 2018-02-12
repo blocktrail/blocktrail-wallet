@@ -273,6 +273,10 @@ angular.module('blocktrail.wallet').run(
         $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
             $log.debug("$stateChangeError" + toState.name + " from  " + fromState.name, toState, fromState, error);
             $state.go('app.error');
+
+            if (window.Raven) {
+                Raven.captureException(error);
+            }
         });
 
         $log.debug('window.sqlitePlugin? ' + !!window.sqlitePlugin);

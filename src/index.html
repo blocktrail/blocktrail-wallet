@@ -44,6 +44,27 @@
             angular.module('blocktrail.translations', []).constant('TRANSLATIONS', <%= TRANSLATIONS %>);
         </script>
 
+        <% if (APPCONFIG.SENTRY_TRACKING_URL) { %>
+        <script>
+            Raven
+                .config('<%= APPCONFIG.SENTRY_TRACKING_URL %>', {release: '<%= VERSION %>', dataCallback: function(data) {
+                    data.request.url = data.request.url.replace(/([&?])token=.+?[&]/, "$1");
+                    if (data.stacktrace) {
+                        data.stacktrace.frames.forEach(function(frame) {
+                            frame.filename = frame.filename.replace(/([&?])token=.+?[&]/, "$1");
+                        });
+                    }
+                    return data;
+                }})
+                .addPlugin(Raven.Plugins.Angular)
+                .install();
+        </script>
+        <% } else { %>
+        <script>
+            // unset Raven because we won't be initializing it
+            window.Raven = null;
+        </script>
+        <% } %>
         <script>
             document.addEventListener("deviceready", function() {
                 console.log('deviceready');
