@@ -48,5 +48,15 @@
                 <button class="button button-block button-energized" ng-click="rateApp()">{{ 'ABOUT_RATEAPP' | translate }}</button>
             </div>
         </div>
+        <div>
+            <div style="height: 20px;" ng-click="devTools=!devTools" ng-show="!devTools">
+
+            </div>
+            <div class="list card" ng-show="devTools">
+                <div class="item item-body">
+                    <button ng-click="panic()">Panic</button>
+                </div>
+            </div>
+        </div>
     </ion-content>
 </ion-view>
