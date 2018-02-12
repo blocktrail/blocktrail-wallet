@@ -67,15 +67,16 @@ edit `config.xml` and bump the version
 run `ionic prepare` for the version update to take effect and `git commit` any and all changes with "vX.Y.Z".  
 tag the release as well in git at this point.
 
+### Push to SentryIO
+push the source files to sentryIO, make sure to pass it the right versionnumber
+```
+node pushsentryio.js <VERSIONNUMBER>
+```
+
 ### Android
 ```
 mv appconfig.json .appconfig.json
 cp appconfig.prod.json appconfig.json
-
-# change config.xml to bump version
-ionic prepare
-# you should commit and tag here...
-git commit -am "v1.0.x"; git tag v1.0.x
 
 rm -rf platforms/android/build/outputs/apk/* # clean up old builds
 
