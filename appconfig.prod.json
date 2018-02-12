@@ -32,6 +32,8 @@
         "api_key": "3b518a9f046fb61498ed39695700a1a2c6052260a729a376"
     },
 
+    "SENTRY_TRACKING_URL": "https://c94a148f172c4a6ab9b4958de58add6d@sentry.io/286724",
+
     "FALLBACK_LANGUAGE": "en",
 
     "NULL": null // just here so we can have a trailing , on every line
