@@ -23,7 +23,7 @@ var blocktrail = angular.module('blocktrail.wallet', [
     "blocktrail.setup",
     "blocktrail.templates",
 
-    window.Raven && "ngRaven",
+    window.loadNgRaven && "ngRaven",
     'ngIOS9UIWebViewPatch'
 ].filter(function filterNull(r) { return !!r; }));
 

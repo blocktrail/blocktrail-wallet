@@ -46,7 +46,9 @@
 
         <% if (APPCONFIG.SENTRY_TRACKING_URL) { %>
         <script>
-            document.addEventListener("deviceready", function() {
+            (function() {
+                // for the angular.module
+                window.loadNgRaven = true;
                 // this will replace any `file://.../www/...` with app:///www/...
                 var PATH_STRIP_RE = /^.*\/www/;
                 function normalizeUrl(url) {
@@ -55,9 +57,7 @@
 
                 Raven
                     .config('<%= APPCONFIG.SENTRY_TRACKING_URL %>', {
-                        release: 'v<%= VERSION %>-' + device.platform,
                         dataCallback: function (data) {
-
                             // normalize the Url
                             if (data.culprit) {
                                 data.culprit = normalizeUrl(data.culprit, PATH_STRIP_RE);
@@ -84,12 +84,16 @@
                     })
                     .addPlugin(Raven.Plugins.Angular)
                     .install();
-            });
+
+                document.addEventListener("deviceready", function() {
+                    Raven.setRelease('v<%= VERSION %>-' + device.platform);
+                });
+            })();
         </script>
         <% } else { %>
         <script>
-            // unset Raven because we won't be initializing it
-            window.Raven = null;
+            // for the angular.module
+            window.loadNgRaven = false;
         </script>
         <% } %>
         <script>
