@@ -23,6 +23,7 @@ var blocktrail = angular.module('blocktrail.wallet', [
     "blocktrail.setup",
     "blocktrail.templates",
 
+    window.Raven && "ngRaven",
     'ngIOS9UIWebViewPatch'
 ].filter(function filterNull(r) { return !!r; }));
 
@@ -264,19 +265,28 @@ angular.module('blocktrail.wallet').run(
         $log.debug("Plugins; ", Object.keys(navigator));
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams) {
             $log.debug("$stateChangeStart", toState.name, Object.keys(toParams).map(function(k) { return k + ":" + toParams[k]; }));
+
+            if (window.Raven) {
+                Raven.setTagsContext({
+                    to_state: toState && toState.name
+                });
+            }
         });
 
         $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams) {
             $log.debug("$stateChangeSuccess", toState.name, Object.keys(toParams).map(function(k) { return k + ":" + toParams[k]; }));
+
+            if (window.Raven) {
+                Raven.setTagsContext({
+                    state: toState && toState.name,
+                    to_state: null
+                });
+            }
         });
 
         $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
             $log.debug("$stateChangeError" + toState.name + " from  " + fromState.name, toState, fromState, error);
             $state.go('app.error');
-
-            if (window.Raven) {
-                Raven.captureException(error);
-            }
         });
 
         $log.debug('window.sqlitePlugin? ' + !!window.sqlitePlugin);
