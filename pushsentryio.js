@@ -4,19 +4,23 @@ var fs = require('fs');
 var crypto = require('crypto');
 var semver = require('semver');
 
-if (process.argv.length !== 3) {
-    console.log('version required as arg');
+if (process.argv.length !== 4) {
+    console.log('platform version required as arg');
     process.exit(1);
 }
 
-var version = semver.parse(process.argv[2]);
+var platform = process.argv[2];
+if (['iOS', 'Android'].indexOf(platform) === false) {
+    console.log('platform invalid; iOS or Android');
+    process.exit(1);
+}
 
+var version = semver.parse(process.argv[3]);
 if (!version) {
     console.log('version invalid');
     process.exit(1);
 }
-
-version = "v" + version;
+version = "v" + version + "-" + platform;
 
 // Adding files to include
 var srcPath = './www/js';

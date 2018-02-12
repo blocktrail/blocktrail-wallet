@@ -46,7 +46,7 @@
 
         <% if (APPCONFIG.SENTRY_TRACKING_URL) { %>
         <script>
-            (function() {
+            document.addEventListener("deviceready", function() {
                 // this will replace any `file://.../www/...` with app:///www/...
                 var PATH_STRIP_RE = /^.*\/www/;
                 function normalizeUrl(url) {
@@ -55,23 +55,19 @@
 
                 Raven
                     .config('<%= APPCONFIG.SENTRY_TRACKING_URL %>', {
-                        release: 'v<%= VERSION %>',
+                        release: 'v<%= VERSION %>-' + device.platform,
                         dataCallback: function (data) {
-                            console.log(data);
 
                             // normalize the Url
                             if (data.culprit) {
-                                console.log('culprit', data.culprit, normalizeUrl(data.culprit, PATH_STRIP_RE));
                                 data.culprit = normalizeUrl(data.culprit, PATH_STRIP_RE);
                             }
 
                             // NOTE: if data.exception exists, exception.values and exception.values[0] are guaranteed to exist
                             var stacktrace = data.stacktrace || (data.exception && data.exception.values[0].stacktrace);
-                            console.log('stacktrace', stacktrace);
                             if (stacktrace) {
                                 stacktrace.frames.forEach(function(frame) {
                                     if (frame.filename !== '[native code]') {
-                                        console.log('frame', frame.filename, normalizeUrl(frame.filename, PATH_STRIP_RE));
                                         // normalize the Url
                                         frame.filename = normalizeUrl(frame.filename, PATH_STRIP_RE);
                                         // normalize out the token from URI
@@ -88,7 +84,7 @@
                     })
                     .addPlugin(Raven.Plugins.Angular)
                     .install();
-            })();
+            });
         </script>
         <% } else { %>
         <script>
