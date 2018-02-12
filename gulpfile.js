@@ -28,6 +28,7 @@ var html2js = require('gulp-html2js');
 var rootdir = __dirname;
 var isWatch = false;
 var noFontello = process.argv.indexOf('--no-fontello') !== -1 || process.argv.indexOf('--nofontello') !== -1;
+var DONT_MANGLE = ['Buffer', 'BigInteger', 'Point', 'Script', 'ECPubKey', 'ECKey', 'sha512_asm', 'asm', 'ECPair', 'HDNode', 'ngRaven'];
 
 /**
  * helper to wrap a stream with a promise for easy chaining
@@ -226,7 +227,11 @@ gulp.task('js:ng-cordova', ['appconfig'], function() {
 
         return streamAsPromise(gulp.src(files)
             .pipe(concat('ng-cordova.js'))
-            .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
+            .pipe(gulpif(APPCONFIG.MINIFY, uglify({
+                mangle: {
+                    except: DONT_MANGLE
+                }
+            })))
             .pipe(gulp.dest('./www/js/'))
         );
     });
@@ -274,7 +279,11 @@ gulp.task('js:libs', ['appconfig'], function() {
         ])
             .pipe(concat('libs.js'))
             .pipe(sourcemaps.init({largeFile: true}))
-            .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
+            .pipe(gulpif(APPCONFIG.MINIFY, uglify({
+                mangle: {
+                    except: DONT_MANGLE
+                }
+            })))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./www/js/'))
         );
@@ -302,7 +311,11 @@ gulp.task('js:app', ['appconfig'], function() {
                 }
             })
             .pipe(sourcemaps.init({largeFile: true}))
-            .pipe(gulpif(APPCONFIG.MINIFY, uglify()))
+            .pipe(gulpif(APPCONFIG.MINIFY, uglify({
+                mangle: {
+                    except: DONT_MANGLE
+                }
+            })))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./www/js/'))
         );
@@ -320,7 +333,7 @@ gulp.task('js:sdk', ['appconfig'], function() {
             .pipe(sourcemaps.init({largeFile: true}))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify({
                 mangle: {
-                    except: ['Buffer', 'BigInteger', 'Point', 'Script', 'ECPubKey', 'ECKey', 'ECPair', 'HDNode']
+                    except: DONT_MANGLE
                 }
             })))
             .pipe(sourcemaps.write('./'))
