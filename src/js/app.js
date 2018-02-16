@@ -438,7 +438,12 @@ angular.module('blocktrail.wallet').config(
                     .state('app', {
                         url: "/android43",
                         templateUrl: "templates/android43.html",
-                        controller: "Android43Ctrl"
+                        controller: "Android43Ctrl",
+                        resolve: {
+                            altNotice: function() {
+                                return "Android 4.3";
+                            }
+                        }
                     })
                 ;
 

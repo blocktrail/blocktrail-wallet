@@ -6,7 +6,7 @@
 
     function WalletCtrl($rootScope, $timeout, $scope, $state, $filter, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast,
                         CONFIG, modalService, localSettingsService, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
-                        trackingService, $ionicLoading) {
+                        trackingService, $ionicLoading, $log) {
 
         var walletData = walletsManagerService.getActiveWalletReadOnlyData();
         var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
