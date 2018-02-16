@@ -277,8 +277,8 @@ gulp.task('js:libs', ['appconfig'], function() {
             "./src/lib/raven-js/dist/raven.js",
             "./src/lib/raven-js/dist/plugins/angular.js"
         ])
-            .pipe(concat('libs.js'))
             .pipe(sourcemaps.init({largeFile: true}))
+            .pipe(concat('libs.js'))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify({
                 mangle: {
                     except: DONT_MANGLE
@@ -296,7 +296,8 @@ gulp.task('js:app', ['appconfig'], function() {
         return streamAsPromise(gulp.src([
             './src/js/**/*.js',
         ])
-            .pipe(concat('app.js'))
+            .pipe(sourcemaps.init({largeFile: true}))
+            .pipe(concat('app.min.js'))
             .pipe(ngAnnotate())
             .on('error', function(e) {
                 if (isWatch) {
@@ -310,7 +311,6 @@ gulp.task('js:app', ['appconfig'], function() {
                     throw e;
                 }
             })
-            .pipe(sourcemaps.init({largeFile: true}))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify({
                 mangle: {
                     except: DONT_MANGLE
@@ -329,8 +329,8 @@ gulp.task('js:sdk', ['appconfig'], function() {
         return streamAsPromise(gulp.src([
             "./src/lib/blocktrail-sdk/build/blocktrail-sdk-full.js"
         ])
-            .pipe(concat('sdk.js'))
             .pipe(sourcemaps.init({largeFile: true}))
+            .pipe(concat('sdk.js'))
             .pipe(gulpif(APPCONFIG.MINIFY, uglify({
                 mangle: {
                     except: DONT_MANGLE
@@ -348,8 +348,8 @@ gulp.task('js:sdk:asmcrypto', ['appconfig'], function() {
         return streamAsPromise(gulp.src([
                 "./src/lib/blocktrail-sdk/build/asmcrypto.js"
             ])
-                .pipe(concat('asmcrypto.js'))
                 .pipe(sourcemaps.init({largeFile: true}))
+                .pipe(concat('asmcrypto.js'))
                 .pipe(sourcemaps.write('./'))
                 .pipe(gulp.dest('./www/js/'))
         );
