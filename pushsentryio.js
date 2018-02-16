@@ -20,7 +20,7 @@ if (!version) {
     console.log('version invalid');
     process.exit(1);
 }
-version = "v" + version + "-" + platform;
+version = "v" + version;
 
 // Adding files to include
 var srcPath = './www/js';
@@ -78,7 +78,7 @@ return sentryCli
             include: includes,
             ignore: ignore,
             // ~ will wildcard any protocol/host
-            urlPrefix: '~/www/js'
+            urlPrefix: 'app://' + platform + '/www/js'
         });
     })
     .then(function () {

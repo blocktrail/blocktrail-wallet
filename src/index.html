@@ -41,14 +41,17 @@
             (function() {
                 // for the angular.module
                 window.loadNgRaven = true;
-                // this will replace any `file://.../www/...` with app:///www/...
+                // this will replace any `file://.../www/...` with app://<platform>/www/...
                 var PATH_STRIP_RE = /^.*\/www/;
+                var platform = null;
                 function normalizeUrl(url) {
-                    return 'app://' + url.replace(/^file\:\/\//, '').replace(PATH_STRIP_RE, '/www');
+                    // we use the platform as hostname and hope it's set before we need it
+                    return 'app://' + (platform || '') + url.replace(/^file\:\/\//, '').replace(PATH_STRIP_RE, '/www');
                 }
 
                 Raven
                     .config('<%= APPCONFIG.SENTRY_TRACKING_URL %>', {
+                        release: 'v<%= VERSION %>',
                         dataCallback: function (data) {
                             // normalize the Url
                             if (data.culprit) {
@@ -78,7 +81,7 @@
                     .install();
 
                 document.addEventListener("deviceready", function() {
-                    Raven.setRelease('v<%= VERSION %>-' + device.platform);
+                    platform = device.platform;
                 });
             })();
         </script>
