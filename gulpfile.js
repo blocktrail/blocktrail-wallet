@@ -297,7 +297,7 @@ gulp.task('js:app', ['appconfig'], function() {
             './src/js/**/*.js',
         ])
             .pipe(sourcemaps.init({largeFile: true}))
-            .pipe(concat('app.min.js'))
+            .pipe(concat('app.js'))
             .pipe(ngAnnotate())
             .on('error', function(e) {
                 if (isWatch) {
