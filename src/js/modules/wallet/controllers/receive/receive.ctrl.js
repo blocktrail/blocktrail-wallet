@@ -7,6 +7,7 @@
     function ReceiveCtrl($scope, walletsManagerService, settingsService, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
                           $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast, CONFIG) {
 
+        var activeWallet = walletsManagerService.getActiveWallet();
         var walletData = walletsManagerService.getActiveWalletReadOnlyData();
 
         $scope.networkLong = CONFIG.NETWORKS[walletData.networkType].NETWORK_LONG;
