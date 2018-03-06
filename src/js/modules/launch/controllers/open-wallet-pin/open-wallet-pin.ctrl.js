@@ -63,8 +63,9 @@
             // Check on numbers, pattern="[0-9]*" is in html
             if (!pin) {
                 modalService.alert({
-                    body: "MSG_BAD_ONLY_NUMBERS"
+                    body: "MSG_BAD_PIN"
                 });
+                isFormSubmit = false;
                 return false;
             }
 
@@ -73,6 +74,7 @@
                 modalService.alert({
                     body: "MSG_BAD_PIN_LENGTH"
                 });
+                isFormSubmit = false;
                 return false;
             }
 
