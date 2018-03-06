@@ -43,8 +43,7 @@
                     >
                         <div class="item-modal-content">
                             <img class="logo-btc-com" src="img/logo-btc-com.png">
-                            <h3 class="title">{{ 'PLEASE_WAIT_SECONDS' | translate }}</h3>
-                            <h4 class="title">{{ lockTimer }}</h4>
+                            <h3 class="title">{{ 'PLEASE_WAIT_SECONDS' | translate : { seconds: lockTimer } }}</h3>
                         </div>
                     </div>
                 </div>
