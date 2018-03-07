@@ -85,6 +85,16 @@
         return self._sdkList[self._keyForGenericSdk];
     };
 
+    SdkService.prototype.getSdkByActiveNetwork = function() {
+        var self = this;
+
+        if(self._sdkData.networkType === null) {
+            throw new Error("Blocktrail core module, sdk service. Network type is not set up");
+        }
+
+        return self._sdkList[self._sdkData.networkType];
+    };
+
     SdkService.prototype.getSdkByNetworkType = function(networkType) {
         var self = this;
 
