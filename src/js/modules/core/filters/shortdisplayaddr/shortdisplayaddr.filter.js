@@ -17,7 +17,6 @@
                 var sliced = input.substring(0, start) + "..." + input.substring(input.length - (trunc - start));
                 return sliced;
             } else {
-                console.log(" its short ", sliced);
                 return input;
             }
 
