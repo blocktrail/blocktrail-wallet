@@ -28,7 +28,7 @@
                 <span>{{ 'ADDRESS_LOOKUP_CHECKONLY_LABELED_SHORT' | translate }}</span>
             </label>
 
-            <label class="toggle-btc">
+            <label class="toggle-btc" ng-show="walletData.networkType.indexOf('BCC') != -1">
                 <div class="toggle">
                     <input type="checkbox" ng-model="appControl.useOldAddress">
                     <div class="track">

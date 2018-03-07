@@ -7,7 +7,7 @@
     function AddressLookupCtrl($scope, CONFIG, $q, $timeout, $cacheFactory, $log, walletsManagerService,
                                $ionicPopover, $translate, $cordovaClipboard, $cordovaToast, $ionicActionSheet,
                                $filter, bitcoinJS, sdkService) {
-        displayAddr = $filter("displayAddr");
+        var displayAddr = $filter("displayAddr");
         var $cache = $cacheFactory.get('address-lookup') || $cacheFactory('address-lookup', {capacity: 10});
         $scope.onScroll = angular.noop;
         $scope.appControl = {
