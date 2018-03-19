@@ -2,17 +2,18 @@
     "use strict";
 
     angular.module("blocktrail.core")
-        .factory("pushNotificationService", function($rootScope, $window, modalService, $q) {
-            return new PushNotificationService($rootScope, $window, modalService, $q);
+        .factory("pushNotificationService", function($rootScope, $window, modalService, $q, sdkService) {
+            return new PushNotificationService($rootScope, $window, modalService, $q, sdkService);
         });
 
-    function PushNotificationService($rootScope, $window, modalService, $q) {
+    function PushNotificationService($rootScope, $window, modalService, $q, sdkService) {
         var self = this;
 
         self._rootScope = $rootScope;
         self._window = $window;
         self._modalService = modalService;
         self._q = $q;
+        self._sdkService = sdkService;
     }
 
     /**
@@ -86,6 +87,14 @@
 
         self._window.FirebasePlugin.getToken(function(token) {
             console.debug('Push notification token: ' + token);
+            // Submit token
+            self._sdkService.syncFirebaseToken({
+                device_id: device.uuid,
+                label: navigator.userAgent,
+                platform: device.platform,
+                firebase_token: token
+            });
+
         }, function(error) {
             console.error(error);
         });
@@ -99,7 +108,14 @@
 
         // Register for token changes
         self._window.FirebasePlugin.onTokenRefresh(function(token) {
-            console.debug('token: ' + token);
+            console.debug('New notification token: ' + token);
+            // Submit token
+            self._sdkService.syncFirebaseToken({
+                device_id: device.uuid,
+                label: navigator.userAgent,
+                platform: device.platform,
+                firebase_token: token
+            });
         }, function(error) {
             console.error(error);
         });
