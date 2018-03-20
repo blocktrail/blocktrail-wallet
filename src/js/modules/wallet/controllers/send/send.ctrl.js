@@ -246,7 +246,7 @@
 
                 // parse input
                 if ($scope.walletData.balance < CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC")) {
-                    amount = parseInt($scope.walletData.balance, "BTC");
+                    amount = parseInt($scope.walletData.balance);
                 } else {
                     amount = parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC"));
                 }
