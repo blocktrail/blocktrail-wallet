@@ -133,7 +133,6 @@
 
     SdkService.prototype._initSdkList = function() {
         var self = this;
-        var isTestNet = self._CONFIG.TESTNET;
 
         // Generic SDK
         self._sdkList[self._keyForGenericSdk] = new GenericBlocktrailSDK({
@@ -145,15 +144,12 @@
 
         // Network SDKs
         self._CONFIG.NETWORKS_ENABLED.forEach(function(networkType) {
-            if (isTestNet && networkType.charAt(0) !== "t") {
-                throw new Error("Blocktrail core module, sdk service. Only test networks are available (tBTC, tBCC ...).");
-            } else if (!isTestNet && networkType.charAt(0) === "t") {
-                throw new Error("Blocktrail core module, sdk service. Only regular networks are available (BTC, BCC ...).");
-            }
+            var isTestNet = (networkType.substr(0, 1) === 't');
+            var isRegtest = (networkType.substr(0, 1) === 'r');
 
             var sdkNetwork = self._CONFIG.NETWORKS[networkType].NETWORK;
 
-            if (isTestNet) {
+            if (isTestNet || isRegtest) {
                 sdkNetwork = sdkNetwork.substr(1);
             }
 
@@ -161,6 +157,7 @@
                 apiKey: self._accountInfo ? self._accountInfo.apiKey : null,
                 apiSecret: self._accountInfo ? self._accountInfo.apiSecret : null,
                 testnet: isTestNet,
+                regtest: isRegtest,
                 host: self._CONFIG.API_HOST || null,
                 network: sdkNetwork,
                 https: typeof self._CONFIG.API_HTTPS !== "undefined" ? self._CONFIG.API_HTTPS : true
