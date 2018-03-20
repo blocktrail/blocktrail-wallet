@@ -81,9 +81,10 @@ angular.module('blocktrail.wallet').run(
         $rootScope.$watch("readOnlySdkServiceData.networkType", function(newValue, oldValue) {
             if (newValue !== oldValue) {
                 var network = CONFIG.NETWORKS[newValue].NETWORK;
-                if (network.substr(0, 1) === "t") {
+                if (network.substr(0, 1) === "t" || network.substr(0, 1) === "r") {
                     network = network.substr(1);
                 }
+                network = network.replace(/BCH$/, 'BCC');
 
                 $rootScope.networkClassType = newValue ? ("network-" + network).toLowerCase() : "";
 
