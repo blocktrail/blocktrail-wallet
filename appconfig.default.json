@@ -117,6 +117,32 @@
             "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx",
             "CASHADDRESS": true,
             "URIPREFIX": "bchtest:"
+        },
+        "rBTC": {
+            "NETWORK": "rBTC",
+            "NETWORK_LONG": "Bitcoin REGTEST",
+            "TICKER": "rBTC",
+            "TICKER_LONG": "Bitcoin REGTEST",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
+            "BUYBTC": true,
+            "PRIOBOOST": false,
+            "EXPLORER_ADDRESS_URL": "https://tchain.btc.com",
+            "EXPLORER_TX_URL": "https://tchain.btc.com",
+            "URI_PREFIX": "bitcoin"
+        },
+        "rBCC": {
+            "NETWORK": "rBCC",
+            "NETWORK_LONG": "Bitcoin Cash REGTEST",
+            "TICKER": "rBCH",
+            "TICKER_LONG": "Bitcoin Cash REGTEST",
+            "TX_FILTER_MIN_BLOCK_HEIGHT": null,
+            "BUYBTC": true,
+            "PRIOBOOST": false,
+            "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBCC/address",
+            "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx",
+            "URI_PREFIX": "bitcoincash"
+            "CASHADDRESS": true,
+            "URIPREFIX": "bchtest:"
         }
     }
 }
