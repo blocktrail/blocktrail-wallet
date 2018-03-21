@@ -67,10 +67,11 @@
             if (data && !data.isEnabled) {
                 // // Request permission if on iOS
                 if (self._rootScope.isIOS) {
-                    self._window.FirebasePlugin.grantPermission();
+                    self._window.FirebasePlugin.grantPermission().then(function () {
+                        deferred.resolve(true);
+                    });
                 }
             }
-            deferred.resolve(true);
         }, function (error) {
             console.error("Unable to retrieve Push Notification permissions." , error);
             deferred.resolve(false);
