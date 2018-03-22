@@ -140,7 +140,7 @@
             "PRIOBOOST": false,
             "EXPLORER_ADDRESS_URL": "https://www.blocktrail.com/tBCC/address",
             "EXPLORER_TX_URL": "https://www.blocktrail.com/tBCC/tx",
-            "URI_PREFIX": "bitcoincash"
+            "URI_PREFIX": "bitcoincash",
             "CASHADDRESS": true,
             "URIPREFIX": "bchtest:"
         }
