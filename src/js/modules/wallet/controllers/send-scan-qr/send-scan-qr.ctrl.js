@@ -11,7 +11,7 @@
             disableAnimate: true
         });
 
-        $ionicLoading.show({template: "<div>{{ 'LOADING' | translate }}...", hideOnStateChange: true});
+        $ionicLoading.show({template: "<div>{{ 'LOADING' | translate }}...</div>", hideOnStateChange: true});
 
         //wait for transition, then open the scanner and begin scanning
         $timeout(function() {
