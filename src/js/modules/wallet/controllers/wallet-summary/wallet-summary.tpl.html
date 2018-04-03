@@ -64,7 +64,7 @@
                         <div>
                             <h2>{{ 'BUYBTC_PENDING_ORDER_FROM' | translate: { order: buyBtcPendingOrder } }}</h2>
                             <h4 class="timestamp">
-                                {{ buyBtcPendingOrder.time | amDateFormat: 'h:mm a' : 'unix' }} | {{ 'BUYBTC_PENDING_ORDER_SUBTITLE' | translate: {order: buyBtcPendingOrder} }}
+                                {{ buyBtcPendingOrder.time | amFromUnix | amDateFormat: 'h:mm a' : 'unix' }} | {{ 'BUYBTC_PENDING_ORDER_SUBTITLE' | translate: {order: buyBtcPendingOrder} }}
                             </h4>
                         </div>
 
@@ -88,7 +88,7 @@
                 <div ng-if="isHeader(transaction)">
                     <div class="item-divider">
                         <div class="date-group">
-                            {{ getTransactionHeader() | amCalendar }}
+                            {{ getTransactionHeader() | amFromUnix | amCalendar }}
                         </div>
                     </div>
                 </div>

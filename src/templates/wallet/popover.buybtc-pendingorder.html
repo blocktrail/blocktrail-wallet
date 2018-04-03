@@ -10,7 +10,7 @@
             <br />
 
             <b>{{ 'EST_DELIVERY' | translate }}</b> <br />
-            {{ (order.estimatedDeliveryDate * 1000) | amCalendar }}
+            {{ (order.estimatedDeliveryDate * 1000) | amFromUnix | amCalendar }}
         </p>
 
         <div class="popover-footer">

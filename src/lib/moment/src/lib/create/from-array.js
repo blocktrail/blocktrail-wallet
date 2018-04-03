@@ -1,18 +1,19 @@
+import { hooks } from '../utils/hooks';
 import { createDate, createUTCDate } from './date-from-array';
 import { daysInYear } from '../units/year';
-import { weekOfYear } from '../units/week';
-import { dayOfYearFromWeeks } from '../units/day-of-year';
+import { weekOfYear, weeksInYear, dayOfYearFromWeeks } from '../units/week-calendar-utils';
 import { YEAR, MONTH, DATE, HOUR, MINUTE, SECOND, MILLISECOND } from '../units/constants';
 import { createLocal } from './local';
 import defaults from '../utils/defaults';
 import getParsingFlags from './parsing-flags';
 
 function currentDateArray(config) {
-    var now = new Date();
+    // hooks is actually the exported moment object
+    var nowValue = new Date(hooks.now());
     if (config._useUTC) {
-        return [now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()];
+        return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
     }
-    return [now.getFullYear(), now.getMonth(), now.getDate()];
+    return [nowValue.getFullYear(), nowValue.getMonth(), nowValue.getDate()];
 }
 
 // convert an array to a date.
@@ -20,7 +21,7 @@ function currentDateArray(config) {
 // note: all values past the year are optional and will default to the lowest possible value.
 // [year, month, day , hour, minute, second, millisecond]
 export function configFromArray (config) {
-    var i, date, input = [], currentDate, yearToUse;
+    var i, date, input = [], currentDate, expectedWeekday, yearToUse;
 
     if (config._d) {
         return;
@@ -34,10 +35,10 @@ export function configFromArray (config) {
     }
 
     //if the day of the year is set, figure out what it is
-    if (config._dayOfYear) {
+    if (config._dayOfYear != null) {
         yearToUse = defaults(config._a[YEAR], currentDate[YEAR]);
 
-        if (config._dayOfYear > daysInYear(yearToUse)) {
+        if (config._dayOfYear > daysInYear(yearToUse) || config._dayOfYear === 0) {
             getParsingFlags(config)._overflowDayOfYear = true;
         }
 
@@ -70,6 +71,8 @@ export function configFromArray (config) {
     }
 
     config._d = (config._useUTC ? createUTCDate : createDate).apply(null, input);
+    expectedWeekday = config._useUTC ? config._d.getUTCDay() : config._d.getDay();
+
     // Apply timezone offset from input. The actual utcOffset can be changed
     // with parseZone.
     if (config._tzm != null) {
@@ -79,10 +82,15 @@ export function configFromArray (config) {
     if (config._nextDay) {
         config._a[HOUR] = 24;
     }
+
+    // check for mismatching day of week
+    if (config._w && typeof config._w.d !== 'undefined' && config._w.d !== expectedWeekday) {
+        getParsingFlags(config).weekdayMismatch = true;
+    }
 }
 
 function dayOfYearFromWeekInfo(config) {
-    var w, weekYear, week, weekday, dow, doy, temp;
+    var w, weekYear, week, weekday, dow, doy, temp, weekdayOverflow;
 
     w = config._w;
     if (w.GG != null || w.W != null || w.E != null) {
@@ -96,29 +104,44 @@ function dayOfYearFromWeekInfo(config) {
         weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(createLocal(), 1, 4).year);
         week = defaults(w.W, 1);
         weekday = defaults(w.E, 1);
+        if (weekday < 1 || weekday > 7) {
+            weekdayOverflow = true;
+        }
     } else {
         dow = config._locale._week.dow;
         doy = config._locale._week.doy;
 
-        weekYear = defaults(w.gg, config._a[YEAR], weekOfYear(createLocal(), dow, doy).year);
-        week = defaults(w.w, 1);
+        var curWeek = weekOfYear(createLocal(), dow, doy);
+
+        weekYear = defaults(w.gg, config._a[YEAR], curWeek.year);
+
+        // Default to current week.
+        week = defaults(w.w, curWeek.week);
 
         if (w.d != null) {
             // weekday -- low day numbers are considered next week
             weekday = w.d;
-            if (weekday < dow) {
-                ++week;
+            if (weekday < 0 || weekday > 6) {
+                weekdayOverflow = true;
             }
         } else if (w.e != null) {
             // local weekday -- counting starts from begining of week
             weekday = w.e + dow;
+            if (w.e < 0 || w.e > 6) {
+                weekdayOverflow = true;
+            }
         } else {
             // default to begining of week
             weekday = dow;
         }
     }
-    temp = dayOfYearFromWeeks(weekYear, week, weekday, doy, dow);
-
-    config._a[YEAR] = temp.year;
-    config._dayOfYear = temp.dayOfYear;
+    if (week < 1 || week > weeksInYear(weekYear, dow, doy)) {
+        getParsingFlags(config)._overflowWeeks = true;
+    } else if (weekdayOverflow != null) {
+        getParsingFlags(config)._overflowWeekday = true;
+    } else {
+        temp = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy);
+        config._a[YEAR] = temp.year;
+        config._dayOfYear = temp.dayOfYear;
+    }
 }

@@ -94,7 +94,7 @@
                                     <p ng-if="transaction.wallet_value_change > 0"><strong>{{ 'TX_INFO_DATE_RECEIVED' | translate }}:</strong></p>
                                 </div>
                                 <div class="col text-right">
-                                    <p>{{ transaction.time | amDateFormat : 'Do MMMM YYYY, h:mm:ss a' : 'unix' }}</p>
+                                    <p>{{ transaction.time | amFromUnix | amDateFormat : 'Do MMMM YYYY, h:mm:ss a' : 'unix' }}</p>
                                 </div>
                             </div>
                         </div>

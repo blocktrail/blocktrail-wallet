@@ -9,6 +9,6 @@
         <span ng-if="!transaction.contact || !displayName" class="sentence-case">{{ altDisplay | translate }}</span>
     </h2>
     <h4 class="timestamp">
-        {{ transaction.time | amDateFormat: 'h:mm a' : 'unix' }}
+        {{ transaction.time | amFromUnix | amDateFormat: 'h:mm a' : 'unix' }}
     </h4>
 </div>
