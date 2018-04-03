@@ -1,5 +1,5 @@
 angular.module('blocktrail.wallet')
-    .controller('PromoCodeRedeemCtrl', function($scope, $rootScope, $stateParams, $btBackButtonDelegate, $q, $log,
+    .controller('PromoCodeRedeemCtrl', function($scope, $rootScope, $state, $stateParams, $btBackButtonDelegate, $q, $log,
                                                 $cordovaToast, $ionicLoading, QR, $timeout, walletsManagerService, trackingService) {
         $scope.appControl = {
             working: false,
@@ -22,7 +22,7 @@ angular.module('blocktrail.wallet')
         };
 
         $scope.scanQr = function() {
-            $ionicLoading.show({template: "<div>{{ 'LOADING' | translate }}...", hideOnStateChange: true});
+            $ionicLoading.show({template: "<div>{{ 'LOADING' | translate }}...</div>", hideOnStateChange: true});
 
             // wait for transition, then open the scanner and begin scanning
             $timeout(function() {
@@ -37,7 +37,7 @@ angular.module('blocktrail.wallet')
                         $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
 
                         if (result.toLowerCase() === "cancelled") {
-                            // -
+                            $state.go('wallet.summary');
                         }
                         else if (elm.protocol === 'btccomwallet:') {
                             var reg = new RegExp(/btccomwallet:\/\/promocode\?code=(.+)/);
