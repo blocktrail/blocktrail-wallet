@@ -30,13 +30,15 @@
                     $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
 
                     if (result.toLowerCase() === "cancelled") {
-                        //go back
-                        $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
+                        // go back - on iOS
+                        if(ionic.Platform.isIOS()) {
+                            $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
+                        }
                     } else if (elm.protocol === 'btccomwallet:') {
                         var reg = new RegExp(/btccomwallet:\/\/promocode\?code=(.+)/);
                         var res = result.match(reg);
 
-                        $state.go('app.wallet.promo', {code: res[1]})
+                        $state.go('app.wallet.promo', {code: res[1]});
 
                     } else if (elm.protocol === 'bitcoincash:' && $rootScope.NETWORK === "BTC") {
                         throw new Error("Can't send to Bitcoin Cash address with BTC wallet");
@@ -57,8 +59,7 @@
 
                         //go to parent "send qr" state to continue with send process
                         $state.go('^');
-                    }
-                    else {
+                    } else {
                         //no bitcoin protocol, set address as full string
                         $scope.clearRecipient();
                         $scope.sendInput.recipientAddress = result;
@@ -68,7 +69,6 @@
                     }
                 },
                 function(error) {
-                    $log.error(error);
                     $log.error("Scanning failed: " + error);
 
                     $ionicLoading.hide();

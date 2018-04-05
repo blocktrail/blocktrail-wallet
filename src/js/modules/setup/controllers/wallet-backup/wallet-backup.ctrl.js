@@ -6,9 +6,13 @@
 
     function SetupWalletBackupCtrl($scope, $btBackButtonDelegate, modalService, launchService,
                                    settingsService, walletBackupService, setupStepsService) {
-        // disable back button
+        // disable back button - re-enable it on $destroy event
         $btBackButtonDelegate.setBackButton(angular.noop);
         $btBackButtonDelegate.setHardwareBackButton(angular.noop);
+        $scope.$on('$destroy', function() {
+            $btBackButtonDelegate.setBackButton($btBackButtonDelegate._default);
+            $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
+        });
 
         var walletBackupData;
         var readOnlySettingsData = settingsService.getReadOnlySettingsData();

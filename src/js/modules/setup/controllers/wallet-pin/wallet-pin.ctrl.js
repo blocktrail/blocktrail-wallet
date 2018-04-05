@@ -6,10 +6,13 @@
 
     function SetupWalletPinCtrl($q, $rootScope, $scope, $state, $cordovaNetwork, $analytics, $log, $btBackButtonDelegate, CONFIG,
                                 blocktrailSDK, sdkService, modalService, launchService, setupStepsService, setupInfoService) {
-
-        // disable back button
+        // disable back button - re-enable it on $destroy event
         $btBackButtonDelegate.setBackButton(angular.noop);
         $btBackButtonDelegate.setHardwareBackButton(angular.noop);
+        $scope.$on('$destroy', function() {
+            $btBackButtonDelegate.setBackButton($btBackButtonDelegate._default);
+            $btBackButtonDelegate.setHardwareBackButton($btBackButtonDelegate._default);
+        });
 
         // Flag for submitting form only once, to avoid user's freak clicks on button "go", "submit" while keyboard is open
         var isFormSubmit = false;

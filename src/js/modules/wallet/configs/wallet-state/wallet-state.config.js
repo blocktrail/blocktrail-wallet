@@ -97,14 +97,6 @@
                 },
                 views: {
                     "overlayView": {
-                        templateProvider: function($stateParams, $log) {
-                            $log.debug("set the backdrop", $stateParams);
-                            if ($stateParams.backdrop) {
-                                return "<div class='scan-screen'><h1>Loading...</h1></div>";
-                            } else {
-                                return "";
-                            }
-                        },
                         controller: "SendScanQRCtrl"
                     }
                 }

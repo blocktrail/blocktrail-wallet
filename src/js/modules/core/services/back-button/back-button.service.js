@@ -93,7 +93,7 @@ angular.module('blocktrail.wallet')
                 $state.go(back.state, back.params);
             } else {
                 // there is no back view. If a "root" state is defined and we're not on it, go to it otherwise close the app
-                if (self.rootState && $state.current.name != self.rootState && settingsService.setupComplete) {
+                if (self.rootState && $state.current.name != self.rootState && $state.current.name.startsWith("app.wallet")) {
                     $state.go(self.rootState);
                 } else {
                     ionic.Platform.exitApp();
