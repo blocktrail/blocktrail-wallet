@@ -4,19 +4,21 @@
     </ion-nav-title>
 
     <ion-content>
-        <h3 class="group-title">
-            {{ 'BUYBTC_CREDIT_CARDS' | translate }}
-        </h3>
-        <div class="list list-inset">
-            <div class="item item-button-right" ng-click="goBuyBTCState('simplex')">
-                <img class="logo-simplex" src="img/simplex-logo.png">
-                <button class="button button-clear">
-                    <i class="icon ion-chevron-right"></i>
-                </button>
+        <div ng-show="simplexEnabled">
+            <h3 class="group-title">
+                {{ 'BUYBTC_CREDIT_CARDS' | translate }}
+            </h3>
+            <div class="list list-inset">
+                <div class="item item-button-right" ng-click="goBuyBTCState('simplex')">
+                    <img class="logo-simplex" src="img/simplex-logo.png">
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div ng-show="network == 'BTC'">
+        <div ng-show="network == 'BTC' && glideraEnabled">
             <h3 class="group-title">
                 {{ 'BUYBTC_BANK_WIRE' | translate }} <span style="color: gray; font-size: 0.8rem;">({{ 'BUYBTC_US_ONLY' | translate }})</span>
             </h3>
