@@ -3,6 +3,7 @@
   "private": "true",
   "dependencies": {
     "blocktrail-sdk": "3.7.3",
+    "bip70-js": "1.0.7",
     "ionic": "1.0.1",
     "pouchdb": "git@github.com:blocktrail/pouchdb.git#blocktrail",
     "q": "1.2.0",
