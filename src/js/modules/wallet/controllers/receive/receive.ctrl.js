@@ -197,7 +197,9 @@
                 address: $scope.newRequest.address,
                 btcValue: $scope.newRequest.btcValue,
                 fiatValue: $scope.newRequest.fiatValue,
-                localCurrency: $scope.settingsData.localCurrency
+                localCurrency: $scope.settingsData.localCurrency,
+                network: CONFIG.NETWORKS[walletData.networkType].TICKER,
+                networkLong: CONFIG.NETWORKS[walletData.networkType].TICKER_LONG
             };
 
             var smsMessage = $scope.newRequest.btcValue ? $translate.instant('MSG_REQUEST_SMS_2', params) : $translate.instant('MSG_REQUEST_SMS_1', params);
