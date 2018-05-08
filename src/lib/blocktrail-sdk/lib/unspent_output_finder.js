@@ -13,7 +13,7 @@ var UnspentOutputFinder = function(bitcoinDataClient, options) {
         batchChunkSize: 200
     };
     this.settings = _.merge({}, this.defaultSettings, options);
-    this.client = bitcoinDataClient;
+    this.dataClient = bitcoinDataClient;
 };
 
 /**
@@ -35,7 +35,7 @@ UnspentOutputFinder.prototype.getUTXOs = function(addresses) {
         }
 
         //get the utxos for this address
-        self.client.getBatchUnspentOutputs(addressBatch).done(function(batchResults) {
+        self.dataClient.getBatchUnspentOutputs(addressBatch).done(function(batchResults) {
             _.each(batchResults, function(utxos, address) {
                 //add the found utxos to the final result
                 if (utxos.length > 0) {

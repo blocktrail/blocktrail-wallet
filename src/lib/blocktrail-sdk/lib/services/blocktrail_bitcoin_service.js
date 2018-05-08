@@ -14,8 +14,6 @@ var BlocktrailBitcoinService = function(options) {
         apiSecret:   null,
         network:     'BTC',
         testnet:     false,
-        apiVersion:  'v1',
-        apiEndpoint: null,
 
         retryLimit: 5,
         retryDelay:  20,

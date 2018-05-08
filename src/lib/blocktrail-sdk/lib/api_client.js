@@ -7,6 +7,8 @@ var _ = require('lodash'),
 
     bip39 = require("bip39"),
     Wallet = require('./wallet'),
+    BtccomConverter = require('./btccom.convert'),
+    BlocktrailConverter = require('./blocktrail.convert'),
     RestClient = require('./rest_client'),
     Encryption = require('./encryption'),
     KeyDerivation = require('./keyderivation'),
@@ -43,8 +45,37 @@ function networkFromOptions(opt) {
 
 var useWebWorker = require('./use-webworker')();
 
+
 /**
- * Bindings to conssume the BlockTrail API
+ * helper to wrap a promise so that the callback get's called when it succeeds or fails
+ *
+ * @param promise   {q.Promise}
+ * @param cb        function
+ * @return q.Promise
+ */
+function callbackify(promise, cb) {
+    // add a .then to trigger the cb for people using callbacks
+    if (cb) {
+        promise
+            .then(function(res) {
+                // use q.nextTick for asyncness
+                q.nextTick(function() {
+                    cb(null, res);
+                });
+            }, function(err) {
+                // use q.nextTick for asyncness
+                q.nextTick(function() {
+                    cb(err, null);
+                });
+            });
+    }
+
+    // return the promise for people using promises
+    return promise;
+}
+
+/**
+ * Bindings to consume the BlockTrail API
  *
  * @param options       object{
  *                          apiKey: 'API_KEY',
@@ -77,10 +108,27 @@ var APIClient = function(options) {
     self.feeSanityCheck = typeof options.feeSanityCheck !== "undefined" ? options.feeSanityCheck : true;
     self.feeSanityCheckBaseFeeMultiplier = options.feeSanityCheckBaseFeeMultiplier || 200;
 
+    options.apiNetwork = options.apiNetwork || ((self.testnet ? "t" : "") + (options.network || 'BTC').toUpperCase());
+
+    if (typeof options.btccom === "undefined") {
+        options.btccom = true;
+    }
+
     /**
      * @type RestClient
      */
-    self.client = APIClient.initRestClient(options);
+    self.dataClient = APIClient.initRestClient(_.merge({}, options));
+    /**
+     * @type RestClient
+     */
+    self.blocktrailClient = APIClient.initRestClient(_.merge({}, options, {btccom: false}));
+
+    if (options.btccom) {
+        self.converter = new BtccomConverter(self.network, true);
+    } else {
+        self.converter = new BlocktrailConverter();
+    }
+
 };
 
 APIClient.normalizeNetworkFromOptions = function(options) {
@@ -137,10 +185,40 @@ APIClient.normalizeNetworkFromOptions = function(options) {
     return [network, testnet, regtest, apiNetwork];
 };
 
-APIClient.initRestClient = function(options) {
+APIClient.updateHostOptions = function(options) {
+    /* jshint -W071, -W074 */
     // BLOCKTRAIL_SDK_API_ENDPOINT overwrite for development
-    if (process.env.BLOCKTRAIL_SDK_API_ENDPOINT) {
+    if (!options.btccom && process.env.BLOCKTRAIL_SDK_API_ENDPOINT) {
         options.host = process.env.BLOCKTRAIL_SDK_API_ENDPOINT;
+    }
+    if (options.btccom && process.env.BLOCKTRAIL_SDK_BTCCOM_API_ENDPOINT) {
+        options.host = process.env.BLOCKTRAIL_SDK_BTCCOM_API_ENDPOINT;
+    }
+
+    if (options.btccom && process.env.BLOCKTRAIL_SDK_THROTTLE_BTCCOM) {
+        options.throttleRequestsTimeout = process.env.BLOCKTRAIL_SDK_THROTTLE_BTCCOM;
+    }
+
+    if (options.btccom) {
+        if (!options.host) {
+            options.host = options.btccomhost || (options.network === 'BCC' ? 'bch-chain.api.btc.com' : 'chain.api.btc.com');
+        }
+
+        if (options.testnet && !options.host.match(/tchain/)) {
+            options.host = options.host.replace(/chain/, 'tchain');
+        }
+
+        if (!options.endpoint) {
+            options.endpoint = options.btccomendpoint || ("/" + (options.apiVersion || "v3"));
+        }
+    } else {
+        if (!options.host) {
+            options.host = 'api.blocktrail.com';
+        }
+
+        if (!options.endpoint) {
+            options.endpoint = "/" + (options.apiVersion || "v1") + (options.apiNetwork ? ("/" + options.apiNetwork) : "");
+        }
     }
 
     // trim off leading https?://
@@ -156,18 +234,15 @@ APIClient.initRestClient = function(options) {
         options.https = true;
     }
 
-    if (!options.host) {
-        options.host = 'api.blocktrail.com';
-    }
-
     if (!options.port) {
         options.port = options.https ? 443 : 80;
     }
 
-    if (!options.endpoint) {
-        options.endpoint = "/" + (options.apiVersion || "v1") + (options.apiNetwork ? ("/" + options.apiNetwork) : "");
-    }
+    return options;
+};
 
+APIClient.initRestClient = function(options) {
+    options = APIClient.updateHostOptions(options);
     return new RestClient(options);
 };
 
@@ -491,7 +566,7 @@ APIClient.prototype.resolveBackupPublicKeyFromOptions = function(options, cb) {
 APIClient.prototype.debugAuth = function(cb) {
     var self = this;
 
-    return self.client.get("/debug/http-signature", null, true, cb);
+    return self.dataClient.get("/debug/http-signature", null, true, cb);
 };
 
 /**
@@ -504,14 +579,25 @@ APIClient.prototype.debugAuth = function(cb) {
 APIClient.prototype.address = function(address, cb) {
     var self = this;
 
-    return self.client.get("/address/" + address, null, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForAddress(address), null)
+        .then(function(data) {
+            return self.converter.handleErros(self, data);
+        })
+        .then(function(data) {
+            if (data === null) {
+                return data;
+            } else {
+                return self.converter.convertAddress(data);
+            }
+        }), cb);
 };
 
 APIClient.prototype.addresses = function(addresses, cb) {
     var self = this;
 
-    return self.client.post("/address", null, {"addresses": addresses}, cb);
+    return callbackify(self.dataClient.post("/address", null, {"addresses": addresses}), cb);
 };
+
 
 /**
  * get all transactions for an address (paginated)
@@ -522,6 +608,7 @@ APIClient.prototype.addresses = function(addresses, cb) {
  * @return q.Promise
  */
 APIClient.prototype.addressTransactions = function(address, params, cb) {
+
     var self = this;
 
     if (typeof params === "function") {
@@ -529,7 +616,13 @@ APIClient.prototype.addressTransactions = function(address, params, cb) {
         params = null;
     }
 
-    return self.client.get("/address/" + address + "/transactions", params, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForAddressTransactions(address), self.converter.paginationParams(params))
+        .then(function(data) {
+            return self.converter.handleErros(self, data);
+        })
+        .then(function(data) {
+            return data.data === null ? data : self.converter.convertAddressTxs(data);
+        }), cb);
 };
 
 /**
@@ -548,7 +641,41 @@ APIClient.prototype.batchAddressHasTransactions = function(addresses, params, cb
         params = null;
     }
 
-    return self.client.post("/address/has-transactions", params, {"addresses": addresses}, cb);
+    var deferred = q.defer();
+
+    var promise = q();
+
+    addresses.forEach(function(address) {
+        promise = promise.then(function(hasTxs) {
+            if (hasTxs) {
+                return hasTxs;
+            }
+
+            return q(address)
+                .then(function(address) {
+                    console.log(address);
+                    return self.addressTransactions(address, params)
+                        .then(function(res) {
+                            // err_no=1 is no txs found
+                            if (res.err_no === 1) {
+                                return false;
+                            } else if (res.err_no) {
+                                throw new Error("err: " + res.err_msg);
+                            }
+
+                            return res.data && res.data.length > 0;
+                        });
+                });
+        });
+    });
+
+    promise.then(function(hasTxs) {
+        deferred.resolve({has_transactions: hasTxs});
+    }, function(err) {
+        deferred.reject(err);
+    });
+
+    return callbackify(deferred.promise, cb);
 };
 
 /**
@@ -567,7 +694,22 @@ APIClient.prototype.addressUnconfirmedTransactions = function(address, params, c
         params = null;
     }
 
-    return self.client.get("/address/" + address + "/unconfirmed-transactions", params, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForAddressTransactions(address), self.converter.paginationParams(params))
+        .then(function(data) {
+            return self.converter.handleErros(self, data);
+        })
+        .then(function(data) {
+            if (data.data === null) {
+                return data;
+            }
+
+            var res = self.converter.convertAddressTxs(data);
+            res.data = res.data.filter(function(tx) {
+                return !tx.confirmations;
+            });
+
+            return res;
+        }), cb);
 };
 
 /**
@@ -586,7 +728,13 @@ APIClient.prototype.addressUnspentOutputs = function(address, params, cb) {
         params = null;
     }
 
-    return self.client.get("/address/" + address + "/unspent-outputs", params, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForAddressUnspent(address), self.converter.paginationParams(params))
+        .then(function(data) {
+            return self.converter.handleErros(self, data);
+        })
+        .then(function(data) {
+            return data.data === null ? data : self.converter.convertAddressUnspentOutputs(data, address);
+        }), cb);
 };
 
 /**
@@ -600,12 +748,23 @@ APIClient.prototype.addressUnspentOutputs = function(address, params, cb) {
 APIClient.prototype.batchAddressUnspentOutputs = function(addresses, params, cb) {
     var self = this;
 
-    if (typeof params === "function") {
-        cb = params;
-        params = null;
-    }
+    if (self.converter instanceof BtccomConverter) {
+        return callbackify(self.dataClient.get(self.converter.getUrlForBatchAddressUnspent(addresses), self.converter.paginationParams(params))
+            .then(function(data) {
+                return self.converter.handleErros(self, data);
+            })
+            .then(function(data) {
+                return data.data === null ? data : self.converter.convertBatchAddressUnspentOutputs(data);
+            }), cb);
+    } else {
 
-    return self.client.post("/address/unspent-outputs", params, {"addresses": addresses}, cb);
+        if (typeof params === "function") {
+            cb = params;
+            params = null;
+        }
+
+        return callbackify(self.dataClient.post("/address/unspent-outputs", params, {"addresses": addresses}), cb);
+    }
 };
 
 /**
@@ -619,12 +778,13 @@ APIClient.prototype.batchAddressUnspentOutputs = function(addresses, params, cb)
 APIClient.prototype.verifyAddress = function(address, signature, cb) {
     var self = this;
 
-    return self.client.post("/address/" + address + "/verify", null, {signature: signature}, cb);
+    return self.verifyMessage(address, address, signature, cb);
 };
 
 /**
- * get all blocks (paginated)
  *
+ * get all blocks (paginated)
+ * ASK
  * @param [params]      object      pagination: {page: 1, limit: 20, sort_dir: 'asc'}
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
@@ -637,7 +797,13 @@ APIClient.prototype.allBlocks = function(params, cb) {
         params = null;
     }
 
-    return self.client.get("/all-blocks", params, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForAllBlocks(), self.converter.paginationParams(params))
+            .then(function(data) {
+                return self.converter.handleErros(self, data);
+            })
+            .then(function(data) {
+                return data.data === null ? data : self.converter.convertBlocks(data);
+            }), cb);
 };
 
 /**
@@ -650,7 +816,13 @@ APIClient.prototype.allBlocks = function(params, cb) {
 APIClient.prototype.block = function(block, cb) {
     var self = this;
 
-    return self.client.get("/block/" + block, null, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForBlock(block), null)
+        .then(function(data) {
+            return self.converter.handleErros(self, data);
+        })
+        .then(function(data) {
+            return data.data === null ? data : self.converter.convertBlock(data.data);
+        }), cb);
 };
 
 /**
@@ -662,7 +834,13 @@ APIClient.prototype.block = function(block, cb) {
 APIClient.prototype.blockLatest = function(cb) {
     var self = this;
 
-    return self.client.get("/block/latest", null, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForBlock("latest"), null)
+        .then(function(data) {
+            return self.converter.handleErros(self, data);
+        })
+        .then(function(data) {
+            return data.data === null ? data : self.converter.convertBlock(data.data);
+        }), cb);
 };
 
 /**
@@ -681,7 +859,13 @@ APIClient.prototype.blockTransactions = function(block, params, cb) {
         params = null;
     }
 
-    return self.client.get("/block/" + block + "/transactions", params, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForBlockTransaction(block), self.converter.paginationParams(params))
+        .then(function(data) {
+            return self.converter.handleErros(self, data);
+        })
+        .then(function(data) {
+            return data.data ===  null ? data : self.converter.convertBlockTxs(data);
+        }), cb);
 };
 
 /**
@@ -694,7 +878,34 @@ APIClient.prototype.blockTransactions = function(block, params, cb) {
 APIClient.prototype.transaction = function(tx, cb) {
     var self = this;
 
-    return self.client.get("/transaction/" + tx, null, cb);
+    return callbackify(self.dataClient.get(self.converter.getUrlForTransaction(tx), null)
+        .then(function(data) {
+            return self.converter.handleErros(self, data);
+        })
+        .then(function(data) {
+            if (data.data === null) {
+                return data;
+            } else {
+                // for BTC.com API we need to fetch the raw hex from the BTC.com explorer endpoint
+                if (self.converter instanceof BtccomConverter) {
+                    return self.dataClient.get(self.converter.getUrlForRawTransaction(tx), null)
+                        .then(function(rawData) {
+                            return [data, rawData.data];
+                        })
+                        .then(function(dataAndTx) {
+                            if (dataAndTx !== null) {
+                                var data = dataAndTx[0];
+                                var rawTx = dataAndTx[1];
+                                return self.converter.convertTx(data, rawTx);
+                            } else {
+                                return dataAndTx;
+                            }
+                        });
+                } else {
+                    return self.converter.convertTx(data);
+                }
+            }
+        }), cb);
 };
 
 /**
@@ -707,7 +918,21 @@ APIClient.prototype.transaction = function(tx, cb) {
 APIClient.prototype.transactions = function(txs, cb) {
     var self = this;
 
-    return self.client.post("/transactions", null, txs, cb, false);
+    if (self.converter instanceof BtccomConverter) {
+        return callbackify(self.dataClient.get(self.converter.getUrlForTransactions(txs), null)
+            .then(function(data) {
+                return self.converter.handleErros(self, data);
+            })
+            .then(function(data) {
+                if (data.data === null) {
+                    return data;
+                } else {
+                    return self.converter.convertTxs(data);
+                }
+            }), cb);
+    } else {
+        return callbackify(self.dataClient.post("/transactions", null, txs, null, false), cb);
+    }
 };
 
 /**
@@ -725,7 +950,7 @@ APIClient.prototype.allWebhooks = function(params, cb) {
         params = null;
     }
 
-    return self.client.get("/webhooks", params, cb);
+    return self.blocktrailClient.get("/webhooks", params, cb);
 };
 
 /**
@@ -745,7 +970,7 @@ APIClient.prototype.setupWebhook = function(url, identifier, cb) {
         identifier = null;
     }
 
-    return self.client.post("/webhook", null, {url: url, identifier: identifier}, cb);
+    return self.blocktrailClient.post("/webhook", null, {url: url, identifier: identifier}, cb);
 };
 
 /**
@@ -821,7 +1046,7 @@ APIClient.prototype.getCashAddressFromLegacyAddress = function(input) {
 APIClient.prototype.getWebhook = function(identifier, cb) {
     var self = this;
 
-    return self.client.get("/webhook/" + identifier, null, cb);
+    return self.blocktrailClient.get("/webhook/" + identifier, null, cb);
 };
 
 /**
@@ -835,7 +1060,7 @@ APIClient.prototype.getWebhook = function(identifier, cb) {
 APIClient.prototype.updateWebhook = function(identifier, webhookData, cb) {
     var self = this;
 
-    return self.client.put("/webhook/" + identifier, null, webhookData, cb);
+    return self.blocktrailClient.put("/webhook/" + identifier, null, webhookData, cb);
 };
 
 /**
@@ -848,7 +1073,7 @@ APIClient.prototype.updateWebhook = function(identifier, webhookData, cb) {
 APIClient.prototype.deleteWebhook = function(identifier, cb) {
     var self = this;
 
-    return self.client.delete("/webhook/" + identifier, null, null, cb);
+    return self.blocktrailClient.delete("/webhook/" + identifier, null, null, cb);
 };
 
 /**
@@ -867,7 +1092,7 @@ APIClient.prototype.getWebhookEvents = function(identifier, params, cb) {
         params = null;
     }
 
-    return self.client.get("/webhook/" + identifier + "/events", params, cb);
+    return self.blocktrailClient.get("/webhook/" + identifier + "/events", params, cb);
 };
 
 /**
@@ -887,7 +1112,7 @@ APIClient.prototype.subscribeTransaction = function(identifier, transaction, con
         'confirmations': confirmations
     };
 
-    return self.client.post("/webhook/" + identifier + "/events", null, postData, cb);
+    return self.blocktrailClient.post("/webhook/" + identifier + "/events", null, postData, cb);
 };
 
 /**
@@ -907,7 +1132,7 @@ APIClient.prototype.subscribeAddressTransactions = function(identifier, address,
         'confirmations': confirmations
     };
 
-    return self.client.post("/webhook/" + identifier + "/events", null, postData, cb);
+    return self.blocktrailClient.post("/webhook/" + identifier + "/events", null, postData, cb);
 };
 
 /**
@@ -926,7 +1151,7 @@ APIClient.prototype.batchSubscribeAddressTransactions = function(identifier, bat
         record.event_type = 'address-transactions';
     });
 
-    return self.client.post("/webhook/" + identifier + "/events/batch", null, batchData, cb);
+    return self.blocktrailClient.post("/webhook/" + identifier + "/events/batch", null, batchData, cb);
 };
 
 /**
@@ -942,7 +1167,7 @@ APIClient.prototype.subscribeNewBlocks = function(identifier, cb) {
         'event_type': 'block'
     };
 
-    return self.client.post("/webhook/" + identifier + "/events", null, postData, cb);
+    return self.blocktrailClient.post("/webhook/" + identifier + "/events", null, postData, cb);
 };
 
 /**
@@ -956,7 +1181,7 @@ APIClient.prototype.subscribeNewBlocks = function(identifier, cb) {
 APIClient.prototype.unsubscribeAddressTransactions = function(identifier, address, cb) {
     var self = this;
 
-    return self.client.delete("/webhook/" + identifier + "/address-transactions/" + address, null, null, cb);
+    return self.blocktrailClient.delete("/webhook/" + identifier + "/address-transactions/" + address, null, null, cb);
 };
 
 /**
@@ -970,7 +1195,7 @@ APIClient.prototype.unsubscribeAddressTransactions = function(identifier, addres
 APIClient.prototype.unsubscribeTransaction = function(identifier, transaction, cb) {
     var self = this;
 
-    return self.client.delete("/webhook/" + identifier + "/transaction/" + transaction, null, null, cb);
+    return self.blocktrailClient.delete("/webhook/" + identifier + "/transaction/" + transaction, null, null, cb);
 };
 
 /**
@@ -983,7 +1208,7 @@ APIClient.prototype.unsubscribeTransaction = function(identifier, transaction, c
 APIClient.prototype.unsubscribeNewBlocks = function(identifier, cb) {
     var self = this;
 
-    return self.client.delete("/webhook/" + identifier + "/block", null, null, cb);
+    return self.blocktrailClient.delete("/webhook/" + identifier + "/block", null, null, cb);
 };
 
 /**
@@ -1029,7 +1254,7 @@ APIClient.prototype.initWallet = function(options, cb) {
         return deferred.promise;
     }
 
-    deferred.resolve(self.client.get("/wallet/" + identifier, null, true).then(function(result) {
+    deferred.resolve(self.blocktrailClient.get("/wallet/" + identifier, null, true).then(function(result) {
         var keyIndex = options.keyIndex || result.key_index;
 
         options.walletVersion = result.wallet_version;
@@ -1098,7 +1323,7 @@ APIClient.CREATE_WALLET_PROGRESS_DONE = 100;
  *
  * Either takes two argument:
  * @param options       object      {}
- * @param [cb]          function    callback(err, wallet, primaryMnemonic, backupMnemonic, blocktrailPubKeys) // nocommit @TODO
+ * @param [cb]          function    callback(err, wallet, primaryMnemonic, backupMnemonic, blocktrailPubKeys)
  *
  * For v1 wallets (explicitly specify options.walletVersion=v1):
  * @param options       object      {}
@@ -1551,7 +1776,7 @@ APIClient.prototype.storeNewWalletV1 = function(identifier, primaryPublicKey, ba
 
     verifyPublicOnly(postData, self.network);
 
-    return self.client.post("/wallet", null, postData);
+    return self.blocktrailClient.post("/wallet", null, postData);
 };
 
 /**
@@ -1589,7 +1814,7 @@ APIClient.prototype.storeNewWalletV2 = function(identifier, primaryPublicKey, ba
 
     verifyPublicOnly(postData, self.network);
 
-    return self.client.post("/wallet", null, postData);
+    return self.blocktrailClient.post("/wallet", null, postData);
 };
 
 /**
@@ -1627,7 +1852,7 @@ APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, ba
 
     verifyPublicOnly(postData, self.network);
 
-    return self.client.post("/wallet", null, postData);
+    return self.blocktrailClient.post("/wallet", null, postData);
 };
 
 /**
@@ -1641,7 +1866,7 @@ APIClient.prototype.storeNewWalletV3 = function(identifier, primaryPublicKey, ba
 APIClient.prototype.updateWallet = function(identifier, postData, cb) {
     var self = this;
 
-    return self.client.post("/wallet/" + identifier, null, postData, cb);
+    return self.blocktrailClient.post("/wallet/" + identifier, null, postData, cb);
 };
 
 /**
@@ -1657,7 +1882,7 @@ APIClient.prototype.updateWallet = function(identifier, postData, cb) {
 APIClient.prototype.upgradeKeyIndex = function(identifier, keyIndex, primaryPublicKey, cb) {
     var self = this;
 
-    return self.client.post("/wallet/" + identifier + "/upgrade", null, {
+    return self.blocktrailClient.post("/wallet/" + identifier + "/upgrade", null, {
         key_index: keyIndex,
         primary_public_key: primaryPublicKey
     }, cb);
@@ -1673,8 +1898,22 @@ APIClient.prototype.upgradeKeyIndex = function(identifier, keyIndex, primaryPubl
 APIClient.prototype.getWalletBalance = function(identifier, cb) {
     var self = this;
 
-    return self.client.get("/wallet/" + identifier + "/balance", null, true, cb);
+    return self.blocktrailClient.get("/wallet/" + identifier + "/balance", null, true, cb);
 };
+
+/**
+ * do HD wallet discovery for the wallet
+ *
+ * @param identifier            string      the wallet identifier
+ * @param [cb]                  function    callback(err, result)
+ * @returns {q.Promise}
+ */
+APIClient.prototype.doWalletDiscovery = function(identifier, gap, cb) {
+    var self = this;
+
+    return self.blocktrailClient.get("/wallet/" + identifier + "/discovery", {gap: gap}, true, cb);
+};
+
 
 /**
  * get a new derivation number for specified parent path
@@ -1689,7 +1928,7 @@ APIClient.prototype.getWalletBalance = function(identifier, cb) {
 APIClient.prototype.getNewDerivation = function(identifier, path, cb) {
     var self = this;
 
-    return self.client.post("/wallet/" + identifier + "/path", null, {path: path}, cb);
+    return self.blocktrailClient.post("/wallet/" + identifier + "/path", null, {path: path}, cb);
 };
 
 
@@ -1713,7 +1952,7 @@ APIClient.prototype.deleteWallet = function(identifier, checksumAddress, checksu
         force = false;
     }
 
-    return self.client.delete("/wallet/" + identifier, {force: force}, {
+    return self.blocktrailClient.delete("/wallet/" + identifier, {force: force}, {
         checksum: checksumAddress,
         signature: checksumSignature
     }, cb);
@@ -1778,7 +2017,7 @@ APIClient.prototype.coinSelection = function(identifier, pay, lockUTXO, allowZer
     }
 
     deferred.resolve(
-        self.client.post("/wallet/" + identifier + "/coin-selection", params, pay).then(
+        self.blocktrailClient.post("/wallet/" + identifier + "/coin-selection", params, pay).then(
             function(result) {
                 return [result.utxos, result.fee, result.change, result];
             },
@@ -1805,7 +2044,7 @@ APIClient.prototype.feePerKB = function(cb) {
     var deferred = q.defer();
     deferred.promise.spreadNodeify(cb);
 
-    deferred.resolve(self.client.get("/fee-per-kb"));
+    deferred.resolve(self.blocktrailClient.get("/fee-per-kb"));
 
     return deferred.promise;
 };
@@ -1846,7 +2085,7 @@ APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFe
         });
     }
 
-    return self.client.post(
+    return self.blocktrailClient.post(
         "/wallet/" + identifier + "/send",
         {
             check_fee: checkFee ? 1 : 0,
@@ -1869,7 +2108,7 @@ APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFe
 APIClient.prototype.setupWalletWebhook = function(identifier, webhookIdentifier, url, cb) {
     var self = this;
 
-    return self.client.post("/wallet/" + identifier + "/webhook", null, {url: url, identifier: webhookIdentifier}, cb);
+    return self.blocktrailClient.post("/wallet/" + identifier + "/webhook", null, {url: url, identifier: webhookIdentifier}, cb);
 };
 
 /**
@@ -1883,7 +2122,7 @@ APIClient.prototype.setupWalletWebhook = function(identifier, webhookIdentifier,
 APIClient.prototype.deleteWalletWebhook = function(identifier, webhookIdentifier, cb) {
     var self = this;
 
-    return self.client.delete("/wallet/" + identifier + "/webhook/" + webhookIdentifier, null, null, cb);
+    return self.blocktrailClient.delete("/wallet/" + identifier + "/webhook/" + webhookIdentifier, null, null, cb);
 };
 
 /**
@@ -1902,7 +2141,7 @@ APIClient.prototype.walletTransactions = function(identifier, params, cb) {
         params = null;
     }
 
-    return self.client.get("/wallet/" + identifier + "/transactions", params, true, cb);
+    return self.blocktrailClient.get("/wallet/" + identifier + "/transactions", params, true, cb);
 };
 
 /**
@@ -1921,7 +2160,7 @@ APIClient.prototype.walletAddresses = function(identifier, params, cb) {
         params = null;
     }
 
-    return self.client.get("/wallet/" + identifier + "/addresses", params, true, cb);
+    return self.blocktrailClient.get("/wallet/" + identifier + "/addresses", params, true, cb);
 };
 
 /**
@@ -1934,7 +2173,7 @@ APIClient.prototype.walletAddresses = function(identifier, params, cb) {
 APIClient.prototype.labelWalletAddress = function(identifier, address, label, cb) {
     var self = this;
 
-    return self.client.post("/wallet/" + identifier + "/address/" + address + "/label", null, {label: label}, cb);
+    return self.blocktrailClient.post("/wallet/" + identifier + "/address/" + address + "/label", null, {label: label}, cb);
 };
 
 APIClient.prototype.walletMaxSpendable = function(identifier, allowZeroConf, feeStrategy, options, cb) {
@@ -1962,7 +2201,7 @@ APIClient.prototype.walletMaxSpendable = function(identifier, allowZeroConf, fee
         params['forcefee'] = options.forcefee;
     }
 
-    return self.client.get("/wallet/" + identifier + "/max-spendable", params, true, cb);
+    return self.blocktrailClient.get("/wallet/" + identifier + "/max-spendable", params, true, cb);
 };
 
 /**
@@ -1981,7 +2220,7 @@ APIClient.prototype.walletUTXOs = function(identifier, params, cb) {
         params = null;
     }
 
-    return self.client.get("/wallet/" + identifier + "/utxos", params, true, cb);
+    return self.blocktrailClient.get("/wallet/" + identifier + "/utxos", params, true, cb);
 };
 
 /**
@@ -1999,7 +2238,7 @@ APIClient.prototype.allWallets = function(params, cb) {
         params = null;
     }
 
-    return self.client.get("/wallets", params, true, cb);
+    return self.blocktrailClient.get("/wallets", params, true, cb);
 };
 
 /**
@@ -2013,9 +2252,6 @@ APIClient.prototype.allWallets = function(params, cb) {
  */
 APIClient.prototype.verifyMessage = function(message, address, signature, cb) {
     var self = this;
-
-    // we could also use the API instead of the using bitcoinjs-lib to verify
-    // return self.client.post("/verify_message", null, {message: message, address: address, signature: signature}, cb);
 
     var deferred = q.defer();
     deferred.promise.nodeify(cb);
@@ -2040,7 +2276,7 @@ APIClient.prototype.verifyMessage = function(message, address, signature, cb) {
 APIClient.prototype.faucetWithdrawl = function(address, amount, cb) {
     var self = this;
 
-    return self.client.post("/faucet/withdrawl", null, {address: address, amount: amount}, cb);
+    return self.blocktrailClient.post("/faucet/withdrawl", null, {address: address, amount: amount}, cb);
 };
 
 /**
@@ -2053,7 +2289,7 @@ APIClient.prototype.faucetWithdrawl = function(address, amount, cb) {
 APIClient.prototype.sendRawTransaction = function(rawTransaction, cb) {
     var self = this;
 
-    return self.client.post("/send-raw-tx", null, rawTransaction, cb);
+    return self.blocktrailClient.post("/send-raw-tx", null, rawTransaction, cb);
 };
 
 /**
@@ -2065,7 +2301,7 @@ APIClient.prototype.sendRawTransaction = function(rawTransaction, cb) {
 APIClient.prototype.price = function(cb) {
     var self = this;
 
-    return self.client.get("/price", null, false, cb);
+    return self.blocktrailClient.get("/price", null, false, cb);
 };
 
 module.exports = APIClient;
