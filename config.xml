@@ -11,8 +11,8 @@
   <access origin="https://api.blocktrail.com"/>
   <access origin="https://sandbox.glidera.io"/>
   <access origin="https://www.glidera.io"/>
-  <access origin="https://bitonic.nl"/>
-  <access origin="https://staging.bitonic.nl"/>
+  <access origin="https://chain.api.btc.com"/>
+  <access origin="https://bch-chain.api.btc.com"/>
   <access origin="https://sentry.io"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
