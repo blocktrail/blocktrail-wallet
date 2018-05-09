@@ -625,23 +625,24 @@
          * @param amount
          */
         function applyBitcoinURIParams(address, amount) {
+
             if (address) {
                 activeWallet.validateAddress(address)
                     .then(function (address) {
                         if (address) {
                             $scope.sendInput.recipientAddress = address;
+
+                            if (amount) {
+                                amount = parseFloat(amount);
+
+                                if (amount) {
+                                    $scope.sendInput.btcValue = amount;
+                                }
+                                $scope.setFiat();
+                                $scope.fetchFee();
+                            }
                         }
                     });
-            }
-
-            if (amount) {
-                amount = parseFloat(amount);
-
-                if (amount) {
-                    $scope.sendInput.btcValue = amount;
-                }
-                $scope.setFiat();
-                $scope.fetchFee();
             }
         }
 
@@ -652,9 +653,18 @@
                 });
 
                 var client = new bip70.HttpClient();
-                client.getRequest($scope.sendInput.paymentUrl, validation)
+
+                var networkConfig;
+                if (walletData.networkType == 'BTC') {
+                    networkConfig = bip70.NetworkConfig.Bitcoin();
+                // TODO: BCH BIP70 is currently incompatible with BitPay
+                } else {
+                    throw new Error('Unsupported network for BIP70 requests');
+                }
+
+                client.getRequest($scope.sendInput.paymentUrl, validation, networkConfig)
                     .then(function(request) {
-                        var details = bip70.ProtoBuf.PaymentDetails.decode(request.serializedPaymentDetails);
+                        var details = bip70.ProtoBuf.PaymentDetails.decode(request[0].serializedPaymentDetails);
                         if (details.outputs.length > 1) {
                             throw new Error("Multiple output payment requests are not supported");
                         }
