@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 # check we have our deps
 command -v git > /dev/null || { echo "missing git"; exit 1; }
@@ -30,23 +31,23 @@ read OK
 cat package.json | jq ".version = \"${VERSION}\"" > tmp.$$.json && mv tmp.$$.json package.json
 
 # commit package.json change
-git commit -m "v${VERSION}" package.json || exit 1
+git commit -m "v${VERSION}" package.json
 
 # npm install for latest deps before we grunt build
-npm install || exit 1
+npm install
 
 # grunt build
-grunt build || exit 1
+grunt build
 
 # commit grunt build
-git commit -am "build for release" || exit 1
+git commit -am "build for release"
 
 # tag version
-git tag v${VERSION} || exit 1
+git tag v${VERSION}
 
 # push with tags
-git push || exit 1
-git push --tags || exit 1
+git push
+git push --tags
 
 # publish to npm
 npm publish

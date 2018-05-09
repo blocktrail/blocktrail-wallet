@@ -999,6 +999,15 @@ function readCashAddress(address, network) {
         err = _err;
     }
 
+    if (err) {
+        try {
+            addr = bitcoin.address.fromCashAddress(network.cashAddrPrefix + ':' + address);
+            err = null;
+        } catch (_err) {
+            err = _err;
+        }
+    }
+
     if (!err) {
         // Valid base58 but invalid network immediately alerts
         if (addr.prefix !== network.cashAddrPrefix) {

@@ -166,20 +166,23 @@ Request.prototype.performRequest = function(options) {
         var body;
 
         if (error) {
-            var err = Request.handleFailure(error.response.body, error.status);
+            var err = Request.handleFailure(error.response && error.response.body, error.status);
 
             self.deferred.reject(err);
-            return self.callback(err, error.response.body);
+            return self.callback(err, error.response && error.response.body);
         }
 
         debug('response status code: %s content type: %s', res.status, res.headers['content-type']);
-
         if (!error && (res.headers['content-type'].indexOf('application/json') >= 0)) {
             try {
                 body = JSON.parse(res.text);
             } catch (e) {
                 error = e;
             }
+        }
+
+        if (!body) {
+            body = res.text;
         }
 
         if (!error && res.status !== 200) {
@@ -209,7 +212,14 @@ Request.handleFailure = function(body, statusCode) {
     }
 
     if (data) {
-        error = new Error(data.msg ? data.msg : null);
+        var msg = data.msg || "";
+        if (!msg) {
+            if (statusCode === 429) {
+                msg = "Too Many Request";
+            }
+        }
+
+        error = new Error(msg);
 
         Object.keys(data).forEach(function(k) {
             if (k !== "msg") {

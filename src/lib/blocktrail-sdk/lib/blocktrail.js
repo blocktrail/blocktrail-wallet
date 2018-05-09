@@ -7,7 +7,8 @@ var blocktrail = {
     COIN: 100000000,
     PRECISION: 8,
     DUST: 2730,
-    BASE_FEE: 10000
+    BASE_FEE: 10000,
+    LOCK_TIME_TIMESTAMP_THRESHOLD: 5000000
 };
 
 var convert = function(s, from, to) {
