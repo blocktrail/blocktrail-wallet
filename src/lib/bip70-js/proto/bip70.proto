@@ -1,0 +1,39 @@
+
+message Output {
+    optional uint64 amount = 1 [default = 0];
+    optional bytes script = 2;
+}
+
+message PaymentDetails {
+    optional string network = 1 [default = "main"];
+    repeated Output outputs = 2;
+    required uint64 time = 3;
+    optional uint64 expires = 4;
+    optional string memo = 5;
+    optional string payment_url = 6;
+    optional bytes merchant_data = 7;
+}
+
+message PaymentRequest {
+    optional uint32 payment_details_version = 1 [default = 1];
+    optional string pki_type = 2 [default = "none"];
+    optional bytes pki_data = 3;
+    required bytes serialized_payment_details = 4;
+    optional bytes signature = 5;
+}
+
+message Payment {
+    optional bytes merchant_data = 1;
+    repeated bytes transactions = 2;
+    repeated Output refund_to = 3;
+    optional string memo = 4;
+}
+
+message PaymentACK {
+    required Payment payment = 1;
+    optional string memo = 2;
+}
+
+message X509Certificates {
+    repeated bytes certificate = 1;
+}
