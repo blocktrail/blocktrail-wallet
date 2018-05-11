@@ -29,7 +29,8 @@ angular.module('blocktrail.wallet').factory(
             if (!dbs[name]) {
                 dbs[name] = new PouchDB(name, {
                     adapter: CONFIG.POUCHDB_DRIVER,
-                    location: 2 // storage file on iOS in location that is not synced to iTunes or iCloud
+                    location: 2, // storage file on iOS in location that is not synced to iTunes or iCloud
+                    androidDatabaseImplementation: 2
                 });
 
                 dbs[name].on('error', function(err) {
