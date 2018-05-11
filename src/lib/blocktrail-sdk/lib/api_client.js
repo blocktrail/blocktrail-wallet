@@ -117,7 +117,8 @@ var APIClient = function(options) {
     /**
      * @type RestClient
      */
-    self.dataClient = APIClient.initRestClient(_.merge({}, options));
+    var dataOptions = _.omit(options, 'host');
+    self.dataClient = APIClient.initRestClient(dataOptions);
     /**
      * @type RestClient
      */

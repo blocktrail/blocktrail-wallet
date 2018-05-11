@@ -275,7 +275,8 @@ gulp.task('js:libs', ['appconfig'], function() {
             "./src/lib/qrcode/lib/qrcode.js",
             "./src/lib/angular-qr/src/angular-qr.js",
             "./src/lib/raven-js/dist/raven.js",
-            "./src/lib/raven-js/dist/plugins/angular.js"
+            "./src/lib/raven-js/dist/plugins/angular.js",
+            "./src/lib/bip70-js/build/bip70.js"
         ])
             .pipe(sourcemaps.init({largeFile: true}))
             .pipe(concat('libs.js'))

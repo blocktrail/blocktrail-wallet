@@ -1,0 +1,44 @@
+{
+  "name": "bip70-js",
+  "version": "2.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha",
+    "clean": "rm -rf build/* && find lib -name '*.js' -delete",
+    "coverage-test": "nyc --reporter=html --reporter=text --reporter=clover mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/bip70/bip70-js"
+  },
+  "keywords": [
+    "bip70",
+    "bitcoin"
+  ],
+  "author": "Thomas Kerin",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.17.0",
+    "jsrsasign": "^8.0.4",
+    "protobufjs": "^6.8.0"
+  },
+  "devDependencies": {
+    "brfs": "^1.4.3",
+    "browserify": "*",
+    "grunt": "~0.4.2",
+    "grunt-browserify": "git://github.com/jmreidy/grunt-browserify.git#4f96beb75d27fdebc4359e08e7db4c514f6265a8",
+    "grunt-contrib-connect": "^0.7.1",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-exec": "^2.0.0",
+    "grunt-notify": "^0.4.5",
+    "grunt-saucelabs": "git://github.com/blocktrail/grunt-saucelabs.git#92615f964444a7f304bfee41cb13627b0457f85d",
+    "grunt-template": "^1.0.0",
+    "jscs": "~3.0.7",
+    "jshint": "~2.9.1",
+    "mocha": "*",
+    "nyc": "^11.3.0",
+    "watchify": "*"
+  }
+}

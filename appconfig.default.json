@@ -27,7 +27,8 @@
         "https://chain.api.btc.com",
         "https://bch-chain.api.btc.com",
         "https://checkout.simplexcc.com",
-        "https://sentry.io"
+        "https://sentry.io",
+        "https://bitpay.com"
     ],
 
     "GLIDERA_URL": "https://www.glidera.io",

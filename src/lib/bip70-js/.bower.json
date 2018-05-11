@@ -1,0 +1,31 @@
+{
+  "name": "bip70-js",
+  "description": "Javascript library for handling BIP70 payment requests",
+  "main": "main.js",
+  "authors": [
+    "Thomas Kerin"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "bip70",
+    "bitcoin"
+  ],
+  "homepage": "https://github.com/bip70/bip70-js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "version": "2.0.1",
+  "_release": "2.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.1",
+    "commit": "f7a2d812535d344f336b6954c36fe19b08d775c9"
+  },
+  "_source": "https://github.com/bip70/bip70-js.git",
+  "_target": "2.0.1",
+  "_originalSource": "bip70-js"
+}

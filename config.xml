@@ -14,6 +14,7 @@
   <access origin="https://chain.api.btc.com"/>
   <access origin="https://bch-chain.api.btc.com"/>
   <access origin="https://sentry.io"/>
+  <access origin="https://bitpay.com"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
