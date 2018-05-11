@@ -659,7 +659,9 @@
                     networkConfig = bip70.NetworkConfig.Bitcoin();
                 // TODO: BCH BIP70 is currently incompatible with BitPay
                 } else {
-                    $cordovaToast.showShortTop($translate.instant('MSG_INVALID_RECIPIENT'.sentenceCase()));
+                    $timeout(function() {
+                        $cordovaToast.showLongCenter($translate.instant('MSG_INVALID_RECIPIENT'.sentenceCase()));
+                    }, 350);
                     throw new Error('Unsupported network for BIP70 requests');
                 }
 
