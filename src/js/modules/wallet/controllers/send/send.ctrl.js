@@ -7,7 +7,7 @@
     function SendCtrl($scope, trackingService, $log, Contacts, walletsManagerService, CurrencyConverter,
                          $timeout, $q, $btBackButtonDelegate, $state, settingsService, localSettingsService,
                          $rootScope, $translate, $cordovaDialogs, AppRateService, activeWallet, bip70, bitcoinJS,
-                         launchService, CONFIG) {
+                         launchService, CONFIG, $cordovaToast) {
 
         var sdkWallet = walletsManagerService.getActiveSdkWallet();
         var walletData = activeWallet.getReadOnlyWalletData();
@@ -659,6 +659,7 @@
                     networkConfig = bip70.NetworkConfig.Bitcoin();
                 // TODO: BCH BIP70 is currently incompatible with BitPay
                 } else {
+                    $cordovaToast.showShortTop($translate.instant('MSG_INVALID_RECIPIENT'.sentenceCase()));
                     throw new Error('Unsupported network for BIP70 requests');
                 }
 
@@ -673,6 +674,7 @@
 
                         var output = details.outputs[0];
                         var address = bitcoinJS.address.fromOutputScript(output.script, activeWallet.getSdkWallet().sdk.network);
+                        $scope.sendInput.paymentUrl = null;
                         applyBitcoinURIParams(address, blocktrailSDK.toBTC(output.amount));
                     }, function(err) {
                         console.log("err - abort request");
@@ -694,7 +696,6 @@
                         //if the app is launched via uri, check for address and amount to send to
                         $scope.parseForAddress($rootScope.bitcoinuri)
                             .then(function(result) {
-                                $scope.sendInput.recipientDisplay = "test";
                                 $log.debug('found address in uri: ' + result.address);
                                 $q.when(walletsManagerService.getActiveWallet().validateAddress(result.address)).then(function() {
                                     $scope.sendInput.recipientDisplay = result.address;
@@ -722,6 +723,12 @@
 
         $scope.$on('$ionicView.enter', function() {
             $scope.checkBitcoinUri();
+        });
+
+        $scope.$watch('sendInput.paymentUrl', function() {
+            if ($scope.sendInput.paymentUrl) {
+                $scope.checkBitcoinUri();
+            }
         });
     }
 })();
