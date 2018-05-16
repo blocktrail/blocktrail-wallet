@@ -115,7 +115,7 @@
       </dict>
     </dict>
     <key>NSCameraUsageDescription</key>
-    <string>BTC.com uses your camera</string>
+    <string>Your camera will be used to scan QR codes</string>
     <key>NSContactsUsageDescription</key>
     <string>BTC.com can use your addressbook to send and receive transactions from contacts</string>
     <key>NSLocationWhenInUseUsageDescription</key>
