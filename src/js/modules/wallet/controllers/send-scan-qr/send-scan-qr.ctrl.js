@@ -49,17 +49,10 @@
                     } else if (elm.protocol === 'bitcoincash:' && $rootScope.NETWORK === "BTC") {
                         throw new Error("Can't send to Bitcoin Cash address with BTC wallet");
                     } else if (elm.protocol === 'bitcoin:' || elm.protocol === 'bitcoincash:') {
-                        var sendParams = {};
                         $scope.clearRecipient();
-                        // TODO This could have sideeffects
-                        try {
-                            sendParams = bitcoinLinkService.parse(result);
-                        } catch (e) { }
-                        //
-                        // //go to parent "send qr" state to continue with send process
-                        // $state.go('^');
-
-                        $state.go('app.wallet.send', {sendInput: sendParams});
+                        bitcoinLinkService.parse(result).then(function (sendParams) {
+                            $state.go('app.wallet.send', {sendInput: sendParams});
+                        });
                     }
                 },
                 function(error) {
