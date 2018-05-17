@@ -50,8 +50,14 @@
                         throw new Error("Can't send to Bitcoin Cash address with BTC wallet");
                     } else if (elm.protocol === 'bitcoin:' || elm.protocol === 'bitcoincash:') {
                         $scope.clearRecipient();
-                        bitcoinLinkService.parse(result).then(function (sendParams) {
-                            $state.go('app.wallet.send', {sendInput: sendParams});
+                        bitcoinLinkService.parse(result).then(function (sendInput) {
+                            if(sendInput && (sendInput.network === 'bitcoin' || sendInput.network === 'bitcoincash')) {
+                                $state.go('app.wallet.send', {
+                                    sendInput: sendInput
+                                });
+                            } else {
+                                $state.go('app.wallet.summary');
+                            }
                         });
                     }
                 },

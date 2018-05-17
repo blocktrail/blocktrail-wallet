@@ -596,56 +596,35 @@
 
         /**
          * Applies the amount and address to the input fields for sending coins
-         * @param address
-         * @param amount
          */
-        function applyBitcoinURIParams(address, amount) {
-
-            if (address) {
-                activeWallet.validateAddress(address)
-                    .then(function (address) {
-                        if (address) {
-                            $scope.sendInput.recipientAddress = address;
-
-                            if (amount) {
-                                amount = parseFloat(amount);
-
-                                if (amount) {
-                                    $scope.sendInput.btcValue = amount;
-                                }
-                                $scope.setFiat();
-                                $scope.fetchFee();
-                            }
-                        }
-                    });
-            }
-        }
-
-        if($stateParams.sendInput) {
-            // Open send in correct wallet network
-            if ($stateParams.sendInput.network === "bitcoin" || $stateParams.sendInput.network === "bitcoincash") {
-                if ($stateParams.sendInput.network === "bitcoin" && walletData.networkType === "BCC") {
-                    return switchWalletByNetworkTypeAndIdentifier('BTC', walletData.identifier);
-                } else if ($stateParams.sendInput.network === "bitcoincash:" && walletData.networkType === "BTC") {
-                    return switchWalletByNetworkTypeAndIdentifier('BCC', walletData.identifier);
+        applyBitcoinURIParams();
+        function applyBitcoinURIParams() {
+            if ($stateParams.sendInput) {
+                // Open send in correct wallet network
+                if ($stateParams.sendInput.network === "bitcoin" || $stateParams.sendInput.network === "bitcoincash") {
+                    if ($stateParams.sendInput.network === "bitcoin" && walletData.networkType === "BCC") {
+                        return switchWalletByNetworkTypeAndIdentifier('BTC', walletData.identifier);
+                    } else if ($stateParams.sendInput.network === "bitcoincash:" && walletData.networkType === "BTC") {
+                        return switchWalletByNetworkTypeAndIdentifier('BCC', walletData.identifier);
+                    }
                 }
-            }
 
-            activeWallet.validateAddress($stateParams.sendInput.recipientAddress)
-                .then(function () {
-                    $scope.sendInput.inputDisabled = true;
-                    $scope.sendInput = Object.assign($scope.sendInput, $stateParams.sendInput);
-                    $scope.setFiat();
-                    $scope.fetchFee();
-                })
-                .catch(function (e) {
-                    console.error(e);
-                    $scope.clearRecipient();
-                    modalService.alert({
-                        title: "ERROR_TITLE_3",
-                        body: "MSG_INVALID_RECIPIENT"
+                activeWallet.validateAddress($stateParams.sendInput.recipientAddress)
+                    .then(function () {
+                        $scope.sendInput.inputDisabled = $stateParams.sendInput.inputDisabled;
+                        $scope.sendInput = Object.assign($scope.sendInput, $stateParams.sendInput);
+                        $scope.setFiat();
+                        $scope.fetchFee();
+                    })
+                    .catch(function (e) {
+                        console.error(e);
+                        $scope.clearRecipient();
+                        modalService.alert({
+                            title: "ERROR_TITLE_3",
+                            body: "MSG_INVALID_RECIPIENT"
+                        });
                     });
-                })
+            }
         }
     }
 })();
