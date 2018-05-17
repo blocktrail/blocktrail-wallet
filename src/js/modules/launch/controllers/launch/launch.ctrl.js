@@ -266,16 +266,14 @@
                                 $rootScope.handleOpenURL.startsWith("bitcoin cash")) {
                                     nextStep = "app.wallet.send";
                                     var extraParams = null;
-                                    try {
-                                        bitcoinLinkService.parse($rootScope.handleOpenURL)
-                                            .then(function (result) {
-                                                extraParams = result;
-                                                $ionicSideMenuDelegate.toggleLeft(false);
-                                                $state.go(nextStep, { sendInput: extraParams });
-                                            });
-                                        // If the parsing of a bitcoin link succeeds, we return here
-                                        return;
-                                    } catch (e) { console.log(e)}
+                                    return bitcoinLinkService.parse($rootScope.handleOpenURL)
+                                        .then(function (result) {
+                                            extraParams = result;
+                                            $ionicSideMenuDelegate.toggleLeft(false);
+                                            $state.go(nextStep, { sendInput: extraParams });
+                                        }).catch(function () {
+                                            $state.go('app.wallet.summary');
+                                        });
                             } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/oauth2")) {
                                 $rootScope.glideraCallback = $rootScope.handleOpenURL;
                                 nextStep = "app.wallet.buybtc.glidera_oauth2_callback";
