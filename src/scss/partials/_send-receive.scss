@@ -351,8 +351,8 @@
             $input-padding-2: 2px;
 
             position: relative;
-            color: #666;
             width: 100%;
+            color: #666;
             height: $input-height*2 + $input-padding*2 + $input-padding-2*2;
             background: #fff;
             transition: background-color 0.5s ease-in-out;
@@ -372,6 +372,7 @@
                     margin: 0;
                     outline: 0;
                     color: #666;
+                    opacity: 1 !important;
                     background: transparent;
                     z-index: 10;
 
