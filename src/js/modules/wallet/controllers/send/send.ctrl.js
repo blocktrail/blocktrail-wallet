@@ -7,7 +7,7 @@
     function SendCtrl($scope, trackingService, $log, Contacts, walletsManagerService, CurrencyConverter,
                          $timeout, $q, $btBackButtonDelegate, $state, settingsService, localSettingsService,
                          $rootScope, $translate, $cordovaDialogs, AppRateService, activeWallet, $stateParams,
-                         launchService, CONFIG) {
+                         launchService, modalService, CONFIG) {
 
         var sdkWallet = walletsManagerService.getActiveSdkWallet();
         var walletData = activeWallet.getReadOnlyWalletData();
@@ -597,8 +597,7 @@
         /**
          * Applies the amount and address to the input fields for sending coins
          */
-        applyBitcoinURIParams();
-        function applyBitcoinURIParams() {
+        $scope.applyBitcoinURIParams = function() {
             if ($stateParams.sendInput) {
                 // Open send in correct wallet network
                 if ($stateParams.sendInput.network === "bitcoin" || $stateParams.sendInput.network === "bitcoincash") {
@@ -626,5 +625,13 @@
                     });
             }
         }
+
+        $scope.$on('appResume', function() {
+            $scope.applyBitcoinURIParams();
+        });
+
+        $scope.$on('$ionicView.enter', function() {
+            $scope.applyBitcoinURIParams();
+        });
     }
 })();

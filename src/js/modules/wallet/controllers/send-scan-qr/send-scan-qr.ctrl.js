@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("SendScanQRCtrl", SendScanQRCtrl);
 
-    function SendScanQRCtrl($scope, $rootScope, $state, QR, $log, $btBackButtonDelegate, $timeout,
+    function SendScanQRCtrl($scope, $rootScope, $state, QR, $log, $btBackButtonDelegate, $timeout, $translate,
                             $ionicHistory, $cordovaToast, $ionicLoading, bitcoinLinkService) {
         //remove animation for next state - looks kinda buggy
         $ionicHistory.nextViewOptions({
@@ -54,9 +54,10 @@
                             if(sendInput && (sendInput.network === 'bitcoin' || sendInput.network === 'bitcoincash')) {
                                 $state.go('app.wallet.send', {
                                     sendInput: sendInput
-                                });
+                                }, { reload: true });
                             } else {
-                                $state.go('app.wallet.summary');
+                                $cordovaToast.showLongTop($translate.$instant("MSG_INVALID_RECIPIENT").sentenceCase());
+                                $state.go('app.wallet.send');
                             }
                         });
                     }
