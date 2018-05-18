@@ -81,6 +81,7 @@
                                raw-model="btcValueRaw"
                                ng-change="setFiat(); sendInputForm.fiatValue.$setDirty(); fetchFee();"
                                ng-enter="blurInput($event)"
+                               ng-disabled="sendInput.inputDisabled"
                                tabindex="{{ !fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
                             <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>
@@ -97,6 +98,7 @@
                                ng-model="sendInput.fiatValue"
                                raw-model="fiatValueRaw"
                                ng-change="setBTC(); sendInputForm.btcValue.$setDirty(); fetchFee();"
+                               ng-disabled="sendInput.inputDisabled"
                                ng-enter="blurInput($event)"
                                tabindex="{{ fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
@@ -105,8 +107,10 @@
                             <span class="spacer">{{ fiatValueRaw }}</span>
                         </div>
                     </div>
-                    <div class="input-swapping-overlay" ng-click="swapInputs()">
-                        <i class="swap-icon ion-arrow-swap"></i>
+                    <div class="input-swapping-overlay"
+                         ng-show="!sendInput.inputDisabled"
+                    >
+                        <i class="swap-icon ion-arrow-swap" ng-click="swapInputs()"></i>
                     </div>
                 </div>
             </div>

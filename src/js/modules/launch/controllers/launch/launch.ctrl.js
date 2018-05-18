@@ -4,7 +4,8 @@
     angular.module("blocktrail.launch")
         .controller("LaunchCtrl", LaunchCtrl);
 
-    function LaunchCtrl($window, $filter, $q, $rootScope, $state, $log, $ionicHistory, $ionicSideMenuDelegate, launchService, CONFIG, storageService, localSettingsService) {
+    function LaunchCtrl($window, $filter, $q, $rootScope, $state, $log, $ionicHistory, $ionicSideMenuDelegate, launchService,
+                        CONFIG, storageService, localSettingsService, bitcoinLinkService) {
         var storageVersionDB = storageService.db('_storage-version');
 
         // disable animation on transition from this state
@@ -263,9 +264,16 @@
                             if($rootScope.handleOpenURL.startsWith("bitcoin") ||
                                 $rootScope.handleOpenURL.startsWith("bitcoincash") ||
                                 $rootScope.handleOpenURL.startsWith("bitcoin cash")) {
-                                    $rootScope.bitcoinuri = $rootScope.handleOpenURL;
                                     nextStep = "app.wallet.send";
-                                    $ionicSideMenuDelegate.toggleLeft(false);
+                                    var extraParams = null;
+                                    return bitcoinLinkService.parse($rootScope.handleOpenURL)
+                                        .then(function (result) {
+                                            extraParams = result;
+                                            $ionicSideMenuDelegate.toggleLeft(false);
+                                            $state.go(nextStep, { sendInput: extraParams });
+                                        }).catch(function () {
+                                            $state.go('app.wallet.summary');
+                                        });
                             } else if ($rootScope.handleOpenURL.startsWith("btccomwallet://glideraCallback/oauth2")) {
                                 $rootScope.glideraCallback = $rootScope.handleOpenURL;
                                 nextStep = "app.wallet.buybtc.glidera_oauth2_callback";

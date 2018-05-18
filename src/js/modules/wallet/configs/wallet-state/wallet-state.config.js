@@ -87,6 +87,9 @@
                         templateUrl: "js/modules/wallet/controllers/send/send.tpl.html",
                         controller: "SendCtrl"
                     }
+                },
+                params: {
+                    sendInput : null
                 }
             })
             .state("app.wallet.send.qrcode", {
