@@ -439,6 +439,11 @@
                         line-height: $input-height;
                         vertical-align: middle;
                         opacity: 0;
+
+                        &.visible {
+                            opacity: 1;
+                            color: #666;
+                        }
                     }
                     .label {
                         display: inline-block;
