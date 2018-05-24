@@ -26,14 +26,10 @@ angular.module('blocktrail.wallet').factory(
         var dbs = {};
         var isWebSQL = false;
 
-        function activateWebSQL() {
-            isWebSQL = true;
-        }
-
         var db = function(name) {
             if (!dbs[name]) {
                 dbs[name] = new PouchDB(name, {
-                    adapter: isWebSQL ? 'websql' : CONFIG.POUCHDB_DRIVER,
+                    adapter: CONFIG.POUCHDB_DRIVER,
                     location: 2, // storage file on iOS in location that is not synced to iTunes or iCloud
                     androidDatabaseImplementation: 2,
                     iosDatabaseLocation: 'default'
@@ -55,7 +51,9 @@ angular.module('blocktrail.wallet').factory(
                 }
 
                 return resetSingle(name);
-            }))
+            })).then(function () {
+                dbs = {};
+            })
                 .catch(function(e) { $log.error('storage ERR' + e); })
             ;
         };
@@ -90,8 +88,7 @@ angular.module('blocktrail.wallet').factory(
             db: db,
             deleteDB: deleteDB,
             reset: resetSingle,
-            resetAll: resetAll,
-            activateWebSQL: activateWebSQL
+            resetAll: resetAll
         };
     }
 );
