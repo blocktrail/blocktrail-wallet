@@ -13,7 +13,19 @@
                     excludeFromHistory: true,
                     clearHistory: true  // always clear history when entering this state
                 },
-                controller: "LaunchCtrl"
+                controller: "LaunchCtrl",
+                resolve: {
+                    websqlify: function (launchService, storageService) {
+                        var testDb = storageService.db('websqlify');
+                        return testDb.put({test: true})
+                            .then(function () {
+                                return storageService.deleteDB('websqlify');
+                            }, function () {
+                                storageService.activateWebSQL();
+                                return storageService.resetAll();
+                            });
+                    }
+                }
             })
             .state("app.reset", {
                 url: "/reset",
