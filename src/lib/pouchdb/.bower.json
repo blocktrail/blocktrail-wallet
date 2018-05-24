@@ -1,5 +1,6 @@
 {
   "name": "pouchdb",
+  "version": "6.4.3",
   "description": "PouchDB is a pocket-sized database.",
   "repo": "daleharvey/pouchdb",
   "keywords": [
@@ -24,14 +25,14 @@
     "npm-debug.log",
     "phantomjsdriver.log"
   ],
-  "homepage": "https://github.com/blocktrail/pouchdb",
-  "_release": "01eb7fe14f",
+  "homepage": "https://github.com/pouchdb/pouchdb",
+  "_release": "6.4.3",
   "_resolution": {
-    "type": "branch",
-    "branch": "blocktrail",
-    "commit": "01eb7fe14f10fbf00e3520df24cb9a52fe5a3966"
+    "type": "version",
+    "tag": "6.4.3",
+    "commit": "b012d8f41f434b5a03862ef70193b1ab6da1f89d"
   },
-  "_source": "git@github.com:blocktrail/pouchdb.git",
-  "_target": "blocktrail",
-  "_originalSource": "git@github.com:blocktrail/pouchdb.git"
+  "_source": "git@github.com:pouchdb/pouchdb.git",
+  "_target": "6.4.3",
+  "_originalSource": "git@github.com:pouchdb/pouchdb.git"
 }
