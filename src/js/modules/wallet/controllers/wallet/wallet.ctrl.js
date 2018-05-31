@@ -43,7 +43,7 @@
         var buyBTCNavItem = {
             stateHref: $state.href("app.wallet.buybtc.choose"),
             activeStateName: "app.wallet.buybtc",
-            linkText: "BUYBTC_NAVTITLE",
+            linkText: "BUYBTC",
             linkIcon: "ion-card",
             isHidden: !CONFIG.NETWORKS[$scope.walletData.networkType].BUYBTC
         };
