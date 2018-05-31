@@ -5,7 +5,7 @@
     "blocktrail-sdk": "3.7.5",
     "bip70-js": "2.0.1",
     "ionic": "1.0.1",
-    "pouchdb": "git@github.com:blocktrail/pouchdb.git#blocktrail",
+    "pouchdb": "git@github.com:pouchdb/pouchdb.git#6.4.3",
     "q": "1.2.0",
     "angular-moment": "~0.10.0",
     "browserify-cryptojs": "~0.3.1",

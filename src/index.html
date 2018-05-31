@@ -96,13 +96,34 @@
         <script src="js/app.js"></script>
 
         <script>
-            angular.module('blocktrail.config', []).constant('CONFIG', <%= APPCONFIG_JSON %>);
-            angular.module('blocktrail.translations', []).constant('TRANSLATIONS', <%= TRANSLATIONS %>);
+            var CONFIG = <%= APPCONFIG_JSON %>;
+            var TRANSLATIONS = <%= TRANSLATIONS %>;
+
         </script>
         <script>
             document.addEventListener("deviceready", function() {
                 console.log('deviceready');
-                angular.bootstrap(document.getElementById("bootstrapper"), ["blocktrail.wallet-bootstrapper"]);
+
+                var testPouchDB = new PouchDB('testDB', {
+                    adapter: CONFIG.POUCHDB_DRIVER,
+                    location: 2, // storage file on iOS in location that is not synced to iTunes or iCloud
+                    androidDatabaseImplementation: 2,
+                    iosDatabaseLocation: 'default'
+                });
+
+                testPouchDB.put({_id: 'test', test: true})
+                .then(
+                    function () {/* IndexedDB works, nothing to do */},
+                    function (err) {
+                        console.warn('Could not initialize with indexedDB, fallback to websql', err);
+                        CONFIG.POUCHDB_DRIVER = 'websql';
+                    })
+                .then(function () {
+                    angular.module('blocktrail.config', []).constant('CONFIG', CONFIG);
+                    angular.module('blocktrail.translations', []).constant('TRANSLATIONS', TRANSLATIONS);
+
+                    angular.bootstrap(document.getElementById("bootstrapper"), ["blocktrail.wallet-bootstrapper"]);
+                });
             }, false);
         </script>
     </head>
