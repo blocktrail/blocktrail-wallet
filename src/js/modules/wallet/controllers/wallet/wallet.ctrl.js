@@ -194,6 +194,15 @@
             return walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
                 .then(function() {
                     $state.transitionTo("app.wallet.summary", null, { reload: true, inherit: false });
+                }).catch(function (err) {
+                    var bodyMessage = "MSG_FAILED_UNKNOWN";
+                    if (err.name == "web_sql_went_bad" || err.name == "indexeddb_went_bad") {
+                       bodyMessage = "MSG_STORAGE_EXCEEDED";
+                    }
+
+                    modalService.alert({
+                        body: bodyMessage
+                    });
                 });
         }
 
