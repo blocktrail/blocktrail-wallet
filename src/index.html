@@ -115,8 +115,10 @@
                 .then(
                     function () {/* IndexedDB works, nothing to do */},
                     function (err) {
-                        console.warn('Could not initialize with indexedDB, fallback to websql', err);
-                        CONFIG.POUCHDB_DRIVER = 'websql';
+                        if (err.name == "indexed_db_went_bad" || err.reason == "QuotaExceededError") {
+                            console.warn('Could not initialize with indexedDB, fallback to websql', err);
+                            CONFIG.POUCHDB_DRIVER = 'websql';
+                        }
                     })
                 .then(function () {
                     angular.module('blocktrail.config', []).constant('CONFIG', CONFIG);
