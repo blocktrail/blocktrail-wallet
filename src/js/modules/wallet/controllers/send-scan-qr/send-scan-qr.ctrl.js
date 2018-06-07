@@ -5,7 +5,7 @@
         .controller("SendScanQRCtrl", SendScanQRCtrl);
 
     function SendScanQRCtrl($scope, $rootScope, $state, QR, $log, $btBackButtonDelegate, $timeout, $translate,
-                            $ionicHistory, $cordovaToast, $ionicLoading, bitcoinLinkService) {
+                            $ionicHistory, $cordovaToast, $ionicLoading, bitcoinLinkService, walletsManagerService) {
         //remove animation for next state - looks kinda buggy
         $ionicHistory.nextViewOptions({
             disableAnimate: true
@@ -59,6 +59,18 @@
                                 $cordovaToast.showLongTop($translate.$instant("MSG_INVALID_RECIPIENT").sentenceCase());
                                 $state.go('app.wallet.send');
                             }
+                        });
+                    } else if (walletsManagerService.getActiveWallet().validateAddress(result)) {
+                        $state.go('app.wallet.send', {
+                            sendInput: {
+                                recipientDisplay: result,
+                                recipientAddress: result
+                            }
+                        });
+                    } else {
+                        modalService.alert({
+                            title: "ERROR_TITLE_3",
+                            body: "MSG_INVALID_RECIPIENT"
                         });
                     }
                 },
