@@ -361,7 +361,7 @@
 
                 //input amount
                 if (!$scope.sendInput.btcValue) {
-                    throw blocktrail.Error('MSG_MISSING_AMOUNT');
+                    throw blocktrail.Error('MSG_INVALID_AMOUNT');
                 }
                 //insufficient funds
                 if (parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC")) >= ($scope.walletData.balance + $scope.walletData.uncBalance)) {
