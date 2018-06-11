@@ -603,7 +603,7 @@
                 if ($stateParams.sendInput.network === "bitcoin" || $stateParams.sendInput.network === "bitcoincash") {
                     if ($stateParams.sendInput.network === "bitcoin" && walletData.networkType === "BCC") {
                         return switchWalletByNetworkTypeAndIdentifier('BTC', walletData.identifier);
-                    } else if ($stateParams.sendInput.network === "bitcoincash:" && walletData.networkType === "BTC") {
+                    } else if ($stateParams.sendInput.network === "bitcoincash" && walletData.networkType === "BTC") {
                         return switchWalletByNetworkTypeAndIdentifier('BCC', walletData.identifier);
                     }
                 }
