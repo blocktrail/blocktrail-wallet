@@ -361,7 +361,7 @@
 
                 //input amount
                 if (!$scope.sendInput.btcValue) {
-                    throw blocktrail.Error('MSG_MISSING_AMOUNT');
+                    throw blocktrail.Error('MSG_INVALID_AMOUNT');
                 }
                 //insufficient funds
                 if (parseInt(CurrencyConverter.toSatoshi($scope.sendInput.btcValue, "BTC")) >= ($scope.walletData.balance + $scope.walletData.uncBalance)) {
@@ -603,7 +603,7 @@
                 if ($stateParams.sendInput.network === "bitcoin" || $stateParams.sendInput.network === "bitcoincash") {
                     if ($stateParams.sendInput.network === "bitcoin" && walletData.networkType === "BCC") {
                         return switchWalletByNetworkTypeAndIdentifier('BTC', walletData.identifier);
-                    } else if ($stateParams.sendInput.network === "bitcoincash:" && walletData.networkType === "BTC") {
+                    } else if ($stateParams.sendInput.network === "bitcoincash" && walletData.networkType === "BTC") {
                         return switchWalletByNetworkTypeAndIdentifier('BCC', walletData.identifier);
                     }
                 }
