@@ -52,7 +52,13 @@
                 if (uri.protocol == 'bitcoin') {
                     networkConfig = bip70.NetworkConfig.Bitcoin();
                     network = bitcoinJS.networks.bitcoin;
-                    // TODO: BCH BIP70 is currently incompatible with BitPay
+                } else if (uri.protocol == 'bitcoincash') {
+                    networkConfig = new bip70.NetworkConfig({
+                        PAYMENT_REQUEST: "application/bitcoincash-paymentrequest",
+                        PAYMENT: "application/bitcoincash-payment",
+                        PAYMENT_ACK: "application/bitcoincash-paymentack"
+                    });
+                    network = bitcoinJS.networks.bitcoincash;
                 } else {
                     $timeout(function() {
                         $cordovaToast.showLongCenter($translate.instant('MSG_INVALID_RECIPIENT'.sentenceCase()));
@@ -69,6 +75,13 @@
                         res.recipientAddress = bitcoinJS.address.fromOutputScript(blocktrailSDK.Buffer.from(details.outputs[0].script), network);
                         res.recipientSource = 'BIP70PaymentURL';
                         res.recipientDisplay = details.memo;
+                        res.paymentDetails = details;
+
+                        // We need to do this to make angularjs happy, doesn't like Uint8Array's as parameters for state changes
+                        // Converting Uint8Array to base64 string
+                        res.paymentDetails.merchantData = btoa(String.fromCharCode.apply(null, res.paymentDetails.merchantData));
+                        res.paymentDetails.outputs[0].script = btoa(String.fromCharCode.apply(null, res.paymentDetails.outputs[0].script));
+
                         res.inputDisabled = true;
                         res.btcValue = parseFloat(blocktrailSDK.toBTC(details.outputs[0].amount));
                         deferred.resolve(res);
