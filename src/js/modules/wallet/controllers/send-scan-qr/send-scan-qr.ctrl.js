@@ -4,8 +4,8 @@
     angular.module("blocktrail.wallet")
         .controller("SendScanQRCtrl", SendScanQRCtrl);
 
-    function SendScanQRCtrl($scope, $rootScope, $state, QR, $log, $btBackButtonDelegate, $timeout, $translate,
-                            $ionicHistory, $cordovaToast, $ionicLoading, bitcoinLinkService, walletsManagerService) {
+    function SendScanQRCtrl($scope, $rootScope, $state, QR, $log, $btBackButtonDelegate, $timeout, $translate, modalService,
+                            $ionicHistory, $cordovaToast, $ionicLoading, bitcoinLinkService, walletsManagerService, $stateParams) {
         //remove animation for next state - looks kinda buggy
         $ionicHistory.nextViewOptions({
             disableAnimate: true
@@ -25,58 +25,50 @@
                     $ionicLoading.hide();
 
                     // Handle cancelled stage
-                    if (result.toLowerCase() === "cancelled") {
-                        // go back - on iOS
-                        if (ionic.Platform.isIOS()) {
-                            $timeout(function () {
-                                $btBackButtonDelegate.goBack();
-                            }, 180);
-                        }
-                        return;
-                    }
+                    if (result.toLowerCase() !== "cancelled") {
+                        //parse result for address and value
+                        var elm = angular.element('<a>').attr('href', result )[0];
 
-                    //parse result for address and value
-                    var elm = angular.element('<a>').attr('href', result )[0];
+                        $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
 
-                    $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
+                        // Handle promocodes
+                        if (elm.protocol === 'btccomwallet:') {
+                            var reg = new RegExp(/btccomwallet:\/\/promocode\?code=(.+)/);
+                            var res = result.match(reg);
 
-                    // Handle promocodes
-                    if (elm.protocol === 'btccomwallet:') {
-                        var reg = new RegExp(/btccomwallet:\/\/promocode\?code=(.+)/);
-                        var res = result.match(reg);
+                            $state.go('app.wallet.promo', {code: res[1]});
 
-                        $state.go('app.wallet.promo', {code: res[1]});
-
-                    } else if (elm.protocol === 'bitcoincash:' && $rootScope.NETWORK === "BTC") {
-                        throw new Error("Can't send to Bitcoin Cash address with BTC wallet");
-                    } else if (elm.protocol === 'bitcoin:' || elm.protocol === 'bitcoincash:') {
-                        $scope.clearRecipient();
-                        bitcoinLinkService.parse(result).then(function (sendInput) {
-                            if(sendInput && (sendInput.network === 'bitcoin' || sendInput.network === 'bitcoincash')) {
-                                $state.go('app.wallet.send', {
-                                    sendInput: sendInput
-                                }, { reload: true });
-                            } else {
-                                $cordovaToast.showLongTop($translate.$instant("MSG_INVALID_RECIPIENT").sentenceCase());
-                                $state.go('app.wallet.send');
-                            }
-                        });
-                    } else {
-                        walletsManagerService.getActiveWallet().validateAddress(result)
-                            .then(function () {
-                                $state.go('app.wallet.send', {
-                                    sendInput: {
-                                        recipientDisplay: result,
-                                        recipientAddress: result
-                                    }
-                                });
-                            })
-                            .catch(function () {
-                                modalService.alert({
-                                    title: "ERROR_TITLE_3",
-                                    body: "MSG_INVALID_RECIPIENT"
-                                });
+                        } else if (elm.protocol === 'bitcoincash:' && $rootScope.NETWORK === "BTC") {
+                            throw new Error("Can't send to Bitcoin Cash address with BTC wallet");
+                        } else if (elm.protocol === 'bitcoin:' || elm.protocol === 'bitcoincash:') {
+                            $scope.clearRecipient();
+                            bitcoinLinkService.parse(result).then(function (sendInput) {
+                                if(sendInput && (sendInput.network === 'bitcoin' || sendInput.network === 'bitcoincash')) {
+                                    $state.go('app.wallet.send', {
+                                        sendInput: sendInput
+                                    }, { reload: true });
+                                } else {
+                                    $cordovaToast.showLongTop($translate.$instant("MSG_INVALID_RECIPIENT").sentenceCase());
+                                    $state.go('app.wallet.send');
+                                }
                             });
+                        } else {
+                            walletsManagerService.getActiveWallet().validateAddress(result)
+                                .then(function () {
+                                    $state.go('app.wallet.send', {
+                                        sendInput: {
+                                            recipientDisplay: result,
+                                            recipientAddress: result
+                                        }
+                                    });
+                                })
+                                .catch(function () {
+                                    modalService.alert({
+                                        title: "ERROR_TITLE_3",
+                                        body: "MSG_INVALID_RECIPIENT"
+                                    });
+                                });
+                        }
                     }
                 },
                 function(error) {

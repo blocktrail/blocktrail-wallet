@@ -102,6 +102,9 @@
                     "overlayView": {
                         controller: "SendScanQRCtrl"
                     }
+                },
+                params: {
+                    promoCodeRedeem : false
                 }
             })
             .state("app.wallet.send.contacts", {
