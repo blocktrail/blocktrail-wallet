@@ -24,11 +24,6 @@
                     $log.debug('scan done', result);
                     $ionicLoading.hide();
 
-                    //parse result for address and value
-                    var elm = angular.element('<a>').attr('href', result )[0];
-
-                    $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
-
                     // Handle cancelled stage
                     if (result.toLowerCase() === "cancelled") {
                         // go back - on iOS
@@ -37,7 +32,13 @@
                                 $btBackButtonDelegate.goBack();
                             }, 180);
                         }
+                        return;
                     }
+
+                    //parse result for address and value
+                    var elm = angular.element('<a>').attr('href', result )[0];
+
+                    $log.debug(elm.protocol, elm.pathname, elm.search, elm.hostname);
 
                     // Handle promocodes
                     if (elm.protocol === 'btccomwallet:') {
@@ -60,18 +61,22 @@
                                 $state.go('app.wallet.send');
                             }
                         });
-                    } else if (walletsManagerService.getActiveWallet().validateAddress(result)) {
-                        $state.go('app.wallet.send', {
-                            sendInput: {
-                                recipientDisplay: result,
-                                recipientAddress: result
-                            }
-                        });
                     } else {
-                        modalService.alert({
-                            title: "ERROR_TITLE_3",
-                            body: "MSG_INVALID_RECIPIENT"
-                        });
+                        walletsManagerService.getActiveWallet().validateAddress(result)
+                            .then(function () {
+                                $state.go('app.wallet.send', {
+                                    sendInput: {
+                                        recipientDisplay: result,
+                                        recipientAddress: result
+                                    }
+                                });
+                            })
+                            .catch(function () {
+                                modalService.alert({
+                                    title: "ERROR_TITLE_3",
+                                    body: "MSG_INVALID_RECIPIENT"
+                                });
+                            });
                     }
                 },
                 function(error) {
