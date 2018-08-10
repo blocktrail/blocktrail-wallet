@@ -95,8 +95,7 @@
             .state("app.wallet.send.qrcode", {
                 url: "/scan?backdrop",
                 data: {
-                    clearHistory: false,
-                    excludeFromHistory: true        //never add this state to the history stack
+                    clearHistory: false
                 },
                 views: {
                     "overlayView": {

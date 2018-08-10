@@ -49,7 +49,7 @@
                                     }, { reload: true });
                                 } else {
                                     $cordovaToast.showLongTop($translate.$instant("MSG_INVALID_RECIPIENT").sentenceCase());
-                                    $state.go('app.wallet.send');
+                                    $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                                 }
                             });
                         } else {
@@ -63,11 +63,18 @@
                                     });
                                 })
                                 .catch(function () {
-                                    modalService.alert({
-                                        title: "ERROR_TITLE_3",
-                                        body: "MSG_INVALID_RECIPIENT"
-                                    });
+                                    $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                                 });
+                        }
+                    } else {
+                        if ($stateParams.promoCodeRedeem) {
+                            $timeout(function () {
+                                $state.go("app.wallet.summary")
+                            }, 300);
+                        } else {
+                            $timeout(function () {
+                                $btBackButtonDelegate.goBack();
+                            }, 180);
                         }
                     }
                 },
@@ -77,10 +84,9 @@
                     $ionicLoading.hide();
                     $cordovaToast.showLongTop("Scanning failed: " + error);
                     $scope.appControl.isScanning = false;
-
                     $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                 }
             );
-        }, 350);
+        }, 150);
     }
 })();
