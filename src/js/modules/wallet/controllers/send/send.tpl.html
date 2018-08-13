@@ -150,7 +150,12 @@
                     </div>
                     <div class="col text-center">
                         <div class="option">
-                            <a class="qrcode" ui-sref="app.wallet.send.qrcode" ng-click="dismissMessage();"><i class="icon-qrcode"></i></a>
+                            <a
+                                class="qrcode"
+                                ui-sref="app.wallet.send.qrcode"
+                                ui-sref-opts="{inherit: false}"
+                                ng-click="dismissMessage();"
+                            ><i class="icon-qrcode"></i></a>
                             <span class="label">{{ 'QR' | translate }}</span>
                         </div>
                     </div>

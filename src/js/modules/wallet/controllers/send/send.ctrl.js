@@ -613,6 +613,9 @@
                         .then(function () {
                             $scope.sendInput.inputDisabled = $stateParams.sendInput.inputDisabled;
                             $scope.sendInput = Object.assign($scope.sendInput, $stateParams.sendInput);
+                            // Clear stateParams
+                            $stateParams.sendInput = null;
+                            // Calculate Fee and Fiat amount
                             $scope.setFiat();
                             $scope.fetchFee();
                         })
