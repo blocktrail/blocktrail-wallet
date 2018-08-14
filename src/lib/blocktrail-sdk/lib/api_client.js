@@ -829,19 +829,28 @@ APIClient.prototype.block = function(block, cb) {
 /**
  * get the latest block
  *
+ * @param altEndpoint   bool        Alternative endpoint for latest block info
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
-APIClient.prototype.blockLatest = function(cb) {
+APIClient.prototype.blockLatest = function(altEndpoint, cb) {
     var self = this;
+    if (typeof altEndpoint === "function") {
+        cb = altEndpoint
+        altEndpoint = true;
+    }
 
-    return callbackify(self.dataClient.get(self.converter.getUrlForBlock("latest"), null)
-        .then(function(data) {
-            return self.converter.handleErros(self, data);
-        })
-        .then(function(data) {
-            return data.data === null ? data : self.converter.convertBlock(data.data);
-        }), cb);
+    if (!altEndpoint) {
+        return callbackify(self.dataClient.get(self.converter.getUrlForBlock("latest"), null)
+            .then(function (data) {
+                return self.converter.handleErros(self, data);
+            })
+            .then(function (data) {
+                return data.data === null ? data : self.converter.convertBlock(data.data);
+            }), cb);
+    } else {
+        return callbackify(self.blocktrailClient.get("/block/latest"), cb);
+    }
 };
 
 /**
@@ -2059,10 +2068,11 @@ APIClient.prototype.feePerKB = function(cb) {
  * @param checkFee          bool        when TRUE the API will verify if the fee is 100% correct and otherwise throw an exception
  * @param [twoFactorToken]  string      2FA token
  * @param [prioboost]       bool
+ * @param options           object      Additional options (for Bitpay/BCH right now)
  * @param [cb]              function    callback(err, txHash)
  * @returns {q.Promise}
  */
-APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFee, twoFactorToken, prioboost, cb) {
+APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFee, twoFactorToken, prioboost, options, cb) {
     var self = this;
 
     if (typeof twoFactorToken === "function") {
@@ -2072,6 +2082,9 @@ APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFe
     } else if (typeof prioboost === "function") {
         cb = prioboost;
         prioboost = false;
+    } else if (typeof options === "function") {
+        cb = options;
+        options = {};
     }
 
     var data = {
@@ -2086,12 +2099,28 @@ APIClient.prototype.sendTransaction = function(identifier, txHex, paths, checkFe
         });
     }
 
+    var postOptions = {
+        check_fee: checkFee ? 1 : 0,
+        prioboost: prioboost ? 1 : 0
+    };
+
+    var bip70 = false;
+    if (options.bip70PaymentUrl) {
+        bip70 = true;
+        postOptions.bip70PaymentUrl = options.bip70PaymentUrl;
+
+        if (options.bip70MerchantData && options.bip70MerchantData instanceof Uint8Array) {
+            // Encode merchant data to base64
+            var decoder = new TextDecoder('utf8');
+            var bip70MerchantData = btoa(decoder.decode(options.bip70MerchantData));
+
+            postOptions.bip70MerchantData = bip70MerchantData;
+        }
+    }
+
     return self.blocktrailClient.post(
         "/wallet/" + identifier + "/send",
-        {
-            check_fee: checkFee ? 1 : 0,
-            prioboost: prioboost ? 1 : 0
-        },
+        postOptions,
         data,
         cb
     );
