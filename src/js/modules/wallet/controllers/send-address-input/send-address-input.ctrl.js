@@ -51,14 +51,8 @@
             }
             return $q.when($cordovaClipboard.paste())
                 .then(function(result) {
-                    return $scope.parseForAddress(result);
-                })
-                .then(function(result) {
-                    return walletsManagerService.getActiveWallet().validateAddress(result.address).then(function() {
-                        $scope.addressInput = result.address;
-                        if (result.amount) {
-                            $scope.addressAmount = result.amount;
-                        }
+                    return walletsManagerService.getActiveWallet().validateAddress(result).then(function() {
+                        $scope.addressInput = result;
 
                         return result;
                     });

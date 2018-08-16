@@ -608,21 +608,26 @@
                     }
                 }
 
-                activeWallet.validateAddress($stateParams.sendInput.recipientAddress)
-                    .then(function () {
-                        $scope.sendInput.inputDisabled = $stateParams.sendInput.inputDisabled;
-                        $scope.sendInput = Object.assign($scope.sendInput, $stateParams.sendInput);
-                        $scope.setFiat();
-                        $scope.fetchFee();
-                    })
-                    .catch(function (e) {
-                        console.error(e);
-                        $scope.clearRecipient();
-                        modalService.alert({
-                            title: "ERROR_TITLE_3",
-                            body: "MSG_INVALID_RECIPIENT"
+                if ($stateParams.sendInput.recipientAddress) {
+                    activeWallet.validateAddress($stateParams.sendInput.recipientAddress)
+                        .then(function () {
+                            $scope.sendInput.inputDisabled = $stateParams.sendInput.inputDisabled;
+                            $scope.sendInput = Object.assign($scope.sendInput, $stateParams.sendInput);
+                            // Clear stateParams
+                            $stateParams.sendInput = null;
+                            // Calculate Fee and Fiat amount
+                            $scope.setFiat();
+                            $scope.fetchFee();
+                        })
+                        .catch(function (e) {
+                            console.error(e);
+                            $scope.clearRecipient();
+                            modalService.alert({
+                                title: "ERROR_TITLE_3",
+                                body: "MSG_INVALID_RECIPIENT"
+                            });
                         });
-                    });
+                }
             }
         }
 
