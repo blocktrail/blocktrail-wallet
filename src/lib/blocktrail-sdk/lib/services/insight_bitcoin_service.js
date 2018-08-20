@@ -60,7 +60,8 @@ InsightBitcoinService.prototype.getBatchUnspentOutputs = function(addresses) {
                 'hash': utxo['txid'],
                 'index': utxo['vout'],
                 'value': blocktrail.toSatoshi(utxo['amount']),
-                'script_hex': utxo['scriptPubKey']
+                'script_hex': utxo['scriptPubKey'],
+                'confirmations': utxo['confirmations']
             });
         });
         deferred.resolve(batchResults);
@@ -193,16 +194,17 @@ InsightBitcoinService.prototype.postRequest = function(url, data) {
                 return;
             }
             if (res.ok) {
-                if (res.headers['content-type'].indexOf('application/json') >= 0) {
-                    try {
-                        var body = JSON.parse(res.text);
-                        return deferred.resolve(body);
-
-                    } catch (e) {
+                // Insight server provides valid JSON but doesn't set Content-Type on some responses
+                // so we are going to try and parse JSON first, then check the Content-Type and resolve accordingly
+                try {
+                    var body = JSON.parse(res.text);
+                    return deferred.resolve(body);
+                } catch (e) {
+                    if (res.headers['content-type'].indexOf('application/json') >= 0) {
                         return deferred.reject(error);
+                    } else {
+                        return deferred.resolve(res.body);
                     }
-                } else {
-                    return deferred.resolve(res.body);
                 }
             } else {
                 return deferred.reject(res.text);

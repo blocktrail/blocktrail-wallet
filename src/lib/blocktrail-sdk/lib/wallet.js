@@ -111,7 +111,7 @@ var Wallet = function(
 
     if (!self.bitcoinCash) {
         if (self.segwit) {
-            self.chain = Wallet.CHAIN_BTC_DEFAULT;
+            self.chain = Wallet.CHAIN_BTC_SEGWIT;
             self.changeChain = Wallet.CHAIN_BTC_SEGWIT;
         } else {
             self.chain = Wallet.CHAIN_BTC_DEFAULT;
@@ -877,7 +877,7 @@ Wallet.prototype.deleteWallet = function(force, cb) {
  * @param [randomizeChangeIdx]  bool        randomize the index of the change output (default TRUE, only disable if you have a good reason to)
  * @param [feeStrategy]         string      defaults to Wallet.FEE_STRATEGY_OPTIMAL
  * @param [twoFactorToken]      string      2FA token
- * @param options
+ * @param options               string      Options for BIP70 broadcast (only for bitpay/BCH currently)
  * @param [cb]                  function    callback(err, txHash)
  * @returns {q.Promise}
  */
@@ -939,7 +939,7 @@ Wallet.prototype.pay = function(pay, changeAddress, allowZeroConf, randomizeChan
                     base_transaction: tx.__toBuffer(null, null, false).toString('hex')
                 };
 
-                return self.sendTransaction(data, utxos.map(function(utxo) { return utxo['path']; }), checkFee, twoFactorToken, options.prioboost)
+                return self.sendTransaction(data, utxos.map(function(utxo) { return utxo['path']; }), checkFee, twoFactorToken, options.prioboost, options)
                     .then(function(result) {
                         deferred.notify(Wallet.PAY_PROGRESS_DONE);
 
@@ -1496,10 +1496,11 @@ Wallet.prototype.coinSelection = function(pay, lockUTXO, allowZeroConf, feeStrat
  * @param checkFee          bool        when TRUE the API will verify if the fee is 100% correct and otherwise throw an exception
  * @param [twoFactorToken]  string      2FA token
  * @param prioboost         bool
+ * @param options
  * @param [cb]              function    callback(err, txHash)
  * @returns {q.Promise}
  */
-Wallet.prototype.sendTransaction = function(txHex, paths, checkFee, twoFactorToken, prioboost, cb) {
+Wallet.prototype.sendTransaction = function(txHex, paths, checkFee, twoFactorToken, prioboost, options, cb) {
     var self = this;
 
     if (typeof twoFactorToken === "function") {
@@ -1507,14 +1508,17 @@ Wallet.prototype.sendTransaction = function(txHex, paths, checkFee, twoFactorTok
         twoFactorToken = null;
         prioboost = false;
     } else if (typeof prioboost === "function") {
-        cb = twoFactorToken;
+        cb = prioboost;
         prioboost = false;
+    } else if (typeof options === "function") {
+        cb = options;
+        options = {};
     }
 
     var deferred = q.defer();
     deferred.promise.nodeify(cb);
 
-    self.sdk.sendTransaction(self.identifier, txHex, paths, checkFee, twoFactorToken, prioboost)
+    self.sdk.sendTransaction(self.identifier, txHex, paths, checkFee, twoFactorToken, prioboost, options)
         .then(
             function(result) {
                 deferred.resolve(result);

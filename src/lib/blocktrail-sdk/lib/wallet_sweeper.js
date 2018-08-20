@@ -275,7 +275,7 @@ WalletSweeper.prototype.getBlocktrailPublicKey = function(path) {
  * generate multisig address and redeem script for given path
  *
  * @param path
- * @returns {{address: *, redeemScript: *}}
+ * @returns {{address, redeem: *, witness: *}}
  */
 WalletSweeper.prototype.createAddress = function(path) {
     //ensure a public path is used
@@ -313,7 +313,10 @@ WalletSweeper.prototype.createAddress = function(path) {
     if (typeof this.network !== "undefined") {
         network = this.network;
     }
-    var address = bitcoin.address.fromOutputScript(scriptPubKey, network);
+    var address = bitcoin.address.fromOutputScript(scriptPubKey, network, !!this.settings.bitcoinCash);
+
+    // Insight nodes want nothing to do with 'bitcoin:' or 'bitcoincash:' prefixes
+    address = address.replace('bitcoin:', '').replace('bitcoincash:', '');
 
     //@todo return as buffers
     return {address: address.toString(), redeem: redeemScript, witness: witnessScript};
@@ -346,13 +349,27 @@ WalletSweeper.prototype.createBatchAddresses = function(start, count, keyIndex, 
     });
 };
 
-WalletSweeper.prototype.discoverWalletFunds = function(increment, cb) {
+WalletSweeper.prototype.discoverWalletFunds = function(increment, options, cb) {
     var self = this;
     var totalBalance = 0;
     var totalUTXOs = 0;
     var totalAddressesGenerated = 0;
+
+    if (typeof increment === "function") {
+        cb = increment;
+        increment = null;
+    } else if (typeof options === "function") {
+        cb = options;
+        options = {};
+    }
+
+    if(options && !(typeof options === "object")) {
+        console.warn("Wallet Sweeper discovery options is not an object, ignoring");
+        options = {};
+    }
+
     var addressUTXOs = {};    //addresses and their utxos, paths and redeem scripts
-    if (typeof increment === "undefined") {
+    if (typeof increment === "undefined" || !increment) {
         increment = this.settings.sweepBatchSize;
     }
 
@@ -425,12 +442,35 @@ WalletSweeper.prototype.discoverWalletFunds = function(increment, cb) {
 
                                             //get the unspent outputs for this batch of addresses
                                             return self.utxoFinder.getUTXOs(_.keys(batch)).then(function(utxos) {
+                                                if (options.excludeZeroConf) {
+                                                    // Do not evaluate 0-confirmation UTXOs
+                                                    // This would include double spends and other things Insight happily accepts
+                                                    // (and keeps in mempool - even when the parent UTXO gets spent otherwise)
+                                                    for (var address in utxos) {
+                                                        if (utxos.hasOwnProperty(address) && Array.isArray(utxos[address])) {
+                                                            var utxosPerAddress = utxos[address];
+                                                            // Iterate over utxos per address
+                                                            for (var idx = 0; idx < utxosPerAddress.length; idx++) {
+                                                                if (utxosPerAddress[idx] &&
+                                                                    'confirmations' in utxosPerAddress[idx]
+                                                                    && utxosPerAddress[idx]['confirmations'] === 0) {
+                                                                    // Delete if unconfirmed
+                                                                    delete utxos[address][idx];
+                                                                    utxos[address].length--;
+                                                                    if (utxos[address].length <= 0) {
+                                                                        delete utxos[address];
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
                                                 // save the address utxos, along with relevant path and redeem script
                                                 _.each(utxos, function(outputs, address) {
                                                     var witnessScript = null;
                                                     if (typeof batch[address]['witness'] !== 'undefined') {
                                                         witnessScript = batch[address]['witness'];
-
                                                     }
                                                     addressUTXOs[address] = {
                                                         path: batch[address]['path'],
@@ -554,6 +594,11 @@ WalletSweeper.prototype.sweepWallet = function(destinationAddress, cb) {
             return self.bitcoinDataClient.estimateFee();
         })
         .then(function(feePerKb) {
+            // Insight reports 1000 sat/kByte, but this is too low
+            if (self.settings.bitcoinCash && feePerKb < 5000) {
+                feePerKb = 5000;
+            }
+
             if (self.sweepData['balance'] === 0) {
                 //no funds found
                 deferred.reject("No funds found after searching through " + self.sweepData['addressesSearched'] + " addresses");
@@ -625,14 +670,26 @@ WalletSweeper.prototype.createTransaction = function(destinationAddress, fee, fe
                 message: "estimating transaction fee, based on " + blocktrail.toBTC(feePerKb) + " BTC/kb"
             });
         }
+
+        var toHexString = function(byteArray) {
+            return Array.prototype.map.call(byteArray, function(byte) {
+                return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+            }).join('');
+        };
+
         var calcUtxos = inputs.map(function(input) {
+            var rs = (typeof input.redeemScript === "string" || !input.redeemScript)
+                ? input.redeemScript : toHexString(input.redeemScript);
+            var ws = (typeof input.witnessScript === "string" || !input.witnessScript)
+                ? input.witnessScript : toHexString(input.witnessScript);
+
             return {
                 txid: input.txid,
                 vout: input.vout,
-                address: input.vout,
-                scriptpubkey_hex: input.vout,
-                redeem_script: input.redeemScript,
-                witness_script: input.witnessScript,
+                address: input.address,
+                scriptpubkey_hex: input.scriptPubKey,
+                redeem_script: rs,
+                witness_script: ws,
                 path: input.path,
                 value: input.value
             };
