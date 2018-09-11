@@ -390,13 +390,17 @@
                         $scope.appControl.unlockType = 'PIN';
                         $scope.appControl.showPinInputError = false;
                         $scope.appControl.complete = false;
-                        return $state.go('app.wallet.send.confirm');
+                        $timeout(function() {
+                            $state.go('app.wallet.send.confirm');
+                        }, 100);
                     } else {
                         $scope.appControl.showUnlockInput = true;
                         $scope.appControl.unlockType = 'PASSWORD';
                         $scope.appControl.showPasswordInputError = false;
                         $scope.appControl.complete = false;
-                        return $state.go('app.wallet.send.confirm');
+                        $timeout(function() {
+                            $state.go('app.wallet.send.confirm');
+                        }, 100);
                     }
                 });
             }).catch(function(err) {
@@ -629,8 +633,6 @@
                         .then(function () {
                             $scope.sendInput.inputDisabled = $stateParams.sendInput.inputDisabled;
                             $scope.sendInput = Object.assign($scope.sendInput, $stateParams.sendInput);
-                            // Clear stateParams
-                            $stateParams.sendInput = null;
                             // Calculate Fee and Fiat amount
                             $scope.setFiat();
                             $scope.fetchFee();
@@ -647,12 +649,10 @@
             }
         }
 
-        $scope.$on('appResume', function() {
-            $scope.applyBitcoinURIParams();
-        });
-
         $scope.$on('$ionicView.enter', function() {
-            $scope.applyBitcoinURIParams();
+            $scope.$apply(function () {
+                $scope.applyBitcoinURIParams();
+            })
         });
     }
 })();

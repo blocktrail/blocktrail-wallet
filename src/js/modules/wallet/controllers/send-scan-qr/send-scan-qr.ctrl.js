@@ -46,9 +46,9 @@
                                 if(sendInput && (sendInput.network === 'bitcoin' || sendInput.network === 'bitcoincash')) {
                                     $state.go('app.wallet.send', {
                                         sendInput: sendInput
-                                    }, { reload: true });
+                                    });
                                 } else {
-                                    $cordovaToast.showLongTop($translate.$instant("MSG_INVALID_RECIPIENT").sentenceCase());
+                                    $cordovaToast.showLongTop($translate.instant("MSG_INVALID_RECIPIENT").sentenceCase());
                                     $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                                 }
                             });
@@ -63,7 +63,13 @@
                                     });
                                 })
                                 .catch(function () {
-                                    $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
+                                    $timeout(function() {
+                                        $btBackButtonDelegate.goBack();
+                                        modalService.alert({
+                                            title: "ERROR_TITLE_3",
+                                            body: "MSG_INVALID_RECIPIENT"
+                                        });
+                                    }, 180);
                                 });
                         }
                     } else {
