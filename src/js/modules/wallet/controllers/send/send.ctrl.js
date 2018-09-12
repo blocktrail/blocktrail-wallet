@@ -119,6 +119,9 @@
             $scope.sendInput.recipientDisplay = null;
             $scope.sendInput.recipientAddress = null;
             $scope.sendInput.recipientSource = null;
+            if ($stateParams.sendInput) {
+                $stateParams.sendInput.recipientAddress = null;
+            }
 
             // Clear values if amount is bound to recipient
             if ($scope.sendInput.inputDisabled) {
@@ -490,12 +493,16 @@
 
                     var optionMerchantData = null;
                     if ($scope.sendInput.paymentDetails) {
-                        // Converting base64 string to (Uint8)Array
-                        optionMerchantData
-                            = atob($scope.sendInput.paymentDetails.merchantData).split('').map(function (c) { return c.charCodeAt(0); });
-                        optionMerchantData = Uint8Array.from(optionMerchantData);
-                        $scope.sendInput.paymentDetails.outputs[0].script
-                            = atob($scope.sendInput.paymentDetails.outputs[0].script).split('').map(function (c) { return c.charCodeAt(0); });
+                        try {
+                            // Converting base64 string to (Uint8)Array
+                            optionMerchantData
+                                = atob($scope.sendInput.paymentDetails.merchantData).split('').map(function (c) { return c.charCodeAt(0); });
+                            optionMerchantData = Uint8Array.from(optionMerchantData);
+                            $scope.sendInput.paymentDetails.outputs[0].script
+                                = atob($scope.sendInput.paymentDetails.outputs[0].script).split('').map(function (c) { return c.charCodeAt(0); });
+                        } catch(e) {
+                            throw new Error($translate.instant("MSG_SEND_FAIL_UNKNOWN").sentenceCase());
+                        }
                     }
 
                     var payOptions = {
