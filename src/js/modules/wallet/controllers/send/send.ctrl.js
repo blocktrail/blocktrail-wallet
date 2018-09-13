@@ -119,6 +119,10 @@
             $scope.sendInput.recipientDisplay = null;
             $scope.sendInput.recipientAddress = null;
             $scope.sendInput.recipientSource = null;
+            if ($stateParams.sendInput) {
+                $stateParams.sendInput.recipientAddress = null;
+                $state.go('app.wallet.send', null, { reload: true, inherit: false });
+            }
 
             // Clear values if amount is bound to recipient
             if ($scope.sendInput.inputDisabled) {
@@ -390,13 +394,17 @@
                         $scope.appControl.unlockType = 'PIN';
                         $scope.appControl.showPinInputError = false;
                         $scope.appControl.complete = false;
-                        return $state.go('app.wallet.send.confirm');
+                        $timeout(function() {
+                            $state.go('app.wallet.send.confirm');
+                        }, 100);
                     } else {
                         $scope.appControl.showUnlockInput = true;
                         $scope.appControl.unlockType = 'PASSWORD';
                         $scope.appControl.showPasswordInputError = false;
                         $scope.appControl.complete = false;
-                        return $state.go('app.wallet.send.confirm');
+                        $timeout(function() {
+                            $state.go('app.wallet.send.confirm');
+                        }, 100);
                     }
                 });
             }).catch(function(err) {
@@ -486,12 +494,16 @@
 
                     var optionMerchantData = null;
                     if ($scope.sendInput.paymentDetails) {
-                        // Converting base64 string to (Uint8)Array
-                        optionMerchantData
-                            = atob($scope.sendInput.paymentDetails.merchantData).split('').map(function (c) { return c.charCodeAt(0); });
-                        optionMerchantData = Uint8Array.from(optionMerchantData);
-                        $scope.sendInput.paymentDetails.outputs[0].script
-                            = atob($scope.sendInput.paymentDetails.outputs[0].script).split('').map(function (c) { return c.charCodeAt(0); });
+                        try {
+                            // Converting base64 string to (Uint8)Array
+                            optionMerchantData
+                                = atob($scope.sendInput.paymentDetails.merchantData).split('').map(function (c) { return c.charCodeAt(0); });
+                            optionMerchantData = Uint8Array.from(optionMerchantData);
+                            $scope.sendInput.paymentDetails.outputs[0].script
+                                = atob($scope.sendInput.paymentDetails.outputs[0].script).split('').map(function (c) { return c.charCodeAt(0); });
+                        } catch(e) {
+                            throw new Error($translate.instant("MSG_SEND_FAIL_UNKNOWN").sentenceCase());
+                        }
                     }
 
                     var payOptions = {
@@ -629,8 +641,6 @@
                         .then(function () {
                             $scope.sendInput.inputDisabled = $stateParams.sendInput.inputDisabled;
                             $scope.sendInput = Object.assign($scope.sendInput, $stateParams.sendInput);
-                            // Clear stateParams
-                            $stateParams.sendInput = null;
                             // Calculate Fee and Fiat amount
                             $scope.setFiat();
                             $scope.fetchFee();
@@ -647,12 +657,10 @@
             }
         }
 
-        $scope.$on('appResume', function() {
-            $scope.applyBitcoinURIParams();
-        });
-
         $scope.$on('$ionicView.enter', function() {
-            $scope.applyBitcoinURIParams();
+            $scope.$apply(function () {
+                $scope.applyBitcoinURIParams();
+            })
         });
     }
 })();
