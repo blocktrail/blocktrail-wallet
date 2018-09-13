@@ -121,6 +121,7 @@
             $scope.sendInput.recipientSource = null;
             if ($stateParams.sendInput) {
                 $stateParams.sendInput.recipientAddress = null;
+                $state.go('app.wallet.send', null, { reload: true, inherit: false });
             }
 
             // Clear values if amount is bound to recipient
