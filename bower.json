@@ -2,7 +2,7 @@
   "name": "blocktrail-wallet",
   "private": "true",
   "dependencies": {
-    "blocktrail-sdk": "3.7.12",
+    "blocktrail-sdk": "3.7.16",
     "bip70-js": "2.0.1",
     "ionic": "1.0.1",
     "pouchdb": "git@github.com:pouchdb/pouchdb.git#6.4.3",

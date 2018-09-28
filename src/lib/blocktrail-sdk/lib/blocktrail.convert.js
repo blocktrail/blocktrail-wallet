@@ -63,7 +63,7 @@ BlocktrailConverter.prototype.getUrlForAllBlocks = function() {
     return "/all-blocks";
 };
 
-BlocktrailConverter.prototype.handleErros = function(self, data) {
+BlocktrailConverter.prototype.handleErrors = function(self, data) {
     return data;
 };
 

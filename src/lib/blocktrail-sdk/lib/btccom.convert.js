@@ -263,7 +263,7 @@ BtccomConverter.prototype.getUrlForAllBlocks = function() {
     return "/block/list";
 };
 
-BtccomConverter.prototype.handleErros = function(self, data) {
+BtccomConverter.prototype.handleErrors = function(self, data) {
     if (data.err_no === 0 || data.data !== null) {
         return data;
     } else {

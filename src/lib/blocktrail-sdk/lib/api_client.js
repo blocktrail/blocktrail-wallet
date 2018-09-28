@@ -582,7 +582,7 @@ APIClient.prototype.address = function(address, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAddress(address), null)
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             if (data === null) {
@@ -619,7 +619,7 @@ APIClient.prototype.addressTransactions = function(address, params, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAddressTransactions(address), self.converter.paginationParams(params))
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             return data.data === null ? data : self.converter.convertAddressTxs(data);
@@ -697,7 +697,7 @@ APIClient.prototype.addressUnconfirmedTransactions = function(address, params, c
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAddressTransactions(address), self.converter.paginationParams(params))
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             if (data.data === null) {
@@ -731,7 +731,7 @@ APIClient.prototype.addressUnspentOutputs = function(address, params, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAddressUnspent(address), self.converter.paginationParams(params))
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             return data.data === null ? data : self.converter.convertAddressUnspentOutputs(data, address);
@@ -752,7 +752,7 @@ APIClient.prototype.batchAddressUnspentOutputs = function(addresses, params, cb)
     if (self.converter instanceof BtccomConverter) {
         return callbackify(self.dataClient.get(self.converter.getUrlForBatchAddressUnspent(addresses), self.converter.paginationParams(params))
             .then(function(data) {
-                return self.converter.handleErros(self, data);
+                return self.converter.handleErrors(self, data);
             })
             .then(function(data) {
                 return data.data === null ? data : self.converter.convertBatchAddressUnspentOutputs(data);
@@ -800,7 +800,7 @@ APIClient.prototype.allBlocks = function(params, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAllBlocks(), self.converter.paginationParams(params))
             .then(function(data) {
-                return self.converter.handleErros(self, data);
+                return self.converter.handleErrors(self, data);
             })
             .then(function(data) {
                 return data.data === null ? data : self.converter.convertBlocks(data);
@@ -819,7 +819,7 @@ APIClient.prototype.block = function(block, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForBlock(block), null)
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             return data.data === null ? data : self.converter.convertBlock(data.data);
@@ -829,28 +829,19 @@ APIClient.prototype.block = function(block, cb) {
 /**
  * get the latest block
  *
- * @param altEndpoint   bool        Alternative endpoint for latest block info
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
-APIClient.prototype.blockLatest = function(altEndpoint, cb) {
+APIClient.prototype.blockLatest = function(cb) {
     var self = this;
-    if (typeof altEndpoint === "function") {
-        cb = altEndpoint
-        altEndpoint = true;
-    }
 
-    if (!altEndpoint) {
-        return callbackify(self.dataClient.get(self.converter.getUrlForBlock("latest"), null)
-            .then(function (data) {
-                return self.converter.handleErros(self, data);
-            })
-            .then(function (data) {
-                return data.data === null ? data : self.converter.convertBlock(data.data);
-            }), cb);
-    } else {
-        return callbackify(self.blocktrailClient.get("/block/latest"), cb);
-    }
+    return callbackify(self.dataClient.get(self.converter.getUrlForBlock("latest"), null)
+        .then(function(data) {
+            return self.converter.handleErrors(self, data);
+        })
+        .then(function(data) {
+            return data.data === null ? data : self.converter.convertBlock(data.data);
+        }), cb);
 };
 
 /**
@@ -871,7 +862,7 @@ APIClient.prototype.blockTransactions = function(block, params, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForBlockTransaction(block), self.converter.paginationParams(params))
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             return data.data ===  null ? data : self.converter.convertBlockTxs(data);
@@ -890,7 +881,7 @@ APIClient.prototype.transaction = function(tx, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForTransaction(tx), null)
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             if (data.data === null) {
@@ -931,7 +922,7 @@ APIClient.prototype.transactions = function(txs, cb) {
     if (self.converter instanceof BtccomConverter) {
         return callbackify(self.dataClient.get(self.converter.getUrlForTransactions(txs), null)
             .then(function(data) {
-                return self.converter.handleErros(self, data);
+                return self.converter.handleErrors(self, data);
             })
             .then(function(data) {
                 if (data.data === null) {
@@ -1219,6 +1210,18 @@ APIClient.prototype.unsubscribeNewBlocks = function(identifier, cb) {
     var self = this;
 
     return self.blocktrailClient.delete("/webhook/" + identifier + "/block", null, null, cb);
+};
+
+/**
+ * Returns ['hash' => x, 'height' => y] for wallet API's chain tip
+ *
+ * @param [cb]          function    callback function to call when request is complete
+ * @return q.Promise
+ */
+APIClient.prototype.getWalletLatestBlock = function(cb) {
+    var self = this;
+
+    return self.blocktrailClient.get("/block/latest", null, cb);
 };
 
 /**

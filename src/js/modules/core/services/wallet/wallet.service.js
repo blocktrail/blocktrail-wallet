@@ -450,7 +450,7 @@
     Wallet.prototype._getBlockHeightFromSdkAndUpdateBlockHeightDoc = function(blockHeightDoc) {
         var self = this;
 
-        return self._$q.when(self._sdkWallet.sdk.blockLatest())
+        return self._$q.when(self._sdkWallet.sdk.getWalletLatestBlock())
             .then(function(result) {
                 blockHeightDoc.height = result.height;
                 return blockHeightDoc;

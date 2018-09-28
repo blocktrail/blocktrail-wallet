@@ -584,7 +584,7 @@ APIClient.prototype.address = function(address, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAddress(address), null)
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             if (data === null) {
@@ -621,7 +621,7 @@ APIClient.prototype.addressTransactions = function(address, params, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAddressTransactions(address), self.converter.paginationParams(params))
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             return data.data === null ? data : self.converter.convertAddressTxs(data);
@@ -699,7 +699,7 @@ APIClient.prototype.addressUnconfirmedTransactions = function(address, params, c
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAddressTransactions(address), self.converter.paginationParams(params))
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             if (data.data === null) {
@@ -733,7 +733,7 @@ APIClient.prototype.addressUnspentOutputs = function(address, params, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAddressUnspent(address), self.converter.paginationParams(params))
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             return data.data === null ? data : self.converter.convertAddressUnspentOutputs(data, address);
@@ -754,7 +754,7 @@ APIClient.prototype.batchAddressUnspentOutputs = function(addresses, params, cb)
     if (self.converter instanceof BtccomConverter) {
         return callbackify(self.dataClient.get(self.converter.getUrlForBatchAddressUnspent(addresses), self.converter.paginationParams(params))
             .then(function(data) {
-                return self.converter.handleErros(self, data);
+                return self.converter.handleErrors(self, data);
             })
             .then(function(data) {
                 return data.data === null ? data : self.converter.convertBatchAddressUnspentOutputs(data);
@@ -802,7 +802,7 @@ APIClient.prototype.allBlocks = function(params, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForAllBlocks(), self.converter.paginationParams(params))
             .then(function(data) {
-                return self.converter.handleErros(self, data);
+                return self.converter.handleErrors(self, data);
             })
             .then(function(data) {
                 return data.data === null ? data : self.converter.convertBlocks(data);
@@ -821,7 +821,7 @@ APIClient.prototype.block = function(block, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForBlock(block), null)
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             return data.data === null ? data : self.converter.convertBlock(data.data);
@@ -831,28 +831,19 @@ APIClient.prototype.block = function(block, cb) {
 /**
  * get the latest block
  *
- * @param altEndpoint   bool        Alternative endpoint for latest block info
  * @param [cb]          function    callback function to call when request is complete
  * @return q.Promise
  */
-APIClient.prototype.blockLatest = function(altEndpoint, cb) {
+APIClient.prototype.blockLatest = function(cb) {
     var self = this;
-    if (typeof altEndpoint === "function") {
-        cb = altEndpoint
-        altEndpoint = true;
-    }
 
-    if (!altEndpoint) {
-        return callbackify(self.dataClient.get(self.converter.getUrlForBlock("latest"), null)
-            .then(function (data) {
-                return self.converter.handleErros(self, data);
-            })
-            .then(function (data) {
-                return data.data === null ? data : self.converter.convertBlock(data.data);
-            }), cb);
-    } else {
-        return callbackify(self.blocktrailClient.get("/block/latest"), cb);
-    }
+    return callbackify(self.dataClient.get(self.converter.getUrlForBlock("latest"), null)
+        .then(function(data) {
+            return self.converter.handleErrors(self, data);
+        })
+        .then(function(data) {
+            return data.data === null ? data : self.converter.convertBlock(data.data);
+        }), cb);
 };
 
 /**
@@ -873,7 +864,7 @@ APIClient.prototype.blockTransactions = function(block, params, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForBlockTransaction(block), self.converter.paginationParams(params))
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             return data.data ===  null ? data : self.converter.convertBlockTxs(data);
@@ -892,7 +883,7 @@ APIClient.prototype.transaction = function(tx, cb) {
 
     return callbackify(self.dataClient.get(self.converter.getUrlForTransaction(tx), null)
         .then(function(data) {
-            return self.converter.handleErros(self, data);
+            return self.converter.handleErrors(self, data);
         })
         .then(function(data) {
             if (data.data === null) {
@@ -933,7 +924,7 @@ APIClient.prototype.transactions = function(txs, cb) {
     if (self.converter instanceof BtccomConverter) {
         return callbackify(self.dataClient.get(self.converter.getUrlForTransactions(txs), null)
             .then(function(data) {
-                return self.converter.handleErros(self, data);
+                return self.converter.handleErrors(self, data);
             })
             .then(function(data) {
                 if (data.data === null) {
@@ -1221,6 +1212,18 @@ APIClient.prototype.unsubscribeNewBlocks = function(identifier, cb) {
     var self = this;
 
     return self.blocktrailClient.delete("/webhook/" + identifier + "/block", null, null, cb);
+};
+
+/**
+ * Returns ['hash' => x, 'height' => y] for wallet API's chain tip
+ *
+ * @param [cb]          function    callback function to call when request is complete
+ * @return q.Promise
+ */
+APIClient.prototype.getWalletLatestBlock = function(cb) {
+    var self = this;
+
+    return self.blocktrailClient.get("/block/latest", null, cb);
 };
 
 /**
@@ -2405,7 +2408,7 @@ BlocktrailConverter.prototype.getUrlForAllBlocks = function() {
     return "/all-blocks";
 };
 
-BlocktrailConverter.prototype.handleErros = function(self, data) {
+BlocktrailConverter.prototype.handleErrors = function(self, data) {
     return data;
 };
 
@@ -2909,7 +2912,7 @@ BtccomConverter.prototype.getUrlForAllBlocks = function() {
     return "/block/list";
 };
 
-BtccomConverter.prototype.handleErros = function(self, data) {
+BtccomConverter.prototype.handleErrors = function(self, data) {
     if (data.err_no === 0 || data.data !== null) {
         return data;
     } else {
@@ -3362,7 +3365,7 @@ module.exports = {
 }).call(this,require("buffer").Buffer)
 },{"buffer":127}],9:[function(require,module,exports){
 module.exports = exports = {
-    VERSION: '3.7.12'
+    VERSION: '3.7.16'
 };
 
 },{}],10:[function(require,module,exports){
@@ -3664,13 +3667,15 @@ var RestClient = function(options) {
 
     self.defaultParams = {};
 
-    if (self.apiKey) {
-        self.defaultParams['api_key'] = self.apiKey;
-    }
+    if (!self.btccom) {
+        if (self.apiKey) {
+            self.defaultParams['api_key'] = self.apiKey;
+        }
 
-    self.defaultHeaders = _.defaults({}, {
-        'X-SDK-Version': 'blocktrail-sdk-nodejs/' + require('./pkginfo').VERSION
-    }, options.defaultHeaders);
+        self.defaultHeaders = _.defaults({}, {
+            'X-SDK-Version': 'blocktrail-sdk-nodejs/' + require('./pkginfo').VERSION
+        }, options.defaultHeaders);
+    }
 };
 
 RestClient.prototype.throttle = function() {
@@ -3707,6 +3712,7 @@ RestClient.prototype.create_request = function(options) {
         endpoint: self.endpoint,
         apiKey: self.apiKey,
         apiSecret: self.apiSecret,
+        contentMd5: !self.btccom,
         params: _.defaults({}, self.defaultParams),
         headers: _.defaults({}, self.defaultHeaders)
     });

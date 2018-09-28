@@ -38,13 +38,15 @@ var RestClient = function(options) {
 
     self.defaultParams = {};
 
-    if (self.apiKey) {
-        self.defaultParams['api_key'] = self.apiKey;
-    }
+    if (!self.btccom) {
+        if (self.apiKey) {
+            self.defaultParams['api_key'] = self.apiKey;
+        }
 
-    self.defaultHeaders = _.defaults({}, {
-        'X-SDK-Version': 'blocktrail-sdk-nodejs/' + require('./pkginfo').VERSION
-    }, options.defaultHeaders);
+        self.defaultHeaders = _.defaults({}, {
+            'X-SDK-Version': 'blocktrail-sdk-nodejs/' + require('./pkginfo').VERSION
+        }, options.defaultHeaders);
+    }
 };
 
 RestClient.prototype.throttle = function() {
@@ -81,6 +83,7 @@ RestClient.prototype.create_request = function(options) {
         endpoint: self.endpoint,
         apiKey: self.apiKey,
         apiSecret: self.apiSecret,
+        contentMd5: !self.btccom,
         params: _.defaults({}, self.defaultParams),
         headers: _.defaults({}, self.defaultHeaders)
     });
