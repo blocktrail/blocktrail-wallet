@@ -5,7 +5,7 @@
         .controller("SendConfirmCtrl", SendConfirmCtrl);
 
     function SendConfirmCtrl($scope) {
-        $scope.appControl.showPinInput = true;
+        $scope.appControl.showUnlockInput = true;
 
         /*-- simply a nested state for template control --*/
     }
