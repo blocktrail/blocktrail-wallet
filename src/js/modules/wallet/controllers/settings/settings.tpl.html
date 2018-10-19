@@ -72,8 +72,18 @@
                 </div>
             </div>
 
-            <h3 class="group-title">{{ 'SETTINGS_PRIVACY' | translate }}</h3>
+            <h3 class="group-title">{{ 'SETTINGS_SECURITY' | translate }}</h3>
+            <div class="list list-inset">
+                <!-- Toggle 2FA -->
+                <div class="item item-button-right" ui-sref="app.wallet.settings.twoFactor">
+                    <span class="sentence-case"> {{ isTwoFactorEnabled ? ("2FA_ENABLED" | translate) : ("2FA_NOT_ENABLED" | translate) }}</span>
+                    <button class="button button-clear">
+                        <i class="icon ion-chevron-right iil-15"></i>
+                    </button>
+                </div>
+            </div>
 
+            <h3 class="group-title">{{ 'SETTINGS_PRIVACY' | translate }}</h3>
             <div class="list list-inset">
                 <!-- Is pin on open -->
                 <div class="item item-toggle">

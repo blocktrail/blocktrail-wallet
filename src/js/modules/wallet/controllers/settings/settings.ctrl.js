@@ -21,6 +21,11 @@
         };
         $scope.isWalletBackupSaved = true;
 
+        $scope.isTwoFactorEnabled = false;
+        launchService.getAccountInfo().then(function (accountInfo) {
+            $scope.isTwoFactorEnabled = !!accountInfo.requires2FA;
+        });
+
         var watchBtcPrecision = $scope.$watch("formLocalSettings.btcPrecision", onSetBtcPrecision);
         var watchIsPinOnOpen = $scope.$watch("formLocalSettings.isPinOnOpen", onSetIsPinOnOpen);
 

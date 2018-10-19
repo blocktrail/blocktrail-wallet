@@ -241,6 +241,18 @@
                     }
                 }
             })
+            .state("app.wallet.settings.twoFactor", {
+                url: "/two-factor",
+                data: {
+                    clearHistory: false
+                },
+                views: {
+                    "mainView@app.wallet": {
+                        templateUrl: "js/modules/wallet/controllers/settings-two-factor/settings-two-factor.tpl.html",
+                        controller: "SettingsTwoFactorCtrl"
+                    }
+                }
+            })
             .state("app.wallet.settings.phone", {
                 url: "/phone?goBackTo",
                 data: {
