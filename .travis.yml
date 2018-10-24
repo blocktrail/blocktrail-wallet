@@ -1,0 +1,21 @@
+language: node_js
+
+branches:
+  only: 
+   - master
+
+node_js:
+ - '5.11'
+ - '6.0.0'
+ - '6.6.0'
+ - '7.0.0'
+ - '7.10.1'
+ - 'node'
+
+before_install:
+ - git submodule update --init --recursive
+ - npm install -g grunt-cli
+ - cp appconfig.default.json appconfig.json
+
+script:
+ - gulp
