@@ -149,5 +149,5 @@
     <preference name="orientation" value="portrait" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="AutoHideSplashScreen" value="true" />
-    <preference name="android-targetSdkVersion" value="22" />
+    <preference name="android-targetSdkVersion" value="26" />
 </widget>
