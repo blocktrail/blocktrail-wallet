@@ -1,0 +1,46 @@
+{
+  "_from": "com.synconset.imagepicker@~2.1.9",
+  "_id": "com.synconset.imagepicker@2.1.9",
+  "_inBundle": false,
+  "_integrity": "sha512-8SVKQoMcib6EJKX5QXuNwyJhF8FW25TNyRYsRKWRUE1/uf6ElQmTbz7qgrqG2Qk6ItMtaTf0IfJCeGvDq/1Fjg==",
+  "_location": "/com.synconset.imagepicker",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "com.synconset.imagepicker@~2.1.9",
+    "name": "com.synconset.imagepicker",
+    "escapedName": "com.synconset.imagepicker",
+    "rawSpec": "~2.1.9",
+    "saveSpec": null,
+    "fetchSpec": "~2.1.9"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/com.synconset.imagepicker/-/com.synconset.imagepicker-2.1.9.tgz",
+  "_shasum": "6f4ff163f43a203b1f22306a483b7281b5486515",
+  "_spec": "com.synconset.imagepicker@~2.1.9",
+  "_where": "D:\\Projects\\Quatremille\\node_modules",
+  "bundleDependencies": false,
+  "cordova_name": "ImagePicker",
+  "deprecated": false,
+  "description": "This plugin allows selection of multiple images from the camera roll / gallery in a phonegap app",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.5.0"
+    }
+  ],
+  "issue": "",
+  "keywords": [],
+  "license": "MIT",
+  "name": "com.synconset.imagepicker",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "repo": "https://github.com/Telerik-Verified-Plugins/ImagePicker",
+  "version": "2.1.10"
+}

@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-customurlscheme.LaunchMyApp", function(require, exports, module) { (function () {
+cordova.define("cordova-plugin-customurlscheme.LaunchMyApp", function(require, exports, module) {
+(function () {
     "use strict";
 
   var remainingAttempts = 10;

@@ -1,7 +1,35 @@
 {
-  "name": "cordova-plugin-appsflyer-sdk",
-  "version": "4.4.0",
-  "description": "Cordova AppsFlyer SDK Plugin",
+  "_from": "cordova-plugin-appsflyer-sdk@4.3.0",
+  "_id": "cordova-plugin-appsflyer-sdk@4.3.0",
+  "_inBundle": false,
+  "_integrity": "sha1-M9TsJb+9bc2n/KdCpHX0ZDjjh1w=",
+  "_location": "/cordova-plugin-appsflyer-sdk",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "cordova-plugin-appsflyer-sdk@4.3.0",
+    "name": "cordova-plugin-appsflyer-sdk",
+    "escapedName": "cordova-plugin-appsflyer-sdk",
+    "rawSpec": "4.3.0",
+    "saveSpec": null,
+    "fetchSpec": "4.3.0"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-appsflyer-sdk/-/cordova-plugin-appsflyer-sdk-4.3.0.tgz",
+  "_shasum": "33d4ec25bfbd6dcda7fca742a475f46438e3875c",
+  "_spec": "cordova-plugin-appsflyer-sdk@4.3.0",
+  "_where": "/storage/blocktrail/btccom/blocktrail-wallet",
+  "author": {
+    "name": "Appsflyer"
+  },
+  "bugs": {
+    "url": "https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk/issues"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-appsflyer-sdk",
     "platforms": [
@@ -9,10 +37,18 @@
       "ios"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk.git"
+  "deprecated": false,
+  "description": "Cordova AppsFlyer SDK Plugin",
+  "devDependencies": {
+    "jshint": "^2.6.0"
   },
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=4.3.0"
+    }
+  ],
+  "homepage": "https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk#readme",
   "keywords": [
     "cordova",
     "appsflyer",
@@ -20,38 +56,30 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "engines": [
-    {
-      "name": "cordova",
-      "version": ">=4.3.0"
-    }
-  ],
-  "author": "Appsflyer",
   "license": {
     "type": "MIT",
     "url": "https://github.com/AppsFlyerSDK/nativescript-plugin-appsflyer-sdk/blob/master/LICENSE"
   },
-  "bugs": {
-    "url": "https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk/issues"
+  "name": "cordova-plugin-appsflyer-sdk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk.git"
   },
-  "homepage": "https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk#readme",
   "scripts": {
-    "test": "npm run jshint",
+    "demo_a.ba": "cd examples/demoA; ionic build android",
+    "demo_a.bi": "cd examples/demoA; ionic build ios",
+    "demo_a.ra": "cd examples/demoA; ionic run android",
+    "demo_a.ri": "cd examples/demoA; ionic run ios",
+    "demo_c.ba": "cd examples/demoC; cordova build android",
+    "demo_c.bi": "cd examples/demoC; cordova build ios",
+    "demo_c.ra": "cd examples/demoC; cordova run android",
+    "demo_c.ri": "cd examples/demoC; cordova run ios",
     "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests",
     "preparedemo_a": "cd examples/demoA; cordova plugin rm cordova-plugin-appsflyer-sdk --save; cordova plugin add cordova-plugin-appsflyer-sdk --save; cordova plugin rm cordova-plugin-appsflyer-sdk-tests --save; cordova plugin add ../../tests/",
     "preparedemo_c": "cd examples/demoC; cordova plugin rm cordova-plugin-appsflyer-sdk --save; cordova plugin add ../.. --save; cordova plugin rm phonegap-plugin-push --save; cordova plugin add phonegap-plugin-push@1.7.0 --variable SENDER_ID=12345 --save; cordova plugin rm cordova-plugin-console --save; cordova plugin add cordova-plugin-console --save; cordova platform rm android; cordova platform add android; cordova platform rm ios; cordova platform add ios",
     "setup_a": "cd examples/demoA; npm install; cd ../..; npm run preparedemo_a;",
     "setup_c": "cd examples/demoC; npm install; cd ../..; npm run preparedemo_c;",
-    "demo_a.ra": "cd examples/demoA; ionic run android",
-    "demo_a.ba": "cd examples/demoA; ionic build android",
-    "demo_a.ri": "cd examples/demoA; ionic run ios",
-    "demo_a.bi": "cd examples/demoA; ionic build ios",
-    "demo_c.ra": "cd examples/demoC; cordova run android",
-    "demo_c.ba": "cd examples/demoC; cordova build android",
-    "demo_c.ri": "cd examples/demoC; cordova run ios",
-    "demo_c.bi": "cd examples/demoC; cordova build ios"
+    "test": "npm run jshint"
   },
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "version": "4.3.0"
 }

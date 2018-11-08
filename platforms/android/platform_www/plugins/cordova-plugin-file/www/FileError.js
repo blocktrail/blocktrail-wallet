@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-file.FileError", function(require, exports, module) { /*
+cordova.define("cordova-plugin-file.FileError", function(require, exports, module) {
+/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,8 +23,8 @@ cordova.define("cordova-plugin-file.FileError", function(require, exports, modul
 /**
  * FileError
  */
-function FileError(error) {
-  this.code = error || null;
+function FileError (error) {
+    this.code = error || null;
 }
 
 // File error codes

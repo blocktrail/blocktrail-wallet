@@ -29,8 +29,8 @@
 - (id) initWithName:(NSString *)name root:(NSString *)fsRoot
 {
     if (self) {
-        _name = name;
-        _fsRoot = fsRoot;
+        self.name = name;
+        self.fsRoot = fsRoot;
     }
     return self;
 }
@@ -78,12 +78,12 @@
     [dirEntry setObject:fullPath forKey:@"fullPath"];
     [dirEntry setObject:lastPart forKey:@"name"];
     [dirEntry setObject:self.name forKey: @"filesystemName"];
-    
+
     NSURL* nativeURL = [NSURL fileURLWithPath:[self filesystemPathForFullPath:fullPath]];
     if (self.urlTransformer) {
         nativeURL = self.urlTransformer(nativeURL);
     }
-    
+
     dirEntry[@"nativeURL"] = [nativeURL absoluteString];
 
     return dirEntry;
@@ -206,7 +206,7 @@
         NSString *combinedPath = [baseURI.fullPath stringByAppendingPathComponent:requestedPath];
         combinedPath = [self normalizePath:combinedPath];
         CDVFilesystemURL* requestedURL = [self URLforFullPath:combinedPath];
-        
+
         NSFileManager* fileMgr = [[NSFileManager alloc] init];
         BOOL bIsDir;
         BOOL bExists = [fileMgr fileExistsAtPath:[self filesystemPathForURL:requestedURL] isDirectory:&bIsDir];
@@ -703,7 +703,7 @@
         NSMutableDictionary* fileInfo = [NSMutableDictionary dictionaryWithCapacity:5];
 
         [fileInfo setObject:localURL.fullPath forKey:@"fullPath"];
-        [fileInfo setObject:@"" forKey:@"type"];  // can't easily get the mimetype unless create URL, send request and read response so skipping
+        [fileInfo setObject:[self mimeTypeForFileAtPath: path] forKey:@"type"];
         [fileInfo setObject:[path lastPathComponent] forKey:@"name"];
 
         // Ensure that directories (and other non-regular files) report size of 0
@@ -729,6 +729,22 @@
     }
 
     callback(result);
+}
+
+// fix errors that base on Alexsander Akers from http://stackoverflow.com/a/5998683/2613194
+- (NSString*) mimeTypeForFileAtPath: (NSString *) path {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        return nil;
+    }
+    
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[path pathExtension], NULL);
+    CFStringRef mimeType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
+    CFRelease(UTI);
+    
+    if (!mimeType) {
+        return @"application/octet-stream";
+    }
+    return (__bridge NSString *)mimeType;
 }
 
 @end

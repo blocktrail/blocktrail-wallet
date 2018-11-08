@@ -17,13 +17,14 @@
        under the License.
 */
 
-// GENERATED FILE! DO NOT EDIT!
-
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
 
     // Switch the Android Gradle plugin version requirement depending on the
@@ -31,17 +32,22 @@ buildscript {
     // http://tools.android.com/tech-docs/new-build-system/version-compatibility
     // and https://issues.apache.org/jira/browse/CB-8143
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:3.0.0'
     }
-   }
+}
 
 // Allow plugins to declare Maven dependencies via build-extras.gradle.
-repositories {
-    mavenCentral()
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.8'
+    gradleVersion = '4.1.0'
 }
 
 // Configuration properties. Set these via environment variables, build-extras.gradle, or gradle.properties.
@@ -86,9 +92,9 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
-apply from: "cordova-fabric-plugin/mywallet-build-extras.gradle"
-apply from: "cordova-plugin-firebase/mywallet-build.gradle"
-apply from: "cordova-plugin-appsflyer-sdk/mywallet-cordovaAF.gradle"
+apply from: "cordova-fabric-plugin/starter-build-extras.gradle"
+apply from: "cordova-plugin-appsflyer-sdk/starter-cordovaAF.gradle"
+apply from: "cordova-plugin-firebase/starter-build.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
@@ -165,7 +171,7 @@ android {
     }
 
     defaultConfig {
-        versionCode cdvVersionCode ?: Integer.parseInt("" + privateHelpers.extractIntFromManifest("versionCode") + "0")
+        versionCode cdvVersionCode ?: new BigInteger("" + privateHelpers.extractIntFromManifest("versionCode"))
         applicationId privateHelpers.extractStringFromManifest("package")
 
         if (cdvMinSdkVersion != null) {
@@ -183,13 +189,13 @@ android {
     if (Boolean.valueOf(cdvBuildMultipleApks)) {
         productFlavors {
             armv7 {
-                versionCode defaultConfig.versionCode + 2
+                versionCode defaultConfig.versionCode*10 + 2
                 ndk {
                     abiFilters "armeabi-v7a", ""
                 }
             }
             x86 {
-                versionCode defaultConfig.versionCode + 4
+                versionCode defaultConfig.versionCode*10 + 4
                 ndk {
                     abiFilters "x86", ""
                 }
@@ -200,7 +206,12 @@ android {
                 }
             }
         }
-    } else if (!cdvVersionCode) {
+    }
+    /*
+
+    ELSE NOTHING! DON'T MESS WITH THE VERSION CODE IF YOU DON'T HAVE TO!
+
+    else if (!cdvVersionCode) {
       def minSdkVersion = cdvMinSdkVersion ?: privateHelpers.extractIntFromManifest("minSdkVersion")
       // Vary versionCode by the two most common API levels:
       // 14 is ICS, which is the lowest API level for many apps.
@@ -211,6 +222,7 @@ android {
         defaultConfig.versionCode += 8
       }
     }
+    */
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
@@ -240,19 +252,19 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
-    debugCompile project(path: "CordovaLib", configuration: "debug")
-    releaseCompile project(path: "CordovaLib", configuration: "release")
-    compile "com.google.android.gms:play-services-analytics:+"
+    implementation(project(path: "CordovaLib"))
     compile "com.facebook.android:facebook-android-sdk:4.14.+"
-    compile "com.android.support:support-v4:24.1.1+"
     compile "com.google.gms:google-services:+"
     compile "com.google.android.gms:play-services-tagmanager:+"
     compile "com.google.firebase:firebase-core:+"
     compile "com.google.firebase:firebase-messaging:+"
     compile "com.google.firebase:firebase-crash:+"
     compile "com.google.firebase:firebase-config:+"
+    compile "com.google.android.gms:play-services-analytics:+"
+    compile "com.android.support:support-annotations:27.+"
+    compile "com.android.support:support-v4:24.1.1+"
     // SUB-PROJECT DEPENDENCIES END
 }
 
@@ -270,7 +282,7 @@ def promptForReleaseKeyPassword() {
 
 gradle.taskGraph.whenReady { taskGraph ->
     taskGraph.getAllTasks().each() { task ->
-        if (task.name == 'validateReleaseSigning') {
+        if (['validateReleaseSigning', 'validateSigningRelease', 'validateSigningArmv7Release', 'validateSigningX86Release'].contains(task.name)) {
             promptForReleaseKeyPassword()
         }
     }
@@ -323,25 +335,6 @@ buildscript {
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
     }
-}
-
-// HOTFIX force google service libs to 11.8.0 to stay consistent
-configurations.all {
-   resolutionStrategy {
-       force "com.google.android.gms:play-services-ads:11.8.0"
-       force "com.google.android.gms:play-services-base:11.8.0"
-       force "com.google.android.gms:play-services-gcm:11.8.0"
-       force "com.google.android.gms:play-services-analytics:11.8.0"
-       force "com.google.android.gms:play-services-location:11.8.0"
-       force "com.google.android.gms:play-services-basement:11.8.0"
-       force "com.google.android.gms:play-services-tagmanager:11.8.0"
-       force 'com.google.firebase:firebase-core:11.8.0'
-       force 'com.google.firebase:firebase-crash:11.8.0'
-       force 'com.google.firebase:firebase-auth:11.8.0'
-       force 'com.google.firebase:firebase-common:11.8.0'
-       force 'com.google.firebase:firebase-config:11.8.0'
-       force 'com.google.firebase:firebase-messaging:11.8.0'
-   }
 }
 
 apply plugin: 'io.fabric'
