@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-google-app-conversion-tracker.GoogleAppTracking", function(require, exports, module) { 
+cordova.define("cordova-plugin-google-app-conversion-tracker.GoogleAppTracking", function(require, exports, module) {
+
 /* global module, require */
 
 var exec = require('cordova/exec');

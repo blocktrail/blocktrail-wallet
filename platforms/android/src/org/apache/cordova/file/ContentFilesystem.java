@@ -18,22 +18,19 @@
  */
 package org.apache.cordova.file;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import org.apache.cordova.CordovaResourceApi;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import org.apache.cordova.CordovaResourceApi;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ContentFilesystem extends Filesystem {
 
@@ -101,7 +98,9 @@ public class ContentFilesystem extends Filesystem {
 			// Was seeing this on the File mobile-spec tests on 4.0.3 x86 emulator.
 			// The ContentResolver applies only when the file was registered in the
 			// first case, which is generally only the case with images.
-            throw new NoModificationAllowedException("Deleting not supported for content uri: " + contentUri);
+            NoModificationAllowedException nmae = new NoModificationAllowedException("Deleting not supported for content uri: " + contentUri);
+            nmae.initCause(t);
+            throw nmae;
 		}
         return true;
 	}
@@ -125,16 +124,23 @@ public class ContentFilesystem extends Filesystem {
         String mimeType = resourceApi.getMimeType(nativeUri);
         Cursor cursor = openCursorForURL(nativeUri);
         try {
-        	if (cursor != null && cursor.moveToFirst()) {
-        		size = resourceSizeForCursor(cursor);
-        		lastModified = lastModifiedDateForCursor(cursor);
-        	} else {
+            if (cursor != null && cursor.moveToFirst()) {
+                Long sizeForCursor = resourceSizeForCursor(cursor);
+                if (sizeForCursor != null) {
+                    size = sizeForCursor.longValue();
+                }
+                Long modified = lastModifiedDateForCursor(cursor);
+                if (modified != null)
+                    lastModified = modified.longValue();
+            } else {
                 // Some content providers don't support cursors at all!
                 CordovaResourceApi.OpenForReadResult offr = resourceApi.openForRead(nativeUri);
-    			size = offr.length;
-        	}
+                size = offr.length;
+            }
         } catch (IOException e) {
-            throw new FileNotFoundException();
+            FileNotFoundException fnfe = new FileNotFoundException();
+            fnfe.initCause(e);
+            throw fnfe;
         } finally {
         	if (cursor != null)
         		cursor.close();
@@ -185,12 +191,14 @@ public class ContentFilesystem extends Filesystem {
 	}
 	
 	protected Long lastModifiedDateForCursor(Cursor cursor) {
-        final String[] LOCAL_FILE_PROJECTION = { MediaStore.MediaColumns.DATE_MODIFIED };
-        int columnIndex = cursor.getColumnIndex(LOCAL_FILE_PROJECTION[0]);
+        int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATE_MODIFIED);
+        if (columnIndex == -1) {
+            columnIndex = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED);
+        }
         if (columnIndex != -1) {
             String dateStr = cursor.getString(columnIndex);
             if (dateStr != null) {
-            	return Long.parseLong(dateStr);
+                return Long.parseLong(dateStr);
             }
         }
         return null;

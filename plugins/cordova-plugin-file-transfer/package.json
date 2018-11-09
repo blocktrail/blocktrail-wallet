@@ -1,8 +1,35 @@
 {
-  "name": "cordova-plugin-file-transfer",
-  "version": "1.6.3",
-  "description": "Cordova File Transfer Plugin",
-  "types": "./types/index.d.ts",
+  "_from": "cordova-plugin-file-transfer",
+  "_id": "cordova-plugin-file-transfer@1.7.1",
+  "_inBundle": false,
+  "_integrity": "sha1-p12L4uvDu5sjxbG70ZkhTsJnWGs=",
+  "_location": "/cordova-plugin-file-transfer",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-file-transfer",
+    "name": "cordova-plugin-file-transfer",
+    "escapedName": "cordova-plugin-file-transfer",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-file-transfer/-/cordova-plugin-file-transfer-1.7.1.tgz",
+  "_shasum": "a75d8be2ebc3bb9b23c5b1bbd199214ec267586b",
+  "_spec": "cordova-plugin-file-transfer",
+  "_where": "/storage/blocktrail/btccom/blocktrail-wallet (copy)",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-file-transfer",
     "platforms": [
@@ -19,15 +46,20 @@
       "browser"
     ]
   },
-  "scripts": {
-    "test": "npm run lint && npm run style",
-    "lint": "jshint www && jshint src && jshint tests",
-    "style": "jscs tests/tests.js"
+  "deprecated": false,
+  "description": "Cordova File Transfer Plugin",
+  "devDependencies": {
+    "jscs": "^2.6.0",
+    "jshint": "^2.8.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-file-transfer"
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
   },
+  "homepage": "https://github.com/apache/cordova-plugin-file-transfer#readme",
   "keywords": [
     "cordova",
     "file",
@@ -45,17 +77,17 @@
     "cordova-firefoxos",
     "cordova-browser"
   ],
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "engines": {
-    "cordovaDependencies": {
-      "2.0.0": {
-        "cordova": ">100"
-      }
-    }
+  "name": "cordova-plugin-file-transfer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-file-transfer.git"
   },
-  "devDependencies": {
-    "jscs": "^2.6.0",
-    "jshint": "^2.8.0"
-  }
+  "scripts": {
+    "lint": "jshint www && jshint src && jshint tests",
+    "style": "jscs tests/tests.js",
+    "test": "npm run lint && npm run style"
+  },
+  "types": "./types/index.d.ts",
+  "version": "1.7.1"
 }

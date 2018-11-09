@@ -1,4 +1,5 @@
-cordova.define("com.cordova.plugins.sms.Sms", function(require, exports, module) { 'use strict';
+cordova.define("com.cordova.plugins.sms.Sms", function(require, exports, module) {
+'use strict';
 
 var exec = require('cordova/exec');
 

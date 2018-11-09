@@ -1,320 +1,320 @@
 {
-    "org.apache.cordova.device": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.device"
-        },
-        "is_top_level": true,
-        "variables": {}
+  "org.apache.cordova.device": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.device"
     },
-    "org.apache.cordova.console": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.console"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "org.apache.cordova.console": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.console"
     },
-    "com.ionic.keyboard": {
-        "source": {
-            "type": "registry",
-            "id": "com.ionic.keyboard"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "com.ionic.keyboard": {
+    "source": {
+      "type": "registry",
+      "id": "com.ionic.keyboard"
     },
-    "io.litehelpers.cordova.sqlite": {
-        "source": {
-            "type": "registry",
-            "id": "io.litehelpers.cordova.sqlite"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "io.litehelpers.cordova.sqlite": {
+    "source": {
+      "type": "registry",
+      "id": "io.litehelpers.cordova.sqlite"
     },
-    "org.apache.cordova.splashscreen": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.splashscreen"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "org.apache.cordova.splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.splashscreen"
     },
-    "com.dbaq.cordova.contactsPhoneNumbers": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/dbaq/cordova-plugin-contacts-phone-numbers.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "com.dbaq.cordova.contactsPhoneNumbers": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/dbaq/cordova-plugin-contacts-phone-numbers.git",
+      "subdir": "."
     },
-    "cordova-plugin-whitelist": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-whitelist"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist"
     },
-    "cordova-plugin-network-information": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-network-information"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-network-information": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-network-information"
     },
-    "com.synconset.imagepicker": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/wymsee/cordova-imagePicker.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "com.synconset.imagepicker": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/wymsee/cordova-imagePicker.git",
+      "subdir": "."
     },
-    "cordova-plugin-camera": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-camera"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-camera"
     },
-    "cordova-plugin-globalization": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-globalization"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-globalization": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-globalization"
     },
-    "hu.dpal.phonegap.plugins.PinDialog": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Paldom/PinDialog.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "hu.dpal.phonegap.plugins.PinDialog": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/Paldom/PinDialog.git",
+      "subdir": "."
     },
-    "fr.spirotron.cordova.disabledatadetectors": {
-        "source": {
-            "type": "registry",
-            "id": "fr.spirotron.cordova.disabledatadetectors"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "fr.spirotron.cordova.disabledatadetectors": {
+    "source": {
+      "type": "registry",
+      "id": "fr.spirotron.cordova.disabledatadetectors"
     },
-    "io.github.pwlin.cordova.plugins.fileopener2": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/pwlin/cordova-plugin-file-opener2.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "io.github.pwlin.cordova.plugins.fileopener2": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/pwlin/cordova-plugin-file-opener2.git",
+      "subdir": "."
     },
-    "cordova-plugin-file": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-file"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-file": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-file"
     },
-    "uk.co.whiteoctober.cordova.appversion": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": false,
+    "variables": {}
+  },
+  "uk.co.whiteoctober.cordova.appversion": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
+      "subdir": "."
     },
-    "org.apache.cordova.dialogs": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.dialogs"
-        },
-        "is_top_level": false,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "org.apache.cordova.dialogs": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.dialogs"
     },
-    "org.apache.cordova.globalization": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.globalization"
-        },
-        "is_top_level": false,
-        "variables": {}
+    "is_top_level": false,
+    "variables": {}
+  },
+  "org.apache.cordova.globalization": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.globalization"
     },
-    "org.apache.cordova.inappbrowser": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-inappbrowser@1.7.0"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": false,
+    "variables": {}
+  },
+  "org.apache.cordova.inappbrowser": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-inappbrowser@1.7.0"
     },
-    "nl.x-services.plugins.toast": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "nl.x-services.plugins.toast": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
+      "subdir": "."
     },
-    "org.apache.cordova.statusbar": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.statusbar"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "org.apache.cordova.statusbar": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.statusbar"
     },
-    "cordova-plugin-customurlscheme": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/blocktrail/Custom-URL-scheme.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {
-            "URL_SCHEME": "bitcoin"
-        }
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-customurlscheme": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/blocktrail/Custom-URL-scheme.git",
+      "subdir": "."
     },
-    "de.appplant.cordova.plugin.email-composer": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/blocktrail/cordova-plugin-email-composer.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "com.cordova.plugins.sms": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/blocktrail/cordova-sms-plugin.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-vibration": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-vibration"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "phonegap-plugin-barcodescanner": {
-        "source": {
-            "type": "registry",
-            "id": "phonegap-plugin-barcodescanner"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-dialogs": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-dialogs"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-google-app-conversion-tracker": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/MyHealthTeams/google-app-conversion-tracker.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-fabric-plugin": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-fabric-plugin"
-        },
-        "is_top_level": true,
-        "variables": {
-            "FABRIC_API_KEY": "059fcf328d73ce164c3ab1c4436293db0d6718ca",
-            "FABRIC_API_SECRET": "2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741"
-        }
-    },
-    "cordova-plugin-google-analytics": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/danwilson/google-analytics-plugin.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-facebook4": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-facebook4"
-        },
-        "is_top_level": true,
-        "variables": {
-            "APP_ID": "1072524012838770",
-            "APP_NAME": "BTC.com"
-        }
-    },
-    "cordova-plugin-x-socialsharing": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-x-socialsharing"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-firebase": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/arnesson/cordova-plugin-firebase",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-open": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-open"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-file-transfer": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-file-transfer"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
-    "cordova-universal-clipboard": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Visigo/CordovaClipboard",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-appsflyer-sdk": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {
+      "URL_SCHEME": "bitcoin"
     }
+  },
+  "de.appplant.cordova.plugin.email-composer": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/blocktrail/cordova-plugin-email-composer.git",
+      "subdir": "."
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "com.cordova.plugins.sms": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/blocktrail/cordova-sms-plugin.git",
+      "subdir": "."
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-vibration": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-vibration"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "phonegap-plugin-barcodescanner": {
+    "source": {
+      "type": "registry",
+      "id": "phonegap-plugin-barcodescanner"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-dialogs": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-dialogs"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-google-app-conversion-tracker": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/MyHealthTeams/google-app-conversion-tracker.git",
+      "subdir": "."
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-fabric-plugin": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-fabric-plugin"
+    },
+    "is_top_level": true,
+    "variables": {
+      "FABRIC_API_KEY": "059fcf328d73ce164c3ab1c4436293db0d6718ca",
+      "FABRIC_API_SECRET": "2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741"
+    }
+  },
+  "cordova-plugin-google-analytics": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/danwilson/google-analytics-plugin.git",
+      "subdir": "."
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-facebook4": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-facebook4"
+    },
+    "is_top_level": true,
+    "variables": {
+      "APP_ID": "1072524012838770",
+      "APP_NAME": "BTC.com"
+    }
+  },
+  "cordova-plugin-x-socialsharing": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-x-socialsharing"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-firebase": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/arnesson/cordova-plugin-firebase",
+      "subdir": "."
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-open": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-open"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-file-transfer": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-file-transfer"
+    },
+    "is_top_level": false,
+    "variables": {}
+  },
+  "cordova-universal-clipboard": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/Visigo/CordovaClipboard",
+      "subdir": "."
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-appsflyer-sdk": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk.git",
+      "subdir": "."
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
 }

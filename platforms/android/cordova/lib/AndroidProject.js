@@ -21,19 +21,20 @@ var fs = require('fs');
 var path = require('path');
 var properties_parser = require('properties-parser');
 var AndroidManifest = require('./AndroidManifest');
+var AndroidStudio = require('./AndroidStudio');
+var pluginHandlers = require('./pluginHandlers');
 
 var projectFileCache = {};
 
-function addToPropertyList(projectProperties, key, value) {
+function addToPropertyList (projectProperties, key, value) {
     var i = 1;
-    while (projectProperties.get(key + '.' + i))
-        i++;
+    while (projectProperties.get(key + '.' + i)) { i++; }
 
     projectProperties.set(key + '.' + i, value);
     projectProperties.dirty = true;
 }
 
-function removeFromPropertyList(projectProperties, key, value) {
+function removeFromPropertyList (projectProperties, key, value) {
     var i = 1;
     var currentValue;
     while ((currentValue = projectProperties.get(key + '.' + i))) {
@@ -52,16 +53,19 @@ function removeFromPropertyList(projectProperties, key, value) {
 
 function getRelativeLibraryPath (parentDir, subDir) {
     var libraryPath = path.relative(parentDir, subDir);
-    return (path.sep == '\\') ? libraryPath.replace(/\\/g, '/') : libraryPath;
+    return (path.sep === '\\') ? libraryPath.replace(/\\/g, '/') : libraryPath;
 }
 
-function AndroidProject(projectDir) {
+function AndroidProject (projectDir) {
     this._propertiesEditors = {};
     this._subProjectDirs = {};
     this._dirty = false;
     this.projectDir = projectDir;
     this.platformWww = path.join(this.projectDir, 'platform_www');
     this.www = path.join(this.projectDir, 'assets/www');
+    if (AndroidStudio.isAndroidStudioProject(projectDir) === true) {
+        this.www = path.join(this.projectDir, 'app/src/main/assets/www');
+    }
 }
 
 AndroidProject.getProjectFile = function (projectDir) {
@@ -87,11 +91,15 @@ AndroidProject.purgeCache = function (projectDir) {
  *
  * @return  {String}              The name of the package
  */
-AndroidProject.prototype.getPackageName = function() {
-    return new AndroidManifest(path.join(this.projectDir, 'AndroidManifest.xml')).getPackageId();
+AndroidProject.prototype.getPackageName = function () {
+    var manifestPath = path.join(this.projectDir, 'AndroidManifest.xml');
+    if (AndroidStudio.isAndroidStudioProject(this.projectDir) === true) {
+        manifestPath = path.join(this.projectDir, 'app/src/main/AndroidManifest.xml');
+    }
+    return new AndroidManifest(manifestPath).getPackageId();
 };
 
-AndroidProject.prototype.getCustomSubprojectRelativeDir = function(plugin_id, src) {
+AndroidProject.prototype.getCustomSubprojectRelativeDir = function (plugin_id, src) {
     // All custom subprojects are prefixed with the last portion of the package id.
     // This is to avoid collisions when opening multiple projects in Eclipse that have subprojects with the same name.
     var packageName = this.getPackageName();
@@ -101,7 +109,7 @@ AndroidProject.prototype.getCustomSubprojectRelativeDir = function(plugin_id, sr
     return subRelativeDir;
 };
 
-AndroidProject.prototype.addSubProject = function(parentDir, subDir) {
+AndroidProject.prototype.addSubProject = function (parentDir, subDir) {
     var parentProjectFile = path.resolve(parentDir, 'project.properties');
     var subProjectFile = path.resolve(subDir, 'project.properties');
     var parentProperties = this._getPropertiesFile(parentProjectFile);
@@ -117,7 +125,7 @@ AndroidProject.prototype.addSubProject = function(parentDir, subDir) {
     this._dirty = true;
 };
 
-AndroidProject.prototype.removeSubProject = function(parentDir, subDir) {
+AndroidProject.prototype.removeSubProject = function (parentDir, subDir) {
     var parentProjectFile = path.resolve(parentDir, 'project.properties');
     var parentProperties = this._getPropertiesFile(parentProjectFile);
     removeFromPropertyList(parentProperties, 'android.library.reference', getRelativeLibraryPath(parentDir, subDir));
@@ -125,35 +133,35 @@ AndroidProject.prototype.removeSubProject = function(parentDir, subDir) {
     this._dirty = true;
 };
 
-AndroidProject.prototype.addGradleReference = function(parentDir, subDir) {
+AndroidProject.prototype.addGradleReference = function (parentDir, subDir) {
     var parentProjectFile = path.resolve(parentDir, 'project.properties');
     var parentProperties = this._getPropertiesFile(parentProjectFile);
     addToPropertyList(parentProperties, 'cordova.gradle.include', getRelativeLibraryPath(parentDir, subDir));
     this._dirty = true;
 };
 
-AndroidProject.prototype.removeGradleReference = function(parentDir, subDir) {
+AndroidProject.prototype.removeGradleReference = function (parentDir, subDir) {
     var parentProjectFile = path.resolve(parentDir, 'project.properties');
     var parentProperties = this._getPropertiesFile(parentProjectFile);
     removeFromPropertyList(parentProperties, 'cordova.gradle.include', getRelativeLibraryPath(parentDir, subDir));
     this._dirty = true;
 };
 
-AndroidProject.prototype.addSystemLibrary = function(parentDir, value) {
+AndroidProject.prototype.addSystemLibrary = function (parentDir, value) {
     var parentProjectFile = path.resolve(parentDir, 'project.properties');
     var parentProperties = this._getPropertiesFile(parentProjectFile);
     addToPropertyList(parentProperties, 'cordova.system.library', value);
     this._dirty = true;
 };
 
-AndroidProject.prototype.removeSystemLibrary = function(parentDir, value) {
+AndroidProject.prototype.removeSystemLibrary = function (parentDir, value) {
     var parentProjectFile = path.resolve(parentDir, 'project.properties');
     var parentProperties = this._getPropertiesFile(parentProjectFile);
     removeFromPropertyList(parentProperties, 'cordova.system.library', value);
     this._dirty = true;
 };
 
-AndroidProject.prototype.write = function() {
+AndroidProject.prototype.write = function () {
     if (!this._dirty) {
         return;
     }
@@ -180,5 +188,22 @@ AndroidProject.prototype._getPropertiesFile = function (filename) {
     return this._propertiesEditors[filename];
 };
 
+AndroidProject.prototype.getInstaller = function (type) {
+    return pluginHandlers.getInstaller(type);
+};
+
+AndroidProject.prototype.getUninstaller = function (type) {
+    return pluginHandlers.getUninstaller(type);
+};
+
+/*
+ * This checks if an Android project is clean or has old build artifacts
+ */
+
+AndroidProject.prototype.isClean = function () {
+    var build_path = path.join(this.projectDir, 'build');
+    // If the build directory doesn't exist, it's clean
+    return !(fs.existsSync(build_path));
+};
 
 module.exports = AndroidProject;
