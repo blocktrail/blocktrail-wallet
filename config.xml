@@ -85,4 +85,5 @@
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-navigation href="http://10.4.86.199:8100" />
     <engine name="android" spec="6.4.0" />
+    <engine name="ios" spec="4.5.5" />
 </widget>
