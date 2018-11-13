@@ -1,6 +1,6 @@
 angular.module('blocktrail.wallet').factory(
     'Contacts',
-    function($log, $rootScope, settingsService, localSettingsService, launchService, sdkService, storageService, $q) {
+    function($log, $rootScope, $translate, settingsService, localSettingsService, launchService, sdkService, storageService, $q) {
         var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
         var Contacts = function() {
@@ -95,13 +95,38 @@ angular.module('blocktrail.wallet').factory(
                 });
         };
 
-        Contacts.prototype.sync = function(forceAll) {
+        Contacts.prototype._checkPermission = function(requestPermission) {
+            var deferred = $q.defer();
+            // Request permission
+            var permissions = cordova.plugins.permissions;
+            permissions.hasPermission(permissions.READ_CONTACTS, function (status) {
+                if (!status.hasPermission) {
+                    var potentialErr = $translate.instant('PERMISSION_REQUIRED_CONTACTS');
+                    if (requestPermission) {
+                        permissions.requestPermission(permissions.READ_CONTACTS,
+                            function () {
+                                deferred.resolve(true);
+                            }, function () {
+                                deferred.reject(new blocktrail.ContactsPermissionError(potentialErr));
+                        });
+                    } else {
+                        deferred.reject(new blocktrail.ContactsPermissionError(potentialErr));
+                    }
+                } else {
+                    deferred.resolve(true);
+                }
+            });
+
+            return deferred.promise;
+        };
+
+        Contacts.prototype.sync = function(forceAll, forcePermissionRequest) {
             var self = this;
 
-            return $q.when(self.contactsCache.get('synced'))
+            return $q.all([self.contactsCache.get('synced'), self._checkPermission(forcePermissionRequest)])
                 .then(function(syncedDoc) {
                     $log.debug('contacts: notfirst sync');
-                    return syncedDoc;
+                    return syncedDoc[0];
                 }, function() {
                     $log.debug('contacts: first sync');
                     return {_id: "synced", lastSynced: 0, synced: [], matches: [], avatars: {}};
@@ -132,8 +157,8 @@ angular.module('blocktrail.wallet').factory(
                                                 if (hash && (forceAll || syncedDoc.synced.indexOf(hash) === -1) && !syncContactsByHash[hash]) {
                                                     syncContactsByHash[hash] =
                                                         localSettingsData.contactsWebSync ?
-                                                        CryptoJS.AES.encrypt(contact.displayName, accountInfo.secret).toString() :
-                                                        "";
+                                                            CryptoJS.AES.encrypt(contact.displayName, accountInfo.secret).toString() :
+                                                            "";
                                                 }
                                             });
                                         });
@@ -163,10 +188,8 @@ angular.module('blocktrail.wallet').factory(
                                             });
                                         });
                                     });
-                                })
-                            ;
-                        })
-                    ;
+                                });
+                        });
                 });
         };
 
@@ -174,31 +197,35 @@ angular.module('blocktrail.wallet').factory(
          * access the contacts on the device
          * @returns {*}
          */
-        Contacts.prototype.getContacts = function() {
+        Contacts.prototype.getContacts = function(forcePermissionRequest) {
             var self = this;
             var deferred = $q.defer();
 
-            navigator.contactsPhoneNumbers.list(function(contacts) {
-                contacts.sort(function(a, b) {
-                    if (a.displayName < b.displayName) return -1;
-                    if (a.displayName > b.displayName) return 1;
-                    return 0;
+            $q.when(self._checkPermission(forcePermissionRequest))
+                .then(function () {
+                    navigator.contactsPhoneNumbers.list(function(contacts) {
+                        contacts.sort(function(a, b) {
+                            if (a.displayName < b.displayName) return -1;
+                            if (a.displayName > b.displayName) return 1;
+                            return 0;
+                        });
+
+                        $log.debug('contacts[' + contacts.length + ']');
+                        deferred.resolve(contacts);
+                    }, function(err) {
+                        $log.error('contacts ERR ' + err);
+
+                        if (err == "unauthorized") {
+                            return deferred.reject(new blocktrail.ContactsPermissionError(err));
+                        } else {
+                            return deferred.reject(new blocktrail.ContactsError(err));
+                        }
+                    });
+                }).catch(function () {
+                    deferred.resolve([]);
                 });
 
-                $log.debug('contacts[' + contacts.length + ']');
-                deferred.resolve(contacts);
-            }, function(err) {
-                $log.error('contacts ERR ' + err);
-
-                if (err == "unauthorized") {
-                    return deferred.reject(new blocktrail.ContactsPermissionError(err));
-                } else {
-                    return deferred.reject(new blocktrail.ContactsError(err));
-                }
-            });
-
             return deferred.promise;
-
         };
 
         Contacts.prototype.formatE164 = function(phoneNumber, defaultRegionCode) {
