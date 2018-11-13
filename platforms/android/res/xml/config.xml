@@ -151,4 +151,7 @@
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="android-targetSdkVersion" value="26" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <feature name="Keyboard">
+        <param name="android-package" onload="true" value="io.ionic.keyboard.IonicKeyboard" />
+    </feature>
 </widget>

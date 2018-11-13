@@ -171,6 +171,10 @@
             {
               "xml": "<feature name=\"AppVersion\"><param name=\"ios-package\" value=\"AppVersion\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"CDVIonicKeyboard\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -356,6 +360,9 @@
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-android-permissions": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-ionic-keyboard": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
@@ -878,6 +885,14 @@
       "clobbers": [
         "cordova.plugins.permissions"
       ]
+    },
+    {
+      "id": "cordova-plugin-ionic-keyboard.keyboard",
+      "file": "plugins/cordova-plugin-ionic-keyboard/www/ios/keyboard.js",
+      "pluginId": "cordova-plugin-ionic-keyboard",
+      "clobbers": [
+        "window.Keyboard"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -915,6 +930,7 @@
     "org.apache.cordova.statusbar": "0.1.10",
     "phonegap-plugin-barcodescanner": "4.0.2",
     "uk.co.whiteoctober.cordova.appversion": "0.1.7",
-    "cordova-plugin-android-permissions": "1.0.0"
+    "cordova-plugin-android-permissions": "1.0.0",
+    "cordova-plugin-ionic-keyboard": "2.1.3"
   }
 }

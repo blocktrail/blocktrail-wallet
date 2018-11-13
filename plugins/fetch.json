@@ -316,5 +316,13 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-ionic-keyboard": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-ionic-keyboard"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

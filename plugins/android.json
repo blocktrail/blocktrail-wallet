@@ -110,6 +110,9 @@
     },
     "cordova-plugin-android-permissions": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {

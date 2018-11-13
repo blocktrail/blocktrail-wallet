@@ -202,4 +202,7 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
+    <feature name="Keyboard">
+        <param name="ios-package" onload="true" value="CDVIonicKeyboard" />
+    </feature>
 </widget>

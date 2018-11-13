@@ -117,6 +117,7 @@
 		DD216483F10145FF85FEC0EB /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 242B35793AB34A4684596ED1 /* CoreVideo.framework */; };
 		507871891BB247EA8841C78B /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FAE24EA17A4D878DD54C57 /* CoreImage.framework */; };
 		BF82C67B2A0B4D9F952CF128 /* AppVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AF467B454D54C3AB11FEC1B /* AppVersion.m */; };
+		329A9F2B1853445D8876A901 /* CDVIonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404141D76B8488EB4C0AD1E /* CDVIonicKeyboard.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -323,6 +324,8 @@
 		A2FAE24EA17A4D878DD54C57 /* CoreImage.framework */ = {isa = PBXFileReference; name = "CoreImage.framework"; path = "System/Library/Frameworks/CoreImage.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		7AF467B454D54C3AB11FEC1B /* AppVersion.m */ = {isa = PBXFileReference; name = "AppVersion.m"; path = "uk.co.whiteoctober.cordova.appversion/AppVersion.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		E2BD5686E0EB4EB7B0D2CC03 /* AppVersion.h */ = {isa = PBXFileReference; name = "AppVersion.h"; path = "uk.co.whiteoctober.cordova.appversion/AppVersion.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		9404141D76B8488EB4C0AD1E /* CDVIonicKeyboard.m */ = {isa = PBXFileReference; name = "CDVIonicKeyboard.m"; path = "cordova-plugin-ionic-keyboard/CDVIonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		BA5C45CBFAD445B69282C059 /* CDVIonicKeyboard.h */ = {isa = PBXFileReference; name = "CDVIonicKeyboard.h"; path = "cordova-plugin-ionic-keyboard/CDVIonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -636,6 +639,8 @@
 				CAD53C93266143B589FE1EF1 /* zxing-all-in-one.h */,
 				7AF467B454D54C3AB11FEC1B /* AppVersion.m */,
 				E2BD5686E0EB4EB7B0D2CC03 /* AppVersion.h */,
+				9404141D76B8488EB4C0AD1E /* CDVIonicKeyboard.m */,
+				BA5C45CBFAD445B69282C059 /* CDVIonicKeyboard.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -805,6 +810,7 @@
 				884301D9659B4D0DA275DD78 /* CDVBarcodeScanner.mm in Resources */,
 				95DAB894C91447C2BD3A68A2 /* zxing-all-in-one.cpp in Resources */,
 				BF82C67B2A0B4D9F952CF128 /* AppVersion.m in Sources */,
+				329A9F2B1853445D8876A901 /* CDVIonicKeyboard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
