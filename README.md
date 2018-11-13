@@ -31,7 +31,7 @@ npm install -g npm # make sure npm is latest version
 
 # engine_strict=false is required because cordova -> cordova-common -> plist -> xmlbuilder@2.2.1
 # next version of plist will use xmlbuilder@3.x which will fix this isse
-npm_config_engine_strict=false npm install -g ionic@2.2.1 cordova@6.5.0 gulp
+npm_config_engine_strict=false npm install -g ionic@4.3.1 cordova@8.1.2 gulp
 
 npm install
 git submodule update --init --recursive # for translations package
