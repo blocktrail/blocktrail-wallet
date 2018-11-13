@@ -517,6 +517,14 @@ module.exports = [
     "clobbers": [
       "cordova.getAppVersion"
     ]
+  },
+  {
+    "id": "cordova-plugin-android-permissions.Permissions",
+    "file": "plugins/cordova-plugin-android-permissions/www/permissions-dummy.js",
+    "pluginId": "cordova-plugin-android-permissions",
+    "clobbers": [
+      "cordova.plugins.permissions"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -556,7 +564,8 @@ module.exports.metadata =
   "org.apache.cordova.splashscreen": "1.0.0",
   "org.apache.cordova.statusbar": "0.1.10",
   "phonegap-plugin-barcodescanner": "4.0.2",
-  "uk.co.whiteoctober.cordova.appversion": "0.1.7"
+  "uk.co.whiteoctober.cordova.appversion": "0.1.7",
+  "cordova-plugin-android-permissions": "1.0.0"
 };
 // BOTTOM OF METADATA
 });

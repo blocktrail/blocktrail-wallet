@@ -110,6 +110,9 @@
     },
     "uk.co.whiteoctober.cordova.appversion": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-android-permissions": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {

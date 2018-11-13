@@ -107,6 +107,9 @@
     <feature name="AppVersion">
         <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
     </feature>
+    <feature name="Permissions">
+        <param name="android-package" value="com.android.plugins.Permissions" />
+    </feature>
     <allow-navigation href="cdvfile:*" />
     <allow-navigation href="http://10.4.86.199:8100" />
     <access origin="https://m.facebook.com" />
