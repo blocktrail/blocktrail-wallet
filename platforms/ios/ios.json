@@ -9,14 +9,6 @@
         "parents": {
           "/*": [
             {
-              "xml": "<feature name=\"Sms\"><param name=\"ios-package\" value=\"Sms\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"ContactsPhoneNumbers\"><param name=\"ios-package\" value=\"CDVContactsPhoneNumbers\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"ImagePicker\"><param name=\"ios-package\" value=\"SOSPicker\" /></feature>",
               "count": 1
             },
@@ -49,7 +41,15 @@
               "count": 1
             },
             {
+              "xml": "<feature name=\"ContactsPhoneNumbers\"><param name=\"ios-package\" value=\"CDVContactsPhoneNumbers\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"EmailComposer\"><param name=\"ios-package\" value=\"APPEmailComposer\" /></feature>",
               "count": 1
             },
             {
@@ -97,6 +97,14 @@
               "count": 1
             },
             {
+              "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"CDVIonicKeyboard\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
               "count": 1
             },
@@ -109,15 +117,11 @@
               "count": 1
             },
             {
+              "xml": "<feature name=\"SQLitePlugin\"><param name=\"ios-package\" value=\"SQLitePlugin\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"Clipboard\"><param name=\"ios-package\" value=\"CDVClipboard\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"EmailComposer\"><param name=\"ios-package\" value=\"APPEmailComposer\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"DisableDataDetectors\"><param name=\"ios-package\" value=\"DisableDataDetectors\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
             {
@@ -126,10 +130,6 @@
             },
             {
               "xml": "<feature name=\"FileOpener2\"><param name=\"ios-package\" value=\"FileOpener2\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"SQLitePlugin\"><param name=\"ios-package\" value=\"SQLitePlugin\" /></feature>",
               "count": 1
             },
             {
@@ -142,10 +142,6 @@
             },
             {
               "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
               "count": 1
             },
             {
@@ -171,10 +167,6 @@
             {
               "xml": "<feature name=\"AppVersion\"><param name=\"ios-package\" value=\"AppVersion\" /></feature>",
               "count": 1
-            },
-            {
-              "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"CDVIonicKeyboard\" /></feature>",
-              "count": 1
             }
           ]
         }
@@ -187,12 +179,6 @@
               "count": 1
             }
           ],
-          "NSLocationWhenInUseUsageDescription": [
-            {
-              "xml": "<string />",
-              "count": 1
-            }
-          ],
           "CFBundleURLTypes": [
             {
               "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>bitcoin</string></array></dict></array>",
@@ -200,6 +186,16 @@
             },
             {
               "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>fb1072524012838770</string></array></dict></array>",
+              "count": 1
+            }
+          ],
+          "LSApplicationQueriesSchemes": [
+            {
+              "xml": "<array><string>mailto</string></array>",
+              "count": 1
+            },
+            {
+              "xml": "<array><string>fbapi</string><string>fb-messenger-api</string><string>fbauth2</string><string>fbshareextension</string></array>",
               "count": 1
             }
           ],
@@ -218,12 +214,6 @@
           "NSAppTransportSecurity": [
             {
               "xml": "<dict><key>NSExceptionDomains</key><dict><key>facebook.com</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict><key>fbcdn.net</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict><key>akamaihd.net</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict></dict></dict>",
-              "count": 1
-            }
-          ],
-          "LSApplicationQueriesSchemes": [
-            {
-              "xml": "<array><string>fbapi</string><string>fb-messenger-api</string><string>fbauth2</string><string>fbshareextension</string></array>",
               "count": 1
             }
           ]
@@ -252,12 +242,6 @@
     }
   },
   "installed_plugins": {
-    "com.cordova.plugins.sms": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "com.dbaq.cordova.contactsPhoneNumbers": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "com.synconset.imagepicker": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
@@ -275,10 +259,16 @@
     "cordova-open": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
+    "cordova-plugin-android-permissions": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
     "cordova-plugin-appsflyer-sdk": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-contacts-phonenumbers": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-customurlscheme": {
@@ -288,9 +278,13 @@
     "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
+    "cordova-plugin-email-composer": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
     "cordova-plugin-facebook4": {
       "APP_ID": "1072524012838770",
       "APP_NAME": "BTC.com",
+      "FACEBOOK_ANDROID_SDK_VERSION": "4.37.0",
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-firebase": {
@@ -305,7 +299,16 @@
     "cordova-plugin-google-app-conversion-tracker": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
     "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-sms": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-vibration": {
@@ -317,22 +320,16 @@
     "cordova-plugin-x-socialsharing": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
     "cordova-universal-clipboard": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "de.appplant.cordova.plugin.email-composer": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "fr.spirotron.cordova.disabledatadetectors": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "hu.dpal.phonegap.plugins.PinDialog": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "io.github.pwlin.cordova.plugins.fileopener2": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "io.litehelpers.cordova.sqlite": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "nl.x-services.plugins.toast": {
@@ -342,9 +339,6 @@
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "org.apache.cordova.device": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "org.apache.cordova.inappbrowser": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "org.apache.cordova.splashscreen": {
@@ -358,32 +352,10 @@
     },
     "uk.co.whiteoctober.cordova.appversion": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-android-permissions": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-ionic-keyboard": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {},
   "modules": [
-    {
-      "id": "com.cordova.plugins.sms.Sms",
-      "file": "plugins/com.cordova.plugins.sms/www/sms.js",
-      "pluginId": "com.cordova.plugins.sms",
-      "clobbers": [
-        "window.sms"
-      ]
-    },
-    {
-      "id": "com.dbaq.cordova.contactsPhoneNumbers.contactsPhoneNumbers",
-      "file": "plugins/com.dbaq.cordova.contactsPhoneNumbers/www/contactsPhoneNumbers.js",
-      "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
-      "clobbers": [
-        "navigator.contactsPhoneNumbers"
-      ]
-    },
     {
       "id": "com.synconset.imagepicker.ImagePicker",
       "file": "plugins/com.synconset.imagepicker/www/imagepicker.js",
@@ -614,6 +586,14 @@
       ]
     },
     {
+      "id": "cordova-plugin-android-permissions.Permissions",
+      "file": "plugins/cordova-plugin-android-permissions/www/permissions-dummy.js",
+      "pluginId": "cordova-plugin-android-permissions",
+      "clobbers": [
+        "cordova.plugins.permissions"
+      ]
+    },
+    {
       "id": "cordova-plugin-appsflyer-sdk.appsflyer",
       "file": "plugins/cordova-plugin-appsflyer-sdk/www/appsflyer.js",
       "pluginId": "cordova-plugin-appsflyer-sdk",
@@ -662,6 +642,14 @@
       ]
     },
     {
+      "id": "cordova-plugin-contacts-phonenumbers.contactsPhoneNumbers",
+      "file": "plugins/cordova-plugin-contacts-phonenumbers/www/contactsPhoneNumbers.js",
+      "pluginId": "cordova-plugin-contacts-phonenumbers",
+      "clobbers": [
+        "navigator.contactsPhoneNumbers"
+      ]
+    },
+    {
       "id": "cordova-plugin-customurlscheme.LaunchMyApp",
       "file": "plugins/cordova-plugin-customurlscheme/www/ios/LaunchMyApp.js",
       "pluginId": "cordova-plugin-customurlscheme",
@@ -675,6 +663,15 @@
       "pluginId": "cordova-plugin-dialogs",
       "merges": [
         "navigator.notification"
+      ]
+    },
+    {
+      "id": "cordova-plugin-email-composer.EmailComposer",
+      "file": "plugins/cordova-plugin-email-composer/www/email_composer.js",
+      "pluginId": "cordova-plugin-email-composer",
+      "clobbers": [
+        "cordova.plugins.email",
+        "plugin.email"
       ]
     },
     {
@@ -727,6 +724,23 @@
       ]
     },
     {
+      "id": "cordova-plugin-inappbrowser.inappbrowser",
+      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+      "pluginId": "cordova-plugin-inappbrowser",
+      "clobbers": [
+        "cordova.InAppBrowser.open",
+        "window.open"
+      ]
+    },
+    {
+      "id": "cordova-plugin-ionic-keyboard.keyboard",
+      "file": "plugins/cordova-plugin-ionic-keyboard/www/ios/keyboard.js",
+      "pluginId": "cordova-plugin-ionic-keyboard",
+      "clobbers": [
+        "window.Keyboard"
+      ]
+    },
+    {
       "id": "cordova-plugin-network-information.network",
       "file": "plugins/cordova-plugin-network-information/www/network.js",
       "pluginId": "cordova-plugin-network-information",
@@ -741,6 +755,14 @@
       "pluginId": "cordova-plugin-network-information",
       "clobbers": [
         "Connection"
+      ]
+    },
+    {
+      "id": "cordova-plugin-sms.SMS",
+      "file": "plugins/cordova-plugin-sms/www/SMS.js",
+      "pluginId": "cordova-plugin-sms",
+      "clobbers": [
+        "window.SMS"
       ]
     },
     {
@@ -761,20 +783,19 @@
       ]
     },
     {
+      "id": "cordova-sqlite-storage.SQLitePlugin",
+      "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+      "pluginId": "cordova-sqlite-storage",
+      "clobbers": [
+        "SQLitePlugin"
+      ]
+    },
+    {
       "id": "cordova-universal-clipboard.Clipboard",
       "file": "plugins/cordova-universal-clipboard/www/clipboard.js",
       "pluginId": "cordova-universal-clipboard",
       "clobbers": [
         "cordova.plugins.clipboard"
-      ]
-    },
-    {
-      "id": "de.appplant.cordova.plugin.email-composer.EmailComposer",
-      "file": "plugins/de.appplant.cordova.plugin.email-composer/www/email_composer.js",
-      "pluginId": "de.appplant.cordova.plugin.email-composer",
-      "clobbers": [
-        "cordova.plugins.email",
-        "plugin.email"
       ]
     },
     {
@@ -791,14 +812,6 @@
       "pluginId": "io.github.pwlin.cordova.plugins.fileopener2",
       "clobbers": [
         "cordova.plugins.fileOpener2"
-      ]
-    },
-    {
-      "id": "io.litehelpers.cordova.sqlite.SQLitePlugin",
-      "file": "plugins/io.litehelpers.cordova.sqlite/www/SQLitePlugin.js",
-      "pluginId": "io.litehelpers.cordova.sqlite",
-      "clobbers": [
-        "SQLitePlugin"
       ]
     },
     {
@@ -839,14 +852,6 @@
       ]
     },
     {
-      "id": "org.apache.cordova.inappbrowser.inappbrowser",
-      "file": "plugins/org.apache.cordova.inappbrowser/www/inappbrowser.js",
-      "pluginId": "org.apache.cordova.inappbrowser",
-      "clobbers": [
-        "window.open"
-      ]
-    },
-    {
       "id": "org.apache.cordova.splashscreen.SplashScreen",
       "file": "plugins/org.apache.cordova.splashscreen/www/splashscreen.js",
       "pluginId": "org.apache.cordova.splashscreen",
@@ -877,60 +882,43 @@
       "clobbers": [
         "cordova.getAppVersion"
       ]
-    },
-    {
-      "id": "cordova-plugin-android-permissions.Permissions",
-      "file": "plugins/cordova-plugin-android-permissions/www/permissions-dummy.js",
-      "pluginId": "cordova-plugin-android-permissions",
-      "clobbers": [
-        "cordova.plugins.permissions"
-      ]
-    },
-    {
-      "id": "cordova-plugin-ionic-keyboard.keyboard",
-      "file": "plugins/cordova-plugin-ionic-keyboard/www/ios/keyboard.js",
-      "pluginId": "cordova-plugin-ionic-keyboard",
-      "clobbers": [
-        "window.Keyboard"
-      ]
     }
   ],
   "plugin_metadata": {
-    "com.cordova.plugins.sms": "0.1.5",
-    "com.dbaq.cordova.contactsPhoneNumbers": "0.0.3",
     "com.synconset.imagepicker": "1.0.6",
     "cordova-fabric-plugin": "1.0.8",
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-file-transfer": "1.7.1",
     "cordova-open": "1.0.12",
+    "cordova-plugin-android-permissions": "1.0.0",
     "cordova-plugin-appsflyer-sdk": "4.4.0",
-    "cordova-plugin-camera": "1.2.0",
+    "cordova-plugin-camera": "4.0.3",
+    "cordova-plugin-contacts-phonenumbers": "0.0.11",
     "cordova-plugin-customurlscheme": "4.0.0",
     "cordova-plugin-dialogs": "1.1.2-dev",
-    "cordova-plugin-facebook4": "1.7.4",
+    "cordova-plugin-email-composer": "0.8.15",
+    "cordova-plugin-facebook4": "3.1.0",
     "cordova-plugin-firebase": "0.1.24",
     "cordova-plugin-globalization": "1.0.1",
     "cordova-plugin-google-analytics": "1.5.6",
     "cordova-plugin-google-app-conversion-tracker": "0.0.2",
+    "cordova-plugin-inappbrowser": "3.0.0",
+    "cordova-plugin-ionic-keyboard": "2.1.3",
     "cordova-plugin-network-information": "1.0.1",
+    "cordova-plugin-sms": "1.0.5",
     "cordova-plugin-vibration": "1.2.0",
     "cordova-plugin-whitelist": "1.0.0",
     "cordova-plugin-x-socialsharing": "5.1.7",
+    "cordova-sqlite-storage": "2.5.1",
     "cordova-universal-clipboard": "0.1.0",
-    "de.appplant.cordova.plugin.email-composer": "0.8.3dev",
-    "fr.spirotron.cordova.disabledatadetectors": "0.1.0",
     "hu.dpal.phonegap.plugins.PinDialog": "0.1.3",
     "io.github.pwlin.cordova.plugins.fileopener2": "1.0.11",
-    "io.litehelpers.cordova.sqlite": "0.7.7",
     "nl.x-services.plugins.toast": "2.1.1",
     "org.apache.cordova.console": "0.2.13",
     "org.apache.cordova.device": "0.3.0",
-    "org.apache.cordova.inappbrowser": "0.6.0",
     "org.apache.cordova.splashscreen": "1.0.0",
     "org.apache.cordova.statusbar": "0.1.10",
     "phonegap-plugin-barcodescanner": "4.0.2",
-    "uk.co.whiteoctober.cordova.appversion": "0.1.7",
-    "cordova-plugin-android-permissions": "1.0.0",
-    "cordova-plugin-ionic-keyboard": "2.1.3"
+    "uk.co.whiteoctober.cordova.appversion": "0.1.7"
   }
 }

@@ -3,10 +3,6 @@
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
-    <feature name="Console">
-        <param name="ios-package" value="CDVLogger" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="HandleOpenUrl">
         <param name="ios-package" value="CDVHandleOpenURL" />
         <param name="onload" value="true" />
@@ -18,12 +14,6 @@
     <feature name="GestureHandler">
         <param name="ios-package" value="CDVGestureHandler" />
         <param name="onload" value="true" />
-    </feature>
-    <feature name="Sms">
-        <param name="ios-package" value="Sms" />
-    </feature>
-    <feature name="ContactsPhoneNumbers">
-        <param name="ios-package" value="CDVContactsPhoneNumbers" />
     </feature>
     <feature name="ImagePicker">
         <param name="ios-package" value="SOSPicker" />
@@ -48,8 +38,14 @@
     <feature name="Camera">
         <param name="ios-package" value="CDVCamera" />
     </feature>
+    <feature name="ContactsPhoneNumbers">
+        <param name="ios-package" value="CDVContactsPhoneNumbers" />
+    </feature>
     <feature name="Notification">
         <param name="ios-package" value="CDVNotification" />
+    </feature>
+    <feature name="EmailComposer">
+        <param name="ios-package" value="APPEmailComposer" />
     </feature>
     <feature name="FacebookConnectPlugin">
         <param name="ios-package" value="FacebookConnectPlugin" />
@@ -74,6 +70,12 @@
     <feature name="GoogleAppTracking">
         <param name="ios-package" value="GoogleAppTracking" />
     </feature>
+    <feature name="InAppBrowser">
+        <param name="ios-package" value="CDVInAppBrowser" />
+    </feature>
+    <feature name="Keyboard">
+        <param name="ios-package" onload="true" value="CDVIonicKeyboard" />
+    </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
     </feature>
@@ -84,24 +86,17 @@
         <param name="ios-package" value="SocialSharing" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="SQLitePlugin">
+        <param name="ios-package" value="SQLitePlugin" />
+    </feature>
     <feature name="Clipboard">
         <param name="ios-package" value="CDVClipboard" />
-    </feature>
-    <feature name="EmailComposer">
-        <param name="ios-package" value="APPEmailComposer" />
-    </feature>
-    <feature name="DisableDataDetectors">
-        <param name="ios-package" value="DisableDataDetectors" />
-        <param name="onload" value="true" />
     </feature>
     <feature name="PinDialog">
         <param name="ios-package" value="CDVPinDialog" />
     </feature>
     <feature name="FileOpener2">
         <param name="ios-package" value="FileOpener2" />
-    </feature>
-    <feature name="SQLitePlugin">
-        <param name="ios-package" value="SQLitePlugin" />
     </feature>
     <feature name="Toast">
         <param name="ios-package" value="Toast" />
@@ -111,9 +106,6 @@
     </feature>
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
-    </feature>
-    <feature name="InAppBrowser">
-        <param name="ios-package" value="CDVInAppBrowser" />
     </feature>
     <feature name="SplashScreen">
         <param name="ios-package" value="CDVSplashScreen" />
@@ -144,14 +136,6 @@
     <access origin="https://bch-chain.api.btc.com" />
     <access origin="https://sentry.io" />
     <access origin="https://bitpay.com" />
-    <access dev="true" origin="http://172.18.0.1" />
-    <access dev="true" origin="http://172.19.0.1" />
-    <access dev="true" origin="http://172.23.0.1" />
-    <access dev="true" origin="http://172.20.0.1" />
-    <access dev="true" origin="http://172.17.0.1" />
-    <access dev="true" origin="http://127.0.0.1" />
-    <access dev="true" origin="http://192.168.122.1" />
-    <access dev="true" origin="http://192.168.60.12" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-navigation href="http://10.4.86.199:8100" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -198,11 +182,9 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="orientation" value="portrait" />
+    <preference name="KeyboardResize" value="false" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
-    <feature name="Keyboard">
-        <param name="ios-package" onload="true" value="CDVIonicKeyboard" />
-    </feature>
 </widget>

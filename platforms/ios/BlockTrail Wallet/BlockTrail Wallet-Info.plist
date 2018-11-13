@@ -5,7 +5,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>English</string>
     <key>CFBundleDisplayName</key>
-    <string>BlockTrail Wallet</string>
+    <string>${PRODUCT_NAME}</string>
     <key>CFBundleExecutable</key>
     <string>${EXECUTABLE_NAME}</string>
     <key>CFBundleIcons</key>
@@ -83,46 +83,6 @@
         <dict/>
         <key>bitpay.com</key>
         <dict/>
-        <key>172.18.0.1</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>172.19.0.1</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>172.23.0.1</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>172.20.0.1</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>172.17.0.1</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>127.0.0.1</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>192.168.122.1</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>192.168.60.12</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
       </dict>
     </dict>
     <key>UIInterfaceOrientation</key>
@@ -134,8 +94,6 @@
       <key>APIKey</key>
       <string>059fcf328d73ce164c3ab1c4436293db0d6718ca</string>
     </dict>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string/>
     <key>CFBundleURLTypes</key>
     <array>
       <dict>
@@ -151,16 +109,17 @@
         </array>
       </dict>
     </array>
-    <key>FacebookAppID</key>
-    <string>1072524012838770</string>
-    <key>FacebookDisplayName</key>
-    <string>BTC.com</string>
     <key>LSApplicationQueriesSchemes</key>
     <array>
+      <string>mailto</string>
       <string>fbapi</string>
       <string>fb-messenger-api</string>
       <string>fbauth2</string>
       <string>fbshareextension</string>
     </array>
+    <key>FacebookAppID</key>
+    <string>1072524012838770</string>
+    <key>FacebookDisplayName</key>
+    <string>BTC.com</string>
   </dict>
 </plist>

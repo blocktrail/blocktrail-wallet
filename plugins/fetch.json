@@ -15,27 +15,10 @@
     "is_top_level": true,
     "variables": {}
   },
-  "io.litehelpers.cordova.sqlite": {
-    "source": {
-      "type": "registry",
-      "id": "io.litehelpers.cordova.sqlite"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "org.apache.cordova.splashscreen": {
     "source": {
       "type": "registry",
       "id": "org.apache.cordova.splashscreen"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "com.dbaq.cordova.contactsPhoneNumbers": {
-    "source": {
-      "type": "git",
-      "url": "https://github.com/dbaq/cordova-plugin-contacts-phone-numbers.git",
-      "subdir": "."
     },
     "is_top_level": true,
     "variables": {}
@@ -65,14 +48,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-camera": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-camera"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-globalization": {
     "source": {
       "type": "registry",
@@ -86,14 +61,6 @@
       "type": "git",
       "url": "https://github.com/Paldom/PinDialog.git",
       "subdir": "."
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "fr.spirotron.cordova.disabledatadetectors": {
-    "source": {
-      "type": "registry",
-      "id": "fr.spirotron.cordova.disabledatadetectors"
     },
     "is_top_level": true,
     "variables": {}
@@ -140,14 +107,6 @@
     "is_top_level": false,
     "variables": {}
   },
-  "org.apache.cordova.inappbrowser": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-inappbrowser@1.7.0"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "nl.x-services.plugins.toast": {
     "source": {
       "type": "git",
@@ -175,24 +134,6 @@
     "variables": {
       "URL_SCHEME": "bitcoin"
     }
-  },
-  "de.appplant.cordova.plugin.email-composer": {
-    "source": {
-      "type": "git",
-      "url": "https://github.com/blocktrail/cordova-plugin-email-composer.git",
-      "subdir": "."
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "com.cordova.plugins.sms": {
-    "source": {
-      "type": "git",
-      "url": "https://github.com/blocktrail/cordova-sms-plugin.git",
-      "subdir": "."
-    },
-    "is_top_level": true,
-    "variables": {}
   },
   "cordova-plugin-vibration": {
     "source": {
@@ -321,6 +262,54 @@
     "source": {
       "type": "registry",
       "id": "cordova-plugin-ionic-keyboard"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-sms": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-sms"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-inappbrowser": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-inappbrowser@3.0.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-contacts-phonenumbers": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-contacts-phonenumbers"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-email-composer": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-email-composer"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-sqlite-storage": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-sqlite-storage"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-camera@4.0.3"
     },
     "is_top_level": true,
     "variables": {}

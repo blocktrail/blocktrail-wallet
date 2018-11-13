@@ -17,33 +17,29 @@
        under the License.
 */
 
-'use strict';
+var Q     = require('q'),
+    shell = require('shelljs'),
+    util = require('util'),
+    versions = require('./versions');
 
-const Q = require('q');
-const shell = require('shelljs');
-const util = require('util');
-const versions = require('./versions');
-
-const SUPPORTED_OS_PLATFORMS = [ 'darwin' ];
-
-const XCODEBUILD_MIN_VERSION = '7.0.0';
-const XCODEBUILD_NOT_FOUND_MESSAGE =
+var XCODEBUILD_MIN_VERSION = '7.0.0';
+var XCODEBUILD_NOT_FOUND_MESSAGE =
     'Please install version ' + XCODEBUILD_MIN_VERSION + ' or greater from App Store';
 
-const IOS_DEPLOY_MIN_VERSION = '1.9.2';
-const IOS_DEPLOY_NOT_FOUND_MESSAGE =
+var IOS_DEPLOY_MIN_VERSION = '1.9.0';
+var IOS_DEPLOY_NOT_FOUND_MESSAGE =
     'Please download, build and install version ' + IOS_DEPLOY_MIN_VERSION + ' or greater' +
     ' from https://github.com/phonegap/ios-deploy into your path, or do \'npm install -g ios-deploy\'';
 
-const COCOAPODS_MIN_VERSION = '1.0.1';
-const COCOAPODS_NOT_FOUND_MESSAGE =
+var COCOAPODS_MIN_VERSION = '1.0.1';
+var COCOAPODS_NOT_FOUND_MESSAGE =
     'Please install version ' + COCOAPODS_MIN_VERSION + ' or greater from https://cocoapods.org/';
-const COCOAPODS_NOT_SYNCED_MESSAGE =
+var COCOAPODS_NOT_SYNCED_MESSAGE =
     'The CocoaPods repo has not been synced yet, this will take a long time (approximately 500MB as of Sept 2016). Please run `pod setup` first to sync the repo.';
-const COCOAPODS_SYNCED_MIN_SIZE = 475; // in megabytes
-const COCOAPODS_SYNC_ERROR_MESSAGE =
+var COCOAPODS_SYNCED_MIN_SIZE = 475; // in megabytes
+var COCOAPODS_SYNC_ERROR_MESSAGE =
     'The CocoaPods repo has been created, but there appears to be a sync error. The repo size should be at least ' + COCOAPODS_SYNCED_MIN_SIZE + '. Please run `pod setup --verbose` to sync the repo.';
-const COCOAPODS_REPO_NOT_FOUND_MESSAGE = 'The CocoaPods repo at ~/.cocoapods was not found.';
+var COCOAPODS_REPO_NOT_FOUND_MESSAGE = 'The CocoaPods repo at ~/.cocoapods was not found.';
 
 /**
  * Checks if xcode util is available
@@ -63,25 +59,13 @@ module.exports.check_ios_deploy = function () {
 
 module.exports.check_os = function () {
     // Build iOS apps available for OSX platform only, so we reject on others platforms
-    return os_platform_is_supported() ?
+    return process.platform === 'darwin' ?
         Q.resolve(process.platform) :
-        Q.reject('Cordova tooling for iOS requires Apple macOS');
+        Q.reject('Cordova tooling for iOS requires Apple OS X');
 };
 
-function os_platform_is_supported () {
-    return (SUPPORTED_OS_PLATFORMS.indexOf(process.platform) !== -1);
-}
-
-function check_cocoapod_tool (toolChecker) {
-    toolChecker = toolChecker || checkTool;
-    if (os_platform_is_supported()) { // CB-12856
-        return toolChecker('pod', COCOAPODS_MIN_VERSION, COCOAPODS_NOT_FOUND_MESSAGE, 'CocoaPods');
-    } else {
-        return Q.resolve({
-            'ignore': true,
-            'ignoreMessage': `CocoaPods check and installation ignored on ${process.platform}`
-        });
-    }
+function check_cocoapod_tool() {
+    return checkTool('pod', COCOAPODS_MIN_VERSION, COCOAPODS_NOT_FOUND_MESSAGE, 'CocoaPods');
 }
 
 /**
@@ -90,48 +74,47 @@ function check_cocoapod_tool (toolChecker) {
  */
 module.exports.check_cocoapods_repo_size = function () {
     return check_cocoapod_tool()
-        .then(function (toolOptions) {
-            // check size of ~/.cocoapods repo
-            let commandString = util.format('du -sh %s/.cocoapods', process.env.HOME);
-            let command = shell.exec(commandString, { silent: true });
+    .then(function() {
+        // check size of ~/.cocoapods repo
+        var commandString = util.format('du -sh %s/.cocoapods', process.env.HOME);
+        var command = shell.exec(commandString,  { silent:true });
+        if (command.code !== 0) { // error, perhaps not found 
+            return Q.reject(util.format('%s (%s)', COCOAPODS_REPO_NOT_FOUND_MESSAGE, command.output));
+        } else { // success, parse output
             // command.output is e.g "750M   path/to/.cocoapods", we just scan the number
-            let size = toolOptions.ignore ? 0 : parseFloat(command.output);
-
-            if (toolOptions.ignore || command.code === 0) { // success, parse output
-                return Q.resolve(size, toolOptions);
-            } else { // error, perhaps not found
-                return Q.reject(util.format('%s (%s)', COCOAPODS_REPO_NOT_FOUND_MESSAGE, command.output));
-            }
-        })
-        .then(function (repoSize, toolOptions) {
-            if (toolOptions.ignore || COCOAPODS_SYNCED_MIN_SIZE <= repoSize) { // success, expected size
-                return Q.resolve(toolOptions);
-            } else {
-                return Q.reject(COCOAPODS_SYNC_ERROR_MESSAGE);
-            }
-        });
+            return Q.resolve(parseFloat(command.output));
+        }
+    })
+    .then(function(repoSize) {
+        if (COCOAPODS_SYNCED_MIN_SIZE > repoSize) {
+            return Q.reject(COCOAPODS_SYNC_ERROR_MESSAGE);
+        } else {
+            return Q.resolve();
+        }
+    });
 };
 
 /**
  * Checks if cocoapods is available, and whether the repo is synced (because it takes a long time to download)
  * @return {Promise} Returns a promise either resolved or rejected
  */
-module.exports.check_cocoapods = function (toolChecker) {
-    return check_cocoapod_tool(toolChecker)
-        // check whether the cocoapods repo has been synced through `pod repo` command
-        // a value of '0 repos' means it hasn't been synced
-        .then(function (toolOptions) {
-            let code = shell.exec('pod repo | grep -e "^0 repos"', { silent: true }).code;
-            let repoIsSynced = (code !== 0);
-
-            if (toolOptions.ignore || repoIsSynced) {
-                // return check_cocoapods_repo_size();
-                // we could check the repo size above, but it takes too long.
-                return Q.resolve(toolOptions);
-            } else {
-                return Q.reject(COCOAPODS_NOT_SYNCED_MESSAGE);
-            }
-        });
+module.exports.check_cocoapods = function () {
+    return check_cocoapod_tool()
+    // check whether the cocoapods repo has been synced through `pod repo` command
+    // a value of '0 repos' means it hasn't been synced
+    .then(function() {
+        var code = shell.exec('pod repo | grep -e "^0 repos"',  { silent:true }).code;
+        return Q.resolve(code !== 0); // non-zero means it is synced (has 1 repo at least)
+    })
+    .then(function(repoIsSynced) {
+        if (repoIsSynced) {
+            // return check_cocoapods_repo_size();
+            // we could check the repo size above, but it takes too long.
+            return Q.resolve();
+        } else {
+            return Q.reject(COCOAPODS_NOT_SYNCED_MESSAGE);
+        }
+    });
 };
 
 /**
@@ -146,16 +129,15 @@ function checkTool (tool, minVersion, message, toolFriendlyName) {
     toolFriendlyName = toolFriendlyName || tool;
 
     // Check whether tool command is available at all
-    let tool_command = shell.which(tool);
+    var tool_command = shell.which(tool);
     if (!tool_command) {
         return Q.reject(toolFriendlyName + ' was not found. ' + (message || ''));
     }
-
     // check if tool version is greater than specified one
     return versions.get_tool_version(tool).then(function (version) {
         version = version.trim();
         return versions.compareVersions(version, minVersion) >= 0 ?
-            Q.resolve({ 'version': version }) :
+            Q.resolve(version) :
             Q.reject('Cordova needs ' + toolFriendlyName + ' version ' + minVersion +
               ' or greater, you have version ' + version + '. ' + (message || ''));
     });
@@ -168,7 +150,7 @@ function checkTool (tool, minVersion, message, toolFriendlyName) {
  * @param {Boolean} isFatal   Marks the requirement as fatal. If such requirement will fail
  *                            next requirements' checks will be skipped.
  */
-let Requirement = function (id, name, isFatal) {
+var Requirement = function (id, name, isFatal) {
     this.id = id;
     this.name = name;
     this.installed = false;
@@ -182,19 +164,19 @@ let Requirement = function (id, name, isFatal) {
  *
  * @return Promise<Requirement[]> Array of requirements. Due to implementation, promise is always fulfilled.
  */
-module.exports.check_all = function () {
+module.exports.check_all = function() {
 
-    const requirements = [
-        new Requirement('os', 'Apple macOS', true),
+    var requirements = [
+        new Requirement('os', 'Apple OS X', true),
         new Requirement('xcode', 'Xcode'),
         new Requirement('ios-deploy', 'ios-deploy'),
         new Requirement('CocoaPods', 'CocoaPods')
     ];
 
-    let result = [];
-    let fatalIsHit = false;
+    var result = [];
+    var fatalIsHit = false;
 
-    let checkFns = [
+    var checkFns = [
         module.exports.check_os,
         module.exports.check_xcodebuild,
         module.exports.check_ios_deploy,
@@ -208,21 +190,21 @@ module.exports.check_all = function () {
             // we don't need to check others
             if (fatalIsHit) return Q();
 
-            let requirement = requirements[idx];
+            var requirement = requirements[idx];
             return checkFn()
-                .then(function (version) {
-                    requirement.installed = true;
-                    requirement.metadata.version = version;
-                    result.push(requirement);
-                }, function (err) {
-                    if (requirement.isFatal) fatalIsHit = true;
-                    requirement.metadata.reason = err;
-                    result.push(requirement);
-                });
+            .then(function (version) {
+                requirement.installed = true;
+                requirement.metadata.version = version;
+                result.push(requirement);
+            }, function (err) {
+                if (requirement.isFatal) fatalIsHit = true;
+                requirement.metadata.reason = err;
+                result.push(requirement);
+            });
         });
     }, Q())
-        .then(function () {
-            // When chain is completed, return requirements array to upstream API
-            return result;
-        });
+    .then(function () {
+        // When chain is completed, return requirements array to upstream API
+        return result;
+    });
 };

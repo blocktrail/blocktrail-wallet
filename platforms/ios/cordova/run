@@ -45,7 +45,6 @@ var opts = nopt({
     'codeSignIdentity': String,
     'codeSignResourceRules': String,
     'provisioningProfile': String,
-    'automaticProvisioning': Boolean,
     'buildConfig' : String,
     'noSign' : Boolean
 }, { 'd' : '--verbose' }, args);

@@ -80,9 +80,7 @@
     if (errorUrl) {
         errorUrl = [NSURL URLWithString:[NSString stringWithFormat:@"?error=%@", [message stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLPathAllowedCharacterSet]] relativeToURL:errorUrl];
         NSLog(@"%@", [errorUrl absoluteString]);
-        if(error.code != NSURLErrorCancelled) {
-            [theWebView loadRequest:[NSURLRequest requestWithURL:errorUrl]];
-        }
+        [theWebView loadRequest:[NSURLRequest requestWithURL:errorUrl]];
     }
 }
 

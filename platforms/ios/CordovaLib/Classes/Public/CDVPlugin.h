@@ -32,7 +32,6 @@
 
 extern NSString* const CDVPageDidLoadNotification;
 extern NSString* const CDVPluginHandleOpenURLNotification;
-extern NSString* const CDVPluginHandleOpenURLWithAppSourceAndAnnotationNotification;
 extern NSString* const CDVPluginResetNotification;
 extern NSString* const CDVViewWillAppearNotification;
 extern NSString* const CDVViewDidAppearNotification;
@@ -66,7 +65,6 @@ extern NSString* const CDVRemoteNotificationError CDV_DEPRECATED(4.0, "Functiona
 - (void)pluginInitialize;
 
 - (void)handleOpenURL:(NSNotification*)notification;
-- (void)handleOpenURLWithApplicationSourceAndAnnotation:(NSNotification*)notification;
 - (void)onAppTerminate;
 - (void)onMemoryWarning;
 - (void)onReset;
