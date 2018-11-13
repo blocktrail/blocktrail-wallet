@@ -13,9 +13,6 @@
     "com.dbaq.cordova.contactsPhoneNumbers": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "com.ionic.keyboard": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "com.synconset.imagepicker": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },

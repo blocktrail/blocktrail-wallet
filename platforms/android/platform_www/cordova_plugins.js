@@ -17,14 +17,6 @@ module.exports = [
     ]
   },
   {
-    "id": "com.ionic.keyboard.keyboard",
-    "file": "plugins/com.ionic.keyboard/www/keyboard.js",
-    "pluginId": "com.ionic.keyboard",
-    "clobbers": [
-      "cordova.plugins.Keyboard"
-    ]
-  },
-  {
     "id": "com.synconset.imagepicker.ImagePicker",
     "file": "plugins/com.synconset.imagepicker/www/imagepicker.js",
     "pluginId": "com.synconset.imagepicker",
@@ -530,7 +522,6 @@ module.exports.metadata =
 {
   "com.cordova.plugins.sms": "0.1.5",
   "com.dbaq.cordova.contactsPhoneNumbers": "0.0.3",
-  "com.ionic.keyboard": "1.0.4",
   "com.synconset.imagepicker": "1.0.6",
   "cordova-fabric-plugin": "1.0.8",
   "cordova-plugin-file": "6.0.1",

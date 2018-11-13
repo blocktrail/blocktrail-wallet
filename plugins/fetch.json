@@ -15,14 +15,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "com.ionic.keyboard": {
-    "source": {
-      "type": "registry",
-      "id": "com.ionic.keyboard"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "io.litehelpers.cordova.sqlite": {
     "source": {
       "type": "registry",

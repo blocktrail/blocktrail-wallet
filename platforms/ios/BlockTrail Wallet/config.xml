@@ -25,9 +25,6 @@
     <feature name="ContactsPhoneNumbers">
         <param name="ios-package" value="CDVContactsPhoneNumbers" />
     </feature>
-    <feature name="Keyboard">
-        <param name="ios-package" onload="true" value="IonicKeyboard" />
-    </feature>
     <feature name="ImagePicker">
         <param name="ios-package" value="SOSPicker" />
     </feature>

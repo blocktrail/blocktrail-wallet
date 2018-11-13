@@ -21,8 +21,6 @@
 		7C1EECED24FA47F597ED89B2 /* CDVContactsPhoneNumbers.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DFA3AA1F09344468EDEAACC /* CDVContactsPhoneNumbers.m */; };
 		5CAD7C5D92CF496FBC826E9A /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61C21BF31FA4C60848F3BC3 /* AddressBook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5D2E2F1392C8410296BD09EF /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71CAF32F8A4D457DA04D578A /* AddressBookUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		5FE9117BA6CD4E59A6D32C89 /* IonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FC4418DA5E4305B6E7E739 /* IonicKeyboard.m */; };
-		0CBB13C8DE1F4F9BB0118EFF /* UIWebViewExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 625EE19140BF4D03B5CE420E /* UIWebViewExtension.m */; };
 		0518685C6568460B9A90B0D1 /* SOSPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = AB69B780B2DD4447923D3AF6 /* SOSPicker.m */; };
 		9005DE7040D14025A954D0DE /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF0CD78B35E42668D37A8CB /* ELCAlbumPickerController.m */; };
 		7692FD42CD474A07BC8E7E9E /* ELCAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 284104C1EFC442C8BC2A2821 /* ELCAsset.m */; };
@@ -166,10 +164,6 @@
 		D20895136F484BC4AED984EB /* CDVContactsPhoneNumbers.h */ = {isa = PBXFileReference; name = "CDVContactsPhoneNumbers.h"; path = "com.dbaq.cordova.contactsPhoneNumbers/CDVContactsPhoneNumbers.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		A61C21BF31FA4C60848F3BC3 /* AddressBook.framework */ = {isa = PBXFileReference; name = "AddressBook.framework"; path = "System/Library/Frameworks/AddressBook.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		71CAF32F8A4D457DA04D578A /* AddressBookUI.framework */ = {isa = PBXFileReference; name = "AddressBookUI.framework"; path = "System/Library/Frameworks/AddressBookUI.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
-		B5FC4418DA5E4305B6E7E739 /* IonicKeyboard.m */ = {isa = PBXFileReference; name = "IonicKeyboard.m"; path = "com.ionic.keyboard/IonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		625EE19140BF4D03B5CE420E /* UIWebViewExtension.m */ = {isa = PBXFileReference; name = "UIWebViewExtension.m"; path = "com.ionic.keyboard/UIWebViewExtension.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		C3224469A06F463B9C2FA9D0 /* IonicKeyboard.h */ = {isa = PBXFileReference; name = "IonicKeyboard.h"; path = "com.ionic.keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		DF79075C29B649ACA0AD9F28 /* UIWebViewExtension.h */ = {isa = PBXFileReference; name = "UIWebViewExtension.h"; path = "com.ionic.keyboard/UIWebViewExtension.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		AB69B780B2DD4447923D3AF6 /* SOSPicker.m */ = {isa = PBXFileReference; name = "SOSPicker.m"; path = "com.synconset.imagepicker/SOSPicker.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		CFF0CD78B35E42668D37A8CB /* ELCAlbumPickerController.m */ = {isa = PBXFileReference; name = "ELCAlbumPickerController.m"; path = "com.synconset.imagepicker/ELCAlbumPickerController.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		284104C1EFC442C8BC2A2821 /* ELCAsset.m */ = {isa = PBXFileReference; name = "ELCAsset.m"; path = "com.synconset.imagepicker/ELCAsset.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
@@ -533,10 +527,6 @@
 				306C9BE3B9BD47B5A8DA68A5 /* Sms.h */,
 				5DFA3AA1F09344468EDEAACC /* CDVContactsPhoneNumbers.m */,
 				D20895136F484BC4AED984EB /* CDVContactsPhoneNumbers.h */,
-				B5FC4418DA5E4305B6E7E739 /* IonicKeyboard.m */,
-				625EE19140BF4D03B5CE420E /* UIWebViewExtension.m */,
-				C3224469A06F463B9C2FA9D0 /* IonicKeyboard.h */,
-				DF79075C29B649ACA0AD9F28 /* UIWebViewExtension.h */,
 				AB69B780B2DD4447923D3AF6 /* SOSPicker.m */,
 				CFF0CD78B35E42668D37A8CB /* ELCAlbumPickerController.m */,
 				284104C1EFC442C8BC2A2821 /* ELCAsset.m */,
@@ -769,8 +759,6 @@
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				EDF0E922345B443C901B9E8F /* Sms.m in Sources */,
 				7C1EECED24FA47F597ED89B2 /* CDVContactsPhoneNumbers.m in Sources */,
-				5FE9117BA6CD4E59A6D32C89 /* IonicKeyboard.m in Sources */,
-				0CBB13C8DE1F4F9BB0118EFF /* UIWebViewExtension.m in Sources */,
 				0518685C6568460B9A90B0D1 /* SOSPicker.m in Sources */,
 				9005DE7040D14025A954D0DE /* ELCAlbumPickerController.m in Sources */,
 				7692FD42CD474A07BC8E7E9E /* ELCAsset.m in Sources */,

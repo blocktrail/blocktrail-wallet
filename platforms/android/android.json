@@ -17,10 +17,6 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
               "count": 1
             },
@@ -846,9 +842,6 @@
     "com.dbaq.cordova.contactsPhoneNumbers": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "com.ionic.keyboard": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "com.synconset.imagepicker": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
@@ -970,14 +963,6 @@
       "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
       "clobbers": [
         "navigator.contactsPhoneNumbers"
-      ]
-    },
-    {
-      "id": "com.ionic.keyboard.keyboard",
-      "file": "plugins/com.ionic.keyboard/www/keyboard.js",
-      "pluginId": "com.ionic.keyboard",
-      "clobbers": [
-        "cordova.plugins.Keyboard"
       ]
     },
     {
@@ -1484,7 +1469,6 @@
   "plugin_metadata": {
     "com.cordova.plugins.sms": "0.1.5",
     "com.dbaq.cordova.contactsPhoneNumbers": "0.0.3",
-    "com.ionic.keyboard": "1.0.4",
     "com.synconset.imagepicker": "1.0.6",
     "cordova-fabric-plugin": "1.0.8",
     "cordova-plugin-file": "6.0.1",
