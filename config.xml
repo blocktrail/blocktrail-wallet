@@ -35,6 +35,8 @@
         <preference name="AutoHideSplashScreen" value="false" />
         <preference name="ShowSplashScreenSpinner" value="false" />
         <preference name="iosPersistentFileLocation" value="Compatibility" />
+        <preference name="StatusBarBackgroundColor" value="#3C78C2" />
+        <preference name="StatusBarStyle" value="blacktranslucent" />
     </platform>
     <platform name="browser">
         <preference name="SplashScreen" value="resources/android/splash/drawable-port-xhdpi-screen.png" />
@@ -80,9 +82,6 @@
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
     </platform>
-    <feature name="StatusBar">
-        <param name="ios-package" onload="true" value="CDVStatusBar" />
-    </feature>
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-navigation href="http://10.4.86.199:8100" />
     <plugin name="cordova-plugin-android-permissions" spec="1.0.0" />
@@ -94,9 +93,10 @@
     <plugin name="cordova-plugin-sms" spec="^1.0.5" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <plugin name="cordova-plugin-contacts-phonenumbers" spec="0.0.11" />
-    <engine name="android" spec="6.4.0" />
     <plugin name="cordova-plugin-email-composer" spec="^0.8.15" />
     <plugin name="cordova-sqlite-storage" spec="^2.5.1" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
-    <engine name="ios" spec="~4.4.0" />
+    <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
+    <engine name="android" spec="6.4.0" />
+    <engine name="ios" spec="4.4.0" />
 </widget>

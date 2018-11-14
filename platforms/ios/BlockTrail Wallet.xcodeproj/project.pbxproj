@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C00B265FEC4619B262B6C7 /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C06521F73F1342F2BA5AD4D4 /* GoogleToolboxForMac.framework */; };
 		00D3F107C4424B638E0E0628 /* CDVLocalFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 015E5C5E144740DEB689657D /* CDVLocalFilesystem.m */; };

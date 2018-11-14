@@ -176,7 +176,7 @@
     <preference name="PaginationMode" value="unpaginated" />
     <preference name="CameraUsesGeolocation" value="false" />
     <preference name="StatusBarOverlaysWebView" value="true" />
-    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="SplashScreen" value="screen" />
@@ -187,4 +187,5 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
+    <preference name="StatusBarBackgroundColor" value="#3C78C2" />
 </widget>
