@@ -5,7 +5,7 @@
         .controller("ReceiveCtrl", ReceiveCtrl);
 
     function ReceiveCtrl($scope, walletsManagerService, settingsService, CurrencyConverter, $q, $cordovaClipboard, $cordovaEmailComposer,
-                          $timeout, $btBackButtonDelegate, $translate, $cordovaSms, $log, $cordovaToast, CONFIG) {
+                          $timeout, $btBackButtonDelegate, $cordovaSocialSharing, $translate, $log, $cordovaToast, CONFIG) {
 
         var activeWallet = walletsManagerService.getActiveWallet();
         var walletData = walletsManagerService.getActiveWalletReadOnlyData();
@@ -192,7 +192,7 @@
                 });
         };
 
-        $scope.toSMS = function() {
+        $scope.shareLink = function() {
             var params = {
                 address: $scope.newRequest.address,
                 btcValue: $scope.newRequest.btcValue,
@@ -202,15 +202,14 @@
                 networkLong: CONFIG.NETWORKS[walletData.networkType].TICKER_LONG
             };
 
-            var smsMessage = $scope.newRequest.btcValue ? $translate.instant('MSG_REQUEST_SMS_2', params) : $translate.instant('MSG_REQUEST_SMS_1', params);
+            var message = $scope.newRequest.btcValue ? $translate.instant('MSG_REQUEST_SMS_2', params) : $translate.instant('MSG_REQUEST_SMS_1', params);
+            var message = message + "\n\n";
 
-            return $cordovaSms.send('', smsMessage, $scope.smsOptions)
-                .then(function() {
-                    $scope.hideExportOptions();
-                })
-                .catch(function(err) {
-                    // An error occurred
-                    $log.error(err);
+            // Share via native share sheet
+            return $cordovaSocialSharing
+                .share(message, "", null, $scope.newRequest.bitcoinUri)
+                .then(function(result) {}, function(err) {
+                    $log.error("LinkSharing: " + err.message);
                 });
         };
 
