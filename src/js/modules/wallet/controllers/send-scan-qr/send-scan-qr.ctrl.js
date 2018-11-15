@@ -4,8 +4,8 @@
     angular.module("blocktrail.wallet")
         .controller("SendScanQRCtrl", SendScanQRCtrl);
 
-    function SendScanQRCtrl($scope, $rootScope, $state, QR, $log, $btBackButtonDelegate, $timeout, $translate, modalService,
-                            $ionicHistory, $cordovaToast, $ionicLoading, bitcoinLinkService, walletsManagerService, $stateParams) {
+    function SendScanQRCtrl($scope, $rootScope, $state, QR, $log, $timeout, $translate, modalService, $ionicHistory,
+                            $cordovaToast, $ionicLoading, bitcoinLinkService, walletsManagerService, $stateParams) {
         //remove animation for next state - looks kinda buggy
         $ionicHistory.nextViewOptions({
             disableAnimate: true
@@ -49,7 +49,6 @@
                                     });
                                 } else {
                                     $cordovaToast.showLongTop($translate.instant("MSG_INVALID_RECIPIENT").sentenceCase());
-                                    $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                                 }
                             });
                         } else {
@@ -64,7 +63,6 @@
                                 })
                                 .catch(function () {
                                     $timeout(function() {
-                                        $btBackButtonDelegate.goBack();
                                         modalService.alert({
                                             title: "ERROR_TITLE_3",
                                             body: "MSG_INVALID_RECIPIENT"
@@ -77,10 +75,6 @@
                             $timeout(function () {
                                 $state.go("app.wallet.summary")
                             }, 300);
-                        } else {
-                            $timeout(function () {
-                                $btBackButtonDelegate.goBack();
-                            }, 180);
                         }
                     }
                 },
@@ -90,7 +84,6 @@
                     $ionicLoading.hide();
                     $cordovaToast.showLongTop("Scanning failed: " + error);
                     $scope.appControl.isScanning = false;
-                    $timeout(function() {$btBackButtonDelegate.goBack();}, 180);
                 }
             );
         }, 150);
