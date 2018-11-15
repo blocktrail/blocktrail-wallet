@@ -95,6 +95,7 @@ ext {
 apply from: "cordova-fabric-plugin/mywallet-build-extras.gradle"
 apply from: "cordova-plugin-appsflyer-sdk/mywallet-cordovaAF.gradle"
 apply from: "cordova-plugin-firebase/mywallet-build.gradle"
+apply from: "phonegap-plugin-barcodescanner/mywallet-barcodescanner.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
@@ -264,6 +265,7 @@ dependencies {
     compile "com.google.firebase:firebase-config:+"
     compile "com.google.android.gms:play-services-analytics:+"
     compile "com.android.support:support-v4:24.1.1+"
+    compile "com.android.support:support-v4:27.+"
     // SUB-PROJECT DEPENDENCIES END
 }
 

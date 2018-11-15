@@ -161,11 +161,11 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"BarcodeScanner\"><param name=\"ios-package\" value=\"CDVBarcodeScanner\" /></feature>",
+              "xml": "<feature name=\"AppVersion\"><param name=\"ios-package\" value=\"AppVersion\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"AppVersion\"><param name=\"ios-package\" value=\"AppVersion\" /></feature>",
+              "xml": "<feature name=\"BarcodeScanner\"><param name=\"ios-package\" value=\"CDVBarcodeScanner\" /></feature>",
               "count": 1
             }
           ]
@@ -347,10 +347,10 @@
     "org.apache.cordova.statusbar": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "phonegap-plugin-barcodescanner": {
+    "uk.co.whiteoctober.cordova.appversion": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "uk.co.whiteoctober.cordova.appversion": {
+    "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
@@ -868,19 +868,19 @@
       ]
     },
     {
-      "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
-      "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
-      "pluginId": "phonegap-plugin-barcodescanner",
-      "clobbers": [
-        "cordova.plugins.barcodeScanner"
-      ]
-    },
-    {
       "id": "uk.co.whiteoctober.cordova.appversion.AppVersionPlugin",
       "file": "plugins/uk.co.whiteoctober.cordova.appversion/www/AppVersionPlugin.js",
       "pluginId": "uk.co.whiteoctober.cordova.appversion",
       "clobbers": [
         "cordova.getAppVersion"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
+      "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
+      "pluginId": "phonegap-plugin-barcodescanner",
+      "clobbers": [
+        "cordova.plugins.barcodeScanner"
       ]
     }
   ],
@@ -918,7 +918,7 @@
     "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.splashscreen": "1.0.0",
     "org.apache.cordova.statusbar": "0.1.10",
-    "phonegap-plugin-barcodescanner": "4.0.2",
-    "uk.co.whiteoctober.cordova.appversion": "0.1.7"
+    "uk.co.whiteoctober.cordova.appversion": "0.1.7",
+    "phonegap-plugin-barcodescanner": "8.0.0"
   }
 }

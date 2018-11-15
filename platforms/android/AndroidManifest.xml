@@ -7,8 +7,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" />
@@ -18,6 +16,8 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <application android:allowBackup="false" android:hardwareAccelerated="true" android:icon="@mipmap/icon" android:label="@string/app_name" android:supportsRtl="true">
         <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" android:label="@string/activity_name" android:launchMode="singleTop" android:name="MainActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.DeviceDefault.NoActionBar" android:windowSoftInputMode="adjustResize">
             <intent-filter android:label="@string/launcher_name">
@@ -33,24 +33,8 @@
         </activity>
         <activity android:label="@string/multi_app_name" android:name="com.synconset.MultiImageChooserActivity" android:theme="@android:style/Theme.Holo.Light" />
         <activity android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/fb_app_name" android:name="com.facebook.FacebookActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden" android:exported="false" android:name="com.google.zxing.client.android.CaptureActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="com.google.zxing.client.android.SCAN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:label="@string/share_name" android:name="com.google.zxing.client.android.encode.EncodeActivity">
-            <intent-filter>
-                <action android:name="com.phonegap.plugins.barcodescanner.ENCODE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:label="@string/share_name" android:name="com.google.zxing.client.android.HelpActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden|screenSize" android:exported="false" android:name="com.google.zxing.client.android.CaptureActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:label="Share" android:name="com.google.zxing.client.android.encode.EncodeActivity" />
         <meta-data android:name="io.fabric.ApiKey" android:value="059fcf328d73ce164c3ab1c4436293db0d6718ca" />
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/fb_app_id" />
         <meta-data android:name="com.facebook.sdk.ApplicationName" android:value="@string/fb_app_name" />
@@ -94,6 +78,6 @@
         </provider>
     </application>
     <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="26" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
 </manifest>
