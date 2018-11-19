@@ -81,6 +81,7 @@
                                raw-model="btcValueRaw"
                                ng-change="setFiat(); sendInputForm.fiatValue.$setDirty(); fetchFee();"
                                ng-enter="blurInput($event)"
+                               ng-focus="clearZeroBTCAmountOnFocus()"
                                ng-disabled="sendInput.inputDisabled"
                                tabindex="{{ !fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
@@ -100,6 +101,7 @@
                                ng-change="setBTC(); sendInputForm.btcValue.$setDirty(); fetchFee();"
                                ng-disabled="sendInput.inputDisabled"
                                ng-enter="blurInput($event)"
+                               ng-focus="clearZeroFiatAmountOnFocus()"
                                tabindex="{{ fiatFirst && 1 || -1 }}"/>
                         <div class="label-group">
                             <span class="placeholder-label">{{ 'AMOUNT_PLACEHOLDER' | translate }}</span>

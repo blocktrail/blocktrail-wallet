@@ -109,9 +109,22 @@
             //converts and sets the FIAT value from the BTC value
             $scope.sendInput.fiatValue = parseFloat(CurrencyConverter.fromBTC($scope.sendInput.btcValue, $scope.settingsData.localCurrency, 2)) || 0;
         };
+
         $scope.setBTC = function() {
             //converts and sets the BTC value from the FIAT value
             $scope.sendInput.btcValue = parseFloat(CurrencyConverter.toBTC($scope.sendInput.fiatValue, $scope.settingsData.localCurrency, 6)) || 0;
+        };
+
+        $scope.clearZeroBTCAmountOnFocus = function() {
+            if ($scope.sendInput.btcValue == 0) {
+                $scope.sendInput.btcValue = null;
+            }
+        };
+
+        $scope.clearZeroFiatAmountOnFocus = function() {
+            if ($scope.sendInput.fiatValue == 0) {
+                $scope.sendInput.fiatValue = null;
+            }
         };
 
         $scope.clearRecipient = function() {
