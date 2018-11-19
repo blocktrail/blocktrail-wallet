@@ -39,15 +39,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "com.synconset.imagepicker": {
-    "source": {
-      "type": "git",
-      "url": "https://github.com/wymsee/cordova-imagePicker.git",
-      "subdir": "."
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-globalization": {
     "source": {
       "type": "registry",
@@ -318,6 +309,14 @@
     "source": {
       "type": "registry",
       "id": "cordova-plugin-statusbar@2.4.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-telerik-imagepicker": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/Telerik-Verified-Plugins/ImagePicker.git"
     },
     "is_top_level": true,
     "variables": {}

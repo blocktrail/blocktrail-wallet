@@ -15,9 +15,6 @@
         <param name="ios-package" value="CDVGestureHandler" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="ImagePicker">
-        <param name="ios-package" value="SOSPicker" />
-    </feature>
     <feature name="FabricPlugin">
         <param name="ios-package" value="FabricPlugin" />
         <param name="onload" value="true" />
@@ -120,6 +117,9 @@
     </feature>
     <feature name="BarcodeScanner">
         <param name="ios-package" value="CDVBarcodeScanner" />
+    </feature>
+    <feature name="ImagePicker">
+        <param name="ios-package" value="SOSPicker" />
     </feature>
     <name>BlockTrail Wallet</name>
     <description>

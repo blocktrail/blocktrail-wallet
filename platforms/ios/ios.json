@@ -9,10 +9,6 @@
         "parents": {
           "/*": [
             {
-              "xml": "<feature name=\"ImagePicker\"><param name=\"ios-package\" value=\"SOSPicker\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"FabricPlugin\"><param name=\"ios-package\" value=\"FabricPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
@@ -167,6 +163,10 @@
             {
               "xml": "<feature name=\"BarcodeScanner\"><param name=\"ios-package\" value=\"CDVBarcodeScanner\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"ImagePicker\"><param name=\"ios-package\" value=\"SOSPicker\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -216,6 +216,12 @@
               "xml": "<dict><key>NSExceptionDomains</key><dict><key>facebook.com</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict><key>fbcdn.net</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict><key>akamaihd.net</key><dict><key>NSIncludesSubdomains</key><true /><key>NSThirdPartyExceptionRequiresForwardSecrecy</key><false /></dict></dict></dict>",
               "count": 1
             }
+          ],
+          "NSPhotoLibraryUsageDescription": [
+            {
+              "xml": "<string> </string>",
+              "count": 1
+            }
           ]
         }
       },
@@ -242,9 +248,6 @@
     }
   },
   "installed_plugins": {
-    "com.synconset.imagepicker": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "cordova-fabric-plugin": {
       "FABRIC_API_KEY": "059fcf328d73ce164c3ab1c4436293db0d6718ca",
       "FABRIC_API_SECRET": "2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741",
@@ -352,18 +355,14 @@
     },
     "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-telerik-imagepicker": {
+      "PHOTO_LIBRARY_USAGE_DESCRIPTION": " ",
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {},
   "modules": [
-    {
-      "id": "com.synconset.imagepicker.ImagePicker",
-      "file": "plugins/com.synconset.imagepicker/www/imagepicker.js",
-      "pluginId": "com.synconset.imagepicker",
-      "clobbers": [
-        "plugins.imagePicker"
-      ]
-    },
     {
       "id": "cordova-fabric-plugin.FabricPlugin",
       "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.js",
@@ -882,10 +881,17 @@
       "clobbers": [
         "cordova.plugins.barcodeScanner"
       ]
+    },
+    {
+      "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
+      "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
+      "pluginId": "cordova-plugin-telerik-imagepicker",
+      "clobbers": [
+        "plugins.imagePicker"
+      ]
     }
   ],
   "plugin_metadata": {
-    "com.synconset.imagepicker": "1.0.6",
     "cordova-fabric-plugin": "1.0.8",
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-file-transfer": "1.7.1",
@@ -919,6 +925,7 @@
     "org.apache.cordova.splashscreen": "1.0.0",
     "org.apache.cordova.statusbar": "0.1.10",
     "uk.co.whiteoctober.cordova.appversion": "0.1.7",
-    "phonegap-plugin-barcodescanner": "8.0.0"
+    "phonegap-plugin-barcodescanner": "8.0.0",
+    "cordova-plugin-telerik-imagepicker": "2.2.2"
   }
 }

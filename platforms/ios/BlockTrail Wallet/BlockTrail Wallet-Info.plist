@@ -121,5 +121,7 @@
     <string>1072524012838770</string>
     <key>FacebookDisplayName</key>
     <string>BTC.com</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string/>
   </dict>
 </plist>

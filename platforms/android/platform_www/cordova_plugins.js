@@ -1,14 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
   {
-    "id": "com.synconset.imagepicker.ImagePicker",
-    "file": "plugins/com.synconset.imagepicker/www/imagepicker.js",
-    "pluginId": "com.synconset.imagepicker",
-    "clobbers": [
-      "plugins.imagePicker"
-    ]
-  },
-  {
     "id": "cordova-fabric-plugin.FabricPlugin",
     "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.js",
     "pluginId": "cordova-fabric-plugin",
@@ -524,12 +516,19 @@ module.exports = [
     "clobbers": [
       "cordova.plugins.barcodeScanner"
     ]
+  },
+  {
+    "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
+    "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
+    "pluginId": "cordova-plugin-telerik-imagepicker",
+    "clobbers": [
+      "plugins.imagePicker"
+    ]
   }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "com.synconset.imagepicker": "1.0.6",
   "cordova-fabric-plugin": "1.0.8",
   "cordova-plugin-file": "6.0.1",
   "cordova-plugin-file-transfer": "1.7.1",
@@ -563,7 +562,8 @@ module.exports.metadata =
   "cordova-plugin-email-composer": "0.8.15",
   "cordova-sqlite-storage": "2.5.1",
   "cordova-plugin-camera": "4.0.3",
-  "phonegap-plugin-barcodescanner": "8.0.0"
+  "phonegap-plugin-barcodescanner": "8.0.0",
+  "cordova-plugin-telerik-imagepicker": "2.2.2"
 };
 // BOTTOM OF METADATA
 });

@@ -9,10 +9,6 @@
         "parents": {
           "/*": [
             {
-              "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"FabricPlugin\"><param name=\"android-package\" value=\"com.sarriaroman.fabric.FabricPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
@@ -167,6 +163,10 @@
             {
               "xml": "<feature name=\"BarcodeScanner\"><param name=\"android-package\" value=\"com.phonegap.plugins.barcodescanner.BarcodeScanner\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -174,10 +174,6 @@
       "AndroidManifest.xml": {
         "parents": {
           "/manifest": [
-            {
-              "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-              "count": 1
-            },
             {
               "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
               "count": 1
@@ -196,6 +192,10 @@
             },
             {
               "xml": "<uses-feature android:name=\"android.hardware.camera\" android:required=\"true\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
               "count": 1
             }
           ],
@@ -259,10 +259,6 @@
           ],
           "/manifest/application": [
             {
-              "xml": "<activity android:label=\"@string/multi_app_name\" android:name=\"com.synconset.MultiImageChooserActivity\" android:theme=\"@android:style/Theme.Holo.Light\"></activity>",
-              "count": 1
-            },
-            {
               "xml": "<service android:enabled=\"true\" android:exported=\"false\" android:name=\"com.google.android.gms.measurement.AppMeasurementService\" />",
               "count": 1
             },
@@ -308,6 +304,10 @@
             },
             {
               "xml": "<activity android:label=\"Share\" android:name=\"com.google.zxing.client.android.encode.EncodeActivity\" />",
+              "count": 1
+            },
+            {
+              "xml": "<activity android:label=\"@string/multi_app_name\" android:name=\"com.synconset.MultiImageChooserActivity\" android:theme=\"@style/Theme.AppCompat.Light\"></activity>",
               "count": 1
             }
           ],
@@ -406,9 +406,6 @@
     }
   },
   "installed_plugins": {
-    "com.synconset.imagepicker": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "cordova-fabric-plugin": {
       "FABRIC_API_KEY": "059fcf328d73ce164c3ab1c4436293db0d6718ca",
       "FABRIC_API_SECRET": "2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741",
@@ -516,18 +513,13 @@
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-telerik-imagepicker": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {},
   "modules": [
-    {
-      "id": "com.synconset.imagepicker.ImagePicker",
-      "file": "plugins/com.synconset.imagepicker/www/imagepicker.js",
-      "pluginId": "com.synconset.imagepicker",
-      "clobbers": [
-        "plugins.imagePicker"
-      ]
-    },
     {
       "id": "cordova-fabric-plugin.FabricPlugin",
       "file": "plugins/cordova-fabric-plugin/www/FabricPlugin.js",
@@ -1044,10 +1036,17 @@
       "clobbers": [
         "cordova.plugins.barcodeScanner"
       ]
+    },
+    {
+      "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
+      "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
+      "pluginId": "cordova-plugin-telerik-imagepicker",
+      "clobbers": [
+        "plugins.imagePicker"
+      ]
     }
   ],
   "plugin_metadata": {
-    "com.synconset.imagepicker": "1.0.6",
     "cordova-fabric-plugin": "1.0.8",
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-file-transfer": "1.7.1",
@@ -1081,6 +1080,7 @@
     "cordova-plugin-email-composer": "0.8.15",
     "cordova-sqlite-storage": "2.5.1",
     "cordova-plugin-camera": "4.0.3",
-    "phonegap-plugin-barcodescanner": "8.0.0"
+    "phonegap-plugin-barcodescanner": "8.0.0",
+    "cordova-plugin-telerik-imagepicker": "2.2.2"
   }
 }
