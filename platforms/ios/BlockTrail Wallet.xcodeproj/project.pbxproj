@@ -99,33 +99,6 @@
 		0EDF79E605B247858CC5CC43 /* CDVBarcodeScanner.mm in Resources */ = {isa = PBXBuildFile; fileRef = 2742C933178840D39BB995FF /* CDVBarcodeScanner.mm */; };
 		EDFE2C37137840ADB96C7238 /* scannerOverlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEADAA4CA53A468A88D7B916 /* scannerOverlay.xib */; };
 		D813586BE0154DA49A1C100C /* CDVBarcodeScanner.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EBDB1842E9C644D1B118CAA2 /* CDVBarcodeScanner.bundle */; };
-		09C46193C220429EA1736D1E /* SOSPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C5B32FCFEC4A1DBD6DD408 /* SOSPicker.m */; };
-		9827672C313F4FDEB4885E66 /* UIImage+fixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = F178EEF364BF42F0A120EB91 /* UIImage+fixOrientation.m */; };
-		7D49198B7D7640319BA34D5F /* GMAlbumsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2723C57464704F469F472B18 /* GMAlbumsViewCell.m */; };
-		DD9188D07DFC4879A468F6C2 /* GMAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23610C5137A0408EB9195C97 /* GMAlbumsViewController.m */; };
-		68E14AAFFA5E4E709046765F /* GMFetchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 11B70D9302AA450EA67EAC90 /* GMFetchItem.m */; };
-		7EF75AD222E54A94A56AB34E /* GMGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E121307D57433684085B33 /* GMGridViewCell.m */; };
-		01925A04FEF547589EEE8A72 /* GMGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DD47EC323841CDA70A8F46 /* GMGridViewController.m */; };
-		7125EEAB87DF471E97F2BF25 /* GMImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CB45491B8449CC9AD65E3F /* GMImagePickerController.m */; };
-		CA042821C34D4142B1A3FFDC /* PSYBlockTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8522C0B5776C4245A36F3AA4 /* PSYBlockTimer.m */; };
-		3966DDF2F2614A55985EA149 /* GMPHAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 18127995CCE04207B52995CD /* GMPHAsset.m */; };
-		7E2C638D3B064C408FC7D70C /* GMEmptyFolder@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55AAEB7FA32B4E4B8B2DFB37 /* GMEmptyFolder@1x.png */; };
-		CE01AB33FCAC44B3B879DC3F /* GMEmptyFolder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70A315DFE3BB4A30B37DFD9B /* GMEmptyFolder@2x.png */; };
-		36BE2E9178B1492EA06F4D94 /* GMSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = EB08209CA47A4EEE8CEB771A /* GMSelected.png */; };
-		1829A630E68A46498CBC2E06 /* GMSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C33E109A7E24DBCA70E47E7 /* GMSelected@2x.png */; };
-		B97862B27E7844FC9F360FE7 /* GMVideoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 91AABAC1663B4246BB6F2ADF /* GMVideoIcon.png */; };
-		ADCA83B823FD48D4B2157A08 /* GMVideoIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7E859F7443CAA9A4E37 /* GMVideoIcon@2x.png */; };
-		8BEAC0ACBEA54A8394D43FC0 /* ca.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 6DF221B169CC40169CD9D754 /* ca.lproj */; };
-		2BD183BF24E44D4D8886C10D /* de.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 515619CDC5E54181A10ED77A /* de.lproj */; };
-		1F289EBC54BF471F9CF59D6A /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 7CA0B4F36E57442B8C4FAE95 /* en.lproj */; };
-		643BDBAEB9504DB8BE4B431C /* es.lproj in Resources */ = {isa = PBXBuildFile; fileRef = A3BBFCFC05B5405ABE0DC971 /* es.lproj */; };
-		DC3D086C0CB4449C8C4CAA35 /* fr.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8EFE1C88A48649E3B83C38BB /* fr.lproj */; };
-		049A5D28C2D048E89DC30BCC /* it.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 14322911CEBA4CAC87B3EFB4 /* it.lproj */; };
-		F8D97160DAA74FF7A4AEF702 /* pt.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9B2D3EE3142141D99344BC9A /* pt.lproj */; };
-		B223FEF048874F9EA04DF240 /* pl.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 69C842A0FBBD481CB877CA3E /* pl.lproj */; };
-		51C4BD041CC84E22A8CDB4E4 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = C2020BAA0B2F4E89BD8F634E /* zh-Hans.lproj */; };
-		ECC2B5CCA7ED4989BAD51AF4 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 189137C51D65499F9351C122 /* Accelerate.framework */; };
-		DF078F270F9A422C841EBD85 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41221B6210FF44D7845EEB1F /* Photos.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,43 +288,6 @@
 		2742C933178840D39BB995FF /* CDVBarcodeScanner.mm */ = {isa = PBXFileReference; name = "CDVBarcodeScanner.mm"; path = "phonegap-plugin-barcodescanner/CDVBarcodeScanner.mm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		DEADAA4CA53A468A88D7B916 /* scannerOverlay.xib */ = {isa = PBXFileReference; name = "scannerOverlay.xib"; path = "scannerOverlay.xib"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = file.xib; explicitFileType = undefined; includeInIndex = 0; };
 		EBDB1842E9C644D1B118CAA2 /* CDVBarcodeScanner.bundle */ = {isa = PBXFileReference; name = "CDVBarcodeScanner.bundle"; path = "CDVBarcodeScanner.bundle"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.plug-in; explicitFileType = undefined; includeInIndex = 0; };
-		79C5B32FCFEC4A1DBD6DD408 /* SOSPicker.m */ = {isa = PBXFileReference; name = "SOSPicker.m"; path = "cordova-plugin-telerik-imagepicker/SOSPicker.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		F178EEF364BF42F0A120EB91 /* UIImage+fixOrientation.m */ = {isa = PBXFileReference; name = "UIImage+fixOrientation.m"; path = "cordova-plugin-telerik-imagepicker/UIImage+fixOrientation.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		2723C57464704F469F472B18 /* GMAlbumsViewCell.m */ = {isa = PBXFileReference; name = "GMAlbumsViewCell.m"; path = "cordova-plugin-telerik-imagepicker/GMAlbumsViewCell.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		23610C5137A0408EB9195C97 /* GMAlbumsViewController.m */ = {isa = PBXFileReference; name = "GMAlbumsViewController.m"; path = "cordova-plugin-telerik-imagepicker/GMAlbumsViewController.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		11B70D9302AA450EA67EAC90 /* GMFetchItem.m */ = {isa = PBXFileReference; name = "GMFetchItem.m"; path = "cordova-plugin-telerik-imagepicker/GMFetchItem.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		F0E121307D57433684085B33 /* GMGridViewCell.m */ = {isa = PBXFileReference; name = "GMGridViewCell.m"; path = "cordova-plugin-telerik-imagepicker/GMGridViewCell.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		53DD47EC323841CDA70A8F46 /* GMGridViewController.m */ = {isa = PBXFileReference; name = "GMGridViewController.m"; path = "cordova-plugin-telerik-imagepicker/GMGridViewController.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		05CB45491B8449CC9AD65E3F /* GMImagePickerController.m */ = {isa = PBXFileReference; name = "GMImagePickerController.m"; path = "cordova-plugin-telerik-imagepicker/GMImagePickerController.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		8522C0B5776C4245A36F3AA4 /* PSYBlockTimer.m */ = {isa = PBXFileReference; name = "PSYBlockTimer.m"; path = "cordova-plugin-telerik-imagepicker/PSYBlockTimer.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		18127995CCE04207B52995CD /* GMPHAsset.m */ = {isa = PBXFileReference; name = "GMPHAsset.m"; path = "cordova-plugin-telerik-imagepicker/GMPHAsset.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		61388CE5248740A2ABB0F1F1 /* SOSPicker.h */ = {isa = PBXFileReference; name = "SOSPicker.h"; path = "cordova-plugin-telerik-imagepicker/SOSPicker.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		6AF5117D97FB4A2FBDEC2FE7 /* UIImage+fixOrientation.h */ = {isa = PBXFileReference; name = "UIImage+fixOrientation.h"; path = "cordova-plugin-telerik-imagepicker/UIImage+fixOrientation.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		EFC3B4E6E1164E5FB4C65A85 /* GMAlbumsViewCell.h */ = {isa = PBXFileReference; name = "GMAlbumsViewCell.h"; path = "cordova-plugin-telerik-imagepicker/GMAlbumsViewCell.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		456F06D7DA90499AB9DDC37C /* GMAlbumsViewController.h */ = {isa = PBXFileReference; name = "GMAlbumsViewController.h"; path = "cordova-plugin-telerik-imagepicker/GMAlbumsViewController.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		14298B7FC8B142199060C6AF /* GMFetchItem.h */ = {isa = PBXFileReference; name = "GMFetchItem.h"; path = "cordova-plugin-telerik-imagepicker/GMFetchItem.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		A2330954CF9449C68450D9C7 /* GMGridViewCell.h */ = {isa = PBXFileReference; name = "GMGridViewCell.h"; path = "cordova-plugin-telerik-imagepicker/GMGridViewCell.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		EEDC238F1BD04F38B919FC1A /* GMGridViewController.h */ = {isa = PBXFileReference; name = "GMGridViewController.h"; path = "cordova-plugin-telerik-imagepicker/GMGridViewController.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		DF66AEF90AC042728E7EDA9A /* GMImagePickerController.h */ = {isa = PBXFileReference; name = "GMImagePickerController.h"; path = "cordova-plugin-telerik-imagepicker/GMImagePickerController.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		1EA68144263043CC8B53D31F /* PSYBlockTimer.h */ = {isa = PBXFileReference; name = "PSYBlockTimer.h"; path = "cordova-plugin-telerik-imagepicker/PSYBlockTimer.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		DD840D9233874BECBE8E5B41 /* GMPHAsset.h */ = {isa = PBXFileReference; name = "GMPHAsset.h"; path = "cordova-plugin-telerik-imagepicker/GMPHAsset.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		55AAEB7FA32B4E4B8B2DFB37 /* GMEmptyFolder@1x.png */ = {isa = PBXFileReference; name = "GMEmptyFolder@1x.png"; path = "GMEmptyFolder@1x.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		70A315DFE3BB4A30B37DFD9B /* GMEmptyFolder@2x.png */ = {isa = PBXFileReference; name = "GMEmptyFolder@2x.png"; path = "GMEmptyFolder@2x.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		EB08209CA47A4EEE8CEB771A /* GMSelected.png */ = {isa = PBXFileReference; name = "GMSelected.png"; path = "GMSelected.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2C33E109A7E24DBCA70E47E7 /* GMSelected@2x.png */ = {isa = PBXFileReference; name = "GMSelected@2x.png"; path = "GMSelected@2x.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		91AABAC1663B4246BB6F2ADF /* GMVideoIcon.png */ = {isa = PBXFileReference; name = "GMVideoIcon.png"; path = "GMVideoIcon.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4948D7E859F7443CAA9A4E37 /* GMVideoIcon@2x.png */ = {isa = PBXFileReference; name = "GMVideoIcon@2x.png"; path = "GMVideoIcon@2x.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6DF221B169CC40169CD9D754 /* ca.lproj */ = {isa = PBXFileReference; name = "ca.lproj"; path = "ca.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		515619CDC5E54181A10ED77A /* de.lproj */ = {isa = PBXFileReference; name = "de.lproj"; path = "de.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7CA0B4F36E57442B8C4FAE95 /* en.lproj */ = {isa = PBXFileReference; name = "en.lproj"; path = "en.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A3BBFCFC05B5405ABE0DC971 /* es.lproj */ = {isa = PBXFileReference; name = "es.lproj"; path = "es.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8EFE1C88A48649E3B83C38BB /* fr.lproj */ = {isa = PBXFileReference; name = "fr.lproj"; path = "fr.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		14322911CEBA4CAC87B3EFB4 /* it.lproj */ = {isa = PBXFileReference; name = "it.lproj"; path = "it.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9B2D3EE3142141D99344BC9A /* pt.lproj */ = {isa = PBXFileReference; name = "pt.lproj"; path = "pt.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		69C842A0FBBD481CB877CA3E /* pl.lproj */ = {isa = PBXFileReference; name = "pl.lproj"; path = "pl.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C2020BAA0B2F4E89BD8F634E /* zh-Hans.lproj */ = {isa = PBXFileReference; name = "zh-Hans.lproj"; path = "zh-Hans.lproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		189137C51D65499F9351C122 /* Accelerate.framework */ = {isa = PBXFileReference; name = "Accelerate.framework"; path = "System/Library/Frameworks/Accelerate.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
-		41221B6210FF44D7845EEB1F /* Photos.framework */ = {isa = PBXFileReference; name = "Photos.framework"; path = "System/Library/Frameworks/Photos.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -401,8 +337,6 @@
 				7AFFDC70F72649BFAE906D46 /* libGoogleConversionTracking.a in Frameworks */,
 				8D2E13BF4C95439B8C208A3D /* Social.framework in Frameworks */,
 				7A105FF5CA344FFFBB21C46F /* QuartzCore.framework in Frameworks */,
-				ECC2B5CCA7ED4989BAD51AF4 /* Accelerate.framework in Frameworks */,
-				DF078F270F9A422C841EBD85 /* Photos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,21 +403,6 @@
 				3E56B9B14B874690888034D8 /* GoogleService-Info.plist */,
 				DEADAA4CA53A468A88D7B916 /* scannerOverlay.xib */,
 				EBDB1842E9C644D1B118CAA2 /* CDVBarcodeScanner.bundle */,
-				55AAEB7FA32B4E4B8B2DFB37 /* GMEmptyFolder@1x.png */,
-				70A315DFE3BB4A30B37DFD9B /* GMEmptyFolder@2x.png */,
-				EB08209CA47A4EEE8CEB771A /* GMSelected.png */,
-				2C33E109A7E24DBCA70E47E7 /* GMSelected@2x.png */,
-				91AABAC1663B4246BB6F2ADF /* GMVideoIcon.png */,
-				4948D7E859F7443CAA9A4E37 /* GMVideoIcon@2x.png */,
-				6DF221B169CC40169CD9D754 /* ca.lproj */,
-				515619CDC5E54181A10ED77A /* de.lproj */,
-				7CA0B4F36E57442B8C4FAE95 /* en.lproj */,
-				A3BBFCFC05B5405ABE0DC971 /* es.lproj */,
-				8EFE1C88A48649E3B83C38BB /* fr.lproj */,
-				14322911CEBA4CAC87B3EFB4 /* it.lproj */,
-				9B2D3EE3142141D99344BC9A /* pt.lproj */,
-				69C842A0FBBD481CB877CA3E /* pl.lproj */,
-				C2020BAA0B2F4E89BD8F634E /* zh-Hans.lproj */,
 			);
 			name = Resources;
 			path = "BlockTrail Wallet/Resources";
@@ -533,8 +452,6 @@
 				F21A5BE378D543FEA5560254 /* libGoogleConversionTracking.a */,
 				E56422B811674CA59CFD5C28 /* Social.framework */,
 				76070DAE9FB44CE0AEBCF3B4 /* QuartzCore.framework */,
-				189137C51D65499F9351C122 /* Accelerate.framework */,
-				41221B6210FF44D7845EEB1F /* Photos.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -658,26 +575,6 @@
 				CB84A501E6B24021BB06831B /* AppVersion.m */,
 				75E507CDF07242D7BB96BAE4 /* AppVersion.h */,
 				2742C933178840D39BB995FF /* CDVBarcodeScanner.mm */,
-				79C5B32FCFEC4A1DBD6DD408 /* SOSPicker.m */,
-				F178EEF364BF42F0A120EB91 /* UIImage+fixOrientation.m */,
-				2723C57464704F469F472B18 /* GMAlbumsViewCell.m */,
-				23610C5137A0408EB9195C97 /* GMAlbumsViewController.m */,
-				11B70D9302AA450EA67EAC90 /* GMFetchItem.m */,
-				F0E121307D57433684085B33 /* GMGridViewCell.m */,
-				53DD47EC323841CDA70A8F46 /* GMGridViewController.m */,
-				05CB45491B8449CC9AD65E3F /* GMImagePickerController.m */,
-				8522C0B5776C4245A36F3AA4 /* PSYBlockTimer.m */,
-				18127995CCE04207B52995CD /* GMPHAsset.m */,
-				61388CE5248740A2ABB0F1F1 /* SOSPicker.h */,
-				6AF5117D97FB4A2FBDEC2FE7 /* UIImage+fixOrientation.h */,
-				EFC3B4E6E1164E5FB4C65A85 /* GMAlbumsViewCell.h */,
-				456F06D7DA90499AB9DDC37C /* GMAlbumsViewController.h */,
-				14298B7FC8B142199060C6AF /* GMFetchItem.h */,
-				A2330954CF9449C68450D9C7 /* GMGridViewCell.h */,
-				EEDC238F1BD04F38B919FC1A /* GMGridViewController.h */,
-				DF66AEF90AC042728E7EDA9A /* GMImagePickerController.h */,
-				1EA68144263043CC8B53D31F /* PSYBlockTimer.h */,
-				DD840D9233874BECBE8E5B41 /* GMPHAsset.h */,
 			);
 			name = Plugins;
 			path = "BlockTrail Wallet/Plugins";
@@ -778,21 +675,6 @@
 				EDF1D05136C94C459BCD1914 /* GoogleService-Info.plist in Resources */,
 				EDFE2C37137840ADB96C7238 /* scannerOverlay.xib in Resources */,
 				D813586BE0154DA49A1C100C /* CDVBarcodeScanner.bundle in Resources */,
-				7E2C638D3B064C408FC7D70C /* GMEmptyFolder@1x.png in Resources */,
-				CE01AB33FCAC44B3B879DC3F /* GMEmptyFolder@2x.png in Resources */,
-				36BE2E9178B1492EA06F4D94 /* GMSelected.png in Resources */,
-				1829A630E68A46498CBC2E06 /* GMSelected@2x.png in Resources */,
-				B97862B27E7844FC9F360FE7 /* GMVideoIcon.png in Resources */,
-				ADCA83B823FD48D4B2157A08 /* GMVideoIcon@2x.png in Resources */,
-				8BEAC0ACBEA54A8394D43FC0 /* ca.lproj in Resources */,
-				2BD183BF24E44D4D8886C10D /* de.lproj in Resources */,
-				1F289EBC54BF471F9CF59D6A /* en.lproj in Resources */,
-				643BDBAEB9504DB8BE4B431C /* es.lproj in Resources */,
-				DC3D086C0CB4449C8C4CAA35 /* fr.lproj in Resources */,
-				049A5D28C2D048E89DC30BCC /* it.lproj in Resources */,
-				F8D97160DAA74FF7A4AEF702 /* pt.lproj in Resources */,
-				B223FEF048874F9EA04DF240 /* pl.lproj in Resources */,
-				51C4BD041CC84E22A8CDB4E4 /* zh-Hans.lproj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -867,16 +749,6 @@
 				3C4FBD84506940B69BCFA309 /* zxing-all-in-one.cpp in Sources */,
 				9FC00889F53C4BB2A77EE312 /* AppVersion.m in Sources */,
 				0EDF79E605B247858CC5CC43 /* CDVBarcodeScanner.mm in Resources */,
-				09C46193C220429EA1736D1E /* SOSPicker.m in Sources */,
-				9827672C313F4FDEB4885E66 /* UIImage+fixOrientation.m in Sources */,
-				7D49198B7D7640319BA34D5F /* GMAlbumsViewCell.m in Sources */,
-				DD9188D07DFC4879A468F6C2 /* GMAlbumsViewController.m in Sources */,
-				68E14AAFFA5E4E709046765F /* GMFetchItem.m in Sources */,
-				7EF75AD222E54A94A56AB34E /* GMGridViewCell.m in Sources */,
-				01925A04FEF547589EEE8A72 /* GMGridViewController.m in Sources */,
-				7125EEAB87DF471E97F2BF25 /* GMImagePickerController.m in Sources */,
-				CA042821C34D4142B1A3FFDC /* PSYBlockTimer.m in Sources */,
-				3966DDF2F2614A55985EA149 /* GMPHAsset.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

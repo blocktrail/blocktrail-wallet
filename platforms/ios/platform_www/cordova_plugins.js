@@ -518,14 +518,6 @@ module.exports = [
     "clobbers": [
       "cordova.plugins.barcodeScanner"
     ]
-  },
-  {
-    "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
-    "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
-    "pluginId": "cordova-plugin-telerik-imagepicker",
-    "clobbers": [
-      "plugins.imagePicker"
-    ]
   }
 ];
 module.exports.metadata = 
@@ -564,8 +556,7 @@ module.exports.metadata =
   "org.apache.cordova.splashscreen": "1.0.0",
   "org.apache.cordova.statusbar": "0.1.10",
   "uk.co.whiteoctober.cordova.appversion": "0.1.7",
-  "phonegap-plugin-barcodescanner": "8.0.0",
-  "cordova-plugin-telerik-imagepicker": "2.2.2"
+  "phonegap-plugin-barcodescanner": "8.0.0"
 };
 // BOTTOM OF METADATA
 });

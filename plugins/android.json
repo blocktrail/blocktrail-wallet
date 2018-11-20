@@ -108,9 +108,6 @@
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-telerik-imagepicker": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {

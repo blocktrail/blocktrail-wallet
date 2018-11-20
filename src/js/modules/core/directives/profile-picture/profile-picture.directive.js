@@ -3,7 +3,7 @@
 
     angular.module("blocktrail.core")
         .directive("profilePicture", profilePicture);
-    
+
     function profilePicture() {
         return {
             restrict: "E",
@@ -19,10 +19,10 @@
 
     function ProfilePictureCtrl($scope, $window, $q, $cordovaImagePicker, $cordovaCamera, $translate, modalService, settingsService) {
         var picSelectOptions = {
-            maximumImagesCount: 1,
-            width: 800,
-            height: 0,
-            quality: 80
+            targetWidth: 800,
+            targetHeight: 0,
+            quality: 80,
+            sourceType: $window.Camera.PictureSourceType.PHOTOLIBRARY
         };
         var picTakeOptions = {
             quality: 80,
@@ -51,25 +51,27 @@
                 if (!hasReadPermission) {
                     return;
                 } else {
+
                     // Do not test it with live reload, img.src = results[0] doesn't work because of cross-domain request
-                    $window.imagePicker.getPictures(function(results) {
-                        if (results[0]) {
-                            // convert image URL into data URL
-                            var img = new Image();
-                            img.crossOrigin = "Anonymous";
-                            img.onload = function() {
-                                var canvas = document.createElement('CANVAS');
-                                var ctx = canvas.getContext('2d');
-                                canvas.height = this.height;
-                                canvas.width = this.width;
-                                ctx.drawImage(this, 0, 0);
-                                var picData = canvas.toDataURL('image/jpeg');
-                                canvas = null;
-                                showPicCrop(picData);
-                            };
-                            img.src = results[0];
-                        }
-                    }, null, picSelectOptions);
+                    $cordovaCamera.getPicture(picSelectOptions)
+                        .then(function(result) {
+                            if (result) {
+                                // convert image URL into data URL
+                                var img = new Image();
+                                img.crossOrigin = "Anonymous";
+                                img.onload = function () {
+                                    var canvas = document.createElement('CANVAS');
+                                    var ctx = canvas.getContext('2d');
+                                    canvas.height = this.height;
+                                    canvas.width = this.width;
+                                    ctx.drawImage(this, 0, 0);
+                                    var picData = canvas.toDataURL('image/jpeg');
+                                    canvas = null;
+                                    showPicCrop(picData);
+                                };
+                                img.src = result;
+                            }
+                        });
                 }
             }).catch(function (e) {
                 modalService.hideSpinner();
@@ -103,27 +105,6 @@
 
 
             return deferred.promise;
-        };
-
-        function hasReadPermission() {
-            var deferred = $q.defer();
-
-            $window.imagePicker.hasReadPermission(
-                function(result) {
-                    if (result) {
-                        deferred.resolve(result);
-                    } else {
-                        requestReadPermission();
-                        deferred.resolve(result);
-                    }
-                }
-            );
-
-            return deferred.promise;
-        }
-
-        function requestReadPermission() {
-            $window.imagePicker.requestReadPermission();
         }
 
         /**
@@ -146,15 +127,15 @@
          */
         function removePic() {
             modalService.confirm({
-                    body: "SETTINGS_REMOVE_PHOTO"
-                })
+                body: "SETTINGS_REMOVE_PHOTO"
+            })
                 .then(function(dialogResult) {
                     if(dialogResult) {
                         modalService.showSpinner();
 
                         settingsService.updateSettingsUp({
-                                profilePic: null
-                            })
+                            profilePic: null
+                        })
                             .then(function() {
                                 modalService.hideSpinner();
                             })
@@ -172,15 +153,15 @@
          */
         function showPicCrop(picData) {
             modalService.cropPic({
-                    picData: picData,
-                    buttonConfirm: "APPLY"
-                })
+                picData: picData,
+                buttonConfirm: "APPLY"
+            })
                 .then(function(croppedPicData) {
                     if(croppedPicData) {
                         modalService.showSpinner();
                         settingsService.updateSettingsUp({
-                                profilePic: croppedPicData
-                            })
+                            profilePic: croppedPicData
+                        })
                             .then(function() {
                                 modalService.hideSpinner();
                             })

@@ -108,10 +108,6 @@
     },
     "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-telerik-imagepicker": {
-      "PHOTO_LIBRARY_USAGE_DESCRIPTION": " ",
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {

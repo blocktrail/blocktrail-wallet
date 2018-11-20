@@ -118,9 +118,6 @@
     <feature name="BarcodeScanner">
         <param name="ios-package" value="CDVBarcodeScanner" />
     </feature>
-    <feature name="ImagePicker">
-        <param name="ios-package" value="SOSPicker" />
-    </feature>
     <name>BlockTrail Wallet</name>
     <description>
         Your personal Bitcoin wallet, powered by BTC.com

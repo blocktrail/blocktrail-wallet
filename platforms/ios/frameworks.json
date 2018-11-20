@@ -1,8 +1,8 @@
 {
     "libz.dylib": 2,
     "libc++.dylib": 1,
-    "SystemConfiguration.framework": 4,
-    "Security.framework": 3,
+    "SystemConfiguration.framework": 3,
+    "Security.framework": 2,
     "QuickLook.framework": 1,
     "Foundation.framework": 1,
     "AdSupport.framework": 3,
@@ -17,7 +17,5 @@
     "CoreData.framework": 1,
     "libsqlite3.dylib": 1,
     "Social.framework": 1,
-    "QuartzCore.framework": 2,
-    "Accelerate.framework": 1,
-    "Photos.framework": 1
+    "QuartzCore.framework": 1
 }

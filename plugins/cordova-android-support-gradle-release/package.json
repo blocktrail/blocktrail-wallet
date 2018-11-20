@@ -1,0 +1,40 @@
+{
+  "_from": "cordova-android-support-gradle-release",
+  "_id": "cordova-android-support-gradle-release@2.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-HlX75PN8b9y3LIlAFLQspSbO7dr7hTRi2/n4A2Hz4AHb7NxiVt6VU+6j+JcseDveVdddh1sKMZd0xPtFMVNjXA==",
+  "_location": "/cordova-android-support-gradle-release",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-android-support-gradle-release",
+    "name": "cordova-android-support-gradle-release",
+    "escapedName": "cordova-android-support-gradle-release",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-android-support-gradle-release/-/cordova-android-support-gradle-release-2.0.1.tgz",
+  "_shasum": "1a6a834a713310a7ee6ad1cd3e1db6b63cb993c3",
+  "_spec": "cordova-android-support-gradle-release",
+  "_where": "/storage/blocktrail/btccom/blocktrail-wallet (copy)",
+  "author": {
+    "name": "Dave Alden"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "semver": "5.1.0",
+    "xml2js": "~0.4.19"
+  },
+  "deprecated": false,
+  "description": "Cordova/Phonegap plugin to align various versions of the Android Support libraries specified by other plugins to a specific version",
+  "devDependencies": {},
+  "license": "MIT",
+  "name": "cordova-android-support-gradle-release",
+  "version": "2.0.1"
+}
