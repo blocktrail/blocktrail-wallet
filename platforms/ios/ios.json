@@ -213,7 +213,30 @@
               "count": 1
             }
           ],
-          "NSPhotoLibraryUsageDescription": []
+          "NSCameraUsageDescription": [
+            {
+              "xml": "<string>Need camera access to scan QR codes</string>",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml"
+            }
+          ],
+          "NSPhotoLibraryUsageDescription": [
+            {
+              "xml": "<string>Need photo library access to select profile picture</string>",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml"
+            }
+          ],
+          "NSPhotoLibraryAddUsageDescription": [
+            {
+              "xml": "<string>Need photo library access to write profile picture, if camera is used</string>",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml"
+            }
+          ]
         }
       },
       "*/Entitlements-Debug.plist": {

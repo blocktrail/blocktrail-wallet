@@ -134,7 +134,15 @@
     <access origin="https://sentry.io" />
     <access origin="https://bitpay.com" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <allow-navigation href="http://10.4.86.199:8100" />
+    <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
+        <string>Need camera access to scan QR codes</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
+        <string>Need photo library access to select profile picture</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
+        <string>Need photo library access to write profile picture, if camera is used</string>
+    </edit-config>
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
     <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
     <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
