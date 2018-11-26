@@ -149,6 +149,8 @@
                 error.type = "SHA_512";
             } else if (blocktrailSDKError instanceof blocktrailSDK.WalletMissing2FAError) {
                 error.type = "2FA_MISSING";
+            } else if (blocktrailSDKError instanceof blocktrailSDK.WalletMissingEmail2FAError) {
+                error.type = "EMAIL_2FA_MISSING";
             } else if (blocktrailSDKError instanceof blocktrailSDK.WalletInvalid2FAError
                 || (blocktrailSDKError.message && blocktrailSDKError.message.match(/invalid two-factor/))) {
                 error.type = "2FA_INVALID";

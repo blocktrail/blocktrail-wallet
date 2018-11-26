@@ -128,6 +128,19 @@
 
                     break;
 
+                case "EMAIL_2FA_MISSING":
+                    modalService.prompt({
+                        placeholder: "MSG_MISSING_EMAIL_TWO_FACTOR_TOKEN"
+                    })
+                        .then(function(dialogResult) {
+                            if (dialogResult !== null) {
+                                $scope.form.twoFactorToken = dialogResult;
+                                login();
+                            }
+                        });
+
+                    break;
+
                 case "2FA_INVALID":
                     modalService.prompt({
                             placeholder: "MSG_INCORRECT_TWO_FACTOR_TOKEN"
