@@ -31,6 +31,14 @@
               "id": "config.xml"
             }
           ],
+          "NSContactsUsageDescription": [
+            {
+              "xml": "<string>Need contact access to display available contacts which are also using the wallet</string>",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml"
+            }
+          ],
           "Fabric": [
             {
               "xml": "<dict><key>APIKey</key><string>059fcf328d73ce164c3ab1c4436293db0d6718ca</string></dict>",

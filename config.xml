@@ -46,6 +46,9 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
             <string>Need photo library access to write profile picture, if camera is used</string>
         </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSContactsUsageDescription">
+            <string>Need contact access to display available contacts which are also using the wallet</string>
+        </edit-config>
     </platform>
     <platform name="browser">
         <preference name="SplashScreen" value="resources/android/splash/drawable-port-xhdpi-screen.png" />

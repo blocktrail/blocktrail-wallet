@@ -122,5 +122,7 @@
     <string>Need photo library access to select profile picture</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>Need photo library access to write profile picture, if camera is used</string>
+    <key>NSContactsUsageDescription</key>
+    <string>Need contact access to display available contacts which are also using the wallet</string>
   </dict>
 </plist>
