@@ -42,7 +42,7 @@ gulp
 
 ## Run
 ```
-ionic run android|ios
+ionic cordova run android|ios
 ```
 
 ## Translations
@@ -64,7 +64,7 @@ cp appconfig.prod.json appconfig.json
 edit `config.xml` and bump the version
 
 ### Ionic prepare
-run `ionic prepare` for the version update to take effect and `git commit` any and all changes with "vX.Y.Z".  
+run `ionic cordova prepare` for the version update to take effect and `git commit` any and all changes with "vX.Y.Z".  
 tag the release as well in git at this point.
 
 ### Push to SentryIO
@@ -80,7 +80,7 @@ cp appconfig.prod.json appconfig.json
 
 rm -rf platforms/android/build/outputs/apk/* # clean up old builds
 
-ionic build android --release 
+ionic cordova build android --release 
 
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/keys/blocktrail.keystore /work/blocktrail-wallet/platforms/android/build/outputs/apk/android-release-unsigned.apk blocktrail  
 
@@ -94,7 +94,7 @@ mv .appconfig.json appconfig.json
 mv appconfig.json .appconfig.json
 cp appconfig.prod.json appconfig.json
 
-ionic prepare ios
+ionic cordova prepare ios
 ```
 
 In xCode:
