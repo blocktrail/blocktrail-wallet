@@ -1,4 +1,5 @@
-cordova.define("nl.x-services.plugins.toast.Toast", function(require, exports, module) { function Toast() {
+cordova.define("nl.x-services.plugins.toast.Toast", function(require, exports, module) {
+function Toast() {
 }
 
 Toast.prototype.optionsBuilder = function () {

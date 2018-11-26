@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-appsflyer-sdk.appsflyer", function(require, exports, module) {     var exec = require('cordova/exec'),
+cordova.define("cordova-plugin-appsflyer-sdk.appsflyer", function(require, exports, module) {
+    var exec = require('cordova/exec'),
         argscheck = require('cordova/argscheck'),
         AppsFlyerError = require('./AppsFlyerError');
     

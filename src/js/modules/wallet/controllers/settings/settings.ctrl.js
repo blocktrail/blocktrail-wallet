@@ -410,7 +410,6 @@
             });
         }
 
-        // TODO Review with @Ruben
         /**
          * Synchronise the contacts with the Blocktrail service
          */
@@ -422,7 +421,7 @@
             // disable back button
             disableBackButton();
 
-            return Contacts.sync(true)
+            return Contacts.sync(true, true)
                 .then(function() {
                     // rebuild the cached contacts list
                     return Contacts.list(true);

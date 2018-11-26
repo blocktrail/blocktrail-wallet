@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-file.androidFileSystem", function(require, exports, module) { /*
+cordova.define("cordova-plugin-file.androidFileSystem", function(require, exports, module) {
+/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,20 +20,32 @@ cordova.define("cordova-plugin-file.androidFileSystem", function(require, export
  *
 */
 
-FILESYSTEM_PROTOCOL = "cdvfile";
+FILESYSTEM_PROTOCOL = 'cdvfile'; // eslint-disable-line no-undef
 
 module.exports = {
-    __format__: function(fullPath, nativeUrl) {
-        var path = '/' + this.name + '/' + encodeURI(fullPath);
-        path = path.replace('//','/');
-        var ret = FILESYSTEM_PROTOCOL + '://localhost' + path;
-        var m = /\?.*/.exec(nativeUrl);
-        if (m) {
-          ret += m[0];
+    __format__: function (fullPath, nativeUrl) {
+        var path;
+        var contentUrlMatch = /^content:\/\//.exec(nativeUrl);
+        if (contentUrlMatch) {
+            // When available, use the path from a native content URL, which was already encoded by Android.
+            // This is necessary because JavaScript's encodeURI() does not encode as many characters as
+            // Android, which can result in permission exceptions when the encoding of a content URI
+            // doesn't match the string for which permission was originally granted.
+            path = nativeUrl.substring(contentUrlMatch[0].length - 1);
+        } else {
+            path = FileSystem.encodeURIPath(fullPath); // eslint-disable-line no-undef
+            if (!/^\//.test(path)) {
+                path = '/' + path;
+            }
+
+            var m = /\?.*/.exec(nativeUrl);
+            if (m) {
+                path += m[0];
+            }
         }
-        return ret;
+
+        return FILESYSTEM_PROTOCOL + '://localhost/' + this.name + path; // eslint-disable-line no-undef
     }
 };
-
 
 });

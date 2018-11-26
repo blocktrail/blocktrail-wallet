@@ -1,4 +1,5 @@
-cordova.define("cordova-open.Open", function(require, exports, module) { /**
+cordova.define("cordova-open.Open", function(require, exports, module) {
+/**
  * disusered.open.js
  *
  * @overview Open documents with compatible apps.

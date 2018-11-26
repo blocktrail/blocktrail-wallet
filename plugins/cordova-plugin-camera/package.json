@@ -1,46 +1,92 @@
 {
-  "name": "cordova-plugin-camera",
-  "version": "1.2.0",
-  "description": "Cordova Camera Plugin",
+  "_from": "cordova-plugin-camera@4.0.3",
+  "_id": "cordova-plugin-camera@4.0.3",
+  "_inBundle": false,
+  "_integrity": "sha1-c3Olk4MYyGzP2E43E+I4LRD+B2s=",
+  "_location": "/cordova-plugin-camera",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "cordova-plugin-camera@4.0.3",
+    "name": "cordova-plugin-camera",
+    "escapedName": "cordova-plugin-camera",
+    "rawSpec": "4.0.3",
+    "saveSpec": null,
+    "fetchSpec": "4.0.3"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-camera/-/cordova-plugin-camera-4.0.3.tgz",
+  "_shasum": "7373a5938318c86ccfd84e3713e2382d10fe076b",
+  "_spec": "cordova-plugin-camera@4.0.3",
+  "_where": "/Users/tobias/work/blocktrail-wallet",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-camera",
     "platforms": [
-      "firefoxos",
       "android",
-      "amazon-fireos",
-      "ubuntu",
       "ios",
-      "blackberry10",
-      "wp7",
-      "wp8",
-      "windows8",
       "browser",
-      "windows"
+      "windows",
+      "osx"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-camera"
+  "deprecated": false,
+  "description": "Cordova Camera Plugin",
+  "devDependencies": {
+    "dmd-plugin-cordova-plugin": "^0.1.0",
+    "eslint": "^4.3.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.10.1",
+    "jsdoc-to-markdown": "^1.2.0"
   },
+  "engines": {
+    "cordovaDependencies": {
+      "3.0.0": {
+        "cordova-android": ">=6.3.0"
+      },
+      "5.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-camera#readme",
   "keywords": [
     "cordova",
     "camera",
     "ecosystem:cordova",
-    "cordova-firefoxos",
     "cordova-android",
-    "cordova-amazon-fireos",
-    "cordova-ubuntu",
     "cordova-ios",
-    "cordova-blackberry10",
-    "cordova-wp7",
-    "cordova-wp8",
-    "cordova-windows8",
     "cordova-browser",
-    "cordova-windows"
+    "cordova-windows",
+    "cordova-osx"
   ],
-  "peerDependencies": {
-    "cordova-plugin-file": ">=2.0.0"
+  "license": "Apache-2.0",
+  "name": "cordova-plugin-camera",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-camera.git"
   },
-  "author": "Apache Software Foundation",
-  "license": "Apache 2.0"
+  "scripts": {
+    "eslint": "node node_modules/eslint/bin/eslint www && node node_modules/eslint/bin/eslint src && node node_modules/eslint/bin/eslint tests",
+    "gen-docs": "jsdoc2md --template \"jsdoc2md/TEMPLATE.md\" \"www/**/*.js\" --plugin \"dmd-plugin-cordova-plugin\" > README.md",
+    "precommit": "npm run gen-docs && git add README.md",
+    "test": "npm run eslint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "4.0.3"
 }

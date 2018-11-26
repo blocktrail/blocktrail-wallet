@@ -1,7 +1,32 @@
 {
-  "name": "cordova-plugin-facebook4",
-  "version": "1.7.4",
-  "description": "Cordova Facebook SDK 4 Plugin",
+  "_from": "cordova-plugin-facebook4@1.7.4",
+  "_id": "cordova-plugin-facebook4@1.7.4",
+  "_inBundle": false,
+  "_integrity": "sha1-dU3hPzwPn8CUnvWBJsxO9oi9Yxo=",
+  "_location": "/cordova-plugin-facebook4",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "cordova-plugin-facebook4@1.7.4",
+    "name": "cordova-plugin-facebook4",
+    "escapedName": "cordova-plugin-facebook4",
+    "rawSpec": "1.7.4",
+    "saveSpec": null,
+    "fetchSpec": "1.7.4"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "http://registry.npmjs.org/cordova-plugin-facebook4/-/cordova-plugin-facebook4-1.7.4.tgz",
+  "_shasum": "754de13f3c0f9fc0949ef58126cc4ef688bd631a",
+  "_spec": "cordova-plugin-facebook4@1.7.4",
+  "_where": "/storage/blocktrail/btccom/blocktrail-wallet (copy)",
+  "bugs": {
+    "url": "https://github.com/jeduan/cordova-plugin-facebook4/issues"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-facebook4",
     "platforms": [
@@ -10,10 +35,9 @@
       "browser"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jeduan/cordova-plugin-facebook4"
-  },
+  "deprecated": false,
+  "description": "Cordova Facebook SDK 4 Plugin",
+  "homepage": "https://github.com/jeduan/cordova-plugin-facebook4#readme",
   "keywords": [
     "cordova",
     "facebook",
@@ -25,5 +49,11 @@
     "social",
     "sharing"
   ],
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "name": "cordova-plugin-facebook4",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeduan/cordova-plugin-facebook4.git"
+  },
+  "version": "1.7.4"
 }

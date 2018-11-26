@@ -1,0 +1,56 @@
+{
+  "_from": "cordova-plugin-sms",
+  "_id": "cordova-plugin-sms@1.0.5",
+  "_inBundle": false,
+  "_integrity": "sha1-ZkQJVMGfc+4+jjXlxxrhI/Q8t7I=",
+  "_location": "/cordova-plugin-sms",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-sms",
+    "name": "cordova-plugin-sms",
+    "escapedName": "cordova-plugin-sms",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-sms/-/cordova-plugin-sms-1.0.5.tgz",
+  "_shasum": "66440954c19f73ee3e8e35e5c71ae123f43cb7b2",
+  "_spec": "cordova-plugin-sms",
+  "_where": "/Users/tobias/work/blocktrail-wallet",
+  "author": {
+    "name": "Raymond Xie",
+    "email": "rjfun.mobile@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/floatinghotpot/cordova-plugin-sms/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-sms",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova plugin to operate SMS, send/list/intercept/delete/restore",
+  "homepage": "https://github.com/floatinghotpot/cordova-plugin-sms#readme",
+  "keywords": [
+    "cordova",
+    "ecosystem:cordova",
+    "sms",
+    "rjfun"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-sms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/floatinghotpot/cordova-plugin-sms.git"
+  },
+  "version": "1.0.5"
+}

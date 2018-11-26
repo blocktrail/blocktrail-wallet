@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("SendCtrl", SendCtrl);
 
-    function SendCtrl($scope, trackingService, $log, Contacts, walletsManagerService, CurrencyConverter,
+    function SendCtrl($scope, trackingService, $log, Contacts, walletsManagerService, Currencies, CurrencyConverter,
                          $timeout, $q, $btBackButtonDelegate, $state, settingsService, localSettingsService,
                          $rootScope, $translate, $cordovaDialogs, AppRateService, activeWallet, $stateParams,
                          launchService, modalService, CONFIG) {
@@ -109,9 +109,22 @@
             //converts and sets the FIAT value from the BTC value
             $scope.sendInput.fiatValue = parseFloat(CurrencyConverter.fromBTC($scope.sendInput.btcValue, $scope.settingsData.localCurrency, 2)) || 0;
         };
+
         $scope.setBTC = function() {
             //converts and sets the BTC value from the FIAT value
             $scope.sendInput.btcValue = parseFloat(CurrencyConverter.toBTC($scope.sendInput.fiatValue, $scope.settingsData.localCurrency, 6)) || 0;
+        };
+
+        $scope.clearZeroBTCAmountOnFocus = function() {
+            if ($scope.sendInput.btcValue == 0) {
+                $scope.sendInput.btcValue = null;
+            }
+        };
+
+        $scope.clearZeroFiatAmountOnFocus = function() {
+            if ($scope.sendInput.fiatValue == 0) {
+                $scope.sendInput.fiatValue = null;
+            }
         };
 
         $scope.clearRecipient = function() {
@@ -668,8 +681,15 @@
             $scope.isLoading = true;
             return walletsManagerService.setActiveWalletByNetworkTypeAndIdentifier(networkType, identifier)
                 .then(function () {
-                    $state.reload();
-                    $scope.isLoading = false;
+                    Currencies.updatePrices(false)
+                        .then(function(prices) {
+                            $rootScope.bitcoinPrices = prices;
+                            $state.reload();
+                            $scope.isLoading = false;
+                        }).catch(function () {
+                            $state.reload();
+                            $scope.isLoading = false;
+                    });
                 });
         }
 

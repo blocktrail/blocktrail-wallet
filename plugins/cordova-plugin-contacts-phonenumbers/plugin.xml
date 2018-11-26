@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-contacts-phonenumbers"
+    version="0.0.11">
+
+    <name>Contacts Phone Numbers</name>
+    <description>Cordova Plugin to List Contacts Phone Numbers </description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,contacts,list,phone,numbers</keywords>
+    <issue>https://github.com/dbaq/cordova-plugin-contacts-phone-numbers/issues</issue>
+
+    <js-module src="www/contactsPhoneNumbers.js" name="contactsPhoneNumbers">
+        <clobbers target="navigator.contactsPhoneNumbers" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="ContactsPhoneNumbers">
+                <param name="android-package" value="com.dbaq.cordova.contactsPhoneNumbers.ContactsManager"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.READ_CONTACTS" />
+        </config-file>
+
+        <source-file src="src/android/ContactsManager.java" target-dir="src/com/dbaq/cordova/contactsPhoneNumbers" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="ContactsPhoneNumbers">
+                <param name="ios-package" value="CDVContactsPhoneNumbers"/>
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/CDVContactsPhoneNumbers.h" />
+        <source-file src="src/ios/CDVContactsPhoneNumbers.m" />
+
+        <framework src="AddressBook.framework" weak="true" />
+        <framework src="AddressBookUI.framework" weak="true" />
+        <framework src="CoreGraphics.framework" />
+    </platform>
+</plugin>

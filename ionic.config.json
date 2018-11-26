@@ -1,0 +1,25 @@
+{
+  "name": "blocktrail-wallet",
+  "integrations": {
+    "cordova": {}
+  },
+  "watchPatterns": [
+    "www/*",
+    "www/js/*",
+    "www/js/**/*",
+    "www/css/*",
+    "www/css/**/*",
+    "www/templates/*",
+    "www/templates/**/*",
+    "www/js/build/*",
+    "!www/lib/**/*"
+  ],
+  "browsers": [
+    {
+      "platform": "android",
+      "browser": "crosswalk",
+      "version": "12.41.296.5"
+    }
+  ],
+  "pro_id": "3dadf3bf"
+}

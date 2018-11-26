@@ -21,9 +21,9 @@ description: Upload and download files.
 #         under the License.
 -->
 
-|Android 4.4|Android 5.1|Android 6.0|iOS 9.3|iOS 10.0|Windows 10 Store|Travis CI|
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-4.4,PLUGIN=cordova-plugin-file-transfer)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-4.4,PLUGIN=cordova-plugin-file-transfer/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-5.1,PLUGIN=cordova-plugin-file-transfer)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-5.1,PLUGIN=cordova-plugin-file-transfer/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-6.0,PLUGIN=cordova-plugin-file-transfer)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-6.0,PLUGIN=cordova-plugin-file-transfer/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=ios-9.3,PLUGIN=cordova-plugin-file-transfer)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=ios-9.3,PLUGIN=cordova-plugin-file-transfer/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=ios-10.0,PLUGIN=cordova-plugin-file-transfer)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=ios-10.0,PLUGIN=cordova-plugin-file-transfer/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=cordova-plugin-file-transfer)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=cordova-plugin-file-transfer/)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-file-transfer.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-file-transfer)|
+|AppVeyor|Travis CI|
+|:-:|:-:|
+|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-file-transfer?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-file-transfer)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-file-transfer.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-file-transfer)|
 
 # cordova-plugin-file-transfer
 
@@ -38,11 +38,13 @@ function onDeviceReady() {
 }
 ```
 
-> To get a few ideas, check out the [sample](#sample) at the bottom of this page or go straight to the [reference](#reference) content.
+> To get a few ideas, check out the [sample](#sample) at the bottom of this page.
 
 Report issues with this plugin on the [Apache Cordova issue tracker](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20%28Open%2C%20%22In%20Progress%22%2C%20Reopened%29%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20File%20Transfer%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC)
 
-##<a name="reference"></a>Reference
+## Deprecated
+
+With the new features introduced in [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest), this plugin is not needed any more. Migrating from this plugin to using the new features of [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest), is explained in this [Cordova blog post](https://cordova.apache.org/blog/2017/10/18/from-filetransfer-to-xhr2.html).
 
 ## Installation
 
@@ -102,9 +104,9 @@ __Parameters__:
   - __mimeType__: The mime type of the data to upload.  Defaults to `image/jpeg`. (DOMString)
   - __params__: A set of optional key/value pairs to pass in the HTTP request. (Object, key/value - DOMString)
   - __chunkedMode__: Whether to upload the data in chunked streaming mode. Defaults to `true`. (Boolean)
-  - __headers__: A map of header name/header values. Use an array to specify more than one value.  On iOS, FireOS, and Android, if a header named Content-Type is present, multipart form data will NOT be used. (Object)
+  - __headers__: A map of header name/header values. Use a hash to specify one or more than one value.  On iOS, FireOS, and Android, if a header named Content-Type is present, multipart form data will NOT be used. (Object)
 
-- __trustAllHosts__: Optional parameter, defaults to `false`. If set to `true`, it accepts all security certificates. This is useful since Android rejects self-signed security certificates. Not recommended for production use. Supported on Android and iOS. _(boolean)_
+- __trustAllHosts__: Optional parameter, defaults to `false`. If set to `true`, it accepts all security certificates. Not recommended for production use. Supported on iOS. _(boolean)_
 
 ### Example
 
@@ -161,7 +163,7 @@ options.fileKey="file";
 options.fileName=fileURL.substr(fileURL.lastIndexOf('/')+1);
 options.mimeType="text/plain";
 
-var headers={'headerParam':'headerValue'};
+var headers={'headerParam':'headerValue', 'headerParam2':'headerValue2'};
 
 options.headers = headers;
 
@@ -220,7 +222,7 @@ __Parameters__:
 
 - __errorCallback__: A callback that executes if an error occurs when retrieving the `FileEntry`. Invoked with a `FileTransferError` object. _(Function)_
 
-- __trustAllHosts__: Optional parameter, defaults to `false`. If set to `true`, it accepts all security certificates. This is useful because Android rejects self-signed security certificates. Not recommended for production use. Supported on Android and iOS. _(boolean)_
+- __trustAllHosts__: Optional parameter, defaults to `false`. If set to `true`, it accepts all security certificates. Not recommended for production use. Supported on iOS. _(boolean)_
 
 - __options__: Optional parameters, currently only supports headers (such as Authorization (Basic Authentication), etc).
 
@@ -309,6 +311,10 @@ A `FileTransferError` object is passed to an error callback when an error occurs
 - __body__ Response body. This attribute is only available when a response is received from the HTTP connection. (String)
 
 - __exception__: Either e.getMessage or e.toString (String)
+
+### iOS Quirks
+
+__exception__ is never defined.
 
 ### Constants
 

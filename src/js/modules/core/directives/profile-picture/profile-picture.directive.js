@@ -3,7 +3,7 @@
 
     angular.module("blocktrail.core")
         .directive("profilePicture", profilePicture);
-    
+
     function profilePicture() {
         return {
             restrict: "E",
@@ -17,12 +17,12 @@
         };
     }
 
-    function ProfilePictureCtrl($scope, $window, $cordovaImagePicker, $cordovaCamera, modalService, settingsService) {
+    function ProfilePictureCtrl($scope, $window, $q, $cordovaImagePicker, $cordovaCamera, $translate, modalService, settingsService) {
         var picSelectOptions = {
-            maximumImagesCount: 1,
-            width: 800,
-            height: 0,
-            quality: 80
+            targetWidth: 800,
+            targetHeight: 0,
+            quality: 80,
+            sourceType: $window.Camera.PictureSourceType.PHOTOLIBRARY
         };
         var picTakeOptions = {
             quality: 80,
@@ -47,26 +47,64 @@
          * Choose the picture
          */
         function choosePic() {
-            // Do not test it with live reload, img.src = results[0] doesn't work because of cross-domain request
-            $cordovaImagePicker.getPictures(picSelectOptions)
-                .then(function(results) {
-                    if (results[0]) {
-                        // convert image URL into data URL
-                        var img = new Image();
-                        img.crossOrigin = "Anonymous";
-                        img.onload = function() {
-                            var canvas = document.createElement('CANVAS');
-                            var ctx = canvas.getContext('2d');
-                            canvas.height = this.height;
-                            canvas.width = this.width;
-                            ctx.drawImage(this, 0, 0);
-                            var picData = canvas.toDataURL('image/jpeg');
-                            canvas = null;
-                            showPicCrop(picData);
-                        };
-                        img.src = results[0];
+            _checkPermission(true).then(function (hasReadPermission) {
+                if (!hasReadPermission) {
+                    return;
+                } else {
+
+                    // Do not test it with live reload, img.src = results[0] doesn't work because of cross-domain request
+                    $cordovaCamera.getPicture(picSelectOptions)
+                        .then(function(result) {
+                            if (result) {
+                                // convert image URL into data URL
+                                var img = new Image();
+                                img.crossOrigin = "Anonymous";
+                                img.onload = function () {
+                                    var canvas = document.createElement('CANVAS');
+                                    var ctx = canvas.getContext('2d');
+                                    canvas.height = this.height;
+                                    canvas.width = this.width;
+                                    ctx.drawImage(this, 0, 0);
+                                    var picData = canvas.toDataURL('image/jpeg');
+                                    canvas = null;
+                                    showPicCrop(picData);
+                                };
+                                img.src = result;
+                            }
+                        });
+                }
+            }).catch(function (e) {
+                modalService.hideSpinner();
+                modalService.alert({body: e.message ? e.message : e.toString()});
+            })
+        }
+
+        function _checkPermission(requestPermission) {
+            var deferred = $q.defer();
+            // Request permission
+            var permissions = cordova.plugins.permissions;
+            var requiredPermissions = [permissions.CAMERA, permissions.READ_EXTERNAL_STORAGE, permissions.WRITE_EXTERNAL_STORAGE];
+
+            permissions.hasPermission(requiredPermissions, function (status) {
+                if (!status.hasPermission) {
+                    var potentialErr = $translate.instant('PERMISSION_REQUIRED_PHOTOS');
+                    if (requestPermission) {
+                        permissions.requestPermissions(requiredPermissions,
+                            function () {
+                                deferred.resolve(true);
+                            }, function () {
+                                deferred.reject(new Error(potentialErr));
+                            });
+                    } else {
+                        deferred.reject(new Error(potentialErr));
                     }
-                });
+                } else {
+                    deferred.resolve(true);
+                }
+            });
+
+
+            return deferred.promise;
         }
 
         /**
@@ -89,15 +127,15 @@
          */
         function removePic() {
             modalService.confirm({
-                    body: "SETTINGS_REMOVE_PHOTO"
-                })
+                body: "SETTINGS_REMOVE_PHOTO"
+            })
                 .then(function(dialogResult) {
                     if(dialogResult) {
                         modalService.showSpinner();
 
                         settingsService.updateSettingsUp({
-                                profilePic: null
-                            })
+                            profilePic: null
+                        })
                             .then(function() {
                                 modalService.hideSpinner();
                             })
@@ -115,15 +153,15 @@
          */
         function showPicCrop(picData) {
             modalService.cropPic({
-                    picData: picData,
-                    buttonConfirm: "APPLY"
-                })
+                picData: picData,
+                buttonConfirm: "APPLY"
+            })
                 .then(function(croppedPicData) {
                     if(croppedPicData) {
                         modalService.showSpinner();
                         settingsService.updateSettingsUp({
-                                profilePic: croppedPicData
-                            })
+                            profilePic: croppedPicData
+                        })
                             .then(function() {
                                 modalService.hideSpinner();
                             })

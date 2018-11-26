@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-appsflyer-sdk.AppsFlyerError", function(require, exports, module) { 
+cordova.define("cordova-plugin-appsflyer-sdk.AppsFlyerError", function(require, exports, module) {
+
 
 module.exports = Object.freeze({
     INVALID_ARGUMENT_ERROR: "INVALID ARGUMENT ERROR",

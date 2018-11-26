@@ -6,7 +6,7 @@
 
     function WalletCtrl($rootScope, $timeout, $scope, $state, $filter, $translate, $ionicNavBarDelegate, $cordovaSocialSharing, $cordovaToast,
                         CONFIG, modalService, localSettingsService, settingsService, activeWallet, walletsManagerService, Currencies, Contacts, glideraService,
-                        trackingService, $ionicLoading, $log) {
+                        trackingService, $ionicLoading, $log, $stateParams) {
 
         var walletData = walletsManagerService.getActiveWalletReadOnlyData();
         var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
@@ -193,7 +193,7 @@
 
             return walletsManagerService.setActiveWalletByUniqueIdentifier(uniqueIdentifier)
                 .then(function() {
-                    $state.transitionTo("app.wallet.summary", null, { reload: true, inherit: false });
+                    $state.transitionTo("app.wallet.summary", { networkChange: true }, { reload: true, inherit: false });
                 }).catch(function (err) {
                     var bodyMessage = "MSG_FAILED_UNKNOWN";
                     if (err.name == "web_sql_went_bad" || err.name == "indexeddb_went_bad") {
@@ -221,8 +221,8 @@
          * Sync contacts
          */
         function syncContacts() {
-            // sync any changes to contacts, if syncing enabled
-            if (localSettingsData.isEnableContacts) {
+            // sync any changes to contacts, if syncing enabled (and it is not a network change)
+            if (localSettingsData.isEnableContacts && !$stateParams.networkChange) {
                 Contacts.sync()
                     .then(function() {
                         //rebuild the cached contacts list
@@ -230,7 +230,7 @@
                     })
                     .then(function() {
                         var data = {
-                            // TODO Review the logic related to 'contactsLastSync' discuss with Ruben,
+                            // TODO Review the logic related to 'contactsLastSync'
                             // TODO we do not use it right no
                             contactsLastSync: new Date().valueOf(),
                             isPermissionContacts: true

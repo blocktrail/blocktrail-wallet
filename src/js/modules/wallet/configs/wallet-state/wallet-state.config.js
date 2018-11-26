@@ -19,6 +19,9 @@
                     pinOnOpen: pinOnOpen,
                     activeWallet: getActiveWallet,
                     loadingData: loadingData
+                },
+                params: {
+                    networkChange: false
                 }
             })
             .state("app.wallet.summary", {
