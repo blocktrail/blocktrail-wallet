@@ -4,7 +4,7 @@
     angular.module("blocktrail.wallet")
         .controller("SendCtrl", SendCtrl);
 
-    function SendCtrl($scope, trackingService, $log, Contacts, walletsManagerService, CurrencyConverter,
+    function SendCtrl($scope, trackingService, $log, Contacts, walletsManagerService, Currencies, CurrencyConverter,
                          $timeout, $q, $btBackButtonDelegate, $state, settingsService, localSettingsService,
                          $rootScope, $translate, $cordovaDialogs, AppRateService, activeWallet, $stateParams,
                          launchService, modalService, CONFIG) {
@@ -681,8 +681,15 @@
             $scope.isLoading = true;
             return walletsManagerService.setActiveWalletByNetworkTypeAndIdentifier(networkType, identifier)
                 .then(function () {
-                    $state.reload();
-                    $scope.isLoading = false;
+                    Currencies.updatePrices(false)
+                        .then(function(prices) {
+                            $rootScope.bitcoinPrices = prices;
+                            $state.reload();
+                            $scope.isLoading = false;
+                        }).catch(function () {
+                            $state.reload();
+                            $scope.isLoading = false;
+                    });
                 });
         }
 
