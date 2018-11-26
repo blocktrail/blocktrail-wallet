@@ -189,7 +189,11 @@
             preFill: self._lodash.isString(parameters.preFill) ? parameters.preFill : ""
         };
 
-        return self.show("js/modules/core/controllers/modal-prompt/modal-prompt.tpl.html", "ModalPromptCtrl", parameters);
+        var options = {
+            focusFirstInput: self._lodash.isBoolean(parameters.focusFirstInput) ? parameters.focusFirstInput : false
+        };
+
+        return self.show("js/modules/core/controllers/modal-prompt/modal-prompt.tpl.html", "ModalPromptCtrl", parameters, options);
     };
 
     /**
