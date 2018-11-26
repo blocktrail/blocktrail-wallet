@@ -23,7 +23,7 @@ The Facebook plugin for [Apache Cordova](http://cordova.apache.org/) allows you 
 ## Compatibility
 
   * Cordova >= 5.0.0
-  * cordova-android >= 4.0 (see Android Guide for cordova-android >= 7)
+  * cordova-android >= 4.0
   * cordova-ios >= 3.8
   * cordova-browser >= 3.6
   * Phonegap build (use phonegap-version >= cli-5.2.0, android-minSdkVersion>=15, and android-build-tool=gradle), see [example here](https://github.com/yoav-zibin/phonegap-tictactoe/blob/gh-pages/www/config.xml)
@@ -37,20 +37,6 @@ The Facebook plugin for [Apache Cordova](http://cordova.apache.org/) allows you 
 - [Browser Guide](docs/browser/README.md)
 
 - [Troubleshooting Guide | F.A.Q.](docs/TROUBLESHOOTING.md)
-
-## Facebook SDK
-
-This plugin use the SDKs provided by Facebook. More information about these in their documentation for [iOS](https://developers.facebook.com/docs/ios/) or [Android](https://developers.facebook.com/docs/android/)
-
-### Facebook SDK version
-
-As of v3.0.0, this plugin will always be released for iOS and for Android with a synchronized usage of the Facebook SDKs
-
-For example: v3.0.0 include the Facebook SDK iOS v4.36.0 and reference per default the Facebook SDK Android v4.36.0 too
-
-### Graph API version
-
-Please note that this plugin itself does not specify which Graph API version is used. The Graph API version is set by the Facebook SDK for iOS and Android (see [Facebook documentation about versioning](https://developers.facebook.com/docs/apps/versions/))
 
 ## API
 
@@ -77,14 +63,6 @@ Failure function returns an error String.
 ### Logout
 
 `facebookConnectPlugin.logout(Function success, Function failure)`
-
-### Check permissions (iOS only)
-
-`facebookConnectPlugin.checkHasCorrectPermissions(Array strings of permissions, Function success, Function failure)`
-
-Success function returns a success string if all passed permissions are granted.
-
-Failure function returns an error String if any passed permissions are not granted.
 
 ### Get Status
 
@@ -118,16 +96,11 @@ Share Dialog:
 		href: "http://example.com",
 		caption: "Such caption, very feed.",
 		description: "Much description",
-		picture: 'http://example.com/image.png',
-		hashtag: '#myHashtag',
+		picture: 'http://example.com/image.png'
 		share_feedWeb: true, // iOS only
 	}
 
-#### iOS
-
-The default dialog mode is [`FBSDKShareDialogModeAutomatic`](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/). You can share that by adding a specific dialog mode parameter. The available share dialog modes are: `share_sheet`, `share_feedBrowser`, `share_native` and `share_feedWeb`. [Read more about share dialog modes](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/)
-
-`caption`, `description` and `picture` were deprecated in Facebok API [v2.9](https://developers.facebook.com/docs/graph-api/changelog/version2.9#gapi-deprecate) and therefore not supported anymore on iOS 
+For iOS, the default dialog mode is [`FBSDKShareDialogModeAutomatic`](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/). You can share that by adding a specific dialog mode parameter. The available share dialog modes are: `share_sheet`, `share_feedBrowser`, `share_native` and `share_feedWeb`. [Read more about share dialog modes](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/)
 
 Game request:
 
@@ -202,6 +175,7 @@ For more information see:
 - Graph Explorer - [https://developers.facebook.com/tools/explorer](https://developers.facebook.com/tools/explorer)
 - Graph API - [https://developers.facebook.com/docs/graph-api/](https://developers.facebook.com/docs/graph-api/)
 
+
 # Events
 
 App events allow you to understand the makeup of users engaging with your app, measure the performance of your Facebook mobile app ads, and reach specific sets of your users with Facebook mobile app ads.
@@ -231,6 +205,45 @@ Events are listed on the [insights page](https://www.facebook.com/insights/)
 ### Manually log activation events
 
 `activateApp(Function success, Function failure)`
+
+### App Invites
+
+`facebookConnectPlugin.appInvite(Object options, Function success, Function failure)`
+
+Please check out the [App Invites Overview](https://developers.facebook.com/docs/app-invites/overview) before using this. The URL is expected to be an [App Link](https://developers.facebook.com/docs/applinks).
+
+Example options:
+
+    {
+      url: "http://example.com",
+      picture: "http://example.com/image.png"
+    }
+
+## Sample Code
+
+```js
+facebookConnectPlugin.appInvite(
+    {
+        url: "http://example.com",
+        picture: "http://example.com/image.png"
+    },
+    function(obj){
+        if(obj) {
+            if(obj.completionGesture == "cancel") {
+                // user canceled, bad guy
+            } else {
+                // user really invited someone :)
+            }
+        } else {
+            // user just pressed done, bad guy
+        }
+    },
+    function(obj){
+        // error
+        console.log(obj);
+    }
+);
+```
 
 ### Login
 

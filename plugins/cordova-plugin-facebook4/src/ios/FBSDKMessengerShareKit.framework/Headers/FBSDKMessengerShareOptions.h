@@ -20,43 +20,42 @@
 
 #import "FBSDKMessengerContext.h"
 
-/**
+/*!
+ @class FBSDKMessengerShareOptions
 
-  Optional parameters that change the way content is shared into Messenger
+ @abstract
+ Optional parameters that change the way content is shared into Messenger
  */
 @interface FBSDKMessengerShareOptions : NSObject
 
-/**
-  Pass additional information to be sent to Messenger which is sent back to
+/*!
+ @abstract Pass additional information to be sent to Messenger which is sent back to
  the user's app when they reply to an attributed message.
  */
 @property (nonatomic, readwrite, copy) NSString *metadata;
 
-/**
- Optional property describing the www source URL of the content
+/*!
+@abstract Optional property describing the www source URL of the content
 
-
- Setting this property improves performance by allowing Messenger to download
+@discussion Setting this property improves performance by allowing Messenger to download
  the content directly rather than uploading the content from your app.
  This option is only used for animated GIFs and WebPs.
  */
 @property (nonatomic, readwrite, copy) NSURL *sourceURL;
 
-/**
-  Optional property describing whether the content should be rendered like a sticker
+/*!
+ @abstract Optional property describing whether the content should be rendered like a sticker
 
- 
- Setting this property informs Messenger that the media content should be rendered
+ @discussion Setting this property informs Messenger that the media content should be rendered
  as a sticker.
  This option is only used for static images.
  */
 @property (nonatomic, readwrite, assign) BOOL renderAsSticker;
 
-/**
-  Optional property that overrides the default way the content will be shared to messenger
+/*!
+ @abstract Optional property that overrides the default way the content will be shared to messenger
 
- 
- By default, if a user enters your app via a replyable context in Messenger
+ @discussion By default, if a user enters your app via a replyable context in Messenger
  (for instance, tapping Reply on a message or opening your app from composer), the next share
  out of your app will trigger the reply flow in Messenger by default. If you'd prefer to not
  trigger the reply flow, then overriding this with FBSDKMessengerBroadcastContext will trigger the

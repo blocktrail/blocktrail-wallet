@@ -1,27 +1,27 @@
 {
-  "_from": "cordova-plugin-facebook4",
-  "_id": "cordova-plugin-facebook4@3.1.0",
+  "_from": "cordova-plugin-facebook4@1.7.4",
+  "_id": "cordova-plugin-facebook4@1.7.4",
   "_inBundle": false,
-  "_integrity": "sha512-TObjtgEFr7leLzLH8RNetdVEAfl3tN9rfLZ1jEI4dfv2gn1kLIxwP3kdyXiip3dU4YuWRVkRP2c9CwXY242bww==",
+  "_integrity": "sha1-dU3hPzwPn8CUnvWBJsxO9oi9Yxo=",
   "_location": "/cordova-plugin-facebook4",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "version",
     "registry": true,
-    "raw": "cordova-plugin-facebook4",
+    "raw": "cordova-plugin-facebook4@1.7.4",
     "name": "cordova-plugin-facebook4",
     "escapedName": "cordova-plugin-facebook4",
-    "rawSpec": "",
+    "rawSpec": "1.7.4",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "1.7.4"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-facebook4/-/cordova-plugin-facebook4-3.1.0.tgz",
-  "_shasum": "e5e7ad23a0e5d48d8854c73358135c44485597bc",
-  "_spec": "cordova-plugin-facebook4",
+  "_resolved": "http://registry.npmjs.org/cordova-plugin-facebook4/-/cordova-plugin-facebook4-1.7.4.tgz",
+  "_shasum": "754de13f3c0f9fc0949ef58126cc4ef688bd631a",
+  "_spec": "cordova-plugin-facebook4@1.7.4",
   "_where": "/storage/blocktrail/btccom/blocktrail-wallet (copy)",
   "bugs": {
     "url": "https://github.com/jeduan/cordova-plugin-facebook4/issues"
@@ -55,5 +55,5 @@
     "type": "git",
     "url": "git+https://github.com/jeduan/cordova-plugin-facebook4.git"
   },
-  "version": "3.1.0"
+  "version": "1.7.4"
 }

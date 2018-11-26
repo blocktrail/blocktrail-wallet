@@ -39,10 +39,10 @@ buildscript {
 // Allow plugins to declare Maven dependencies via build-extras.gradle.
 allprojects {
     repositories {
+        jcenter()
         maven {
             url "https://maven.google.com"
         }
-        jcenter()
     }
 }
 
@@ -92,6 +92,7 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
+apply from: "cordova-android-support-gradle-release/mywallet-cordova-android-support-gradle-release.gradle"
 apply from: "cordova-fabric-plugin/mywallet-build-extras.gradle"
 apply from: "cordova-plugin-appsflyer-sdk/mywallet-cordovaAF.gradle"
 apply from: "cordova-plugin-firebase/mywallet-build.gradle"
@@ -256,7 +257,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: "CordovaLib"))
-    compile "com.facebook.android:facebook-android-sdk:4.14.+"
+    compile "com.android.support:support-v4:24.1.1+"
     compile "com.google.gms:google-services:+"
     compile "com.google.android.gms:play-services-tagmanager:+"
     compile "com.google.firebase:firebase-core:+"
@@ -264,8 +265,8 @@ dependencies {
     compile "com.google.firebase:firebase-crash:+"
     compile "com.google.firebase:firebase-config:+"
     compile "com.google.android.gms:play-services-analytics:+"
-    compile "com.android.support:support-v4:24.1.1+"
     compile "com.android.support:support-v4:27.+"
+    compile "com.facebook.android:facebook-android-sdk:4.14.+"
     // SUB-PROJECT DEPENDENCIES END
 }
 

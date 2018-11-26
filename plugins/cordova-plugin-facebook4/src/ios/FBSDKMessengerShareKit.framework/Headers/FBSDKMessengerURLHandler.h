@@ -27,8 +27,9 @@ FBSDKMessengerURLHandlerCancelContext;
 
 @optional
 
-/**
-  This is called after FBSDKMessengerURLHandler has received a reply from messenger
+/*!
+ @abstract
+ This is called after FBSDKMessengerURLHandler has received a reply from messenger
 
  @param messengerURLHandler The handler that handled the URL
  @param context The data passed from Messenger
@@ -36,8 +37,9 @@ FBSDKMessengerURLHandlerCancelContext;
 - (void)messengerURLHandler:(FBSDKMessengerURLHandler *)messengerURLHandler
   didHandleReplyWithContext:(FBSDKMessengerURLHandlerReplyContext *)context;
 
-/**
-  This is called after a user tapped this app from the composer in Messenger
+/*!
+ @abstract
+ This is called after a user tapped this app from the composer in Messenger
 
  @param messengerURLHandler The handler that handled the URL
  @param context The data passed from Messenger
@@ -45,8 +47,9 @@ FBSDKMessengerURLHandlerCancelContext;
 - (void)          messengerURLHandler:(FBSDKMessengerURLHandler *)messengerURLHandler
  didHandleOpenFromComposerWithContext:(FBSDKMessengerURLHandlerOpenFromComposerContext *)context;
 
-/**
-  This is called after a user canceled a share and Messenger redirected here
+/*!
+ @abstract
+ This is called after a user canceled a share and Messenger redirected here
 
  @param messengerURLHandler The handler that handled the URL
  @param context The data passed from Messenger
@@ -56,14 +59,17 @@ FBSDKMessengerURLHandlerCancelContext;
 
 @end
 
-/**
+/*!
+ @class FBSDKMessengerURLHandler
 
-  FBSDKMessengerURLHandler is used to handle incoming URLs from Messenger.
+ @abstract
+ FBSDKMessengerURLHandler is used to handle incoming URLs from Messenger.
  */
 @interface FBSDKMessengerURLHandler : NSObject
 
-/**
-    Determines whether an incoming URL can be handled by this class
+/*!
+  @abstract
+  Determines whether an incoming URL can be handled by this class
 
   @param url The URL passed in from the source application
   @param sourceApplication The bundle id representing the source application
@@ -72,8 +78,9 @@ FBSDKMessengerURLHandlerCancelContext;
  */
 - (BOOL)canOpenURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication;
 
-/**
-    Attempts to handle the Messenger URL and returns YES if and only if successful.
+/*!
+  @abstract
+  Attempts to handle the Messenger URL and returns YES if and only if successful.
   This should be called from the AppDelegate's -openURL: method
 
   @param url The URL passed in from the source application

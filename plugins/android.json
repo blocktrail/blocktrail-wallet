@@ -15,7 +15,16 @@
     "cordova-open": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
+    "cordova-plugin-android-permissions": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
     "cordova-plugin-appsflyer-sdk": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-contacts-phonenumbers": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-customurlscheme": {
@@ -25,9 +34,7 @@
     "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "cordova-plugin-facebook4": {
-      "APP_ID": "1072524012838770",
-      "APP_NAME": "BTC.com",
+    "cordova-plugin-email-composer": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-firebase": {
@@ -42,7 +49,19 @@
     "cordova-plugin-google-app-conversion-tracker": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
     "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-sms": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-vibration": {
@@ -52,6 +71,9 @@
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-x-socialsharing": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-sqlite-storage": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-universal-clipboard": {
@@ -75,42 +97,24 @@
     "org.apache.cordova.splashscreen": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "org.apache.cordova.statusbar": {
+    "phonegap-plugin-barcodescanner": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "uk.co.whiteoctober.cordova.appversion": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "cordova-plugin-android-permissions": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-ionic-keyboard": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-sms": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-contacts-phonenumbers": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-email-composer": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-sqlite-storage": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "cordova-plugin-camera": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
-    "phonegap-plugin-barcodescanner": {
-      "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    "cordova-plugin-facebook4": {
+      "APP_ID": "1072524012838770",
+      "APP_NAME": "BTC.com",
+      "PACKAGE_NAME": "com.blocktrail.mywallettest"
     }
   },
   "dependent_plugins": {
+    "cordova-android-support-gradle-release": {
+      "ANDROID_SUPPORT_VERSION": "27.+",
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },

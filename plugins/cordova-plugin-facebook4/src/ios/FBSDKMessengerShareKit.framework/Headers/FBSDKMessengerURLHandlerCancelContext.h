@@ -20,9 +20,11 @@
 
 #import "FBSDKMessengerContext.h"
 
-/**
+/*!
+ @class FBSDKMessengerURLHandlerCancelContext
 
-  This object represents a user canceling out of a share flow in Messenger
+ @abstract
+ This object represents a user canceling out of a share flow in Messenger
  */
 @interface FBSDKMessengerURLHandlerCancelContext : FBSDKMessengerContext
 

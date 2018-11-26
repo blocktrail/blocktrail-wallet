@@ -171,17 +171,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-facebook4": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-facebook4"
-    },
-    "is_top_level": true,
-    "variables": {
-      "APP_ID": "1072524012838770",
-      "APP_NAME": "BTC.com"
-    }
-  },
   "cordova-plugin-x-socialsharing": {
     "source": {
       "type": "registry",
@@ -312,5 +301,16 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-facebook4": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-facebook4@1.7.4"
+    },
+    "is_top_level": true,
+    "variables": {
+      "APP_ID": "1072524012838770",
+      "APP_NAME": "BTC.com"
+    }
   }
 }

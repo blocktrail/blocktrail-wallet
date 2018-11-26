@@ -37,12 +37,6 @@
     "cordova-plugin-email-composer": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "cordova-plugin-facebook4": {
-      "APP_ID": "1072524012838770",
-      "APP_NAME": "BTC.com",
-      "FACEBOOK_ANDROID_SDK_VERSION": "4.37.0",
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "cordova-plugin-firebase": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
@@ -65,6 +59,9 @@
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-sms": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
+    "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "cordova-plugin-vibration": {
@@ -100,17 +97,22 @@
     "org.apache.cordova.splashscreen": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "org.apache.cordova.statusbar": {
+    "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
     "uk.co.whiteoctober.cordova.appversion": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "phonegap-plugin-barcodescanner": {
+    "cordova-plugin-facebook4": {
+      "APP_ID": "1072524012838770",
+      "APP_NAME": "BTC.com",
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {
+    "cordova-android-support-gradle-release": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
+    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },

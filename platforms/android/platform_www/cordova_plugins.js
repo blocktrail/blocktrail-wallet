@@ -222,6 +222,14 @@ module.exports = [
     ]
   },
   {
+    "id": "cordova-plugin-android-permissions.Permissions",
+    "file": "plugins/cordova-plugin-android-permissions/www/permissions.js",
+    "pluginId": "cordova-plugin-android-permissions",
+    "clobbers": [
+      "cordova.plugins.permissions"
+    ]
+  },
+  {
     "id": "cordova-plugin-appsflyer-sdk.appsflyer",
     "file": "plugins/cordova-plugin-appsflyer-sdk/www/appsflyer.js",
     "pluginId": "cordova-plugin-appsflyer-sdk",
@@ -235,6 +243,46 @@ module.exports = [
     "pluginId": "cordova-plugin-appsflyer-sdk",
     "clobbers": [
       "AppsFlyerError"
+    ]
+  },
+  {
+    "id": "cordova-plugin-camera.Camera",
+    "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+    "pluginId": "cordova-plugin-camera",
+    "clobbers": [
+      "Camera"
+    ]
+  },
+  {
+    "id": "cordova-plugin-camera.CameraPopoverOptions",
+    "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+    "pluginId": "cordova-plugin-camera",
+    "clobbers": [
+      "CameraPopoverOptions"
+    ]
+  },
+  {
+    "id": "cordova-plugin-camera.camera",
+    "file": "plugins/cordova-plugin-camera/www/Camera.js",
+    "pluginId": "cordova-plugin-camera",
+    "clobbers": [
+      "navigator.camera"
+    ]
+  },
+  {
+    "id": "cordova-plugin-camera.CameraPopoverHandle",
+    "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
+    "pluginId": "cordova-plugin-camera",
+    "clobbers": [
+      "CameraPopoverHandle"
+    ]
+  },
+  {
+    "id": "cordova-plugin-contacts-phonenumbers.contactsPhoneNumbers",
+    "file": "plugins/cordova-plugin-contacts-phonenumbers/www/contactsPhoneNumbers.js",
+    "pluginId": "cordova-plugin-contacts-phonenumbers",
+    "clobbers": [
+      "navigator.contactsPhoneNumbers"
     ]
   },
   {
@@ -262,11 +310,12 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
-    "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
-    "pluginId": "cordova-plugin-facebook4",
+    "id": "cordova-plugin-email-composer.EmailComposer",
+    "file": "plugins/cordova-plugin-email-composer/www/email_composer.js",
+    "pluginId": "cordova-plugin-email-composer",
     "clobbers": [
-      "facebookConnectPlugin"
+      "cordova.plugins.email",
+      "plugin.email"
     ]
   },
   {
@@ -311,6 +360,23 @@ module.exports = [
     ]
   },
   {
+    "id": "cordova-plugin-inappbrowser.inappbrowser",
+    "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+    "pluginId": "cordova-plugin-inappbrowser",
+    "clobbers": [
+      "cordova.InAppBrowser.open",
+      "window.open"
+    ]
+  },
+  {
+    "id": "cordova-plugin-ionic-keyboard.keyboard",
+    "file": "plugins/cordova-plugin-ionic-keyboard/www/android/keyboard.js",
+    "pluginId": "cordova-plugin-ionic-keyboard",
+    "clobbers": [
+      "window.Keyboard"
+    ]
+  },
+  {
     "id": "cordova-plugin-network-information.network",
     "file": "plugins/cordova-plugin-network-information/www/network.js",
     "pluginId": "cordova-plugin-network-information",
@@ -325,6 +391,22 @@ module.exports = [
     "pluginId": "cordova-plugin-network-information",
     "clobbers": [
       "Connection"
+    ]
+  },
+  {
+    "id": "cordova-plugin-sms.SMS",
+    "file": "plugins/cordova-plugin-sms/www/SMS.js",
+    "pluginId": "cordova-plugin-sms",
+    "clobbers": [
+      "window.SMS"
+    ]
+  },
+  {
+    "id": "cordova-plugin-statusbar.statusbar",
+    "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+    "pluginId": "cordova-plugin-statusbar",
+    "clobbers": [
+      "window.StatusBar"
     ]
   },
   {
@@ -348,6 +430,14 @@ module.exports = [
     "pluginId": "cordova-plugin-x-socialsharing",
     "clobbers": [
       "window.plugins.socialsharing"
+    ]
+  },
+  {
+    "id": "cordova-sqlite-storage.SQLitePlugin",
+    "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+    "pluginId": "cordova-sqlite-storage",
+    "clobbers": [
+      "SQLitePlugin"
     ]
   },
   {
@@ -404,11 +494,11 @@ module.exports = [
     ]
   },
   {
-    "id": "org.apache.cordova.statusbar.statusbar",
-    "file": "plugins/org.apache.cordova.statusbar/www/statusbar.js",
-    "pluginId": "org.apache.cordova.statusbar",
+    "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
+    "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
+    "pluginId": "phonegap-plugin-barcodescanner",
     "clobbers": [
-      "window.StatusBar"
+      "cordova.plugins.barcodeScanner"
     ]
   },
   {
@@ -420,123 +510,42 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-android-permissions.Permissions",
-    "file": "plugins/cordova-plugin-android-permissions/www/permissions.js",
-    "pluginId": "cordova-plugin-android-permissions",
+    "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
+    "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
+    "pluginId": "cordova-plugin-facebook4",
     "clobbers": [
-      "cordova.plugins.permissions"
-    ]
-  },
-  {
-    "id": "cordova-plugin-ionic-keyboard.keyboard",
-    "file": "plugins/cordova-plugin-ionic-keyboard/www/android/keyboard.js",
-    "pluginId": "cordova-plugin-ionic-keyboard",
-    "clobbers": [
-      "window.Keyboard"
-    ]
-  },
-  {
-    "id": "cordova-plugin-sms.SMS",
-    "file": "plugins/cordova-plugin-sms/www/SMS.js",
-    "pluginId": "cordova-plugin-sms",
-    "clobbers": [
-      "window.SMS"
-    ]
-  },
-  {
-    "id": "cordova-plugin-inappbrowser.inappbrowser",
-    "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-    "pluginId": "cordova-plugin-inappbrowser",
-    "clobbers": [
-      "cordova.InAppBrowser.open",
-      "window.open"
-    ]
-  },
-  {
-    "id": "cordova-plugin-contacts-phonenumbers.contactsPhoneNumbers",
-    "file": "plugins/cordova-plugin-contacts-phonenumbers/www/contactsPhoneNumbers.js",
-    "pluginId": "cordova-plugin-contacts-phonenumbers",
-    "clobbers": [
-      "navigator.contactsPhoneNumbers"
-    ]
-  },
-  {
-    "id": "cordova-plugin-email-composer.EmailComposer",
-    "file": "plugins/cordova-plugin-email-composer/www/email_composer.js",
-    "pluginId": "cordova-plugin-email-composer",
-    "clobbers": [
-      "cordova.plugins.email",
-      "plugin.email"
-    ]
-  },
-  {
-    "id": "cordova-sqlite-storage.SQLitePlugin",
-    "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-    "pluginId": "cordova-sqlite-storage",
-    "clobbers": [
-      "SQLitePlugin"
-    ]
-  },
-  {
-    "id": "cordova-plugin-camera.Camera",
-    "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-    "pluginId": "cordova-plugin-camera",
-    "clobbers": [
-      "Camera"
-    ]
-  },
-  {
-    "id": "cordova-plugin-camera.CameraPopoverOptions",
-    "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-    "pluginId": "cordova-plugin-camera",
-    "clobbers": [
-      "CameraPopoverOptions"
-    ]
-  },
-  {
-    "id": "cordova-plugin-camera.camera",
-    "file": "plugins/cordova-plugin-camera/www/Camera.js",
-    "pluginId": "cordova-plugin-camera",
-    "clobbers": [
-      "navigator.camera"
-    ]
-  },
-  {
-    "id": "cordova-plugin-camera.CameraPopoverHandle",
-    "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
-    "pluginId": "cordova-plugin-camera",
-    "clobbers": [
-      "CameraPopoverHandle"
-    ]
-  },
-  {
-    "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
-    "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
-    "pluginId": "phonegap-plugin-barcodescanner",
-    "clobbers": [
-      "cordova.plugins.barcodeScanner"
+      "facebookConnectPlugin"
     ]
   }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
+  "cordova-android-support-gradle-release": "2.0.1",
   "cordova-fabric-plugin": "1.0.8",
   "cordova-plugin-file": "6.0.1",
   "cordova-plugin-file-transfer": "1.7.1",
   "cordova-open": "1.0.12",
+  "cordova-plugin-android-permissions": "1.0.0",
   "cordova-plugin-appsflyer-sdk": "4.4.0",
+  "cordova-plugin-camera": "4.0.3",
+  "cordova-plugin-contacts-phonenumbers": "0.0.11",
   "cordova-plugin-customurlscheme": "4.0.0",
   "cordova-plugin-dialogs": "1.1.2-dev",
-  "cordova-plugin-facebook4": "1.7.4",
+  "cordova-plugin-email-composer": "0.8.15",
   "cordova-plugin-firebase": "0.1.24",
   "cordova-plugin-globalization": "1.0.1",
   "cordova-plugin-google-analytics": "1.5.6",
   "cordova-plugin-google-app-conversion-tracker": "0.0.2",
+  "cordova-plugin-inappbrowser": "3.0.0",
+  "cordova-plugin-ionic-keyboard": "2.1.3",
   "cordova-plugin-network-information": "1.0.1",
+  "cordova-plugin-sms": "1.0.5",
+  "cordova-plugin-statusbar": "2.4.2",
   "cordova-plugin-vibration": "1.2.0",
   "cordova-plugin-whitelist": "1.0.0",
   "cordova-plugin-x-socialsharing": "5.1.7",
+  "cordova-sqlite-storage": "2.5.1",
   "cordova-universal-clipboard": "0.1.0",
   "hu.dpal.phonegap.plugins.PinDialog": "0.1.3",
   "io.github.pwlin.cordova.plugins.fileopener2": "1.0.11",
@@ -544,17 +553,9 @@ module.exports.metadata =
   "org.apache.cordova.console": "0.2.13",
   "org.apache.cordova.device": "0.3.0",
   "org.apache.cordova.splashscreen": "1.0.0",
-  "org.apache.cordova.statusbar": "0.1.10",
+  "phonegap-plugin-barcodescanner": "8.0.0",
   "uk.co.whiteoctober.cordova.appversion": "0.1.7",
-  "cordova-plugin-android-permissions": "1.0.0",
-  "cordova-plugin-ionic-keyboard": "2.1.3",
-  "cordova-plugin-sms": "1.0.5",
-  "cordova-plugin-inappbrowser": "3.0.0",
-  "cordova-plugin-contacts-phonenumbers": "0.0.11",
-  "cordova-plugin-email-composer": "0.8.15",
-  "cordova-sqlite-storage": "2.5.1",
-  "cordova-plugin-camera": "4.0.3",
-  "phonegap-plugin-barcodescanner": "8.0.0"
+  "cordova-plugin-facebook4": "1.7.4"
 };
 // BOTTOM OF METADATA
 });
