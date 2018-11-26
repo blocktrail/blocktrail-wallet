@@ -87,7 +87,7 @@
             if (CONFIG.NETWORKS[walletData.networkType].CASHADDRESS) {
                 prefix = "";
                 if (!$scope.appControl.useCashAddress) {
-                    prefix = CONFIG.NETWORKS["BTC"].URIPREFIX;
+                    prefix = CONFIG.NETWORKS[walletData.networkType].URIPREFIX;
                 }
             }
 
