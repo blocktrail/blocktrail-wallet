@@ -311,6 +311,14 @@ module.exports = [
         ]
     },
     {
+        "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
+        "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
+        "pluginId": "cordova-plugin-facebook4",
+        "clobbers": [
+            "facebookConnectPlugin"
+        ]
+    },
+    {
         "id": "cordova-plugin-firebase.FirebasePlugin",
         "file": "plugins/cordova-plugin-firebase/www/firebase.js",
         "pluginId": "cordova-plugin-firebase",
@@ -510,14 +518,6 @@ module.exports = [
         "clobbers": [
             "cordova.getAppVersion"
         ]
-    },
-    {
-        "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
-        "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
-        "pluginId": "cordova-plugin-facebook4",
-        "clobbers": [
-            "facebookConnectPlugin"
-        ]
     }
 ];
 module.exports.metadata = 
@@ -535,6 +535,7 @@ module.exports.metadata =
     "cordova-plugin-customurlscheme": "4.0.0",
     "cordova-plugin-dialogs": "1.1.2-dev",
     "cordova-plugin-email-composer": "0.8.15",
+    "cordova-plugin-facebook4": "1.7.4",
     "cordova-plugin-firebase": "0.1.24",
     "cordova-plugin-globalization": "1.0.1",
     "cordova-plugin-google-analytics": "1.5.6",
@@ -556,8 +557,7 @@ module.exports.metadata =
     "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.splashscreen": "1.0.0",
     "phonegap-plugin-barcodescanner": "8.0.0",
-    "uk.co.whiteoctober.cordova.appversion": "0.1.7",
-    "cordova-plugin-facebook4": "1.7.4"
+    "uk.co.whiteoctober.cordova.appversion": "0.1.7"
 };
 // BOTTOM OF METADATA
 });
