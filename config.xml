@@ -83,9 +83,11 @@
         <icon height="144" src="resources/ios/icon/icon-72@2x.png" width="144" />
         <icon height="76" src="resources/ios/icon/icon-76.png" width="76" />
         <icon height="152" src="resources/ios/icon/icon-76@2x.png" width="152" />
+        <icon height="167" src="resources/ios/icon/icon-83.5@2x.png" width="167" />
         <icon height="29" src="resources/ios/icon/icon-small.png" width="29" />
         <icon height="58" src="resources/ios/icon/icon-small@2x.png" width="58" />
         <icon height="87" src="resources/ios/icon/icon-small@3x.png" width="87" />
+        <icon height="1024" src="resources/icon-1024-non-transparent.png" width="1024" />
         <splash src="resources/ios/splash/Default@2x~universal~anyany.png" />
         <splash src="resources/ios/splash/Default@2x~universal~comany.png" />
         <splash src="resources/ios/splash/Default@2x~universal~comcom.png" />
@@ -94,19 +96,44 @@
         <splash src="resources/ios/splash/Default@3x~universal~comany.png" />
     </platform>
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <plugin name="cordova-plugin-android-permissions" spec="1.0.0" />
-    <plugin name="cordova-plugin-ionic-keyboard" spec="2.1.3" />
-    <plugin name="cordova-plugin-sms" spec="^1.0.5" />
-    <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
-    <plugin name="cordova-plugin-contacts-phonenumbers" spec="0.0.11" />
-    <plugin name="cordova-plugin-email-composer" spec="^0.8.15" />
-    <plugin name="cordova-sqlite-storage" spec="^2.5.1" />
-    <plugin name="cordova-plugin-camera" spec="4.0.3" />
-    <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
-    <plugin name="phonegap-plugin-barcodescanner" spec="^8.0.0">
-        <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
+    <plugin name="org.apache.cordova.device" spec="~0.3.0" />
+    <plugin name="org.apache.cordova.console" spec="~0.2.13" />
+    <plugin name="org.apache.cordova.splashscreen" spec="~1.0.0" />
+    <plugin name="cordova-plugin-whitelist" spec="~1.0.0" />
+    <plugin name="cordova-plugin-network-information" spec="~1.0.1" />
+    <plugin name="cordova-plugin-globalization" spec="~1.0.1" />
+    <plugin name="hu.dpal.phonegap.plugins.PinDialog" spec="https://github.com/Paldom/PinDialog.git" />
+    <plugin name="io.github.pwlin.cordova.plugins.fileopener2" spec="https://github.com/pwlin/cordova-plugin-file-opener2.git" />
+    <plugin name="uk.co.whiteoctober.cordova.appversion" spec="https://github.com/whiteoctober/cordova-plugin-app-version.git" />
+    <plugin name="nl.x-services.plugins.toast" spec="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git" />
+    <plugin name="org.apache.cordova.statusbar" spec="~0.1.10" />
+    <plugin name="cordova-plugin-customurlscheme" spec="https://github.com/blocktrail/Custom-URL-scheme.git">
+        <variable name="URL_SCHEME" value="bitcoin" />
     </plugin>
-    <plugin name="cordova-plugin-facebook4" spec="1.7.4">
+    <plugin name="cordova-plugin-vibration" spec="~1.2.0" />
+    <plugin name="cordova-plugin-dialogs" spec="~1.1.2-dev" />
+    <plugin name="cordova-plugin-google-app-conversion-tracker" spec="https://github.com/MyHealthTeams/google-app-conversion-tracker.git" />
+    <plugin name="cordova-fabric-plugin" spec="~1.0.8">
+        <variable name="FABRIC_API_KEY" value="059fcf328d73ce164c3ab1c4436293db0d6718ca" />
+        <variable name="FABRIC_API_SECRET" value="2c340ebe46f524afe449562561ea54dfadc2e974006b7ce0b45340753c1ee741" />
+    </plugin>
+    <plugin name="cordova-plugin-google-analytics" spec="https://github.com/danwilson/google-analytics-plugin.git" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.7" />
+    <plugin name="cordova-plugin-firebase" spec="https://github.com/arnesson/cordova-plugin-firebase" />
+    <plugin name="cordova-open" spec="~1.0.12" />
+    <plugin name="cordova-universal-clipboard" spec="https://github.com/Visigo/CordovaClipboard" />
+    <plugin name="cordova-plugin-appsflyer-sdk" spec="https://github.com/AppsFlyerSDK/cordova-plugin-appsflyer-sdk.git" />
+    <plugin name="cordova-plugin-android-permissions" spec="~1.0.0" />
+    <plugin name="cordova-plugin-ionic-keyboard" spec="~2.1.3" />
+    <plugin name="cordova-plugin-sms" spec="~1.0.5" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~3.0.0" />
+    <plugin name="cordova-plugin-contacts-phonenumbers" spec="~0.0.11" />
+    <plugin name="cordova-plugin-email-composer" spec="~0.8.15" />
+    <plugin name="cordova-sqlite-storage" spec="~2.5.1" />
+    <plugin name="cordova-plugin-camera" spec="~4.0.3" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="~8.0.0" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.4.2" />
+    <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
         <variable name="APP_ID" value="1072524012838770" />
         <variable name="APP_NAME" value="BTC.com" />
     </plugin>
