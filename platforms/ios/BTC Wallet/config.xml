@@ -162,13 +162,12 @@
     <icon height="29" src="resources/ios/icon/icon-small.png" width="29" />
     <icon height="58" src="resources/ios/icon/icon-small@2x.png" width="58" />
     <icon height="87" src="resources/ios/icon/icon-small@3x.png" width="87" />
-    <splash height="1136" src="resources/ios/splash/Default-568h@2x~iphone.png" width="640" />
-    <splash height="1334" src="resources/ios/splash/Default-667h.png" width="750" />
-    <splash height="2208" src="resources/ios/splash/Default-736h.png" width="1242" />
-    <splash height="2048" src="resources/ios/splash/Default-Portrait@2x~ipad.png" width="1536" />
-    <splash height="1024" src="resources/ios/splash/Default-Portrait~ipad.png" width="768" />
-    <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
-    <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
+    <splash src="resources/ios/splash/Default@2x~universal~anyany.png" />
+    <splash src="resources/ios/splash/Default@2x~universal~comany.png" />
+    <splash src="resources/ios/splash/Default@2x~universal~comcom.png" />
+    <splash src="resources/ios/splash/Default@3x~universal~anyany.png" />
+    <splash src="resources/ios/splash/Default@3x~universal~anycom.png" />
+    <splash src="resources/ios/splash/Default@3x~universal~comany.png" />
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="DisallowOverscroll" value="true" />

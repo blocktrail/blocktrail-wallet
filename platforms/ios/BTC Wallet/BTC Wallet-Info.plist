@@ -116,6 +116,8 @@
     <string>1072524012838770</string>
     <key>FacebookDisplayName</key>
     <string>BTC.com</string>
+    <key>UILaunchStoryboardName</key>
+    <string>CDVLaunchScreen</string>
     <key>NSCameraUsageDescription</key>
     <string>Need camera access to scan QR codes</string>
     <key>NSPhotoLibraryUsageDescription</key>
