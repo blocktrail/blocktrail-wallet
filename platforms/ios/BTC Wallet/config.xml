@@ -115,6 +115,10 @@
     <feature name="AppVersion">
         <param name="ios-package" value="AppVersion" />
     </feature>
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
     <name>BTC Wallet</name>
     <description>
         Your personal Bitcoin wallet, powered by BTC.com
@@ -194,8 +198,4 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
     <preference name="StatusBarBackgroundColor" value="#3C78C2" />
-    <feature name="SplashScreen">
-        <param name="ios-package" value="CDVSplashScreen" />
-        <param name="onload" value="true" />
-    </feature>
 </widget>
