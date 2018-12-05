@@ -91,9 +91,6 @@
     "org.apache.cordova.device": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "org.apache.cordova.splashscreen": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.blocktrail.mywallet"
@@ -105,6 +102,9 @@
       "APP_ID": "1072524012838770",
       "APP_NAME": "BTC.com",
       "PACKAGE_NAME": "com.blocktrail.mywallettest"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.blocktrail.mywallet"
     }
   },
   "dependent_plugins": {

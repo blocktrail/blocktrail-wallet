@@ -109,10 +109,6 @@
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
     </feature>
-    <feature name="SplashScreen">
-        <param name="ios-package" value="CDVSplashScreen" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="BarcodeScanner">
         <param name="ios-package" value="CDVBarcodeScanner" />
     </feature>
@@ -198,4 +194,8 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
     <preference name="StatusBarBackgroundColor" value="#3C78C2" />
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
 </widget>

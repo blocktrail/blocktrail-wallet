@@ -21,6 +21,7 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="orientation" value="portrait" />
     <preference name="KeyboardResize" value="false" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
@@ -98,7 +99,6 @@
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <plugin name="org.apache.cordova.device" spec="~0.3.0" />
     <plugin name="org.apache.cordova.console" spec="~0.2.13" />
-    <plugin name="org.apache.cordova.splashscreen" spec="~1.0.0" />
     <plugin name="cordova-plugin-whitelist" spec="~1.0.0" />
     <plugin name="cordova-plugin-network-information" spec="~1.0.1" />
     <plugin name="cordova-plugin-globalization" spec="~1.0.1" />
@@ -137,6 +137,7 @@
         <variable name="APP_ID" value="1072524012838770" />
         <variable name="APP_NAME" value="BTC.com" />
     </plugin>
+    <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <engine name="android" spec="6.4.0" />
     <engine name="ios" spec="4.5.4" />
 </widget>
