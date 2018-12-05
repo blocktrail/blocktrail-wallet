@@ -17,10 +17,21 @@
  under the License.
  */
 
-#import <Cordova/CDVPlugin.h>
+#import "CDVLogger.h"
 
-@interface CDVLogger : CDVPlugin
+@implementation CDVLogger
 
-- (void)logLevel:(CDVInvokedUrlCommand*)command;
+/* log a message */
+- (void)logLevel:(CDVInvokedUrlCommand*)command
+{
+    id level = [command argumentAtIndex:0];
+    id message = [command argumentAtIndex:1];
+
+    if ([level isEqualToString:@"LOG"]) {
+        NSLog(@"%@", message);
+    } else {
+        NSLog(@"%@: %@", level, message);
+    }
+}
 
 @end

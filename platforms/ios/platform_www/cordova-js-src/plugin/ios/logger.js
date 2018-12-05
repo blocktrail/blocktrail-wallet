@@ -1,4 +1,3 @@
-cordova.define("org.apache.cordova.console.logger", function(require, exports, module) {
 /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -44,7 +43,6 @@ cordova.define("org.apache.cordova.console.logger", function(require, exports, m
 var logger = exports;
 
 var exec    = require('cordova/exec');
-var utils   = require('cordova/utils');
 
 var UseConsole   = false;
 var UseLogger    = true;
@@ -354,5 +352,3 @@ logger.__onDeviceReady = function() {
 
 // add a deviceready event to log queued messages
 document.addEventListener("deviceready", logger.__onDeviceReady, false);
-
-});

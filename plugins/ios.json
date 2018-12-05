@@ -93,9 +93,6 @@
     "nl.x-services.plugins.toast": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "org.apache.cordova.console": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "org.apache.cordova.device": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },

@@ -1,4 +1,3 @@
-cordova.define("org.apache.cordova.console.console", function(require, exports, module) {
 /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,8 +21,7 @@ cordova.define("org.apache.cordova.console.console", function(require, exports, 
 
 //------------------------------------------------------------------------------
 
-var logger = require("./logger");
-var utils  = require("cordova/utils");
+var logger = require('cordova/plugin/ios/logger');
 
 //------------------------------------------------------------------------------
 // object that we're exporting
@@ -186,5 +184,3 @@ for (var key in console) {
         console[key] = wrappedOrigCall(WinConsole[key], console[key]);
     }
 }
-
-});
