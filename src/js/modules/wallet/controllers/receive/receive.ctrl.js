@@ -61,7 +61,14 @@
             //$scope.newRequest.btcValue.$setDirty();    //ideally set the other input to dirty as well
         };
         $scope.newAddress = function() {
-            $q.when(walletsManagerService.getActiveWallet().getNewAddress()).then(function(address) {
+            var chainIdx = null;
+            if (walletData.networkType === "BCC") {
+                chainIdx = blocktrailSDK.Wallet.CHAIN_BCC_DEFAULT;
+            } else if (walletData.networkType === "BTC") {
+                chainIdx = blocktrailSDK.Wallet.CHAIN_BTC_DEFAULT;
+            }
+
+            $q.when(walletsManagerService.getActiveWallet().getNewAddress(chainIdx)).then(function(address) {
                 $scope.newRequest.address = address;
             });
         };
