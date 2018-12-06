@@ -158,8 +158,8 @@ $ionicons-font-path: "../fonts" !default;
 // Include all of Ionic
 @import "../lib/ionic/scss/ionic";
 
-//iOS 9 patches
-@import "partials/ios9-fixes";
+//iOS patches
+@import "partials/ios-fixes";
 
 //Add our mixins
 @import "mixins";

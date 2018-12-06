@@ -256,10 +256,11 @@ angular.module('blocktrail.wallet').run(
 
         // set the iOS status bar style to light
         if (window.StatusBar) {
-            $cordovaStatusbar.overlaysWebView(true);
+            if (ionic.Platform.isIOS()) {
+                $cordovaStatusbar.overlaysWebView(true);
+            }
             $cordovaStatusbar.style(1);
         }
-
 
         // --- Debugging info ---
         $log.debug("Plugins; ", Object.keys(navigator));

@@ -486,14 +486,6 @@ module.exports = [
     ]
   },
   {
-    "id": "org.apache.cordova.splashscreen.SplashScreen",
-    "file": "plugins/org.apache.cordova.splashscreen/www/splashscreen.js",
-    "pluginId": "org.apache.cordova.splashscreen",
-    "clobbers": [
-      "navigator.splashscreen"
-    ]
-  },
-  {
     "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
     "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
     "pluginId": "phonegap-plugin-barcodescanner",
@@ -515,6 +507,14 @@ module.exports = [
     "pluginId": "cordova-plugin-facebook4",
     "clobbers": [
       "facebookConnectPlugin"
+    ]
+  },
+  {
+    "id": "cordova-plugin-splashscreen.SplashScreen",
+    "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+    "pluginId": "cordova-plugin-splashscreen",
+    "clobbers": [
+      "navigator.splashscreen"
     ]
   }
 ];
@@ -550,12 +550,11 @@ module.exports.metadata =
   "hu.dpal.phonegap.plugins.PinDialog": "0.1.3",
   "io.github.pwlin.cordova.plugins.fileopener2": "1.0.11",
   "nl.x-services.plugins.toast": "2.1.1",
-  "org.apache.cordova.console": "0.2.13",
   "org.apache.cordova.device": "0.3.0",
-  "org.apache.cordova.splashscreen": "1.0.0",
   "phonegap-plugin-barcodescanner": "8.0.0",
   "uk.co.whiteoctober.cordova.appversion": "0.1.7",
-  "cordova-plugin-facebook4": "1.7.4"
+  "cordova-plugin-facebook4": "1.7.4",
+  "cordova-plugin-splashscreen": "5.0.2"
 };
 // BOTTOM OF METADATA
 });

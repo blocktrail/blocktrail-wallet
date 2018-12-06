@@ -15,14 +15,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "org.apache.cordova.splashscreen": {
-    "source": {
-      "type": "registry",
-      "id": "org.apache.cordova.splashscreen"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-whitelist": {
     "source": {
       "type": "registry",
@@ -312,5 +304,13 @@
       "APP_ID": "1072524012838770",
       "APP_NAME": "BTC.com"
     }
+  },
+  "cordova-plugin-splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-splashscreen@^5.0.2"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

@@ -3,7 +3,6 @@
     <string name="app_name">BTC Wallet</string>
     <string name="launcher_name">@string/app_name</string>
     <string name="activity_name">@string/launcher_name</string>
-    
     <string name="google_app_id">1:647858814792:android:af0575aabe6811ca</string>
     <string name="google_api_key">AIzaSyDQtYkg0yzLNBpCqrbB6JCQqXQqli6uW-s</string>
 </resources>

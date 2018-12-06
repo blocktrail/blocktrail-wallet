@@ -472,35 +472,11 @@ module.exports = [
         "pluginId": "nl.x-services.plugins.toast"
     },
     {
-        "id": "org.apache.cordova.console.console",
-        "file": "plugins/org.apache.cordova.console/www/console-via-logger.js",
-        "pluginId": "org.apache.cordova.console",
-        "clobbers": [
-            "console"
-        ]
-    },
-    {
-        "id": "org.apache.cordova.console.logger",
-        "file": "plugins/org.apache.cordova.console/www/logger.js",
-        "pluginId": "org.apache.cordova.console",
-        "clobbers": [
-            "cordova.logger"
-        ]
-    },
-    {
         "id": "org.apache.cordova.device.device",
         "file": "plugins/org.apache.cordova.device/www/device.js",
         "pluginId": "org.apache.cordova.device",
         "clobbers": [
             "device"
-        ]
-    },
-    {
-        "id": "org.apache.cordova.splashscreen.SplashScreen",
-        "file": "plugins/org.apache.cordova.splashscreen/www/splashscreen.js",
-        "pluginId": "org.apache.cordova.splashscreen",
-        "clobbers": [
-            "navigator.splashscreen"
         ]
     },
     {
@@ -517,6 +493,14 @@ module.exports = [
         "pluginId": "uk.co.whiteoctober.cordova.appversion",
         "clobbers": [
             "cordova.getAppVersion"
+        ]
+    },
+    {
+        "id": "cordova-plugin-splashscreen.SplashScreen",
+        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+        "pluginId": "cordova-plugin-splashscreen",
+        "clobbers": [
+            "navigator.splashscreen"
         ]
     }
 ];
@@ -553,11 +537,10 @@ module.exports.metadata =
     "hu.dpal.phonegap.plugins.PinDialog": "0.1.3",
     "io.github.pwlin.cordova.plugins.fileopener2": "1.0.11",
     "nl.x-services.plugins.toast": "2.1.1",
-    "org.apache.cordova.console": "0.2.13",
     "org.apache.cordova.device": "0.3.0",
-    "org.apache.cordova.splashscreen": "1.0.0",
     "phonegap-plugin-barcodescanner": "8.0.0",
-    "uk.co.whiteoctober.cordova.appversion": "0.1.7"
+    "uk.co.whiteoctober.cordova.appversion": "0.1.7",
+    "cordova-plugin-splashscreen": "5.0.2"
 };
 // BOTTOM OF METADATA
 });
