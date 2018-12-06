@@ -1226,11 +1226,17 @@
             .then(function(addressesDoc) {
                 var refill = self._amountOfOfflineAddresses - addressesDoc.available.length;
                 var cappedRefill = Math.min(refill, max, 5);
-
+                
+                var chainIdx = null;
+                if (self._walletData.networkType === "BCC") {
+                    chainIdx = blocktrailSDK.Wallet.CHAIN_BCC_DEFAULT;
+                } else if (self._walletData.networkType === "BTC") {
+                    chainIdx = blocktrailSDK.Wallet.CHAIN_BTC_DEFAULT;
+                }
                 // $log.debug('refill address by ' + cappedRefill);
                 if (cappedRefill > 0) {
                     return Q.all(repeat(cappedRefill, function(i) {
-                        return self._sdkWallet.getNewAddress().then(function(result) {
+                        return self._sdkWallet.getNewAddress(chainIdx).then(function(result) {
                             addressesDoc.available.push(result[0]);
                         });
                     })).then(function() {
@@ -1271,7 +1277,7 @@
             });
     };
 
-    Wallet.prototype.getNewAddress = function() {
+    Wallet.prototype.getNewAddress = function(chainIdx) {
         var self = this;
 
         return self.getNewOfflineAddress().then(
@@ -1279,7 +1285,7 @@
                 return address;
             },
             function() {
-                return self._sdkWallet.getNewAddress().then(function(result) {
+                return self._sdkWallet.getNewAddress(chainIdx).then(function(result) {
                     return result[0];
                 });
             }
