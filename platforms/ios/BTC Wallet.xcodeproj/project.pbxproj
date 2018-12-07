@@ -809,7 +809,7 @@
 					"\"$(SRCROOT)/BTC Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
 				);
 				PRODUCT_NAME = "BTC Wallet";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1";
 			};
 			name = Debug;
 		};
@@ -859,7 +859,7 @@
 					"\"$(SRCROOT)/BTC Wallet/Plugins/cordova-plugin-google-app-conversion-tracker\"",
 				);
 				PRODUCT_NAME = "BTC Wallet";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1";
 			};
 			name = Release;
 		};
@@ -886,6 +886,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1";
 			};
 			name = Debug;
 		};
@@ -911,6 +912,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1";
 			};
 			name = Release;
 		};
