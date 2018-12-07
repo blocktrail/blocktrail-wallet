@@ -21,6 +21,9 @@ if (rootdir) {
             throw new Error(xmlPath + ' has incorrect root node name (expected "manifest")');
         }
 
+        // https://stackoverflow.com/a/44925089 | https://stackoverflow.com/a/39361989
+        doc.manifest.$['android:versionCode'] += '8';
+
         // disable automatic backups to gdrive
         doc.manifest.application[0].$['android:allowBackup'] = false;
 
