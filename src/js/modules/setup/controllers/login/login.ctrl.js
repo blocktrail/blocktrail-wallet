@@ -129,14 +129,19 @@
                     break;
 
                 case "EMAIL_2FA_MISSING":
-                    modalService.prompt({
-                        placeholder: "MSG_MISSING_EMAIL_TWO_FACTOR_TOKEN"
+                    modalService.alert({
+                        body: "MSG_EMAIL_VERIFY"
                     })
-                        .then(function(dialogResult) {
-                            if (dialogResult !== null) {
-                                $scope.form.twoFactorToken = dialogResult;
-                                login();
-                            }
+                        .then(function () {
+                            modalService.prompt({
+                                placeholder: "MSG_MISSING_TWO_FACTOR_TOKEN"
+                            })
+                                .then(function(dialogResult) {
+                                    if (dialogResult !== null) {
+                                        $scope.form.twoFactorToken = dialogResult;
+                                        login();
+                                    }
+                                });
                         });
 
                     break;
