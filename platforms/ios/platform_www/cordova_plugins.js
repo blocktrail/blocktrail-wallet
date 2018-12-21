@@ -394,14 +394,6 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-sms.SMS",
-        "file": "plugins/cordova-plugin-sms/www/SMS.js",
-        "pluginId": "cordova-plugin-sms",
-        "clobbers": [
-            "window.SMS"
-        ]
-    },
-    {
         "id": "cordova-plugin-statusbar.statusbar",
         "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
         "pluginId": "cordova-plugin-statusbar",
@@ -527,7 +519,6 @@ module.exports.metadata =
     "cordova-plugin-inappbrowser": "3.0.0",
     "cordova-plugin-ionic-keyboard": "2.1.3",
     "cordova-plugin-network-information": "1.0.1",
-    "cordova-plugin-sms": "1.0.5",
     "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-vibration": "1.2.0",
     "cordova-plugin-whitelist": "1.0.0",

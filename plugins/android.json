@@ -58,9 +58,6 @@
     "cordova-plugin-network-information": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
-    "cordova-plugin-sms": {
-      "PACKAGE_NAME": "com.blocktrail.mywallet"
-    },
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.blocktrail.mywallet"
     },
