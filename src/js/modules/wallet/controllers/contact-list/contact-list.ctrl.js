@@ -31,7 +31,7 @@
                     'OK',
                     'CANCEL',
                     'ERROR',
-                    'CONTACTS_FILTER_TITLE',
+                    'ADVANCED_SEND_OPTIONS',
                     'CONTACTS_SHOW_ALL',
                     'CONTACTS_WALLETS_ONLY',
                     'CONTACTS_RESYNC',
@@ -51,14 +51,24 @@
             $scope.getTranslations().then(function(transactions) {
                 $scope.hideFilterOptions = $ionicActionSheet.show({
                     buttons: [
-                        { text: transactions['CONTACTS_WALLETS_ONLY'].sentenceCase() }
+                        { text: transactions['CONTACTS_RESYNC'].sentenceCase() }
                     ],
                     cancelText: transactions['CANCEL'].sentenceCase(),
-                    titleText: transactions['CONTACTS_FILTER_TITLE'].sentenceCase(),
-                    destructiveText: transactions['CONTACTS_RESYNC'].sentenceCase(),
+                    titleText: transactions['ADVANCED_SEND_OPTIONS'].sentenceCase(),
+                    destructiveText: transactions['CANCEL'].sentenceCase(),
                     cancel: function() {},
                     buttonClicked: function(index) {
                         if (index == 0) {
+                            $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
+                            $scope.reloadContacts()
+                                .then(function() {
+                                    $ionicLoading.hide();
+                                }, function(err) {
+                                    $ionicLoading.hide();
+                                    return $cordovaDialogs.alert(err.toString(), $scope.translations['ERROR'].sentenceCase(), $scope.translations['OK']);
+                                });
+                            return true;
+
                             $scope.contactsWithWalletOnly = true;
                             $scope.contactsWithPhoneOnly = false;
                             //$scope.contactsWithEmailOnly = false;
@@ -67,14 +77,6 @@
                         return true;
                     },
                     destructiveButtonClicked: function() {
-                        $ionicLoading.show({template: "<div>{{ 'WORKING' | translate }}...</div><ion-spinner></ion-spinner>", hideOnStateChange: true});
-                        $scope.reloadContacts()
-                            .then(function() {
-                                $ionicLoading.hide();
-                            }, function(err) {
-                                $ionicLoading.hide();
-                                return $cordovaDialogs.alert(err.toString(), $scope.translations['ERROR'].sentenceCase(), $scope.translations['OK']);
-                            });
                         return true;
                     }
                 });
