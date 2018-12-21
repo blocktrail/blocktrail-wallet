@@ -6,7 +6,7 @@
 
     function ContactsListCtrl($scope, $state, $q, Contacts, $timeout, $translate,
                       $ionicScrollDelegate, $ionicActionSheet, $ionicLoading, $cordovaDialogs,
-                      $log, $cordovaSms, localSettingsService) {
+                      $log, localSettingsService) {
 
         var localSettingsData = localSettingsService.getReadOnlyLocalSettingsData();
 
@@ -51,7 +51,6 @@
             $scope.getTranslations().then(function(transactions) {
                 $scope.hideFilterOptions = $ionicActionSheet.show({
                     buttons: [
-                        { text: transactions['CONTACTS_SHOW_ALL'].sentenceCase() },
                         { text: transactions['CONTACTS_WALLETS_ONLY'].sentenceCase() }
                     ],
                     cancelText: transactions['CANCEL'].sentenceCase(),
@@ -60,13 +59,8 @@
                     cancel: function() {},
                     buttonClicked: function(index) {
                         if (index == 0) {
-                            $scope.contactsWithWalletOnly = false;
-                            $scope.contactsWithPhoneOnly = true;
-                            //$scope.contactsWithEmailOnly = false;
-                        }
-                        else if (index == 1) {
                             $scope.contactsWithWalletOnly = true;
-                            $scope.contactsWithPhoneOnly = true;
+                            $scope.contactsWithPhoneOnly = false;
                             //$scope.contactsWithEmailOnly = false;
                         }
                         $scope.getContacts();
@@ -192,16 +186,6 @@
                 $timeout(function() {
                     $state.go('^');
                 }, 300);
-            } else {
-                //otherwise invite them
-                $scope.getTranslations()
-                    .then(function() {
-                        return $cordovaSms.send(contact.phoneNumbers[0].number, $scope.translations['MSG_INVITE_CONTACT'], $scope.smsOptions);
-                    })
-                    .catch(function(err) {
-                        // An error occurred
-                        $log.error(err);
-                    });
             }
         };
 
