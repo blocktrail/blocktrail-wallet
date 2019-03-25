@@ -42,7 +42,8 @@
             super_secret: null,
             powtcha: null,
             browser_fingerprint: null,
-            skip_two_factor: true // will make the resulting API key not require 2FA in the future
+            skip_two_factor: true, // will make the resulting API key not require 2FA in the future
+            captcha : window.captchaToken
         };
 
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/register";
@@ -103,7 +104,9 @@
     NewAccountFormService.prototype._errorHandler = function(error) {
         var self = this;
         var response;
-
+        var ifr = document.querySelector('#ifr');
+        ifr.contentWindow.postMessage({a: 1}, '*');
+        // window.fetchCaptchaToken();
         self._$log.debug("M:SETUP:newAccountFormService:_errorHandler", error);
 
         if (error && error.data && error.data.msg.toLowerCase().match(/username exists/)) {
