@@ -114,7 +114,7 @@
         } else if (error && error.data && error.data.msg.toLowerCase().match(/already in use/)) {
             response = "MSG_EMAIL_TAKEN";
         } else if (!!error) {
-            response = "" + (error.message || error.msg || error);
+            response = "" + (error.message || error.msg || error.data && error.data.msg || error);
         }
 
         return this._$q.reject(response);
