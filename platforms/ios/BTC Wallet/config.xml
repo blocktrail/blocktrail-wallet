@@ -127,6 +127,7 @@
     BTC.com Team
     </author>
     <content src="index.html" />
+    <access origin="https://wallet-api.btc.com" />
     <access origin="https://api.blocktrail.com" />
     <access origin="https://sandbox.glidera.io" />
     <access origin="https://www.glidera.io" />
