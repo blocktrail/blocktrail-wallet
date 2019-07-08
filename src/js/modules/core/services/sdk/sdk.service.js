@@ -354,4 +354,10 @@
 
         return self.blocktrailClient.post("/mywallet/feedback", null, data);
     };
+
+    GenericBlocktrailSDK.prototype.syncFirebaseToken = function (data) {
+        var self = this;
+
+        return self.client.post("/mywallet/notifications/token", null, data);
+    };
 })();

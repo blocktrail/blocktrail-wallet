@@ -63,7 +63,7 @@ angular.module('blocktrail.wallet').run(
     function($rootScope, $state, $q, $log, $interval, $timeout, CONFIG, $ionicPlatform, $ionicHistory, $cordovaNetwork,
              $analytics, $ionicSideMenuDelegate, $locale, $btBackButtonDelegate, $cordovaAppVersion,
              $cordovaStatusbar, settingsService, localSettingsService, $window, $cordovaClipboard, $cordovaToast, $translate, $cordovaDevice,
-             amMoment, trackingService, blocktrailLocalisation, sdkService) {
+             amMoment, trackingService, blocktrailLocalisation, sdkService, pushNotificationService) {
 
         $rootScope.readOnlySdkServiceData = sdkService.getReadOnlySdkServiceData();
         $rootScope.networkClassType = "";
@@ -129,6 +129,16 @@ angular.module('blocktrail.wallet').run(
                 GappTrack.track(CONFIG.GAPPTRACK_ID, CONFIG.GAPPTRACK_ACTIVATE_LABELS.android, "1.00", false);
             }
         }
+
+        /*---- Push notifications ---*/
+        pushNotificationService.checkPermissions()
+            .then(function (result) {
+                if(result) {
+                    pushNotificationService.enablePushNotifications();
+                    // Subscribe to general channel
+                    pushNotificationService.subscribe("general");
+                }
+            });
 
         /*---- iOS Keyboard fix ---*/
         // fix for a quirk where the keyboard is triggered randomly without input focus (usually only happens on send screen)
