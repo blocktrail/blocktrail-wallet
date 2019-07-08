@@ -70,7 +70,6 @@
                     var params = [
                         "v=" + (self._CONFIG.VERSION || ""),
                         "platform=mobile",
-                        "testnet=" + (self._CONFIG.TESTNET ? 1 : 0)
                     ];
 
                     if (accountInfo.apiKey) {

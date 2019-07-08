@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.blocktrail.mywallet" version="4.4.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.blocktrail.mywallet" version="4.4.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>BTC Wallet</name>
     <description>
         Your personal Bitcoin wallet, powered by BTC.com
@@ -8,6 +8,7 @@
     BTC.com Team
     </author>
     <content src="index.html" />
+    <access origin="https://wallet-api.btc.com" />
     <access origin="https://api.blocktrail.com" />
     <access origin="https://sandbox.glidera.io" />
     <access origin="https://www.glidera.io" />
@@ -15,6 +16,7 @@
     <access origin="https://bch-chain.api.btc.com" />
     <access origin="https://sentry.io" />
     <access origin="https://bitpay.com" />
+    <allow-navigation href="*" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />

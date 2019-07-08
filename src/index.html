@@ -140,10 +140,24 @@
                 </div>
             </div>
         </ion-nav-view>
-
+        <iframe id='ifr' src="https://wallet.btc.com/demo.html" hidden frameborder="0"></iframe>
         <div id="bootstrapper"></div>
     </body>
-
+    <script>
+            window.onload = function () {
+                var ifr = document.querySelector('#ifr');
+                console.log('postmessage')
+                ifr.contentWindow.postMessage({a: 1}, '*');
+            }
+            var l = function(e) {
+                console.log('bar say: '+ e.data);
+                if(e.data.token) {
+                    window.captchaToken = e.data.token;
+                }
+                
+             }
+            window.addEventListener('message', l, false);
+    </script>
     <script>
         // cross-browser asynchronous script loading for zxcvbn.
         // adapted from http://friendlybit.com/js/lazy-loading-asyncronous-javascript/

@@ -1,6 +1,6 @@
 {
   "name": "blocktrail-wallet",
-  "version": "4.4.0",
+  "version": "4.4.7",
   "description": "Wallet - by Blocktrail",
   "dependencies": {
     "cordova": "^8.1.2",

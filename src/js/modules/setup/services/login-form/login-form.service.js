@@ -40,7 +40,8 @@
             device_name: (self._device.platform || self._device.model) ? ([self._device.platform, self._device.model].clean().join(" / ")) : "Unknown Device",
             super_secret: self._CONFIG.SUPER_SECRET || null,
             browser_fingerprint: null,
-            skip_two_factor: true // will make the resulting API key not require 2FA in the future
+            skip_two_factor: true, // will make the resulting API key not require 2FA in the future
+            captcha : window.captchaToken
         };
 
         var url = self._CONFIG.API_URL + "/v1/" + data.networkType + "/mywallet/enable";
@@ -137,7 +138,9 @@
             type: "MSG_BAD_NETWORK",
             data: null
         };
-
+        // window.fetchCaptchaToken();
+        var ifr = document.querySelector('#ifr');
+        ifr.contentWindow.postMessage({a: 1}, '*');
         if (response.data) {
             var blocktrailSDKError = blocktrailSDK.Request.handleFailure(response.data);
 

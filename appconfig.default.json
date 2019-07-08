@@ -4,7 +4,7 @@
     "MINIFY": true,
     "NG_CORDOVA_MOCKS": false,
     "POUCHDB_DRIVER": null,
-    "API_HOST": "api.blocktrail.com",
+    "API_HOST": "wallet-api.btc.com",
     "API_HTTPS": true,
 
     "STORAGE_VERSION": "v3",
@@ -20,7 +20,7 @@
     "CURRENCIES": ["USD", "EUR", "GBP", "AUD", "BTC", "CNY"],
 
     "CSP": [
-        "https://api.blocktrail.com",
+        "https://wallet-api.btc.com",
         "https://www.glidera.io",
         "https://sandbox.glidera.io",
         "https://buy.btc.com",
