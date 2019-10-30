@@ -22,7 +22,7 @@
   "devDependencies": {
     "@ionic/v1-toolkit": "1.0.12",
     "@sentry/cli": "^1.29.1",
-    "bower": "^1.3.3",
+    "bower": "^1.8.8",
     "cordova-common": "^1.5.1",
     "git-rev": "^0.2.1",
     "gulp": "^3.9.0",
