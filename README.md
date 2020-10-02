@@ -103,8 +103,8 @@ In xCode:
  - Select the newest build in the Archives window and choose "Upload to App Store"
  - Follow steps ...
 
-### tips
-Remember to remove the old signed, zipped APK before running zipalign, it doesn't overrite the file.  
+### tips to remember
+Remember to remove the old signed, zipped APK before running zipalign, it doesn't overwrite the file.  
 
 ## License
 The Blocktrail Wallet source code is released under the GNU Affero General Public License.  
