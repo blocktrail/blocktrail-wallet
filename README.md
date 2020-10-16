@@ -104,7 +104,7 @@ In xCode:
  - Follow steps ...
 
 ### tips
-Remember to remove the old signed, zipped APK before running zipalign, it doesn't overrite the file.  
+Remember to remove the old signed, zipped APK before running zipalign, it doesn't overwrite the file.  
 
 ## License
 The Blocktrail Wallet source code is released under the GNU Affero General Public License.  
