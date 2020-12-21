@@ -41,7 +41,7 @@
     "gulp-uglify": "^2.1.2",
     "gulp-util": "^2.2.14",
     "lodash": "^3.7.0",
-    "node-notifier": "^4.2.1",
+    "node-notifier": "^8.0.1",
     "properties-parser": "^0.3.1",
     "q": "^1.4.1",
     "run-sequence": "^1.2.2",
